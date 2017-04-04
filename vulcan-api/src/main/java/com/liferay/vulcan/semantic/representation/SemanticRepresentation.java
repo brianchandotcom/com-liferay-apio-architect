@@ -12,18 +12,18 @@
  * details.
  */
 
-package com.liferay.vulcan.representation;
+package com.liferay.vulcan.semantic.representation;
 
-import com.liferay.vulcan.representation.builder.RepresentationBuilder;
+import com.liferay.vulcan.semantic.representation.builder.SemanticRepresentationBuilder;
 
 /**
  * @author Carlos Sierra Andrés
  * @author Alejandro Hernández
  */
-public interface Representation<T> {
+public interface SemanticRepresentation<T> {
 
-	public void buildRepresentation(
-		RepresentationBuilder<T> representationBuilder);
+	public void buildSemanticRepresentation(
+		SemanticRepresentationBuilder<T> representationBuilder);
 
 	public String getIdentifier(T t);
 

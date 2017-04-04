@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.representation.builder;
+package com.liferay.vulcan.semantic.representation.builder;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -21,12 +21,12 @@ import java.util.function.Function;
  * @author Carlos Sierra Andrés
  * @author Alejandro Hernández
  */
-public interface RepresentationBuilder<T> {
+public interface SemanticRepresentationBuilder<T> {
 
-	public <S> RepresentationBuilder<T> addEmbedded(
+	public <S> SemanticRepresentationBuilder<T> addEmbedded(
 		String key, Class<S> clazz, Function<T, Optional<S>> objectFunction);
 
-	public RepresentationBuilder<T> addField(
+	public SemanticRepresentationBuilder<T> addField(
 		String key, Function<T, Object> valueFunction);
 
 }
