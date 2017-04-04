@@ -2,6 +2,6 @@ Bundle-Name: Liferay Vulcan API
 Bundle-SymbolicName: com.liferay.vulcan.api
 Bundle-Version: 1.0.0
 Export-Package:\
-	com.liferay.vulcan.builder,\
 	com.liferay.vulcan.contributor,\
-	com.liferay.vulcan.representation
+	com.liferay.vulcan.representation,\
+	com.liferay.vulcan.representation.builder
