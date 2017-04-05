@@ -12,17 +12,26 @@
  * details.
  */
 
-package com.liferay.vulcan.semantic.representation;
+package com.liferay.vulcan.semantic.representor.builder;
 
-import com.liferay.vulcan.semantic.representation.builder.SemanticRepresentationBuilder;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * @author Carlos Sierra Andrés
  * @author Alejandro Hernández
  */
-public interface SemanticRepresentor<T> {
+public interface SemanticRepresentorBuilder<T> {
 
-	public void buildSemanticRepresentation(
-		SemanticRepresentationBuilder<T> semanticRepresentationBuilder);
+	public <S> SemanticRepresentorBuilder<T> addEmbedded(
+		String key, Class<S> clazz, Function<T, Optional<S>> objectFunction);
+
+	public SemanticRepresentorBuilder<T> addField(
+		String key, Function<T, Object> valueFunction);
+
+	public SemanticRepresentorBuilder<T> addIdentifier(
+		Function<T, String> identifierFunction);
+
+	public SemanticRepresentorBuilder<T> addType(String type);
 
 }
