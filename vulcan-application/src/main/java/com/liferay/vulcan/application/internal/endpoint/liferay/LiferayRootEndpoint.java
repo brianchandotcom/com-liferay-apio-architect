@@ -71,12 +71,12 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		APIContributor apiContributor = _serviceTrackerMap.getService(path);
 
 		if (apiContributor instanceof PathProvider) {
-			LiferayDispatcher liferayDispatcher = new LiferayDispatcher(
-				(PathProvider)apiContributor);
+			LiferayDispatcherResource liferayDispatcherResource =
+				new LiferayDispatcherResource((PathProvider)apiContributor);
 
-			_resourceContext.initResource(liferayDispatcher);
+			_resourceContext.initResource(liferayDispatcherResource);
 
-			return liferayDispatcher;
+			return liferayDispatcherResource;
 		}
 
 		if (apiContributor instanceof Resource) {

@@ -33,9 +33,9 @@ import javax.ws.rs.core.Context;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public class LiferayDispatcher implements Resource {
+public class LiferayDispatcherResource implements Resource {
 
-	public LiferayDispatcher(PathProvider pathProvider) {
+	public LiferayDispatcherResource(PathProvider pathProvider) {
 		_pathProvider = pathProvider;
 	}
 
