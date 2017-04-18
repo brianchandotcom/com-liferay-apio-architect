@@ -45,16 +45,16 @@ public class PaginationParamsContextProvider
 			queryString);
 
 		int itemsPerPage = MapUtil.getInteger(
-			parameterMap, "per_page", _DEFAULT_ITEMS_PER_PAGE);
+			parameterMap, "per_page", _ITEMS_PER_PAGE_DEFAULT);
 
-		int page = MapUtil.getInteger(parameterMap, "page", _DEFAULT_PAGE);
+		int page = MapUtil.getInteger(parameterMap, "page", _PAGE_DEFAULT);
 
 		return new DefaultPaginationParams(itemsPerPage, page);
 	}
 
-	private static final int _DEFAULT_ITEMS_PER_PAGE = 30;
+	private static final int _ITEMS_PER_PAGE_DEFAULT = 30;
 
-	private static final int _DEFAULT_PAGE = 1;
+	private static final int _PAGE_DEFAULT = 1;
 
 	private class DefaultPage<T> implements Page<T> {
 
