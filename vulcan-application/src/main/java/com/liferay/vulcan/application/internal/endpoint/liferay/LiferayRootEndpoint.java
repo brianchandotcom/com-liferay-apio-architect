@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.contributor.APIContributor;
 import com.liferay.vulcan.contributor.PathProvider;
 import com.liferay.vulcan.endpoint.RootEndpoint;
-import com.liferay.vulcan.resource.GroupedResource;
+import com.liferay.vulcan.resource.GroupResource;
 import com.liferay.vulcan.resource.Resource;
 
 import javax.ws.rs.NotFoundException;
@@ -82,10 +82,10 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		if (apiContributor instanceof Resource) {
 			Resource resource = (Resource)apiContributor;
 
-			if (resource instanceof GroupedResource) {
-				GroupedResource groupedResource = (GroupedResource)resource;
+			if (resource instanceof GroupResource) {
+				GroupResource groupResource = (GroupResource)resource;
 
-				groupedResource.setGroupId(GroupThreadLocal.getGroupId());
+				groupResource.setGroupId(GroupThreadLocal.getGroupId());
 			}
 
 			_resourceContext.initResource(resource);
