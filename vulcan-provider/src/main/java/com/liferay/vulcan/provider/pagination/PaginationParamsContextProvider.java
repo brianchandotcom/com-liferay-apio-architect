@@ -46,9 +46,10 @@ public class PaginationParamsContextProvider
 
 		int itemsPerPage = MapUtil.getInteger(
 			parameterMap, "per_page", _ITEMS_PER_PAGE_DEFAULT);
-		int page = MapUtil.getInteger(parameterMap, "page", _PAGE_DEFAULT);
+		int pageNumber = MapUtil.getInteger(
+			parameterMap, "page", _PAGE_DEFAULT);
 
-		return new DefaultPaginationParams(itemsPerPage, page);
+		return new DefaultPaginationParams(itemsPerPage, pageNumber);
 	}
 
 	private static final int _ITEMS_PER_PAGE_DEFAULT = 30;
@@ -119,20 +120,20 @@ public class PaginationParamsContextProvider
 
 	private class DefaultPaginationParams implements PaginationParams {
 
-		public DefaultPaginationParams(int itemsPerPage, int page) {
+		public DefaultPaginationParams(int itemsPerPage, int pageNumber) {
 			_itemsPerPage = itemsPerPage;
-			_page = page;
+			_pageNumber = pageNumber;
 		}
 
 		@Override
 		public <T> Page<T> createPage(Collection<T> items, int totalCount) {
 			return new DefaultPage<>(
-				items, getItemsPerPage(), getPage(), totalCount);
+				items, getItemsPerPage(), getPageNumber(), totalCount);
 		}
 
 		@Override
 		public int getEndPosition() {
-			return _page * _itemsPerPage;
+			return _pageNumber * _itemsPerPage;
 		}
 
 		@Override
@@ -141,17 +142,17 @@ public class PaginationParamsContextProvider
 		}
 
 		@Override
-		public int getPage() {
-			return _page;
+		public int getPageNumber() {
+			return _pageNumber;
 		}
 
 		@Override
 		public int getStartPosition() {
-			return (_page - 1) * _itemsPerPage;
+			return (_pageNumber - 1) * _itemsPerPage;
 		}
 
 		private final int _itemsPerPage;
-		private final int _page;
+		private final int _pageNumber;
 
 	}
 

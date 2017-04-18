@@ -32,7 +32,7 @@ public interface PaginationParams {
 
 	public int getItemsPerPage();
 
-	public int getPage();
+	public int getPageNumber();
 
 	public int getStartPosition();
 
