@@ -25,6 +25,6 @@ import java.util.function.BiConsumer;
  */
 public interface PathProvider {
 
-	public <T> void getResources(BiConsumer<String, Resource<T>> match);
+	public <T> void getResources(BiConsumer<String, Resource<T>> biConsumer);
 
 }
