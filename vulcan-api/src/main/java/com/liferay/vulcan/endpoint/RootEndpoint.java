@@ -27,6 +27,6 @@ import javax.ws.rs.PathParam;
 public interface RootEndpoint {
 
 	@Path("/{path}")
-	public Resource getApiContributors(@PathParam("path") String path);
+	public Resource getAPIContributors(@PathParam("path") String path);
 
 }
