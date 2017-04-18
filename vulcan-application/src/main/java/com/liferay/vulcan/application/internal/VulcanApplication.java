@@ -15,7 +15,7 @@
 package com.liferay.vulcan.application.internal;
 
 import com.liferay.vulcan.endpoint.RootEndpoint;
-import com.liferay.vulcan.provider.pagination.PaginationParamsContextProvider;
+import com.liferay.vulcan.provider.pagination.PaginationContextProvider;
 
 import java.util.HashSet;
 import java.util.List;
@@ -43,7 +43,7 @@ public class VulcanApplication extends Application {
 	public Set<Class<?>> getClasses() {
 		Set<Class<?>> classes = new HashSet<>();
 
-		classes.add(PaginationParamsContextProvider.class);
+		classes.add(PaginationContextProvider.class);
 
 		return classes;
 	}

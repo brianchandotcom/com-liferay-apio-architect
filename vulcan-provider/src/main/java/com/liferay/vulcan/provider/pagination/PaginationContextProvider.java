@@ -17,7 +17,7 @@ package com.liferay.vulcan.provider.pagination;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.vulcan.pagination.Page;
-import com.liferay.vulcan.pagination.PaginationParams;
+import com.liferay.vulcan.pagination.Pagination;
 
 import java.util.Collection;
 import java.util.Map;
@@ -33,11 +33,10 @@ import org.apache.cxf.message.Message;
  * @author Jorge Ferrer
  */
 @Provider
-public class PaginationParamsContextProvider
-	implements ContextProvider<PaginationParams> {
+public class PaginationContextProvider implements ContextProvider<Pagination> {
 
 	@Override
-	public PaginationParams createContext(Message message) {
+	public Pagination createContext(Message message) {
 		String queryString = (String)message.getContextualProperty(
 			Message.QUERY_STRING);
 
@@ -49,7 +48,7 @@ public class PaginationParamsContextProvider
 		int pageNumber = MapUtil.getInteger(
 			parameterMap, "page", _PAGE_DEFAULT);
 
-		return new DefaultPaginationParams(itemsPerPage, pageNumber);
+		return new DefaultPagination(itemsPerPage, pageNumber);
 	}
 
 	private static final int _ITEMS_PER_PAGE_DEFAULT = 30;
@@ -118,9 +117,9 @@ public class PaginationParamsContextProvider
 
 	}
 
-	private class DefaultPaginationParams implements PaginationParams {
+	private class DefaultPagination implements Pagination {
 
-		public DefaultPaginationParams(int itemsPerPage, int pageNumber) {
+		public DefaultPagination(int itemsPerPage, int pageNumber) {
 			_itemsPerPage = itemsPerPage;
 			_pageNumber = pageNumber;
 		}

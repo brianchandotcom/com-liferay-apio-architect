@@ -15,7 +15,7 @@
 package com.liferay.vulcan.resource;
 
 import com.liferay.vulcan.pagination.Page;
-import com.liferay.vulcan.pagination.PaginationParams;
+import com.liferay.vulcan.pagination.Pagination;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -30,7 +30,7 @@ import javax.ws.rs.core.Context;
 public interface CollectionResource<T> extends Resource<T> {
 
 	@GET
-	public Page<T> getPage(@Context PaginationParams paginationParams);
+	public Page<T> getPage(@Context Pagination pagination);
 
 	@Path("/{id}")
 	public SingleResource<T> getSingleResource(@PathParam("id") String id);

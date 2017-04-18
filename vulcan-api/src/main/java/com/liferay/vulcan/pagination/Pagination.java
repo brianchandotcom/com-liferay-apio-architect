@@ -24,7 +24,7 @@ import java.util.Collection;
  * @author Jorge Ferrer
  */
 @ProviderType
-public interface PaginationParams {
+public interface Pagination {
 
 	public <T> Page<T> createPage(Collection<T> items, int totalCount);
 
