@@ -59,10 +59,7 @@ public class VulcanApplication extends Application {
 		return singletons;
 	}
 
-	@Reference(
-		policyOption = ReferencePolicyOption.GREEDY,
-		target = "(liferay-vulcan-context-provider=true)"
-	)
+	@Reference(policyOption = ReferencePolicyOption.GREEDY)
 	private List<ContextProvider> _contextProviders;
 
 	@Reference
