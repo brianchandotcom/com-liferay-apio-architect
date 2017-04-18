@@ -41,22 +41,23 @@ public class LiferayDispatcher implements Resource {
 
 	@Path("/{path}")
 	public Resource getResource(@PathParam("path") String path) {
-		_pathProvider.getResources(_resourceMap::put);
+		_pathProvider.getResources(_resources::put);
 
-		if (!_resourceMap.containsKey(path)) {
+		if (!_resources.containsKey(path)) {
 			throw new NotFoundException();
 		}
 
-		Resource matchedResource = _resourceMap.get(path);
+		Resource resource = _resources.get(path);
 
-		_resourceContext.initResource(matchedResource);
+		_resourceContext.initResource(resource);
 
-		if (matchedResource instanceof GroupScoped) {
-			((GroupScoped)matchedResource).setGroupId(
-				GroupThreadLocal.getGroupId());
+		if (resource instanceof GroupScoped) {
+			GroupScoped groupScoped = (GroupScoped)resource;
+
+			groupScoped.setGroupId(GroupThreadLocal.getGroupId());
 		}
 
-		return matchedResource;
+		return resource;
 	}
 
 	@Context
@@ -66,6 +67,6 @@ public class LiferayDispatcher implements Resource {
 
 	private final PathProvider _pathProvider;
 	private ResourceContext _resourceContext;
-	private final Map<String, Resource> _resourceMap = new HashMap<>();
+	private final Map<String, Resource> _resources = new HashMap<>();
 
 }
