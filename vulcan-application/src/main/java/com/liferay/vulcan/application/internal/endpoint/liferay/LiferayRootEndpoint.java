@@ -47,13 +47,13 @@ public class LiferayRootEndpoint implements RootEndpoint {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
-		ServiceReferenceMapper<String, APIContributor> serviceMapper =
+		ServiceReferenceMapper<String, APIContributor> serviceReferenceMapper =
 			ServiceReferenceMapperFactory.create(
 				bundleContext, (service, emitter) ->
 					emitter.emit(service.getPath()));
 
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, APIContributor.class, null, serviceMapper);
+			bundleContext, APIContributor.class, null, serviceReferenceMapper);
 	}
 
 	@Deactivate
@@ -83,8 +83,9 @@ public class LiferayRootEndpoint implements RootEndpoint {
 			Resource resource = (Resource)apiContributor;
 
 			if (resource instanceof GroupScoped) {
-				((GroupScoped)resource).setGroupId(
-					GroupThreadLocal.getGroupId());
+				GroupScoped groupScoped = (GroupScoped)resource;
+
+				groupScoped.setGroupId(GroupThreadLocal.getGroupId());
 			}
 
 			_resourceContext.initResource(resource);
