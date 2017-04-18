@@ -19,7 +19,7 @@ package com.liferay.vulcan.resource;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public interface GroupScoped {
+public interface GroupedResource<T> extends Resource<T> {
 
 	public void setGroupId(long groupId);
 
