@@ -97,7 +97,9 @@ public class LiferayRootEndpoint implements RootEndpoint {
 	}
 
 	@Path("/group/{id}/")
-	public LiferayRootEndpoint getGroupScopeResource(@PathParam("id") long id) {
+	public LiferayRootEndpoint getGroupLiferayRootEndpoint(
+		@PathParam("id") long id) {
+
 		GroupThreadLocal.setGroupId(id);
 
 		return this;
