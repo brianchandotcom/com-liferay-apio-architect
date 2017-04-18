@@ -46,7 +46,6 @@ public class PaginationParamsContextProvider
 
 		int itemsPerPage = MapUtil.getInteger(
 			parameterMap, "per_page", _ITEMS_PER_PAGE_DEFAULT);
-
 		int page = MapUtil.getInteger(parameterMap, "page", _PAGE_DEFAULT);
 
 		return new DefaultPaginationParams(itemsPerPage, page);
