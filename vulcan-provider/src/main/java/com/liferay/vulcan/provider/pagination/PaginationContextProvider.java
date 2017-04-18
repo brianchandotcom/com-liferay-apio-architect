@@ -46,14 +46,14 @@ public class PaginationContextProvider implements ContextProvider<Pagination> {
 		int itemsPerPage = MapUtil.getInteger(
 			parameterMap, "per_page", _ITEMS_PER_PAGE_DEFAULT);
 		int pageNumber = MapUtil.getInteger(
-			parameterMap, "page", _PAGE_DEFAULT);
+			parameterMap, "page", _PAGE_NUMBER_DEFAULT);
 
 		return new DefaultPagination(itemsPerPage, pageNumber);
 	}
 
 	private static final int _ITEMS_PER_PAGE_DEFAULT = 30;
 
-	private static final int _PAGE_DEFAULT = 1;
+	private static final int _PAGE_NUMBER_DEFAULT = 1;
 
 	private class DefaultPage<T> implements Page<T> {
 
