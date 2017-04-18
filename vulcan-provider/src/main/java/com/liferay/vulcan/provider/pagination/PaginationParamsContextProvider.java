@@ -36,10 +36,6 @@ import org.apache.cxf.message.Message;
 public class PaginationParamsContextProvider
 	implements ContextProvider<PaginationParams> {
 
-	public static final int DEFAULT_ITEMS_PER_PAGE = 30;
-
-	public static final int DEFAULT_PAGE = 1;
-
 	@Override
 	public PaginationParams createContext(Message message) {
 		String queryString = (String)message.getContextualProperty(
@@ -49,12 +45,16 @@ public class PaginationParamsContextProvider
 			queryString);
 
 		int itemsPerPage = MapUtil.getInteger(
-			parameterMap, "per_page", DEFAULT_ITEMS_PER_PAGE);
+			parameterMap, "per_page", _DEFAULT_ITEMS_PER_PAGE);
 
-		int page = MapUtil.getInteger(parameterMap, "page", DEFAULT_PAGE);
+		int page = MapUtil.getInteger(parameterMap, "page", _DEFAULT_PAGE);
 
 		return new DefaultPaginationParams(itemsPerPage, page);
 	}
+
+	private static final int _DEFAULT_ITEMS_PER_PAGE = 30;
+
+	private static final int _DEFAULT_PAGE = 1;
 
 	private class DefaultPage<T> implements Page<T> {
 
