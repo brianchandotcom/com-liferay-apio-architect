@@ -44,9 +44,9 @@ public class PaginationContextProvider implements ContextProvider<Pagination> {
 			queryString);
 
 		int itemsPerPage = MapUtil.getInteger(
-			parameterMap, "per_page", _ITEMS_PER_PAGE_DEFAULT);
+			parameterMap, "itemsPerPage", _ITEMS_PER_PAGE_DEFAULT);
 		int pageNumber = MapUtil.getInteger(
-			parameterMap, "page", _PAGE_NUMBER_DEFAULT);
+			parameterMap, "pageNumber", _PAGE_NUMBER_DEFAULT);
 
 		return new DefaultPagination(itemsPerPage, pageNumber);
 	}
