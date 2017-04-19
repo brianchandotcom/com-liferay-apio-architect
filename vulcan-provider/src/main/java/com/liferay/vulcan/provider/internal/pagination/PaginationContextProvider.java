@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(immediate = true, property = "liferay-vulcan-context-provider=true")
+@Component(immediate = true, property = "liferay.vulcan.context.provider=true")
 @Provider
 public class PaginationContextProvider implements ContextProvider<Pagination> {
 
