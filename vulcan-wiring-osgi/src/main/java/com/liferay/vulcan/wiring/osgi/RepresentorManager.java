@@ -111,6 +111,11 @@ public class RepresentorManager {
 		_removeModelRepresentorMapper(modelRepresentorMapper, modelClass);
 
 		_removeRepresentorMaps(modelClass);
+
+		getModelRepresentorMapper(modelClass).ifPresent(
+			firstModelRepresentorMapper ->
+				_createRepresentorMaps(
+					firstModelRepresentorMapper, modelClass));
 	}
 
 	private <T> void _addModelRepresentorMapper(
