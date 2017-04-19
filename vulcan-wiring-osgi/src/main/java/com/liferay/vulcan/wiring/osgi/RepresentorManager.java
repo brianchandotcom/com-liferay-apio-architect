@@ -47,6 +47,38 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 @Component(immediate = true, service = RepresentorManager.class)
 public class RepresentorManager {
 
+	public <T> Map<String, Function<T, Object>> getFieldFunctions(
+		Class<T> modelClass) {
+
+		return (Map)_fieldFunctionMaps.get(modelClass.getName());
+	}
+
+	public <T> String getIdentifier(Class<T> modelClass, T model) {
+		Function<T, String> identifierFunction =
+			(Function<T, String>)_identifierFunctions.get(modelClass.getName());
+
+		return identifierFunction.apply(model);
+	}
+
+	public <T> Optional<ModelRepresentorMapper<T>> getModelRepresentorMapper(
+		Class<T> modelClass) {
+
+		return Optional.ofNullable(
+			_modelRepresentorMappers.get(
+				modelClass.getName())).map(TreeSet::first).map(
+				modelRepresentorMapperTuple ->
+					(ModelRepresentorMapper<T>)modelRepresentorMapperTuple.
+						getModelRepresentorMapper());
+	}
+
+	public <T, V> List<RelationTuple<T, V>> getRelations(Class<T> modelClass) {
+		return (List)_relationTupleLists.get(modelClass.getName());
+	}
+
+	public <T> List<String> getTypes(Class<T> modelClass) {
+		return _typeLists.get(modelClass.getName());
+	}
+
 	@Reference(
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC,
