@@ -59,15 +59,7 @@ public class RepresentorManager {
 		ModelRepresentorMapper<T> modelRepresentorMapper =
 			_bundleContext.getService(serviceReference);
 
-		Optional<Class<T>> genericClass = GenericUtil.getGenericClass(
-			modelRepresentorMapper, ModelRepresentorMapper.class);
-
-		if (!genericClass.isPresent()) {
-			throw new InvalidGenericException(
-				modelRepresentorMapper.getClass());
-		}
-
-		Class<T> modelClass = genericClass.get();
+		Class<T> modelClass = _getModelClass(modelRepresentorMapper);
 
 		_addModelRepresentorMapper(
 			serviceReference, modelRepresentorMapper, modelClass);
@@ -76,7 +68,17 @@ public class RepresentorManager {
 	}
 
 	protected <T> void unsetServiceReference(
-		ServiceReference<ModelRepresentorMapper<T>> serviceReference) {
+			ServiceReference<ModelRepresentorMapper<T>> serviceReference)
+		throws InvalidGenericException {
+
+		ModelRepresentorMapper<T> modelRepresentorMapper =
+			_bundleContext.getService(serviceReference);
+
+		Class<T> modelClass = _getModelClass(modelRepresentorMapper);
+
+		_removeModelRepresentorMapper(modelRepresentorMapper, modelClass);
+
+		_removeRepresentorMaps(modelClass);
 	}
 
 	private <T> void _addModelRepresentorMapper(
@@ -111,6 +113,35 @@ public class RepresentorManager {
 			new RepresentorBuilderImpl<>(
 				modelClass, _identifierFunctions, fieldFunctions,
 				relationTuples, types));
+	}
+
+	private <T> Class<T> _getModelClass(
+			ModelRepresentorMapper<T> modelRepresentorMapper)
+		throws InvalidGenericException {
+
+		Optional<Class<T>> genericClass = GenericUtil.getGenericClass(
+			modelRepresentorMapper, ModelRepresentorMapper.class);
+
+		if (!genericClass.isPresent()) {
+			throw new InvalidGenericException(
+				modelRepresentorMapper.getClass());
+		}
+
+		return genericClass.get();
+	}
+
+	private <T> void _removeModelRepresentorMapper(
+		ModelRepresentorMapper modelRepresentorMapper, Class<T> modelClass) {
+
+		_modelRepresentorMappers.get(modelClass.getName()).removeIf(tuple ->
+			tuple.getModelRepresentorMapper() == modelRepresentorMapper);
+	}
+
+	private <T> void _removeRepresentorMaps(Class<T> modelClass) {
+		_fieldFunctionMaps.remove(modelClass.getName());
+		_identifierFunctions.remove(modelClass.getName());
+		_relationTupleLists.remove(modelClass.getName());
+		_typeLists.remove(modelClass.getName());
 	}
 
 	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
