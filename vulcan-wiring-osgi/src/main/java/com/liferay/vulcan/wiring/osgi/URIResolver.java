@@ -51,6 +51,31 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 @Component(immediate = true, service = URIResolver.class)
 public class URIResolver {
 
+	public <T> Optional<String> getCollectionResourceURIOptional(
+		Class<T> modelClass) {
+
+		ModelURIFunctions<T> modelURIFunctions =
+			(ModelURIFunctions<T>)_modelURIFunctions.get(modelClass.getName());
+
+		Optional<Supplier<Optional<String>>> optional = Optional.of(
+			modelURIFunctions.getCollectionResourceURISupplier());
+
+		return optional.flatMap(Supplier::get);
+	}
+
+	public <T> Optional<String> getSingleResourceURIOptional(
+		Class<T> modelClass, T t) {
+
+		ModelURIFunctions<T> modelURIFunctions =
+			(ModelURIFunctions<T>)_modelURIFunctions.get(modelClass.getName());
+
+		Optional<Function<T, Optional<String>>> optional = Optional.of(
+			modelURIFunctions.getSingleResourceURIFunction());
+
+		return optional.flatMap(
+			singleResourceURIFunction -> singleResourceURIFunction.apply(t));
+	}
+
 	@Reference(
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC,
