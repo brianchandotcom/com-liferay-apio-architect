@@ -51,7 +51,7 @@ public class VulcanApplication extends Application {
 
 	@Reference(
 		policyOption = ReferencePolicyOption.GREEDY,
-		target = "(liferay-vulcan-context-provider=true)"
+		target = "(liferay.vulcan.context.provider=true)"
 	)
 	private List<ContextProvider> _contextProviders;
 
