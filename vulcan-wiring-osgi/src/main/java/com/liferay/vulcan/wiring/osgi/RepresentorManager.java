@@ -15,7 +15,17 @@
 package com.liferay.vulcan.wiring.osgi;
 
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
+import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
+import com.liferay.vulcan.wiring.osgi.internal.InvalidGenericException;
+import com.liferay.vulcan.wiring.osgi.internal.ModelRepresentorMapperTuple;
 
+import java.util.Optional;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -37,11 +47,47 @@ public class RepresentorManager {
 		policyOption = ReferencePolicyOption.GREEDY
 	)
 	protected <T> void setServiceReference(
-		ServiceReference<ModelRepresentorMapper<T>> serviceReference) {
+			ServiceReference<ModelRepresentorMapper<T>> serviceReference)
+		throws InvalidGenericException {
+
+		ModelRepresentorMapper<T> modelRepresentorMapper =
+			_bundleContext.getService(serviceReference);
+
+		Optional<Class<T>> genericClass = GenericUtil.getGenericClass(
+			modelRepresentorMapper, ModelRepresentorMapper.class);
+
+		if (!genericClass.isPresent()) {
+			throw new InvalidGenericException(
+				modelRepresentorMapper.getClass());
+		}
+
+		Class<T> modelClass = genericClass.get();
+
+		_addModelRepresentorMapper(
+			serviceReference, modelRepresentorMapper, modelClass);
 	}
 
 	protected <T> void unsetServiceReference(
 		ServiceReference<ModelRepresentorMapper<T>> serviceReference) {
 	}
+
+	private <T> void _addModelRepresentorMapper(
+		ServiceReference<ModelRepresentorMapper<T>> serviceReference,
+		ModelRepresentorMapper<T> modelRepresentorMapper, Class<T> modelClass) {
+
+		_modelRepresentorMappers.computeIfAbsent(
+			modelClass.getName(), name -> new TreeSet<>());
+
+		ModelRepresentorMapperTuple<T> tuple =
+			new ModelRepresentorMapperTuple<>(
+				serviceReference, modelRepresentorMapper);
+
+		_modelRepresentorMappers.get(modelClass.getName()).add(tuple);
+	}
+
+	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
+		RepresentorManager.class).getBundleContext();
+	private final ConcurrentMap<String, TreeSet<ModelRepresentorMapperTuple<?>>>
+		_modelRepresentorMappers = new ConcurrentHashMap<>();
 
 }
