@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.application.internal.endpoint.liferay;
+package com.liferay.vulcan.liferay.internal;
 
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapperFactory;
@@ -41,7 +41,7 @@ import org.osgi.service.component.annotations.Deactivate;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(immediate = true, service = LiferayRootEndpoint.class)
+@Component(immediate = true)
 @Path("/")
 public class LiferayRootEndpoint implements RootEndpoint {
 

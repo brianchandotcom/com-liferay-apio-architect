@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.application.internal.endpoint.liferay;
+package com.liferay.vulcan.liferay.internal;
 
 import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.contributor.ResourceMapper;
