@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.vulcan.resource;
+package com.liferay.vulcan.liferay.scope;
 
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public interface GroupResource<T> extends Resource<T> {
+public interface GroupScoped {
 
 	public void setGroupId(long groupId);
 
