@@ -15,7 +15,6 @@
 package com.liferay.vulcan.application.internal;
 
 import com.liferay.vulcan.endpoint.RootEndpoint;
-import com.liferay.vulcan.provider.pagination.PaginationContextProvider;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,15 +39,6 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 public class VulcanApplication extends Application {
 
 	@Override
-	public Set<Class<?>> getClasses() {
-		Set<Class<?>> classes = new HashSet<>();
-
-		classes.add(PaginationContextProvider.class);
-
-		return classes;
-	}
-
-	@Override
 	public Set<Object> getSingletons() {
 		Set<Object> singletons = new HashSet<>();
 
@@ -59,7 +49,10 @@ public class VulcanApplication extends Application {
 		return singletons;
 	}
 
-	@Reference(policyOption = ReferencePolicyOption.GREEDY)
+	@Reference(
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(liferay-vulcan-context-provider=true)"
+	)
 	private List<ContextProvider> _contextProviders;
 
 	@Reference
