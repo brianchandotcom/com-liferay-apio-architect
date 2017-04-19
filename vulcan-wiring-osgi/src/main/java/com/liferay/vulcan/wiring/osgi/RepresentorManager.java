@@ -18,11 +18,17 @@ import com.liferay.vulcan.representor.ModelRepresentorMapper;
 import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.internal.InvalidGenericException;
 import com.liferay.vulcan.wiring.osgi.internal.ModelRepresentorMapperTuple;
+import com.liferay.vulcan.wiring.osgi.internal.RepresentorBuilderImpl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -65,6 +71,8 @@ public class RepresentorManager {
 
 		_addModelRepresentorMapper(
 			serviceReference, modelRepresentorMapper, modelClass);
+
+		_createRepresentorMaps(modelRepresentorMapper, modelClass);
 	}
 
 	protected <T> void unsetServiceReference(
@@ -82,12 +90,40 @@ public class RepresentorManager {
 			new ModelRepresentorMapperTuple<>(
 				serviceReference, modelRepresentorMapper);
 
-		_modelRepresentorMappers.get(modelClass.getName()).add(tuple);
+		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
+			_modelRepresentorMappers.get(modelClass.getName());
+
+		modelRepresentorMapperTuples.add(tuple);
+	}
+
+	private <T> void _createRepresentorMaps(
+		ModelRepresentorMapper<T> modelRepresentorMapper, Class<T> modelClass) {
+
+		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
+		List<RelationTuple<?, ?>> relationTuples = new ArrayList<>();
+		List<String> types = new ArrayList<>();
+
+		_fieldFunctionMaps.put(modelClass.getName(), fieldFunctions);
+		_relationTupleLists.put(modelClass.getName(), relationTuples);
+		_typeLists.put(modelClass.getName(), types);
+
+		modelRepresentorMapper.buildRepresentor(
+			new RepresentorBuilderImpl<>(
+				modelClass, _identifierFunctions, fieldFunctions,
+				relationTuples, types));
 	}
 
 	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
 		RepresentorManager.class).getBundleContext();
+	private final ConcurrentMap<String, Map<String, Function<?, Object>>>
+		_fieldFunctionMaps = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, Function<?, String>>
+		_identifierFunctions = new ConcurrentHashMap<>();
 	private final ConcurrentMap<String, TreeSet<ModelRepresentorMapperTuple<?>>>
 		_modelRepresentorMappers = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, List<RelationTuple<?, ?>>>
+		_relationTupleLists = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, List<String>> _typeLists =
+		new ConcurrentHashMap<>();
 
 }
