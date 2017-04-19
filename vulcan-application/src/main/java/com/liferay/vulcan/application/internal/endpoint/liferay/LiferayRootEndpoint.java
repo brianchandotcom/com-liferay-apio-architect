@@ -74,7 +74,7 @@ public class LiferayRootEndpoint implements RootEndpoint {
 			LiferayDispatcherResource liferayDispatcherResource =
 				new LiferayDispatcherResource((PathProvider)apiContributor);
 
-			_resourceContext.initResource(liferayDispatcherResource);
+			resourceContext.initResource(liferayDispatcherResource);
 
 			return liferayDispatcherResource;
 		}
@@ -88,7 +88,7 @@ public class LiferayRootEndpoint implements RootEndpoint {
 				groupScoped.setGroupId(GroupThreadLocal.getGroupId());
 			}
 
-			_resourceContext.initResource(resource);
+			resourceContext.initResource(resource);
 
 			return resource;
 		}
@@ -106,11 +106,8 @@ public class LiferayRootEndpoint implements RootEndpoint {
 	}
 
 	@Context
-	protected void setResourceContext(ResourceContext resourceContext) {
-		_resourceContext = resourceContext;
-	}
+	protected ResourceContext resourceContext;
 
-	private ResourceContext _resourceContext;
 	private ServiceTrackerMap<String, APIContributor> _serviceTrackerMap;
 
 }
