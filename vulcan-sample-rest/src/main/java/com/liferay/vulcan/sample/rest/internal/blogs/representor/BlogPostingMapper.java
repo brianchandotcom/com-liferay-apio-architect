@@ -51,36 +51,40 @@ public class BlogPostingMapper implements ModelRepresentorMapper<BlogsEntry> {
 	public void buildRepresentor(
 		RepresentorBuilder<BlogsEntry> representorBuilder) {
 
-		DateFormat iso8601Format = DateUtil.getISO8601Format();
-
-		Function<Date, Object> getDate = date -> {
+		Function<Date, Object> formatFunction = date -> {
 			if (date == null) {
 				return null;
 			}
 
-			return iso8601Format.format(date);
+			DateFormat dateFormat = DateUtil.getISO8601Format();
+
+			return dateFormat.format(date);
 		};
 
 		RepresentorBuilder.FirstStep<BlogsEntry> firstStep =
 			representorBuilder.addIdentifier(
 				blogsEntry -> String.valueOf(blogsEntry.getEntryId()));
 
-		firstStep.addEmbedded("author", User.class, this::_getUser);
-		firstStep.addEmbedded("creator", User.class, this::_getUser);
+		firstStep.addEmbedded("author", User.class, this::_getUserOptional);
+		firstStep.addEmbedded("creator", User.class, this::_getUserOptional);
 		firstStep.addField("alternativeHeadline", BlogsEntry::getSubtitle);
 		firstStep.addField("articleBody", BlogsEntry::getContent);
-		firstStep.addField("createDate", blogsEntry ->
-			getDate.apply(blogsEntry.getCreateDate()));
+		firstStep.addField(
+			"createDate",
+			blogsEntry -> formatFunction.apply(blogsEntry.getCreateDate()));
 		firstStep.addField("fileFormat", blogsEntry -> "text/html");
 		firstStep.addField("headline", BlogsEntry::getTitle);
-		firstStep.addField("modifiedDate", blogsEntry ->
-			getDate.apply(blogsEntry.getModifiedDate()));
-		firstStep.addField("publishedDate", blogsEntry ->
-			getDate.apply(blogsEntry.getLastPublishDate()));
+		firstStep.addField(
+			"modifiedDate",
+			blogsEntry -> formatFunction.apply(blogsEntry.getModifiedDate()));
+		firstStep.addField(
+			"publishedDate",
+			blogsEntry -> formatFunction.apply(
+				blogsEntry.getLastPublishDate()));
 		firstStep.addType("BlogPosting");
 	}
 
-	private Optional<User> _getUser(BlogsEntry blogsEntry) {
+	private Optional<User> _getUserOptional(BlogsEntry blogsEntry) {
 		try {
 			return Optional.ofNullable(
 				_userService.getUserById(blogsEntry.getUserId()));
