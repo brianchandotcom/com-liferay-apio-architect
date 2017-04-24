@@ -45,13 +45,12 @@ public class BlogPostingCollectionResource
 
 	@Override
 	public Page<BlogsEntry> getPage(Pagination pagination) {
-		List<BlogsEntry> groupEntries = _blogsService.getGroupEntries(
+		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
 			_groupId, 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
+		int count = _blogsService.getGroupEntriesCount(_groupId, 0);
 
-		int groupEntriesCount = _blogsService.getGroupEntriesCount(_groupId, 0);
-
-		return pagination.createPage(groupEntries, groupEntriesCount);
+		return pagination.createPage(blogsEntries, count);
 	}
 
 	@Override
