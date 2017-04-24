@@ -30,8 +30,7 @@ import javax.ws.rs.core.Context;
 public interface CollectionResource<T> extends Resource<T> {
 
 	@Path("/{id}")
-	public SingleResource<T> getCollectionItemResource(
-		@PathParam("id") String id);
+	public SingleResource<T> getSingleResource(@PathParam("id") String id);
 
 	@GET
 	public Page<T> getPage(@Context Pagination pagination);

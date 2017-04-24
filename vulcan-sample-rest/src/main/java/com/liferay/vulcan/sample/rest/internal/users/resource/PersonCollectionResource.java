@@ -46,7 +46,7 @@ public class PersonCollectionResource
 	implements CollectionResource<User>, APIContributor {
 
 	@Override
-	public SingleResource<User> getCollectionItemResource(String id) {
+	public SingleResource<User> getSingleResource(String id) {
 		try {
 			long userId = Long.valueOf(id);
 

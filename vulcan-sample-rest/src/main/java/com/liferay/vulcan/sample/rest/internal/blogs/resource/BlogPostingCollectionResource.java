@@ -44,7 +44,7 @@ public class BlogPostingCollectionResource
 	implements CollectionResource<BlogsEntry>, GroupScoped {
 
 	@Override
-	public SingleResource<BlogsEntry> getCollectionItemResource(String id) {
+	public SingleResource<BlogsEntry> getSingleResource(String id) {
 		BlogsEntry blogsEntry = null;
 
 		try {
