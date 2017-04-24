@@ -35,9 +35,10 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true,
-	service = {PersonMapper.class, ModelRepresentorMapper.class}
+	service = {ModelRepresentorMapper.class, PersonModelRepresentorMapper.class}
 )
-public class PersonMapper implements ModelRepresentorMapper<User> {
+public class PersonModelRepresentorMapper
+	implements ModelRepresentorMapper<User> {
 
 	@Override
 	public void buildRepresentor(RepresentorBuilder<User> representorBuilder) {

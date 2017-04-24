@@ -43,9 +43,12 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	service = {BlogPostingMapper.class, ModelRepresentorMapper.class}
+	service = {
+		BlogPostingModelRepresentorMapper.class, ModelRepresentorMapper.class
+	}
 )
-public class BlogPostingMapper implements ModelRepresentorMapper<BlogsEntry> {
+public class BlogPostingModelRepresentorMapper
+	implements ModelRepresentorMapper<BlogsEntry> {
 
 	@Override
 	public void buildRepresentor(
