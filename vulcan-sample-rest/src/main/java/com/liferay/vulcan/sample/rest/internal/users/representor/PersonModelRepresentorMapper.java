@@ -42,30 +42,31 @@ public class PersonModelRepresentorMapper
 
 	@Override
 	public void buildRepresentor(RepresentorBuilder<User> representorBuilder) {
-		DateFormat iso8601Format = DateUtil.getISO8601Format();
+		RepresentorBuilder.FirstStep<User> firstStep =
+			representorBuilder.addIdentifier(
+				user -> String.valueOf(user.getUserId()));
 
-		Function<User, Object> getBirthDate = user -> {
+		firstStep.addField("additionalName", User::getMiddleName);
+
+		Function<User, Object> birthDateFunction = user -> {
 			try {
-				return iso8601Format.format(user.getBirthday());
+				DateFormat dateFormat = DateUtil.getISO8601Format();
+
+				return dateFormat.format(user.getBirthday());
 			}
 			catch (PortalException pe) {
 				throw new ServerErrorException(500, pe);
 			}
 		};
 
-		RepresentorBuilder.FirstStep<User> firstStep =
-			representorBuilder.addIdentifier(user ->
-				String.valueOf(user.getUserId()));
+		firstStep.addField("birthDate", birthDateFunction);
 
-		firstStep.addType("Person");
-
-		firstStep.addField("additionalName", User::getMiddleName);
-		firstStep.addField("birthDate", getBirthDate);
 		firstStep.addField("email", User::getEmailAddress);
 		firstStep.addField("familyName", User::getLastName);
 		firstStep.addField("givenName", User::getFirstName);
 		firstStep.addField("name", User::getFullName);
 		firstStep.addField("jobTitle", User::getJobTitle);
+		firstStep.addType("Person");
 	}
 
 }
