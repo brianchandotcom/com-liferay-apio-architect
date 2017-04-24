@@ -62,31 +62,22 @@ public class BlogPostingMapper implements ModelRepresentorMapper<BlogsEntry> {
 		};
 
 		RepresentorBuilder.FirstStep<BlogsEntry> firstStep =
-			representorBuilder.addIdentifier(blogsEntry ->
-				String.valueOf(blogsEntry.getEntryId()));
-
-		firstStep.addType("BlogPosting");
-
-		firstStep.addField("alternativeHeadline", BlogsEntry::getSubtitle);
-
-		firstStep.addField("articleBody", BlogsEntry::getContent);
-
-		firstStep.addField("createDate", blogsEntry ->
-			getDate.apply(blogsEntry.getCreateDate()));
-
-		firstStep.addField("fileFormat", blogsEntry -> "text/html");
-
-		firstStep.addField("headline", BlogsEntry::getTitle);
-
-		firstStep.addField("modifiedDate", blogsEntry ->
-			getDate.apply(blogsEntry.getModifiedDate()));
-
-		firstStep.addField("publishedDate", blogsEntry ->
-			getDate.apply(blogsEntry.getLastPublishDate()));
+			representorBuilder.addIdentifier(
+				blogsEntry -> String.valueOf(blogsEntry.getEntryId()));
 
 		firstStep.addEmbedded("author", User.class, this::_getUser);
-
 		firstStep.addEmbedded("creator", User.class, this::_getUser);
+		firstStep.addField("alternativeHeadline", BlogsEntry::getSubtitle);
+		firstStep.addField("articleBody", BlogsEntry::getContent);
+		firstStep.addField("createDate", blogsEntry ->
+			getDate.apply(blogsEntry.getCreateDate()));
+		firstStep.addField("fileFormat", blogsEntry -> "text/html");
+		firstStep.addField("headline", BlogsEntry::getTitle);
+		firstStep.addField("modifiedDate", blogsEntry ->
+			getDate.apply(blogsEntry.getModifiedDate()));
+		firstStep.addField("publishedDate", blogsEntry ->
+			getDate.apply(blogsEntry.getLastPublishDate()));
+		firstStep.addType("BlogPosting");
 	}
 
 	private Optional<User> _getUser(BlogsEntry blogsEntry) {
