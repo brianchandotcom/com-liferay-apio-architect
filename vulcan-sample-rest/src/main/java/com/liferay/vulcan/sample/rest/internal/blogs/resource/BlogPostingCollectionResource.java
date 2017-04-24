@@ -19,6 +19,7 @@ import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.service.BlogsEntryService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.Pagination;
@@ -27,7 +28,6 @@ import com.liferay.vulcan.resource.SingleResource;
 
 import java.util.List;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
@@ -58,15 +58,12 @@ public class BlogPostingCollectionResource
 		BlogsEntry blogsEntry = null;
 
 		try {
-			long entryId = Long.parseLong(id);
+			long entryId = GetterUtil.getLong(id);
 
 			blogsEntry = _blogsService.getEntry(entryId);
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException();
-		}
-		catch (NumberFormatException nfe) {
-			throw new BadRequestException();
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

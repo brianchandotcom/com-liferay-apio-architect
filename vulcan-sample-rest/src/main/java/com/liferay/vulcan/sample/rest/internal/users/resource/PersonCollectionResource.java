@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserService;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.contributor.APIContributor;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.Pagination;
@@ -28,7 +29,6 @@ import com.liferay.vulcan.resource.SingleResource;
 
 import java.util.List;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.core.Context;
@@ -51,11 +51,10 @@ public class PersonCollectionResource
 			List<User> users = _userService.getCompanyUsers(
 				company.getCompanyId(), paginationParams.getStartPosition(),
 				paginationParams.getEndPosition());
-
-			int userCount = _userService.getCompanyUsersCount(
+			int count = _userService.getCompanyUsersCount(
 				company.getCompanyId());
 
-			return paginationParams.createPage(users, userCount);
+			return paginationParams.createPage(users, count);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -70,7 +69,7 @@ public class PersonCollectionResource
 	@Override
 	public SingleResource<User> getSingleResource(String id) {
 		try {
-			long userId = Long.valueOf(id);
+			long userId = GetterUtil.getLong(id);
 
 			User user = _userService.getUserById(userId);
 
@@ -78,9 +77,6 @@ public class PersonCollectionResource
 		}
 		catch (NoSuchUserException | PrincipalException e) {
 			throw new NotFoundException();
-		}
-		catch (NumberFormatException nfe) {
-			throw new BadRequestException();
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
