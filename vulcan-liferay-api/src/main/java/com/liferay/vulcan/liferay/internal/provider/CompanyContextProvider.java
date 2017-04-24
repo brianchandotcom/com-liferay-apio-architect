@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  */
 @Component(
-	immediate = true, property = "liferay-vulcan-context-provider=true",
+	immediate = true, property = "liferay.vulcan.context.provider=true",
 	service = CompanyContextProvider.class
 )
 @Provider
