@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.internal.blogs.representor;
+package com.liferay.vulcan.sample.rest.internal.vulcan.representor;
 
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.portal.kernel.exception.NoSuchUserException;

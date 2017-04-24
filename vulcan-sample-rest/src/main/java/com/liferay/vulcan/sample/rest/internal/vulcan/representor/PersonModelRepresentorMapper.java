@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.internal.users.representor;
+package com.liferay.vulcan.sample.rest.internal.vulcan.representor;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;

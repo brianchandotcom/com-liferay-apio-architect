@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.internal.blogs.resource;
+package com.liferay.vulcan.sample.rest.internal.vulcan.resource;
 
 import com.liferay.vulcan.contributor.APIContributor;
 import com.liferay.vulcan.contributor.ResourceMapper;

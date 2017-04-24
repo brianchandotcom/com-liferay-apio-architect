@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.internal.users.resource;
+package com.liferay.vulcan.sample.rest.internal.vulcan.resource;
 
-import com.liferay.portal.kernel.model.User;
+import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.vulcan.resource.SingleResource;
 
 /**
@@ -22,17 +22,17 @@ import com.liferay.vulcan.resource.SingleResource;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public class PersonSingleResource implements SingleResource<User> {
+public class BlogPostingSingleResource implements SingleResource<BlogsEntry> {
 
-	public PersonSingleResource(User user) {
-		_user = user;
+	public BlogPostingSingleResource(BlogsEntry blogsEntry) {
+		_blogsEntry = blogsEntry;
 	}
 
 	@Override
-	public User getModel() {
-		return _user;
+	public BlogsEntry getModel() {
+		return _blogsEntry;
 	}
 
-	private final User _user;
+	private final BlogsEntry _blogsEntry;
 
 }

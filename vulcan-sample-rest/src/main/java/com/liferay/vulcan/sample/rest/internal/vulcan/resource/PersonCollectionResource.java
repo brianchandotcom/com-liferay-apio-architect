@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.internal.users.resource;
+package com.liferay.vulcan.sample.rest.internal.vulcan.resource;
 
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class PersonCollectionResource
-	implements CollectionResource<User>, APIContributor {
+	implements APIContributor, CollectionResource<User> {
 
 	@Override
 	public Page<User> getPage(Pagination paginationParams) {
