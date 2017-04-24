@@ -61,9 +61,18 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		_serviceTrackerMap.close();
 	}
 
+	@Path("/group/{id}/")
+	public LiferayRootEndpoint getGroupLiferayRootEndpoint(
+		@PathParam("id") long id) {
+
+		GroupThreadLocal.setGroupId(id);
+
+		return this;
+	}
+
 	@Override
 	@Path("/{path}")
-	public Resource getAPIContributorResource(@PathParam("path") String path) {
+	public Resource getResource(@PathParam("path") String path) {
 		if (!_serviceTrackerMap.containsKey(path)) {
 			throw new NotFoundException();
 		}
@@ -94,15 +103,6 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		}
 
 		throw new NotFoundException();
-	}
-
-	@Path("/group/{id}/")
-	public LiferayRootEndpoint getGroupLiferayRootEndpoint(
-		@PathParam("id") long id) {
-
-		GroupThreadLocal.setGroupId(id);
-
-		return this;
 	}
 
 	@Context
