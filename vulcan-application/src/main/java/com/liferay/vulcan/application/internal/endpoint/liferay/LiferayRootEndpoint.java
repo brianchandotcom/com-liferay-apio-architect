@@ -20,7 +20,7 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.contributor.APIContributor;
-import com.liferay.vulcan.contributor.PathProvider;
+import com.liferay.vulcan.contributor.ResourceMapper;
 import com.liferay.vulcan.endpoint.RootEndpoint;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
 import com.liferay.vulcan.resource.Resource;
@@ -70,9 +70,9 @@ public class LiferayRootEndpoint implements RootEndpoint {
 
 		APIContributor apiContributor = _serviceTrackerMap.getService(path);
 
-		if (apiContributor instanceof PathProvider) {
+		if (apiContributor instanceof ResourceMapper) {
 			LiferayDispatcherResource liferayDispatcherResource =
-				new LiferayDispatcherResource((PathProvider)apiContributor);
+				new LiferayDispatcherResource((ResourceMapper)apiContributor);
 
 			resourceContext.initResource(liferayDispatcherResource);
 

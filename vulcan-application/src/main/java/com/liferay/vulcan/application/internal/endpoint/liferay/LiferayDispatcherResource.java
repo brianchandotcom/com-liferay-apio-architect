@@ -15,7 +15,7 @@
 package com.liferay.vulcan.application.internal.endpoint.liferay;
 
 import com.liferay.portal.kernel.util.GroupThreadLocal;
-import com.liferay.vulcan.contributor.PathProvider;
+import com.liferay.vulcan.contributor.ResourceMapper;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
 import com.liferay.vulcan.resource.Resource;
 
@@ -35,13 +35,13 @@ import javax.ws.rs.core.Context;
  */
 public class LiferayDispatcherResource implements Resource {
 
-	public LiferayDispatcherResource(PathProvider pathProvider) {
-		_pathProvider = pathProvider;
+	public LiferayDispatcherResource(ResourceMapper resourceMapper) {
+		_resourceMapper = resourceMapper;
 	}
 
 	@Path("/{path}")
 	public Resource getResource(@PathParam("path") String path) {
-		_pathProvider.getResources(_resources::put);
+		_resourceMapper.mapResources(_resources::put);
 
 		if (!_resources.containsKey(path)) {
 			throw new NotFoundException();
@@ -63,7 +63,7 @@ public class LiferayDispatcherResource implements Resource {
 	@Context
 	protected ResourceContext resourceContext;
 
-	private final PathProvider _pathProvider;
+	private final ResourceMapper _resourceMapper;
 	private final Map<String, Resource> _resources = new HashMap<>();
 
 }

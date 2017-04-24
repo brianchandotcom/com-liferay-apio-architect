@@ -23,8 +23,8 @@ import java.util.function.BiConsumer;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public interface PathProvider {
+public interface ResourceMapper {
 
-	public void getResources(BiConsumer<String, Resource<?>> biConsumer);
+	public void mapResources(BiConsumer<String, Resource<?>> mapFunction);
 
 }
