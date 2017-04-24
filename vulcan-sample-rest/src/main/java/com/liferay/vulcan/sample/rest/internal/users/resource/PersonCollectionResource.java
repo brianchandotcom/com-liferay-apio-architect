@@ -46,26 +46,6 @@ public class PersonCollectionResource
 	implements CollectionResource<User>, APIContributor {
 
 	@Override
-	public SingleResource<User> getSingleResource(String id) {
-		try {
-			long userId = Long.valueOf(id);
-
-			User user = _userService.getUserById(userId);
-
-			return new PersonSingleResource(user);
-		}
-		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException();
-		}
-		catch (NumberFormatException nfe) {
-			throw new BadRequestException();
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
-	}
-
-	@Override
 	public Page<User> getPage(Pagination paginationParams) {
 		try {
 			List<User> users = _userService.getCompanyUsers(
@@ -85,6 +65,26 @@ public class PersonCollectionResource
 	@Override
 	public String getPath() {
 		return "people";
+	}
+
+	@Override
+	public SingleResource<User> getSingleResource(String id) {
+		try {
+			long userId = Long.valueOf(id);
+
+			User user = _userService.getUserById(userId);
+
+			return new PersonSingleResource(user);
+		}
+		catch (NoSuchUserException | PrincipalException e) {
+			throw new NotFoundException();
+		}
+		catch (NumberFormatException nfe) {
+			throw new BadRequestException();
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	@Context
