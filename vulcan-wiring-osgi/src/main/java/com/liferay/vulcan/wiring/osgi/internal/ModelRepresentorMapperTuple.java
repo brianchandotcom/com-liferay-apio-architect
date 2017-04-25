@@ -35,8 +35,11 @@ public class ModelRepresentorMapperTuple<T>
 	}
 
 	@Override
-	public int compareTo(ModelRepresentorMapperTuple o) {
-		return _serviceReference.compareTo(o._serviceReference);
+	public int compareTo(
+		ModelRepresentorMapperTuple modelRepresentorMapperTuple) {
+
+		return _serviceReference.compareTo(
+			modelRepresentorMapperTuple._serviceReference);
 	}
 
 	public ModelRepresentorMapper<T> getModelRepresentorMapper() {
