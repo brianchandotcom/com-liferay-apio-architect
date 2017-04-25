@@ -54,10 +54,10 @@ public class BlogPostingCollectionResource
 			throw new BadRequestException();
 		}
 
-		BlogsEntry blogsEntry = null;
-
 		try {
-			blogsEntry = _blogsService.getEntry(entryId);
+			BlogsEntry blogsEntry = _blogsService.getEntry(entryId);
+
+			return new BlogPostingSingleResource(blogsEntry);
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException();
@@ -65,8 +65,6 @@ public class BlogPostingCollectionResource
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
-
-		return new BlogPostingSingleResource(blogsEntry);
 	}
 
 	@Override
