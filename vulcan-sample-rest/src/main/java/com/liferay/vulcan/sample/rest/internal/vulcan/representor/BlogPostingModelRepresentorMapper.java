@@ -55,7 +55,7 @@ public class BlogPostingModelRepresentorMapper
 		RepresentorBuilder<BlogsEntry> representorBuilder) {
 
 		RepresentorBuilder.FirstStep<BlogsEntry> firstStep =
-			representorBuilder.addIdentifier(
+			representorBuilder.identifier(
 				blogsEntry -> String.valueOf(blogsEntry.getEntryId()));
 
 		firstStep.addEmbedded("author", User.class, this::_getUserOptional);

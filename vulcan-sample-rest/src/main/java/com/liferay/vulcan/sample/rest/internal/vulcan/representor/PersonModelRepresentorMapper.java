@@ -43,7 +43,7 @@ public class PersonModelRepresentorMapper
 	@Override
 	public void buildRepresentor(RepresentorBuilder<User> representorBuilder) {
 		RepresentorBuilder.FirstStep<User> firstStep =
-			representorBuilder.addIdentifier(
+			representorBuilder.identifier(
 				user -> String.valueOf(user.getUserId()));
 
 		firstStep.addField("additionalName", User::getMiddleName);

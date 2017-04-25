@@ -24,7 +24,7 @@ import java.util.function.Function;
  */
 public interface RepresentorBuilder<T> {
 
-	public FirstStep<T> addIdentifier(Function<T, String> identifierFunction);
+	public FirstStep<T> identifier(Function<T, String> identifierFunction);
 
 	public interface FirstStep<T> {
 
