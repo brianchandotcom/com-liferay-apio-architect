@@ -44,17 +44,9 @@ public class BlogPostingCollectionResource
 	implements CollectionResource<BlogsEntry>, GroupScoped {
 
 	@Override
-	public Page<BlogsEntry> getPage(Pagination pagination) {
-		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			_groupId, 0, pagination.getStartPosition(),
-			pagination.getEndPosition());
-		int count = _blogsService.getGroupEntriesCount(_groupId, 0);
+	public SingleResource<BlogsEntry> getCollectionItemSingleResource(
+		String id) {
 
-		return pagination.createPage(blogsEntries, count);
-	}
-
-	@Override
-	public SingleResource<BlogsEntry> getSingleResource(String id) {
 		BlogsEntry blogsEntry = null;
 
 		try {
@@ -70,6 +62,16 @@ public class BlogPostingCollectionResource
 		}
 
 		return new BlogPostingSingleResource(blogsEntry);
+	}
+
+	@Override
+	public Page<BlogsEntry> getPage(Pagination pagination) {
+		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
+			_groupId, 0, pagination.getStartPosition(),
+			pagination.getEndPosition());
+		int count = _blogsService.getGroupEntriesCount(_groupId, 0);
+
+		return pagination.createPage(blogsEntries, count);
 	}
 
 	@Override
