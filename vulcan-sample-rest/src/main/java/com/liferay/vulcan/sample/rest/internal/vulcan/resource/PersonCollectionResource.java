@@ -29,6 +29,7 @@ import com.liferay.vulcan.resource.SingleResource;
 
 import java.util.List;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.core.Context;
@@ -47,9 +48,13 @@ public class PersonCollectionResource
 
 	@Override
 	public SingleResource<User> getCollectionItemSingleResource(String id) {
-		try {
-			long userId = GetterUtil.getLong(id);
+		long userId = GetterUtil.getLong(id);
 
+		if (userId == GetterUtil.DEFAULT_LONG) {
+			throw new BadRequestException();
+		}
+
+		try {
 			User user = _userService.getUserById(userId);
 
 			return new PersonSingleResource(user);

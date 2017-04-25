@@ -28,6 +28,7 @@ import com.liferay.vulcan.resource.SingleResource;
 
 import java.util.List;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
@@ -47,11 +48,15 @@ public class BlogPostingCollectionResource
 	public SingleResource<BlogsEntry> getCollectionItemSingleResource(
 		String id) {
 
+		long entryId = GetterUtil.getLong(id);
+
+		if (entryId == GetterUtil.DEFAULT_LONG) {
+			throw new BadRequestException();
+		}
+
 		BlogsEntry blogsEntry = null;
 
 		try {
-			long entryId = GetterUtil.getLong(id);
-
 			blogsEntry = _blogsService.getEntry(entryId);
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
