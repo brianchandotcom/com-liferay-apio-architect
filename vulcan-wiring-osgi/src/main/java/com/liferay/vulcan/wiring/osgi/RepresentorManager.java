@@ -111,7 +111,7 @@ public class RepresentorManager {
 		_addModelRepresentorMapper(
 			serviceReference, modelRepresentorMapper, modelClass);
 
-		_createRepresentorMaps(modelRepresentorMapper, modelClass);
+		_buildRepresentor(modelRepresentorMapper, modelClass);
 	}
 
 	protected <T> void unsetServiceReference(
@@ -132,8 +132,7 @@ public class RepresentorManager {
 
 		optional.ifPresent(
 			firstModelRepresentorMapper ->
-				_createRepresentorMaps(
-					firstModelRepresentorMapper, modelClass));
+				_buildRepresentor(firstModelRepresentorMapper, modelClass));
 	}
 
 	private <T> void _addModelRepresentorMapper(
@@ -153,7 +152,7 @@ public class RepresentorManager {
 		modelRepresentorMapperTuples.add(modelRepresentorMapperTuple);
 	}
 
-	private <T> void _createRepresentorMaps(
+	private <T> void _buildRepresentor(
 		ModelRepresentorMapper<T> modelRepresentorMapper, Class<T> modelClass) {
 
 		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
