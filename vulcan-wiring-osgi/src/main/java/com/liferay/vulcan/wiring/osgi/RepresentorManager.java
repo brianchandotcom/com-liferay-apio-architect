@@ -119,7 +119,10 @@ public class RepresentorManager {
 
 		_removeRepresentorMaps(modelClass);
 
-		getModelRepresentorMapperOptional(modelClass).ifPresent(
+		Optional<ModelRepresentorMapper<T>> optional =
+			getModelRepresentorMapperOptional(modelClass);
+
+		optional.ifPresent(
 			firstModelRepresentorMapper ->
 				_createRepresentorMaps(
 					firstModelRepresentorMapper, modelClass));
