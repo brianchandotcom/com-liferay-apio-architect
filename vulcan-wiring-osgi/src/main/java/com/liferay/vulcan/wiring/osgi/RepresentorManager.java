@@ -155,15 +155,15 @@ public class RepresentorManager {
 			ModelRepresentorMapper<T> modelRepresentorMapper)
 		throws InvalidGenericException {
 
-		Optional<Class<T>> genericClass = GenericUtil.getGenericClass(
+		Optional<Class<T>> optional = GenericUtil.getGenericClassOptional(
 			modelRepresentorMapper, ModelRepresentorMapper.class);
 
-		if (!genericClass.isPresent()) {
+		if (!optional.isPresent()) {
 			throw new InvalidGenericException(
 				modelRepresentorMapper.getClass());
 		}
 
-		return genericClass.get();
+		return optional.get();
 	}
 
 	private <T> void _removeModelRepresentorMapper(

@@ -31,7 +31,7 @@ import java.util.Optional;
  */
 public class GenericUtil {
 
-	public static <T, S> Optional<Class<S>> getGenericClass(
+	public static <T, S> Optional<Class<S>> getGenericClassOptional(
 		T service, Class<T> clazz) {
 
 		Type genericType = ReflectionUtil.getGenericInterface(service, clazz);
