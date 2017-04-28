@@ -189,8 +189,12 @@ public class RepresentorManager {
 	private <T> void _removeModelRepresentorMapper(
 		ModelRepresentorMapper modelRepresentorMapper, Class<T> modelClass) {
 
-		_modelRepresentorMappers.get(modelClass.getName()).removeIf(tuple ->
-			tuple.getModelRepresentorMapper() == modelRepresentorMapper);
+		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
+			_modelRepresentorMappers.get(modelClass.getName());
+
+		modelRepresentorMapperTuples.removeIf(
+			modelRepresentorMapperTuple ->
+				modelRepresentorMapperTuple.getModelRepresentorMapper() == modelRepresentorMapper);
 	}
 
 	private <T> void _removeRepresentorMaps(Class<T> modelClass) {
