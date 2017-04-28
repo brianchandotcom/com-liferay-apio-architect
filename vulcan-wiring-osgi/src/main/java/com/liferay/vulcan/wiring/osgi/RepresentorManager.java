@@ -28,6 +28,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -44,6 +45,12 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  */
 @Component(immediate = true, service = RepresentorManager.class)
 public class RepresentorManager {
+
+	public RepresentorManager() {
+		Bundle bundle = FrameworkUtil.getBundle(RepresentorManager.class);
+
+		_bundleContext = bundle.getBundleContext();
+	}
 
 	public <T> Map<String, Function<T, Object>> getFieldFunctions(
 		Class<T> modelClass) {
@@ -193,8 +200,7 @@ public class RepresentorManager {
 		_typeLists.remove(modelClass.getName());
 	}
 
-	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
-		RepresentorManager.class).getBundleContext();
+	private final BundleContext _bundleContext;
 	private final Map<String, Map<String, Function<?, Object>>>
 		_fieldFunctionMaps = new ConcurrentHashMap<>();
 	private final Map<String, Function<?, String>> _identifierFunctions =
