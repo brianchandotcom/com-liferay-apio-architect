@@ -29,7 +29,7 @@ public interface RepresentorBuilder<T> {
 	public interface FirstStep<T> {
 
 		public <S> FirstStep<T> addEmbedded(
-			String key, Class<S> clazz,
+			String key, Class<S> modelClass,
 			Function<T, Optional<S>> objectFunction);
 
 		public FirstStep<T> addField(
