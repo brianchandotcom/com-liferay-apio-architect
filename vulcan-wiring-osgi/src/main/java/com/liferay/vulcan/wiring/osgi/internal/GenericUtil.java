@@ -32,9 +32,9 @@ import java.util.Optional;
 public class GenericUtil {
 
 	public static <T, S> Optional<Class<S>> getGenericClassOptional(
-		T service, Class<T> clazz) {
+		T t, Class<T> clazz) {
 
-		Type genericType = ReflectionUtil.getGenericInterface(service, clazz);
+		Type genericType = ReflectionUtil.getGenericInterface(t, clazz);
 
 		if ((genericType != null) &&
 			(genericType instanceof ParameterizedType)) {
