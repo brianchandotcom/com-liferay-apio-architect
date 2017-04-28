@@ -127,7 +127,7 @@ public class RepresentorManager {
 
 		_removeModelRepresentorMapper(modelRepresentorMapper, modelClass);
 
-		_removeRepresentorMaps(modelClass);
+		_removeRepresentor(modelClass);
 
 		Optional<ModelRepresentorMapper<T>> optional =
 			getModelRepresentorMapperOptional(modelClass);
@@ -210,7 +210,7 @@ public class RepresentorManager {
 			});
 	}
 
-	private <T> void _removeRepresentorMaps(Class<T> modelClass) {
+	private <T> void _removeRepresentor(Class<T> modelClass) {
 		_fieldFunctions.remove(modelClass.getName());
 		_identifierFunctions.remove(modelClass.getName());
 		_relationTuples.remove(modelClass.getName());
