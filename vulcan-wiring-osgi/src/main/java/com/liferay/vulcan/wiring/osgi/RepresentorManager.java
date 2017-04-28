@@ -56,7 +56,7 @@ public class RepresentorManager {
 	public <T> Map<String, Function<T, Object>> getFieldFunctions(
 		Class<T> modelClass) {
 
-		return (Map)_fieldFunctionMaps.get(modelClass.getName());
+		return (Map)_fieldFunctions.get(modelClass.getName());
 	}
 
 	public <T> String getIdentifier(Class<T> modelClass, T model) {
@@ -87,11 +87,11 @@ public class RepresentorManager {
 	}
 
 	public <T, V> List<RelationTuple<T, V>> getRelations(Class<T> modelClass) {
-		return (List)_relationTupleLists.get(modelClass.getName());
+		return (List)_relationTuples.get(modelClass.getName());
 	}
 
 	public <T> List<String> getTypes(Class<T> modelClass) {
-		return _typeLists.get(modelClass.getName());
+		return _types.get(modelClass.getName());
 	}
 
 	@Reference(
@@ -160,9 +160,9 @@ public class RepresentorManager {
 		List<RelationTuple<?, ?>> relationTuples = new ArrayList<>();
 		List<String> types = new ArrayList<>();
 
-		_fieldFunctionMaps.put(modelClass.getName(), fieldFunctions);
-		_relationTupleLists.put(modelClass.getName(), relationTuples);
-		_typeLists.put(modelClass.getName(), types);
+		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
+		_relationTuples.put(modelClass.getName(), relationTuples);
+		_types.put(modelClass.getName(), types);
 
 		modelRepresentorMapper.buildRepresentor(
 			new RepresentorBuilderImpl<>(
@@ -206,22 +206,21 @@ public class RepresentorManager {
 	}
 
 	private <T> void _removeRepresentorMaps(Class<T> modelClass) {
-		_fieldFunctionMaps.remove(modelClass.getName());
+		_fieldFunctions.remove(modelClass.getName());
 		_identifierFunctions.remove(modelClass.getName());
-		_relationTupleLists.remove(modelClass.getName());
-		_typeLists.remove(modelClass.getName());
+		_relationTuples.remove(modelClass.getName());
+		_types.remove(modelClass.getName());
 	}
 
 	private final BundleContext _bundleContext;
 	private final Map<String, Map<String, Function<?, Object>>>
-		_fieldFunctionMaps = new ConcurrentHashMap<>();
+		_fieldFunctions = new ConcurrentHashMap<>();
 	private final Map<String, Function<?, String>> _identifierFunctions =
 		new ConcurrentHashMap<>();
 	private final Map<String, TreeSet<ModelRepresentorMapperTuple<?>>>
 		_modelRepresentorMappers = new ConcurrentHashMap<>();
-	private final Map<String, List<RelationTuple<?, ?>>> _relationTupleLists =
+	private final Map<String, List<RelationTuple<?, ?>>> _relationTuples =
 		new ConcurrentHashMap<>();
-	private final Map<String, List<String>> _typeLists =
-		new ConcurrentHashMap<>();
+	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
 
 }
