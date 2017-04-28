@@ -86,7 +86,9 @@ public class RepresentorManager {
 					getModelRepresentorMapper());
 	}
 
-	public <T, V> List<RelationTuple<T, V>> getRelations(Class<T> modelClass) {
+	public <T, V> List<RelationTuple<T, V>> getRelationTuples(
+		Class<T> modelClass) {
+
 		return (List)_relationTuples.get(modelClass.getName());
 	}
 
