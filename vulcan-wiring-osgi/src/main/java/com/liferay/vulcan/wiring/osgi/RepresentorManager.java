@@ -15,9 +15,9 @@
 package com.liferay.vulcan.wiring.osgi;
 
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
+import com.liferay.vulcan.wiring.osgi.internal.EmbeddedTuple;
 import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.internal.ModelRepresentorMapperTuple;
-import com.liferay.vulcan.wiring.osgi.internal.EmbeddedTuple;
 import com.liferay.vulcan.wiring.osgi.internal.RepresentorBuilderImpl;
 
 import java.util.ArrayList;
@@ -53,6 +53,12 @@ public class RepresentorManager {
 		_bundleContext = bundle.getBundleContext();
 	}
 
+	public <T, V> List<EmbeddedTuple<T, V>> getEmbeddedTuples(
+		Class<T> modelClass) {
+
+		return (List)_embeddedTuples.get(modelClass.getName());
+	}
+
 	public <T> Map<String, Function<T, Object>> getFieldFunctions(
 		Class<T> modelClass) {
 
@@ -84,12 +90,6 @@ public class RepresentorManager {
 			modelRepresentorMapperTuple ->
 				(ModelRepresentorMapper<T>)modelRepresentorMapperTuple.
 					getModelRepresentorMapper());
-	}
-
-	public <T, V> List<EmbeddedTuple<T, V>> getEmbeddedTuples(
-		Class<T> modelClass) {
-
-		return (List)_embeddedTuples.get(modelClass.getName());
 	}
 
 	public <T> List<String> getTypes(Class<T> modelClass) {
@@ -218,14 +218,14 @@ public class RepresentorManager {
 	}
 
 	private final BundleContext _bundleContext;
+	private final Map<String, List<EmbeddedTuple<?, ?>>> _embeddedTuples =
+		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
 		_fieldFunctions = new ConcurrentHashMap<>();
 	private final Map<String, Function<?, String>> _identifierFunctions =
 		new ConcurrentHashMap<>();
 	private final Map<String, TreeSet<ModelRepresentorMapperTuple<?>>>
 		_modelRepresentorMappers = new ConcurrentHashMap<>();
-	private final Map<String, List<EmbeddedTuple<?, ?>>> _embeddedTuples =
-		new ConcurrentHashMap<>();
 	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
 
 }

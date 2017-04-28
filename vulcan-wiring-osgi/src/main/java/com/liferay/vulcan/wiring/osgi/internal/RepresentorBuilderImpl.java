@@ -77,10 +77,10 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		};
 	}
 
+	private final List<EmbeddedTuple<?, ?>> _embeddedTuples;
 	private final Map<String, Function<?, Object>> _fieldFunctions;
 	private final Map<String, Function<?, String>> _identifierFunctions;
 	private final Class<T> _modelClass;
-	private final List<EmbeddedTuple<?, ?>> _embeddedTuples;
 	private final List<String> _types;
 
 }
