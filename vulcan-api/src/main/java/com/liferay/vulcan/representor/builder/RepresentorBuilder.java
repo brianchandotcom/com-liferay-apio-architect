@@ -33,7 +33,7 @@ public interface RepresentorBuilder<T> {
 			Function<T, Optional<S>> modelFunction);
 
 		public FirstStep<T> addField(
-			String key, Function<T, Object> valueFunction);
+			String key, Function<T, Object> fieldFunction);
 
 		public FirstStep<T> addType(String type);
 

@@ -60,9 +60,9 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 
 			@Override
 			public FirstStep<T> addField(
-				String key, Function<T, Object> valueFunction) {
+				String key, Function<T, Object> fieldFunction) {
 
-				_fieldFunctions.put(key, valueFunction);
+				_fieldFunctions.put(key, fieldFunction);
 
 				return this;
 			}
