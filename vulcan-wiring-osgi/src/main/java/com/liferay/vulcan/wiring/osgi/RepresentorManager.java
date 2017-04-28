@@ -211,9 +211,9 @@ public class RepresentorManager {
 	}
 
 	private <T> void _removeRepresentor(Class<T> modelClass) {
+		_embeddedTuples.remove(modelClass.getName());
 		_fieldFunctions.remove(modelClass.getName());
 		_identifierFunctions.remove(modelClass.getName());
-		_embeddedTuples.remove(modelClass.getName());
 		_types.remove(modelClass.getName());
 	}
 
