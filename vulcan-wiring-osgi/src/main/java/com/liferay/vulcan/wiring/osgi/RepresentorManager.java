@@ -58,8 +58,8 @@ public class RepresentorManager {
 		return identifierFunction.apply(model);
 	}
 
-	public <T> Optional<ModelRepresentorMapper<T>> getModelRepresentorMapper(
-		Class<T> modelClass) {
+	public <T> Optional<ModelRepresentorMapper<T>>
+		getModelRepresentorMapperOptional(Class<T> modelClass) {
 
 		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
 			_modelRepresentorMappers.get(modelClass.getName());
@@ -119,7 +119,7 @@ public class RepresentorManager {
 
 		_removeRepresentorMaps(modelClass);
 
-		getModelRepresentorMapper(modelClass).ifPresent(
+		getModelRepresentorMapperOptional(modelClass).ifPresent(
 			firstModelRepresentorMapper ->
 				_createRepresentorMaps(
 					firstModelRepresentorMapper, modelClass));
