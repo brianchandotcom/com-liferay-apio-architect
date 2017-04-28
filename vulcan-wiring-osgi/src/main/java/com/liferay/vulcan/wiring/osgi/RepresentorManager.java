@@ -135,14 +135,14 @@ public class RepresentorManager {
 		_modelRepresentorMappers.computeIfAbsent(
 			modelClass.getName(), name -> new TreeSet<>());
 
-		ModelRepresentorMapperTuple<T> tuple =
+		ModelRepresentorMapperTuple<T> modelRepresentorMapperTuple =
 			new ModelRepresentorMapperTuple<>(
 				serviceReference, modelRepresentorMapper);
 
 		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
 			_modelRepresentorMappers.get(modelClass.getName());
 
-		modelRepresentorMapperTuples.add(tuple);
+		modelRepresentorMapperTuples.add(modelRepresentorMapperTuple);
 	}
 
 	private <T> void _createRepresentorMaps(
