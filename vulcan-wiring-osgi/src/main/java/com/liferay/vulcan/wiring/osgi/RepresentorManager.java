@@ -61,12 +61,21 @@ public class RepresentorManager {
 	public <T> Optional<ModelRepresentorMapper<T>> getModelRepresentorMapper(
 		Class<T> modelClass) {
 
-		return Optional.ofNullable(
-			_modelRepresentorMappers.get(
-				modelClass.getName())).map(TreeSet::first).map(
-				modelRepresentorMapperTuple ->
-					(ModelRepresentorMapper<T>)modelRepresentorMapperTuple.
-						getModelRepresentorMapper());
+		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
+			_modelRepresentorMappers.get(modelClass.getName());
+
+		Optional<TreeSet<ModelRepresentorMapperTuple<?>>>
+			modelRepresentorMapperTuplesOptional = Optional.ofNullable(
+				modelRepresentorMapperTuples);
+
+		Optional<ModelRepresentorMapperTuple<?>>
+			firstModelRepresentorMapperTuple =
+				modelRepresentorMapperTuplesOptional.map(TreeSet::first);
+
+		return firstModelRepresentorMapperTuple.map(
+			modelRepresentorMapperTuple ->
+				(ModelRepresentorMapper<T>)modelRepresentorMapperTuple.
+					getModelRepresentorMapper());
 	}
 
 	public <T, V> List<RelationTuple<T, V>> getRelations(Class<T> modelClass) {
