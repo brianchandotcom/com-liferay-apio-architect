@@ -26,27 +26,27 @@ public class RelationTuple<T, S> {
 
 	public RelationTuple(
 		String name, Class<S> modelClass,
-		Function<T, Optional<S>> objectFunction) {
+		Function<T, Optional<S>> modelFunction) {
 
 		_name = name;
 		_modelClass = modelClass;
-		_objectFunction = objectFunction;
+		_modelFunction = modelFunction;
 	}
 
 	public Class<S> getModelClass() {
 		return _modelClass;
 	}
 
+	public Function<T, Optional<S>> getModelFunction() {
+		return _modelFunction;
+	}
+
 	public String getName() {
 		return _name;
 	}
 
-	public Function<T, Optional<S>> getObjectFunction() {
-		return _objectFunction;
-	}
-
 	private final Class<S> _modelClass;
+	private final Function<T, Optional<S>> _modelFunction;
 	private final String _name;
-	private final Function<T, Optional<S>> _objectFunction;
 
 }

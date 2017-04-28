@@ -50,10 +50,10 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 			@Override
 			public <S> FirstStep<T> addEmbedded(
 				String key, Class<S> modelClass,
-				Function<T, Optional<S>> objectFunction) {
+				Function<T, Optional<S>> modelFunction) {
 
 				_relationTypes.add(
-					new RelationTuple<>(key, modelClass, objectFunction));
+					new RelationTuple<>(key, modelClass, modelFunction));
 
 				return this;
 			}
