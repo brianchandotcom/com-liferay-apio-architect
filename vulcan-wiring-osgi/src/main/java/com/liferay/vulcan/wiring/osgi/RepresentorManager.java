@@ -157,11 +157,15 @@ public class RepresentorManager {
 		ModelRepresentorMapper<T> modelRepresentorMapper, Class<T> modelClass) {
 
 		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
-		List<RelationTuple<?, ?>> relationTuples = new ArrayList<>();
-		List<String> types = new ArrayList<>();
 
 		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
+
+		List<RelationTuple<?, ?>> relationTuples = new ArrayList<>();
+
 		_relationTuples.put(modelClass.getName(), relationTuples);
+
+		List<String> types = new ArrayList<>();
+
 		_types.put(modelClass.getName(), types);
 
 		modelRepresentorMapper.buildRepresentor(
