@@ -25,12 +25,16 @@ import java.util.function.Function;
 public class RelationTuple<T, S> {
 
 	public RelationTuple(
-		String name, Class<S> modelClass,
+		String key, Class<S> modelClass,
 		Function<T, Optional<S>> modelFunction) {
 
-		_name = name;
+		_key = key;
 		_modelClass = modelClass;
 		_modelFunction = modelFunction;
+	}
+
+	public String getKey() {
+		return _key;
 	}
 
 	public Class<S> getModelClass() {
@@ -41,12 +45,8 @@ public class RelationTuple<T, S> {
 		return _modelFunction;
 	}
 
-	public String getName() {
-		return _name;
-	}
-
+	private final String _key;
 	private final Class<S> _modelClass;
 	private final Function<T, Optional<S>> _modelFunction;
-	private final String _name;
 
 }
