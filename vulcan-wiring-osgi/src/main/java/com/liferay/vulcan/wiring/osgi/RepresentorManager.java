@@ -17,6 +17,7 @@ package com.liferay.vulcan.wiring.osgi;
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
 import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.internal.ModelRepresentorMapperTuple;
+import com.liferay.vulcan.wiring.osgi.internal.RelationTuple;
 import com.liferay.vulcan.wiring.osgi.internal.RepresentorBuilderImpl;
 
 import java.util.ArrayList;

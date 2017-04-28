@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi;
+package com.liferay.vulcan.wiring.osgi.internal;
 
 import java.util.Optional;
 import java.util.function.Function;
