@@ -52,7 +52,7 @@ public class GenericUtil {
 				}
 				catch (ClassCastException cce) {
 					if (_log.isWarnEnabled()) {
-						_log.warn(cce);
+						_log.warn(cce, cce);
 					}
 				}
 			}
