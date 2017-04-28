@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
 import org.osgi.framework.BundleContext;
@@ -183,15 +182,15 @@ public class RepresentorManager {
 
 	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
 		RepresentorManager.class).getBundleContext();
-	private final ConcurrentMap<String, Map<String, Function<?, Object>>>
+	private final Map<String, Map<String, Function<?, Object>>>
 		_fieldFunctionMaps = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<String, Function<?, String>>
-		_identifierFunctions = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, TreeSet<ModelRepresentorMapperTuple<?>>>
+	private final Map<String, Function<?, String>> _identifierFunctions =
+		new ConcurrentHashMap<>();
+	private final Map<String, TreeSet<ModelRepresentorMapperTuple<?>>>
 		_modelRepresentorMappers = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, List<RelationTuple<?, ?>>>
-		_relationTupleLists = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, List<String>> _typeLists =
+	private final Map<String, List<RelationTuple<?, ?>>> _relationTupleLists =
+		new ConcurrentHashMap<>();
+	private final Map<String, List<String>> _typeLists =
 		new ConcurrentHashMap<>();
 
 }

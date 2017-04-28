@@ -20,7 +20,6 @@ import com.liferay.vulcan.wiring.osgi.RelationTuple;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
@@ -32,7 +31,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 
 	public RepresentorBuilderImpl(
 		Class<T> modelClass,
-		ConcurrentHashMap<String, Function<?, String>> identifierFunctions,
+		Map<String, Function<?, String>> identifierFunctions,
 		Map<String, Function<?, Object>> fieldFunctions,
 		List<RelationTuple<?, ?>> relationTypes, List<String> types) {
 
@@ -80,8 +79,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	}
 
 	private final Map<String, Function<?, Object>> _fieldFunctions;
-	private final ConcurrentHashMap<String, Function<?, String>>
-		_identifierFunctions;
+	private final Map<String, Function<?, String>> _identifierFunctions;
 	private final Class<T> _modelClass;
 	private final List<RelationTuple<?, ?>> _relationTypes;
 	private final List<String> _types;
