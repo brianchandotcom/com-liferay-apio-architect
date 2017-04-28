@@ -32,12 +32,12 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		Class<T> modelClass,
 		Map<String, Function<?, String>> identifierFunctions,
 		Map<String, Function<?, Object>> fieldFunctions,
-		List<RelationTuple<?, ?>> relationTuples, List<String> types) {
+		List<EmbeddedTuple<?, ?>> embeddedTuples, List<String> types) {
 
 		_modelClass = modelClass;
 		_identifierFunctions = identifierFunctions;
 		_fieldFunctions = fieldFunctions;
-		_relationTuples = relationTuples;
+		_embeddedTuples = embeddedTuples;
 		_types = types;
 	}
 
@@ -52,8 +52,8 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 				String key, Class<S> modelClass,
 				Function<T, Optional<S>> modelFunction) {
 
-				_relationTuples.add(
-					new RelationTuple<>(key, modelClass, modelFunction));
+				_embeddedTuples.add(
+					new EmbeddedTuple<>(key, modelClass, modelFunction));
 
 				return this;
 			}
@@ -80,7 +80,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	private final Map<String, Function<?, Object>> _fieldFunctions;
 	private final Map<String, Function<?, String>> _identifierFunctions;
 	private final Class<T> _modelClass;
-	private final List<RelationTuple<?, ?>> _relationTuples;
+	private final List<EmbeddedTuple<?, ?>> _embeddedTuples;
 	private final List<String> _types;
 
 }

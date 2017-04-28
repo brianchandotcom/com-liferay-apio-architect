@@ -22,9 +22,9 @@ import java.util.function.Function;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public class RelationTuple<T, S> {
+public class EmbeddedTuple<T, S> {
 
-	public RelationTuple(
+	public EmbeddedTuple(
 		String key, Class<S> modelClass,
 		Function<T, Optional<S>> modelFunction) {
 
