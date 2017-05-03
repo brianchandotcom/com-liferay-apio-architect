@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.wiring.osgi;
 
+import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
 import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.internal.ModelRepresentorMapperTuple;
@@ -112,8 +113,7 @@ public class RepresentorManager {
 		policyOption = ReferencePolicyOption.GREEDY
 	)
 	protected <T> void setServiceReference(
-			ServiceReference<ModelRepresentorMapper<T>> serviceReference)
-		throws IllegalArgumentException {
+		ServiceReference<ModelRepresentorMapper<T>> serviceReference) {
 
 		ModelRepresentorMapper<T> modelRepresentorMapper =
 			_bundleContext.getService(serviceReference);
@@ -127,8 +127,7 @@ public class RepresentorManager {
 	}
 
 	protected <T> void unsetServiceReference(
-			ServiceReference<ModelRepresentorMapper<T>> serviceReference)
-		throws IllegalArgumentException {
+		ServiceReference<ModelRepresentorMapper<T>> serviceReference) {
 
 		ModelRepresentorMapper<T> modelRepresentorMapper =
 			_bundleContext.getService(serviceReference);
@@ -192,17 +191,14 @@ public class RepresentorManager {
 	}
 
 	private <T> Class<T> _getModelClass(
-			ModelRepresentorMapper<T> modelRepresentorMapper)
-		throws IllegalArgumentException {
+		ModelRepresentorMapper<T> modelRepresentorMapper) {
 
 		Optional<Class<T>> optional = GenericUtil.getGenericClassOptional(
 			modelRepresentorMapper, ModelRepresentorMapper.class);
 
 		if (!optional.isPresent()) {
-			Class<?> clazz = modelRepresentorMapper.getClass();
-
-			throw new IllegalArgumentException(
-				"Class " + clazz.getName() + " must have a generic type");
+			throw new VulcanDeveloperError.MustHaveValidGenericType(
+				modelRepresentorMapper.getClass());
 		}
 
 		return optional.get();
