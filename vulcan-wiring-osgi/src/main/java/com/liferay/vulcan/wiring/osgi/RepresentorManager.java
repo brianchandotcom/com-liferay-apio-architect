@@ -167,13 +167,11 @@ public class RepresentorManager {
 
 		_types.put(modelClass.getName(), types);
 
-		Optional<ModelRepresentorMapper<T>> modelRepresentorMapperOptional =
-			getModelRepresentorMapperOptional(modelClass);
-
-		modelRepresentorMapperOptional.get().buildRepresentor(
-			new RepresentorBuilderImpl<>(
-				modelClass, _identifierFunctions, fieldFunctions,
-				embeddedRelatedModels, linkedRelatedModels, links, types));
+		getModelRepresentorMapperOptional(modelClass).ifPresent(
+			modelRepresentorMapper -> modelRepresentorMapper.buildRepresentor(
+				new RepresentorBuilderImpl<>(
+					modelClass, _identifierFunctions, fieldFunctions,
+					embeddedRelatedModels, linkedRelatedModels, links, types)));
 	}
 
 	private <T> void _addModelRepresentorMapper(
