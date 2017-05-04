@@ -32,15 +32,15 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		Class<T> modelClass,
 		Map<String, Function<?, String>> identifierFunctions,
 		Map<String, Function<?, Object>> fieldFunctions,
-		List<EmbeddedTuple<?, ?>> embeddedTuples,
-		List<EmbeddedTuple<?, ?>> linkTuples, Map<String, String> links,
+		List<RelatedModel<?, ?>> embeddedRelatedModels,
+		List<RelatedModel<?, ?>> linkedRelatedModels, Map<String, String> links,
 		List<String> types) {
 
 		_modelClass = modelClass;
 		_identifierFunctions = identifierFunctions;
 		_fieldFunctions = fieldFunctions;
-		_embeddedTuples = embeddedTuples;
-		_linkTuples = linkTuples;
+		_embeddedRelatedModels = embeddedRelatedModels;
+		_linkedRelatedModels = linkedRelatedModels;
 		_links = links;
 		_types = types;
 	}
@@ -56,8 +56,8 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 				String key, Class<S> modelClass,
 				Function<T, Optional<S>> modelFunction) {
 
-				_embeddedTuples.add(
-					new EmbeddedTuple<>(key, modelClass, modelFunction));
+				_embeddedRelatedModels.add(
+					new RelatedModel<>(key, modelClass, modelFunction));
 
 				return this;
 			}
@@ -76,8 +76,8 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 				String key, Class<S> modelClass,
 				Function<T, Optional<S>> modelFunction) {
 
-				_linkTuples.add(
-					new EmbeddedTuple<>(key, modelClass, modelFunction));
+				_linkedRelatedModels.add(
+					new RelatedModel<>(key, modelClass, modelFunction));
 
 				return this;
 			}
@@ -99,11 +99,11 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		};
 	}
 
-	private final List<EmbeddedTuple<?, ?>> _embeddedTuples;
+	private final List<RelatedModel<?, ?>> _embeddedRelatedModels;
 	private final Map<String, Function<?, Object>> _fieldFunctions;
 	private final Map<String, Function<?, String>> _identifierFunctions;
+	private final List<RelatedModel<?, ?>> _linkedRelatedModels;
 	private final Map<String, String> _links;
-	private final List<EmbeddedTuple<?, ?>> _linkTuples;
 	private final Class<T> _modelClass;
 	private final List<String> _types;
 

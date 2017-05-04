@@ -15,9 +15,9 @@
 package com.liferay.vulcan.wiring.osgi;
 
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
-import com.liferay.vulcan.wiring.osgi.internal.EmbeddedTuple;
 import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.internal.ModelRepresentorMapperTuple;
+import com.liferay.vulcan.wiring.osgi.internal.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.internal.RepresentorBuilderImpl;
 
 import java.util.ArrayList;
@@ -54,10 +54,10 @@ public class RepresentorManager {
 		_bundleContext = bundle.getBundleContext();
 	}
 
-	public <T, V> List<EmbeddedTuple<T, V>> getEmbeddedTuples(
+	public <T, V> List<RelatedModel<T, V>> getEmbeddedRelatedModels(
 		Class<T> modelClass) {
 
-		return (List)_embeddedTuples.get(modelClass.getName());
+		return (List)_embeddedRelatedModels.get(modelClass.getName());
 	}
 
 	public <T> Map<String, Function<T, Object>> getFieldFunctions(
@@ -73,14 +73,14 @@ public class RepresentorManager {
 		return identifierFunction.apply(model);
 	}
 
-	public <T> Map<String, String> getLinks(Class<T> modelClass) {
-		return _linkMaps.get(modelClass.getName());
-	}
-
-	public <T, V> List<EmbeddedTuple<T, V>> getLinksToRelations(
+	public <T, V> List<RelatedModel<T, V>> getLinkedRelatedModels(
 		Class<T> modelClass) {
 
-		return (List)_linkTupleLists.get(modelClass.getName());
+		return (List)_linkedRelatedModels.get(modelClass.getName());
+	}
+
+	public <T> Map<String, String> getLinks(Class<T> modelClass) {
+		return _links.get(modelClass.getName());
 	}
 
 	public <T> Optional<ModelRepresentorMapper<T>>
@@ -172,17 +172,17 @@ public class RepresentorManager {
 
 		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
 
-		List<EmbeddedTuple<?, ?>> embeddedTuples = new ArrayList<>();
+		List<RelatedModel<?, ?>> embeddedRelatedModels = new ArrayList<>();
 
-		_embeddedTuples.put(modelClass.getName(), embeddedTuples);
+		_embeddedRelatedModels.put(modelClass.getName(), embeddedRelatedModels);
 
 		Map<String, String> links = new HashMap<>();
 
-		_linkMaps.put(modelClass.getName(), links);
+		_links.put(modelClass.getName(), links);
 
-		List<EmbeddedTuple<?, ?>> linkTuples = new ArrayList<>();
+		List<RelatedModel<?, ?>> linkedRelatedModels = new ArrayList<>();
 
-		_linkTupleLists.put(modelClass.getName(), linkTuples);
+		_linkedRelatedModels.put(modelClass.getName(), linkedRelatedModels);
 
 		List<String> types = new ArrayList<>();
 
@@ -191,7 +191,7 @@ public class RepresentorManager {
 		modelRepresentorMapper.buildRepresentor(
 			new RepresentorBuilderImpl<>(
 				modelClass, _identifierFunctions, fieldFunctions,
-				embeddedTuples, linkTuples, links, types));
+				embeddedRelatedModels, linkedRelatedModels, links, types));
 	}
 
 	private <T> Class<T> _getModelClass(
@@ -230,23 +230,23 @@ public class RepresentorManager {
 	}
 
 	private <T> void _removeRepresentor(Class<T> modelClass) {
-		_embeddedTuples.remove(modelClass.getName());
+		_embeddedRelatedModels.remove(modelClass.getName());
 		_fieldFunctions.remove(modelClass.getName());
 		_identifierFunctions.remove(modelClass.getName());
 		_types.remove(modelClass.getName());
 	}
 
 	private final BundleContext _bundleContext;
-	private final Map<String, List<EmbeddedTuple<?, ?>>> _embeddedTuples =
+	private final Map<String, List<RelatedModel<?, ?>>> _embeddedRelatedModels =
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
 		_fieldFunctions = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<String, Function<?, String>>
+	private final ConcurrentMap<String, Function<?, String>>
 		_identifierFunctions = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<String, Map<String, String>> _linkMaps =
+	private final ConcurrentMap<String, List<RelatedModel<?, ?>>>
+		_linkedRelatedModels = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, Map<String, String>> _links =
 		new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, List<EmbeddedTuple<?, ?>>>
-		_linkTupleLists = new ConcurrentHashMap<>();
 	private final Map<String, TreeSet<ModelRepresentorMapperTuple<?>>>
 		_modelRepresentorMappers = new ConcurrentHashMap<>();
 	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
