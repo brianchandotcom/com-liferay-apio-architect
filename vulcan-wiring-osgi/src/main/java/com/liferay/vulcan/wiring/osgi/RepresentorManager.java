@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
 import org.osgi.framework.Bundle;
@@ -243,11 +242,11 @@ public class RepresentorManager {
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
 		_fieldFunctions = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, Function<?, String>>
-		_identifierFunctions = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, List<RelatedModel<?, ?>>>
-		_linkedRelatedModels = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, Map<String, String>> _links =
+	private final Map<String, Function<?, String>> _identifierFunctions =
+		new ConcurrentHashMap<>();
+	private final Map<String, List<RelatedModel<?, ?>>> _linkedRelatedModels =
+		new ConcurrentHashMap<>();
+	private final Map<String, Map<String, String>> _links =
 		new ConcurrentHashMap<>();
 	private final Map<String, TreeSet<ModelRepresentorMapperTuple<?>>>
 		_modelRepresentorMappers = new ConcurrentHashMap<>();
