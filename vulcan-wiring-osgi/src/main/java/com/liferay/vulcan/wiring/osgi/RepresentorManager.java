@@ -57,13 +57,13 @@ public class RepresentorManager {
 	public <T, V> List<RelatedModel<T, V>> getEmbeddedRelatedModels(
 		Class<T> modelClass) {
 
-		return (List)_embeddedRelatedModels.get(modelClass.getName());
+		return (List)_embeddedRelatedModelLists.get(modelClass.getName());
 	}
 
 	public <T> Map<String, Function<T, Object>> getFieldFunctions(
 		Class<T> modelClass) {
 
-		return (Map)_fieldFunctions.get(modelClass.getName());
+		return (Map)_fieldFunctionMaps.get(modelClass.getName());
 	}
 
 	public <T> String getIdentifier(Class<T> modelClass, T model) {
@@ -76,18 +76,18 @@ public class RepresentorManager {
 	public <T, V> List<RelatedModel<T, V>> getLinkedRelatedModels(
 		Class<T> modelClass) {
 
-		return (List)_linkedRelatedModels.get(modelClass.getName());
+		return (List)_linkedRelatedModelLists.get(modelClass.getName());
 	}
 
 	public <T> Map<String, String> getLinks(Class<T> modelClass) {
-		return _links.get(modelClass.getName());
+		return _linkMaps.get(modelClass.getName());
 	}
 
 	public <T> Optional<ModelRepresentorMapper<T>>
 		getModelRepresentorMapperOptional(Class<T> modelClass) {
 
 		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
-			_modelRepresentorMappers.get(modelClass.getName());
+			_modelRepresentorMapperSets.get(modelClass.getName());
 
 		Optional<TreeSet<ModelRepresentorMapperTuple<?>>>
 			modelRepresentorMapperTuplesOptional = Optional.ofNullable(
@@ -104,7 +104,7 @@ public class RepresentorManager {
 	}
 
 	public <T> List<String> getTypes(Class<T> modelClass) {
-		return _types.get(modelClass.getName());
+		return _typeLists.get(modelClass.getName());
 	}
 
 	@Reference(
@@ -148,23 +148,24 @@ public class RepresentorManager {
 	private <T> void _addModelClassMaps(Class<T> modelClass) {
 		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
 
-		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
+		_fieldFunctionMaps.put(modelClass.getName(), fieldFunctions);
 
 		List<RelatedModel<?, ?>> embeddedRelatedModels = new ArrayList<>();
 
-		_embeddedRelatedModels.put(modelClass.getName(), embeddedRelatedModels);
+		_embeddedRelatedModelLists.put(
+			modelClass.getName(), embeddedRelatedModels);
 
 		Map<String, String> links = new HashMap<>();
 
-		_links.put(modelClass.getName(), links);
+		_linkMaps.put(modelClass.getName(), links);
 
 		List<RelatedModel<?, ?>> linkedRelatedModels = new ArrayList<>();
 
-		_linkedRelatedModels.put(modelClass.getName(), linkedRelatedModels);
+		_linkedRelatedModelLists.put(modelClass.getName(), linkedRelatedModels);
 
 		List<String> types = new ArrayList<>();
 
-		_types.put(modelClass.getName(), types);
+		_typeLists.put(modelClass.getName(), types);
 
 		getModelRepresentorMapperOptional(modelClass).ifPresent(
 			modelRepresentorMapper -> modelRepresentorMapper.buildRepresentor(
@@ -177,7 +178,7 @@ public class RepresentorManager {
 		ServiceReference<ModelRepresentorMapper<T>> serviceReference,
 		ModelRepresentorMapper<T> modelRepresentorMapper, Class<T> modelClass) {
 
-		_modelRepresentorMappers.computeIfAbsent(
+		_modelRepresentorMapperSets.computeIfAbsent(
 			modelClass.getName(), name -> new TreeSet<>());
 
 		ModelRepresentorMapperTuple<T> modelRepresentorMapperTuple =
@@ -185,7 +186,7 @@ public class RepresentorManager {
 				serviceReference, modelRepresentorMapper);
 
 		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
-			_modelRepresentorMappers.get(modelClass.getName());
+			_modelRepresentorMapperSets.get(modelClass.getName());
 
 		modelRepresentorMapperTuples.add(modelRepresentorMapperTuple);
 	}
@@ -203,19 +204,19 @@ public class RepresentorManager {
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
-		_embeddedRelatedModels.remove(modelClass.getName());
-		_linkedRelatedModels.remove(modelClass.getName());
-		_links.remove(modelClass.getName());
-		_fieldFunctions.remove(modelClass.getName());
+		_embeddedRelatedModelLists.remove(modelClass.getName());
+		_linkedRelatedModelLists.remove(modelClass.getName());
+		_linkMaps.remove(modelClass.getName());
+		_fieldFunctionMaps.remove(modelClass.getName());
 		_identifierFunctions.remove(modelClass.getName());
-		_types.remove(modelClass.getName());
+		_typeLists.remove(modelClass.getName());
 	}
 
 	private <T> void _removeModelRepresentorMapper(
 		ModelRepresentorMapper modelRepresentorMapper, Class<T> modelClass) {
 
 		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
-			_modelRepresentorMappers.get(modelClass.getName());
+			_modelRepresentorMapperSets.get(modelClass.getName());
 
 		modelRepresentorMapperTuples.removeIf(
 			modelRepresentorMapperTuple -> {
@@ -230,18 +231,19 @@ public class RepresentorManager {
 	}
 
 	private final BundleContext _bundleContext;
-	private final Map<String, List<RelatedModel<?, ?>>> _embeddedRelatedModels =
-		new ConcurrentHashMap<>();
+	private final Map<String, List<RelatedModel<?, ?>>>
+		_embeddedRelatedModelLists = new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
-		_fieldFunctions = new ConcurrentHashMap<>();
+		_fieldFunctionMaps = new ConcurrentHashMap<>();
 	private final Map<String, Function<?, String>> _identifierFunctions =
 		new ConcurrentHashMap<>();
-	private final Map<String, List<RelatedModel<?, ?>>> _linkedRelatedModels =
-		new ConcurrentHashMap<>();
-	private final Map<String, Map<String, String>> _links =
+	private final Map<String, List<RelatedModel<?, ?>>>
+		_linkedRelatedModelLists = new ConcurrentHashMap<>();
+	private final Map<String, Map<String, String>> _linkMaps =
 		new ConcurrentHashMap<>();
 	private final Map<String, TreeSet<ModelRepresentorMapperTuple<?>>>
-		_modelRepresentorMappers = new ConcurrentHashMap<>();
-	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
+		_modelRepresentorMapperSets = new ConcurrentHashMap<>();
+	private final Map<String, List<String>> _typeLists =
+		new ConcurrentHashMap<>();
 
 }
