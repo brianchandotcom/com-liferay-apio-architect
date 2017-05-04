@@ -233,6 +233,8 @@ public class RepresentorManager {
 		_embeddedRelatedModels.remove(modelClass.getName());
 		_fieldFunctions.remove(modelClass.getName());
 		_identifierFunctions.remove(modelClass.getName());
+		_linkedRelatedModels.remove(modelClass.getName());
+		_links.remove(modelClass.getName());
 		_types.remove(modelClass.getName());
 	}
 
