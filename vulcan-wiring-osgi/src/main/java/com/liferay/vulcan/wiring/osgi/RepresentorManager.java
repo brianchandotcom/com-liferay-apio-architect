@@ -123,7 +123,7 @@ public class RepresentorManager {
 		_addModelRepresentorMapper(
 			serviceReference, modelRepresentorMapper, modelClass);
 
-		_buildRepresentor(modelRepresentorMapper, modelClass);
+		_addModelClassMaps(modelClass);
 	}
 
 	protected <T> void unsetServiceReference(
@@ -137,36 +137,16 @@ public class RepresentorManager {
 
 		_removeModelRepresentorMapper(modelRepresentorMapper, modelClass);
 
-		_removeRepresentor(modelClass);
+		_removeModelClassMaps(modelClass);
 
 		Optional<ModelRepresentorMapper<T>> optional =
 			getModelRepresentorMapperOptional(modelClass);
 
 		optional.ifPresent(
-			firstModelRepresentorMapper ->
-				_buildRepresentor(firstModelRepresentorMapper, modelClass));
+			firstModelRepresentorMapper -> _addModelClassMaps(modelClass));
 	}
 
-	private <T> void _addModelRepresentorMapper(
-		ServiceReference<ModelRepresentorMapper<T>> serviceReference,
-		ModelRepresentorMapper<T> modelRepresentorMapper, Class<T> modelClass) {
-
-		_modelRepresentorMappers.computeIfAbsent(
-			modelClass.getName(), name -> new TreeSet<>());
-
-		ModelRepresentorMapperTuple<T> modelRepresentorMapperTuple =
-			new ModelRepresentorMapperTuple<>(
-				serviceReference, modelRepresentorMapper);
-
-		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
-			_modelRepresentorMappers.get(modelClass.getName());
-
-		modelRepresentorMapperTuples.add(modelRepresentorMapperTuple);
-	}
-
-	private <T> void _buildRepresentor(
-		ModelRepresentorMapper<T> modelRepresentorMapper, Class<T> modelClass) {
-
+	private <T> void _addModelClassMaps(Class<T> modelClass) {
 		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
 
 		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
@@ -187,10 +167,30 @@ public class RepresentorManager {
 
 		_types.put(modelClass.getName(), types);
 
-		modelRepresentorMapper.buildRepresentor(
+		Optional<ModelRepresentorMapper<T>> modelRepresentorMapperOptional =
+			getModelRepresentorMapperOptional(modelClass);
+
+		modelRepresentorMapperOptional.get().buildRepresentor(
 			new RepresentorBuilderImpl<>(
 				modelClass, _identifierFunctions, fieldFunctions,
 				embeddedRelatedModels, linkedRelatedModels, links, types));
+	}
+
+	private <T> void _addModelRepresentorMapper(
+		ServiceReference<ModelRepresentorMapper<T>> serviceReference,
+		ModelRepresentorMapper<T> modelRepresentorMapper, Class<T> modelClass) {
+
+		_modelRepresentorMappers.computeIfAbsent(
+			modelClass.getName(), name -> new TreeSet<>());
+
+		ModelRepresentorMapperTuple<T> modelRepresentorMapperTuple =
+			new ModelRepresentorMapperTuple<>(
+				serviceReference, modelRepresentorMapper);
+
+		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
+			_modelRepresentorMappers.get(modelClass.getName());
+
+		modelRepresentorMapperTuples.add(modelRepresentorMapperTuple);
 	}
 
 	private <T> Class<T> _getModelClass(
@@ -210,6 +210,15 @@ public class RepresentorManager {
 		return optional.get();
 	}
 
+	private <T> void _removeModelClassMaps(Class<T> modelClass) {
+		_embeddedRelatedModels.remove(modelClass.getName());
+		_linkedRelatedModels.remove(modelClass.getName());
+		_links.remove(modelClass.getName());
+		_fieldFunctions.remove(modelClass.getName());
+		_identifierFunctions.remove(modelClass.getName());
+		_types.remove(modelClass.getName());
+	}
+
 	private <T> void _removeModelRepresentorMapper(
 		ModelRepresentorMapper modelRepresentorMapper, Class<T> modelClass) {
 
@@ -226,15 +235,6 @@ public class RepresentorManager {
 
 				return false;
 			});
-	}
-
-	private <T> void _removeRepresentor(Class<T> modelClass) {
-		_embeddedRelatedModels.remove(modelClass.getName());
-		_fieldFunctions.remove(modelClass.getName());
-		_identifierFunctions.remove(modelClass.getName());
-		_linkedRelatedModels.remove(modelClass.getName());
-		_links.remove(modelClass.getName());
-		_types.remove(modelClass.getName());
 	}
 
 	private final BundleContext _bundleContext;
