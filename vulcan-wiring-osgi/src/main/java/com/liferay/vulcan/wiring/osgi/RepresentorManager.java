@@ -146,6 +146,9 @@ public class RepresentorManager {
 	}
 
 	private <T> void _addModelClassMaps(Class<T> modelClass) {
+		Optional<ModelRepresentorMapper<T>> optional =
+			getModelRepresentorMapperOptional(modelClass);
+
 		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
 
 		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
@@ -165,9 +168,6 @@ public class RepresentorManager {
 		List<String> types = new ArrayList<>();
 
 		_types.put(modelClass.getName(), types);
-
-		Optional<ModelRepresentorMapper<T>> optional =
-			getModelRepresentorMapperOptional(modelClass);
 
 		optional.ifPresent(
 			modelRepresentorMapper -> modelRepresentorMapper.buildRepresentor(
