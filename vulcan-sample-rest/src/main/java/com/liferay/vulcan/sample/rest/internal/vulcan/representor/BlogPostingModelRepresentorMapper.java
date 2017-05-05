@@ -87,7 +87,7 @@ public class BlogPostingModelRepresentorMapper
 				blogsEntry.getLastPublishDate()));
 		firstStep.addLink("author", User.class, this::_getUserOptional);
 		firstStep.addLink(
-			"license", "https://creativecommons.org/licenses/by/4.0/");
+			"license", "https://creativecommons.org/licenses/by/4.0");
 		firstStep.addType("BlogPosting");
 	}
 
