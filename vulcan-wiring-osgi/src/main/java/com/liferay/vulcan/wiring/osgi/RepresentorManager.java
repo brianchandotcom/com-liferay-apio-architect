@@ -206,10 +206,10 @@ public class RepresentorManager {
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
 		_embeddedRelatedModels.remove(modelClass.getName());
-		_linkRelatedModels.remove(modelClass.getName());
-		_links.remove(modelClass.getName());
 		_fieldFunctions.remove(modelClass.getName());
 		_identifierFunctions.remove(modelClass.getName());
+		_linkRelatedModels.remove(modelClass.getName());
+		_links.remove(modelClass.getName());
 		_types.remove(modelClass.getName());
 	}
 
