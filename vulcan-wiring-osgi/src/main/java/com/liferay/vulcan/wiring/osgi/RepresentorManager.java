@@ -154,13 +154,13 @@ public class RepresentorManager {
 
 		_embeddedRelatedModels.put(modelClass.getName(), embeddedRelatedModels);
 
-		Map<String, String> links = new HashMap<>();
-
-		_links.put(modelClass.getName(), links);
-
 		List<RelatedModel<?, ?>> linkRelatedModels = new ArrayList<>();
 
 		_linkRelatedModels.put(modelClass.getName(), linkRelatedModels);
+
+		Map<String, String> links = new HashMap<>();
+
+		_links.put(modelClass.getName(), links);
 
 		List<String> types = new ArrayList<>();
 
