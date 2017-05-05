@@ -196,11 +196,11 @@ public class RepresentorManager {
 	private <T> Class<T> _getModelClass(
 		ModelRepresentorMapper<T> modelRepresentorMapper) {
 
-		Optional<Class<T>> genericClassOptional =
+		Optional<Class<T>> optional =
 			GenericUtil.getGenericClassOptional(
 				modelRepresentorMapper, ModelRepresentorMapper.class);
 
-		return genericClassOptional.orElseThrow(() ->
+		return optional.orElseThrow(() ->
 			new VulcanDeveloperError.MustHaveValidGenericType(
 				modelRepresentorMapper.getClass()));
 	}
