@@ -73,10 +73,10 @@ public class RepresentorManager {
 		return identifierFunction.apply(model);
 	}
 
-	public <T, V> List<RelatedModel<T, V>> getLinkedRelatedModels(
+	public <T, V> List<RelatedModel<T, V>> getLinkRelatedModels(
 		Class<T> modelClass) {
 
-		return (List)_linkedRelatedModels.get(modelClass.getName());
+		return (List)_linkRelatedModels.get(modelClass.getName());
 	}
 
 	public <T> Map<String, String> getLinks(Class<T> modelClass) {
@@ -158,9 +158,9 @@ public class RepresentorManager {
 
 		_links.put(modelClass.getName(), links);
 
-		List<RelatedModel<?, ?>> linkedRelatedModels = new ArrayList<>();
+		List<RelatedModel<?, ?>> linkRelatedModels = new ArrayList<>();
 
-		_linkedRelatedModels.put(modelClass.getName(), linkedRelatedModels);
+		_linkRelatedModels.put(modelClass.getName(), linkRelatedModels);
 
 		List<String> types = new ArrayList<>();
 
@@ -170,7 +170,7 @@ public class RepresentorManager {
 			modelRepresentorMapper -> modelRepresentorMapper.buildRepresentor(
 				new RepresentorBuilderImpl<>(
 					modelClass, _identifierFunctions, fieldFunctions,
-					embeddedRelatedModels, linkedRelatedModels, links, types)));
+					embeddedRelatedModels, linkRelatedModels, links, types)));
 	}
 
 	private <T> void _addModelRepresentorMapper(
@@ -204,7 +204,7 @@ public class RepresentorManager {
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
 		_embeddedRelatedModels.remove(modelClass.getName());
-		_linkedRelatedModels.remove(modelClass.getName());
+		_linkRelatedModels.remove(modelClass.getName());
 		_links.remove(modelClass.getName());
 		_fieldFunctions.remove(modelClass.getName());
 		_identifierFunctions.remove(modelClass.getName());
@@ -236,7 +236,7 @@ public class RepresentorManager {
 		_fieldFunctions = new ConcurrentHashMap<>();
 	private final Map<String, Function<?, String>> _identifierFunctions =
 		new ConcurrentHashMap<>();
-	private final Map<String, List<RelatedModel<?, ?>>> _linkedRelatedModels =
+	private final Map<String, List<RelatedModel<?, ?>>> _linkRelatedModels =
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, String>> _links =
 		new ConcurrentHashMap<>();
