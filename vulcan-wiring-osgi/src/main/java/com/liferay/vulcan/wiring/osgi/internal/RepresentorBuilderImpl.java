@@ -52,7 +52,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		return new FirstStep<T>() {
 
 			@Override
-			public <S> FirstStep<T> addEmbedded(
+			public <S> FirstStep<T> addEmbeddedModel(
 				String key, Class<S> modelClass,
 				Function<T, Optional<S>> modelFunction) {
 
@@ -72,19 +72,19 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 			}
 
 			@Override
-			public <S> FirstStep<T> addLink(
-				String key, Class<S> modelClass,
-				Function<T, Optional<S>> modelFunction) {
-
-				_linkRelatedModels.add(
-					new RelatedModel<>(key, modelClass, modelFunction));
+			public FirstStep<T> addLink(String key, String url) {
+				_links.put(key, url);
 
 				return this;
 			}
 
 			@Override
-			public FirstStep<T> addLink(String key, String url) {
-				_links.put(key, url);
+			public <S> FirstStep<T> addLinkedModel(
+				String key, Class<S> modelClass,
+				Function<T, Optional<S>> modelFunction) {
+
+				_linkRelatedModels.add(
+					new RelatedModel<>(key, modelClass, modelFunction));
 
 				return this;
 			}
