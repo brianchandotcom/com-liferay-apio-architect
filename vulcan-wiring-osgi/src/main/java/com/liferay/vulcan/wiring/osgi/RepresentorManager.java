@@ -14,7 +14,6 @@
 
 package com.liferay.vulcan.wiring.osgi;
 
-import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
 import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.internal.RelatedModel;
@@ -112,7 +111,8 @@ public class RepresentorManager {
 		ModelRepresentorMapper<T> modelRepresentorMapper =
 			_bundleContext.getService(serviceReference);
 
-		Class<T> modelClass = _getModelClass(modelRepresentorMapper);
+		Class<T> modelClass = GenericUtil.getGenericClass(
+			modelRepresentorMapper, ModelRepresentorMapper.class);
 
 		_addModelRepresentorMapper(
 			serviceReference, modelRepresentorMapper, modelClass);
@@ -126,7 +126,8 @@ public class RepresentorManager {
 		ModelRepresentorMapper<T> modelRepresentorMapper =
 			_bundleContext.getService(serviceReference);
 
-		Class<T> modelClass = _getModelClass(modelRepresentorMapper);
+		Class<T> modelClass = GenericUtil.getGenericClass(
+			modelRepresentorMapper, ModelRepresentorMapper.class);
 
 		_removeModelRepresentorMapper(modelRepresentorMapper, modelClass);
 
@@ -194,17 +195,6 @@ public class RepresentorManager {
 				modelClass.getName());
 
 		serviceReferenceServiceTuples.add(serviceReferenceServiceTuple);
-	}
-
-	private <T> Class<T> _getModelClass(
-		ModelRepresentorMapper<T> modelRepresentorMapper) {
-
-		Optional<Class<T>> optional = GenericUtil.getGenericClassOptional(
-			modelRepresentorMapper, ModelRepresentorMapper.class);
-
-		return optional.orElseThrow(
-			() -> new VulcanDeveloperError.MustHaveValidGenericType(
-				modelRepresentorMapper.getClass()));
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
