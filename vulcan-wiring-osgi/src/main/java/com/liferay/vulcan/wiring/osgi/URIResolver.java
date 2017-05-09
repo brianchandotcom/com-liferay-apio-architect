@@ -15,11 +15,24 @@
 package com.liferay.vulcan.wiring.osgi;
 
 import com.liferay.vulcan.contributor.APIContributor;
+import com.liferay.vulcan.contributor.ResourceMapper;
+import com.liferay.vulcan.resource.CollectionResource;
+import com.liferay.vulcan.resource.Resource;
+import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
+import com.liferay.vulcan.wiring.osgi.internal.ModelURIFunctions;
 import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
 
+import java.net.URI;
+
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javax.ws.rs.core.UriBuilder;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -50,6 +63,7 @@ public class URIResolver {
 			serviceReference);
 
 		_addAPIContributor(serviceReference, apiContributor);
+		_addResourceURIs(apiContributor);
 	}
 
 	protected void unsetServiceReference(
@@ -71,10 +85,75 @@ public class URIResolver {
 		serviceReferenceServiceTuples.add(serviceReferenceServiceTuple);
 	}
 
+	private <T> void _addCollectionResourceURIs(
+		String path, CollectionResource<T> collectionResource) {
+
+		Class<T> modelClass = GenericUtil.getGenericClass(
+			collectionResource, CollectionResource.class);
+
+		Function<T, Optional<String>> singleResourceURIFunction = t ->
+			_representorManager.getModelRepresentorMapperOptional(modelClass).
+				map(modelRepresentorMapper -> {
+					String identifier = _representorManager.getIdentifier(
+						modelClass, t);
+
+					UriBuilder uriBuilder = UriBuilder.fromPath(path).clone();
+
+					URI singleResourceURI = uriBuilder.path(
+						CollectionResource.class,
+						"getCollectionItemSingleResource").build(identifier);
+
+					return singleResourceURI.toString();
+				});
+
+		Supplier<Optional<String>> collectionResourceURISupplier = () ->
+			_representorManager.getModelRepresentorMapperOptional(modelClass).
+				map(modelRepresentorMapper -> {
+					URI uri = UriBuilder.fromPath(path).build();
+
+					return uri.toString();
+				});
+
+		_modelURIFunctions.computeIfAbsent(
+			modelClass.getName(),
+			key -> new ModelURIFunctions<>(
+				collectionResourceURISupplier, singleResourceURIFunction));
+	}
+
+	private void _addResourceURIs(APIContributor apiContributor) {
+		String apiContributorPath = apiContributor.getPath();
+
+		if (apiContributor instanceof ResourceMapper) {
+			ResourceMapper resourceMapper = (ResourceMapper)apiContributor;
+
+			resourceMapper.mapResources((path, resource) ->
+				_addResourceURIs(apiContributorPath + "/" + path, resource));
+		}
+		else if (apiContributor instanceof Resource) {
+			Resource resource = (Resource)apiContributor;
+
+			_addResourceURIs(apiContributorPath, resource);
+		}
+	}
+
+	private <T> void _addResourceURIs(String path, Resource<T> resource) {
+		if (resource instanceof CollectionResource) {
+			CollectionResource<T> collectionResource =
+				(CollectionResource<T>)resource;
+
+			_addCollectionResourceURIs(path, collectionResource);
+		}
+	}
+
 	private final Map<String,
 		TreeSet<ServiceReferenceServiceTuple<APIContributor>>>
 			_apiContributors = new ConcurrentHashMap<>();
 	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
 		URIResolver.class).getBundleContext();
+	private final Map<String, ModelURIFunctions<?>> _modelURIFunctions =
+		new HashMap<>();
+
+	@Reference
+	private RepresentorManager _representorManager;
 
 }
