@@ -48,12 +48,6 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 @Component(immediate = true, service = RepresentorManager.class)
 public class RepresentorManager {
 
-	public RepresentorManager() {
-		Bundle bundle = FrameworkUtil.getBundle(RepresentorManager.class);
-
-		_bundleContext = bundle.getBundleContext();
-	}
-
 	public <T, V> List<RelatedModel<T, V>> getEmbeddedRelatedModels(
 		Class<T> modelClass) {
 
@@ -143,6 +137,12 @@ public class RepresentorManager {
 
 		optional.ifPresent(
 			firstModelRepresentorMapper -> _addModelClassMaps(modelClass));
+	}
+
+	private RepresentorManager() {
+		Bundle bundle = FrameworkUtil.getBundle(RepresentorManager.class);
+
+		_bundleContext = bundle.getBundleContext();
 	}
 
 	private <T> void _addModelClassMaps(Class<T> modelClass) {
