@@ -17,9 +17,9 @@ package com.liferay.vulcan.wiring.osgi;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
 import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
-import com.liferay.vulcan.wiring.osgi.internal.ModelRepresentorMapperTuple;
 import com.liferay.vulcan.wiring.osgi.internal.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.internal.RepresentorBuilderImpl;
+import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,21 +86,21 @@ public class RepresentorManager {
 	public <T> Optional<ModelRepresentorMapper<T>>
 		getModelRepresentorMapperOptional(Class<T> modelClass) {
 
-		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
-			_modelRepresentorMappers.get(modelClass.getName());
+		TreeSet<ServiceReferenceServiceTuple<ModelRepresentorMapper<?>>>
+			serviceReferenceServiceTuples = _modelRepresentorMappers.get(
+				modelClass.getName());
 
-		Optional<TreeSet<ModelRepresentorMapperTuple<?>>>
-			modelRepresentorMapperTuplesOptional = Optional.ofNullable(
-				modelRepresentorMapperTuples);
+		Optional<TreeSet<ServiceReferenceServiceTuple<
+			ModelRepresentorMapper<?>>>> optional = Optional.ofNullable(
+				serviceReferenceServiceTuples);
 
-		Optional<ModelRepresentorMapperTuple<?>>
-			firstModelRepresentorMapperTuple =
-				modelRepresentorMapperTuplesOptional.map(TreeSet::first);
+		Optional<ServiceReferenceServiceTuple<?>>
+			firstServiceReferenceServiceTuple = optional.map(TreeSet::first);
 
-		return firstModelRepresentorMapperTuple.map(
-			modelRepresentorMapperTuple ->
-				(ModelRepresentorMapper<T>)modelRepresentorMapperTuple.
-					getModelRepresentorMapper());
+		return firstServiceReferenceServiceTuple.map(
+			serviceReferenceServiceTuple ->
+				(ModelRepresentorMapper<T>)serviceReferenceServiceTuple.
+					getService());
 	}
 
 	public <T> List<String> getTypes(Class<T> modelClass) {
@@ -183,14 +183,17 @@ public class RepresentorManager {
 		_modelRepresentorMappers.computeIfAbsent(
 			modelClass.getName(), name -> new TreeSet<>());
 
-		ModelRepresentorMapperTuple<T> modelRepresentorMapperTuple =
-			new ModelRepresentorMapperTuple<>(
-				serviceReference, modelRepresentorMapper);
+		ServiceReferenceServiceTuple<ModelRepresentorMapper<?>>
+			serviceReferenceServiceTuple =
+				(ServiceReferenceServiceTuple)
+					new ServiceReferenceServiceTuple<>(
+						serviceReference, modelRepresentorMapper);
 
-		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
-			_modelRepresentorMappers.get(modelClass.getName());
+		TreeSet<ServiceReferenceServiceTuple<ModelRepresentorMapper<?>>>
+			serviceReferenceServiceTuples = _modelRepresentorMappers.get(
+				modelClass.getName());
 
-		modelRepresentorMapperTuples.add(modelRepresentorMapperTuple);
+		serviceReferenceServiceTuples.add(serviceReferenceServiceTuple);
 	}
 
 	private <T> Class<T> _getModelClass(
@@ -216,12 +219,13 @@ public class RepresentorManager {
 	private <T> void _removeModelRepresentorMapper(
 		ModelRepresentorMapper modelRepresentorMapper, Class<T> modelClass) {
 
-		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
-			_modelRepresentorMappers.get(modelClass.getName());
+		TreeSet<ServiceReferenceServiceTuple<ModelRepresentorMapper<?>>>
+			serviceReferenceServiceTuples = _modelRepresentorMappers.get(
+				modelClass.getName());
 
-		modelRepresentorMapperTuples.removeIf(
+		serviceReferenceServiceTuples.removeIf(
 			modelRepresentorMapperTuple -> {
-				if (modelRepresentorMapperTuple.getModelRepresentorMapper() ==
+				if (modelRepresentorMapperTuple.getService() ==
 						modelRepresentorMapper) {
 
 					return true;
@@ -242,8 +246,9 @@ public class RepresentorManager {
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, String>> _links =
 		new ConcurrentHashMap<>();
-	private final Map<String, TreeSet<ModelRepresentorMapperTuple<?>>>
-		_modelRepresentorMappers = new ConcurrentHashMap<>();
+	private final Map<String,
+		TreeSet<ServiceReferenceServiceTuple<ModelRepresentorMapper<?>>>>
+			_modelRepresentorMappers = new ConcurrentHashMap<>();
 	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
 
 }

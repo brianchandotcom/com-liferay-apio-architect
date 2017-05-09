@@ -14,8 +14,6 @@
 
 package com.liferay.vulcan.wiring.osgi.internal;
 
-import com.liferay.vulcan.representor.ModelRepresentorMapper;
-
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -23,30 +21,29 @@ import org.osgi.framework.ServiceReference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public class ModelRepresentorMapperTuple<T>
-	implements Comparable<ModelRepresentorMapperTuple> {
+public class ServiceReferenceServiceTuple<T>
+	implements Comparable<ServiceReferenceServiceTuple> {
 
-	public ModelRepresentorMapperTuple(
-		ServiceReference<ModelRepresentorMapper<T>> serviceReference,
-		ModelRepresentorMapper<T> modelRepresentorMapper) {
+	public ServiceReferenceServiceTuple(
+		ServiceReference<T> serviceReference, T service) {
 
 		_serviceReference = serviceReference;
-		_modelRepresentorMapper = modelRepresentorMapper;
+		_service = service;
 	}
 
 	@Override
 	public int compareTo(
-		ModelRepresentorMapperTuple modelRepresentorMapperTuple) {
+		ServiceReferenceServiceTuple serviceReferenceServiceTuple) {
 
 		return _serviceReference.compareTo(
-			modelRepresentorMapperTuple._serviceReference);
+			serviceReferenceServiceTuple._serviceReference);
 	}
 
-	public ModelRepresentorMapper<T> getModelRepresentorMapper() {
-		return _modelRepresentorMapper;
+	public T getService() {
+		return _service;
 	}
 
-	private final ModelRepresentorMapper<T> _modelRepresentorMapper;
-	private final ServiceReference<ModelRepresentorMapper<T>> _serviceReference;
+	private final T _service;
+	private final ServiceReference<T> _serviceReference;
 
 }
