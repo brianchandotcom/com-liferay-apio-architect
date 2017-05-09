@@ -94,6 +94,20 @@ public class URIResolver {
 
 	protected void unsetServiceReference(
 		ServiceReference<APIContributor> serviceReference) {
+
+		APIContributor apiContributor = _bundleContext.getService(
+			serviceReference);
+
+		_removeAPIContributor(apiContributor);
+		_removeResourceURIs(apiContributor);
+
+		if (!_apiContributors.get(apiContributor.getPath()).isEmpty()) {
+			ServiceReferenceServiceTuple<APIContributor>
+				serviceReferenceServiceTuple = _apiContributors.get(
+					apiContributor.getPath()).first();
+
+			_addResourceURIs(serviceReferenceServiceTuple.getService());
+		}
 	}
 
 	private void _addAPIContributor(
@@ -186,6 +200,44 @@ public class URIResolver {
 				(CollectionResource<T>)resource;
 
 			_addCollectionResourceURIs(path, collectionResource);
+		}
+	}
+
+	private void _removeAPIContributor(APIContributor apiContributor) {
+		_apiContributors.get(apiContributor.getPath()).removeIf(tuple ->
+			tuple.getService() == apiContributor);
+	}
+
+	private <T> void _removeCollectionResourceURIs(
+			CollectionResource<T> collectionResource)
+		throws IllegalArgumentException {
+
+		Class<Object> genericClass = GenericUtil.getGenericClass(
+			collectionResource, CollectionResource.class);
+
+		_modelURIFunctions.remove(genericClass.getName());
+	}
+
+	private void _removeResourceURIs(APIContributor apiContributor) {
+		if (apiContributor instanceof ResourceMapper) {
+			ResourceMapper resourceMapper = (ResourceMapper)apiContributor;
+
+			resourceMapper.mapResources((path, resource) ->
+				_removeResourceURIs(resource));
+		}
+		else if (apiContributor instanceof Resource) {
+			Resource resource = (Resource)apiContributor;
+
+			_removeResourceURIs(resource);
+		}
+	}
+
+	private <T> void _removeResourceURIs(Resource<T> resource) {
+		if (resource instanceof CollectionResource) {
+			CollectionResource<T> collectionResource =
+				(CollectionResource<T>)resource;
+
+			_removeCollectionResourceURIs(collectionResource);
 		}
 	}
 
