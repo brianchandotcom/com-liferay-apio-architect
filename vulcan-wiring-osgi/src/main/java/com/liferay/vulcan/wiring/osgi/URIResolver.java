@@ -18,6 +18,7 @@ import com.liferay.vulcan.contributor.APIContributor;
 import com.liferay.vulcan.contributor.ResourceMapper;
 import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Resource;
+import com.liferay.vulcan.uri.CollectionResourceURITransformer;
 import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.internal.ModelURIFunctions;
 import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
@@ -122,7 +123,17 @@ public class URIResolver {
 					String identifier = _representorManager.getIdentifier(
 						modelClass, t);
 
-					UriBuilder uriBuilder = UriBuilder.fromPath(path).clone();
+					String transformedPath = path;
+
+					if (_collectionResourceURITransformer != null) {
+						transformedPath =
+							_collectionResourceURITransformer.
+								transformCollectionItemSingleResourceURI(
+									path, modelClass, t, collectionResource);
+					}
+
+					UriBuilder uriBuilder = UriBuilder.fromPath(
+						transformedPath).clone();
 
 					URI singleResourceURI = uriBuilder.path(
 						CollectionResource.class,
@@ -134,7 +145,15 @@ public class URIResolver {
 		Supplier<Optional<String>> collectionResourceURISupplier = () ->
 			_representorManager.getModelRepresentorMapperOptional(modelClass).
 				map(modelRepresentorMapper -> {
-					URI uri = UriBuilder.fromPath(path).build();
+					String transformedPath = path;
+
+					if (_collectionResourceURITransformer != null) {
+						transformedPath =
+							_collectionResourceURITransformer.transformPageURI(
+								path, modelClass, collectionResource);
+					}
+
+					URI uri = UriBuilder.fromPath(transformedPath).build();
 
 					return uri.toString();
 				});
@@ -175,6 +194,10 @@ public class URIResolver {
 			_apiContributors = new ConcurrentHashMap<>();
 	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
 		URIResolver.class).getBundleContext();
+
+	@Reference(cardinality = ReferenceCardinality.OPTIONAL)
+	private CollectionResourceURITransformer _collectionResourceURITransformer;
+
 	private final Map<String, ModelURIFunctions<?>> _modelURIFunctions =
 		new HashMap<>();
 
