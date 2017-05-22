@@ -47,7 +47,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 @Component(immediate = true, service = RepresentorManager.class)
 public class RepresentorManager {
 
-	public <T, V> List<RelatedModel<T, V>> getEmbeddedRelatedModels(
+	public <T> List<RelatedModel<T, ?>> getEmbeddedRelatedModels(
 		Class<T> modelClass) {
 
 		return (List)_embeddedRelatedModels.get(modelClass.getName());
@@ -66,7 +66,7 @@ public class RepresentorManager {
 		return identifierFunction.apply(model);
 	}
 
-	public <T, V> List<RelatedModel<T, V>> getLinkedRelatedModels(
+	public <T> List<RelatedModel<T, ?>> getLinkedRelatedModels(
 		Class<T> modelClass) {
 
 		return (List)_linkedRelatedModels.get(modelClass.getName());

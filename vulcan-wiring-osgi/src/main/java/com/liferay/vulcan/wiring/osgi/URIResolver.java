@@ -133,44 +133,49 @@ public class URIResolver {
 
 		Function<T, Optional<String>> singleResourceURIFunction = t ->
 			_representorManager.getModelRepresentorMapperOptional(modelClass).
-				map(modelRepresentorMapper -> {
-					String identifier = _representorManager.getIdentifier(
-						modelClass, t);
+				map(
+					modelRepresentorMapper -> {
+						String identifier = _representorManager.getIdentifier(
+							modelClass, t);
 
-					String transformedPath = path;
+						String transformedPath = path;
 
-					if (_collectionResourceURITransformer != null) {
-						transformedPath =
-							_collectionResourceURITransformer.
-								transformCollectionItemSingleResourceURI(
-									path, modelClass, t, collectionResource);
-					}
+						if (_collectionResourceURITransformer != null) {
+							transformedPath =
+								_collectionResourceURITransformer.
+									transformCollectionItemSingleResourceURI(
+										path, modelClass, t,
+										collectionResource);
+						}
 
-					UriBuilder uriBuilder = UriBuilder.fromPath(
-						transformedPath).clone();
+						UriBuilder uriBuilder = UriBuilder.fromPath(
+							transformedPath).clone();
 
-					URI singleResourceURI = uriBuilder.path(
-						CollectionResource.class,
-						"getCollectionItemSingleResource").build(identifier);
+						URI singleResourceURI = uriBuilder.path(
+							CollectionResource.class,
+							"getCollectionItemSingleResource").build(
+								identifier);
 
-					return singleResourceURI.toString();
-				});
+						return singleResourceURI.toString();
+					});
 
 		Supplier<Optional<String>> collectionResourceURISupplier = () ->
 			_representorManager.getModelRepresentorMapperOptional(modelClass).
-				map(modelRepresentorMapper -> {
-					String transformedPath = path;
+				map(
+					modelRepresentorMapper -> {
+						String transformedPath = path;
 
-					if (_collectionResourceURITransformer != null) {
-						transformedPath =
-							_collectionResourceURITransformer.transformPageURI(
-								path, modelClass, collectionResource);
-					}
+						if (_collectionResourceURITransformer != null) {
+							transformedPath =
+								_collectionResourceURITransformer.
+									transformPageURI(
+										path, modelClass, collectionResource);
+						}
 
-					URI uri = UriBuilder.fromPath(transformedPath).build();
+						URI uri = UriBuilder.fromPath(transformedPath).build();
 
-					return uri.toString();
-				});
+						return uri.toString();
+					});
 
 		_modelURIFunctions.computeIfAbsent(
 			modelClass.getName(),
@@ -184,8 +189,9 @@ public class URIResolver {
 		if (apiContributor instanceof ResourceMapper) {
 			ResourceMapper resourceMapper = (ResourceMapper)apiContributor;
 
-			resourceMapper.mapResources((path, resource) ->
-				_addResourceURIs(apiContributorPath + "/" + path, resource));
+			resourceMapper.mapResources(
+				(path, resource) -> _addResourceURIs(
+					apiContributorPath + "/" + path, resource));
 		}
 		else if (apiContributor instanceof Resource) {
 			Resource resource = (Resource)apiContributor;
@@ -222,8 +228,8 @@ public class URIResolver {
 		if (apiContributor instanceof ResourceMapper) {
 			ResourceMapper resourceMapper = (ResourceMapper)apiContributor;
 
-			resourceMapper.mapResources((path, resource) ->
-				_removeResourceURIs(resource));
+			resourceMapper.mapResources(
+				(path, resource) -> _removeResourceURIs(resource));
 		}
 		else if (apiContributor instanceof Resource) {
 			Resource resource = (Resource)apiContributor;
