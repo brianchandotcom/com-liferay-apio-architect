@@ -23,31 +23,18 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
-import javax.ws.rs.ext.Provider;
-
-import org.apache.cxf.jaxrs.ext.ContextProvider;
-import org.apache.cxf.message.Message;
-
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(immediate = true, property = "liferay-vulcan-context-provider=true")
-@Provider
-public class EmbeddedContextProvider implements ContextProvider<Embedded> {
+public class EmbeddedRetriever {
 
-	@Override
-	public Embedded createContext(Message message) {
-		HttpServletRequest httpServletRequest = (HttpServletRequest)message.get(
-			"HTTP.REQUEST");
-
+	public static Embedded getEmbedded(HttpServletRequest httpServletRequest) {
 		Map<String, String[]> parameterMap =
 			httpServletRequest.getParameterMap();
 
-		String[] embeddedParams = parameterMap.get("include");
+		String[] embeddedParams = parameterMap.get("embedded");
 
 		if ((embeddedParams != null) && (embeddedParams.length == 1)) {
 			String[] embeddedKeys = _EMBEDDED_SEPARATOR_PATTERN.split(

@@ -24,27 +24,14 @@ import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import javax.ws.rs.ext.Provider;
-
-import org.apache.cxf.jaxrs.ext.ContextProvider;
-import org.apache.cxf.message.Message;
-
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(immediate = true, property = "liferay-vulcan-context-provider=true")
-@Provider
-public class FieldsContextProvider implements ContextProvider<Fields> {
+public class FieldsRetriever {
 
-	@Override
-	public Fields createContext(Message message) {
-		HttpServletRequest httpServletRequest = (HttpServletRequest)message.get(
-			"HTTP.REQUEST");
-
+	public static Fields getFields(HttpServletRequest httpServletRequest) {
 		Map<String, String[]> parameterMap =
 			httpServletRequest.getParameterMap();
 
