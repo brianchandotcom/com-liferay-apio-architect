@@ -112,7 +112,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
 		Class<T> modelClass = (Class<T>)genericType;
 
-		JSONObjectBuilder jsonMessageBuilder = new JSONObjectBuilderImpl();
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
 
 		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
@@ -130,12 +130,12 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 			);
 
 		_writeModel(
-			singleModelJSONMessageMapper, jsonMessageBuilder, model, modelClass,
+			singleModelJSONMessageMapper, jsonObjectBuilder, model, modelClass,
 			requestInfo);
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
-		printWriter.println(jsonMessageBuilder.build().toString());
+		printWriter.println(jsonObjectBuilder.build().toString());
 
 		printWriter.close();
 	}
