@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.jax.rs.writer.json.internal;
 
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -46,6 +47,28 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 		return firstStep;
 	}
 
+	public static class ArrayStepImpl implements ArrayStep {
+
+		public ArrayStepImpl(JSONArray jsonArray) {
+			_jsonArray = jsonArray;
+		}
+
+		@Override
+		public void add(JSONObjectBuilder jsonObjectBuilder) {
+			_jsonArray.put(jsonObjectBuilder.build());
+		}
+
+		@Override
+		public void add(Object value) {
+			if (value != null) {
+				_jsonArray.put(value);
+			}
+		}
+
+		private final JSONArray _jsonArray;
+
+	}
+
 	private final JSONObject _jsonObject = JSONFactoryUtil.createJSONObject();
 
 	private static class FirstStepImpl implements FirstStep {
@@ -53,6 +76,19 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 		public FirstStepImpl(String name, JSONObject jsonObject) {
 			_name = name;
 			_stepJSONObject = jsonObject;
+		}
+
+		@Override
+		public ArrayStep arrayValue() {
+			JSONArray jsonArray = _stepJSONObject.getJSONArray(_name);
+
+			if (jsonArray == null) {
+				jsonArray = JSONFactoryUtil.createJSONArray();
+
+				_stepJSONObject.put(_name, jsonArray);
+			}
+
+			return new ArrayStepImpl(jsonArray);
 		}
 
 		@Override

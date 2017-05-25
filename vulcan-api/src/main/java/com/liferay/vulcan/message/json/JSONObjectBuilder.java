@@ -32,7 +32,17 @@ public interface JSONObjectBuilder {
 
 	public FirstStep nestedField(String parentName, String... nestedNames);
 
+	public interface ArrayStep {
+
+		public void add(JSONObjectBuilder jsonObjectBuilder);
+
+		public void add(Object value);
+
+	}
+
 	public interface FirstStep {
+
+		public ArrayStep arrayValue();
 
 		public FirstStep field(String name);
 
