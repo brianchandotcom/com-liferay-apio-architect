@@ -36,7 +36,9 @@ import java.lang.reflect.Type;
 import java.net.URI;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.ws.rs.WebApplicationException;
@@ -141,6 +143,10 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		pageJSONMessageMapper.onStart(
 			jsonObjectBuilder, page, modelClass, requestInfo);
 
+		_writeItems(
+			page, modelClass, requestInfo, pageJSONMessageMapper,
+			jsonObjectBuilder);
+
 		_writeItemTotalCount(pageJSONMessageMapper, jsonObjectBuilder, page);
 
 		_writePageCount(pageJSONMessageMapper, jsonObjectBuilder, page);
@@ -161,6 +167,14 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 	@Context
 	protected UriInfo uriInfo;
 
+	private String _getAbsoluteURL(String relativeResourceURI) {
+		UriBuilder uriBuilder = uriInfo.getBaseUriBuilder().clone();
+
+		URI uri = uriBuilder.path(relativeResourceURI).build();
+
+		return uri.toString();
+	}
+
 	private String _getCollectionURL(Class<T> modelClass) {
 		Optional<String> optional =
 			_uriResolver.getCollectionResourceURIOptional(modelClass);
@@ -168,23 +182,15 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		String uri = optional.orElseThrow(
 			() -> new VulcanDeveloperError.CannotCalculateURI(modelClass));
 
-		return _getURL(uri);
+		return _getAbsoluteURL(uri);
 	}
 
-	private String _getPageUrl(
+	private String _getPageURL(
 		Class<T> modelClass, int page, int itemsPerPage) {
 
 		String url = _getCollectionURL(modelClass);
 
 		return url + "?page=" + page + "&per_page=" + itemsPerPage;
-	}
-
-	private String _getURL(String relativeResourceURI) {
-		UriBuilder uriBuilder = uriInfo.getBaseUriBuilder().clone();
-
-		URI uri = uriBuilder.path(relativeResourceURI).build();
-
-		return uri.toString();
 	}
 
 	private void _writeCollectionURL(
@@ -196,6 +202,73 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		pageJSONMessageMapper.mapCollectionURL(jsonObjectBuilder, url);
 	}
 
+	private <U> void _writeItemFields(
+		PageJSONMessageMapper<U> pageJSONMessageMapper,
+		JSONObjectBuilder rootJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, U model, Class<U> modelClass) {
+
+		Map<String, Function<U, Object>> fieldFunctions =
+			_representorManager.getFieldFunctions(modelClass);
+
+		for (String field : fieldFunctions.keySet()) {
+			Object data = fieldFunctions.get(field).apply(model);
+
+			if (data != null) {
+				pageJSONMessageMapper.mapItemField(
+					rootJSONObjectBuilder, itemJSONObjectBuilder, field, data);
+			}
+		}
+	}
+
+	private void _writeItemLinks(
+		PageJSONMessageMapper<T> pageJSONMessageMapper,
+		JSONObjectBuilder rootJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, Class<T> modelClass) {
+
+		Map<String, String> links = _representorManager.getLinks(modelClass);
+
+		for (String key : links.keySet()) {
+			pageJSONMessageMapper.mapItemLink(
+				rootJSONObjectBuilder, itemJSONObjectBuilder, key,
+				links.get(key));
+		}
+	}
+
+	private void _writeItems(
+		Page<T> page, Class<T> modelClass, RequestInfo requestInfo,
+		PageJSONMessageMapper<T> pageJSONMessageMapper,
+		JSONObjectBuilder jsonObjectBuilder) {
+
+		for (T model : page.getItems()) {
+			JSONObjectBuilder itemJSONObjectBuilder =
+				new JSONObjectBuilderImpl();
+
+			pageJSONMessageMapper.onStartItem(
+				jsonObjectBuilder, itemJSONObjectBuilder, model, modelClass,
+				requestInfo);
+
+			_writeItemFields(
+				pageJSONMessageMapper, jsonObjectBuilder, itemJSONObjectBuilder,
+				model, modelClass);
+
+			_writeItemLinks(
+				pageJSONMessageMapper, jsonObjectBuilder, itemJSONObjectBuilder,
+				modelClass);
+
+			_writeItemTypes(
+				pageJSONMessageMapper, jsonObjectBuilder, itemJSONObjectBuilder,
+				modelClass);
+
+			_writeItemURL(
+				pageJSONMessageMapper, jsonObjectBuilder, itemJSONObjectBuilder,
+				model, modelClass);
+
+			pageJSONMessageMapper.onFinishItem(
+				jsonObjectBuilder, itemJSONObjectBuilder, model, modelClass,
+				requestInfo);
+		}
+	}
+
 	private void _writeItemTotalCount(
 		PageJSONMessageMapper<T> pageJSONMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page) {
@@ -203,6 +276,34 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		int totalCount = page.getTotalCount();
 
 		pageJSONMessageMapper.mapItemTotalCount(jsonObjectBuilder, totalCount);
+	}
+
+	private void _writeItemTypes(
+		PageJSONMessageMapper<T> pageJSONMessageMapper,
+		JSONObjectBuilder rootJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, Class<T> modelClass) {
+
+		List<String> types = _representorManager.getTypes(modelClass);
+
+		pageJSONMessageMapper.mapItemTypes(
+			rootJSONObjectBuilder, itemJSONObjectBuilder, types);
+	}
+
+	private void _writeItemURL(
+		PageJSONMessageMapper<T> pageJSONMessageMapper,
+		JSONObjectBuilder rootJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, T model, Class<T> modelClass) {
+
+		Optional<String> optional = _uriResolver.getSingleResourceURIOptional(
+			modelClass, model);
+
+		String uri = optional.orElseThrow(
+			() -> new VulcanDeveloperError.CannotCalculateURI(modelClass));
+
+		String url = _getAbsoluteURL(uri);
+
+		pageJSONMessageMapper.mapItemSelfURL(
+			rootJSONObjectBuilder, itemJSONObjectBuilder, url);
 	}
 
 	private void _writePageCount(
@@ -225,26 +326,26 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		pageJSONMessageMapper.mapCurrentPageURL(
 			jsonObjectBuilder,
-			_getPageUrl(modelClass, currentPage, itemsPerPage));
+			_getPageURL(modelClass, currentPage, itemsPerPage));
 
 		pageJSONMessageMapper.mapFirstPageURL(
-			jsonObjectBuilder, _getPageUrl(modelClass, 1, itemsPerPage));
+			jsonObjectBuilder, _getPageURL(modelClass, 1, itemsPerPage));
 
 		if (page.hasPrevious()) {
 			pageJSONMessageMapper.mapPreviousPageURL(
 				jsonObjectBuilder,
-				_getPageUrl(modelClass, currentPage - 1, itemsPerPage));
+				_getPageURL(modelClass, currentPage - 1, itemsPerPage));
 		}
 
 		if (page.hasNext()) {
 			pageJSONMessageMapper.mapNextPageURL(
 				jsonObjectBuilder,
-				_getPageUrl(modelClass, currentPage + 1, itemsPerPage));
+				_getPageURL(modelClass, currentPage + 1, itemsPerPage));
 		}
 
 		pageJSONMessageMapper.mapLastPageURL(
 			jsonObjectBuilder,
-			_getPageUrl(modelClass, page.getLastPageNumber(), itemsPerPage));
+			_getPageURL(modelClass, page.getLastPageNumber(), itemsPerPage));
 	}
 
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
