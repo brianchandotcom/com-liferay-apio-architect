@@ -1,0 +1,191 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.vulcan.message.json.plain.internal;
+
+import com.liferay.vulcan.list.FunctionalList;
+import com.liferay.vulcan.message.PageJSONMessageMapper;
+import com.liferay.vulcan.message.RequestInfo;
+import com.liferay.vulcan.message.json.JSONObjectBuilder;
+
+import org.osgi.service.component.annotations.Component;
+
+/**
+ * @author Alejandro Hernández
+ */
+@Component(immediate = true)
+public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
+
+	@Override
+	public String getMediaType() {
+		return "application/json";
+	}
+
+	@Override
+	public void mapCollectionURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
+		jsonObjectBuilder.field("collection").value(url);
+	}
+
+	@Override
+	public void mapCurrentPageURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
+		jsonObjectBuilder.field("self").value(url);
+	}
+
+	@Override
+	public void mapFirstPageURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
+		jsonObjectBuilder.nestedField("pages", "first").value(url);
+	}
+
+	@Override
+	public void mapItemEmbeddedResourceField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		Object value) {
+
+		itemJSONObjectBuilder.nestedField(
+			embeddedPathElements.head(),
+			embeddedPathElements.tail().toArray(String[]::new)
+		).value(
+			value
+		);
+	}
+
+	@Override
+	public void mapItemEmbeddedResourceLink(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		String url) {
+
+		itemJSONObjectBuilder.nestedField(
+			embeddedPathElements.head(),
+			embeddedPathElements.tail().toArray(String[]::new)
+		).field(
+			fieldName
+		).value(
+			url
+		);
+	}
+
+	@Override
+	public void mapItemEmbeddedResourceURL(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String url) {
+
+		itemJSONObjectBuilder.nestedField(
+			embeddedPathElements.head(),
+			embeddedPathElements.tail().toArray(String[]::new)
+		).field(
+			"self"
+		).value(
+			url
+		);
+	}
+
+	@Override
+	public void mapItemField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		Object value) {
+
+		itemJSONObjectBuilder.field(fieldName).value(value);
+	}
+
+	@Override
+	public void mapItemLink(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName, String url) {
+
+		itemJSONObjectBuilder.field(fieldName).value(url);
+	}
+
+	@Override
+	public void mapItemLinkedResourceURL(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String url) {
+
+		itemJSONObjectBuilder.nestedField(
+			embeddedPathElements.head(),
+			embeddedPathElements.tail().toArray(String[]::new)
+		).value(
+			url
+		);
+	}
+
+	@Override
+	public void mapItemSelfURL(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String url) {
+
+		itemJSONObjectBuilder.field("self").value(url);
+	}
+
+	@Override
+	public void mapItemTotalCount(
+		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
+
+		jsonObjectBuilder.field("totalNumberOfItems").value(totalCount);
+	}
+
+	@Override
+	public void mapLastPageURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
+		jsonObjectBuilder.nestedField("pages", "last").value(url);
+	}
+
+	@Override
+	public void mapNextPageURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
+		jsonObjectBuilder.nestedField("pages", "next").value(url);
+	}
+
+	@Override
+	public void mapPageCount(JSONObjectBuilder jsonObjectBuilder, int count) {
+		jsonObjectBuilder.field("numberOfItems").value(count);
+	}
+
+	@Override
+	public void mapPreviousPageURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
+		jsonObjectBuilder.nestedField("pages", "prev").value(url);
+	}
+
+	@Override
+	public void onFinishItem(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, T item, Class<T> modelClass,
+		RequestInfo requestInfo) {
+
+		pageJSONObjectBuilder.field(
+			"elements"
+		).arrayValue(
+
+		).add(
+			itemJSONObjectBuilder
+		);
+	}
+
+}
