@@ -35,12 +35,8 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import java.net.URI;
-
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +45,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
@@ -146,95 +141,29 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 	@Context
 	protected UriInfo uriInfo;
 
-	private String _getAbsoluteURL(String relativeURI) {
-		UriBuilder uriBuilder = uriInfo.getBaseUriBuilder().clone();
-
-		URI uri = uriBuilder.path(relativeURI).build();
-
-		return uri.toString();
-	}
-
-	private <U> void _writeEmbeddedModelFields(
-		SingleModelJSONMessageMapper<?> singleModelJSONMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder, U model, Class<U> modelClass,
-		FunctionalList<String> embeddedPathElements) {
-
-		Map<String, Function<U, Object>> fieldFunctions =
-			_representorManager.getFieldFunctions(modelClass);
-
-		for (String field : fieldFunctions.keySet()) {
-			Object data = fieldFunctions.get(field).apply(model);
-
-			if (data != null) {
-				singleModelJSONMessageMapper.mapEmbeddedResourceField(
-					jsonObjectBuilder, embeddedPathElements, field, data);
-			}
-		}
-	}
-
-	private <U> void _writeEmbeddedModelLinks(
-		SingleModelJSONMessageMapper<?> singleModelJSONMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder, Class<U> modelClass,
-		FunctionalList<String> embeddedPathElements) {
-
-		Map<String, String> links = _representorManager.getLinks(modelClass);
-
-		for (String key : links.keySet()) {
-			singleModelJSONMessageMapper.mapEmbeddedResourceLink(
-				jsonObjectBuilder, embeddedPathElements, key, links.get(key));
-		}
-	}
-
-	private <U> void _writeEmbeddedModelTypes(
-		SingleModelJSONMessageMapper<?> singleModelJSONMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder, Class<U> modelClass,
-		FunctionalList<String> embeddedPathElements) {
-
-		List<String> types = _representorManager.getTypes(modelClass);
-
-		singleModelJSONMessageMapper.mapEmbeddedResourceTypes(
-			jsonObjectBuilder, embeddedPathElements, types);
-	}
-
 	private <U, V> void _writeEmbeddedRelatedModel(
 		SingleModelJSONMessageMapper<?> singleModelJSONMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, RelatedModel<U, V> relatedModel,
 		U parentModel, FunctionalList<String> parentEmbeddedPathElements) {
 
-		Optional<V> modelOptional =
-			relatedModel.getModelFunction().apply(parentModel);
+		_writerHelper.writeRelatedModel(
+			relatedModel, parentModel, parentEmbeddedPathElements, uriInfo,
+			(model, modelClass, url, embeddedPathElements) -> {
+				_writerHelper.writeFields(
+					model, modelClass, (fieldName, value) ->
+						singleModelJSONMessageMapper.mapEmbeddedResourceField(
+							jsonObjectBuilder, embeddedPathElements, fieldName,
+							value));
 
-		if (!modelOptional.isPresent()) {
-			return;
-		}
+				_writerHelper.writeLinks(
+					modelClass, (fieldName, link) ->
+						singleModelJSONMessageMapper.mapEmbeddedResourceLink(
+							jsonObjectBuilder, embeddedPathElements, fieldName,
+							link));
 
-		V model = modelOptional.get();
-
-		Class<V> modelClass = relatedModel.getModelClass();
-
-		Optional<String> uriOptional =
-			_uriResolver.getSingleResourceURIOptional(modelClass, model);
-
-		uriOptional.ifPresent(
-			uri -> {
-				String key = relatedModel.getKey();
-
-				FunctionalList<String> embeddedPathElements =
-					new StringFunctionalList(parentEmbeddedPathElements, key);
-
-				String url = _getAbsoluteURL(uri);
-
-				_writeEmbeddedModelFields(
-					singleModelJSONMessageMapper, jsonObjectBuilder, model,
-					modelClass, embeddedPathElements);
-
-				_writeEmbeddedModelLinks(
-					singleModelJSONMessageMapper, jsonObjectBuilder, modelClass,
-					embeddedPathElements);
-
-				_writeEmbeddedModelTypes(
-					singleModelJSONMessageMapper, jsonObjectBuilder, modelClass,
-					embeddedPathElements);
+				_writerHelper.writeTypes(modelClass, types ->
+					singleModelJSONMessageMapper.mapEmbeddedResourceTypes(
+						jsonObjectBuilder, embeddedPathElements, types));
 
 				singleModelJSONMessageMapper.mapEmbeddedResourceURL(
 					jsonObjectBuilder, embeddedPathElements, url);
@@ -242,30 +171,19 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 				List<RelatedModel<V, ?>> embeddedRelatedModels =
 					_representorManager.getEmbeddedRelatedModels(modelClass);
 
-				_writeEmbeddedRelatedModels(
-					singleModelJSONMessageMapper, jsonObjectBuilder,
-					embeddedRelatedModels, model, embeddedPathElements);
+				embeddedRelatedModels.forEach(
+					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
+						singleModelJSONMessageMapper, jsonObjectBuilder,
+						embeddedRelatedModel, model, embeddedPathElements));
 
 				List<RelatedModel<V, ?>> linkedRelatedModels =
 					_representorManager.getLinkedRelatedModels(modelClass);
 
-				_writeLinkedRelatedModels(
-					singleModelJSONMessageMapper, jsonObjectBuilder,
-					linkedRelatedModels, model, embeddedPathElements);
+				linkedRelatedModels.forEach(
+					linkedRelatedModel -> _writeLinkedRelatedModel(
+						singleModelJSONMessageMapper, jsonObjectBuilder,
+						linkedRelatedModel, model, embeddedPathElements));
 			});
-	}
-
-	private <U> void _writeEmbeddedRelatedModels(
-		SingleModelJSONMessageMapper<?> singleModelJSONMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder,
-		List<RelatedModel<U, ?>> relatedModels, U parentModel,
-		FunctionalList<String> embeddedPathElements) {
-
-		for (RelatedModel<U, ?> relatedModel : relatedModels) {
-			_writeEmbeddedRelatedModel(
-				singleModelJSONMessageMapper, jsonObjectBuilder, relatedModel,
-				parentModel, embeddedPathElements);
-		}
 	}
 
 	private <U, V> void _writeLinkedRelatedModel(
@@ -273,45 +191,11 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		JSONObjectBuilder jsonObjectBuilder, RelatedModel<U, V> relatedModel,
 		U parentModel, FunctionalList<String> parentEmbeddedPathElements) {
 
-		Optional<V> modelOptional =
-			relatedModel.getModelFunction().apply(parentModel);
-
-		if (!modelOptional.isPresent()) {
-			return;
-		}
-
-		V model = modelOptional.get();
-
-		Class<V> modelClass = relatedModel.getModelClass();
-
-		Optional<String> uriOptional =
-			_uriResolver.getSingleResourceURIOptional(modelClass, model);
-
-		uriOptional.ifPresent(
-			uri -> {
-				String key = relatedModel.getKey();
-
-				FunctionalList<String> embeddedPathElements =
-					new StringFunctionalList(parentEmbeddedPathElements, key);
-
-				String url = _getAbsoluteURL(uri);
-
+		_writerHelper.writeRelatedModel(
+			relatedModel, parentModel, parentEmbeddedPathElements, uriInfo,
+			(model, modelClass, url, embeddedPathElements) ->
 				singleModelJSONMessageMapper.mapLinkedResourceURL(
-					jsonObjectBuilder, embeddedPathElements, url);
-			});
-	}
-
-	private <U> void _writeLinkedRelatedModels(
-		SingleModelJSONMessageMapper<?> singleModelJSONMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder,
-		List<RelatedModel<U, ?>> relatedModels, U parentModel,
-		FunctionalList<String> embeddedPathElements) {
-
-		for (RelatedModel<U, ?> relatedModel : relatedModels) {
-			_writeLinkedRelatedModel(
-				singleModelJSONMessageMapper, jsonObjectBuilder, relatedModel,
-				parentModel, embeddedPathElements);
-		}
+					jsonObjectBuilder, embeddedPathElements, url));
 	}
 
 	private <U> void _writeModel(
@@ -322,87 +206,43 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		singleModelJSONMessageMapper.onStart(
 			jsonObjectBuilder, model, modelClass, requestInfo);
 
-		_writeModelFields(
-			singleModelJSONMessageMapper, jsonObjectBuilder, model, modelClass);
+		_writerHelper.writeFields(
+			model, modelClass, (field, value) ->
+				singleModelJSONMessageMapper.mapField(
+					jsonObjectBuilder, field, value));
 
-		_writeModelLinks(
-			singleModelJSONMessageMapper, jsonObjectBuilder, modelClass);
+		_writerHelper.writeLinks(
+			modelClass, (fieldName, link) ->
+				singleModelJSONMessageMapper.mapLink(
+					jsonObjectBuilder, fieldName, link));
 
-		_writeModelTypes(
-			singleModelJSONMessageMapper, jsonObjectBuilder, modelClass);
+		_writerHelper.writeTypes(
+			modelClass, types -> singleModelJSONMessageMapper.mapTypes(
+				jsonObjectBuilder, types));
 
-		_writeSelfURL(
-			singleModelJSONMessageMapper, jsonObjectBuilder, model, modelClass);
+		_writerHelper.writeSingleResourceURL(
+			model, modelClass, uriInfo, url ->
+				singleModelJSONMessageMapper.mapSelfURL(
+					jsonObjectBuilder, url));
 
 		List<RelatedModel<U, ?>> embeddedRelatedModels =
 			_representorManager.getEmbeddedRelatedModels(modelClass);
 
-		_writeEmbeddedRelatedModels(
-			singleModelJSONMessageMapper, jsonObjectBuilder,
-			embeddedRelatedModels, model, null);
+		embeddedRelatedModels.forEach(
+			embeddedRelatedModel -> _writeEmbeddedRelatedModel(
+				singleModelJSONMessageMapper, jsonObjectBuilder,
+				embeddedRelatedModel, model, null));
 
 		List<RelatedModel<U, ?>> linkedRelatedModels =
 			_representorManager.getLinkedRelatedModels(modelClass);
 
-		_writeLinkedRelatedModels(
-			singleModelJSONMessageMapper, jsonObjectBuilder,
-			linkedRelatedModels, model, null);
+		linkedRelatedModels.forEach(
+			linkedRelatedModel -> _writeLinkedRelatedModel(
+				singleModelJSONMessageMapper, jsonObjectBuilder,
+				linkedRelatedModel, model, null));
 
 		singleModelJSONMessageMapper.onFinish(
 			jsonObjectBuilder, model, modelClass, requestInfo);
-	}
-
-	private <U> void _writeModelFields(
-		SingleModelJSONMessageMapper<U> singleModelJSONMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder, U model, Class<U> modelClass) {
-
-		Map<String, Function<U, Object>> fieldFunctions =
-			_representorManager.getFieldFunctions(modelClass);
-
-		for (String field : fieldFunctions.keySet()) {
-			Object data = fieldFunctions.get(field).apply(model);
-
-			if (data != null) {
-				singleModelJSONMessageMapper.mapField(
-					jsonObjectBuilder, field, data);
-			}
-		}
-	}
-
-	private <U> void _writeModelLinks(
-		SingleModelJSONMessageMapper<U> singleModelJSONMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder, Class<U> modelClass) {
-
-		Map<String, String> links = _representorManager.getLinks(modelClass);
-
-		for (String key : links.keySet()) {
-			singleModelJSONMessageMapper.mapLink(
-				jsonObjectBuilder, key, links.get(key));
-		}
-	}
-
-	private <U> void _writeModelTypes(
-		SingleModelJSONMessageMapper<U> singleModelJSONMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder, Class<U> modelClass) {
-
-		List<String> types = _representorManager.getTypes(modelClass);
-
-		singleModelJSONMessageMapper.mapTypes(jsonObjectBuilder, types);
-	}
-
-	private <U> void _writeSelfURL(
-		SingleModelJSONMessageMapper<U> singleModelJSONMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder, U model, Class<U> modelClass) {
-
-		Optional<String> optional = _uriResolver.getSingleResourceURIOptional(
-			modelClass, model);
-
-		String uri = optional.orElseThrow(
-			() -> new VulcanDeveloperError.CannotCalculateURI(modelClass));
-
-		String url = _getAbsoluteURL(uri);
-
-		singleModelJSONMessageMapper.mapSelfURL(jsonObjectBuilder, url);
 	}
 
 	@Reference
@@ -414,5 +254,8 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
 	@Reference
 	private URIResolver _uriResolver;
+
+	@Reference
+	private WriterHelper _writerHelper;
 
 }
