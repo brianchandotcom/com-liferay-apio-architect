@@ -18,11 +18,13 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEA
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.PageJSONMessageMapper;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
+import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.RepresentorManager;
 import com.liferay.vulcan.wiring.osgi.URIResolver;
 
@@ -202,9 +204,137 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		pageJSONMessageMapper.mapCollectionURL(jsonObjectBuilder, url);
 	}
 
+	private <U> void _writeEmbeddedModelFields(
+		PageJSONMessageMapper<?> pageJSONMessageMapper,
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, U model, Class<U> modelClass,
+		FunctionalList<String> embeddedPathElements) {
+
+		Map<String, Function<U, Object>> fieldFunctions =
+			_representorManager.getFieldFunctions(modelClass);
+
+		for (String field : fieldFunctions.keySet()) {
+			Object data = fieldFunctions.get(field).apply(model);
+
+			if (data != null) {
+				pageJSONMessageMapper.mapItemEmbeddedResourceField(
+					pageJSONObjectBuilder, itemJSONObjectBuilder,
+					embeddedPathElements, field, data);
+			}
+		}
+	}
+
+	private <U> void _writeEmbeddedModelLinks(
+		PageJSONMessageMapper<?> pageJSONMessageMapper,
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, Class<U> modelClass,
+		FunctionalList<String> embeddedPathElements) {
+
+		Map<String, String> links = _representorManager.getLinks(modelClass);
+
+		for (String key : links.keySet()) {
+			pageJSONMessageMapper.mapItemEmbeddedResourceLink(
+				pageJSONObjectBuilder, itemJSONObjectBuilder,
+				embeddedPathElements, key, links.get(key));
+		}
+	}
+
+	private <U> void _writeEmbeddedModelTypes(
+		PageJSONMessageMapper<?> pageJSONMessageMapper,
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, Class<U> modelClass,
+		FunctionalList<String> embeddedPathElements) {
+
+		List<String> types = _representorManager.getTypes(modelClass);
+
+		pageJSONMessageMapper.mapItemEmbeddedResourceTypes(
+			pageJSONObjectBuilder, itemJSONObjectBuilder, embeddedPathElements,
+			types);
+	}
+
+	private <U, V> void _writeEmbeddedRelatedModel(
+		PageJSONMessageMapper<?> pageJSONMessageMapper,
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		RelatedModel<U, V> relatedModel, U parentModel,
+		FunctionalList<String> parentEmbeddedPathElements) {
+
+		Optional<V> modelOptional =
+			relatedModel.getModelFunction().apply(parentModel);
+
+		if (!modelOptional.isPresent()) {
+			return;
+		}
+
+		V model = modelOptional.get();
+
+		Class<V> modelClass = relatedModel.getModelClass();
+
+		Optional<String> uriOptional =
+			_uriResolver.getSingleResourceURIOptional(modelClass, model);
+
+		uriOptional.ifPresent(
+			uri -> {
+				String key = relatedModel.getKey();
+
+				FunctionalList<String> embeddedPathElements =
+					new StringFunctionalList(parentEmbeddedPathElements, key);
+
+				String url = _getAbsoluteURL(uri);
+
+				_writeEmbeddedModelFields(
+					pageJSONMessageMapper, pageJSONObjectBuilder,
+					itemJSONObjectBuilder, model, modelClass,
+					embeddedPathElements);
+
+				_writeEmbeddedModelLinks(
+					pageJSONMessageMapper, pageJSONObjectBuilder,
+					itemJSONObjectBuilder, modelClass, embeddedPathElements);
+
+				_writeEmbeddedModelTypes(
+					pageJSONMessageMapper, pageJSONObjectBuilder,
+					itemJSONObjectBuilder, modelClass, embeddedPathElements);
+
+				pageJSONMessageMapper.mapItemEmbeddedResourceURL(
+					pageJSONObjectBuilder, itemJSONObjectBuilder,
+					embeddedPathElements, url);
+
+				List<RelatedModel<V, ?>> embeddedRelatedModels =
+					_representorManager.getEmbeddedRelatedModels(modelClass);
+
+				_writeEmbeddedRelatedModels(
+					pageJSONMessageMapper, pageJSONObjectBuilder,
+					itemJSONObjectBuilder, embeddedRelatedModels, model,
+					embeddedPathElements);
+
+				List<RelatedModel<V, ?>> linkedRelatedModels =
+					_representorManager.getLinkedRelatedModels(modelClass);
+
+				_writeLinkedRelatedModels(
+					pageJSONMessageMapper, pageJSONObjectBuilder,
+					itemJSONObjectBuilder, linkedRelatedModels, model,
+					embeddedPathElements);
+			});
+	}
+
+	private <U> void _writeEmbeddedRelatedModels(
+		PageJSONMessageMapper<?> pageJSONMessageMapper,
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		List<RelatedModel<U, ?>> relatedModels, U parentModel,
+		FunctionalList<String> embeddedPathElements) {
+
+		for (RelatedModel<U, ?> relatedModel : relatedModels) {
+			_writeEmbeddedRelatedModel(
+				pageJSONMessageMapper, pageJSONObjectBuilder,
+				itemJSONObjectBuilder, relatedModel, parentModel,
+				embeddedPathElements);
+		}
+	}
+
 	private <U> void _writeItemFields(
 		PageJSONMessageMapper<U> pageJSONMessageMapper,
-		JSONObjectBuilder rootJSONObjectBuilder,
+		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, U model, Class<U> modelClass) {
 
 		Map<String, Function<U, Object>> fieldFunctions =
@@ -215,21 +345,21 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 			if (data != null) {
 				pageJSONMessageMapper.mapItemField(
-					rootJSONObjectBuilder, itemJSONObjectBuilder, field, data);
+					pageJSONObjectBuilder, itemJSONObjectBuilder, field, data);
 			}
 		}
 	}
 
 	private void _writeItemLinks(
 		PageJSONMessageMapper<T> pageJSONMessageMapper,
-		JSONObjectBuilder rootJSONObjectBuilder,
+		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, Class<T> modelClass) {
 
 		Map<String, String> links = _representorManager.getLinks(modelClass);
 
 		for (String key : links.keySet()) {
 			pageJSONMessageMapper.mapItemLink(
-				rootJSONObjectBuilder, itemJSONObjectBuilder, key,
+				pageJSONObjectBuilder, itemJSONObjectBuilder, key,
 				links.get(key));
 		}
 	}
@@ -263,6 +393,20 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 				pageJSONMessageMapper, jsonObjectBuilder, itemJSONObjectBuilder,
 				model, modelClass);
 
+			List<RelatedModel<T, ?>> embeddedRelatedModels =
+				_representorManager.getEmbeddedRelatedModels(modelClass);
+
+			_writeEmbeddedRelatedModels(
+				pageJSONMessageMapper, jsonObjectBuilder, itemJSONObjectBuilder,
+				embeddedRelatedModels, model, null);
+
+			List<RelatedModel<T, ?>> linkedRelatedModels =
+				_representorManager.getLinkedRelatedModels(modelClass);
+
+			_writeLinkedRelatedModels(
+				pageJSONMessageMapper, jsonObjectBuilder, itemJSONObjectBuilder,
+				linkedRelatedModels, model, null);
+
 			pageJSONMessageMapper.onFinishItem(
 				jsonObjectBuilder, itemJSONObjectBuilder, model, modelClass,
 				requestInfo);
@@ -280,18 +424,18 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	private void _writeItemTypes(
 		PageJSONMessageMapper<T> pageJSONMessageMapper,
-		JSONObjectBuilder rootJSONObjectBuilder,
+		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, Class<T> modelClass) {
 
 		List<String> types = _representorManager.getTypes(modelClass);
 
 		pageJSONMessageMapper.mapItemTypes(
-			rootJSONObjectBuilder, itemJSONObjectBuilder, types);
+			pageJSONObjectBuilder, itemJSONObjectBuilder, types);
 	}
 
 	private void _writeItemURL(
 		PageJSONMessageMapper<T> pageJSONMessageMapper,
-		JSONObjectBuilder rootJSONObjectBuilder,
+		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, T model, Class<T> modelClass) {
 
 		Optional<String> optional = _uriResolver.getSingleResourceURIOptional(
@@ -303,7 +447,58 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		String url = _getAbsoluteURL(uri);
 
 		pageJSONMessageMapper.mapItemSelfURL(
-			rootJSONObjectBuilder, itemJSONObjectBuilder, url);
+			pageJSONObjectBuilder, itemJSONObjectBuilder, url);
+	}
+
+	private <U, V> void _writeLinkedRelatedModel(
+		PageJSONMessageMapper<?> pageJSONMessageMapper,
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		RelatedModel<U, V> relatedModel, U parentModel,
+		FunctionalList<String> parentEmbeddedPathElements) {
+
+		Optional<V> modelOptional =
+			relatedModel.getModelFunction().apply(parentModel);
+
+		if (!modelOptional.isPresent()) {
+			return;
+		}
+
+		V model = modelOptional.get();
+
+		Class<V> modelClass = relatedModel.getModelClass();
+
+		Optional<String> uriOptional =
+			_uriResolver.getSingleResourceURIOptional(modelClass, model);
+
+		uriOptional.ifPresent(
+			uri -> {
+				String key = relatedModel.getKey();
+
+				FunctionalList<String> embeddedPathElements =
+					new StringFunctionalList(parentEmbeddedPathElements, key);
+
+				String url = _getAbsoluteURL(uri);
+
+				pageJSONMessageMapper.mapItemLinkedResourceURL(
+					pageJSONObjectBuilder, itemJSONObjectBuilder,
+					embeddedPathElements, url);
+			});
+	}
+
+	private <U> void _writeLinkedRelatedModels(
+		PageJSONMessageMapper<?> pageJSONMessageMapper,
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		List<RelatedModel<U, ?>> relatedModels, U parentModel,
+		FunctionalList<String> embeddedPathElements) {
+
+		for (RelatedModel<U, ?> relatedModel : relatedModels) {
+			_writeLinkedRelatedModel(
+				pageJSONMessageMapper, pageJSONObjectBuilder,
+				itemJSONObjectBuilder, relatedModel, parentModel,
+				embeddedPathElements);
+		}
 	}
 
 	private void _writePageCount(
