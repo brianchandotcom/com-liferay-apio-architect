@@ -16,13 +16,17 @@ package com.liferay.vulcan.message.json;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.portal.kernel.json.JSONObject;
+
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
 @ProviderType
-public interface JSONMessageBuilder {
+public interface JSONObjectBuilder {
+
+	public JSONObject build();
 
 	public FirstStep field(String name);
 

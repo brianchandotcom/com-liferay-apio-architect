@@ -17,7 +17,7 @@ package com.liferay.vulcan.message;
 import aQute.bnd.annotation.ConsumerType;
 
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.message.json.JSONMessageBuilder;
+import com.liferay.vulcan.message.json.JSONObjectBuilder;
 
 import java.util.List;
 
@@ -32,54 +32,54 @@ public interface SingleModelJSONMessageMapper<T> {
 	public String getMediaType();
 
 	public default void mapEmbeddedResourceField(
-		JSONMessageBuilder jsonMessageBuilder,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String field,
 		Object value) {
 	}
 
 	public default void mapEmbeddedResourceLink(
-		JSONMessageBuilder jsonMessageBuilder,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String field, String url) {
 	}
 
 	public default void mapEmbeddedResourceTypes(
-		JSONMessageBuilder jsonMessageBuilder,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, List<String> types) {
 	}
 
 	public default void mapEmbeddedResourceURL(
-		JSONMessageBuilder jsonMessageBuilder,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 	}
 
 	public default void mapField(
-		JSONMessageBuilder jsonMessageBuilder, String fieldName, Object value) {
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, Object value) {
 	}
 
 	public default void mapLink(
-		JSONMessageBuilder jsonMessageBuilder, String fieldName, String url) {
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, String url) {
 	}
 
 	public default void mapLinkedResourceURL(
-		JSONMessageBuilder jsonMessageBuilder,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 	}
 
 	public default void mapSelfURL(
-		JSONMessageBuilder jsonMessageBuilder, String url) {
+		JSONObjectBuilder jsonObjectBuilder, String url) {
 	}
 
 	public default void mapTypes(
-		JSONMessageBuilder jsonMessageBuilder, List<String> types) {
+		JSONObjectBuilder jsonObjectBuilder, List<String> types) {
 	}
 
 	public default void onFinish(
-		JSONMessageBuilder jsonMessageBuilder, T model, Class<T> modelClass,
+		JSONObjectBuilder jsonObjectBuilder, T model, Class<T> modelClass,
 		RequestInfo requestInfo) {
 	}
 
 	public default void onStart(
-		JSONMessageBuilder jsonMessageBuilder, T model, Class<T> modelClass,
+		JSONObjectBuilder jsonObjectBuilder, T model, Class<T> modelClass,
 		RequestInfo requestInfo) {
 	}
 

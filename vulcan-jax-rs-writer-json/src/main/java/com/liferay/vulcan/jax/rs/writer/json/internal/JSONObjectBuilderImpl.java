@@ -16,22 +16,23 @@ package com.liferay.vulcan.jax.rs.writer.json.internal;
 
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.vulcan.message.json.JSONMessageBuilder;
+import com.liferay.vulcan.message.json.JSONObjectBuilder;
 
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public class JSONMessageBuilderImpl implements JSONMessageBuilder {
+public class JSONObjectBuilderImpl implements JSONObjectBuilder {
+
+	@Override
+	public JSONObject build() {
+		return _jsonObject;
+	}
 
 	@Override
 	public FirstStep field(String name) {
 		return new FirstStepImpl(name, _jsonObject);
-	}
-
-	public JSONObject getJSONObject() {
-		return _jsonObject;
 	}
 
 	@Override

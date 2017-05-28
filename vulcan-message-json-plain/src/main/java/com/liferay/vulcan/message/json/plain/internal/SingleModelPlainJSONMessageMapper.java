@@ -16,7 +16,7 @@ package com.liferay.vulcan.message.json.plain.internal;
 
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.SingleModelJSONMessageMapper;
-import com.liferay.vulcan.message.json.JSONMessageBuilder;
+import com.liferay.vulcan.message.json.JSONObjectBuilder;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -36,11 +36,11 @@ public class SingleModelPlainJSONMessageMapper<T>
 
 	@Override
 	public void mapEmbeddedResourceField(
-		JSONMessageBuilder jsonMessageBuilder,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object value) {
 
-		jsonMessageBuilder.nestedField(
+		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(),
 			embeddedPathElements.tail().toArray(String[]::new)
 		).value(
@@ -50,11 +50,11 @@ public class SingleModelPlainJSONMessageMapper<T>
 
 	@Override
 	public void mapEmbeddedResourceLink(
-		JSONMessageBuilder jsonMessageBuilder,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
 
-		jsonMessageBuilder.nestedField(
+		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(),
 			embeddedPathElements.tail().toArray(String[]::new)
 		).field(
@@ -66,10 +66,10 @@ public class SingleModelPlainJSONMessageMapper<T>
 
 	@Override
 	public void mapEmbeddedResourceURL(
-		JSONMessageBuilder jsonMessageBuilder,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		jsonMessageBuilder.nestedField(
+		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(),
 			embeddedPathElements.tail().toArray(String[]::new)
 		).field(
@@ -81,24 +81,24 @@ public class SingleModelPlainJSONMessageMapper<T>
 
 	@Override
 	public void mapField(
-		JSONMessageBuilder jsonMessageBuilder, String fieldName, Object value) {
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, Object value) {
 
-		jsonMessageBuilder.field(fieldName).value(value);
+		jsonObjectBuilder.field(fieldName).value(value);
 	}
 
 	@Override
 	public void mapLink(
-		JSONMessageBuilder jsonMessageBuilder, String fieldName, String url) {
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, String url) {
 
-		jsonMessageBuilder.field(fieldName).value(url);
+		jsonObjectBuilder.field(fieldName).value(url);
 	}
 
 	@Override
 	public void mapLinkedResourceURL(
-		JSONMessageBuilder jsonMessageBuilder,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		jsonMessageBuilder.nestedField(
+		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(),
 			embeddedPathElements.tail().toArray(String[]::new)
 		).value(
@@ -107,8 +107,8 @@ public class SingleModelPlainJSONMessageMapper<T>
 	}
 
 	@Override
-	public void mapSelfURL(JSONMessageBuilder jsonMessageBuilder, String url) {
-		jsonMessageBuilder.field("self").value(url);
+	public void mapSelfURL(JSONObjectBuilder jsonObjectBuilder, String url) {
+		jsonObjectBuilder.field("self").value(url);
 	}
 
 }
