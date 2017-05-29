@@ -71,8 +71,7 @@ public class LiferayRootEndpoint implements RootEndpoint {
 	}
 
 	@Override
-	@Path("/{path}")
-	public Resource getResource(@PathParam("path") String path) {
+	public Resource getResource(String path) {
 		if (!_serviceTrackerMap.containsKey(path)) {
 			throw new NotFoundException();
 		}
