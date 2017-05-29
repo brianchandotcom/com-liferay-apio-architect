@@ -31,11 +31,11 @@ public interface JSONObjectBuilder {
 
 	public JSONObject build();
 
-	public FirstStep field(String name);
+	public FieldStep field(String name);
 
-	public FirstStep nestedField(String parentName, String... nestedNames);
+	public FieldStep nestedField(String parentName, String... nestedNames);
 
-	public interface ArrayStep {
+	public interface ArrayValueStep {
 
 		public void add(Consumer<JSONObjectBuilder> consumer);
 
@@ -47,13 +47,13 @@ public interface JSONObjectBuilder {
 
 	}
 
-	public interface FirstStep {
+	public interface FieldStep {
 
-		public ArrayStep arrayValue();
+		public ArrayValueStep arrayValue();
 
-		public FirstStep field(String name);
+		public FieldStep field(String name);
 
-		public FirstStep nestedField(String parentName, String... nestedNames);
+		public FieldStep nestedField(String parentName, String... nestedNames);
 
 		public void value(Object value);
 

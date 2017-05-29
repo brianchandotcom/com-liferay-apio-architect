@@ -35,24 +35,24 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 	}
 
 	@Override
-	public FirstStep field(String name) {
-		return new FirstStepImpl(name, _jsonObject);
+	public FieldStep field(String name) {
+		return new FieldStepImpl(name, _jsonObject);
 	}
 
 	@Override
-	public FirstStep nestedField(String parentName, String... nestedNames) {
-		FirstStep firstStep = field(parentName);
+	public FieldStep nestedField(String parentName, String... nestedNames) {
+		FieldStep fieldStep = field(parentName);
 
 		for (String string : nestedNames) {
-			firstStep = firstStep.field(string);
+			fieldStep = fieldStep.field(string);
 		}
 
-		return firstStep;
+		return fieldStep;
 	}
 
-	public static class ArrayStepImpl implements ArrayStep {
+	public static class ArrayValueStepImpl implements ArrayValueStep {
 
-		public ArrayStepImpl(JSONArray jsonArray) {
+		public ArrayValueStepImpl(JSONArray jsonArray) {
 			_jsonArray = jsonArray;
 		}
 
@@ -88,15 +88,15 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 
 	private final JSONObject _jsonObject = JSONFactoryUtil.createJSONObject();
 
-	private static class FirstStepImpl implements FirstStep {
+	private static class FieldStepImpl implements FieldStep {
 
-		public FirstStepImpl(String name, JSONObject jsonObject) {
+		public FieldStepImpl(String name, JSONObject jsonObject) {
 			_name = name;
 			_stepJSONObject = jsonObject;
 		}
 
 		@Override
-		public ArrayStep arrayValue() {
+		public ArrayValueStep arrayValue() {
 			JSONArray jsonArray = _stepJSONObject.getJSONArray(_name);
 
 			if (jsonArray == null) {
@@ -105,11 +105,11 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 				_stepJSONObject.put(_name, jsonArray);
 			}
 
-			return new ArrayStepImpl(jsonArray);
+			return new ArrayValueStepImpl(jsonArray);
 		}
 
 		@Override
-		public FirstStep field(String name) {
+		public FieldStep field(String name) {
 			JSONObject previousJSONObject = _stepJSONObject.getJSONObject(
 				_name);
 
@@ -118,21 +118,21 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 
 				_stepJSONObject.put(_name, jsonObject);
 
-				return new FirstStepImpl(name, jsonObject);
+				return new FieldStepImpl(name, jsonObject);
 			}
 
-			return new FirstStepImpl(name, previousJSONObject);
+			return new FieldStepImpl(name, previousJSONObject);
 		}
 
 		@Override
-		public FirstStep nestedField(String parentName, String... nestedNames) {
-			FirstStep firstStep = field(parentName);
+		public FieldStep nestedField(String parentName, String... nestedNames) {
+			FieldStep fieldStep = field(parentName);
 
 			for (String string : nestedNames) {
-				firstStep = firstStep.field(string);
+				fieldStep = fieldStep.field(string);
 			}
 
-			return firstStep;
+			return fieldStep;
 		}
 
 		@Override
