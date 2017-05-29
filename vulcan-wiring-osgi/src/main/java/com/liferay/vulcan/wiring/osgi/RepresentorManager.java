@@ -139,12 +139,6 @@ public class RepresentorManager {
 			firstModelRepresentorMapper -> _addModelClassMaps(modelClass));
 	}
 
-	private RepresentorManager() {
-		Bundle bundle = FrameworkUtil.getBundle(RepresentorManager.class);
-
-		_bundleContext = bundle.getBundleContext();
-	}
-
 	private <T> void _addModelClassMaps(Class<T> modelClass) {
 		Optional<ModelRepresentorMapper<T>> optional =
 			getModelRepresentorMapperOptional(modelClass);
@@ -224,7 +218,8 @@ public class RepresentorManager {
 			});
 	}
 
-	private final BundleContext _bundleContext;
+	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
+		RepresentorManager.class).getBundleContext();
 	private final Map<String, List<RelatedModel<?, ?>>> _embeddedRelatedModels =
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
