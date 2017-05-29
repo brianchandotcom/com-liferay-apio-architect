@@ -14,6 +14,17 @@
 
 package com.liferay.vulcan.message.json.plain.internal;
 
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_COLLECTION;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_ELEMENTS;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_FIRST;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_LAST;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_MEDIA_TYPE;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_NEXT;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_PAGES;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_PAGE_COUNT;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_PREV;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_TOTAL_COUNT;
+
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.PageJSONMessageMapper;
 import com.liferay.vulcan.message.RequestInfo;
@@ -30,14 +41,14 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 
 	@Override
 	public String getMediaType() {
-		return "application/json";
+		return JSON_PLAIN_MEDIA_TYPE;
 	}
 
 	@Override
 	public void mapCollectionURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		jsonObjectBuilder.field("collection").value(url);
+		jsonObjectBuilder.field(JSON_PLAIN_COLLECTION).value(url);
 	}
 
 	@Override
@@ -51,7 +62,11 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 	public void mapFirstPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		jsonObjectBuilder.nestedField("pages", "first").value(url);
+		jsonObjectBuilder.nestedField(
+			JSON_PLAIN_PAGES, JSON_PLAIN_FIRST
+		).value(
+			url
+		);
 	}
 
 	@Override
@@ -128,33 +143,45 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 	public void mapItemTotalCount(
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
 
-		jsonObjectBuilder.field("totalNumberOfItems").value(totalCount);
+		jsonObjectBuilder.field(JSON_PLAIN_TOTAL_COUNT).value(totalCount);
 	}
 
 	@Override
 	public void mapLastPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		jsonObjectBuilder.nestedField("pages", "last").value(url);
+		jsonObjectBuilder.nestedField(
+			JSON_PLAIN_PAGES, JSON_PLAIN_LAST
+		).value(
+			url
+		);
 	}
 
 	@Override
 	public void mapNextPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		jsonObjectBuilder.nestedField("pages", "next").value(url);
+		jsonObjectBuilder.nestedField(
+			JSON_PLAIN_PAGES, JSON_PLAIN_NEXT
+		).value(
+			url
+		);
 	}
 
 	@Override
 	public void mapPageCount(JSONObjectBuilder jsonObjectBuilder, int count) {
-		jsonObjectBuilder.field("numberOfItems").value(count);
+		jsonObjectBuilder.field(JSON_PLAIN_PAGE_COUNT).value(count);
 	}
 
 	@Override
 	public void mapPreviousPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		jsonObjectBuilder.nestedField("pages", "prev").value(url);
+		jsonObjectBuilder.nestedField(
+			JSON_PLAIN_PAGES, JSON_PLAIN_PREV
+		).value(
+			url
+		);
 	}
 
 	@Override
@@ -164,7 +191,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		RequestInfo requestInfo) {
 
 		pageJSONObjectBuilder.field(
-			"elements"
+			JSON_PLAIN_ELEMENTS
 		).arrayValue().add(
 			itemJSONObjectBuilder
 		);

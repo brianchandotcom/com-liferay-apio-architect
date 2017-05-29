@@ -14,6 +14,9 @@
 
 package com.liferay.vulcan.message.json.plain.internal;
 
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_MEDIA_TYPE;
+import static com.liferay.vulcan.message.json.plain.internal.JSONPlainConstants.JSON_PLAIN_SELF;
+
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.SingleModelJSONMessageMapper;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -37,7 +40,7 @@ public class SingleModelPlainJSONMessageMapper<T>
 
 	@Override
 	public String getMediaType() {
-		return "application/json";
+		return JSON_PLAIN_MEDIA_TYPE;
 	}
 
 	@Override
@@ -79,7 +82,7 @@ public class SingleModelPlainJSONMessageMapper<T>
 			embeddedPathElements.head(),
 			embeddedPathElements.tail().toArray(String[]::new)
 		).field(
-			"self"
+			JSON_PLAIN_SELF
 		).value(
 			url
 		);
@@ -114,7 +117,7 @@ public class SingleModelPlainJSONMessageMapper<T>
 
 	@Override
 	public void mapSelfURL(JSONObjectBuilder jsonObjectBuilder, String url) {
-		jsonObjectBuilder.field("self").value(url);
+		jsonObjectBuilder.field(JSON_PLAIN_SELF).value(url);
 	}
 
 }
