@@ -30,6 +30,7 @@ import com.liferay.vulcan.wiring.osgi.URIResolver;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -156,6 +157,12 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		pageJSONMessageMapper.onFinish(
 			jsonObjectBuilder, page, modelClass, requestInfo);
+
+		PrintWriter printWriter = new PrintWriter(entityStream, true);
+
+		printWriter.println(jsonObjectBuilder.build().toString());
+
+		printWriter.close();
 	}
 
 	@Context
