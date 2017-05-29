@@ -28,7 +28,6 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -78,21 +77,17 @@ public class RepresentorManager {
 	public <T> Optional<ModelRepresentorMapper<T>>
 		getModelRepresentorMapperOptional(Class<T> modelClass) {
 
-		TreeSet<ServiceReferenceServiceTuple<ModelRepresentorMapper<?>>>
-			serviceReferenceServiceTuples = _modelRepresentorMappers.get(
-				modelClass.getName());
-
 		Optional<TreeSet<ServiceReferenceServiceTuple<
 			ModelRepresentorMapper<?>>>> optional = Optional.ofNullable(
-				serviceReferenceServiceTuples);
+				_modelRepresentorMappers.get(modelClass.getName()));
 
-		Optional<ServiceReferenceServiceTuple<?>>
-			firstServiceReferenceServiceTuple = optional.map(TreeSet::first);
-
-		return firstServiceReferenceServiceTuple.map(
+		return optional.map(
+			TreeSet::first
+		).map(
 			serviceReferenceServiceTuple ->
-				(ModelRepresentorMapper<T>)serviceReferenceServiceTuple.
-					getService());
+				(ModelRepresentorMapper<T>)
+					serviceReferenceServiceTuple.getService()
+		);
 	}
 
 	public <T> List<String> getTypes(Class<T> modelClass) {
