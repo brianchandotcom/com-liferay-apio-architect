@@ -19,6 +19,7 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.portal.kernel.json.JSONObject;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * @author Alejandro Hernández
@@ -35,6 +36,8 @@ public interface JSONObjectBuilder {
 	public FirstStep nestedField(String parentName, String... nestedNames);
 
 	public interface ArrayStep {
+
+		public void add(Consumer<JSONObjectBuilder> consumer);
 
 		public void add(JSONObjectBuilder jsonObjectBuilder);
 

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * @author Alejandro Hernández
@@ -53,6 +54,15 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 
 		public ArrayStepImpl(JSONArray jsonArray) {
 			_jsonArray = jsonArray;
+		}
+
+		@Override
+		public void add(Consumer<JSONObjectBuilder> consumer) {
+			JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
+
+			consumer.accept(jsonObjectBuilder);
+
+			add(jsonObjectBuilder);
 		}
 
 		@Override
