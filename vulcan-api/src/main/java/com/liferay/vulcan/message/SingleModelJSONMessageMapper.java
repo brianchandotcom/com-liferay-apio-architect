@@ -33,13 +33,14 @@ public interface SingleModelJSONMessageMapper<T> {
 
 	public default void mapEmbeddedResourceField(
 		JSONObjectBuilder jsonObjectBuilder,
-		FunctionalList<String> embeddedPathElements, String field,
+		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object value) {
 	}
 
 	public default void mapEmbeddedResourceLink(
 		JSONObjectBuilder jsonObjectBuilder,
-		FunctionalList<String> embeddedPathElements, String field, String url) {
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		String url) {
 	}
 
 	public default void mapEmbeddedResourceTypes(

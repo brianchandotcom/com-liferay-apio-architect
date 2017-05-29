@@ -248,9 +248,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		PageJSONMessageMapper<T> pageJSONMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder) {
 
-		page.getItems(
-
-		).forEach(
+		page.getItems().forEach(
 			item -> {
 				JSONObjectBuilder itemJSONObjectBuilder =
 					new JSONObjectBuilderImpl();
@@ -300,8 +298,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 				pageJSONMessageMapper.onFinishItem(
 					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
 					requestInfo);
-			}
-		);
+			});
 	}
 
 	private void _writeItemTotalCount(

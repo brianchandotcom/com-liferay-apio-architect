@@ -181,9 +181,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 
 		pageJSONObjectBuilder.field(
 			"elements"
-		).arrayValue(
-
-		).add(
+		).arrayValue().add(
 			itemJSONObjectBuilder
 		);
 	}
