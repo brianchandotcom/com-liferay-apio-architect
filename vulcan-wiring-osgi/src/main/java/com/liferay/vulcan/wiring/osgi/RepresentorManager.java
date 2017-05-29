@@ -81,7 +81,10 @@ public class RepresentorManager {
 			ModelRepresentorMapper<?>>>> optional = Optional.ofNullable(
 				_modelRepresentorMappers.get(modelClass.getName()));
 
-		return optional.map(
+		return optional.filter(
+			serviceReferenceServiceTuples ->
+				!serviceReferenceServiceTuples.isEmpty()
+		).map(
 			TreeSet::first
 		).map(
 			serviceReferenceServiceTuple ->
