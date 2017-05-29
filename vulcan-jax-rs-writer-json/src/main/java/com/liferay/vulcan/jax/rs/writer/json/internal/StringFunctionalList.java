@@ -32,12 +32,13 @@ public class StringFunctionalList implements FunctionalList<String> {
 	public StringFunctionalList(
 		FunctionalList<String> functionalList, String last) {
 
-		_first = functionalList.head();
-
 		if (functionalList == null) {
+			_first = last;
 			_tail = Collections.emptyList();
 		}
 		else {
+			_first = functionalList.head();
+
 			List<String> tail =
 				functionalList.tail().collect(Collectors.toList());
 
