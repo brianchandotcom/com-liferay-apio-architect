@@ -18,6 +18,8 @@ import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.kernel.json.JSONObject;
 
+import java.util.Collection;
+
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
@@ -37,6 +39,8 @@ public interface JSONObjectBuilder {
 		public void add(JSONObjectBuilder jsonObjectBuilder);
 
 		public void add(Object value);
+
+		public <T> void addAll(Collection<T> collection);
 
 	}
 

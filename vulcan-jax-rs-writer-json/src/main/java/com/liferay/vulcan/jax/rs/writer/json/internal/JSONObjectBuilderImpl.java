@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 
+import java.util.Collection;
+
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
@@ -63,6 +65,11 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 			if (value != null) {
 				_jsonArray.put(value);
 			}
+		}
+
+		@Override
+		public <T> void addAll(Collection<T> collection) {
+			collection.forEach(_jsonArray::put);
 		}
 
 		private final JSONArray _jsonArray;
