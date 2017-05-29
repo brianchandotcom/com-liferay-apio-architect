@@ -20,6 +20,7 @@ import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
@@ -43,7 +44,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 	public void mapCurrentPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		jsonObjectBuilder.field("self").value(url);
+		_singleModelPlainJSONMessageMapper.mapSelfURL(jsonObjectBuilder, url);
 	}
 
 	@Override
@@ -60,12 +61,8 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object value) {
 
-		itemJSONObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
-		).value(
-			value
-		);
+		_singleModelPlainJSONMessageMapper.mapEmbeddedResourceField(
+			itemJSONObjectBuilder, embeddedPathElements, fieldName, value);
 	}
 
 	@Override
@@ -75,14 +72,8 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
 
-		itemJSONObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
-		).field(
-			fieldName
-		).value(
-			url
-		);
+		_singleModelPlainJSONMessageMapper.mapEmbeddedResourceLink(
+			itemJSONObjectBuilder, embeddedPathElements, fieldName, url);
 	}
 
 	@Override
@@ -91,14 +82,8 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		itemJSONObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
-		).field(
-			"self"
-		).value(
-			url
-		);
+		_singleModelPlainJSONMessageMapper.mapEmbeddedResourceURL(
+			itemJSONObjectBuilder, embeddedPathElements, url);
 	}
 
 	@Override
@@ -107,7 +92,8 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
 		Object value) {
 
-		itemJSONObjectBuilder.field(fieldName).value(value);
+		_singleModelPlainJSONMessageMapper.mapField(
+			itemJSONObjectBuilder, fieldName, value);
 	}
 
 	@Override
@@ -115,7 +101,8 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName, String url) {
 
-		itemJSONObjectBuilder.field(fieldName).value(url);
+		_singleModelPlainJSONMessageMapper.mapLink(
+			itemJSONObjectBuilder, fieldName, url);
 	}
 
 	@Override
@@ -124,12 +111,8 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		itemJSONObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
-		).value(
-			url
-		);
+		_singleModelPlainJSONMessageMapper.mapLinkedResourceURL(
+			itemJSONObjectBuilder, embeddedPathElements, url);
 	}
 
 	@Override
@@ -137,7 +120,8 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String url) {
 
-		itemJSONObjectBuilder.field("self").value(url);
+		_singleModelPlainJSONMessageMapper.mapSelfURL(
+			itemJSONObjectBuilder, url);
 	}
 
 	@Override
@@ -185,5 +169,9 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 			itemJSONObjectBuilder
 		);
 	}
+
+	@Reference
+	private SingleModelPlainJSONMessageMapper
+		_singleModelPlainJSONMessageMapper;
 
 }

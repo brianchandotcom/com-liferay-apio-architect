@@ -25,7 +25,13 @@ import org.osgi.service.component.annotations.Component;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(immediate = true)
+@Component(
+	immediate = true,
+	service = {
+		SingleModelPlainJSONMessageMapper.class,
+		SingleModelJSONMessageMapper.class
+	}
+)
 public class SingleModelPlainJSONMessageMapper<T>
 	implements SingleModelJSONMessageMapper<T> {
 
