@@ -16,6 +16,7 @@ package com.liferay.vulcan.jaxrs.writer.json.internal;
 
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.list.FunctionalList;
+import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.RepresentorManager;
 import com.liferay.vulcan.wiring.osgi.URIResolver;
@@ -28,6 +29,8 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -72,6 +75,21 @@ public class WriterHelper {
 		}
 	}
 
+	public <T, U> void writeLinkedRelatedModel(
+		RelatedModel<T, U> relatedModel, T parentModel,
+		FunctionalList<String> parentEmbeddedPathElements, UriInfo uriInfo,
+		Embedded embedded,
+		BiConsumer<String, FunctionalList<String>> biConsumer) {
+
+		writeRelatedModel(
+			relatedModel, parentModel, parentEmbeddedPathElements, uriInfo,
+			embedded,
+			(model, modelClass, embeddedPathElements) -> {
+				return;
+			},
+			biConsumer);
+	}
+
 	public <T> void writeLinks(
 		Class<T> modelClass, BiConsumer<String, String> biConsumer) {
 
@@ -85,8 +103,9 @@ public class WriterHelper {
 	public <T, U> void writeRelatedModel(
 		RelatedModel<T, U> relatedModel, T parentModel,
 		FunctionalList<String> parentEmbeddedPathElements, UriInfo uriInfo,
-		TetraConsumer<U, Class<U>, String, FunctionalList<String>>
-			tetraConsumer) {
+		Embedded embedded,
+		TriConsumer<U, Class<U>, FunctionalList<String>> triConsumer,
+		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
 		Function<T, Optional<U>> modelFunction =
 			relatedModel.getModelFunction();
@@ -106,15 +125,25 @@ public class WriterHelper {
 
 		uriOptional.ifPresent(
 			uri -> {
-				String url = getAbsoluteURL(uriInfo, uri);
-
 				String key = relatedModel.getKey();
+
+				String url = getAbsoluteURL(uriInfo, uri);
 
 				FunctionalList<String> embeddedPathElements =
 					new StringFunctionalList(parentEmbeddedPathElements, key);
 
-				tetraConsumer.accept(
-					model, modelClass, url, embeddedPathElements);
+				biConsumer.accept(url, embeddedPathElements);
+
+				Stream<String> stream = Stream.concat(
+					Stream.of(embeddedPathElements.head()),
+					embeddedPathElements.tail());
+
+				String embeddedPath = String.join(
+					".", stream.collect(Collectors.toList()));
+
+				if (embedded.getEmbeddedPredicate().test(embeddedPath)) {
+					triConsumer.accept(model, modelClass, embeddedPathElements);
+				}
 			});
 	}
 

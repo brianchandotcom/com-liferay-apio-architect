@@ -25,6 +25,8 @@ import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
+import com.liferay.vulcan.response.control.Embedded;
+import com.liferay.vulcan.response.control.EmbeddedRetriever;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.RepresentorManager;
 import com.liferay.vulcan.wiring.osgi.URIResolver;
@@ -42,6 +44,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import javax.servlet.http.HttpServletRequest;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ResourceInfo;
@@ -122,6 +126,8 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
+
 		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
@@ -148,14 +154,14 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 				mediaTypeString, modelClass)
 		);
 
-		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
+		Embedded embedded = EmbeddedRetriever.getEmbedded(_httpServletRequest);
 
 		pageMessageMapper.onStart(
 			jsonObjectBuilder, page, modelClass, requestInfo);
 
 		_writeItems(
-			page, modelClass, requestInfo, pageMessageMapper,
-			jsonObjectBuilder);
+			pageMessageMapper, jsonObjectBuilder, page, modelClass, requestInfo,
+			embedded);
 
 		_writeItemTotalCount(pageMessageMapper, jsonObjectBuilder, page);
 
@@ -207,11 +213,12 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder,
 		RelatedModel<U, V> relatedModel, U parentModel,
-		FunctionalList<String> parentEmbeddedPathElements) {
+		FunctionalList<String> parentEmbeddedPathElements, Embedded embedded) {
 
 		_writerHelper.writeRelatedModel(
 			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
-			(model, modelClass, url, embeddedPathElements) -> {
+			embedded,
+			(model, modelClass, embeddedPathElements) -> {
 				_writerHelper.writeFields(
 					model, modelClass,
 					(fieldName, value) ->
@@ -232,10 +239,6 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 						pageJSONObjectBuilder, itemJSONObjectBuilder,
 						embeddedPathElements, types));
 
-				pageMessageMapper.mapItemEmbeddedResourceURL(
-					pageJSONObjectBuilder, itemJSONObjectBuilder,
-					embeddedPathElements, url);
-
 				List<RelatedModel<V, ?>> embeddedRelatedModels =
 					_representorManager.getEmbeddedRelatedModels(modelClass);
 
@@ -243,7 +246,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
 						pageMessageMapper, pageJSONObjectBuilder,
 						itemJSONObjectBuilder, embeddedRelatedModel, model,
-						embeddedPathElements));
+						embeddedPathElements, embedded));
 
 				List<RelatedModel<V, ?>> linkedRelatedModels =
 					_representorManager.getLinkedRelatedModels(modelClass);
@@ -252,14 +255,18 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 					linkedRelatedModel -> _writeLinkedRelatedModel(
 						pageMessageMapper, pageJSONObjectBuilder,
 						itemJSONObjectBuilder, linkedRelatedModel, model,
-						embeddedPathElements));
-			});
+						embeddedPathElements, embedded));
+			},
+			(url, embeddedPathElements) ->
+				pageMessageMapper.mapItemEmbeddedResourceURL(
+					pageJSONObjectBuilder, itemJSONObjectBuilder,
+					embeddedPathElements, url));
 	}
 
 	private void _writeItems(
-		Page<T> page, Class<T> modelClass, RequestInfo requestInfo,
 		PageMessageMapper<T> pageMessageMapper,
-		JSONObjectBuilder jsonObjectBuilder) {
+		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
+		RequestInfo requestInfo, Embedded embedded) {
 
 		Collection<T> items = page.getItems();
 
@@ -300,8 +307,8 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 				embeddedRelatedModels.forEach(
 					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
 						pageMessageMapper, jsonObjectBuilder,
-						itemJSONObjectBuilder, embeddedRelatedModel, item,
-						null));
+						itemJSONObjectBuilder, embeddedRelatedModel, item, null,
+						embedded));
 
 				List<RelatedModel<T, ?>> linkedRelatedModels =
 					_representorManager.getLinkedRelatedModels(modelClass);
@@ -309,7 +316,8 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 				linkedRelatedModels.forEach(
 					linkedRelatedModel -> _writeLinkedRelatedModel(
 						pageMessageMapper, jsonObjectBuilder,
-						itemJSONObjectBuilder, linkedRelatedModel, item, null));
+						itemJSONObjectBuilder, linkedRelatedModel, item, null,
+						embedded));
 
 				pageMessageMapper.onFinishItem(
 					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
@@ -330,11 +338,12 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder,
 		RelatedModel<U, V> relatedModel, U parentModel,
-		FunctionalList<String> parentEmbeddedPathElements) {
+		FunctionalList<String> parentEmbeddedPathElements, Embedded embedded) {
 
-		_writerHelper.writeRelatedModel(
+		_writerHelper.writeLinkedRelatedModel(
 			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
-			(model, modelClass, url, embeddedPathElements) ->
+			embedded,
+			(url, embeddedPathElements) ->
 				pageMessageMapper.mapItemLinkedResourceURL(
 					pageJSONObjectBuilder, itemJSONObjectBuilder,
 					embeddedPathElements, url));
@@ -384,6 +393,9 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			_getPageURL(
 				modelClass, page.getLastPageNumber(), page.getItemsPerPage()));
 	}
+
+	@Context
+	private HttpServletRequest _httpServletRequest;
 
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
 	private List<PageMessageMapper<T>> _pageMessageMappers;

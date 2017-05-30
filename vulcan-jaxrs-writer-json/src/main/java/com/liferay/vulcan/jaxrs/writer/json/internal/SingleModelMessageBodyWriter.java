@@ -25,6 +25,8 @@ import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.SingleModelMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
+import com.liferay.vulcan.response.control.Embedded;
+import com.liferay.vulcan.response.control.EmbeddedRetriever;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.RepresentorManager;
 import com.liferay.vulcan.wiring.osgi.URIResolver;
@@ -127,9 +129,11 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
 
+		Embedded embedded = EmbeddedRetriever.getEmbedded(_httpServletRequest);
+
 		_writeModel(
 			singleModelMessageMapper, jsonObjectBuilder, model, modelClass,
-			requestInfo);
+			requestInfo, embedded);
 
 		JSONObject jsonObject = jsonObjectBuilder.build();
 
@@ -141,11 +145,13 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 	private <U, V> void _writeEmbeddedRelatedModel(
 		SingleModelMessageMapper<?> singleModelMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, RelatedModel<U, V> relatedModel,
-		U parentModel, FunctionalList<String> parentEmbeddedPathElements) {
+		U parentModel, FunctionalList<String> parentEmbeddedPathElements,
+		Embedded embedded) {
 
 		_writerHelper.writeRelatedModel(
 			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
-			(model, modelClass, url, embeddedPathElements) -> {
+			embedded,
+			(model, modelClass, embeddedPathElements) -> {
 				_writerHelper.writeFields(
 					model, modelClass,
 					(fieldName, value) ->
@@ -165,16 +171,14 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 					types -> singleModelMessageMapper.mapEmbeddedResourceTypes(
 						jsonObjectBuilder, embeddedPathElements, types));
 
-				singleModelMessageMapper.mapEmbeddedResourceURL(
-					jsonObjectBuilder, embeddedPathElements, url);
-
 				List<RelatedModel<V, ?>> embeddedRelatedModels =
 					_representorManager.getEmbeddedRelatedModels(modelClass);
 
 				embeddedRelatedModels.forEach(
 					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
 						singleModelMessageMapper, jsonObjectBuilder,
-						embeddedRelatedModel, model, embeddedPathElements));
+						embeddedRelatedModel, model, embeddedPathElements,
+						embedded));
 
 				List<RelatedModel<V, ?>> linkedRelatedModels =
 					_representorManager.getLinkedRelatedModels(modelClass);
@@ -182,18 +186,24 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 				linkedRelatedModels.forEach(
 					linkedRelatedModel -> _writeLinkedRelatedModel(
 						singleModelMessageMapper, jsonObjectBuilder,
-						linkedRelatedModel, model, embeddedPathElements));
-			});
+						linkedRelatedModel, model, embeddedPathElements,
+						embedded));
+			},
+			(url, embeddedPathElements) ->
+				singleModelMessageMapper.mapEmbeddedResourceURL(
+					jsonObjectBuilder, embeddedPathElements, url));
 	}
 
 	private <U, V> void _writeLinkedRelatedModel(
 		SingleModelMessageMapper<?> singleModelMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, RelatedModel<U, V> relatedModel,
-		U parentModel, FunctionalList<String> parentEmbeddedPathElements) {
+		U parentModel, FunctionalList<String> parentEmbeddedPathElements,
+		Embedded embedded) {
 
-		_writerHelper.writeRelatedModel(
+		_writerHelper.writeLinkedRelatedModel(
 			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
-			(model, modelClass, url, embeddedPathElements) ->
+			embedded,
+			(url, embeddedPathElements) ->
 				singleModelMessageMapper.mapLinkedResourceURL(
 					jsonObjectBuilder, embeddedPathElements, url));
 	}
@@ -201,7 +211,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 	private <U> void _writeModel(
 		SingleModelMessageMapper<U> singleModelMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, U model, Class<U> modelClass,
-		RequestInfo requestInfo) {
+		RequestInfo requestInfo, Embedded embedded) {
 
 		singleModelMessageMapper.onStart(
 			jsonObjectBuilder, model, modelClass, requestInfo);
@@ -231,7 +241,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		embeddedRelatedModels.forEach(
 			embeddedRelatedModel -> _writeEmbeddedRelatedModel(
 				singleModelMessageMapper, jsonObjectBuilder,
-				embeddedRelatedModel, model, null));
+				embeddedRelatedModel, model, null, embedded));
 
 		List<RelatedModel<U, ?>> linkedRelatedModels =
 			_representorManager.getLinkedRelatedModels(modelClass);
@@ -239,7 +249,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		linkedRelatedModels.forEach(
 			linkedRelatedModel -> _writeLinkedRelatedModel(
 				singleModelMessageMapper, jsonObjectBuilder, linkedRelatedModel,
-				model, null));
+				model, null, embedded));
 
 		singleModelMessageMapper.onFinish(
 			jsonObjectBuilder, model, modelClass, requestInfo);

@@ -18,8 +18,8 @@ package com.liferay.vulcan.jaxrs.writer.json.internal;
  * @author Alejandro Hernández
  */
 @FunctionalInterface
-public interface TetraConsumer<T, U, V, W> {
+public interface TriConsumer<T, U, V> {
 
-	public void accept(T t, U u, V v, W w);
+	public void accept(T t, U u, V v);
 
 }
