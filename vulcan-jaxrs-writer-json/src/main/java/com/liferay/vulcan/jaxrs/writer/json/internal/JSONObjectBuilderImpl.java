@@ -21,6 +21,7 @@ import com.liferay.vulcan.message.json.JSONObjectBuilder;
 
 import java.util.Collection;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author Alejandro Hernández
@@ -37,6 +38,19 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 	@Override
 	public FieldStep field(String name) {
 		return new FieldStepImpl(name, _jsonObject);
+	}
+
+	@Override
+	public FieldStep ifElseCondition(
+		boolean condition, Function<JSONObjectBuilder, FieldStep> ifFunction,
+		Function<JSONObjectBuilder, FieldStep> elseFunction) {
+
+		if (condition) {
+			return ifFunction.apply(this);
+		}
+		else {
+			return elseFunction.apply(this);
+		}
 	}
 
 	@Override
@@ -122,6 +136,31 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 			}
 
 			return new FieldStepImpl(name, previousJSONObject);
+		}
+
+		@Override
+		public FieldStep ifCondition(
+			boolean condition, Function<FieldStep, FieldStep> ifFunction) {
+
+			if (condition) {
+				return ifFunction.apply(this);
+			}
+			else {
+				return this;
+			}
+		}
+
+		@Override
+		public FieldStep ifElseCondition(
+			boolean condition, Function<FieldStep, FieldStep> ifFunction,
+			Function<FieldStep, FieldStep> elseFunction) {
+
+			if (condition) {
+				return ifFunction.apply(this);
+			}
+			else {
+				return elseFunction.apply(this);
+			}
 		}
 
 		@Override
