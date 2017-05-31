@@ -64,6 +64,32 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 		return fieldStep;
 	}
 
+	@Override
+	public FieldStep nestedPrefixedField(
+		String prefix, String parentName, String... nestedNames) {
+
+		FieldStep fieldStep = nestedField(prefix, parentName);
+
+		for (String nestedName : nestedNames) {
+			fieldStep = fieldStep.nestedField(prefix, nestedName);
+		}
+
+		return fieldStep;
+	}
+
+	@Override
+	public FieldStep nestedSuffixedField(
+		String suffix, String parentName, String... nestedNames) {
+
+		FieldStep fieldStep = nestedField(parentName, suffix);
+
+		for (String nestedName : nestedNames) {
+			fieldStep = fieldStep.nestedField(nestedName, suffix);
+		}
+
+		return fieldStep;
+	}
+
 	public static class ArrayValueStepImpl implements ArrayValueStep {
 
 		public ArrayValueStepImpl(JSONArray jsonArray) {
@@ -169,6 +195,32 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 
 			for (String nestedName : nestedNames) {
 				fieldStep = fieldStep.field(nestedName);
+			}
+
+			return fieldStep;
+		}
+
+		@Override
+		public FieldStep nestedPrefixedField(
+			String prefix, String parentName, String... nestedNames) {
+
+			FieldStep fieldStep = nestedField(prefix, parentName);
+
+			for (String nestedName : nestedNames) {
+				fieldStep = fieldStep.nestedField(prefix, nestedName);
+			}
+
+			return fieldStep;
+		}
+
+		@Override
+		public FieldStep nestedSuffixedField(
+			String suffix, String parentName, String... nestedNames) {
+
+			FieldStep fieldStep = nestedField(parentName, suffix);
+
+			for (String nestedName : nestedNames) {
+				fieldStep = fieldStep.nestedField(nestedName, suffix);
 			}
 
 			return fieldStep;

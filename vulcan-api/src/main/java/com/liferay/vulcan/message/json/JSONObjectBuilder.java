@@ -40,6 +40,12 @@ public interface JSONObjectBuilder {
 
 	public FieldStep nestedField(String parentName, String... nestedNames);
 
+	public FieldStep nestedPrefixedField(
+		String prefix, String parentName, String... nestedNames);
+
+	public FieldStep nestedSuffixedField(
+		String suffix, String parentName, String... nestedNames);
+
 	public interface ArrayValueStep {
 
 		public void add(Consumer<JSONObjectBuilder> consumer);
@@ -66,6 +72,12 @@ public interface JSONObjectBuilder {
 			Function<FieldStep, FieldStep> elseFunction);
 
 		public FieldStep nestedField(String parentName, String... nestedNames);
+
+		public FieldStep nestedPrefixedField(
+			String prefix, String parentName, String... nestedNames);
+
+		public FieldStep nestedSuffixedField(
+			String suffix, String parentName, String... nestedNames);
 
 		public void value(Object value);
 
