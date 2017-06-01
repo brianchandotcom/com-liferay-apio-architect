@@ -65,7 +65,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
 	@Override
 	public long getSize(
-		T t, Class<?> type, Type genericType, Annotation[] annotations,
+		T t, Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
 		return -1;
@@ -73,7 +73,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
 	@Override
 	public boolean isWriteable(
-		Class<?> type, Type genericType, Annotation[] annotations,
+		Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
 		try {
@@ -100,7 +100,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
 	@Override
 	public void writeTo(
-			T model, Class<?> type, Type genericType, Annotation[] annotations,
+			T model, Class<?> clazz, Type genericType, Annotation[] annotations,
 			MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
