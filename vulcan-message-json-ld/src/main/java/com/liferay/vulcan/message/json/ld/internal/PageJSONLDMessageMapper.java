@@ -88,14 +88,14 @@ public class PageJSONLDMessageMapper<T> implements PageJSONMessageMapper<T> {
 	public void mapItemEmbeddedResourceField(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder,
-		FunctionalList<String> embeddedPathElements, String field,
+		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object fieldData) {
 
 		itemJSONObjectBuilder.nestedField(
 			embeddedPathElements.head(),
 			embeddedPathElements.tail().toArray(String[]::new)
 		).field(
-			field
+			fieldName
 		).value(
 			fieldData
 		);

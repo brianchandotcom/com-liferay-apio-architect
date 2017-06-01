@@ -61,13 +61,13 @@ public class WriterHelper {
 		Map<String, Function<T, Object>> fieldFunctions =
 			_representorManager.getFieldFunctions(modelClass);
 
-		for (String field : fieldFunctions.keySet()) {
-			Function<T, Object> fieldFunction = fieldFunctions.get(field);
+		for (String fieldName : fieldFunctions.keySet()) {
+			Function<T, Object> fieldFunction = fieldFunctions.get(fieldName);
 
 			Object data = fieldFunction.apply(model);
 
 			if (data != null) {
-				biConsumer.accept(field, data);
+				biConsumer.accept(fieldName, data);
 			}
 		}
 	}
