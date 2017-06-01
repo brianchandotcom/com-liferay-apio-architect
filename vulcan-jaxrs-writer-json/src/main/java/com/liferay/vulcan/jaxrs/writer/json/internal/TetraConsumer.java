@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.jax.rs.writer.json.internal;
+package com.liferay.vulcan.jaxrs.writer.json.internal;
 
 /**
  * @author Alejandro Hernández
