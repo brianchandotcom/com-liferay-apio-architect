@@ -106,12 +106,12 @@ public class WriterHelper {
 
 		uriOptional.ifPresent(
 			uri -> {
+				String url = getAbsoluteURL(uriInfo, uri);
+
 				String key = relatedModel.getKey();
 
 				FunctionalList<String> embeddedPathElements =
 					new StringFunctionalList(parentEmbeddedPathElements, key);
-
-				String url = getAbsoluteURL(uriInfo, uri);
 
 				tetraConsumer.accept(
 					model, modelClass, url, embeddedPathElements);
