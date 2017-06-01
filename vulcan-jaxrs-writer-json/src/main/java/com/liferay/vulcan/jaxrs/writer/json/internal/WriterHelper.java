@@ -88,8 +88,10 @@ public class WriterHelper {
 		TetraConsumer<U, Class<U>, String, FunctionalList<String>>
 			tetraConsumer) {
 
-		Optional<U> modelOptional =
-			relatedModel.getModelFunction().apply(parentModel);
+		Function<T, Optional<U>> modelFunction =
+			relatedModel.getModelFunction();
+
+		Optional<U> modelOptional = modelFunction.apply(parentModel);
 
 		if (!modelOptional.isPresent()) {
 			return;
