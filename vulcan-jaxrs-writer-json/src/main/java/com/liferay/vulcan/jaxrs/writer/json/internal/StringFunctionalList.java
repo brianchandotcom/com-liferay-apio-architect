@@ -39,8 +39,9 @@ public class StringFunctionalList implements FunctionalList<String> {
 		else {
 			_first = functionalList.head();
 
-			List<String> tail =
-				functionalList.tail().collect(Collectors.toList());
+			Stream<String> stream = functionalList.tail();
+
+			List<String> tail = stream.collect(Collectors.toList());
 
 			tail.add(last);
 
@@ -59,7 +60,10 @@ public class StringFunctionalList implements FunctionalList<String> {
 			List<String> init = new ArrayList<>();
 
 			init.add(_first);
-			init.addAll(middle().collect(Collectors.toList()));
+
+			Stream<String> middle = middle();
+
+			init.addAll(middle.collect(Collectors.toList()));
 
 			_init = init;
 		}
