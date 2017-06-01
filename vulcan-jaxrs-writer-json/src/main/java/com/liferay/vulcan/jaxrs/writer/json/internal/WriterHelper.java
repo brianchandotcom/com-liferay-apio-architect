@@ -44,9 +44,13 @@ import org.osgi.service.component.annotations.Reference;
 public class WriterHelper {
 
 	public String getAbsoluteURL(UriInfo uriInfo, String relativeURI) {
-		UriBuilder uriBuilder = uriInfo.getBaseUriBuilder().clone();
+		UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
 
-		URI uri = uriBuilder.path(relativeURI).build();
+		uriBuilder = uriBuilder.clone();
+
+		uriBuilder = uriBuilder.path(relativeURI);
+
+		URI uri = uriBuilder.build();
 
 		return uri.toString();
 	}
@@ -58,7 +62,9 @@ public class WriterHelper {
 			_representorManager.getFieldFunctions(modelClass);
 
 		for (String field : fieldFunctions.keySet()) {
-			Object data = fieldFunctions.get(field).apply(model);
+			Function<T, Object> fieldFunction = fieldFunctions.get(field);
+
+			Object data = fieldFunction.apply(model);
 
 			if (data != null) {
 				biConsumer.accept(field, data);
