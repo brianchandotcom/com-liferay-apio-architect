@@ -154,7 +154,9 @@ public class URIResolver {
 					}
 
 					UriBuilder uriBuilder = UriBuilder.fromPath(
-						transformedPath).clone();
+						transformedPath);
+
+					uriBuilder = uriBuilder.clone();
 
 					URI singleResourceURI = uriBuilder.path(
 						CollectionResource.class,
@@ -174,7 +176,10 @@ public class URIResolver {
 								path, modelClass, collectionResource);
 					}
 
-					URI uri = UriBuilder.fromPath(transformedPath).build();
+					UriBuilder uriBuilder = UriBuilder.fromPath(
+						transformedPath);
+
+					URI uri = uriBuilder.build();
 
 					return uri.toString();
 				});
