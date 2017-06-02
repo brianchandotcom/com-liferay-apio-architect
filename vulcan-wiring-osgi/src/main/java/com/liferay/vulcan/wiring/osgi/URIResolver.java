@@ -214,8 +214,12 @@ public class URIResolver {
 	}
 
 	private void _removeAPIContributor(APIContributor apiContributor) {
-		_apiContributors.get(apiContributor.getPath()).removeIf(tuple ->
-			tuple.getService() == apiContributor);
+		TreeSet<ServiceReferenceServiceTuple<APIContributor>>
+			serviceReferenceServiceTuples = _apiContributors.get(
+				apiContributor.getPath());
+
+		serviceReferenceServiceTuples.removeIf(
+			tuple -> tuple.getService() == apiContributor);
 	}
 
 	private <T> void _removeCollectionResourceURIs(
