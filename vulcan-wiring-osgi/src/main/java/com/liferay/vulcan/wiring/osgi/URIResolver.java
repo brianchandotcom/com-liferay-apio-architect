@@ -135,8 +135,11 @@ public class URIResolver {
 		Class<T> modelClass = GenericUtil.getGenericClass(
 			collectionResource, CollectionResource.class);
 
+		Optional optional =
+			_representorManager.getModelRepresentorMapperOptional(modelClass);
+
 		Function<T, Optional<String>> singleResourceURIFunction = t ->
-			_representorManager.getModelRepresentorMapperOptional(modelClass).
+			optional.
 				map(
 					modelRepresentorMapper -> {
 						String identifier = _representorManager.getIdentifier(
@@ -164,7 +167,7 @@ public class URIResolver {
 					});
 
 		Supplier<Optional<String>> collectionResourceURISupplier = () ->
-			_representorManager.getModelRepresentorMapperOptional(modelClass).
+			optional.
 				map(
 					modelRepresentorMapper -> {
 						String transformedPath = path;
