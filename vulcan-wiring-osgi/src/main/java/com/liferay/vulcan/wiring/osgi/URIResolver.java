@@ -156,8 +156,6 @@ public class URIResolver {
 					UriBuilder uriBuilder = UriBuilder.fromPath(
 						transformedPath);
 
-					uriBuilder = uriBuilder.clone();
-
 					URI singleResourceURI = uriBuilder.path(
 						CollectionResource.class,
 						"getCollectionItemSingleResource").build(identifier);
