@@ -18,6 +18,8 @@ import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.SingleModelJSONMessageMapper;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 
+import java.util.stream.Stream;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -46,9 +48,10 @@ public class SingleModelPlainJSONMessageMapper<T>
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object value) {
 
+		Stream<String> tailStream = embeddedPathElements.tail();
+
 		jsonObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).value(
 			value
 		);
@@ -60,9 +63,10 @@ public class SingleModelPlainJSONMessageMapper<T>
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
 
+		Stream<String> tailStream = embeddedPathElements.tail();
+
 		jsonObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).field(
 			fieldName
 		).value(
@@ -75,9 +79,10 @@ public class SingleModelPlainJSONMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
+		Stream<String> tailStream = embeddedPathElements.tail();
+
 		jsonObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).field(
 			"self"
 		).value(
@@ -104,9 +109,10 @@ public class SingleModelPlainJSONMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
+		Stream<String> tailStream = embeddedPathElements.tail();
+
 		jsonObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).value(
 			url
 		);
