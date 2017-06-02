@@ -94,14 +94,22 @@ public class SingleModelPlainJSONMessageMapper<T>
 	public void mapField(
 		JSONObjectBuilder jsonObjectBuilder, String fieldName, Object value) {
 
-		jsonObjectBuilder.field(fieldName).value(value);
+		jsonObjectBuilder.field(
+			fieldName
+		).value(
+			value
+		);
 	}
 
 	@Override
 	public void mapLink(
 		JSONObjectBuilder jsonObjectBuilder, String fieldName, String url) {
 
-		jsonObjectBuilder.field(fieldName).value(url);
+		jsonObjectBuilder.field(
+			fieldName
+		).value(
+			url
+		);
 	}
 
 	@Override
@@ -120,7 +128,11 @@ public class SingleModelPlainJSONMessageMapper<T>
 
 	@Override
 	public void mapSelfURL(JSONObjectBuilder jsonObjectBuilder, String url) {
-		jsonObjectBuilder.field("self").value(url);
+		jsonObjectBuilder.field(
+			"self"
+		).value(
+			url
+		);
 	}
 
 }
