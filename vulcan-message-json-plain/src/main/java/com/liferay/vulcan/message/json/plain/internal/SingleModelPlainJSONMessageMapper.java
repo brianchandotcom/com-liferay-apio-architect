@@ -30,11 +30,11 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true,
 	service = {
-		PlainSingleModelJSONMessageMapper.class,
+		SingleModelPlainJSONMessageMapper.class,
 		SingleModelJSONMessageMapper.class
 	}
 )
-public class PlainSingleModelJSONMessageMapper<T>
+public class SingleModelPlainJSONMessageMapper<T>
 	implements SingleModelJSONMessageMapper<T> {
 
 	@Override
