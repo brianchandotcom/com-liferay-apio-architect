@@ -77,8 +77,8 @@ public class RepresentorManager {
 	public <T> Optional<ModelRepresentorMapper<T>>
 		getModelRepresentorMapperOptional(Class<T> modelClass) {
 
-		Optional<TreeSet<ServiceReferenceServiceTuple<
-			ModelRepresentorMapper<?>>>> optional = Optional.ofNullable(
+		Optional<TreeSet<ServiceReferenceServiceTuple
+			<ModelRepresentorMapper<?>>>> optional = Optional.ofNullable(
 				_modelRepresentorMappers.get(modelClass.getName()));
 
 		return optional.filter(
