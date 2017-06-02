@@ -43,8 +43,8 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 	public FieldStep nestedField(String parentName, String... nestedNames) {
 		FieldStep fieldStep = field(parentName);
 
-		for (String string : nestedNames) {
-			fieldStep = fieldStep.field(string);
+		for (String nestedName : nestedNames) {
+			fieldStep = fieldStep.field(nestedName);
 		}
 
 		return fieldStep;
@@ -128,8 +128,8 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 		public FieldStep nestedField(String parentName, String... nestedNames) {
 			FieldStep fieldStep = field(parentName);
 
-			for (String string : nestedNames) {
-				fieldStep = fieldStep.field(string);
+			for (String nestedName : nestedNames) {
+				fieldStep = fieldStep.field(nestedName);
 			}
 
 			return fieldStep;
