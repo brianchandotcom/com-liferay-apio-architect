@@ -15,8 +15,8 @@
 package com.liferay.vulcan.message.json.plain.internal;
 
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.message.SingleModelJSONMessageMapper;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
+import com.liferay.vulcan.message.json.SingleModelJSONMessageMapper;
 
 import java.util.stream.Stream;
 

@@ -32,9 +32,9 @@ import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_L
 import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_VOCAB;
 
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.message.PageJSONMessageMapper;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
+import com.liferay.vulcan.message.json.PageJSONMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 
 import java.util.List;

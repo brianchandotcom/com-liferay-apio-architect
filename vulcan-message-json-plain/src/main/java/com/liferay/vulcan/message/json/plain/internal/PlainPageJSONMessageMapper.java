@@ -15,9 +15,9 @@
 package com.liferay.vulcan.message.json.plain.internal;
 
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.message.PageJSONMessageMapper;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
+import com.liferay.vulcan.message.json.PageJSONMessageMapper;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;

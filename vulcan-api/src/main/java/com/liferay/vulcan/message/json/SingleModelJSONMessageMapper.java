@@ -12,12 +12,12 @@
  * details.
  */
 
-package com.liferay.vulcan.message;
+package com.liferay.vulcan.message.json;
 
 import aQute.bnd.annotation.ConsumerType;
 
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.message.json.JSONObjectBuilder;
+import com.liferay.vulcan.message.RequestInfo;
 
 import java.util.List;
 
