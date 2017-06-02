@@ -19,26 +19,26 @@ package com.liferay.vulcan.message.json.plain.internal;
  */
 public class JSONPlainConstants {
 
-	protected static final String JSON_PLAIN_COLLECTION = "collection";
+	protected static final String FIELD_NAME_COLLECTION = "collection";
 
-	protected static final String JSON_PLAIN_ELEMENTS = "elements";
+	protected static final String FIELD_NAME_ELEMENTS = "elements";
 
-	protected static final String JSON_PLAIN_FIRST = "first";
+	protected static final String FIELD_NAME_FIRST = "first";
 
-	protected static final String JSON_PLAIN_LAST = "last";
+	protected static final String FIELD_NAME_LAST = "last";
 
-	protected static final String JSON_PLAIN_MEDIA_TYPE = "application/json";
+	protected static final String MEDIA_TYPE = "application/json";
 
-	protected static final String JSON_PLAIN_NEXT = "next";
+	protected static final String FIELD_NAME_NEXT = "next";
 
-	protected static final String JSON_PLAIN_PAGE_COUNT = "numberOfItems";
+	protected static final String FIELD_NAME_PAGE_COUNT = "numberOfItems";
 
-	protected static final String JSON_PLAIN_PAGES = "pages";
+	protected static final String FIELD_NAME_PAGES = "pages";
 
-	protected static final String JSON_PLAIN_PREV = "prev";
+	protected static final String FIELD_NAME_PREV = "prev";
 
-	protected static final String JSON_PLAIN_SELF = "self";
+	protected static final String FIELD_NAME_SELF = "self";
 
-	protected static final String JSON_PLAIN_TOTAL_COUNT = "totalNumberOfItems";
+	protected static final String FIELD_NAME_TOTAL_COUNT = "totalNumberOfItems";
 
 }
