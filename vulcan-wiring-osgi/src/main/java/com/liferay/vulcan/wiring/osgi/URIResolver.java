@@ -156,9 +156,11 @@ public class URIResolver {
 					UriBuilder uriBuilder = UriBuilder.fromPath(
 						transformedPath);
 
-					URI singleResourceURI = uriBuilder.path(
+					uriBuilder.path(
 						CollectionResource.class,
-						"getCollectionItemSingleResource").build(identifier);
+						"getCollectionItemSingleResource");
+
+					URI singleResourceURI = uriBuilder.build(identifier);
 
 					return singleResourceURI.toString();
 				});

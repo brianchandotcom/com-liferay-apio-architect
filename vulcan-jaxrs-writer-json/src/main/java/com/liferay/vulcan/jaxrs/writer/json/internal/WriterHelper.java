@@ -48,7 +48,7 @@ public class WriterHelper {
 
 		uriBuilder = uriBuilder.clone();
 
-		uriBuilder = uriBuilder.path(relativeURI);
+		uriBuilder.path(relativeURI);
 
 		URI uri = uriBuilder.build();
 
