@@ -37,7 +37,11 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 	public void mapCollectionURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		jsonObjectBuilder.field("collection").value(url);
+		jsonObjectBuilder.field(
+			"collection"
+		).value(
+			url
+		);
 	}
 
 	@Override
