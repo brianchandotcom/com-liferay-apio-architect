@@ -20,16 +20,6 @@ package com.liferay.vulcan.error;
  */
 public class VulcanDeveloperError extends Error {
 
-	public static class UnresolvableURI extends VulcanDeveloperError {
-
-		public UnresolvableURI(Class<?> modelClass) {
-			super(
-				"Unable to resolve URI for model class " +
-					modelClass.getName());
-		}
-
-	}
-
 	public static class MustHaveMessageMapper extends VulcanDeveloperError {
 
 		public MustHaveMessageMapper(String mediaType, Class<?> modelClass) {
@@ -45,6 +35,16 @@ public class VulcanDeveloperError extends Error {
 		public MustHaveValidGenericType(Class clazz) {
 			super(
 				"Class " + clazz.getName() + " must have a valid generic type");
+		}
+
+	}
+
+	public static class UnresolvableURI extends VulcanDeveloperError {
+
+		public UnresolvableURI(Class<?> modelClass) {
+			super(
+				"Unable to resolve URI for model class " +
+					modelClass.getName());
 		}
 
 	}
