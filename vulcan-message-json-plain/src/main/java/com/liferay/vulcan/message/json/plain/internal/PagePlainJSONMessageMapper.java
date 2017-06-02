@@ -136,7 +136,11 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 	public void mapItemTotalCount(
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
 
-		jsonObjectBuilder.field("totalNumberOfItems").value(totalCount);
+		jsonObjectBuilder.field(
+			"totalNumberOfItems"
+		).value(
+			totalCount
+		);
 	}
 
 	@Override
@@ -163,7 +167,11 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 
 	@Override
 	public void mapPageCount(JSONObjectBuilder jsonObjectBuilder, int count) {
-		jsonObjectBuilder.field("numberOfItems").value(count);
+		jsonObjectBuilder.field(
+			"numberOfItems"
+		).value(
+			count
+		);
 	}
 
 	@Override
