@@ -20,21 +20,22 @@ package com.liferay.vulcan.error;
  */
 public class VulcanDeveloperError extends Error {
 
-	public static class CannotCalculateURI extends VulcanDeveloperError {
+	public static class UnresolvableURI extends VulcanDeveloperError {
 
-		public CannotCalculateURI(Class<?> modelClass) {
+		public UnresolvableURI(Class<?> modelClass) {
 			super(
-				"Cannot calculate URI for model class " + modelClass.getName());
+				"Unable to resolve URI for model class " +
+					modelClass.getName());
 		}
 
 	}
 
-	public static class CannotFindMessageMapper extends VulcanDeveloperError {
+	public static class MustHaveMessageMapper extends VulcanDeveloperError {
 
-		public CannotFindMessageMapper(String mediaType, Class<?> modelClass) {
+		public MustHaveMessageMapper(String mediaType, Class<?> modelClass) {
 			super(
-				"Cannot find MessageMapper for media type " + mediaType +
-					" of class " + modelClass.getName());
+				"Media type " + mediaType + " and model class " +
+					modelClass.getName() + " does not have a message mapper");
 		}
 
 	}

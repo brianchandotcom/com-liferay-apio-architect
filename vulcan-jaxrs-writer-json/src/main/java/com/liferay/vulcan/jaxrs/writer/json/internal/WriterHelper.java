@@ -126,7 +126,7 @@ public class WriterHelper {
 			modelClass, model);
 
 		String uri = optional.orElseThrow(
-			() -> new VulcanDeveloperError.CannotCalculateURI(modelClass));
+			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
 
 		String url = getAbsoluteURL(uriInfo, uri);
 

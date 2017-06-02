@@ -134,7 +134,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 				mediaType.toString().equals(bodyWriter.getMediaType()) &&
 					bodyWriter.supports(page, modelClass, requestInfo)
 		).findFirst().orElseThrow(
-			() -> new VulcanDeveloperError.CannotFindMessageMapper(
+			() -> new VulcanDeveloperError.MustHaveMessageMapper(
 				mediaType.toString(), modelClass)
 		);
 
@@ -176,7 +176,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			_uriResolver.getCollectionResourceURIOptional(modelClass);
 
 		String uri = optional.orElseThrow(
-			() -> new VulcanDeveloperError.CannotCalculateURI(modelClass));
+			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
 
 		return _writerHelper.getAbsoluteURL(uriInfo, uri);
 	}
