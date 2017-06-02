@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
+public class PlainPageJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 
 	@Override
 	public String getMediaType() {
@@ -48,7 +48,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 	public void mapCurrentPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		_singleModelPlainJSONMessageMapper.mapSelfURL(jsonObjectBuilder, url);
+		_plainSingleModelJSONMessageMapper.mapSelfURL(jsonObjectBuilder, url);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object value) {
 
-		_singleModelPlainJSONMessageMapper.mapEmbeddedResourceField(
+		_plainSingleModelJSONMessageMapper.mapEmbeddedResourceField(
 			itemJSONObjectBuilder, embeddedPathElements, fieldName, value);
 	}
 
@@ -80,7 +80,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
 
-		_singleModelPlainJSONMessageMapper.mapEmbeddedResourceLink(
+		_plainSingleModelJSONMessageMapper.mapEmbeddedResourceLink(
 			itemJSONObjectBuilder, embeddedPathElements, fieldName, url);
 	}
 
@@ -90,7 +90,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		_singleModelPlainJSONMessageMapper.mapEmbeddedResourceURL(
+		_plainSingleModelJSONMessageMapper.mapEmbeddedResourceURL(
 			itemJSONObjectBuilder, embeddedPathElements, url);
 	}
 
@@ -100,7 +100,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
 		Object value) {
 
-		_singleModelPlainJSONMessageMapper.mapField(
+		_plainSingleModelJSONMessageMapper.mapField(
 			itemJSONObjectBuilder, fieldName, value);
 	}
 
@@ -109,7 +109,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName, String url) {
 
-		_singleModelPlainJSONMessageMapper.mapLink(
+		_plainSingleModelJSONMessageMapper.mapLink(
 			itemJSONObjectBuilder, fieldName, url);
 	}
 
@@ -119,7 +119,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		_singleModelPlainJSONMessageMapper.mapLinkedResourceURL(
+		_plainSingleModelJSONMessageMapper.mapLinkedResourceURL(
 			itemJSONObjectBuilder, embeddedPathElements, url);
 	}
 
@@ -128,7 +128,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String url) {
 
-		_singleModelPlainJSONMessageMapper.mapSelfURL(
+		_plainSingleModelJSONMessageMapper.mapSelfURL(
 			itemJSONObjectBuilder, url);
 	}
 
@@ -199,7 +199,7 @@ public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
 	}
 
 	@Reference
-	private SingleModelPlainJSONMessageMapper
-		_singleModelPlainJSONMessageMapper;
+	private PlainSingleModelJSONMessageMapper
+		_plainSingleModelJSONMessageMapper;
 
 }
