@@ -101,10 +101,14 @@ public class URIResolver {
 		_removeAPIContributor(apiContributor);
 		_removeResourceURIs(apiContributor);
 
-		if (!_apiContributors.get(apiContributor.getPath()).isEmpty()) {
+		TreeSet<ServiceReferenceServiceTuple<APIContributor>>
+			serviceReferenceServiceTuples = _apiContributors.get(
+				apiContributor.getPath());
+
+		if (!serviceReferenceServiceTuples.isEmpty()) {
 			ServiceReferenceServiceTuple<APIContributor>
-				serviceReferenceServiceTuple = _apiContributors.get(
-					apiContributor.getPath()).first();
+				serviceReferenceServiceTuple =
+					serviceReferenceServiceTuples.first();
 
 			_addResourceURIs(serviceReferenceServiceTuple.getService());
 		}
