@@ -14,6 +14,11 @@
 
 package com.liferay.vulcan.wiring.osgi;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
+import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+
 import com.liferay.vulcan.contributor.APIContributor;
 import com.liferay.vulcan.contributor.ResourceMapper;
 import com.liferay.vulcan.resource.CollectionResource;
@@ -40,9 +45,6 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Alejandro Hernández
@@ -77,11 +79,7 @@ public class URIResolver {
 			singleResourceURIFunction -> singleResourceURIFunction.apply(t));
 	}
 
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY
-	)
+	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
 	protected void setServiceReference(
 		ServiceReference<APIContributor> serviceReference) {
 
@@ -261,7 +259,7 @@ public class URIResolver {
 	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
 		URIResolver.class).getBundleContext();
 
-	@Reference(cardinality = ReferenceCardinality.OPTIONAL)
+	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private CollectionResourceURITransformer _collectionResourceURITransformer;
 
 	private final Map<String, ModelURIFunctions<?>> _modelURIFunctions =
