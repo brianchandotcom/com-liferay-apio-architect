@@ -129,13 +129,15 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		Stream<PageJSONMessageMapper<T>> stream =
 			_pageJSONMessageMappers.stream();
 
+		String stringMediaType = mediaType.toString();
+
 		PageJSONMessageMapper<T> pageJSONMessageMapper = stream.filter(
 			bodyWriter ->
-				mediaType.toString().equals(bodyWriter.getMediaType()) &&
+				stringMediaType.equals(bodyWriter.getMediaType()) &&
 					bodyWriter.supports(page, modelClass, requestInfo)
 		).findFirst().orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveMessageMapper(
-				mediaType.toString(), modelClass)
+				stringMediaType, modelClass)
 		);
 
 		pageJSONMessageMapper.onStart(

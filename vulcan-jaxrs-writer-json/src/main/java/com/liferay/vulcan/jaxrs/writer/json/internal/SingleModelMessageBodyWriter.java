@@ -114,14 +114,16 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		Stream<SingleModelJSONMessageMapper<T>> stream =
 			_singleModelJSONMessageMappers.stream();
 
+		String stringMediaType = mediaType.toString();
+
 		SingleModelJSONMessageMapper<T> singleModelJSONMessageMapper =
 			stream.filter(
 				messageMapper ->
-					mediaType.toString().equals(messageMapper.getMediaType()) &&
+					stringMediaType.equals(messageMapper.getMediaType()) &&
 						messageMapper.supports(model, modelClass, requestInfo)
 			).findFirst().orElseThrow(
 				() -> new VulcanDeveloperError.MustHaveMessageMapper(
-					mediaType.toString(), modelClass)
+					stringMediaType, modelClass)
 			);
 
 		_writeModel(
