@@ -60,7 +60,7 @@ public class BlogPostingCollectionResource
 			return new BlogPostingSingleResource(blogsEntry);
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
-			throw new NotFoundException();
+			throw new NotFoundException(e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

@@ -100,7 +100,7 @@ public class BlogPostingModelRepresentorMapper
 				_userService.getUserById(blogsEntry.getUserId()));
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException();
+			throw new NotFoundException(e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

@@ -60,7 +60,7 @@ public class PersonCollectionResource
 			return new PersonSingleResource(user);
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException();
+			throw new NotFoundException(e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
