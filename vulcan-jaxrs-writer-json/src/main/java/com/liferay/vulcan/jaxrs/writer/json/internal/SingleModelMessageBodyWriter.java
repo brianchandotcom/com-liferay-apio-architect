@@ -17,6 +17,7 @@ package com.liferay.vulcan.jaxrs.writer.json.internal;
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
@@ -121,7 +122,9 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 				messageMapper ->
 					stringMediaType.equals(messageMapper.getMediaType()) &&
 						messageMapper.supports(model, modelClass, requestInfo)
-			).findFirst().orElseThrow(
+			).findFirst(
+
+			).orElseThrow(
 				() -> new VulcanDeveloperError.MustHaveMessageMapper(
 					stringMediaType, modelClass)
 			);
@@ -132,7 +135,9 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
-		printWriter.println(jsonObjectBuilder.build().toString());
+		JSONObject jsonObject = jsonObjectBuilder.build();
+
+		printWriter.println(jsonObject.toString());
 
 		printWriter.close();
 	}

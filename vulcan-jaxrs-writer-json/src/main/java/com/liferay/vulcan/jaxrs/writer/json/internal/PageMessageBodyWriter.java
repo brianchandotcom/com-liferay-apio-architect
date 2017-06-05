@@ -17,6 +17,7 @@ package com.liferay.vulcan.jaxrs.writer.json.internal;
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
@@ -33,6 +34,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -76,14 +78,15 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		Class<?> type, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
-		Class<?> returnType = resourceInfo.getResourceMethod().getReturnType();
+		Method resourceMethod = resourceInfo.getResourceMethod();
+
+		Class<?> returnType = resourceMethod.getReturnType();
 
 		if (!returnType.isAssignableFrom(Page.class)) {
 			return false;
 		}
 
-		Type genericReturnType =
-			resourceInfo.getResourceMethod().getGenericReturnType();
+		Type genericReturnType = resourceMethod.getGenericReturnType();
 
 		Type[] actualTypeArguments =
 			((ParameterizedType)genericReturnType).getActualTypeArguments();
@@ -114,8 +117,9 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
-		Type genericReturnType =
-			resourceInfo.getResourceMethod().getGenericReturnType();
+		Method resourceMethod = resourceInfo.getResourceMethod();
+
+		Type genericReturnType = resourceMethod.getGenericReturnType();
 
 		Type[] actualTypeArguments =
 			((ParameterizedType)genericReturnType).getActualTypeArguments();
@@ -135,7 +139,9 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			bodyWriter ->
 				stringMediaType.equals(bodyWriter.getMediaType()) &&
 					bodyWriter.supports(page, modelClass, requestInfo)
-		).findFirst().orElseThrow(
+		).findFirst(
+
+		).orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveMessageMapper(
 				stringMediaType, modelClass)
 		);
@@ -162,7 +168,9 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
-		printWriter.println(jsonObjectBuilder.build().toString());
+		JSONObject jsonObject = jsonObjectBuilder.build();
+
+		printWriter.println(jsonObject.toString());
 
 		printWriter.close();
 	}
