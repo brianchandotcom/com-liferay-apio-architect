@@ -78,7 +78,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		Class<?> type, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
-		Method resourceMethod = resourceInfo.getResourceMethod();
+		Method resourceMethod = _resourceInfo.getResourceMethod();
 
 		Class<?> returnType = resourceMethod.getReturnType();
 
@@ -117,7 +117,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
-		Method resourceMethod = resourceInfo.getResourceMethod();
+		Method resourceMethod = _resourceInfo.getResourceMethod();
 
 		Type genericReturnType = resourceMethod.getGenericReturnType();
 
@@ -175,12 +175,6 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		printWriter.close();
 	}
 
-	@Context
-	protected ResourceInfo resourceInfo;
-
-	@Context
-	protected UriInfo uriInfo;
-
 	private String _getCollectionURL(Class<T> modelClass) {
 		Optional<String> optional =
 			_uriResolver.getCollectionResourceURIOptional(modelClass);
@@ -188,7 +182,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		String uri = optional.orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
 
-		return _writerHelper.getAbsoluteURL(uriInfo, uri);
+		return _writerHelper.getAbsoluteURL(_uriInfo, uri);
 	}
 
 	private String _getPageURL(
@@ -216,7 +210,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		FunctionalList<String> parentEmbeddedPathElements) {
 
 		_writerHelper.writeRelatedModel(
-			relatedModel, parentModel, parentEmbeddedPathElements, uriInfo,
+			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
 			(model, modelClass, url, embeddedPathElements) -> {
 				_writerHelper.writeFields(
 					model, modelClass, (fieldName, value) ->
@@ -291,7 +285,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 						jsonObjectBuilder, itemJSONObjectBuilder, types));
 
 				_writerHelper.writeSingleResourceURL(
-					item, modelClass, uriInfo, url ->
+					item, modelClass, _uriInfo, url ->
 						pageJSONMessageMapper.mapItemSelfURL(
 							jsonObjectBuilder, itemJSONObjectBuilder, url));
 
@@ -335,7 +329,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		FunctionalList<String> parentEmbeddedPathElements) {
 
 		_writerHelper.writeRelatedModel(
-			relatedModel, parentModel, parentEmbeddedPathElements, uriInfo,
+			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
 			(model, modelClass, url, embeddedPathElements) ->
 				pageJSONMessageMapper.mapItemLinkedResourceURL(
 					pageJSONObjectBuilder, itemJSONObjectBuilder,
@@ -389,6 +383,12 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	@Reference
 	private RepresentorManager _representorManager;
+
+	@Context
+	private ResourceInfo _resourceInfo;
+
+	@Context
+	private UriInfo _uriInfo;
 
 	@Reference
 	private URIResolver _uriResolver;

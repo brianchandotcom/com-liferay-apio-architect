@@ -49,7 +49,7 @@ public class LiferayDispatcherResource implements Resource {
 
 		Resource resource = _resources.get(path);
 
-		resourceContext.initResource(resource);
+		_resourceContext.initResource(resource);
 
 		if (resource instanceof GroupScoped) {
 			GroupScoped groupScoped = (GroupScoped)resource;
@@ -61,7 +61,7 @@ public class LiferayDispatcherResource implements Resource {
 	}
 
 	@Context
-	protected ResourceContext resourceContext;
+	private ResourceContext _resourceContext;
 
 	private final ResourceMapper _resourceMapper;
 	private final Map<String, Resource> _resources = new HashMap<>();

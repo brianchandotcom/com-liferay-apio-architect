@@ -71,10 +71,10 @@ public class PersonCollectionResource
 	public Page<User> getPage(Pagination paginationParams) {
 		try {
 			List<User> users = _userService.getCompanyUsers(
-				company.getCompanyId(), paginationParams.getStartPosition(),
+				_company.getCompanyId(), paginationParams.getStartPosition(),
 				paginationParams.getEndPosition());
 			int count = _userService.getCompanyUsersCount(
-				company.getCompanyId());
+				_company.getCompanyId());
 
 			return paginationParams.createPage(users, count);
 		}
@@ -89,7 +89,7 @@ public class PersonCollectionResource
 	}
 
 	@Context
-	protected Company company;
+	private Company _company;
 
 	@Reference
 	private UserService _userService;

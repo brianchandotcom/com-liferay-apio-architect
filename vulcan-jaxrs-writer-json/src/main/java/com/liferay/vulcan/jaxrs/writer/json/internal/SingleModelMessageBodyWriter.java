@@ -142,19 +142,13 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		printWriter.close();
 	}
 
-	@Context
-	protected HttpServletRequest httpServletRequest;
-
-	@Context
-	protected UriInfo uriInfo;
-
 	private <U, V> void _writeEmbeddedRelatedModel(
 		SingleModelJSONMessageMapper<?> singleModelJSONMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, RelatedModel<U, V> relatedModel,
 		U parentModel, FunctionalList<String> parentEmbeddedPathElements) {
 
 		_writerHelper.writeRelatedModel(
-			relatedModel, parentModel, parentEmbeddedPathElements, uriInfo,
+			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
 			(model, modelClass, url, embeddedPathElements) -> {
 				_writerHelper.writeFields(
 					model, modelClass, (fieldName, value) ->
@@ -199,7 +193,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		U parentModel, FunctionalList<String> parentEmbeddedPathElements) {
 
 		_writerHelper.writeRelatedModel(
-			relatedModel, parentModel, parentEmbeddedPathElements, uriInfo,
+			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
 			(model, modelClass, url, embeddedPathElements) ->
 				singleModelJSONMessageMapper.mapLinkedResourceURL(
 					jsonObjectBuilder, embeddedPathElements, url));
@@ -228,7 +222,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 				jsonObjectBuilder, types));
 
 		_writerHelper.writeSingleResourceURL(
-			model, modelClass, uriInfo, url ->
+			model, modelClass, _uriInfo, url ->
 				singleModelJSONMessageMapper.mapSelfURL(
 					jsonObjectBuilder, url));
 
@@ -252,12 +246,18 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 			jsonObjectBuilder, model, modelClass, requestInfo);
 	}
 
+	@Context
+	private HttpServletRequest _httpServletRequest;
+
 	@Reference
 	private RepresentorManager _representorManager;
 
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
 	private List<SingleModelJSONMessageMapper<T>>
 		_singleModelJSONMessageMappers;
+
+	@Context
+	private UriInfo _uriInfo;
 
 	@Reference
 	private URIResolver _uriResolver;
