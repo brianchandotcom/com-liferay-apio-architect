@@ -133,51 +133,57 @@ public class URIResolver {
 		Class<T> modelClass = GenericUtil.getGenericClass(
 			collectionResource, CollectionResource.class);
 
-		Function<T, Optional<String>> singleResourceURIFunction = t ->
-			_representorManager.getModelRepresentorMapperOptional(modelClass).
-				map(
-					modelRepresentorMapper -> {
-						String identifier = _representorManager.getIdentifier(
-							modelClass, t);
+		Optional optional1 =
+			_representorManager.getModelRepresentorMapperOptional(modelClass);
 
-						String transformedPath = path;
+		Function<T, Optional<String>> singleResourceURIFunction =
+			t -> optional1.map(
+				modelRepresentorMapper -> {
+					String identifier = _representorManager.getIdentifier(
+						modelClass, t);
 
-						if (_collectionResourceURITransformer != null) {
-							transformedPath =
-								_collectionResourceURITransformer.
-									transformCollectionItemSingleResourceURI(
-										path, modelClass, t,
-										collectionResource);
-						}
+					String transformedPath = path;
 
-						UriBuilder uriBuilder = UriBuilder.fromPath(
-							transformedPath).clone();
+					if (_collectionResourceURITransformer != null) {
+						transformedPath =
+							_collectionResourceURITransformer.
+								transformCollectionItemSingleResourceURI(
+									path, modelClass, t, collectionResource);
+					}
 
-						URI singleResourceURI = uriBuilder.path(
-							CollectionResource.class,
-							"getCollectionItemSingleResource").build(
-								identifier);
+					UriBuilder uriBuilder = UriBuilder.fromPath(
+						transformedPath);
 
-						return singleResourceURI.toString();
-					});
+					uriBuilder.path(
+						CollectionResource.class,
+						"getCollectionItemSingleResource");
 
-		Supplier<Optional<String>> collectionResourceURISupplier = () ->
-			_representorManager.getModelRepresentorMapperOptional(modelClass).
-				map(
-					modelRepresentorMapper -> {
-						String transformedPath = path;
+					URI singleResourceURI = uriBuilder.build(identifier);
 
-						if (_collectionResourceURITransformer != null) {
-							transformedPath =
-								_collectionResourceURITransformer.
-									transformPageURI(
-										path, modelClass, collectionResource);
-						}
+					return singleResourceURI.toString();
+				});
 
-						URI uri = UriBuilder.fromPath(transformedPath).build();
+		Optional optional2 =
+			_representorManager.getModelRepresentorMapperOptional(modelClass);
 
-						return uri.toString();
-					});
+		Supplier<Optional<String>> collectionResourceURISupplier =
+			() -> optional2.map(
+				modelRepresentorMapper -> {
+					String transformedPath = path;
+
+					if (_collectionResourceURITransformer != null) {
+						transformedPath =
+							_collectionResourceURITransformer.transformPageURI(
+								path, modelClass, collectionResource);
+					}
+
+					UriBuilder uriBuilder = UriBuilder.fromPath(
+						transformedPath);
+
+					URI uri = uriBuilder.build();
+
+					return uri.toString();
+				});
 
 		_modelURIFunctions.computeIfAbsent(
 			modelClass.getName(),
