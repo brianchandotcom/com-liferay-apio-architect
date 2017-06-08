@@ -181,8 +181,7 @@ public class JSONLDSingleModelMessageMapper<T>
 
 		jsonObjectBuilder.field(
 			"@type"
-		).arrayValue(
-		).addAll(
+		).arrayValue().addAll(
 			types
 		);
 	}
