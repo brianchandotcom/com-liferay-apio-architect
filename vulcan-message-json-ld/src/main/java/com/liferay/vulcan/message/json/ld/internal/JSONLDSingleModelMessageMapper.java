@@ -20,6 +20,7 @@ import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.SingleModelMessageMapper;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -48,9 +49,10 @@ public class JSONLDSingleModelMessageMapper<T>
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object value) {
 
+		Stream<String> tailStream = embeddedPathElements.tail();
+
 		jsonObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).field(
 			fieldName
 		).value(
@@ -64,9 +66,10 @@ public class JSONLDSingleModelMessageMapper<T>
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
 
+		Stream<String> tailStream = embeddedPathElements.tail();
+
 		jsonObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).field(
 			fieldName
 		).value(
@@ -79,9 +82,10 @@ public class JSONLDSingleModelMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, List<String> types) {
 
+		Stream<String> tailStream = embeddedPathElements.tail();
+
 		jsonObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).field(
 			"@type"
 		).arrayValue().addAll(
@@ -94,9 +98,10 @@ public class JSONLDSingleModelMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
+		Stream<String> tailStream = embeddedPathElements.tail();
+
 		jsonObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).field(
 			"@id"
 		).value(
@@ -123,7 +128,9 @@ public class JSONLDSingleModelMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		String[] tail = embeddedPathElements.tail().toArray(String[]::new);
+		Stream<String> tailStream = embeddedPathElements.tail();
+
+		String[] tail = tailStream.toArray(String[]::new);
 
 		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(), tail
