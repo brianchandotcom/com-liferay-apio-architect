@@ -148,19 +148,22 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
 			(model, modelClass, url, embeddedPathElements) -> {
 				_writerHelper.writeFields(
-					model, modelClass, (fieldName, value) ->
+					model, modelClass,
+					(fieldName, value) ->
 						singleModelMessageMapper.mapEmbeddedResourceField(
 							jsonObjectBuilder, embeddedPathElements, fieldName,
 							value));
 
 				_writerHelper.writeLinks(
-					modelClass, (fieldName, link) ->
+					modelClass,
+					(fieldName, link) ->
 						singleModelMessageMapper.mapEmbeddedResourceLink(
 							jsonObjectBuilder, embeddedPathElements, fieldName,
 							link));
 
-				_writerHelper.writeTypes(modelClass, types ->
-					singleModelMessageMapper.mapEmbeddedResourceTypes(
+				_writerHelper.writeTypes(
+					modelClass,
+					types -> singleModelMessageMapper.mapEmbeddedResourceTypes(
 						jsonObjectBuilder, embeddedPathElements, types));
 
 				singleModelMessageMapper.mapEmbeddedResourceURL(
