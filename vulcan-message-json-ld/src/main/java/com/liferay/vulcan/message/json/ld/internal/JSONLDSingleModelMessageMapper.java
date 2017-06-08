@@ -124,7 +124,11 @@ public class JSONLDSingleModelMessageMapper<T>
 	public void mapLink(
 		JSONObjectBuilder jsonObjectBuilder, String fieldName, String url) {
 
-		jsonObjectBuilder.field(fieldName).value(url);
+		jsonObjectBuilder.field(
+			fieldName
+		).value(
+			url
+		);
 	}
 
 	@Override
@@ -164,7 +168,11 @@ public class JSONLDSingleModelMessageMapper<T>
 
 	@Override
 	public void mapSelfURL(JSONObjectBuilder jsonObjectBuilder, String url) {
-		jsonObjectBuilder.field("@id").value(url);
+		jsonObjectBuilder.field(
+			"@id"
+		).value(
+			url
+		);
 	}
 
 	@Override
