@@ -66,7 +66,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
 	@Override
 	public long getSize(
-		T t, Class<?> type, Type genericType, Annotation[] annotations,
+		T model, Class<?> type, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
 		return -1;

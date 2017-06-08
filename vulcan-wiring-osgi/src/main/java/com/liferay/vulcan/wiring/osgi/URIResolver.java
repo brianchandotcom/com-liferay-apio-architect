@@ -67,7 +67,7 @@ public class URIResolver {
 	}
 
 	public <T> Optional<String> getSingleResourceURIOptional(
-		Class<T> modelClass, T t) {
+		Class<T> modelClass, T model) {
 
 		ModelURIFunctions<T> modelURIFunctions =
 			(ModelURIFunctions<T>)_modelURIFunctions.get(modelClass.getName());
@@ -76,7 +76,8 @@ public class URIResolver {
 			modelURIFunctions.getSingleResourceURIFunction());
 
 		return optional.flatMap(
-			singleResourceURIFunction -> singleResourceURIFunction.apply(t));
+			singleResourceURIFunction -> singleResourceURIFunction.apply(
+				model));
 	}
 
 	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
