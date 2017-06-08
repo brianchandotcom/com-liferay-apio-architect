@@ -321,9 +321,8 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page) {
 
-		int totalCount = page.getTotalCount();
-
-		pageMessageMapper.mapItemTotalCount(jsonObjectBuilder, totalCount);
+		pageMessageMapper.mapItemTotalCount(
+			jsonObjectBuilder, page.getTotalCount());
 	}
 
 	private <U, V> void _writeLinkedRelatedModel(
