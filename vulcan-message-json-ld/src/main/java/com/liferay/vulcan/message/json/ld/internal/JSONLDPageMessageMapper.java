@@ -59,7 +59,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	public void mapCollectionURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		_singleModelJSONLDMessageMapper.mapSelfURL(jsonObjectBuilder, url);
+		_jsonLDSingleModelMessageMapper.mapSelfURL(jsonObjectBuilder, url);
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
 
-		_singleModelJSONLDMessageMapper.mapEmbeddedResourceLink(
+		_jsonLDSingleModelMessageMapper.mapEmbeddedResourceLink(
 			itemJSONObjectBuilder, embeddedPathElements, fieldName, url);
 	}
 
@@ -118,7 +118,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, List<String> types) {
 
-		_singleModelJSONLDMessageMapper.mapEmbeddedResourceTypes(
+		_jsonLDSingleModelMessageMapper.mapEmbeddedResourceTypes(
 			itemJSONObjectBuilder, embeddedPathElements, types);
 	}
 
@@ -128,7 +128,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		_singleModelJSONLDMessageMapper.mapEmbeddedResourceURL(
+		_jsonLDSingleModelMessageMapper.mapEmbeddedResourceURL(
 			itemJSONObjectBuilder, embeddedPathElements, url);
 	}
 
@@ -146,7 +146,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName, String url) {
 
-		_singleModelJSONLDMessageMapper.mapLink(
+		_jsonLDSingleModelMessageMapper.mapLink(
 			itemJSONObjectBuilder, fieldName, url);
 	}
 
@@ -156,7 +156,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		_singleModelJSONLDMessageMapper.mapLinkedResourceURL(
+		_jsonLDSingleModelMessageMapper.mapLinkedResourceURL(
 			itemJSONObjectBuilder, embeddedPathElements, url);
 	}
 
@@ -165,7 +165,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String url) {
 
-		_singleModelJSONLDMessageMapper.mapSelfURL(itemJSONObjectBuilder, url);
+		_jsonLDSingleModelMessageMapper.mapSelfURL(itemJSONObjectBuilder, url);
 	}
 
 	@Override
@@ -184,7 +184,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, List<String> types) {
 
-		_singleModelJSONLDMessageMapper.mapTypes(itemJSONObjectBuilder, types);
+		_jsonLDSingleModelMessageMapper.mapTypes(itemJSONObjectBuilder, types);
 	}
 
 	@Override
@@ -267,6 +267,6 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Reference
-	private SingleModelJSONLDMessageMapper<T> _singleModelJSONLDMessageMapper;
+	private JSONLDSingleModelMessageMapper<T> _jsonLDSingleModelMessageMapper;
 
 }

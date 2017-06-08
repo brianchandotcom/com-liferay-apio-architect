@@ -27,7 +27,7 @@ import java.util.List;
  * @author Jorge Ferrer
  */
 @ConsumerType
-public interface SingleModelJSONMessageMapper<T> {
+public interface SingleModelMessageMapper<T> {
 
 	public String getMediaType();
 

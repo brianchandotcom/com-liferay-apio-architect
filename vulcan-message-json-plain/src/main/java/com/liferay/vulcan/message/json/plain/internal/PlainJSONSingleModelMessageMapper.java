@@ -16,7 +16,7 @@ package com.liferay.vulcan.message.json.plain.internal;
 
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
-import com.liferay.vulcan.message.json.SingleModelJSONMessageMapper;
+import com.liferay.vulcan.message.json.SingleModelMessageMapper;
 
 import java.util.stream.Stream;
 
@@ -30,12 +30,11 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true,
 	service = {
-		SingleModelPlainJSONMessageMapper.class,
-		SingleModelJSONMessageMapper.class
+		PlainJSONSingleModelMessageMapper.class, SingleModelMessageMapper.class
 	}
 )
-public class SingleModelPlainJSONMessageMapper<T>
-	implements SingleModelJSONMessageMapper<T> {
+public class PlainJSONSingleModelMessageMapper<T>
+	implements SingleModelMessageMapper<T> {
 
 	@Override
 	public String getMediaType() {
