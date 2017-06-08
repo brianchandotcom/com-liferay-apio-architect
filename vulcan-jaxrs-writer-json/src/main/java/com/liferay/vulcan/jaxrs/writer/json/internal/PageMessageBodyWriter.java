@@ -355,32 +355,35 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
 		Class<T> modelClass) {
 
-		int itemsPerPage = page.getItemsPerPage();
-
-		int currentPage = page.getPageNumber();
-
 		pageMessageMapper.mapCurrentPageURL(
 			jsonObjectBuilder,
-			_getPageURL(modelClass, currentPage, itemsPerPage));
+			_getPageURL(
+				modelClass, page.getPageNumber(), page.getItemsPerPage()));
 
 		pageMessageMapper.mapFirstPageURL(
-			jsonObjectBuilder, _getPageURL(modelClass, 1, itemsPerPage));
+			jsonObjectBuilder,
+			_getPageURL(modelClass, 1, page.getItemsPerPage()));
 
 		if (page.hasPrevious()) {
 			pageMessageMapper.mapPreviousPageURL(
 				jsonObjectBuilder,
-				_getPageURL(modelClass, currentPage - 1, itemsPerPage));
+				_getPageURL(
+					modelClass, page.getPageNumber() - 1,
+					page.getItemsPerPage()));
 		}
 
 		if (page.hasNext()) {
 			pageMessageMapper.mapNextPageURL(
 				jsonObjectBuilder,
-				_getPageURL(modelClass, currentPage + 1, itemsPerPage));
+				_getPageURL(
+					modelClass, page.getPageNumber() + 1,
+					page.getItemsPerPage()));
 		}
 
 		pageMessageMapper.mapLastPageURL(
 			jsonObjectBuilder,
-			_getPageURL(modelClass, page.getLastPageNumber(), itemsPerPage));
+			_getPageURL(
+				modelClass, page.getLastPageNumber(), page.getItemsPerPage()));
 	}
 
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
