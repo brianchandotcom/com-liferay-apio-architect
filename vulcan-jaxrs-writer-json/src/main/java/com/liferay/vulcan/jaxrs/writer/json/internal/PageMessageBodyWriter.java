@@ -345,9 +345,9 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page) {
 
-		int count = page.getItems().size();
+		Collection<T> items = page.getItems();
 
-		pageMessageMapper.mapPageCount(jsonObjectBuilder, count);
+		pageMessageMapper.mapPageCount(jsonObjectBuilder, items.size());
 	}
 
 	private void _writePageURLs(
