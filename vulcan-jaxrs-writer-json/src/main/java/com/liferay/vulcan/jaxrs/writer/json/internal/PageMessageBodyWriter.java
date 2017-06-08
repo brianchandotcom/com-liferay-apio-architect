@@ -120,6 +120,10 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
+		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
+
+		String mediaTypeString = mediaType.toString();
+
 		Method resourceMethod = _resourceInfo.getResourceMethod();
 
 		Type genericReturnType = resourceMethod.getGenericReturnType();
@@ -131,13 +135,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		Class<T> modelClass = (Class<T>)actualTypeArguments[0];
 
-		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
-
 		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
-
-		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
-
-		String mediaTypeString = mediaType.toString();
 
 		PageMessageMapper<T> pageMessageMapper = stream.filter(
 			bodyWriter ->
@@ -147,6 +145,8 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			() -> new VulcanDeveloperError.MustHaveMessageMapper(
 				mediaTypeString, modelClass)
 		);
+
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
 
 		pageMessageMapper.onStart(
 			jsonObjectBuilder, page, modelClass, requestInfo);
