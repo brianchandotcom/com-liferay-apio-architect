@@ -67,8 +67,8 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	@Override
 	public long getSize(
-		Page<T> page, Class<?> clazz, Type genericType, Annotation[] annotations,
-		MediaType mediaType) {
+		Page<T> page, Class<?> clazz, Type genericType,
+		Annotation[] annotations, MediaType mediaType) {
 
 		return -1;
 	}
