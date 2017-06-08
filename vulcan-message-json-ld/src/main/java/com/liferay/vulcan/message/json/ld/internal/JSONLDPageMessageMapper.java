@@ -21,6 +21,7 @@ import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -74,9 +75,10 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object fieldData) {
 
+		Stream<String> tailStream = embeddedPathElements.tail();
+
 		itemJSONObjectBuilder.nestedField(
-			embeddedPathElements.head(),
-			embeddedPathElements.tail().toArray(String[]::new)
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).field(
 			fieldName
 		).value(
@@ -121,7 +123,11 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
 		Object value) {
 
-		itemJSONObjectBuilder.field(fieldName).value(value);
+		itemJSONObjectBuilder.field(
+			fieldName
+		).value(
+			value
+		);
 	}
 
 	@Override
@@ -194,7 +200,11 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 	@Override
 	public void mapPageCount(JSONObjectBuilder jsonObjectBuilder, int count) {
-		jsonObjectBuilder.field("numberOfItems").value(count);
+		jsonObjectBuilder.field(
+			"numberOfItems"
+		).value(
+			count
+		);
 	}
 
 	@Override
