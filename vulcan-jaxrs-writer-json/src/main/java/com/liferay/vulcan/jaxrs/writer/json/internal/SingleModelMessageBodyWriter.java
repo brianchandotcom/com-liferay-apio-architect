@@ -220,8 +220,8 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 				jsonObjectBuilder, types));
 
 		_writerHelper.writeSingleResourceURL(
-			model, modelClass, _uriInfo, url ->
-				singleModelMessageMapper.mapSelfURL(jsonObjectBuilder, url));
+			model, modelClass, _uriInfo,
+			url -> singleModelMessageMapper.mapSelfURL(jsonObjectBuilder, url));
 
 		List<RelatedModel<U, ?>> embeddedRelatedModels =
 			_representorManager.getEmbeddedRelatedModels(modelClass);
