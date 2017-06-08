@@ -88,8 +88,10 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		Type genericReturnType = resourceMethod.getGenericReturnType();
 
-		Type[] actualTypeArguments =
-			((ParameterizedType)genericReturnType).getActualTypeArguments();
+		ParameterizedType parameterizedType =
+			(ParameterizedType)genericReturnType;
+
+		Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
 
 		try {
 			Class<T> modelClass = (Class<T>)actualTypeArguments[0];
