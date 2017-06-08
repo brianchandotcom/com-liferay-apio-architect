@@ -213,22 +213,24 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
 			(model, modelClass, url, embeddedPathElements) -> {
 				_writerHelper.writeFields(
-					model, modelClass, (fieldName, value) ->
+					model, modelClass,
+					(fieldName, value) ->
 						pageMessageMapper.mapItemEmbeddedResourceField(
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, fieldName, value));
 
 				_writerHelper.writeLinks(
-					modelClass, (fieldName, link) ->
+					modelClass,
+					(fieldName, link) ->
 						pageMessageMapper.mapItemEmbeddedResourceLink(
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, fieldName, link));
 
 				_writerHelper.writeTypes(
-					modelClass, types ->
-						pageMessageMapper.mapItemEmbeddedResourceTypes(
-							pageJSONObjectBuilder, itemJSONObjectBuilder,
-							embeddedPathElements, types));
+					modelClass,
+					types -> pageMessageMapper.mapItemEmbeddedResourceTypes(
+						pageJSONObjectBuilder, itemJSONObjectBuilder,
+						embeddedPathElements, types));
 
 				pageMessageMapper.mapItemEmbeddedResourceURL(
 					pageJSONObjectBuilder, itemJSONObjectBuilder,
@@ -271,25 +273,26 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 					requestInfo);
 
 				_writerHelper.writeFields(
-					item, modelClass, (field, value) ->
-						pageMessageMapper.mapItemField(
-							jsonObjectBuilder, itemJSONObjectBuilder, field,
-							value));
+					item, modelClass,
+					(field, value) -> pageMessageMapper.mapItemField(
+						jsonObjectBuilder, itemJSONObjectBuilder, field,
+						value));
 
 				_writerHelper.writeLinks(
-					modelClass, (fieldName, link) ->
-						pageMessageMapper.mapItemLink(
-							jsonObjectBuilder, itemJSONObjectBuilder, fieldName,
-							link));
+					modelClass,
+					(fieldName, link) -> pageMessageMapper.mapItemLink(
+						jsonObjectBuilder, itemJSONObjectBuilder, fieldName,
+						link));
 
 				_writerHelper.writeTypes(
-					modelClass, types -> pageMessageMapper.mapItemTypes(
+					modelClass,
+					types -> pageMessageMapper.mapItemTypes(
 						jsonObjectBuilder, itemJSONObjectBuilder, types));
 
 				_writerHelper.writeSingleResourceURL(
-					item, modelClass, _uriInfo, url ->
-						pageMessageMapper.mapItemSelfURL(
-							jsonObjectBuilder, itemJSONObjectBuilder, url));
+					item, modelClass, _uriInfo,
+					url -> pageMessageMapper.mapItemSelfURL(
+						jsonObjectBuilder, itemJSONObjectBuilder, url));
 
 				List<RelatedModel<T, ?>> embeddedRelatedModels =
 					_representorManager.getEmbeddedRelatedModels(modelClass);
