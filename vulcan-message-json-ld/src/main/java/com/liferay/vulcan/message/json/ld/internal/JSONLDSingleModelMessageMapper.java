@@ -113,7 +113,11 @@ public class JSONLDSingleModelMessageMapper<T>
 	public void mapField(
 		JSONObjectBuilder jsonObjectBuilder, String fieldName, Object value) {
 
-		jsonObjectBuilder.field(fieldName).value(value);
+		jsonObjectBuilder.field(
+			fieldName
+		).value(
+			value
+		);
 	}
 
 	@Override
@@ -146,9 +150,10 @@ public class JSONLDSingleModelMessageMapper<T>
 			);
 		}
 		else {
+			Stream<String> middleStream = embeddedPathElements.middle();
+
 			jsonObjectBuilder.nestedField(
-				embeddedPathElements.head(),
-				embeddedPathElements.middle().toArray(String[]::new)
+				embeddedPathElements.head(), middleStream.toArray(String[]::new)
 			).nestedField(
 				"@context", embeddedPathElements.last(), "@type"
 			).value(
