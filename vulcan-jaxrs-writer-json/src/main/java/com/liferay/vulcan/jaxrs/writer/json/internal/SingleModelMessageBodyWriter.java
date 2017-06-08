@@ -106,16 +106,15 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
-		Class<T> modelClass = (Class<T>)genericType;
-
-		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
-
-		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
+		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
 		Stream<SingleModelMessageMapper<T>> stream =
 			_singleModelMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
+
+		Class<T> modelClass = (Class<T>)genericType;
+		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
 		SingleModelMessageMapper<T> singleModelMessageMapper = stream.filter(
 			messageMapper ->
@@ -126,11 +125,11 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 				mediaTypeString, modelClass)
 		);
 
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
+
 		_writeModel(
 			singleModelMessageMapper, jsonObjectBuilder, model, modelClass,
 			requestInfo);
-
-		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
 		JSONObject jsonObject = jsonObjectBuilder.build();
 
