@@ -67,7 +67,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	@Override
 	public long getSize(
-		Page<T> page, Class<?> type, Type genericType, Annotation[] annotations,
+		Page<T> page, Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
 		return -1;
@@ -75,7 +75,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	@Override
 	public boolean isWriteable(
-		Class<?> type, Type genericType, Annotation[] annotations,
+		Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
 		Method resourceMethod = _resourceInfo.getResourceMethod();
@@ -113,7 +113,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	@Override
 	public void writeTo(
-			Page<T> page, Class<?> type, Type genericType,
+			Page<T> page, Class<?> clazz, Type genericType,
 			Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> httpHeaders,
 			OutputStream entityStream)
