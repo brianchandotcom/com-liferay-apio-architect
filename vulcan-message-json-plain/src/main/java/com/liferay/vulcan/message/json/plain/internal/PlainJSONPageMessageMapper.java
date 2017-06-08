@@ -17,7 +17,7 @@ package com.liferay.vulcan.message.json.plain.internal;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
-import com.liferay.vulcan.message.json.PageJSONMessageMapper;
+import com.liferay.vulcan.message.json.PageMessageMapper;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class PagePlainJSONMessageMapper<T> implements PageJSONMessageMapper<T> {
+public class PlainJSONPageMessageMapper<T> implements PageMessageMapper<T> {
 
 	@Override
 	public String getMediaType() {

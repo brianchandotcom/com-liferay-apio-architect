@@ -22,7 +22,7 @@ import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
-import com.liferay.vulcan.message.json.PageJSONMessageMapper;
+import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
@@ -130,12 +130,11 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
-		Stream<PageJSONMessageMapper<T>> stream =
-			_pageJSONMessageMappers.stream();
+		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
 
 		String stringMediaType = mediaType.toString();
 
-		PageJSONMessageMapper<T> pageJSONMessageMapper = stream.filter(
+		PageMessageMapper<T> pageMessageMapper = stream.filter(
 			bodyWriter ->
 				stringMediaType.equals(bodyWriter.getMediaType()) &&
 					bodyWriter.supports(page, modelClass, requestInfo)
@@ -146,24 +145,22 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 				stringMediaType, modelClass)
 		);
 
-		pageJSONMessageMapper.onStart(
+		pageMessageMapper.onStart(
 			jsonObjectBuilder, page, modelClass, requestInfo);
 
 		_writeItems(
-			page, modelClass, requestInfo, pageJSONMessageMapper,
+			page, modelClass, requestInfo, pageMessageMapper,
 			jsonObjectBuilder);
 
-		_writeItemTotalCount(pageJSONMessageMapper, jsonObjectBuilder, page);
+		_writeItemTotalCount(pageMessageMapper, jsonObjectBuilder, page);
 
-		_writePageCount(pageJSONMessageMapper, jsonObjectBuilder, page);
+		_writePageCount(pageMessageMapper, jsonObjectBuilder, page);
 
-		_writePageURLs(
-			pageJSONMessageMapper, jsonObjectBuilder, page, modelClass);
+		_writePageURLs(pageMessageMapper, jsonObjectBuilder, page, modelClass);
 
-		_writeCollectionURL(
-			pageJSONMessageMapper, jsonObjectBuilder, modelClass);
+		_writeCollectionURL(pageMessageMapper, jsonObjectBuilder, modelClass);
 
-		pageJSONMessageMapper.onFinish(
+		pageMessageMapper.onFinish(
 			jsonObjectBuilder, page, modelClass, requestInfo);
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
@@ -194,16 +191,16 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 	}
 
 	private void _writeCollectionURL(
-		PageJSONMessageMapper<T> pageJSONMessageMapper,
+		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Class<T> modelClass) {
 
 		String url = _getCollectionURL(modelClass);
 
-		pageJSONMessageMapper.mapCollectionURL(jsonObjectBuilder, url);
+		pageMessageMapper.mapCollectionURL(jsonObjectBuilder, url);
 	}
 
 	private <U, V> void _writeEmbeddedRelatedModel(
-		PageJSONMessageMapper<?> pageJSONMessageMapper,
+		PageMessageMapper<?> pageMessageMapper,
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder,
 		RelatedModel<U, V> relatedModel, U parentModel,
@@ -214,23 +211,23 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			(model, modelClass, url, embeddedPathElements) -> {
 				_writerHelper.writeFields(
 					model, modelClass, (fieldName, value) ->
-						pageJSONMessageMapper.mapItemEmbeddedResourceField(
+						pageMessageMapper.mapItemEmbeddedResourceField(
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, fieldName, value));
 
 				_writerHelper.writeLinks(
 					modelClass, (fieldName, link) ->
-						pageJSONMessageMapper.mapItemEmbeddedResourceLink(
+						pageMessageMapper.mapItemEmbeddedResourceLink(
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, fieldName, link));
 
 				_writerHelper.writeTypes(
 					modelClass, types ->
-						pageJSONMessageMapper.mapItemEmbeddedResourceTypes(
+						pageMessageMapper.mapItemEmbeddedResourceTypes(
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, types));
 
-				pageJSONMessageMapper.mapItemEmbeddedResourceURL(
+				pageMessageMapper.mapItemEmbeddedResourceURL(
 					pageJSONObjectBuilder, itemJSONObjectBuilder,
 					embeddedPathElements, url);
 
@@ -239,7 +236,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 				embeddedRelatedModels.forEach(
 					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
-						pageJSONMessageMapper, pageJSONObjectBuilder,
+						pageMessageMapper, pageJSONObjectBuilder,
 						itemJSONObjectBuilder, embeddedRelatedModel, model,
 						embeddedPathElements));
 
@@ -248,7 +245,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 				linkedRelatedModels.forEach(
 					linkedRelatedModel -> _writeLinkedRelatedModel(
-						pageJSONMessageMapper, pageJSONObjectBuilder,
+						pageMessageMapper, pageJSONObjectBuilder,
 						itemJSONObjectBuilder, linkedRelatedModel, model,
 						embeddedPathElements));
 			});
@@ -256,7 +253,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	private void _writeItems(
 		Page<T> page, Class<T> modelClass, RequestInfo requestInfo,
-		PageJSONMessageMapper<T> pageJSONMessageMapper,
+		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder) {
 
 		page.getItems().forEach(
@@ -264,29 +261,29 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 				JSONObjectBuilder itemJSONObjectBuilder =
 					new JSONObjectBuilderImpl();
 
-				pageJSONMessageMapper.onStartItem(
+				pageMessageMapper.onStartItem(
 					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
 					requestInfo);
 
 				_writerHelper.writeFields(
 					item, modelClass, (field, value) ->
-						pageJSONMessageMapper.mapItemField(
+						pageMessageMapper.mapItemField(
 							jsonObjectBuilder, itemJSONObjectBuilder, field,
 							value));
 
 				_writerHelper.writeLinks(
 					modelClass, (fieldName, link) ->
-						pageJSONMessageMapper.mapItemLink(
+						pageMessageMapper.mapItemLink(
 							jsonObjectBuilder, itemJSONObjectBuilder, fieldName,
 							link));
 
 				_writerHelper.writeTypes(
-					modelClass, types -> pageJSONMessageMapper.mapItemTypes(
+					modelClass, types -> pageMessageMapper.mapItemTypes(
 						jsonObjectBuilder, itemJSONObjectBuilder, types));
 
 				_writerHelper.writeSingleResourceURL(
 					item, modelClass, _uriInfo, url ->
-						pageJSONMessageMapper.mapItemSelfURL(
+						pageMessageMapper.mapItemSelfURL(
 							jsonObjectBuilder, itemJSONObjectBuilder, url));
 
 				List<RelatedModel<T, ?>> embeddedRelatedModels =
@@ -294,7 +291,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 				embeddedRelatedModels.forEach(
 					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
-						pageJSONMessageMapper, jsonObjectBuilder,
+						pageMessageMapper, jsonObjectBuilder,
 						itemJSONObjectBuilder, embeddedRelatedModel, item,
 						null));
 
@@ -303,26 +300,26 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 				linkedRelatedModels.forEach(
 					linkedRelatedModel -> _writeLinkedRelatedModel(
-						pageJSONMessageMapper, jsonObjectBuilder,
+						pageMessageMapper, jsonObjectBuilder,
 						itemJSONObjectBuilder, linkedRelatedModel, item, null));
 
-				pageJSONMessageMapper.onFinishItem(
+				pageMessageMapper.onFinishItem(
 					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
 					requestInfo);
 			});
 	}
 
 	private void _writeItemTotalCount(
-		PageJSONMessageMapper<T> pageJSONMessageMapper,
+		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page) {
 
 		int totalCount = page.getTotalCount();
 
-		pageJSONMessageMapper.mapItemTotalCount(jsonObjectBuilder, totalCount);
+		pageMessageMapper.mapItemTotalCount(jsonObjectBuilder, totalCount);
 	}
 
 	private <U, V> void _writeLinkedRelatedModel(
-		PageJSONMessageMapper<?> pageJSONMessageMapper,
+		PageMessageMapper<?> pageMessageMapper,
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder,
 		RelatedModel<U, V> relatedModel, U parentModel,
@@ -331,22 +328,22 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		_writerHelper.writeRelatedModel(
 			relatedModel, parentModel, parentEmbeddedPathElements, _uriInfo,
 			(model, modelClass, url, embeddedPathElements) ->
-				pageJSONMessageMapper.mapItemLinkedResourceURL(
+				pageMessageMapper.mapItemLinkedResourceURL(
 					pageJSONObjectBuilder, itemJSONObjectBuilder,
 					embeddedPathElements, url));
 	}
 
 	private void _writePageCount(
-		PageJSONMessageMapper<T> pageJSONMessageMapper,
+		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page) {
 
 		int count = page.getItems().size();
 
-		pageJSONMessageMapper.mapPageCount(jsonObjectBuilder, count);
+		pageMessageMapper.mapPageCount(jsonObjectBuilder, count);
 	}
 
 	private void _writePageURLs(
-		PageJSONMessageMapper<T> pageJSONMessageMapper,
+		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
 		Class<T> modelClass) {
 
@@ -354,32 +351,32 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		int currentPage = page.getPageNumber();
 
-		pageJSONMessageMapper.mapCurrentPageURL(
+		pageMessageMapper.mapCurrentPageURL(
 			jsonObjectBuilder,
 			_getPageURL(modelClass, currentPage, itemsPerPage));
 
-		pageJSONMessageMapper.mapFirstPageURL(
+		pageMessageMapper.mapFirstPageURL(
 			jsonObjectBuilder, _getPageURL(modelClass, 1, itemsPerPage));
 
 		if (page.hasPrevious()) {
-			pageJSONMessageMapper.mapPreviousPageURL(
+			pageMessageMapper.mapPreviousPageURL(
 				jsonObjectBuilder,
 				_getPageURL(modelClass, currentPage - 1, itemsPerPage));
 		}
 
 		if (page.hasNext()) {
-			pageJSONMessageMapper.mapNextPageURL(
+			pageMessageMapper.mapNextPageURL(
 				jsonObjectBuilder,
 				_getPageURL(modelClass, currentPage + 1, itemsPerPage));
 		}
 
-		pageJSONMessageMapper.mapLastPageURL(
+		pageMessageMapper.mapLastPageURL(
 			jsonObjectBuilder,
 			_getPageURL(modelClass, page.getLastPageNumber(), itemsPerPage));
 	}
 
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
-	private List<PageJSONMessageMapper<T>> _pageJSONMessageMappers;
+	private List<PageMessageMapper<T>> _pageMessageMappers;
 
 	@Reference
 	private RepresentorManager _representorManager;

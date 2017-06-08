@@ -34,7 +34,7 @@ import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_L
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
-import com.liferay.vulcan.message.json.PageJSONMessageMapper;
+import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 
 import java.util.List;
@@ -48,7 +48,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  */
 @Component(immediate = true)
-public class PageJSONLDMessageMapper<T> implements PageJSONMessageMapper<T> {
+public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 	@Override
 	public String getMediaType() {

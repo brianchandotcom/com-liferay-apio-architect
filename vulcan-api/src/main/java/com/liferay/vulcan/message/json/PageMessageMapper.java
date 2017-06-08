@@ -25,7 +25,7 @@ import java.util.List;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public interface PageJSONMessageMapper<T> {
+public interface PageMessageMapper<T> {
 
 	public String getMediaType();
 
