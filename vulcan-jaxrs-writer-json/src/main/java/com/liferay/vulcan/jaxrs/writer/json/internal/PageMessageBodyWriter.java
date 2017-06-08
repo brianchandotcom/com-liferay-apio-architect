@@ -38,6 +38,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -258,7 +259,9 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder) {
 
-		page.getItems().forEach(
+		Collection<T> items = page.getItems();
+
+		items.forEach(
 			item -> {
 				JSONObjectBuilder itemJSONObjectBuilder =
 					new JSONObjectBuilderImpl();
