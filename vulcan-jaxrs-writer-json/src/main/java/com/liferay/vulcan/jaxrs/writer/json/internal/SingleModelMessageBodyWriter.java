@@ -215,7 +215,8 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 				jsonObjectBuilder, fieldName, link));
 
 		_writerHelper.writeTypes(
-			modelClass, types -> singleModelMessageMapper.mapTypes(
+			modelClass,
+			types -> singleModelMessageMapper.mapTypes(
 				jsonObjectBuilder, types));
 
 		_writerHelper.writeSingleResourceURL(
