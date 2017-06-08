@@ -14,13 +14,6 @@
 
 package com.liferay.vulcan.message.json.ld.internal;
 
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_CONTEXT;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_ID;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_MIME_TYPE;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_SCHEMA_ORG;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_TYPE;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_VOCAB;
-
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -46,7 +39,7 @@ public class JSONLDSingleModelMessageMapper<T>
 
 	@Override
 	public String getMediaType() {
-		return JSON_LD_MIME_TYPE;
+		return "application/ld+json";
 	}
 
 	@Override
@@ -90,7 +83,7 @@ public class JSONLDSingleModelMessageMapper<T>
 			embeddedPathElements.head(),
 			embeddedPathElements.tail().toArray(String[]::new)
 		).field(
-			JSON_LD_TYPE
+			"@type"
 		).arrayValue().addAll(
 			types
 		);
@@ -105,7 +98,7 @@ public class JSONLDSingleModelMessageMapper<T>
 			embeddedPathElements.head(),
 			embeddedPathElements.tail().toArray(String[]::new)
 		).field(
-			JSON_LD_ID
+			"@id"
 		).value(
 			url
 		);
@@ -140,9 +133,9 @@ public class JSONLDSingleModelMessageMapper<T>
 
 		if (tail.length == 0) {
 			jsonObjectBuilder.nestedField(
-				JSON_LD_CONTEXT, embeddedPathElements.last(), JSON_LD_TYPE
+				"@context", embeddedPathElements.last(), "@type"
 			).value(
-				JSON_LD_ID
+				"@id"
 			);
 		}
 		else {
@@ -150,16 +143,16 @@ public class JSONLDSingleModelMessageMapper<T>
 				embeddedPathElements.head(),
 				embeddedPathElements.middle().toArray(String[]::new)
 			).nestedField(
-				JSON_LD_CONTEXT, embeddedPathElements.last(), JSON_LD_TYPE
+				"@context", embeddedPathElements.last(), "@type"
 			).value(
-				JSON_LD_ID
+				"@id"
 			);
 		}
 	}
 
 	@Override
 	public void mapSelfURL(JSONObjectBuilder jsonObjectBuilder, String url) {
-		jsonObjectBuilder.field(JSON_LD_ID).value(url);
+		jsonObjectBuilder.field("@id").value(url);
 	}
 
 	@Override
@@ -167,7 +160,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder, List<String> types) {
 
 		jsonObjectBuilder.field(
-			JSON_LD_TYPE
+			"@type"
 		).arrayValue().addAll(
 			types
 		);
@@ -179,9 +172,9 @@ public class JSONLDSingleModelMessageMapper<T>
 		RequestInfo requestInfo) {
 
 		jsonObjectBuilder.nestedField(
-			JSON_LD_CONTEXT, JSON_LD_VOCAB
+			"@context", "@vocab"
 		).value(
-			JSON_LD_SCHEMA_ORG
+			"http://schema.org"
 		);
 	}
 

@@ -14,23 +14,6 @@
 
 package com.liferay.vulcan.message.json.ld.internal;
 
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_COLLECTION;
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_CONTEXT;
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_FIRST;
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_LAST;
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_MEMBERS;
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_NEXT;
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_PAGE_COUNT;
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_PREVIOUS;
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_TOTAL_ITEMS;
-import static com.liferay.vulcan.message.json.ld.internal.HydraConstants.HYDRA_VIEW;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_CONTEXT;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_ID;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_MIME_TYPE;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_SCHEMA_ORG;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_TYPE;
-import static com.liferay.vulcan.message.json.ld.internal.JsonLDConstants.JSON_LD_VOCAB;
-
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -52,7 +35,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 	@Override
 	public String getMediaType() {
-		return JSON_LD_MIME_TYPE;
+		return "application/ld+json";
 	}
 
 	@Override
@@ -67,7 +50,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			HYDRA_VIEW, JSON_LD_ID
+			"view", "@id"
 		).value(
 			url
 		);
@@ -78,7 +61,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			HYDRA_VIEW, HYDRA_FIRST
+			"view", "first"
 		).value(
 			url
 		);
@@ -173,7 +156,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
 
 		jsonObjectBuilder.field(
-			HYDRA_TOTAL_ITEMS
+			"totalItems"
 		).value(
 			totalCount
 		);
@@ -192,7 +175,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			HYDRA_VIEW, HYDRA_LAST
+			"view", "last"
 		).value(
 			url
 		);
@@ -203,7 +186,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			HYDRA_VIEW, HYDRA_NEXT
+			"view", "next"
 		).value(
 			url
 		);
@@ -211,7 +194,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 	@Override
 	public void mapPageCount(JSONObjectBuilder jsonObjectBuilder, int count) {
-		jsonObjectBuilder.field(HYDRA_PAGE_COUNT).value(count);
+		jsonObjectBuilder.field("numberOfItems").value(count);
 	}
 
 	@Override
@@ -219,7 +202,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			HYDRA_VIEW, HYDRA_PREVIOUS
+			"view", "previous"
 		).value(
 			url
 		);
@@ -231,24 +214,24 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		RequestInfo requestInfo) {
 
 		jsonObjectBuilder.field(
-			JSON_LD_TYPE
+			"@type"
 		).value(
-			HYDRA_COLLECTION
+			"Collection"
 		);
 
 		jsonObjectBuilder.field(
-			JSON_LD_CONTEXT
+			"@context"
 		).arrayValue().add(
-			HYDRA_CONTEXT
+			"http://www.w3.org/ns/hydra/pagination.jsonld"
 		);
 
 		jsonObjectBuilder.field(
-			JSON_LD_CONTEXT
+			"@context"
 		).arrayValue().add(
 			nestedJsonObjectBuilder -> nestedJsonObjectBuilder.field(
-				JSON_LD_VOCAB
+				"@vocab"
 			).value(
-				JSON_LD_SCHEMA_ORG
+				"http://schema.org"
 			)
 		);
 	}
@@ -260,7 +243,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		RequestInfo requestInfo) {
 
 		pageJSONObjectBuilder.field(
-			HYDRA_MEMBERS
+			"members"
 		).arrayValue().add(
 			itemJSONObjectBuilder
 		);
