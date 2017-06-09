@@ -21,6 +21,7 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.vulcan.contributor.APIContributor;
 import com.liferay.vulcan.contributor.ResourceMapper;
+import com.liferay.vulcan.representor.ModelRepresentorMapper;
 import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
@@ -134,11 +135,12 @@ public class URIResolver {
 		Class<T> modelClass = GenericUtil.getGenericClass(
 			collectionResource, CollectionResource.class);
 
-		Optional optional1 =
-			_representorManager.getModelRepresentorMapperOptional(modelClass);
+		Function<T, Optional<String>> singleResourceURIFunction = t -> {
+			Optional<ModelRepresentorMapper<T>> optional =
+				_representorManager.getModelRepresentorMapperOptional(
+					modelClass);
 
-		Function<T, Optional<String>> singleResourceURIFunction =
-			t -> optional1.map(
+			return optional.map(
 				modelRepresentorMapper -> {
 					String identifier = _representorManager.getIdentifier(
 						modelClass, t);
@@ -163,12 +165,14 @@ public class URIResolver {
 
 					return singleResourceURI.toString();
 				});
+		};
 
-		Optional optional2 =
-			_representorManager.getModelRepresentorMapperOptional(modelClass);
+		Supplier<Optional<String>> collectionResourceURISupplier = () -> {
+			Optional<ModelRepresentorMapper<T>> optional =
+				_representorManager.getModelRepresentorMapperOptional(
+					modelClass);
 
-		Supplier<Optional<String>> collectionResourceURISupplier =
-			() -> optional2.map(
+			return optional.map(
 				modelRepresentorMapper -> {
 					String transformedPath = path;
 
@@ -185,6 +189,7 @@ public class URIResolver {
 
 					return uri.toString();
 				});
+		};
 
 		_modelURIFunctions.computeIfAbsent(
 			modelClass.getName(),
