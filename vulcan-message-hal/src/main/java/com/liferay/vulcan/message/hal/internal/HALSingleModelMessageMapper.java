@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true,
 	service = {
-		SingleModelMessageMapper.class, HALSingleModelMessageMapper.class
+		HALSingleModelMessageMapper.class, SingleModelMessageMapper.class
 	}
 )
 public class HALSingleModelMessageMapper<T>
