@@ -17,6 +17,7 @@ package com.liferay.vulcan.response.control;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -38,13 +39,26 @@ public class FieldsRetriever {
 		Function<String, String> typeExtractFunction = key -> key.substring(
 			key.indexOf("[") + 1, key.indexOf("]"));
 
-		Stream<Map.Entry<String, String[]>> stream =
-			parameterMap.entrySet().stream();
+		Set<Map.Entry<String, String[]>> set = parameterMap.entrySet();
+
+		Stream<Map.Entry<String, String[]>> stream = set.stream();
 
 		Map<String, List<String>> fieldLists = stream.filter(
-			entry -> entry.getKey().matches(_FIELDS_PATTERN)
+			entry -> {
+				String key = entry.getKey();
+
+				return key.matches(_FIELDS_PATTERN);
+			}
 		).filter(
-			entry -> entry.getValue().length == 1
+			entry -> {
+				String[] value = entry.getValue();
+
+				if (value.length == 1) {
+					return true;
+				}
+
+				return false;
+			}
 		).filter(
 			entry -> !entry.getValue()[0].isEmpty()
 		).collect(
@@ -70,7 +84,7 @@ public class FieldsRetriever {
 				return stream.map(
 					_fieldLists::get
 				).anyMatch(
-					fields -> fields != null && fields.contains(field)
+					fields -> (fields != null) && fields.contains(field)
 				);
 			};
 		}
