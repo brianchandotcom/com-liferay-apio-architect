@@ -148,7 +148,7 @@ public class HALSingleModelMessageMapper<T>
 
 			List<String> middleList = middleStream.collect(Collectors.toList());
 
-			String preLast = middleList.remove(middleList.size() - 1);
+			String prelast = middleList.remove(middleList.size() - 1);
 
 			String[] middle = middleList.toArray(new String[middleList.size()]);
 
@@ -157,7 +157,7 @@ public class HALSingleModelMessageMapper<T>
 			).nestedSuffixedField(
 				"_embedded", embeddedPathElements.head(), middle
 			).nestedField(
-				preLast, "_links", embeddedPathElements.last(), "href"
+				prelast, "_links", embeddedPathElements.last(), "href"
 			).value(
 				url
 			);
