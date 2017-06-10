@@ -72,7 +72,9 @@ public class WriterHelper {
 
 		for (String field : fieldFunctions.keySet()) {
 			if (fieldsPredicate.test(field)) {
-				Object data = fieldFunctions.get(field).apply(model);
+				Function<T, Object> fieldFunction = fieldFunctions.get(field);
+
+				Object data = fieldFunction.apply(model);
 
 				if (data != null) {
 					biConsumer.accept(field, data);
@@ -161,7 +163,10 @@ public class WriterHelper {
 				String embeddedPath = String.join(
 					".", stream.collect(Collectors.toList()));
 
-				if (embedded.getEmbeddedPredicate().test(embeddedPath)) {
+				Predicate<String> embeddedPredicate =
+					embedded.getEmbeddedPredicate();
+
+				if (embeddedPredicate.test(embeddedPath)) {
 					triConsumer.accept(model, modelClass, embeddedPathElements);
 				}
 			});
