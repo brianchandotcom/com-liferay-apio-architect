@@ -36,9 +36,6 @@ public class FieldsRetriever {
 		Map<String, String[]> parameterMap =
 			httpServletRequest.getParameterMap();
 
-		Function<String, String> typeExtractFunction = key -> key.substring(
-			key.indexOf("[") + 1, key.indexOf("]"));
-
 		Set<Map.Entry<String, String[]>> set = parameterMap.entrySet();
 
 		Stream<Map.Entry<String, String[]>> stream = set.stream();
@@ -63,7 +60,7 @@ public class FieldsRetriever {
 			entry -> !entry.getValue()[0].isEmpty()
 		).collect(
 			Collectors.toMap(
-				entry -> typeExtractFunction.apply(entry.getKey()),
+				entry -> _typeExtractFunction.apply(entry.getKey()),
 				entry -> Arrays.asList(entry.getValue()[0].split(",")))
 		);
 
@@ -94,5 +91,8 @@ public class FieldsRetriever {
 	}
 
 	private static final String _REGEXP = "fields\\[([A-Z|a-z]+)]";
+
+	private static final Function<String, String> _typeExtractFunction =
+		key -> key.substring(key.indexOf("[") + 1, key.indexOf("]"));
 
 }
