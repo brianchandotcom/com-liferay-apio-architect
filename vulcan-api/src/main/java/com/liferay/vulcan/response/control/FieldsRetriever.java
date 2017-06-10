@@ -47,7 +47,7 @@ public class FieldsRetriever {
 			entry -> {
 				String key = entry.getKey();
 
-				return key.matches(_FIELDS_PATTERN);
+				return key.matches(_REGEXP);
 			}
 		).filter(
 			entry -> {
@@ -93,6 +93,6 @@ public class FieldsRetriever {
 
 	}
 
-	private static final String _FIELDS_PATTERN = "fields\\[([A-Z|a-z]+)]";
+	private static final String _REGEXP = "fields\\[([A-Z|a-z]+)]";
 
 }
