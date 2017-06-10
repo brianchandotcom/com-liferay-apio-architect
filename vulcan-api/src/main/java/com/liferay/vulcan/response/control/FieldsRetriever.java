@@ -60,7 +60,7 @@ public class FieldsRetriever {
 			entry -> !entry.getValue()[0].isEmpty()
 		).collect(
 			Collectors.toMap(
-				entry -> _typeExtractFunction.apply(entry.getKey()),
+				entry -> _getTypeFunction.apply(entry.getKey()),
 				entry -> Arrays.asList(entry.getValue()[0].split(",")))
 		);
 
@@ -92,7 +92,7 @@ public class FieldsRetriever {
 
 	private static final String _REGEXP = "fields\\[([A-Z|a-z]+)]";
 
-	private static final Function<String, String> _typeExtractFunction =
+	private static final Function<String, String> _getTypeFunction =
 		key -> key.substring(key.indexOf("[") + 1, key.indexOf("]"));
 
 }
