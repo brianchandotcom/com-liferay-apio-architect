@@ -156,12 +156,11 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
 
-		Embedded embedded = EmbeddedRetriever.getEmbedded(_httpServletRequest);
-
-		Fields fields = FieldsRetriever.getFields(_httpServletRequest);
-
 		pageMessageMapper.onStart(
 			jsonObjectBuilder, page, modelClass, requestInfo);
+
+		Fields fields = FieldsRetriever.getFields(_httpServletRequest);
+		Embedded embedded = EmbeddedRetriever.getEmbedded(_httpServletRequest);
 
 		_writeItems(
 			pageMessageMapper, jsonObjectBuilder, page, modelClass, requestInfo,
