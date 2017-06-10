@@ -61,7 +61,9 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
-	public void mapFirstPageURL(JSONObjectBuilder jsonObjectBuilder, String url) {
+	public void mapFirstPageURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
 		jsonObjectBuilder.nestedField(
 			"_links", "first", "href"
 		).value(
@@ -161,7 +163,9 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
-	public void mapLastPageURL(JSONObjectBuilder jsonObjectBuilder, String url) {
+	public void mapLastPageURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
 		jsonObjectBuilder.nestedField(
 			"_links", "last", "href"
 		).value(
@@ -170,7 +174,9 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
-	public void mapNextPageURL(JSONObjectBuilder jsonObjectBuilder, String url) {
+	public void mapNextPageURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
 		jsonObjectBuilder.nestedField(
 			"_links", "next", "href"
 		).value(
