@@ -64,11 +64,11 @@ public class WriterHelper {
 		T model, Class<T> modelClass, Fields fields,
 		BiConsumer<String, Object> biConsumer) {
 
-		Map<String, Function<T, Object>> fieldFunctions =
-			_representorManager.getFieldFunctions(modelClass);
-
 		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			modelClass, fields);
+
+		Map<String, Function<T, Object>> fieldFunctions =
+			_representorManager.getFieldFunctions(modelClass);
 
 		for (String field : fieldFunctions.keySet()) {
 			if (fieldsPredicate.test(field)) {
@@ -100,10 +100,10 @@ public class WriterHelper {
 		Class<T> modelClass, Fields fields,
 		BiConsumer<String, String> biConsumer) {
 
-		Map<String, String> links = _representorManager.getLinks(modelClass);
-
 		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			modelClass, fields);
+
+		Map<String, String> links = _representorManager.getLinks(modelClass);
 
 		for (String key : links.keySet()) {
 			if (fieldsPredicate.test(key)) {
