@@ -67,11 +67,11 @@ public class WriterHelper {
 		Map<String, Function<T, Object>> fieldFunctions =
 			_representorManager.getFieldFunctions(modelClass);
 
-		Predicate<String> isFieldIncludedPredicate = _getFieldsPredicate(
+		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			modelClass, fields);
 
 		for (String field : fieldFunctions.keySet()) {
-			if (isFieldIncludedPredicate.test(field)) {
+			if (fieldsPredicate.test(field)) {
 				Object data = fieldFunctions.get(field).apply(model);
 
 				if (data != null) {
@@ -102,11 +102,11 @@ public class WriterHelper {
 
 		Map<String, String> links = _representorManager.getLinks(modelClass);
 
-		Predicate<String> isFieldIncludedPredicate = _getFieldsPredicate(
+		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			modelClass, fields);
 
 		for (String key : links.keySet()) {
-			if (isFieldIncludedPredicate.test(key)) {
+			if (fieldsPredicate.test(key)) {
 				biConsumer.accept(key, links.get(key));
 			}
 		}
@@ -120,12 +120,12 @@ public class WriterHelper {
 		TriConsumer<U, Class<U>, FunctionalList<String>> triConsumer,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
-		Predicate<String> isFieldIncludedPredicate = _getFieldsPredicate(
+		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			parentModelClass, fields);
 
 		String key = relatedModel.getKey();
 
-		if (!isFieldIncludedPredicate.test(key)) {
+		if (!fieldsPredicate.test(key)) {
 			return;
 		}
 
