@@ -130,9 +130,7 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		);
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
-
 		Fields fields = FieldsRetriever.getFields(_httpServletRequest);
-
 		Embedded embedded = EmbeddedRetriever.getEmbedded(_httpServletRequest);
 
 		_writeModel(
