@@ -129,8 +129,10 @@ public class WriterHelper {
 			return;
 		}
 
-		Optional<U> modelOptional =
-			relatedModel.getModelFunction().apply(parentModel);
+		Function<T, Optional<U>> modelFunction =
+			relatedModel.getModelFunction();
+
+		Optional<U> modelOptional = modelFunction.apply(parentModel);
 
 		if (!modelOptional.isPresent()) {
 			return;
