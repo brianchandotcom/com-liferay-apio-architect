@@ -43,7 +43,7 @@ public class FieldsRetriever {
 
 		Stream<Map.Entry<String, String[]>> stream = set.stream();
 
-		Map<String, List<String>> fieldLists = stream.filter(
+		Map<String, List<String>> fieldsMap = stream.filter(
 			entry -> {
 				String key = entry.getKey();
 
@@ -67,13 +67,13 @@ public class FieldsRetriever {
 				entry -> Arrays.asList(entry.getValue()[0].split(",")))
 		);
 
-		return new FieldsImpl(fieldLists);
+		return new FieldsImpl(fieldsMap);
 	}
 
 	public static class FieldsImpl implements Fields {
 
-		public FieldsImpl(Map<String, List<String>> fieldLists) {
-			_fieldLists = fieldLists;
+		public FieldsImpl(Map<String, List<String>> fieldsMap) {
+			_fieldsMap = fieldsMap;
 		}
 
 		@Override
@@ -82,14 +82,14 @@ public class FieldsRetriever {
 				Stream<String> stream = types.stream();
 
 				return stream.map(
-					_fieldLists::get
+					_fieldsMap::get
 				).anyMatch(
 					fields -> (fields != null) && fields.contains(field)
 				);
 			};
 		}
 
-		private final Map<String, List<String>> _fieldLists;
+		private final Map<String, List<String>> _fieldsMap;
 
 	}
 
