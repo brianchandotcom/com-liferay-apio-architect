@@ -149,8 +149,10 @@ public class WriterHelper {
 
 		uriOptional.ifPresent(
 			uri -> {
-				String url = getAbsoluteURL(uriInfo, uri);
+				Predicate<String> embeddedPredicate =
+					embedded.getEmbeddedPredicate();
 
+				String url = getAbsoluteURL(uriInfo, uri);
 				FunctionalList<String> embeddedPathElements =
 					new StringFunctionalList(parentEmbeddedPathElements, key);
 
@@ -162,9 +164,6 @@ public class WriterHelper {
 
 				String embeddedPath = String.join(
 					".", stream.collect(Collectors.toList()));
-
-				Predicate<String> embeddedPredicate =
-					embedded.getEmbeddedPredicate();
 
 				if (embeddedPredicate.test(embeddedPath)) {
 					triConsumer.accept(model, modelClass, embeddedPathElements);
