@@ -34,13 +34,10 @@ public class EmbeddedRetriever {
 		Map<String, String[]> parameterMap =
 			httpServletRequest.getParameterMap();
 
-		String[] embeddedParams = parameterMap.get("embedded");
+		String[] values = parameterMap.get("embedded");
 
-		if ((embeddedParams != null) && (embeddedParams.length == 1)) {
-			String[] embeddedKeys = _EMBEDDED_SEPARATOR_PATTERN.split(
-				embeddedParams[0]);
-
-			return new EmbeddedImpl(Arrays.asList(embeddedKeys));
+		if ((values != null) && (values.length == 1)) {
+			return new EmbeddedImpl(Arrays.asList(_pattern.split(values[0])));
 		}
 
 		return new EmbeddedImpl(new ArrayList<>());
@@ -61,7 +58,6 @@ public class EmbeddedRetriever {
 
 	}
 
-	private static final Pattern _EMBEDDED_SEPARATOR_PATTERN = Pattern.compile(
-		"\\s*,\\s*");
+	private static final Pattern _pattern = Pattern.compile("\\s*,\\s*");
 
 }
