@@ -67,7 +67,7 @@ public class WriterHelper {
 		Map<String, Function<T, Object>> fieldFunctions =
 			_representorManager.getFieldFunctions(modelClass);
 
-		Predicate<String> isFieldIncludedPredicate = _getFieldIncludedPredicate(
+		Predicate<String> isFieldIncludedPredicate = _getFieldsPredicate(
 			modelClass, fields);
 
 		for (String field : fieldFunctions.keySet()) {
@@ -102,7 +102,7 @@ public class WriterHelper {
 
 		Map<String, String> links = _representorManager.getLinks(modelClass);
 
-		Predicate<String> isFieldIncludedPredicate = _getFieldIncludedPredicate(
+		Predicate<String> isFieldIncludedPredicate = _getFieldsPredicate(
 			modelClass, fields);
 
 		for (String key : links.keySet()) {
@@ -120,7 +120,7 @@ public class WriterHelper {
 		TriConsumer<U, Class<U>, FunctionalList<String>> triConsumer,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
-		Predicate<String> isFieldIncludedPredicate = _getFieldIncludedPredicate(
+		Predicate<String> isFieldIncludedPredicate = _getFieldsPredicate(
 			parentModelClass, fields);
 
 		String key = relatedModel.getKey();
@@ -188,12 +188,12 @@ public class WriterHelper {
 		consumer.accept(types);
 	}
 
-	private <T> Predicate<String> _getFieldIncludedPredicate(
+	private <T> Predicate<String> _getFieldsPredicate(
 		Class<T> modelClass, Fields fields) {
 
 		List<String> types = _representorManager.getTypes(modelClass);
 
-		return fields.getFieldIncludedPredicate(types);
+		return fields.getFieldsPredicate(types);
 	}
 
 	@Reference

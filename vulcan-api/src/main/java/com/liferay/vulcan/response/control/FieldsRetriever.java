@@ -74,7 +74,7 @@ public class FieldsRetriever {
 		}
 
 		@Override
-		public Predicate<String> getFieldIncludedPredicate(List<String> types) {
+		public Predicate<String> getFieldsPredicate(List<String> types) {
 			return field -> {
 				Stream<String> stream = types.stream();
 
