@@ -151,6 +151,7 @@ public class WriterHelper {
 					embedded.getEmbeddedPredicate();
 
 				String url = getAbsoluteURL(uriInfo, uri);
+
 				FunctionalList<String> embeddedPathElements =
 					new StringFunctionalList(parentEmbeddedPathElements, key);
 

@@ -23,8 +23,7 @@ import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.SingleModelMessageMapper;
-import com.liferay.vulcan.pagination.Page;
-import com.liferay.vulcan.representor.ModelRepresentorMapper;
+import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.EmbeddedRetriever;
 import com.liferay.vulcan.response.control.Fields;
@@ -40,7 +39,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,12 +63,13 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true, property = "liferay.vulcan.message.body.writer=true"
 )
 @Provider
-public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
+public class SingleModelMessageBodyWriter<T>
+	implements MessageBodyWriter<SingleModel<T>> {
 
 	@Override
 	public long getSize(
-		T model, Class<?> clazz, Type genericType, Annotation[] annotations,
-		MediaType mediaType) {
+		SingleModel<T> model, Class<?> clazz, Type genericType,
+		Annotation[] annotations, MediaType mediaType) {
 
 		return -1;
 	}
@@ -80,43 +79,32 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
-		try {
-			Class<T> modelClass = (Class<T>)genericType;
-
-			if (modelClass.isAssignableFrom(Page.class)) {
-				return false;
-			}
-
-			Optional<ModelRepresentorMapper<T>> optional =
-				_representorManager.getModelRepresentorMapperOptional(
-					modelClass);
-
-			if (!optional.isPresent()) {
-				return false;
-			}
-
+		if (clazz.isAssignableFrom(SingleModel.class)) {
 			return true;
 		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
 	public void writeTo(
-			T model, Class<?> clazz, Type genericType, Annotation[] annotations,
-			MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
+			SingleModel<T> singleModel, Class<?> clazz, Type genericType,
+			Annotation[] annotations, MediaType mediaType,
+			MultivaluedMap<String, Object> httpHeaders,
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
+
+		Class<T> modelClass = singleModel.getModelClass();
+
+		T model = singleModel.getModel();
 
 		Stream<SingleModelMessageMapper<T>> stream =
 			_singleModelMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
 
-		Class<T> modelClass = (Class<T>)genericType;
 		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
 		SingleModelMessageMapper<T> singleModelMessageMapper = stream.filter(

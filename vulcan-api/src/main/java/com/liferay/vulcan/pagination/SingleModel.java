@@ -14,32 +14,25 @@
 
 package com.liferay.vulcan.pagination;
 
-import aQute.bnd.annotation.ProviderType;
-
-import java.util.Collection;
-
 /**
  * @author Alejandro Hernández
- * @author Carlos Sierra Andrés
- * @author Jorge Ferrer
  */
-@ProviderType
-public interface Page<T> {
+public class SingleModel<T> {
 
-	public Collection<T> getItems();
+	public SingleModel(T model, Class<T> modelClass) {
+		_model = model;
+		_modelClass = modelClass;
+	}
 
-	public int getItemsPerPage();
+	public T getModel() {
+		return _model;
+	}
 
-	public int getLastPageNumber();
+	public Class<T> getModelClass() {
+		return _modelClass;
+	}
 
-	public Class<T> getModelClass();
-
-	public int getPageNumber();
-
-	public int getTotalCount();
-
-	public boolean hasNext();
-
-	public boolean hasPrevious();
+	private final T _model;
+	private final Class<T> _modelClass;
 
 }

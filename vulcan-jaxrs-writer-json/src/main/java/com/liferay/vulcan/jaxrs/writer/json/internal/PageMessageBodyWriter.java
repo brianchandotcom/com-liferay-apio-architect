@@ -24,7 +24,6 @@ import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
-import com.liferay.vulcan.representor.ModelRepresentorMapper;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.EmbeddedRetriever;
 import com.liferay.vulcan.response.control.Fields;
@@ -38,7 +37,6 @@ import java.io.PrintWriter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import java.util.Collection;
@@ -92,29 +90,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			return false;
 		}
 
-		Type genericReturnType = resourceMethod.getGenericReturnType();
-
-		ParameterizedType parameterizedType =
-			(ParameterizedType)genericReturnType;
-
-		Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-
-		try {
-			Class<T> modelClass = (Class<T>)actualTypeArguments[0];
-
-			Optional<ModelRepresentorMapper<T>> optional =
-				_representorManager.getModelRepresentorMapperOptional(
-					modelClass);
-
-			if (!optional.isPresent()) {
-				return false;
-			}
-
-			return true;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		return true;
 	}
 
 	@Override
@@ -131,16 +107,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 		String mediaTypeString = mediaType.toString();
 
-		Method resourceMethod = _resourceInfo.getResourceMethod();
-
-		Type genericReturnType = resourceMethod.getGenericReturnType();
-
-		ParameterizedType parameterizedType =
-			(ParameterizedType)genericReturnType;
-
-		Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-
-		Class<T> modelClass = (Class<T>)actualTypeArguments[0];
+		Class<T> modelClass = page.getModelClass();
 
 		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 

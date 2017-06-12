@@ -64,9 +64,10 @@ public class PaginationContextProvider implements ContextProvider<Pagination> {
 	private static class DefaultPage<T> implements Page<T> {
 
 		public DefaultPage(
-			Collection<T> items, int itemsPerPage, int pageNumber,
-			int totalCount) {
+			Class<T> modelClass, Collection<T> items, int itemsPerPage,
+			int pageNumber, int totalCount) {
 
+			_modelClass = modelClass;
 			_items = items;
 			_itemsPerPage = itemsPerPage;
 			_pageNumber = pageNumber;
@@ -86,6 +87,11 @@ public class PaginationContextProvider implements ContextProvider<Pagination> {
 		@Override
 		public int getLastPageNumber() {
 			return -Math.floorDiv(-_totalCount, _itemsPerPage);
+		}
+
+		@Override
+		public Class<T> getModelClass() {
+			return _modelClass;
 		}
 
 		@Override
@@ -118,6 +124,7 @@ public class PaginationContextProvider implements ContextProvider<Pagination> {
 
 		private final Collection<T> _items;
 		private final int _itemsPerPage;
+		private final Class<T> _modelClass;
 		private final int _pageNumber;
 		private final int _totalCount;
 
@@ -131,9 +138,12 @@ public class PaginationContextProvider implements ContextProvider<Pagination> {
 		}
 
 		@Override
-		public <T> Page<T> createPage(Collection<T> items, int totalCount) {
+		public <T> Page<T> createPage(
+			Class<T> modelClass, Collection<T> items, int totalCount) {
+
 			return new DefaultPage<>(
-				items, getItemsPerPage(), getPageNumber(), totalCount);
+				modelClass, items, getItemsPerPage(), getPageNumber(),
+				totalCount);
 		}
 
 		@Override

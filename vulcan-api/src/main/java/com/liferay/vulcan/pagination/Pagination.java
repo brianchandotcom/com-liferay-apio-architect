@@ -26,7 +26,8 @@ import java.util.Collection;
 @ProviderType
 public interface Pagination {
 
-	public <T> Page<T> createPage(Collection<T> items, int totalCount);
+	public <T> Page<T> createPage(
+		Class<T> modelClass, Collection<T> items, int totalCount);
 
 	public int getEndPosition();
 
