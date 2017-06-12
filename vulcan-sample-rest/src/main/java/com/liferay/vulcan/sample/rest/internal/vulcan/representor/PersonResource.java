@@ -16,6 +16,7 @@ package com.liferay.vulcan.sample.rest.internal.vulcan.representor;
 
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserService;
@@ -29,6 +30,7 @@ import com.liferay.vulcan.representor.builder.RepresentorBuilder;
 
 import java.text.DateFormat;
 
+import java.util.List;
 import java.util.function.Function;
 
 import javax.ws.rs.NotFoundException;
@@ -86,14 +88,28 @@ public class PersonResource implements Resource<User> {
 
 	public Routes<User> routes(RoutesBuilder<User> routesBuilder) {
 		return routesBuilder.collectionPage(
-			this::_getPageItems
+			this::_getPageItems, Company.class
 		).collectionItem(
 			this::_getUser, Long.class
 		);
 	}
 
-	private PageItems<User> _getPageItems(Pagination pagination) {
-		return null;
+	private PageItems<User> _getPageItems(
+		Pagination pagination, Company company) {
+
+		try {
+			List<User> users = _userService.getCompanyUsers(
+				company.getCompanyId(), pagination.getStartPosition(),
+				pagination.getEndPosition());
+
+			int count = _userService.getCompanyUsersCount(
+				company.getCompanyId());
+
+			return new PageItems<>(users, count);
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	private User _getUser(Long id) {

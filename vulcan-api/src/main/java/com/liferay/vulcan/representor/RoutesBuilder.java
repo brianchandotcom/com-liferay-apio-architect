@@ -17,12 +17,16 @@ package com.liferay.vulcan.representor;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
  * @author Alejandro Hernández
  */
 public interface RoutesBuilder<T> {
+
+	public <U> SingleStep<T> collectionPage(
+		BiFunction<Pagination, U, PageItems<T>> biFunction, Class<U> clazz);
 
 	public SingleStep<T> collectionPage(
 		Function<Pagination, PageItems<T>> function);

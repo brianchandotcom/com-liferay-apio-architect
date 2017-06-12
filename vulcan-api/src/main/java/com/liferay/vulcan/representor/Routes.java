@@ -16,16 +16,18 @@ package com.liferay.vulcan.representor;
 
 import com.liferay.vulcan.pagination.PageItems;
 
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * @author Alejandro Hernández
  */
 public interface Routes<T> {
 
-	public Function<String, T> getModelFunction();
+	public Function<Function<Class<?>, Optional<?>>, Function<String, T>>
+		getModelFunction();
 
-	public Supplier<PageItems<T>> getPageItemsSupplier();
+	public Function<Function<Class<?>, Optional<?>>, PageItems<T>>
+		getPageItemsFunction();
 
 }

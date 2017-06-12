@@ -15,7 +15,9 @@
 package com.liferay.vulcan.wiring.osgi;
 
 import com.liferay.vulcan.representor.Resource;
+import com.liferay.vulcan.representor.Routes;
 import com.liferay.vulcan.wiring.osgi.internal.RepresentorBuilderImpl;
+import com.liferay.vulcan.wiring.osgi.internal.RoutesBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
 
 import java.util.ArrayList;
@@ -90,6 +92,10 @@ public class ResourceManager {
 		);
 	}
 
+	public <T> Routes<T> getRoutes(Class<T> modelClass) {
+		return (Routes)_routes.get(modelClass.getName());
+	}
+
 	public <T> List<String> getTypes(Class<T> modelClass) {
 		return _types.get(modelClass.getName());
 	}
@@ -153,10 +159,17 @@ public class ResourceManager {
 		_types.put(modelClass.getName(), types);
 
 		optional.ifPresent(
-			resource -> resource.buildRepresentor(
-				new RepresentorBuilderImpl<>(
-					modelClass, _identifierFunctions, fieldFunctions,
-					embeddedRelatedModels, linkedRelatedModels, links, types)));
+			resource -> {
+				resource.buildRepresentor(
+					new RepresentorBuilderImpl<>(
+						modelClass, _identifierFunctions, fieldFunctions,
+						embeddedRelatedModels, linkedRelatedModels, links,
+						types));
+
+				Routes<T> routes = resource.routes(new RoutesBuilderImpl<>());
+
+				_routes.put(modelClass.getName(), routes);
+			});
 	}
 
 	private <T> void _addResource(
@@ -216,6 +229,7 @@ public class ResourceManager {
 	private final Map<String,
 		TreeSet<ServiceReferenceServiceTuple<Resource<?>>>> _resources =
 			new ConcurrentHashMap<>();
+	private final Map<String, Routes<?>> _routes = new ConcurrentHashMap<>();
 	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
 
 }

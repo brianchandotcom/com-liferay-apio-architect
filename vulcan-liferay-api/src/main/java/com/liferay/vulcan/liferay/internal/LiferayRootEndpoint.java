@@ -29,11 +29,11 @@ import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.Routes;
 import com.liferay.vulcan.wiring.osgi.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.ProviderManager;
+import com.liferay.vulcan.wiring.osgi.ResourceManager;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -80,14 +80,10 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		Class<T> modelClass = GenericUtil.getGenericClass(
 			resource, Resource.class);
 
-		Pagination pagination = _getPagination();
+		Routes<T> routes = _resourceManager.getRoutes(modelClass);
 
-		RoutesBuilderImpl<T> endpointBuilder = new RoutesBuilderImpl<>(
-			pagination);
-
-		Routes<T> routes = resource.routes(endpointBuilder);
-
-		Function<String, T> modelFunction = routes.getModelFunction();
+		Function<String, T> modelFunction =
+			routes.getModelFunction().apply(this::provide);
 
 		T model = modelFunction.apply(id);
 
@@ -101,17 +97,17 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		Class<T> modelClass = GenericUtil.getGenericClass(
 			resource, Resource.class);
 
-		Pagination pagination = _getPagination();
+		Routes<T> routes = _resourceManager.getRoutes(modelClass);
 
-		RoutesBuilderImpl<T> endpointBuilder = new RoutesBuilderImpl<>(
-			pagination);
+		Function<Function<Class<?>, Optional<?>>, PageItems<T>>
+			pageItemsFunction = routes.getPageItemsFunction();
 
-		Routes<T> routes = resource.routes(endpointBuilder);
+		PageItems<T> pageItems = pageItemsFunction.apply(this::provide);
 
-		Supplier<PageItems<T>> pageItemsSupplier =
-			routes.getPageItemsSupplier();
+		Optional<Pagination> optional = provide(Pagination.class);
 
-		PageItems<T> pageItems = pageItemsSupplier.get();
+		Pagination pagination = optional.orElseThrow(
+			() -> new MustHaveProvider(Pagination.class));
 
 		return new DefaultPage<>(
 			modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
@@ -131,18 +127,14 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		return _providerManager.provide(clazz, _httpServletRequest);
 	}
 
-	private Pagination _getPagination() {
-		Optional<Pagination> optional = provide(Pagination.class);
-
-		return optional.orElseThrow(
-			() -> new MustHaveProvider(Pagination.class));
-	}
-
 	@Context
 	private HttpServletRequest _httpServletRequest;
 
 	@Reference
 	private ProviderManager _providerManager;
+
+	@Reference
+	private ResourceManager _resourceManager;
 
 	private ServiceTrackerMap<String, Resource> _serviceTrackerMap;
 

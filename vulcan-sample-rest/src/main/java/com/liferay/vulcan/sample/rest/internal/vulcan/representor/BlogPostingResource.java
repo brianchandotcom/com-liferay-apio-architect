@@ -19,11 +19,12 @@ import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.service.BlogsEntryService;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
-import com.liferay.portal.kernel.util.GroupThreadLocal;
+import com.liferay.vulcan.liferay.context.CurrentGroup;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -113,7 +114,7 @@ public class BlogPostingResource
 	@Override
 	public Routes<BlogsEntry> routes(RoutesBuilder<BlogsEntry> routesBuilder) {
 		return routesBuilder.collectionPage(
-			this::_getPageItems
+			this::_getPageItems, CurrentGroup.class
 		).collectionItem(
 			this::_getBlogsEntry, Long.class
 		);
@@ -131,14 +132,16 @@ public class BlogPostingResource
 		}
 	}
 
-	private PageItems<BlogsEntry> _getPageItems(Pagination pagination) {
-		Long groupId = GroupThreadLocal.getGroupId();
+	private PageItems<BlogsEntry> _getPageItems(
+		Pagination pagination, CurrentGroup currentGroup) {
+
+		Group group = currentGroup.getGroup();
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			groupId, 0, pagination.getStartPosition(),
+			group.getGroupId(), 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
 
-		int count = _blogsService.getGroupEntriesCount(groupId, 0);
+		int count = _blogsService.getGroupEntriesCount(group.getGroupId(), 0);
 
 		return new PageItems<>(blogsEntries, count);
 	}

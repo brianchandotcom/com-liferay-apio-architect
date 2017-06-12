@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.internal;
+package com.liferay.vulcan.wiring.osgi.internal;
 
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.representor.Routes;
 
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * @author Alejandro Hernández
@@ -26,24 +26,30 @@ import java.util.function.Supplier;
 public class RoutesImpl<T> implements Routes<T> {
 
 	public RoutesImpl(
-		Supplier<PageItems<T>> pageItemsSupplier,
-		Function<String, T> modelFunction) {
+		Function<Function<Class<?>, Optional<?>>, PageItems<T>>
+			pageItemsFunction,
+		Function<Function<Class<?>, Optional<?>>, Function<String, T>>
+			modelFunction) {
 
-		_pageItemsSupplier = pageItemsSupplier;
+		_pageItemsFunction = pageItemsFunction;
 		_modelFunction = modelFunction;
 	}
 
-	@Override
-	public Function<String, T> getModelFunction() {
+	public Function<Function<Class<?>, Optional<?>>, Function<String, T>>
+		getModelFunction() {
+
 		return _modelFunction;
 	}
 
-	@Override
-	public Supplier<PageItems<T>> getPageItemsSupplier() {
-		return _pageItemsSupplier;
+	public Function<Function<Class<?>, Optional<?>>, PageItems<T>>
+		getPageItemsFunction() {
+
+		return _pageItemsFunction;
 	}
 
-	private final Function<String, T> _modelFunction;
-	private final Supplier<PageItems<T>> _pageItemsSupplier;
+	private final Function<Function<Class<?>, Optional<?>>, Function<String, T>>
+		_modelFunction;
+	private final Function<Function<Class<?>, Optional<?>>, PageItems<T>>
+		_pageItemsFunction;
 
 }
