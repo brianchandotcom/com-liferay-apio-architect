@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.representor;
 
+import com.liferay.vulcan.functions.TriFunction;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 
@@ -25,11 +26,15 @@ import java.util.function.Function;
  */
 public interface RoutesBuilder<T> {
 
-	public <U> SingleStep<T> collectionPage(
-		BiFunction<Pagination, U, PageItems<T>> biFunction, Class<U> clazz);
+	public <A> SingleStep<T> collectionPage(
+		BiFunction<Pagination, A, PageItems<T>> biFunction, Class<A> aClass);
 
 	public SingleStep<T> collectionPage(
 		Function<Pagination, PageItems<T>> function);
+
+	public <A, B> SingleStep<T> collectionPage(
+		TriFunction<Pagination, A, B, PageItems<T>> triFunction,
+		Class<A> aClass, Class<B> bClass);
 
 	public interface SingleStep<T> {
 

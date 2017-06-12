@@ -16,6 +16,7 @@ package com.liferay.vulcan.wiring.osgi.internal;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
+import com.liferay.vulcan.functions.TriFunction;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.representor.Routes;
@@ -42,6 +43,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 			return biFunction.apply(pagination, a);
 		};
+
 		return new SingleStepImpl();
 	}
 
@@ -54,6 +56,23 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 			return function.apply(pagination);
 		};
+
+		return new SingleStepImpl();
+	}
+
+	@Override
+	public <A, B> SingleStep<T> collectionPage(
+		TriFunction<Pagination, A, B, PageItems<T>> triFunction,
+		Class<A> aClass, Class<B> bClass) {
+
+		_pageItemsFunction = provideFunction -> {
+			Pagination pagination = _provide(Pagination.class, provideFunction);
+			A a = _provide(aClass, provideFunction);
+			B b = _provide(bClass, provideFunction);
+
+			return triFunction.apply(pagination, a, b);
+		};
+
 		return new SingleStepImpl();
 	}
 
