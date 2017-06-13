@@ -71,7 +71,7 @@ public class BlogPostingResource
 			return dateFormat.format(date);
 		};
 
-		representorBuilder.getFirstStep(
+		representorBuilder.identifier(
 			blogsEntry -> String.valueOf(blogsEntry.getEntryId())
 		).addEmbeddedModel(
 			"creator", User.class, this::_getUserOptional

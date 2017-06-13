@@ -60,7 +60,7 @@ public class PersonResource implements Resource<User> {
 			}
 		};
 
-		representorBuilder.getFirstStep(
+		representorBuilder.identifier(
 			user -> String.valueOf(user.getUserId())
 		).addField(
 			"additionalName", User::getMiddleName
