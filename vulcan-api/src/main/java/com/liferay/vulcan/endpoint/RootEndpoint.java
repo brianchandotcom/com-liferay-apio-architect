@@ -14,19 +14,10 @@
 
 package com.liferay.vulcan.endpoint;
 
-import com.liferay.vulcan.resource.Resource;
-
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
 public interface RootEndpoint {
-
-	@Path("/{path}")
-	public Resource getResource(@PathParam("path") String path);
-
 }

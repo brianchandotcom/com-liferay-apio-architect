@@ -31,7 +31,6 @@ import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.response.control.FieldsRetriever;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.RepresentorManager;
-import com.liferay.vulcan.wiring.osgi.URIResolver;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -185,8 +184,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 	}
 
 	private String _getCollectionURL(Class<T> modelClass) {
-		Optional<String> optional =
-			_uriResolver.getCollectionResourceURIOptional(modelClass);
+		Optional<String> optional = Optional.empty();
 
 		String uri = optional.orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
@@ -415,9 +413,6 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	@Context
 	private UriInfo _uriInfo;
-
-	@Reference
-	private URIResolver _uriResolver;
 
 	@Reference
 	private WriterHelper _writerHelper;

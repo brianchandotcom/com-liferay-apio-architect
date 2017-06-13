@@ -14,27 +14,13 @@
 
 package com.liferay.vulcan.liferay.internal;
 
-import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper;
-import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapperFactory;
-import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
-import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.kernel.util.GroupThreadLocal;
-import com.liferay.vulcan.contributor.APIContributor;
-import com.liferay.vulcan.contributor.ResourceMapper;
 import com.liferay.vulcan.endpoint.RootEndpoint;
-import com.liferay.vulcan.liferay.scope.GroupScoped;
-import com.liferay.vulcan.resource.Resource;
 
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.container.ResourceContext;
-import javax.ws.rs.core.Context;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 
 /**
  * @author Alejandro Hernández
@@ -45,22 +31,6 @@ import org.osgi.service.component.annotations.Deactivate;
 @Path("/")
 public class LiferayRootEndpoint implements RootEndpoint {
 
-	@Activate
-	public void activate(BundleContext bundleContext) {
-		ServiceReferenceMapper<String, APIContributor> serviceReferenceMapper =
-			ServiceReferenceMapperFactory.create(
-				bundleContext,
-				(service, emitter) -> emitter.emit(service.getPath()));
-
-		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, APIContributor.class, null, serviceReferenceMapper);
-	}
-
-	@Deactivate
-	public void deactivate() {
-		_serviceTrackerMap.close();
-	}
-
 	@Path("/group/{id}/")
 	public LiferayRootEndpoint getGroupLiferayRootEndpoint(
 		@PathParam("id") long id) {
@@ -69,43 +39,5 @@ public class LiferayRootEndpoint implements RootEndpoint {
 
 		return this;
 	}
-
-	@Override
-	public Resource getResource(String path) {
-		if (!_serviceTrackerMap.containsKey(path)) {
-			throw new NotFoundException();
-		}
-
-		APIContributor apiContributor = _serviceTrackerMap.getService(path);
-
-		if (apiContributor instanceof Resource) {
-			Resource resource = (Resource)apiContributor;
-
-			if (resource instanceof GroupScoped) {
-				GroupScoped groupScoped = (GroupScoped)resource;
-
-				groupScoped.setGroupId(GroupThreadLocal.getGroupId());
-			}
-
-			_resourceContext.initResource(resource);
-
-			return resource;
-		}
-		else if (apiContributor instanceof ResourceMapper) {
-			LiferayDispatcherResource liferayDispatcherResource =
-				new LiferayDispatcherResource((ResourceMapper)apiContributor);
-
-			_resourceContext.initResource(liferayDispatcherResource);
-
-			return liferayDispatcherResource;
-		}
-
-		throw new NotFoundException();
-	}
-
-	@Context
-	private ResourceContext _resourceContext;
-
-	private ServiceTrackerMap<String, APIContributor> _serviceTrackerMap;
 
 }

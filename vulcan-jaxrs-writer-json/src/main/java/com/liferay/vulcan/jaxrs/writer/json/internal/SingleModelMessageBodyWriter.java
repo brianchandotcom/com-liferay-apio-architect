@@ -31,7 +31,6 @@ import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.response.control.FieldsRetriever;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.RepresentorManager;
-import com.liferay.vulcan.wiring.osgi.URIResolver;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -271,9 +270,6 @@ public class SingleModelMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
 	@Context
 	private UriInfo _uriInfo;
-
-	@Reference
-	private URIResolver _uriResolver;
 
 	@Reference
 	private WriterHelper _writerHelper;

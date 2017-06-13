@@ -20,7 +20,6 @@ import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.RepresentorManager;
-import com.liferay.vulcan.wiring.osgi.URIResolver;
 
 import java.net.URI;
 
@@ -144,8 +143,7 @@ public class WriterHelper {
 
 		Class<U> modelClass = relatedModel.getModelClass();
 
-		Optional<String> uriOptional =
-			_uriResolver.getSingleResourceURIOptional(modelClass, model);
+		Optional<String> uriOptional = Optional.empty();
 
 		uriOptional.ifPresent(
 			uri -> {
@@ -175,8 +173,7 @@ public class WriterHelper {
 		T model, Class<T> modelClass, UriInfo uriInfo,
 		Consumer<String> consumer) {
 
-		Optional<String> optional = _uriResolver.getSingleResourceURIOptional(
-			modelClass, model);
+		Optional<String> optional = Optional.empty();
 
 		String uri = optional.orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
@@ -204,8 +201,5 @@ public class WriterHelper {
 
 	@Reference
 	private RepresentorManager _representorManager;
-
-	@Reference
-	private URIResolver _uriResolver;
 
 }

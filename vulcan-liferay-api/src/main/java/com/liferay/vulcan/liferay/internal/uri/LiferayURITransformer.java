@@ -14,9 +14,6 @@
 
 package com.liferay.vulcan.liferay.internal.uri;
 
-import com.liferay.portal.kernel.util.GroupThreadLocal;
-import com.liferay.vulcan.liferay.scope.GroupScoped;
-import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
 
 import org.osgi.service.component.annotations.Component;
@@ -29,30 +26,13 @@ public class LiferayURITransformer implements CollectionResourceURITransformer {
 
 	@Override
 	public <T> String transformCollectionItemSingleResourceURI(
-		String uri, Class<T> modelClass, T model,
-		CollectionResource<T> collectionResource) {
-
-		if (collectionResource instanceof GroupScoped) {
-			GroupScoped<T> groupScoped = (GroupScoped<T>)collectionResource;
-
-			long groupId = groupScoped.getGroupId(model);
-
-			return String.format("/group/%d/%s", groupId, uri);
-		}
+		String uri, Class<T> modelClass, T model) {
 
 		return uri;
 	}
 
 	@Override
-	public <T> String transformPageURI(
-		String uri, Class<T> modelClass,
-		CollectionResource<T> collectionResource) {
-
-		if (collectionResource instanceof GroupScoped) {
-			return String.format(
-				"/group/%d/%s", GroupThreadLocal.getGroupId(), uri);
-		}
-
+	public <T> String transformPageURI(String uri, Class<T> modelClass) {
 		return uri;
 	}
 
