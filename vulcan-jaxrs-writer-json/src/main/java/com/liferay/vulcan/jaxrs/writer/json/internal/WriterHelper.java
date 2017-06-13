@@ -141,7 +141,8 @@ public class WriterHelper {
 			parentEmbeddedPathElements, uriInfo, fields, embedded,
 			(model, modelClass, embeddedPathElements) -> {
 			},
-			biConsumer);
+			(url, embeddedPathElements, isEmbedded) -> biConsumer.accept(
+				url, embeddedPathElements));
 	}
 
 	public <T> void writeLinks(
@@ -165,8 +166,8 @@ public class WriterHelper {
 		Class<T> parentModelClass,
 		FunctionalList<String> parentEmbeddedPathElements, UriInfo uriInfo,
 		Fields fields, Embedded embedded,
-		TriConsumer<U, Class<U>, FunctionalList<String>> triConsumer,
-		BiConsumer<String, FunctionalList<String>> biConsumer) {
+		TriConsumer<U, Class<U>, FunctionalList<String>> modelTriConsumer,
+		TriConsumer<String, FunctionalList<String>, Boolean> urlTriConsumer) {
 
 		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			parentModelClass, fields);
@@ -200,8 +201,6 @@ public class WriterHelper {
 				FunctionalList<String> embeddedPathElements =
 					new StringFunctionalList(parentEmbeddedPathElements, key);
 
-				biConsumer.accept(url, embeddedPathElements);
-
 				Stream<String> stream = Stream.concat(
 					Stream.of(embeddedPathElements.head()),
 					embeddedPathElements.tail());
@@ -209,8 +208,13 @@ public class WriterHelper {
 				String embeddedPath = String.join(
 					".", stream.collect(Collectors.toList()));
 
-				if (embeddedPredicate.test(embeddedPath)) {
-					triConsumer.accept(model, modelClass, embeddedPathElements);
+				boolean isEmbedded = embeddedPredicate.test(embeddedPath);
+
+				urlTriConsumer.accept(url, embeddedPathElements, isEmbedded);
+
+				if (isEmbedded) {
+					modelTriConsumer.accept(
+						model, modelClass, embeddedPathElements);
 				}
 			});
 	}

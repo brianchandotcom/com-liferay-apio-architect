@@ -190,9 +190,16 @@ public class SingleModelMessageBodyWriter<T>
 						linkedRelatedModel, model, modelClass,
 						embeddedPathElements, fields, embedded));
 			},
-			(url, embeddedPathElements) ->
-				singleModelMessageMapper.mapEmbeddedResourceURL(
-					jsonObjectBuilder, embeddedPathElements, url));
+			(url, embeddedPathElements, isEmbedded) -> {
+				if (isEmbedded) {
+					singleModelMessageMapper.mapEmbeddedResourceURL(
+						jsonObjectBuilder, embeddedPathElements, url);
+				}
+				else {
+					singleModelMessageMapper.mapLinkedResourceURL(
+						jsonObjectBuilder, embeddedPathElements, url);
+				}
+			});
 	}
 
 	private <U, V> void _writeLinkedRelatedModel(

@@ -234,10 +234,18 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 						itemJSONObjectBuilder, linkedRelatedModel, model,
 						modelClass, embeddedPathElements, fields, embedded));
 			},
-			(url, embeddedPathElements) ->
-				pageMessageMapper.mapItemEmbeddedResourceURL(
-					pageJSONObjectBuilder, itemJSONObjectBuilder,
-					embeddedPathElements, url));
+			(url, embeddedPathElements, isEmbedded) -> {
+				if (isEmbedded) {
+					pageMessageMapper.mapItemEmbeddedResourceURL(
+						pageJSONObjectBuilder, itemJSONObjectBuilder,
+						embeddedPathElements, url);
+				}
+				else {
+					pageMessageMapper.mapItemLinkedResourceURL(
+						pageJSONObjectBuilder, itemJSONObjectBuilder,
+						embeddedPathElements, url);
+				}
+			});
 	}
 
 	private void _writeItems(
