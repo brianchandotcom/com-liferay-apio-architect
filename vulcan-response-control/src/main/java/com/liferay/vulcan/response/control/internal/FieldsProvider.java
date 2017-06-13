@@ -20,6 +20,7 @@ import com.liferay.vulcan.response.control.Fields;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -84,11 +85,22 @@ public class FieldsProvider implements Provider<Fields> {
 			return field -> {
 				Stream<String> stream = types.stream();
 
-				return stream.map(
+				List<String> fields = stream.map(
 					_fieldsMap::get
-				).anyMatch(
-					fields -> (fields != null) && fields.contains(field)
+				).filter(
+					Objects::nonNull
+				).flatMap(
+					List::stream
+				).collect(
+					Collectors.toList()
 				);
+
+				if (fields.isEmpty() || fields.contains(field)) {
+					return true;
+				}
+				else {
+					return false;
+				}
 			};
 		}
 
