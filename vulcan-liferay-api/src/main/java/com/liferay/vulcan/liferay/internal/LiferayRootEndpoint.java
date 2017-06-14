@@ -16,6 +16,8 @@ package com.liferay.vulcan.liferay.internal;
 
 import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.endpoint.RootEndpoint;
+import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.SingleModel;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -30,6 +32,18 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true)
 @Path("/")
 public class LiferayRootEndpoint implements RootEndpoint {
+
+	@Override
+	public <T> SingleModel<T> getCollectionItemSingleModel(
+		String path, String id) {
+
+		return null;
+	}
+
+	@Override
+	public <T> Page<T> getCollectionPage(String path) {
+		return null;
+	}
 
 	@Path("/group/{id}/")
 	public LiferayRootEndpoint getGroupLiferayRootEndpoint(

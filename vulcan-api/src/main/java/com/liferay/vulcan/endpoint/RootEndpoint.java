@@ -14,10 +14,27 @@
 
 package com.liferay.vulcan.endpoint;
 
+import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.SingleModel;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
 public interface RootEndpoint {
+
+	@GET
+	@Path("/p/{path}/{id}")
+	public <T> SingleModel<T> getCollectionItemSingleModel(
+		@PathParam("path") String path, @PathParam("id") String id);
+
+	@GET
+	@Path("/p/{path}")
+	public <T> Page<T> getCollectionPage(@PathParam("path") String path);
+
 }
