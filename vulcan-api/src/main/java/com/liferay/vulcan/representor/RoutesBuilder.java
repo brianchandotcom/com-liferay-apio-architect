@@ -14,19 +14,23 @@
 
 package com.liferay.vulcan.representor;
 
-import com.liferay.vulcan.representor.builder.RepresentorBuilder;
+import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.Pagination;
+
+import java.util.function.Function;
 
 /**
  * @author Alejandro Hernández
- * @author Carlos Sierra Andrés
- * @author Jorge Ferrer
  */
-public interface Resource<T> {
+public interface RoutesBuilder<T> {
 
-	public void buildRepresentor(RepresentorBuilder<T> representorBuilder);
+	public SingleStep<T> collectionPage(Function<Pagination, Page<T>> function);
 
-	public String getPath();
+	public interface SingleStep<T> {
 
-	public Routes<T> routes(RoutesBuilder<T> routesBuilder);
+		public <U> Routes<T> collectionItem(
+			Function<U, T> function, Class<U> identifierClass);
+
+	}
 
 }

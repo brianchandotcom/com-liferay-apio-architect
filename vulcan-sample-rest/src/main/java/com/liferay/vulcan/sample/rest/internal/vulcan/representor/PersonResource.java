@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.representor.Resource;
+import com.liferay.vulcan.representor.Routes;
+import com.liferay.vulcan.representor.RoutesBuilder;
 import com.liferay.vulcan.representor.builder.RepresentorBuilder;
 
 import java.text.DateFormat;
@@ -73,6 +75,10 @@ public class PersonResource implements Resource<User> {
 	@Override
 	public String getPath() {
 		return "people";
+	}
+
+	public Routes<User> routes(RoutesBuilder<User> routesBuilder) {
+		return null;
 	}
 
 }

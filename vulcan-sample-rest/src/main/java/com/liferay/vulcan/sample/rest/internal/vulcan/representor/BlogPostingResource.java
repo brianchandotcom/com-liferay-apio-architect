@@ -23,6 +23,8 @@ import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
 import com.liferay.vulcan.representor.Resource;
+import com.liferay.vulcan.representor.Routes;
+import com.liferay.vulcan.representor.RoutesBuilder;
 import com.liferay.vulcan.representor.builder.RepresentorBuilder;
 
 import java.text.DateFormat;
@@ -100,6 +102,11 @@ public class BlogPostingResource
 	@Override
 	public String getPath() {
 		return "blogs";
+	}
+
+	@Override
+	public Routes<BlogsEntry> routes(RoutesBuilder<BlogsEntry> routesBuilder) {
+		return null;
 	}
 
 	private Optional<User> _getUserOptional(BlogsEntry blogsEntry) {
