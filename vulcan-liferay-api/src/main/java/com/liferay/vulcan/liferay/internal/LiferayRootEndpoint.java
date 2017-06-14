@@ -20,6 +20,7 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.endpoint.RootEndpoint;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -27,10 +28,14 @@ import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.Routes;
 import com.liferay.vulcan.wiring.osgi.GenericUtil;
+import com.liferay.vulcan.wiring.osgi.ProviderManager;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import javax.servlet.http.HttpServletRequest;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -40,6 +45,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
@@ -74,8 +80,10 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		Class<T> modelClass = GenericUtil.getGenericClass(
 			resource, Resource.class);
 
+		Pagination pagination = _getPagination();
+
 		RoutesBuilderImpl<T> endpointBuilder = new RoutesBuilderImpl<>(
-			_pagination);
+			pagination);
 
 		Routes<T> routes = resource.routes(endpointBuilder);
 
@@ -93,8 +101,10 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		Class<T> modelClass = GenericUtil.getGenericClass(
 			resource, Resource.class);
 
+		Pagination pagination = _getPagination();
+
 		RoutesBuilderImpl<T> endpointBuilder = new RoutesBuilderImpl<>(
-			_pagination);
+			pagination);
 
 		Routes<T> routes = resource.routes(endpointBuilder);
 
@@ -104,8 +114,8 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		PageItems<T> pageItems = pageItemsSupplier.get();
 
 		return new DefaultPage<>(
-			modelClass, pageItems.getItems(), _pagination.getItemsPerPage(),
-			_pagination.getPageNumber(), pageItems.getTotalCount());
+			modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+			pagination.getPageNumber(), pageItems.getTotalCount());
 	}
 
 	@Path("/group/{id}/")
@@ -117,8 +127,22 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		return this;
 	}
 
+	public <U> Optional<U> provide(Class<U> clazz) {
+		return _providerManager.provide(clazz, _httpServletRequest);
+	}
+
+	private Pagination _getPagination() {
+		Optional<Pagination> optional = provide(Pagination.class);
+
+		return optional.orElseThrow(
+			() -> new MustHaveProvider(Pagination.class));
+	}
+
 	@Context
-	private Pagination _pagination;
+	private HttpServletRequest _httpServletRequest;
+
+	@Reference
+	private ProviderManager _providerManager;
 
 	private ServiceTrackerMap<String, Resource> _serviceTrackerMap;
 
