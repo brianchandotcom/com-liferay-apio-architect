@@ -151,12 +151,11 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 	}
 
 	private String _getCollectionURL(Class<T> modelClass) {
-		Optional<String> optional = Optional.empty();
+		Optional<String> optional = _writerHelper.getCollectionURL(
+			modelClass, _uriInfo);
 
-		String uri = optional.orElseThrow(
+		return optional.orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
-
-		return _writerHelper.getAbsoluteURL(_uriInfo, uri);
 	}
 
 	private String _getPageURL(

@@ -14,10 +14,15 @@
 
 package com.liferay.vulcan.jaxrs.writer.json.internal;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.list.FunctionalList;
+import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
+import com.liferay.vulcan.uri.CollectionResourceURITransformer;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.ResourceManager;
 
@@ -27,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -57,6 +63,47 @@ public class WriterHelper {
 		URI uri = uriBuilder.build();
 
 		return uri.toString();
+	}
+
+	public <T> Optional<String> getCollectionURL(
+		Class<T> modelClass, UriInfo uriInfo) {
+
+		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
+			modelClass);
+
+		return optional.map(
+			Resource::getPath
+		).map(
+			path -> "/p/" + path
+		).map(
+			_transformURI(
+				(uri, transformer) -> transformer.transformPageURI(
+					uri, modelClass))
+		).map(
+			uri -> getAbsoluteURL(uriInfo, uri)
+		);
+	}
+
+	public <T> Optional<String> getSingleURL(
+		Class<T> modelClass, T model, UriInfo uriInfo) {
+
+		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
+			modelClass);
+
+		String identifier = _resourceManager.getIdentifier(modelClass, model);
+
+		return optional.map(
+			Resource::getPath
+		).map(
+			path -> "/p/" + path + "/" + identifier
+		).map(
+			_transformURI(
+				(uri, transformer) ->
+					transformer.transformCollectionItemSingleResourceURI(
+						uri, modelClass, model))
+		).map(
+			uri -> getAbsoluteURL(uriInfo, uri)
+		);
 	}
 
 	public <T> void writeFields(
@@ -143,14 +190,12 @@ public class WriterHelper {
 
 		Class<U> modelClass = relatedModel.getModelClass();
 
-		Optional<String> uriOptional = Optional.empty();
+		Optional<String> urlOptional = getSingleURL(modelClass, model, uriInfo);
 
-		uriOptional.ifPresent(
-			uri -> {
+		urlOptional.ifPresent(
+			url -> {
 				Predicate<String> embeddedPredicate =
 					embedded.getEmbeddedPredicate();
-
-				String url = getAbsoluteURL(uriInfo, uri);
 
 				FunctionalList<String> embeddedPathElements =
 					new StringFunctionalList(parentEmbeddedPathElements, key);
@@ -174,12 +219,8 @@ public class WriterHelper {
 		T model, Class<T> modelClass, UriInfo uriInfo,
 		Consumer<String> consumer) {
 
-		Optional<String> optional = Optional.empty();
-
-		String uri = optional.orElseThrow(
+		String url = getSingleURL(modelClass, model, uriInfo).orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
-
-		String url = getAbsoluteURL(uriInfo, uri);
 
 		consumer.accept(url);
 	}
@@ -199,6 +240,26 @@ public class WriterHelper {
 
 		return fields.getFieldsPredicate(types);
 	}
+
+	private Function<String, String> _transformURI(
+		BiFunction<String, CollectionResourceURITransformer, String>
+			biFunction) {
+
+		return uri -> {
+			Optional<CollectionResourceURITransformer>
+				collectionResourceURITransformerOptional = Optional.ofNullable(
+					_collectionResourceURITransformer);
+
+			return collectionResourceURITransformerOptional.map(
+				transformer -> biFunction.apply(uri, transformer)
+			).orElse(
+				uri
+			);
+		};
+	}
+
+	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
+	private CollectionResourceURITransformer _collectionResourceURITransformer;
 
 	@Reference
 	private ResourceManager _resourceManager;
