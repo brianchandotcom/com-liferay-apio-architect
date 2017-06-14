@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.vulcan.liferay.scope.GroupScoped;
 import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.builder.RepresentorBuilder;
 
@@ -44,7 +45,8 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true, service = {BlogPostingResource.class, Resource.class}
 )
-public class BlogPostingResource implements Resource<BlogsEntry> {
+public class BlogPostingResource
+	implements GroupScoped<BlogsEntry>, Resource<BlogsEntry> {
 
 	@Override
 	public void buildRepresentor(
@@ -91,8 +93,17 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 	}
 
 	@Override
+	public long getGroupId(BlogsEntry blogsEntry) {
+		return blogsEntry.getGroupId();
+	}
+
+	@Override
 	public String getPath() {
 		return "blogs";
+	}
+
+	@Override
+	public void setGroupId(long groupId) {
 	}
 
 	private Optional<User> _getUserOptional(BlogsEntry blogsEntry) {

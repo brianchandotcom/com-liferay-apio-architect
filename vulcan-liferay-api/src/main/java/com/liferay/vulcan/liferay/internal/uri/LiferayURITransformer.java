@@ -14,9 +14,16 @@
 
 package com.liferay.vulcan.liferay.internal.uri;
 
+import com.liferay.portal.kernel.util.GroupThreadLocal;
+import com.liferay.vulcan.liferay.scope.GroupScoped;
+import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
+import com.liferay.vulcan.wiring.osgi.ResourceManager;
+
+import java.util.Optional;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
@@ -28,12 +35,41 @@ public class LiferayURITransformer implements CollectionResourceURITransformer {
 	public <T> String transformCollectionItemSingleResourceURI(
 		String uri, Class<T> modelClass, T model) {
 
-		return uri;
+		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
+			modelClass);
+
+		return optional.filter(
+			resource -> resource instanceof GroupScoped
+		).map(
+			resource -> {
+				GroupScoped<T> groupScoped = (GroupScoped<T>)resource;
+
+				long groupId = groupScoped.getGroupId(model);
+
+				return String.format("/group/%d/%s", groupId, uri);
+			}
+		).orElse(
+			uri
+		);
 	}
 
 	@Override
 	public <T> String transformPageURI(String uri, Class<T> modelClass) {
-		return uri;
+		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
+			modelClass);
+
+		return optional.filter(
+			resource -> resource instanceof GroupScoped
+		).map(
+			resource -> String.format(
+				"/group/%d/%s", GroupThreadLocal.getGroupId(), uri)
+
+		).orElse(
+			uri
+		);
 	}
+
+	@Reference
+	private ResourceManager _resourceManager;
 
 }
