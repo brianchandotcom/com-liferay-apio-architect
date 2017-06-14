@@ -14,14 +14,19 @@
 
 package com.liferay.vulcan.sample.rest.internal.vulcan.representor;
 
+import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.blogs.kernel.model.BlogsEntry;
+import com.liferay.blogs.kernel.service.BlogsEntryService;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
+import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.Routes;
 import com.liferay.vulcan.representor.RoutesBuilder;
@@ -30,6 +35,7 @@ import com.liferay.vulcan.representor.builder.RepresentorBuilder;
 import java.text.DateFormat;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -106,7 +112,35 @@ public class BlogPostingResource
 
 	@Override
 	public Routes<BlogsEntry> routes(RoutesBuilder<BlogsEntry> routesBuilder) {
-		return null;
+		return routesBuilder.collectionPage(
+			this::_getPage
+		).collectionItem(
+			this::_getBlogsEntry, Long.class
+		);
+	}
+
+	private BlogsEntry _getBlogsEntry(Long id) {
+		try {
+			return _blogsService.getEntry(id);
+		}
+		catch (NoSuchEntryException | PrincipalException e) {
+			throw new NotFoundException(e);
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
+	}
+
+	private Page<BlogsEntry> _getPage(Pagination pagination) {
+		Long groupId = GroupThreadLocal.getGroupId();
+
+		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
+			groupId, 0, pagination.getStartPosition(),
+			pagination.getEndPosition());
+
+		int count = _blogsService.getGroupEntriesCount(groupId, 0);
+
+		return pagination.createPage(BlogsEntry.class, blogsEntries, count);
 	}
 
 	private Optional<User> _getUserOptional(BlogsEntry blogsEntry) {
@@ -121,6 +155,9 @@ public class BlogPostingResource
 			throw new ServerErrorException(500, pe);
 		}
 	}
+
+	@Reference
+	private BlogsEntryService _blogsService;
 
 	@Reference
 	private UserService _userService;

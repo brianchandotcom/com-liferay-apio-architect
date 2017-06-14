@@ -14,9 +14,14 @@
 
 package com.liferay.vulcan.sample.rest.internal.vulcan.representor;
 
+import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.Routes;
 import com.liferay.vulcan.representor.RoutesBuilder;
@@ -26,9 +31,11 @@ import java.text.DateFormat;
 
 import java.util.function.Function;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
@@ -78,7 +85,30 @@ public class PersonResource implements Resource<User> {
 	}
 
 	public Routes<User> routes(RoutesBuilder<User> routesBuilder) {
+		return routesBuilder.collectionPage(
+			this::_getPage
+		).collectionItem(
+			this::_getUser, Long.class
+		);
+	}
+
+	private Page<User> _getPage(Pagination pagination) {
 		return null;
 	}
+
+	private User _getUser(Long id) {
+		try {
+			return _userService.getUserById(id);
+		}
+		catch (NoSuchUserException | PrincipalException e) {
+			throw new NotFoundException(e);
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
+	}
+
+	@Reference
+	private UserService _userService;
 
 }
