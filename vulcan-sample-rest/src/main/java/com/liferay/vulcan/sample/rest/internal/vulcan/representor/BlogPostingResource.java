@@ -102,10 +102,6 @@ public class BlogPostingResource
 		return "blogs";
 	}
 
-	@Override
-	public void setGroupId(long groupId) {
-	}
-
 	private Optional<User> _getUserOptional(BlogsEntry blogsEntry) {
 		try {
 			return Optional.ofNullable(
