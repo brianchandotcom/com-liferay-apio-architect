@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
-import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.Routes;
@@ -113,7 +113,7 @@ public class BlogPostingResource
 	@Override
 	public Routes<BlogsEntry> routes(RoutesBuilder<BlogsEntry> routesBuilder) {
 		return routesBuilder.collectionPage(
-			this::_getPage
+			this::_getPageItems
 		).collectionItem(
 			this::_getBlogsEntry, Long.class
 		);
@@ -131,7 +131,7 @@ public class BlogPostingResource
 		}
 	}
 
-	private Page<BlogsEntry> _getPage(Pagination pagination) {
+	private PageItems<BlogsEntry> _getPageItems(Pagination pagination) {
 		Long groupId = GroupThreadLocal.getGroupId();
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
@@ -140,7 +140,7 @@ public class BlogPostingResource
 
 		int count = _blogsService.getGroupEntriesCount(groupId, 0);
 
-		return pagination.createPage(BlogsEntry.class, blogsEntries, count);
+		return new PageItems<>(blogsEntries, count);
 	}
 
 	private Optional<User> _getUserOptional(BlogsEntry blogsEntry) {

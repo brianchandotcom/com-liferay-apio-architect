@@ -15,7 +15,7 @@
 package com.liferay.vulcan.liferay.internal;
 
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.representor.Routes;
 import com.liferay.vulcan.representor.RoutesBuilder;
@@ -36,14 +36,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 	@Override
 	public SingleStep<T> collectionPage(
-		Function<Pagination, Page<T>> function) {
+		Function<Pagination, PageItems<T>> function) {
 
-		_pageSupplier = () -> function.apply(_pagination);
+		_pageItemsSupplier = () -> function.apply(_pagination);
 
 		return new SingleStepImpl();
 	}
 
-	private Supplier<Page<T>> _pageSupplier;
+	private Supplier<PageItems<T>> _pageItemsSupplier;
 	private final Pagination _pagination;
 
 	private class SingleStepImpl implements SingleStep<T> {
@@ -81,7 +81,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				throw new RuntimeException();
 			}
 
-			return new RoutesImpl<>(_pageSupplier, _modelFunction);
+			return new RoutesImpl<>(_pageItemsSupplier, _modelFunction);
 		}
 
 		private Function<String, T> _modelFunction;

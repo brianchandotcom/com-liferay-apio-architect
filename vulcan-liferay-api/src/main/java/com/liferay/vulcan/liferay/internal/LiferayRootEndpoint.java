@@ -21,12 +21,14 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory
 import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.endpoint.RootEndpoint;
 import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.Routes;
 import com.liferay.vulcan.wiring.osgi.GenericUtil;
 
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -88,14 +90,22 @@ public class LiferayRootEndpoint implements RootEndpoint {
 	public <T> Page<T> getCollectionPage(String path) {
 		Resource<T> resource = (Resource<T>)_serviceTrackerMap.getService(path);
 
+		Class<T> modelClass = GenericUtil.getGenericClass(
+			resource, Resource.class);
+
 		RoutesBuilderImpl<T> endpointBuilder = new RoutesBuilderImpl<>(
 			_pagination);
 
 		Routes<T> routes = resource.routes(endpointBuilder);
 
-		Supplier<Page<T>> pageSupplier = routes.getPageSupplier();
+		Supplier<PageItems<T>> pageItemsSupplier =
+			routes.getPageItemsSupplier();
 
-		return pageSupplier.get();
+		PageItems<T> pageItems = pageItemsSupplier.get();
+
+		return new DefaultPage<>(
+			modelClass, pageItems.getItems(), _pagination.getItemsPerPage(),
+			_pagination.getPageNumber(), pageItems.getTotalCount());
 	}
 
 	@Path("/group/{id}/")
@@ -111,5 +121,74 @@ public class LiferayRootEndpoint implements RootEndpoint {
 	private Pagination _pagination;
 
 	private ServiceTrackerMap<String, Resource> _serviceTrackerMap;
+
+	private static class DefaultPage<T> implements Page<T> {
+
+		public DefaultPage(
+			Class<T> modelClass, Collection<T> items, int itemsPerPage,
+			int pageNumber, int totalCount) {
+
+			_modelClass = modelClass;
+			_items = items;
+			_itemsPerPage = itemsPerPage;
+			_pageNumber = pageNumber;
+			_totalCount = totalCount;
+		}
+
+		@Override
+		public Collection<T> getItems() {
+			return _items;
+		}
+
+		@Override
+		public int getItemsPerPage() {
+			return _itemsPerPage;
+		}
+
+		@Override
+		public int getLastPageNumber() {
+			return -Math.floorDiv(-_totalCount, _itemsPerPage);
+		}
+
+		@Override
+		public Class<T> getModelClass() {
+			return _modelClass;
+		}
+
+		@Override
+		public int getPageNumber() {
+			return _pageNumber;
+		}
+
+		@Override
+		public int getTotalCount() {
+			return _totalCount;
+		}
+
+		@Override
+		public boolean hasNext() {
+			if (getLastPageNumber() > _pageNumber) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			if (_pageNumber > 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		private final Collection<T> _items;
+		private final int _itemsPerPage;
+		private final Class<T> _modelClass;
+		private final int _pageNumber;
+		private final int _totalCount;
+
+	}
 
 }

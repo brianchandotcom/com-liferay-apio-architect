@@ -16,10 +16,8 @@ package com.liferay.vulcan.response.control.internal;
 
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.MapUtil;
-import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.Pagination;
 
-import java.util.Collection;
 import java.util.Map;
 
 import javax.ws.rs.ext.Provider;
@@ -61,89 +59,11 @@ public class PaginationContextProvider implements ContextProvider<Pagination> {
 	@Reference
 	private Http _http;
 
-	private static class DefaultPage<T> implements Page<T> {
-
-		public DefaultPage(
-			Class<T> modelClass, Collection<T> items, int itemsPerPage,
-			int pageNumber, int totalCount) {
-
-			_modelClass = modelClass;
-			_items = items;
-			_itemsPerPage = itemsPerPage;
-			_pageNumber = pageNumber;
-			_totalCount = totalCount;
-		}
-
-		@Override
-		public Collection<T> getItems() {
-			return _items;
-		}
-
-		@Override
-		public int getItemsPerPage() {
-			return _itemsPerPage;
-		}
-
-		@Override
-		public int getLastPageNumber() {
-			return -Math.floorDiv(-_totalCount, _itemsPerPage);
-		}
-
-		@Override
-		public Class<T> getModelClass() {
-			return _modelClass;
-		}
-
-		@Override
-		public int getPageNumber() {
-			return _pageNumber;
-		}
-
-		@Override
-		public int getTotalCount() {
-			return _totalCount;
-		}
-
-		@Override
-		public boolean hasNext() {
-			if (getLastPageNumber() > _pageNumber) {
-				return true;
-			}
-
-			return false;
-		}
-
-		@Override
-		public boolean hasPrevious() {
-			if (_pageNumber > 1) {
-				return true;
-			}
-
-			return false;
-		}
-
-		private final Collection<T> _items;
-		private final int _itemsPerPage;
-		private final Class<T> _modelClass;
-		private final int _pageNumber;
-		private final int _totalCount;
-
-	}
-
 	private static class DefaultPagination implements Pagination {
 
 		public DefaultPagination(int itemsPerPage, int pageNumber) {
 			_itemsPerPage = itemsPerPage;
 			_pageNumber = pageNumber;
-		}
-
-		@Override
-		public <T> Page<T> createPage(
-			Class<T> modelClass, Collection<T> items, int totalCount) {
-
-			return new DefaultPage<>(
-				modelClass, items, getItemsPerPage(), getPageNumber(),
-				totalCount);
 		}
 
 		@Override

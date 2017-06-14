@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.liferay.internal;
 
-import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.representor.Routes;
 
 import java.util.function.Function;
@@ -26,9 +26,10 @@ import java.util.function.Supplier;
 public class RoutesImpl<T> implements Routes<T> {
 
 	public RoutesImpl(
-		Supplier<Page<T>> pageSupplier, Function<String, T> modelFunction) {
+		Supplier<PageItems<T>> pageItemsSupplier,
+		Function<String, T> modelFunction) {
 
-		_pageSupplier = pageSupplier;
+		_pageItemsSupplier = pageItemsSupplier;
 		_modelFunction = modelFunction;
 	}
 
@@ -38,11 +39,11 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
-	public Supplier<Page<T>> getPageSupplier() {
-		return _pageSupplier;
+	public Supplier<PageItems<T>> getPageItemsSupplier() {
+		return _pageItemsSupplier;
 	}
 
 	private final Function<String, T> _modelFunction;
-	private final Supplier<Page<T>> _pageSupplier;
+	private final Supplier<PageItems<T>> _pageItemsSupplier;
 
 }

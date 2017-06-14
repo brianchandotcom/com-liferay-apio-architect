@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
-import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.Routes;
@@ -86,13 +86,13 @@ public class PersonResource implements Resource<User> {
 
 	public Routes<User> routes(RoutesBuilder<User> routesBuilder) {
 		return routesBuilder.collectionPage(
-			this::_getPage
+			this::_getPageItems
 		).collectionItem(
 			this::_getUser, Long.class
 		);
 	}
 
-	private Page<User> _getPage(Pagination pagination) {
+	private PageItems<User> _getPageItems(Pagination pagination) {
 		return null;
 	}
 
