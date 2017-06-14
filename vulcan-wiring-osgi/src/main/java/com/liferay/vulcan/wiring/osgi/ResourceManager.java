@@ -15,7 +15,6 @@
 package com.liferay.vulcan.wiring.osgi;
 
 import com.liferay.vulcan.representor.Resource;
-import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.internal.RepresentorBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
 
