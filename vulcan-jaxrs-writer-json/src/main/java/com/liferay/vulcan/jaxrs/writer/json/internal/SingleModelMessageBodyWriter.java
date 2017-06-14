@@ -19,15 +19,15 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.SingleModelMessageMapper;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.response.control.Embedded;
-import com.liferay.vulcan.response.control.EmbeddedRetriever;
 import com.liferay.vulcan.response.control.Fields;
-import com.liferay.vulcan.response.control.FieldsRetriever;
+import com.liferay.vulcan.wiring.osgi.ProviderManager;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.ResourceManager;
 
@@ -39,6 +39,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -117,8 +118,18 @@ public class SingleModelMessageBodyWriter<T>
 		);
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
-		Fields fields = FieldsRetriever.getFields(_httpServletRequest);
-		Embedded embedded = EmbeddedRetriever.getEmbedded(_httpServletRequest);
+
+		Optional<Fields> optionalFields = _providerManager.provide(
+			Fields.class, _httpServletRequest);
+
+		Optional<Embedded> optionalEmbedded = _providerManager.provide(
+			Embedded.class, _httpServletRequest);
+
+		Fields fields = optionalFields.orElseThrow(
+			() -> new MustHaveProvider(Fields.class));
+
+		Embedded embedded = optionalEmbedded.orElseThrow(
+			() -> new MustHaveProvider(Embedded.class));
 
 		_writeModel(
 			singleModelMessageMapper, jsonObjectBuilder, model, modelClass,
@@ -249,6 +260,9 @@ public class SingleModelMessageBodyWriter<T>
 
 	@Context
 	private HttpServletRequest _httpServletRequest;
+
+	@Reference
+	private ProviderManager _providerManager;
 
 	@Reference
 	private ResourceManager _resourceManager;

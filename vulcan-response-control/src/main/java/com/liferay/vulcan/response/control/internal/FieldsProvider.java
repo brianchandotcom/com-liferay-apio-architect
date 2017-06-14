@@ -12,7 +12,10 @@
  * details.
  */
 
-package com.liferay.vulcan.response.control;
+package com.liferay.vulcan.response.control.internal;
+
+import com.liferay.vulcan.provider.Provider;
+import com.liferay.vulcan.response.control.Fields;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,14 +28,17 @@ import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public class FieldsRetriever {
+@Component(immediate = true)
+public class FieldsProvider implements Provider<Fields> {
 
-	public static Fields getFields(HttpServletRequest httpServletRequest) {
+	public Fields createContext(HttpServletRequest httpServletRequest) {
 		Map<String, String[]> parameterMap =
 			httpServletRequest.getParameterMap();
 

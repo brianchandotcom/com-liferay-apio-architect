@@ -25,9 +25,8 @@ import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.response.control.Embedded;
-import com.liferay.vulcan.response.control.EmbeddedRetriever;
 import com.liferay.vulcan.response.control.Fields;
-import com.liferay.vulcan.response.control.FieldsRetriever;
+import com.liferay.vulcan.wiring.osgi.ProviderManager;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.ResourceManager;
 
@@ -125,8 +124,17 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		pageMessageMapper.onStart(
 			jsonObjectBuilder, page, modelClass, requestInfo);
 
-		Fields fields = FieldsRetriever.getFields(_httpServletRequest);
-		Embedded embedded = EmbeddedRetriever.getEmbedded(_httpServletRequest);
+		Optional<Fields> optionalFields = _providerManager.provide(
+			Fields.class, _httpServletRequest);
+
+		Optional<Embedded> optionalEmbedded = _providerManager.provide(
+			Embedded.class, _httpServletRequest);
+
+		Fields fields = optionalFields.orElseThrow(
+			() -> new VulcanDeveloperError.MustHaveProvider(Fields.class));
+
+		Embedded embedded = optionalEmbedded.orElseThrow(
+			() -> new VulcanDeveloperError.MustHaveProvider(Embedded.class));
 
 		_writeItems(
 			pageMessageMapper, jsonObjectBuilder, page, modelClass, requestInfo,
@@ -370,6 +378,9 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
 	private List<PageMessageMapper<T>> _pageMessageMappers;
+
+	@Reference
+	private ProviderManager _providerManager;
 
 	@Context
 	private ResourceInfo _resourceInfo;
