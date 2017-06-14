@@ -29,7 +29,7 @@ import com.liferay.vulcan.response.control.EmbeddedRetriever;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.response.control.FieldsRetriever;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
-import com.liferay.vulcan.wiring.osgi.RepresentorManager;
+import com.liferay.vulcan.wiring.osgi.ResourceManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -210,7 +210,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 						embeddedPathElements, types));
 
 				List<RelatedModel<V, ?>> embeddedRelatedModels =
-					_representorManager.getEmbeddedRelatedModels(modelClass);
+					_resourceManager.getEmbeddedRelatedModels(modelClass);
 
 				embeddedRelatedModels.forEach(
 					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
@@ -219,7 +219,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 						modelClass, embeddedPathElements, fields, embedded));
 
 				List<RelatedModel<V, ?>> linkedRelatedModels =
-					_representorManager.getLinkedRelatedModels(modelClass);
+					_resourceManager.getLinkedRelatedModels(modelClass);
 
 				linkedRelatedModels.forEach(
 					linkedRelatedModel -> _writeLinkedRelatedModel(
@@ -272,7 +272,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 						jsonObjectBuilder, itemJSONObjectBuilder, url));
 
 				List<RelatedModel<T, ?>> embeddedRelatedModels =
-					_representorManager.getEmbeddedRelatedModels(modelClass);
+					_resourceManager.getEmbeddedRelatedModels(modelClass);
 
 				embeddedRelatedModels.forEach(
 					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
@@ -281,7 +281,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 						modelClass, null, fields, embedded));
 
 				List<RelatedModel<T, ?>> linkedRelatedModels =
-					_representorManager.getLinkedRelatedModels(modelClass);
+					_resourceManager.getLinkedRelatedModels(modelClass);
 
 				linkedRelatedModels.forEach(
 					linkedRelatedModel -> _writeLinkedRelatedModel(
@@ -372,11 +372,11 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
 	private List<PageMessageMapper<T>> _pageMessageMappers;
 
-	@Reference
-	private RepresentorManager _representorManager;
-
 	@Context
 	private ResourceInfo _resourceInfo;
+
+	@Reference
+	private ResourceManager _resourceManager;
 
 	@Context
 	private UriInfo _uriInfo;

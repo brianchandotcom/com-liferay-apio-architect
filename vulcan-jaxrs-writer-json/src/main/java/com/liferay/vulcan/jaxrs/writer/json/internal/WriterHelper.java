@@ -19,7 +19,7 @@ import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
-import com.liferay.vulcan.wiring.osgi.RepresentorManager;
+import com.liferay.vulcan.wiring.osgi.ResourceManager;
 
 import java.net.URI;
 
@@ -67,7 +67,7 @@ public class WriterHelper {
 			modelClass, fields);
 
 		Map<String, Function<T, Object>> fieldFunctions =
-			_representorManager.getFieldFunctions(modelClass);
+			_resourceManager.getFieldFunctions(modelClass);
 
 		for (String field : fieldFunctions.keySet()) {
 			if (fieldsPredicate.test(field)) {
@@ -104,7 +104,7 @@ public class WriterHelper {
 		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			modelClass, fields);
 
-		Map<String, String> links = _representorManager.getLinks(modelClass);
+		Map<String, String> links = _resourceManager.getLinks(modelClass);
 
 		for (String key : links.keySet()) {
 			if (fieldsPredicate.test(key)) {
@@ -187,7 +187,7 @@ public class WriterHelper {
 	public <U> void writeTypes(
 		Class<U> modelClass, Consumer<List<String>> consumer) {
 
-		List<String> types = _representorManager.getTypes(modelClass);
+		List<String> types = _resourceManager.getTypes(modelClass);
 
 		consumer.accept(types);
 	}
@@ -195,12 +195,12 @@ public class WriterHelper {
 	private <T> Predicate<String> _getFieldsPredicate(
 		Class<T> modelClass, Fields fields) {
 
-		List<String> types = _representorManager.getTypes(modelClass);
+		List<String> types = _resourceManager.getTypes(modelClass);
 
 		return fields.getFieldsPredicate(types);
 	}
 
 	@Reference
-	private RepresentorManager _representorManager;
+	private ResourceManager _resourceManager;
 
 }

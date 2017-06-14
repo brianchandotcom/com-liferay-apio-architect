@@ -17,7 +17,7 @@ package com.liferay.vulcan.sample.rest.internal.vulcan.representor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.DateUtil;
-import com.liferay.vulcan.representor.ModelRepresentorMapper;
+import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.builder.RepresentorBuilder;
 
 import java.text.DateFormat;
@@ -33,12 +33,8 @@ import org.osgi.service.component.annotations.Component;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(
-	immediate = true,
-	service = {ModelRepresentorMapper.class, PersonModelRepresentorMapper.class}
-)
-public class PersonModelRepresentorMapper
-	implements ModelRepresentorMapper<User> {
+@Component(immediate = true, service = {Resource.class, PersonResource.class})
+public class PersonResource implements Resource<User> {
 
 	@Override
 	public void buildRepresentor(RepresentorBuilder<User> representorBuilder) {
@@ -72,6 +68,11 @@ public class PersonModelRepresentorMapper
 		).addType(
 			"Person"
 		);
+	}
+
+	@Override
+	public String getPath() {
+		return "people";
 	}
 
 }

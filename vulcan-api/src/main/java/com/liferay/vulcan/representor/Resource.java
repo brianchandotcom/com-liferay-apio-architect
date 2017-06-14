@@ -21,8 +21,10 @@ import com.liferay.vulcan.representor.builder.RepresentorBuilder;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public interface ModelRepresentorMapper<T> {
+public interface Resource<T> {
 
 	public void buildRepresentor(RepresentorBuilder<T> representorBuilder);
+
+	public String getPath();
 
 }

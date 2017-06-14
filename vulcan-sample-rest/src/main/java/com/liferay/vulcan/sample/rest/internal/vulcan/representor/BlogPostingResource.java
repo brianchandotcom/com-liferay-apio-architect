@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
-import com.liferay.vulcan.representor.ModelRepresentorMapper;
+import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.builder.RepresentorBuilder;
 
 import java.text.DateFormat;
@@ -42,13 +42,9 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  */
 @Component(
-	immediate = true,
-	service = {
-		BlogPostingModelRepresentorMapper.class, ModelRepresentorMapper.class
-	}
+	immediate = true, service = {BlogPostingResource.class, Resource.class}
 )
-public class BlogPostingModelRepresentorMapper
-	implements ModelRepresentorMapper<BlogsEntry> {
+public class BlogPostingResource implements Resource<BlogsEntry> {
 
 	@Override
 	public void buildRepresentor(
@@ -92,6 +88,11 @@ public class BlogPostingModelRepresentorMapper
 		).addType(
 			"BlogPosting"
 		);
+	}
+
+	@Override
+	public String getPath() {
+		return "blogs";
 	}
 
 	private Optional<User> _getUserOptional(BlogsEntry blogsEntry) {

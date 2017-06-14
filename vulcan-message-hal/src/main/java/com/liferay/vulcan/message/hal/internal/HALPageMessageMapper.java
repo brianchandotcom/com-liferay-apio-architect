@@ -18,7 +18,7 @@ import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
-import com.liferay.vulcan.wiring.osgi.RepresentorManager;
+import com.liferay.vulcan.wiring.osgi.ResourceManager;
 
 import java.util.List;
 
@@ -210,7 +210,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, T model, Class<T> modelClass,
 		RequestInfo requestInfo) {
 
-		List<String> types = _representorManager.getTypes(modelClass);
+		List<String> types = _resourceManager.getTypes(modelClass);
 
 		pageJSONObjectBuilder.nestedField(
 			"_embedded", types.get(0)
@@ -223,6 +223,6 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	private HALSingleModelMessageMapper _halSingleModelMessageMapper;
 
 	@Reference
-	private RepresentorManager _representorManager;
+	private ResourceManager _resourceManager;
 
 }
