@@ -17,13 +17,11 @@ package com.liferay.vulcan.response.control.internal;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.provider.Provider;
 
 import java.util.Map;
 
-import javax.ws.rs.ext.Provider;
-
-import org.apache.cxf.jaxrs.ext.ContextProvider;
-import org.apache.cxf.message.Message;
+import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -33,16 +31,13 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(immediate = true, property = "liferay.vulcan.context.provider=true")
-@Provider
-public class PaginationContextProvider implements ContextProvider<Pagination> {
+@Component(immediate = true)
+public class PaginationProvider implements Provider<Pagination> {
 
 	@Override
-	public Pagination createContext(Message message) {
-		String queryString = (String)message.getContextualProperty(
-			Message.QUERY_STRING);
-
-		Map<String, String[]> parameterMap = _http.getParameterMap(queryString);
+	public Pagination createContext(HttpServletRequest httpServletRequest) {
+		Map<String, String[]> parameterMap =
+			httpServletRequest.getParameterMap();
 
 		int itemsPerPage = MapUtil.getInteger(
 			parameterMap, "per_page", _ITEMS_PER_PAGE_DEFAULT);
