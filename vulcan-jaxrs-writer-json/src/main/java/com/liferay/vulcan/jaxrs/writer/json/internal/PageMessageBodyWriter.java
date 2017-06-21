@@ -114,7 +114,8 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 			bodyWriter ->
 				mediaTypeString.equals(bodyWriter.getMediaType()) &&
 				bodyWriter.supports(page, modelClass, requestInfo)
-		).findFirst().orElseThrow(
+		).findFirst(
+		).orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveMessageMapper(
 				mediaTypeString, modelClass)
 		);
