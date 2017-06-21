@@ -27,6 +27,7 @@ public interface DecaFunction<A, B, C, D, E, F, G, H, I, J, R> {
 		Function<? super R, ? extends V> after) {
 
 		Objects.requireNonNull(after);
+
 		return (A a, B b, C c, D d, E e, F f, G g, H h, I i, J j) ->
 			after.apply(apply(a, b, c, d, e, f, g, h, i, j));
 	}

@@ -27,6 +27,7 @@ public interface TetraFunction<A, B, C, D, R> {
 		Function<? super R, ? extends V> after) {
 
 		Objects.requireNonNull(after);
+
 		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
 	}
 
