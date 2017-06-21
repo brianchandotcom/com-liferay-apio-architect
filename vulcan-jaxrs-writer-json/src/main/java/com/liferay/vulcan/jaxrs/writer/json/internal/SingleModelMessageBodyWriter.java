@@ -120,16 +120,16 @@ public class SingleModelMessageBodyWriter<T>
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
 
-		Optional<Fields> optionalFields = _providerManager.provide(
+		Optional<Fields> fieldsOptional = _providerManager.provide(
 			Fields.class, _httpServletRequest);
 
-		Optional<Embedded> optionalEmbedded = _providerManager.provide(
+		Optional<Embedded> embeddedOptional = _providerManager.provide(
 			Embedded.class, _httpServletRequest);
 
-		Fields fields = optionalFields.orElseThrow(
+		Fields fields = fieldsOptional.orElseThrow(
 			() -> new MustHaveProvider(Fields.class));
 
-		Embedded embedded = optionalEmbedded.orElseThrow(
+		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new MustHaveProvider(Embedded.class));
 
 		_writeModel(
