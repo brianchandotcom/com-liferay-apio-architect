@@ -24,11 +24,11 @@ import java.util.function.Function;
 public interface TriFunction<A, B, C, R> {
 
 	public default <V> TriFunction<A, B, C, V> andThen(
-		Function<? super R, ? extends V> after) {
+		Function<? super R, ? extends V> afterFunction) {
 
-		Objects.requireNonNull(after);
+		Objects.requireNonNull(afterFunction);
 
-		return (A a, B b, C c) -> after.apply(apply(a, b, c));
+		return (A a, B b, C c) -> afterFunction.apply(apply(a, b, c));
 	}
 
 	public R apply(A a, B b, C c);

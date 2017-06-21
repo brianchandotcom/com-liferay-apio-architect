@@ -24,11 +24,11 @@ import java.util.function.Function;
 public interface TetraFunction<A, B, C, D, R> {
 
 	public default <V> TetraFunction<A, B, C, D, V> andThen(
-		Function<? super R, ? extends V> after) {
+		Function<? super R, ? extends V> afterFunction) {
 
-		Objects.requireNonNull(after);
+		Objects.requireNonNull(afterFunction);
 
-		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
+		return (A a, B b, C c, D d) -> afterFunction.apply(apply(a, b, c, d));
 	}
 
 	public R apply(A a, B b, C c, D d);
