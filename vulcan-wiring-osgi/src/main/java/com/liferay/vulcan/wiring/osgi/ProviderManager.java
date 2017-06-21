@@ -120,8 +120,8 @@ public class ProviderManager {
 	}
 
 	private final BundleContext _bundleContext;
-	private final Map<String,
-		TreeSet<ServiceReferenceServiceTuple<Provider<?>>>>
+	private final Map
+		<String, TreeSet<ServiceReferenceServiceTuple<Provider<?>>>>
 			_providers = new ConcurrentHashMap<>();
 
 }
