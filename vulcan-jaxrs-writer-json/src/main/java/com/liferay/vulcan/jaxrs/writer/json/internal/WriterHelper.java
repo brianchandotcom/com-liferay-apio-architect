@@ -191,10 +191,10 @@ public class WriterHelper {
 
 		Class<U> modelClass = relatedModel.getModelClass();
 
-		Optional<String> urlOptional = getSingleURLOptional(
+		Optional<String> singleURLOptional = getSingleURLOptional(
 			modelClass, model, uriInfo);
 
-		urlOptional.ifPresent(
+		singleURLOptional.ifPresent(
 			url -> {
 				Predicate<String> embeddedPredicate =
 					embedded.getEmbeddedPredicate();
