@@ -123,11 +123,11 @@ public class SingleModelMessageBodyWriter<T>
 		Optional<Fields> fieldsOptional = _providerManager.provide(
 			Fields.class, _httpServletRequest);
 
-		Optional<Embedded> embeddedOptional = _providerManager.provide(
-			Embedded.class, _httpServletRequest);
-
 		Fields fields = fieldsOptional.orElseThrow(
 			() -> new MustHaveProvider(Fields.class));
+
+		Optional<Embedded> embeddedOptional = _providerManager.provide(
+			Embedded.class, _httpServletRequest);
 
 		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new MustHaveProvider(Embedded.class));
