@@ -224,11 +224,13 @@ public class WriterHelper {
 		T model, Class<T> modelClass, UriInfo uriInfo,
 		Consumer<String> consumer) {
 
-		String url =
-			getSingleURLOptional(modelClass, model, uriInfo).orElseThrow(
-				() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
+		Optional<String> singleURLOptional = getSingleURLOptional(
+			modelClass, model, uriInfo);
 
-		consumer.accept(url);
+		String singleURL = singleURLOptional.orElseThrow(
+			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
+
+		consumer.accept(singleURL);
 	}
 
 	public <U> void writeTypes(
