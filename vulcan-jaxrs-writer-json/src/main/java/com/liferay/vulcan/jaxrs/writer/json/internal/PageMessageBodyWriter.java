@@ -158,7 +158,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 	}
 
 	private String _getCollectionURL(Class<T> modelClass) {
-		Optional<String> optional = _writerHelper.getCollectionURL(
+		Optional<String> optional = _writerHelper.getCollectionURLOptional(
 			modelClass, _uriInfo);
 
 		return optional.orElseThrow(

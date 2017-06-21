@@ -65,7 +65,7 @@ public class WriterHelper {
 		return uri.toString();
 	}
 
-	public <T> Optional<String> getCollectionURL(
+	public <T> Optional<String> getCollectionURLOptional(
 		Class<T> modelClass, UriInfo uriInfo) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
@@ -84,7 +84,7 @@ public class WriterHelper {
 		);
 	}
 
-	public <T> Optional<String> getSingleURL(
+	public <T> Optional<String> getSingleURLOptional(
 		Class<T> modelClass, T model, UriInfo uriInfo) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
@@ -191,7 +191,8 @@ public class WriterHelper {
 
 		Class<U> modelClass = relatedModel.getModelClass();
 
-		Optional<String> urlOptional = getSingleURL(modelClass, model, uriInfo);
+		Optional<String> urlOptional = getSingleURLOptional(
+			modelClass, model, uriInfo);
 
 		urlOptional.ifPresent(
 			url -> {
@@ -223,8 +224,9 @@ public class WriterHelper {
 		T model, Class<T> modelClass, UriInfo uriInfo,
 		Consumer<String> consumer) {
 
-		String url = getSingleURL(modelClass, model, uriInfo).orElseThrow(
-			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
+		String url =
+			getSingleURLOptional(modelClass, model, uriInfo).orElseThrow(
+				() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
 
 		consumer.accept(url);
 	}
