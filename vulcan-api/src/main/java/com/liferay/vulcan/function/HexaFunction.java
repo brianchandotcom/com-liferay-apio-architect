@@ -24,11 +24,11 @@ import java.util.function.Function;
 public interface HexaFunction<A, B, C, D, E, F, R> {
 
 	public default <V> HexaFunction<A, B, C, D, E, F, V> andThen(
-		Function<? super R, ? extends V> after) {
+		Function<? super R, ? extends V> afterFunction) {
 
-		Objects.requireNonNull(after);
+		Objects.requireNonNull(afterFunction);
 
-		return (A a, B b, C c, D d, E e, F f) -> after.apply(
+		return (A a, B b, C c, D d, E e, F f) -> afterFunction.apply(
 			apply(a, b, c, d, e, f));
 	}
 

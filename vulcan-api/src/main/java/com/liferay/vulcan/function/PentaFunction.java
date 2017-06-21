@@ -24,11 +24,12 @@ import java.util.function.Function;
 public interface PentaFunction<A, B, C, D, E, R> {
 
 	public default <V> PentaFunction<A, B, C, D, E, V> andThen(
-		Function<? super R, ? extends V> after) {
+		Function<? super R, ? extends V> afterFunction) {
 
-		Objects.requireNonNull(after);
+		Objects.requireNonNull(afterFunction);
 
-		return (A a, B b, C c, D d, E e) -> after.apply(apply(a, b, c, d, e));
+		return (A a, B b, C c, D d, E e) -> afterFunction.apply(
+			apply(a, b, c, d, e));
 	}
 
 	public R apply(A a, B b, C c, D d, E e);

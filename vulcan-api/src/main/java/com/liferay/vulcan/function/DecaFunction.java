@@ -24,12 +24,12 @@ import java.util.function.Function;
 public interface DecaFunction<A, B, C, D, E, F, G, H, I, J, R> {
 
 	public default <V> DecaFunction<A, B, C, D, E, F, G, H, I, J, V> andThen(
-		Function<? super R, ? extends V> after) {
+		Function<? super R, ? extends V> afterFunction) {
 
-		Objects.requireNonNull(after);
+		Objects.requireNonNull(afterFunction);
 
 		return (A a, B b, C c, D d, E e, F f, G g, H h, I i, J j) ->
-			after.apply(apply(a, b, c, d, e, f, g, h, i, j));
+			afterFunction.apply(apply(a, b, c, d, e, f, g, h, i, j));
 	}
 
 	public R apply(A a, B b, C c, D d, E e, F f, G g, H h, I i, J j);

@@ -24,11 +24,11 @@ import java.util.function.Function;
 public interface OctaFunction<A, B, C, D, E, F, G, H, R> {
 
 	public default <V> OctaFunction<A, B, C, D, E, F, G, H, V> andThen(
-		Function<? super R, ? extends V> after) {
+		Function<? super R, ? extends V> afterFunction) {
 
-		Objects.requireNonNull(after);
+		Objects.requireNonNull(afterFunction);
 
-		return (A a, B b, C c, D d, E e, F f, G g, H h) -> after.apply(
+		return (A a, B b, C c, D d, E e, F f, G g, H h) -> afterFunction.apply(
 			apply(a, b, c, d, e, f, g, h));
 	}
 

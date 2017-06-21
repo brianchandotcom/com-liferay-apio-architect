@@ -24,11 +24,11 @@ import java.util.function.Function;
 public interface HeptaFunction<A, B, C, D, E, F, G, R> {
 
 	public default <V> HeptaFunction<A, B, C, D, E, F, G, V> andThen(
-		Function<? super R, ? extends V> after) {
+		Function<? super R, ? extends V> afterFunction) {
 
-		Objects.requireNonNull(after);
+		Objects.requireNonNull(afterFunction);
 
-		return (A a, B b, C c, D d, E e, F f, G g) -> after.apply(
+		return (A a, B b, C c, D d, E e, F f, G g) -> afterFunction.apply(
 			apply(a, b, c, d, e, f, g));
 	}
 

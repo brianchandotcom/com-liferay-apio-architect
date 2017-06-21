@@ -24,12 +24,12 @@ import java.util.function.Function;
 public interface EnneaFunction<A, B, C, D, E, F, G, H, I, R> {
 
 	public default <V> EnneaFunction<A, B, C, D, E, F, G, H, I, V> andThen(
-		Function<? super R, ? extends V> after) {
+		Function<? super R, ? extends V> afterFunction) {
 
-		Objects.requireNonNull(after);
+		Objects.requireNonNull(afterFunction);
 
-		return (A a, B b, C c, D d, E e, F f, G g, H h, I i) -> after.apply(
-			apply(a, b, c, d, e, f, g, h, i));
+		return (A a, B b, C c, D d, E e, F f, G g, H h, I i) ->
+			afterFunction.apply(apply(a, b, c, d, e, f, g, h, i));
 	}
 
 	public R apply(A a, B b, C c, D d, E e, F f, G g, H h, I i);
