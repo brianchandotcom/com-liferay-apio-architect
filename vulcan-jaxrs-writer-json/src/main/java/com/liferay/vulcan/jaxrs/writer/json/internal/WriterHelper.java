@@ -76,7 +76,7 @@ public class WriterHelper {
 		).map(
 			path -> "/p/" + path
 		).map(
-			_transformURI(
+			_getTransformURIFunction(
 				(uri, transformer) -> transformer.transformPageURI(
 					uri, modelClass))
 		).map(
@@ -97,7 +97,7 @@ public class WriterHelper {
 		).map(
 			path -> "/p/" + path + "/" + identifier
 		).map(
-			_transformURI(
+			_getTransformURIFunction(
 				(uri, transformer) ->
 					transformer.transformCollectionItemSingleResourceURI(
 						uri, modelClass, model))
@@ -249,7 +249,7 @@ public class WriterHelper {
 		return fields.getFieldsPredicate(types);
 	}
 
-	private Function<String, String> _transformURI(
+	private Function<String, String> _getTransformURIFunction(
 		BiFunction<String, CollectionResourceURITransformer, String>
 			biFunction) {
 
