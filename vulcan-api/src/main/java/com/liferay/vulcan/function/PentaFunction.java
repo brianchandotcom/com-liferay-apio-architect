@@ -27,6 +27,7 @@ public interface PentaFunction<A, B, C, D, E, R> {
 		Function<? super R, ? extends V> after) {
 
 		Objects.requireNonNull(after);
+
 		return (A a, B b, C c, D d, E e) -> after.apply(apply(a, b, c, d, e));
 	}
 
