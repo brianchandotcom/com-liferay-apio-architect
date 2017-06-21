@@ -125,16 +125,16 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		pageMessageMapper.onStart(
 			jsonObjectBuilder, page, modelClass, requestInfo);
 
-		Optional<Fields> optionalFields = _providerManager.provide(
+		Optional<Fields> fieldsOptional = _providerManager.provide(
 			Fields.class, _httpServletRequest);
 
-		Optional<Embedded> optionalEmbedded = _providerManager.provide(
+		Optional<Embedded> embeddedOptional = _providerManager.provide(
 			Embedded.class, _httpServletRequest);
 
-		Fields fields = optionalFields.orElseThrow(
+		Fields fields = fieldsOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Fields.class));
 
-		Embedded embedded = optionalEmbedded.orElseThrow(
+		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Embedded.class));
 
 		_writeItems(
