@@ -453,15 +453,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<A> aClass, Class<B> bClass) {
 
 			_modelFunction = provideFunction -> _convertIdentifier(
-				identifierClass
-			).andThen(
-				id -> {
-					A a = _provide(aClass, provideFunction);
-					B b = _provide(bClass, provideFunction);
+					identifierClass
+				).andThen(
+					id -> {
+						A a = _provide(aClass, provideFunction);
+						B b = _provide(bClass, provideFunction);
 
-					return triFunction.apply(id, a, b);
-				}
-			);
+						return triFunction.apply(id, a, b);
+					}
+				);
 
 			return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
 		}
