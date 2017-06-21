@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.functions;
+package com.liferay.vulcan.function;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -21,16 +21,15 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  */
 @FunctionalInterface
-public interface OctaFunction<A, B, C, D, E, F, G, H, R> {
+public interface TetraFunction<A, B, C, D, R> {
 
-	public default <V> OctaFunction<A, B, C, D, E, F, G, H, V> andThen(
+	public default <V> TetraFunction<A, B, C, D, V> andThen(
 		Function<? super R, ? extends V> after) {
 
 		Objects.requireNonNull(after);
-		return (A a, B b, C c, D d, E e, F f, G g, H h) -> after.apply(
-			apply(a, b, c, d, e, f, g, h));
+		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
 	}
 
-	public R apply(A a, B b, C c, D d, E e, F f, G g, H h);
+	public R apply(A a, B b, C c, D d);
 
 }

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.functions;
+package com.liferay.vulcan.function;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -21,15 +21,16 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  */
 @FunctionalInterface
-public interface TriFunction<A, B, C, R> {
+public interface DecaFunction<A, B, C, D, E, F, G, H, I, J, R> {
 
-	public default <V> TriFunction<A, B, C, V> andThen(
+	public default <V> DecaFunction<A, B, C, D, E, F, G, H, I, J, V> andThen(
 		Function<? super R, ? extends V> after) {
 
 		Objects.requireNonNull(after);
-		return (A a, B b, C c) -> after.apply(apply(a, b, c));
+		return (A a, B b, C c, D d, E e, F f, G g, H h, I i, J j) ->
+			after.apply(apply(a, b, c, d, e, f, g, h, i, j));
 	}
 
-	public R apply(A a, B b, C c);
+	public R apply(A a, B b, C c, D d, E e, F f, G g, H h, I i, J j);
 
 }
