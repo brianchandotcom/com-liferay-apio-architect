@@ -128,11 +128,11 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		Optional<Fields> fieldsOptional = _providerManager.provide(
 			Fields.class, _httpServletRequest);
 
-		Optional<Embedded> embeddedOptional = _providerManager.provide(
-			Embedded.class, _httpServletRequest);
-
 		Fields fields = fieldsOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Fields.class));
+
+		Optional<Embedded> embeddedOptional = _providerManager.provide(
+			Embedded.class, _httpServletRequest);
 
 		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Embedded.class));
