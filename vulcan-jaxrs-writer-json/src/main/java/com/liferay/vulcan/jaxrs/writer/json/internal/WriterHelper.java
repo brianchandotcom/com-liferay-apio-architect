@@ -72,16 +72,16 @@ public class WriterHelper {
 			modelClass);
 
 		return optional.map(
-				Resource::getPath
-			).map(
-				path -> "/p/" + path
-			).map(
-				_transformURI(
-					(uri, transformer) -> transformer.transformPageURI(
-						uri, modelClass))
-			).map(
-				uri -> getAbsoluteURL(uriInfo, uri)
-			);
+			Resource::getPath
+		).map(
+			path -> "/p/" + path
+		).map(
+			_transformURI(
+				(uri, transformer) -> transformer.transformPageURI(
+					uri, modelClass))
+		).map(
+			uri -> getAbsoluteURL(uriInfo, uri)
+		);
 	}
 
 	public <T> Optional<String> getSingleURL(
@@ -93,17 +93,17 @@ public class WriterHelper {
 		String identifier = _resourceManager.getIdentifier(modelClass, model);
 
 		return optional.map(
-				Resource::getPath
-			).map(
-				path -> "/p/" + path + "/" + identifier
-			).map(
-				_transformURI(
-					(uri, transformer) ->
-						transformer.transformCollectionItemSingleResourceURI(
-							uri, modelClass, model))
-			).map(
-				uri -> getAbsoluteURL(uriInfo, uri)
-			);
+			Resource::getPath
+		).map(
+			path -> "/p/" + path + "/" + identifier
+		).map(
+			_transformURI(
+				(uri, transformer) ->
+					transformer.transformCollectionItemSingleResourceURI(
+						uri, modelClass, model))
+		).map(
+			uri -> getAbsoluteURL(uriInfo, uri)
+		);
 	}
 
 	public <T> void writeFields(
