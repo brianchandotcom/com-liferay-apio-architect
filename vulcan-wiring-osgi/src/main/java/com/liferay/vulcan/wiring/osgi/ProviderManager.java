@@ -79,12 +79,12 @@ public class ProviderManager {
 		_providers.computeIfAbsent(
 			modelClass.getName(), name -> new TreeSet<>());
 
-		ServiceReferenceServiceTuple<Provider<T>> serviceReferenceServiceTuple =
-			new ServiceReferenceServiceTuple<>(serviceReference, provider);
-
 		TreeSet<ServiceReferenceServiceTuple<Provider<?>>>
 			serviceReferenceServiceTuples = _providers.get(
 				modelClass.getName());
+
+		ServiceReferenceServiceTuple<Provider<T>> serviceReferenceServiceTuple =
+			new ServiceReferenceServiceTuple<>(serviceReference, provider);
 
 		serviceReferenceServiceTuples.add(
 			(ServiceReferenceServiceTuple)serviceReferenceServiceTuple);
