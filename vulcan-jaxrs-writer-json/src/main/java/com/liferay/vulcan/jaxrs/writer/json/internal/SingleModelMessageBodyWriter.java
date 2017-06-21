@@ -97,15 +97,12 @@ public class SingleModelMessageBodyWriter<T>
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
-		Class<T> modelClass = singleModel.getModelClass();
-
-		T model = singleModel.getModel();
-
 		Stream<SingleModelMessageMapper<T>> stream =
 			_singleModelMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
-
+		T model = singleModel.getModel();
+		Class<T> modelClass = singleModel.getModelClass();
 		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
 		SingleModelMessageMapper<T> singleModelMessageMapper = stream.filter(

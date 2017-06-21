@@ -105,9 +105,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
-
 		Class<T> modelClass = page.getModelClass();
-
 		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
 		PageMessageMapper<T> pageMessageMapper = stream.filter(
