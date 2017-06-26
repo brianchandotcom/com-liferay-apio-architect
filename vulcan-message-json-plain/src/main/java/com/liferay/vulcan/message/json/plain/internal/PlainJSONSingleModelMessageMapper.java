@@ -23,6 +23,8 @@ import java.util.stream.Stream;
 import org.osgi.service.component.annotations.Component;
 
 /**
+ * Adds Vulcan the ability to represent single models in plain JSON.
+ *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
