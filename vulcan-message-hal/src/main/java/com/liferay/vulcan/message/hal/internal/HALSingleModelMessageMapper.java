@@ -25,8 +25,12 @@ import java.util.stream.Stream;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Carlos Sierra Andrés
+ * Adds Vulcan the ability to represent single models in HAL format.
+ *
  * @author Alejandro Hernández
+ * @author Carlos Sierra Andrés
+ * @author Jorge Ferrer
+ * @see    <a href="http://stateless.co/hal_specification.html">HAL</a>
  */
 @Component(
 	immediate = true,
