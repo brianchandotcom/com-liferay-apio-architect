@@ -25,9 +25,13 @@ import java.util.stream.Stream;
 import org.osgi.service.component.annotations.Component;
 
 /**
+ * Adds Vulcan the ability to represent single models in JSON-LD + Hydra format.
+ *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @see    <a href="https://json-ld.org/">JSON-LD</a>
+ * @see    <a href="https://www.hydra-cg.com/">Hydra</a>
  */
 @Component(
 	immediate = true,
