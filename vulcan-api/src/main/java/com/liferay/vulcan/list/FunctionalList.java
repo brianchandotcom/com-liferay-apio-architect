@@ -19,6 +19,14 @@ import aQute.bnd.annotation.ProviderType;
 import java.util.stream.Stream;
 
 /**
+ * Instances of this class behave like a list in pure functional languages.
+ * Instead of splitting the list manually, you can use the provided methods to
+ * take different elements from the list, like <code>#head()</code>,
+ * <code>#tail()</code>, etc.
+ *
+ * Instances of <code>FunctionalList</code> should always have at least one
+ * element.
+ *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
@@ -26,14 +34,41 @@ import java.util.stream.Stream;
 @ProviderType
 public interface FunctionalList<T> {
 
+	/**
+	 * Returns the first element of the list.
+	 *
+	 * @return the first element.
+	 */
 	public T head();
 
+	/**
+	 * Returns all elements of the list except the last one in a Java stream.
+	 *
+	 * @return a stream with all elements except the last one.
+	 */
 	public Stream<T> init();
 
+	/**
+	 * Returns the last element of the list. If the list only has one element,
+	 * this method returns the same as <code>#head()</code>
+	 *
+	 * @return the last element.
+	 */
 	public T last();
 
+	/**
+	 * Returns all elements of the list except the first and last in a Java
+	 * stream.
+	 *
+	 * @return a stream with all elements except the first and last.
+	 */
 	public Stream<T> middle();
 
+	/**
+	 * Returns all elements of the list except the first one in a Java stream.
+	 *
+	 * @return a stream with all elements except the first one.
+	 */
 	public Stream<T> tail();
 
 }
