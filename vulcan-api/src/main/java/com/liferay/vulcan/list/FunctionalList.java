@@ -16,6 +16,7 @@ package com.liferay.vulcan.list;
 
 import aQute.bnd.annotation.ProviderType;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -49,12 +50,13 @@ public interface FunctionalList<T> {
 	public Stream<T> init();
 
 	/**
-	 * Returns the last element of the list. If the list only has one element,
-	 * this method returns the same as <code>#head()</code>
+	 * Returns the last element of the list if there is one (tail need to have
+	 * at least one element). Otherwise returns <code>Optional.empty()</code>
 	 *
-	 * @return the last element.
+	 * @return the last element if there is one, otherwise
+	 *         <code>Optional.empty()</code>
 	 */
-	public T last();
+	public Optional<T> last();
 
 	/**
 	 * Returns all elements of the list except the first and last in a Java
