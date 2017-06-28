@@ -35,7 +35,7 @@ import javax.ws.rs.PathParam;
 public interface RootEndpoint {
 
 	/**
-	 * Returns the single model for a given path.
+	 * Returns the {@link SingleModel} for a given path.
 	 *
 	 * @param  path the path from the URL.
 	 * @return the single model at the path.
@@ -46,7 +46,7 @@ public interface RootEndpoint {
 		@PathParam("path") String path, @PathParam("id") String id);
 
 	/**
-	 * Returns the collection page for a given path.
+	 * Returns the collection {@link Page} for a given path.
 	 *
 	 * @param  path the path from the URL.
 	 * @return the collection page at the path.
