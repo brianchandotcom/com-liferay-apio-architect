@@ -20,6 +20,7 @@ import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.SingleModelMessageMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
@@ -140,12 +141,14 @@ public class JSONLDSingleModelMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
+		String head = embeddedPathElements.head();
+
 		Stream<String> tailStream = embeddedPathElements.tail();
 
 		String[] tail = tailStream.toArray(String[]::new);
 
 		jsonObjectBuilder.nestedField(
-			embeddedPathElements.head(), tail
+			head, tail
 		).value(
 			url
 		);
@@ -154,15 +157,17 @@ public class JSONLDSingleModelMessageMapper<T>
 
 		String[] middle = middleStream.toArray(String[]::new);
 
+		Optional<String> optional = embeddedPathElements.last();
+
 		jsonObjectBuilder.ifElseCondition(
-			tail.length == 0, builder -> builder.field("@context"),
+			optional.isPresent(),
 			builder -> builder.nestedField(
-				embeddedPathElements.head(), middle
-			).field(
-				"@context"
-			)
-		).nestedField(
-			embeddedPathElements.last(), "@type"
+				head, middle
+			).nestedField(
+				"@context", optional.get()
+			), builder -> builder.nestedField("@context", head)
+		).field(
+			"@type"
 		).value(
 			"@id"
 		);
