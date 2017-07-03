@@ -230,7 +230,8 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.field(
 			"@type"
-		).value(
+		).arrayValue(
+		).add(
 			"Collection"
 		);
 
