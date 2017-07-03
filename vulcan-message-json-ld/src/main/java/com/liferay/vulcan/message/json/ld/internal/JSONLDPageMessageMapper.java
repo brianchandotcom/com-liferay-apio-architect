@@ -228,25 +228,18 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
 		RequestInfo requestInfo) {
 
-
-		jsonObjectBuilder.field(
-			"@context"
-		).arrayValue(
-		).add(
+		jsonObjectBuilder.nestedField(
+			"@context", "Collection"
+		).value(
 			"http://www.w3.org/ns/hydra/pagination.jsonld"
 		);
 
-		jsonObjectBuilder.field(
-			"@context"
-		).arrayValue(
-		).add(
-			nestedJsonObjectBuilder -> nestedJsonObjectBuilder.field(
-				"@vocab"
-			).value(
-				"http://schema.org"
-			)
+		jsonObjectBuilder.nestedField(
+			"@context", "@vocab"
+		).value(
+			"http://schema.org"
 		);
-		
+
 		jsonObjectBuilder.nestedField(
 			"view", "@type"
 		).arrayValue(
