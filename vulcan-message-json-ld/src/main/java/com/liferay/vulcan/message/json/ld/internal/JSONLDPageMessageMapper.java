@@ -228,12 +228,6 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
 		RequestInfo requestInfo) {
 
-		jsonObjectBuilder.field(
-			"@type"
-		).arrayValue(
-		).add(
-			"Collection"
-		);
 
 		jsonObjectBuilder.field(
 			"@context"
@@ -251,6 +245,20 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 			).value(
 				"http://schema.org"
 			)
+		);
+		
+		jsonObjectBuilder.nestedField(
+			"view", "@type"
+		).arrayValue(
+		).add(
+			"PartialCollectionView"
+		);
+
+		jsonObjectBuilder.field(
+			"@type"
+		).arrayValue(
+		).add(
+			"Collection"
 		);
 	}
 
