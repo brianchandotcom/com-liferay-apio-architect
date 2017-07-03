@@ -68,7 +68,8 @@ public class HALSingleModelMessageMapper<T>
 				"_embedded", head, middle
 			).field(
 				optional.get()
-			), fieldStep -> fieldStep.field(head)
+			),
+			fieldStep -> fieldStep.field(head)
 		).field(
 			fieldName
 		).value(
@@ -98,7 +99,8 @@ public class HALSingleModelMessageMapper<T>
 				"_embedded", head, middle
 			).field(
 				optional.get()
-			), fieldStep -> fieldStep.field(head)
+			),
+			fieldStep -> fieldStep.field(head)
 		).nestedField(
 			"_links", fieldName, "href"
 		).value(

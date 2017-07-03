@@ -165,7 +165,8 @@ public class JSONLDSingleModelMessageMapper<T>
 				head, middle
 			).nestedField(
 				"@context", optional.get()
-			), builder -> builder.nestedField("@context", head)
+			),
+			builder -> builder.nestedField("@context", head)
 		).field(
 			"@type"
 		).value(
