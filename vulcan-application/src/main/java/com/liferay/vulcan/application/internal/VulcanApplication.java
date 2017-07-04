@@ -70,6 +70,7 @@ public class VulcanApplication extends Application {
 		_messageBodyWriters.add(messageBodyWriter);
 	}
 
+	@SuppressWarnings("unused")
 	public <T> void unsetServiceReference(
 		ServiceReference<MessageBodyWriter<T>> serviceReference,
 		MessageBodyWriter<T> messageBodyWriter) {
