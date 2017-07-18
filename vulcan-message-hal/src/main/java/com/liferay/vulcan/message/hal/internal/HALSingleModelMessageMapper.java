@@ -52,11 +52,11 @@ public class HALSingleModelMessageMapper<T>
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object value) {
 
-		Optional<String> optional = embeddedPathElements.last();
+		Optional<String> optional = embeddedPathElements.lastOptional();
 
 		String head = embeddedPathElements.head();
 
-		Stream<String> middleStream = embeddedPathElements.middle();
+		Stream<String> middleStream = embeddedPathElements.middleStream();
 
 		String[] middle = middleStream.toArray(String[]::new);
 
@@ -83,11 +83,11 @@ public class HALSingleModelMessageMapper<T>
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
 
-		Optional<String> optional = embeddedPathElements.last();
+		Optional<String> optional = embeddedPathElements.lastOptional();
 
 		String head = embeddedPathElements.head();
 
-		Stream<String> middleStream = embeddedPathElements.middle();
+		Stream<String> middleStream = embeddedPathElements.middleStream();
 
 		String[] middle = middleStream.toArray(String[]::new);
 
@@ -144,7 +144,7 @@ public class HALSingleModelMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		Optional<String> optional = embeddedPathElements.last();
+		Optional<String> optional = embeddedPathElements.lastOptional();
 
 		String head = embeddedPathElements.head();
 
@@ -156,7 +156,7 @@ public class HALSingleModelMessageMapper<T>
 			);
 		}
 		else {
-			Stream<String> middleStream = embeddedPathElements.middle();
+			Stream<String> middleStream = embeddedPathElements.middleStream();
 
 			List<String> middleList = middleStream.collect(Collectors.toList());
 

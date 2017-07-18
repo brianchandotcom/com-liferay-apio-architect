@@ -47,7 +47,7 @@ public interface FunctionalList<T> {
 	 *
 	 * @return a stream with all elements except the last one.
 	 */
-	public Stream<T> init();
+	public Stream<T> initStream();
 
 	/**
 	 * Returns the last element of the list if there is one (tail need to have
@@ -56,7 +56,7 @@ public interface FunctionalList<T> {
 	 * @return the last element if there is one, otherwise
 	 *         <code>Optional.empty()</code>
 	 */
-	public Optional<T> last();
+	public Optional<T> lastOptional();
 
 	/**
 	 * Returns all elements of the list except the first and last in a Java
@@ -64,13 +64,13 @@ public interface FunctionalList<T> {
 	 *
 	 * @return a stream with all elements except the first and last.
 	 */
-	public Stream<T> middle();
+	public Stream<T> middleStream();
 
 	/**
 	 * Returns all elements of the list except the first one in a Java stream.
 	 *
 	 * @return a stream with all elements except the first one.
 	 */
-	public Stream<T> tail();
+	public Stream<T> tailStream();
 
 }

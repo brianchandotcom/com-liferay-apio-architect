@@ -284,7 +284,7 @@ public class WriterHelper {
 
 				Stream<String> stream = Stream.concat(
 					Stream.of(embeddedPathElements.head()),
-					embeddedPathElements.tail());
+					embeddedPathElements.tailStream());
 
 				String embeddedPath = String.join(
 					".", stream.collect(Collectors.toList()));
