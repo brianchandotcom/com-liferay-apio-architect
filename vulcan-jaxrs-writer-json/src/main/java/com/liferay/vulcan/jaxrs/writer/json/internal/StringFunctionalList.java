@@ -40,7 +40,7 @@ public class StringFunctionalList implements FunctionalList<String> {
 		else {
 			_first = functionalList.head();
 
-			Stream<String> stream = functionalList.tail();
+			Stream<String> stream = functionalList.tailStream();
 
 			List<String> tail = stream.collect(Collectors.toList());
 
@@ -56,13 +56,13 @@ public class StringFunctionalList implements FunctionalList<String> {
 	}
 
 	@Override
-	public Stream<String> init() {
+	public Stream<String> initStream() {
 		if (_init == null) {
 			List<String> init = new ArrayList<>();
 
 			init.add(_first);
 
-			Stream<String> middle = middle();
+			Stream<String> middle = middleStream();
 
 			init.addAll(middle.collect(Collectors.toList()));
 
@@ -73,7 +73,7 @@ public class StringFunctionalList implements FunctionalList<String> {
 	}
 
 	@Override
-	public Optional<String> last() {
+	public Optional<String> lastOptional() {
 		if (_last == null) {
 			if (_tail.size() == 0) {
 				return Optional.empty();
@@ -86,7 +86,7 @@ public class StringFunctionalList implements FunctionalList<String> {
 	}
 
 	@Override
-	public Stream<String> middle() {
+	public Stream<String> middleStream() {
 		if (_middle == null) {
 			if (_tail.size() == 0) {
 				_middle = Collections.emptyList();
@@ -100,7 +100,7 @@ public class StringFunctionalList implements FunctionalList<String> {
 	}
 
 	@Override
-	public Stream<String> tail() {
+	public Stream<String> tailStream() {
 		return _tail.stream();
 	}
 

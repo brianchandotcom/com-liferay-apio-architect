@@ -80,7 +80,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object fieldData) {
 
-		Stream<String> tailStream = embeddedPathElements.tail();
+		Stream<String> tailStream = embeddedPathElements.tailStream();
 
 		itemJSONObjectBuilder.nestedField(
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)

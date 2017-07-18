@@ -53,7 +53,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Object value) {
 
-		Stream<String> tailStream = embeddedPathElements.tail();
+		Stream<String> tailStream = embeddedPathElements.tailStream();
 
 		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)
@@ -70,7 +70,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
 
-		Stream<String> tailStream = embeddedPathElements.tail();
+		Stream<String> tailStream = embeddedPathElements.tailStream();
 
 		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)
@@ -86,7 +86,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, List<String> types) {
 
-		Stream<String> tailStream = embeddedPathElements.tail();
+		Stream<String> tailStream = embeddedPathElements.tailStream();
 
 		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)
@@ -103,7 +103,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		Stream<String> tailStream = embeddedPathElements.tail();
+		Stream<String> tailStream = embeddedPathElements.tailStream();
 
 		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)
@@ -143,7 +143,7 @@ public class JSONLDSingleModelMessageMapper<T>
 
 		String head = embeddedPathElements.head();
 
-		Stream<String> tailStream = embeddedPathElements.tail();
+		Stream<String> tailStream = embeddedPathElements.tailStream();
 
 		String[] tail = tailStream.toArray(String[]::new);
 
@@ -153,11 +153,11 @@ public class JSONLDSingleModelMessageMapper<T>
 			url
 		);
 
-		Stream<String> middleStream = embeddedPathElements.middle();
+		Stream<String> middleStream = embeddedPathElements.middleStream();
 
 		String[] middle = middleStream.toArray(String[]::new);
 
-		Optional<String> optional = embeddedPathElements.last();
+		Optional<String> optional = embeddedPathElements.lastOptional();
 
 		jsonObjectBuilder.ifElseCondition(
 			optional.isPresent(),
