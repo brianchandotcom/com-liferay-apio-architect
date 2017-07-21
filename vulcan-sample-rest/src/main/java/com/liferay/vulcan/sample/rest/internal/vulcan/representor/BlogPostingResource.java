@@ -117,7 +117,7 @@ public class BlogPostingResource
 			this::_getPageItems, CurrentGroup.class
 		).collectionItem(
 			this::_getBlogsEntry, Long.class
-		);
+		).build();
 	}
 
 	private BlogsEntry _getBlogsEntry(Long id) {

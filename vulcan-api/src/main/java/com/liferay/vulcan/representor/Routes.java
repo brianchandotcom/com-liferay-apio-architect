@@ -40,7 +40,8 @@ public interface Routes<T> {
 
 	/**
 	 * Returns the function used to create the single model of a {@link
-	 * Resource}.
+	 * Resource}. Returns <code>Optional#empty()</code> if the endpoint wasn't
+	 * added through the {@link RoutesBuilder}.
 	 *
 	 * <p>
 	 * This function will have as its only parameter another function which must
@@ -48,13 +49,16 @@ public interface Routes<T> {
 	 * com.liferay.vulcan.provider.Provider}.
 	 * </p>
 	 *
-	 * @return the function used to create the single model.
+	 * @return the function used to create the single model, if present;
+	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Function<Function<Class<?>, Optional<?>>, Function<String, T>>
-		getModelFunction();
+	public Optional<Function<Function<Class<?>, Optional<?>>, Function
+		<String, T>>> getModelFunctionOptional();
 
 	/**
 	 * Returns the function used to create the page of a {@link Resource}.
+	 * Returns <code>Optional#empty()</code> if the endpoint wasn't added
+	 * through the {@link RoutesBuilder}.
 	 *
 	 * <p>
 	 * This function will have as its only parameter another function which must
@@ -62,9 +66,10 @@ public interface Routes<T> {
 	 * com.liferay.vulcan.provider.Provider}.
 	 * </p>
 	 *
-	 * @return the function used to create the page.
+	 * @return the function used to create the page, if present;
+	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Function<Function<Class<?>, Optional<?>>, PageItems<T>>
-		getPageItemsFunction();
+	public Optional<Function<Function<Class<?>, Optional<?>>, PageItems<T>>>
+		getPageItemsFunctionOptional();
 
 }

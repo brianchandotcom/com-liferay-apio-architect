@@ -37,6 +37,7 @@ import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -82,8 +83,11 @@ public class LiferayRootEndpoint implements RootEndpoint {
 
 		Routes<T> routes = _resourceManager.getRoutes(modelClass);
 
+		Optional<Function<Function<Class<?>, Optional<?>>, Function<String, T>>>
+			optional = routes.getModelFunctionOptional();
+
 		Function<Function<Class<?>, Optional<?>>, Function<String, T>>
-			routesModelFunction = routes.getModelFunction();
+			routesModelFunction = optional.orElseThrow(NotFoundException::new);
 
 		Function<String, T> modelFunction = routesModelFunction.apply(
 			this::_provide);
@@ -102,14 +106,17 @@ public class LiferayRootEndpoint implements RootEndpoint {
 
 		Routes<T> routes = _resourceManager.getRoutes(modelClass);
 
+		Optional<Function<Function<Class<?>, Optional<?>>, PageItems<T>>>
+			optional = routes.getPageItemsFunctionOptional();
+
 		Function<Function<Class<?>, Optional<?>>, PageItems<T>>
-			pageItemsFunction = routes.getPageItemsFunction();
+			pageItemsFunction = optional.orElseThrow(NotFoundException::new);
 
 		PageItems<T> pageItems = pageItemsFunction.apply(this::_provide);
 
-		Optional<Pagination> optional = _provide(Pagination.class);
+		Optional<Pagination> paginationOptional = _provide(Pagination.class);
 
-		Pagination pagination = optional.orElseThrow(
+		Pagination pagination = paginationOptional.orElseThrow(
 			() -> new MustHaveProvider(Pagination.class));
 
 		return new DefaultPage<>(

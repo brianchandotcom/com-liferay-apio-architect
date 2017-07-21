@@ -41,15 +41,251 @@ import javax.ws.rs.BadRequestException;
 public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 	@Override
+	public Routes<T> build() {
+		return _routesImpl;
+	}
+
+	@Override
+	public <U, A> RoutesBuilder<T> collectionItem(
+		BiFunction<U, A, T> biFunction, Class<U> identifierClass,
+		Class<A> aClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				id -> {
+					A a = _provide(aClass, provideFunction);
+
+					return biFunction.apply(id, a);
+				}
+			));
+
+		return this;
+	}
+
+	@Override
+	public <U, A, B, C, D, E, F, G, H, I> RoutesBuilder<T> collectionItem(
+		DecaFunction<U, A, B, C, D, E, F, G, H, I, T> decaFunction,
+		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+		Class<G> gClass, Class<H> hClass, Class<I> iClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				id -> {
+					A a = _provide(aClass, provideFunction);
+					B b = _provide(bClass, provideFunction);
+					C c = _provide(cClass, provideFunction);
+					D d = _provide(dClass, provideFunction);
+					E e = _provide(eClass, provideFunction);
+					F f = _provide(fClass, provideFunction);
+					G g = _provide(gClass, provideFunction);
+					H h = _provide(hClass, provideFunction);
+					I i = _provide(iClass, provideFunction);
+
+					return decaFunction.apply(id, a, b, c, d, e, f, g, h, i);
+				}
+			));
+
+		return this;
+	}
+
+	@Override
+	public <U, A, B, C, D, E, F, G, H> RoutesBuilder<T> collectionItem(
+		EnneaFunction<U, A, B, C, D, E, F, G, H, T> enneaFunction,
+		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+		Class<G> gClass, Class<H> hClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				id -> {
+					A a = _provide(aClass, provideFunction);
+					B b = _provide(bClass, provideFunction);
+					C c = _provide(cClass, provideFunction);
+					D d = _provide(dClass, provideFunction);
+					E e = _provide(eClass, provideFunction);
+					F f = _provide(fClass, provideFunction);
+					G g = _provide(gClass, provideFunction);
+					H h = _provide(hClass, provideFunction);
+
+					return enneaFunction.apply(id, a, b, c, d, e, f, g, h);
+				}
+			));
+
+		return this;
+	}
+
+	@Override
+	public <U> RoutesBuilder<T> collectionItem(
+		Function<U, T> function, Class<U> identifierClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				function
+			));
+
+		return this;
+	}
+
+	@Override
+	public <U, A, B, C, D, E, F> RoutesBuilder<T> collectionItem(
+		HeptaFunction<U, A, B, C, D, E, F, T> heptaFunction,
+		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				id -> {
+					A a = _provide(aClass, provideFunction);
+					B b = _provide(bClass, provideFunction);
+					C c = _provide(cClass, provideFunction);
+					D d = _provide(dClass, provideFunction);
+					E e = _provide(eClass, provideFunction);
+					F f = _provide(fClass, provideFunction);
+
+					return heptaFunction.apply(id, a, b, c, d, e, f);
+				}
+			));
+
+		return this;
+	}
+
+	@Override
+	public <U, A, B, C, D, E> RoutesBuilder<T> collectionItem(
+		HexaFunction<U, A, B, C, D, E, T> hexaFunction,
+		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass, Class<D> dClass, Class<E> eClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				id -> {
+					A a = _provide(aClass, provideFunction);
+					B b = _provide(bClass, provideFunction);
+					C c = _provide(cClass, provideFunction);
+					D d = _provide(dClass, provideFunction);
+					E e = _provide(eClass, provideFunction);
+
+					return hexaFunction.apply(id, a, b, c, d, e);
+				}
+			));
+
+		return this;
+	}
+
+	@Override
+	public <U, A, B, C, D, E, F, G> RoutesBuilder<T> collectionItem(
+		OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction,
+		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+		Class<G> gClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				id -> {
+					A a = _provide(aClass, provideFunction);
+					B b = _provide(bClass, provideFunction);
+					C c = _provide(cClass, provideFunction);
+					D d = _provide(dClass, provideFunction);
+					E e = _provide(eClass, provideFunction);
+					F f = _provide(fClass, provideFunction);
+					G g = _provide(gClass, provideFunction);
+
+					return octaFunction.apply(id, a, b, c, d, e, f, g);
+				}
+			));
+
+		return this;
+	}
+
+	@Override
+	public <U, A, B, C, D> RoutesBuilder<T> collectionItem(
+		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<U> identifierClass,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				id -> {
+					A a = _provide(aClass, provideFunction);
+					B b = _provide(bClass, provideFunction);
+					C c = _provide(cClass, provideFunction);
+					D d = _provide(dClass, provideFunction);
+
+					return pentaFunction.apply(id, a, b, c, d);
+				}
+			));
+
+		return this;
+	}
+
+	@Override
+	public <U, A, B, C> RoutesBuilder<T> collectionItem(
+		TetraFunction<U, A, B, C, T> tetraFunction, Class<U> identifierClass,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				id -> {
+					A a = _provide(aClass, provideFunction);
+					B b = _provide(bClass, provideFunction);
+					C c = _provide(cClass, provideFunction);
+
+					return tetraFunction.apply(id, a, b, c);
+				}
+			));
+
+		return this;
+	}
+
+	@Override
+	public <U, A, B> RoutesBuilder<T> collectionItem(
+		TriFunction<U, A, B, T> triFunction, Class<U> identifierClass,
+		Class<A> aClass, Class<B> bClass) {
+
+		_routesImpl.setModelFunction(
+			provideFunction -> _convertIdentifier(
+				identifierClass
+			).andThen(
+				id -> {
+					A a = _provide(aClass, provideFunction);
+					B b = _provide(bClass, provideFunction);
+
+					return triFunction.apply(id, a, b);
+				}
+			));
+
+		return this;
+	}
+
+	@Override
 	public <A> RoutesBuilder<T> collectionPage(
 		BiFunction<Pagination, A, PageItems<T>> biFunction, Class<A> aClass) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
-			A a = _provide(aClass, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
 
-			return biFunction.apply(pagination, a);
-		};
+				return biFunction.apply(pagination, a);
+			});
 
 		return this;
 	}
@@ -61,20 +297,23 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 		Class<G> gClass, Class<H> hClass, Class<I> iClass) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
-			A a = _provide(aClass, provideFunction);
-			B b = _provide(bClass, provideFunction);
-			C c = _provide(cClass, provideFunction);
-			D d = _provide(dClass, provideFunction);
-			E e = _provide(eClass, provideFunction);
-			F f = _provide(fClass, provideFunction);
-			G g = _provide(gClass, provideFunction);
-			H h = _provide(hClass, provideFunction);
-			I i = _provide(iClass, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
+				F f = _provide(fClass, provideFunction);
+				G g = _provide(gClass, provideFunction);
+				H h = _provide(hClass, provideFunction);
+				I i = _provide(iClass, provideFunction);
 
-			return decaFunction.apply(pagination, a, b, c, d, e, f, g, h, i);
-		};
+				return decaFunction.apply(
+					pagination, a, b, c, d, e, f, g, h, i);
+			});
 
 		return this;
 	}
@@ -86,19 +325,21 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass,
 		Class<H> hClass) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
-			A a = _provide(aClass, provideFunction);
-			B b = _provide(bClass, provideFunction);
-			C c = _provide(cClass, provideFunction);
-			D d = _provide(dClass, provideFunction);
-			E e = _provide(eClass, provideFunction);
-			F f = _provide(fClass, provideFunction);
-			G g = _provide(gClass, provideFunction);
-			H h = _provide(hClass, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
+				F f = _provide(fClass, provideFunction);
+				G g = _provide(gClass, provideFunction);
+				H h = _provide(hClass, provideFunction);
 
-			return enneaFunction.apply(pagination, a, b, c, d, e, f, g, h);
-		};
+				return enneaFunction.apply(pagination, a, b, c, d, e, f, g, h);
+			});
 
 		return this;
 	}
@@ -107,11 +348,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	public RoutesBuilder<T> collectionPage(
 		Function<Pagination, PageItems<T>> function) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
 
-			return function.apply(pagination);
-		};
+				return function.apply(pagination);
+			});
 
 		return this;
 	}
@@ -122,17 +365,19 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Class<E> eClass, Class<F> fClass) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
-			A a = _provide(aClass, provideFunction);
-			B b = _provide(bClass, provideFunction);
-			C c = _provide(cClass, provideFunction);
-			D d = _provide(dClass, provideFunction);
-			E e = _provide(eClass, provideFunction);
-			F f = _provide(fClass, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
+				F f = _provide(fClass, provideFunction);
 
-			return heptaFunction.apply(pagination, a, b, c, d, e, f);
-		};
+				return heptaFunction.apply(pagination, a, b, c, d, e, f);
+			});
 
 		return this;
 	}
@@ -143,16 +388,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Class<E> eClass) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
-			A a = _provide(aClass, provideFunction);
-			B b = _provide(bClass, provideFunction);
-			C c = _provide(cClass, provideFunction);
-			D d = _provide(dClass, provideFunction);
-			E e = _provide(eClass, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
 
-			return hexaFunction.apply(pagination, a, b, c, d, e);
-		};
+				return hexaFunction.apply(pagination, a, b, c, d, e);
+			});
 
 		return this;
 	}
@@ -163,18 +410,20 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			octaFunction, Class<A> aClass, Class<B> bClass, Class<C> cClass,
 		Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
-			A a = _provide(aClass, provideFunction);
-			B b = _provide(bClass, provideFunction);
-			C c = _provide(cClass, provideFunction);
-			D d = _provide(dClass, provideFunction);
-			E e = _provide(eClass, provideFunction);
-			F f = _provide(fClass, provideFunction);
-			G g = _provide(gClass, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
+				F f = _provide(fClass, provideFunction);
+				G g = _provide(gClass, provideFunction);
 
-			return octaFunction.apply(pagination, a, b, c, d, e, f, g);
-		};
+				return octaFunction.apply(pagination, a, b, c, d, e, f, g);
+			});
 
 		return this;
 	}
@@ -184,15 +433,17 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		PentaFunction<Pagination, A, B, C, D, PageItems<T>> pentaFunction,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
-			A a = _provide(aClass, provideFunction);
-			B b = _provide(bClass, provideFunction);
-			C c = _provide(cClass, provideFunction);
-			D d = _provide(dClass, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
 
-			return pentaFunction.apply(pagination, a, b, c, d);
-		};
+				return pentaFunction.apply(pagination, a, b, c, d);
+			});
 
 		return this;
 	}
@@ -202,14 +453,16 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		TetraFunction<Pagination, A, B, C, PageItems<T>> tetraFunction,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
-			A a = _provide(aClass, provideFunction);
-			B b = _provide(bClass, provideFunction);
-			C c = _provide(cClass, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
 
-			return tetraFunction.apply(pagination, a, b, c);
-		};
+				return tetraFunction.apply(pagination, a, b, c);
+			});
 
 		return this;
 	}
@@ -219,249 +472,17 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		TriFunction<Pagination, A, B, PageItems<T>> triFunction,
 		Class<A> aClass, Class<B> bClass) {
 
-		_pageItemsFunction = provideFunction -> {
-			Pagination pagination = _provide(Pagination.class, provideFunction);
-			A a = _provide(aClass, provideFunction);
-			B b = _provide(bClass, provideFunction);
+		_routesImpl.setPageItemsFunction(
+			provideFunction -> {
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
 
-			return triFunction.apply(pagination, a, b);
-		};
+				return triFunction.apply(pagination, a, b);
+			});
 
 		return this;
-	}
-
-	private <U> U _provide(
-		Class<U> clazz, Function<Class<?>, Optional<?>> provideFunction) {
-
-		Optional<U> optional = (Optional<U>)provideFunction.apply(clazz);
-
-		return optional.orElseThrow(
-			() -> new MustHaveProvider(Pagination.class));
-	}
-
-	private Function<Function<Class<?>, Optional<?>>, PageItems<T>>
-		_pageItemsFunction;
-
-	@Override
-	public <U, A> Routes<T> collectionItem(
-		BiFunction<U, A, T> biFunction, Class<U> identifierClass,
-		Class<A> aClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			id -> {
-				A a = _provide(aClass, provideFunction);
-
-				return biFunction.apply(id, a);
-			}
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
-	}
-
-	@Override
-	public <U, A, B, C, D, E, F, G, H, I> Routes<T> collectionItem(
-		DecaFunction<U, A, B, C, D, E, F, G, H, I, T> decaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-		Class<G> gClass, Class<H> hClass, Class<I> iClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			id -> {
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
-				F f = _provide(fClass, provideFunction);
-				G g = _provide(gClass, provideFunction);
-				H h = _provide(hClass, provideFunction);
-				I i = _provide(iClass, provideFunction);
-
-				return decaFunction.apply(id, a, b, c, d, e, f, g, h, i);
-			}
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
-	}
-
-	@Override
-	public <U, A, B, C, D, E, F, G, H> Routes<T> collectionItem(
-		EnneaFunction<U, A, B, C, D, E, F, G, H, T> enneaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-		Class<G> gClass, Class<H> hClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			id -> {
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
-				F f = _provide(fClass, provideFunction);
-				G g = _provide(gClass, provideFunction);
-				H h = _provide(hClass, provideFunction);
-
-				return enneaFunction.apply(id, a, b, c, d, e, f, g, h);
-			}
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
-	}
-
-	@Override
-	public <U> Routes<T> collectionItem(
-		Function<U, T> function, Class<U> identifierClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			function
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
-	}
-
-	@Override
-	public <U, A, B, C, D, E, F> Routes<T> collectionItem(
-		HeptaFunction<U, A, B, C, D, E, F, T> heptaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass,
-		Class<F> fClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			id -> {
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
-				F f = _provide(fClass, provideFunction);
-
-				return heptaFunction.apply(id, a, b, c, d, e, f);
-			}
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
-	}
-
-	@Override
-	public <U, A, B, C, D, E> Routes<T> collectionItem(
-		HexaFunction<U, A, B, C, D, E, T> hexaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			id -> {
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
-
-				return hexaFunction.apply(id, a, b, c, d, e);
-			}
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
-	}
-
-	@Override
-	public <U, A, B, C, D, E, F, G> Routes<T> collectionItem(
-		OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-		Class<G> gClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			id -> {
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
-				F f = _provide(fClass, provideFunction);
-				G g = _provide(gClass, provideFunction);
-
-				return octaFunction.apply(id, a, b, c, d, e, f, g);
-			}
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
-	}
-
-	@Override
-	public <U, A, B, C, D> Routes<T> collectionItem(
-		PentaFunction<U, A, B, C, D, T> pentaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			id -> {
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-
-				return pentaFunction.apply(id, a, b, c, d);
-			}
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
-	}
-
-	@Override
-	public <U, A, B, C> Routes<T> collectionItem(
-		TetraFunction<U, A, B, C, T> tetraFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			id -> {
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-
-				return tetraFunction.apply(id, a, b, c);
-			}
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
-	}
-
-	@Override
-	public <U, A, B> Routes<T> collectionItem(
-		TriFunction<U, A, B, T> triFunction, Class<U> identifierClass,
-		Class<A> aClass, Class<B> bClass) {
-
-		_modelFunction = provideFunction -> _convertIdentifier(
-			identifierClass
-		).andThen(
-			id -> {
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-
-				return triFunction.apply(id, a, b);
-			}
-		);
-
-		return new RoutesImpl<>(_pageItemsFunction, _modelFunction);
 	}
 
 	private <U> Function<String, U> _convertIdentifier(
@@ -497,7 +518,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		}
 	}
 
-	private Function<Function<Class<?>, Optional<?>>, Function<String, T>>
-		_modelFunction;
+	private <U> U _provide(
+		Class<U> clazz, Function<Class<?>, Optional<?>> provideFunction) {
+
+		Optional<U> optional = (Optional<U>)provideFunction.apply(clazz);
+
+		return optional.orElseThrow(
+			() -> new MustHaveProvider(Pagination.class));
+	}
+
+	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();
 
 }

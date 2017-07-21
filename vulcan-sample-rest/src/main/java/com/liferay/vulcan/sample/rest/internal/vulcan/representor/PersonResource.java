@@ -91,7 +91,7 @@ public class PersonResource implements Resource<User> {
 			this::_getPageItems, Company.class
 		).collectionItem(
 			this::_getUser, Long.class
-		);
+		).build();
 	}
 
 	private PageItems<User> _getPageItems(

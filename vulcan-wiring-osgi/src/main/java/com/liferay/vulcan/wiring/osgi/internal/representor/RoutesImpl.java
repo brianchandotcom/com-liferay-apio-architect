@@ -25,31 +25,37 @@ import java.util.function.Function;
  */
 public class RoutesImpl<T> implements Routes<T> {
 
-	public RoutesImpl(
-		Function<Function<Class<?>, Optional<?>>, PageItems<T>>
-			pageItemsFunction,
+	@Override
+	public Optional<Function<Function<Class<?>, Optional<?>>, Function
+		<String, T>>> getModelFunctionOptional() {
+
+		return Optional.ofNullable(_modelFunction);
+	}
+
+	@Override
+	public Optional<Function<Function<Class<?>, Optional<?>>, PageItems<T>>>
+		getPageItemsFunctionOptional() {
+
+		return Optional.ofNullable(_pageItemsFunction);
+	}
+
+	public void setModelFunction(
 		Function<Function<Class<?>, Optional<?>>, Function<String, T>>
 			modelFunction) {
 
-		_pageItemsFunction = pageItemsFunction;
 		_modelFunction = modelFunction;
 	}
 
-	public Function<Function<Class<?>, Optional<?>>, Function<String, T>>
-		getModelFunction() {
+	public void setPageItemsFunction(
+		Function<Function<Class<?>, Optional<?>>, PageItems<T>>
+			pageItemsFunction) {
 
-		return _modelFunction;
+		_pageItemsFunction = pageItemsFunction;
 	}
 
-	public Function<Function<Class<?>, Optional<?>>, PageItems<T>>
-		getPageItemsFunction() {
-
-		return _pageItemsFunction;
-	}
-
-	private final Function<Function<Class<?>, Optional<?>>, Function<String, T>>
+	private Function<Function<Class<?>, Optional<?>>, Function<String, T>>
 		_modelFunction;
-	private final Function<Function<Class<?>, Optional<?>>, PageItems<T>>
+	private Function<Function<Class<?>, Optional<?>>, PageItems<T>>
 		_pageItemsFunction;
 
 }
