@@ -4,6 +4,7 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.vulcan.endpoint,\
 	com.liferay.vulcan.error,\
+	com.liferay.vulcan.filter,\
 	com.liferay.vulcan.function,\
 	com.liferay.vulcan.list,\
 	com.liferay.vulcan.message,\
