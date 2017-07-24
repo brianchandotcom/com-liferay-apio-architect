@@ -44,7 +44,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(immediate = true, service = {Resource.class, PersonResource.class})
+@Component(immediate = true)
 public class PersonResource implements Resource<User> {
 
 	@Override

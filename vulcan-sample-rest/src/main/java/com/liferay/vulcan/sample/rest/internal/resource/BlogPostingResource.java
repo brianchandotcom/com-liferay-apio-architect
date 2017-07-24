@@ -53,9 +53,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(
-	immediate = true, service = {BlogPostingResource.class, Resource.class}
-)
+@Component(immediate = true)
 public class BlogPostingResource
 	implements GroupScoped<BlogsEntry>, Resource<BlogsEntry> {
 
