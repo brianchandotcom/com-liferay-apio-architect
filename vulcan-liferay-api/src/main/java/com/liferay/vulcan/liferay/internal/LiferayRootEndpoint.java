@@ -27,12 +27,14 @@ import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.Routes;
+import com.liferay.vulcan.wiring.osgi.ConverterManager;
 import com.liferay.vulcan.wiring.osgi.GenericUtil;
 import com.liferay.vulcan.wiring.osgi.ProviderManager;
 import com.liferay.vulcan.wiring.osgi.ResourceManager;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
@@ -83,14 +85,20 @@ public class LiferayRootEndpoint implements RootEndpoint {
 
 		Routes<T> routes = _resourceManager.getRoutes(modelClass);
 
-		Optional<Function<Function<Class<?>, Optional<?>>, Function<String, T>>>
-			optional = routes.getModelFunctionOptional();
+		Optional<Function<BiFunction<Class<?>, String, ?>,
+			Function<Function<Class<?>, Optional<?>>, Function<String, T>>>>
+				optional = routes.getModelFunctionOptional();
 
-		Function<Function<Class<?>, Optional<?>>, Function<String, T>>
-			routesModelFunction = optional.orElseThrow(NotFoundException::new);
+		Function<BiFunction<Class<?>, String, ?>,
+			Function<Function<Class<?>, Optional<?>>, Function<String, T>>>
+				routesModelFunction = optional.orElseThrow(
+					NotFoundException::new);
 
 		Function<String, T> modelFunction = routesModelFunction.apply(
-			this::_provide);
+			this::_convert
+		).apply(
+			this::_provide
+		);
 
 		T model = modelFunction.apply(id);
 
@@ -133,9 +141,16 @@ public class LiferayRootEndpoint implements RootEndpoint {
 		return this;
 	}
 
+	private <U> Optional<U> _convert(Class<U> clazz, String id) {
+		return _converterManager.convert(clazz, id);
+	}
+
 	private <U> Optional<U> _provide(Class<U> clazz) {
 		return _providerManager.provide(clazz, _httpServletRequest);
 	}
+
+	@Reference
+	private ConverterManager _converterManager;
 
 	@Context
 	private HttpServletRequest _httpServletRequest;

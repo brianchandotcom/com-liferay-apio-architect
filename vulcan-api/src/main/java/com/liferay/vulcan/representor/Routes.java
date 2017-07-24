@@ -17,6 +17,7 @@ package com.liferay.vulcan.representor;
 import com.liferay.vulcan.pagination.PageItems;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -45,15 +46,23 @@ public interface Routes<T> {
 	 *
 	 * <p>
 	 * This function will have as its only parameter another function which must
-	 * be able to provide instances of classes that have a {@link
+	 * be able to convert String identifiers to a class that have a {@link
+	 * com.liferay.vulcan.converter.Converter}.
+	 * </p>
+	 *
+	 * <p>
+	 * Once the first function has been applied, the result function will have
+	 * as its only parameter another function which must be able to provide
+	 * instances of classes that have a {@link
 	 * com.liferay.vulcan.provider.Provider}.
 	 * </p>
 	 *
 	 * @return the function used to create the single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Function<Function<Class<?>, Optional<?>>, Function
-		<String, T>>> getModelFunctionOptional();
+	public Optional<Function<BiFunction<Class<?>, String, ?>,
+		Function<Function<Class<?>, Optional<?>>, Function<String, T>>>>
+			getModelFunctionOptional();
 
 	/**
 	 * Returns the function used to create the page of a {@link Resource}.

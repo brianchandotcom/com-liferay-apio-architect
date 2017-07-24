@@ -15,6 +15,7 @@
 package com.liferay.vulcan.wiring.osgi.internal.representor;
 
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveConverter;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.function.DecaFunction;
 import com.liferay.vulcan.function.EnneaFunction;
@@ -51,15 +52,16 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				id -> {
 					A a = _provide(aClass, provideFunction);
 
 					return biFunction.apply(id, a);
 				}
-			));
+			)
+		);
 
 		return this;
 	}
@@ -72,8 +74,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<G> gClass, Class<H> hClass, Class<I> iClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				id -> {
 					A a = _provide(aClass, provideFunction);
@@ -101,8 +103,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<G> gClass, Class<H> hClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				id -> {
 					A a = _provide(aClass, provideFunction);
@@ -126,8 +128,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<U, T> function, Class<U> identifierClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				function
 			));
@@ -142,8 +144,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				id -> {
 					A a = _provide(aClass, provideFunction);
@@ -167,8 +169,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				id -> {
 					A a = _provide(aClass, provideFunction);
@@ -192,8 +194,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<G> gClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				id -> {
 					A a = _provide(aClass, provideFunction);
@@ -217,8 +219,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				id -> {
 					A a = _provide(aClass, provideFunction);
@@ -239,8 +241,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				id -> {
 					A a = _provide(aClass, provideFunction);
@@ -260,8 +262,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass, Class<B> bClass) {
 
 		_routesImpl.setModelFunction(
-			provideFunction -> _convertIdentifier(
-				identifierClass
+			convertFunction -> provideFunction -> _convertIdentifier(
+				identifierClass, convertFunction
 			).andThen(
 				id -> {
 					A a = _provide(aClass, provideFunction);
@@ -486,7 +488,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	private <U> Function<String, U> _convertIdentifier(
-		Class<U> identifierClass) {
+		Class<U> identifierClass,
+		BiFunction<Class<?>, String, ?> convertFunction) {
 
 		if (identifierClass.isAssignableFrom(Long.class)) {
 			return id -> {
@@ -514,7 +517,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return id -> (U)id;
 		}
 		else {
-			throw new RuntimeException();
+			return id -> {
+				Optional<U> optional = (Optional<U>)convertFunction.apply(
+					identifierClass, id);
+
+				return optional.orElseThrow(
+					() -> new MustHaveConverter(identifierClass));
+			};
 		}
 	}
 
@@ -523,8 +532,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		Optional<U> optional = (Optional<U>)provideFunction.apply(clazz);
 
-		return optional.orElseThrow(
-			() -> new MustHaveProvider(Pagination.class));
+		return optional.orElseThrow(() -> new MustHaveProvider(clazz));
 	}
 
 	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();

@@ -18,6 +18,7 @@ import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.representor.Routes;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -26,8 +27,9 @@ import java.util.function.Function;
 public class RoutesImpl<T> implements Routes<T> {
 
 	@Override
-	public Optional<Function<Function<Class<?>, Optional<?>>, Function
-		<String, T>>> getModelFunctionOptional() {
+	public Optional<Function<BiFunction<Class<?>, String, ?>,
+		Function<Function<Class<?>, Optional<?>>, Function<String, T>>>>
+			getModelFunctionOptional() {
 
 		return Optional.ofNullable(_modelFunction);
 	}
@@ -40,8 +42,8 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	public void setModelFunction(
-		Function<Function<Class<?>, Optional<?>>, Function<String, T>>
-			modelFunction) {
+		Function<BiFunction<Class<?>, String, ?>, Function<Function<Class<?>,
+			Optional<?>>, Function<String, T>>> modelFunction) {
 
 		_modelFunction = modelFunction;
 	}
@@ -53,8 +55,8 @@ public class RoutesImpl<T> implements Routes<T> {
 		_pageItemsFunction = pageItemsFunction;
 	}
 
-	private Function<Function<Class<?>, Optional<?>>, Function<String, T>>
-		_modelFunction;
+	private Function<BiFunction<Class<?>, String, ?>, Function
+		<Function<Class<?>, Optional<?>>, Function<String, T>>> _modelFunction;
 	private Function<Function<Class<?>, Optional<?>>, PageItems<T>>
 		_pageItemsFunction;
 
