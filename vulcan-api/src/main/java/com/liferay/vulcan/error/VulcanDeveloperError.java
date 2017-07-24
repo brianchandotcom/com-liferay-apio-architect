@@ -24,6 +24,20 @@ package com.liferay.vulcan.error;
 public class VulcanDeveloperError extends Error {
 
 	/**
+	 * Represents the error the developer should throw when a converter is
+	 * missing.
+	 */
+	public static class MustHaveConverter extends VulcanDeveloperError {
+
+		public MustHaveConverter(Class<?> modelClass) {
+			super(
+				"Model class " + modelClass.getName() +
+					" does not have a converter");
+		}
+
+	}
+
+	/**
 	 * Represents the error the developer should throw when a message mapper is
 	 * missing.
 	 */

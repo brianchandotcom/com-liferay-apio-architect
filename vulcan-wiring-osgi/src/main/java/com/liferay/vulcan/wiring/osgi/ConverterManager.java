@@ -14,15 +14,13 @@
 
 package com.liferay.vulcan.wiring.osgi;
 
-import com.liferay.vulcan.provider.Provider;
+import com.liferay.vulcan.converter.Converter;
 import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -35,38 +33,34 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
- * Provides methods to provide instances of classes with a valid {@link
- * Provider}.
+ * Provides methods to convert String identifiers to custom types.
  *
  * @author Alejandro Hernández
- * @author Carlos Sierra Andrés
- * @author Jorge Ferrer
  */
-@Component(immediate = true, service = ProviderManager.class)
-public class ProviderManager {
+@Component(immediate = true, service = ConverterManager.class)
+public class ConverterManager {
 
-	public ProviderManager() {
-		Bundle bundle = FrameworkUtil.getBundle(ProviderManager.class);
+	public ConverterManager() {
+		Bundle bundle = FrameworkUtil.getBundle(ConverterManager.class);
 
 		_bundleContext = bundle.getBundleContext();
 	}
 
 	/**
-	 * Returns an instance of type T if a valid {@link Provider} can be found.
-	 * Returns <code>Optional#empty()</code> otherwise.
+	 * Converts a string identifier to its equivalent of type T if a valid
+	 * {@link Converter} can be found. Returns <code>Optional#empty()</code>
+	 * otherwise.
 	 *
-	 * @param  clazz the type class to be provided.
-	 * @param  httpServletRequest the current request.
-	 * @return the instance of T, if a valid {@link Provider} is present;
-	 *         <code>Optional#empty()</code> otherwise.
+	 * @param  clazz the type class to be converted to.
+	 * @param  id the string identifier.
+	 * @return the converted identifier, if a valid {@link Converter} is
+	 *         present; <code>Optional#empty()</code> otherwise.
 	 */
-	public <T> Optional<T> provide(
-		Class<T> clazz, HttpServletRequest httpServletRequest) {
+	public <T> Optional<T> convert(Class<T> clazz, String id) {
+		TreeSet<ServiceReferenceServiceTuple<Converter<?>>>
+			serviceReferenceServiceTuples = _converters.get(clazz.getName());
 
-		TreeSet<ServiceReferenceServiceTuple<Provider<?>>>
-			serviceReferenceServiceTuples = _providers.get(clazz.getName());
-
-		Optional<TreeSet<ServiceReferenceServiceTuple<Provider<?>>>> optional =
+		Optional<TreeSet<ServiceReferenceServiceTuple<Converter<?>>>> optional =
 			Optional.ofNullable(serviceReferenceServiceTuples);
 
 		return optional.filter(
@@ -75,10 +69,10 @@ public class ProviderManager {
 			TreeSet::first
 		).map(
 			serviceReferenceServiceTuple ->
-				(Provider<T>)
+				(Converter<T>)
 					serviceReferenceServiceTuple.getService()
 		).map(
-			provider -> provider.createContext(httpServletRequest)
+			converter -> converter.convert(id)
 		);
 	}
 
@@ -88,37 +82,38 @@ public class ProviderManager {
 		policyOption = ReferencePolicyOption.GREEDY
 	)
 	protected <T> void setServiceReference(
-		ServiceReference<Provider<T>> serviceReference) {
+		ServiceReference<Converter<T>> serviceReference) {
 
-		Provider<T> provider = _bundleContext.getService(serviceReference);
+		Converter<T> converter = _bundleContext.getService(serviceReference);
 
 		Class<T> modelClass = GenericUtil.getGenericClass(
-			provider, Provider.class);
+			converter, Converter.class);
 
-		_providers.computeIfAbsent(
+		_converters.computeIfAbsent(
 			modelClass.getName(), name -> new TreeSet<>());
 
-		TreeSet<ServiceReferenceServiceTuple<Provider<?>>>
-			serviceReferenceServiceTuples = _providers.get(
+		TreeSet<ServiceReferenceServiceTuple<Converter<?>>>
+			serviceReferenceServiceTuples = _converters.get(
 				modelClass.getName());
 
-		ServiceReferenceServiceTuple<Provider<T>> serviceReferenceServiceTuple =
-			new ServiceReferenceServiceTuple<>(serviceReference, provider);
+		ServiceReferenceServiceTuple<Converter<T>>
+			serviceReferenceServiceTuple = new ServiceReferenceServiceTuple<>(
+				serviceReference, converter);
 
 		serviceReferenceServiceTuples.add(
 			(ServiceReferenceServiceTuple)serviceReferenceServiceTuple);
 	}
 
 	protected <T> void unsetServiceReference(
-		ServiceReference<Provider<T>> serviceReference) {
+		ServiceReference<Converter<T>> serviceReference) {
 
-		Provider<T> resource = _bundleContext.getService(serviceReference);
+		Converter<T> resource = _bundleContext.getService(serviceReference);
 
 		Class<T> modelClass = GenericUtil.getGenericClass(
-			resource, Provider.class);
+			resource, Converter.class);
 
-		TreeSet<ServiceReferenceServiceTuple<Provider<?>>>
-			serviceReferenceServiceTuples = _providers.get(
+		TreeSet<ServiceReferenceServiceTuple<Converter<?>>>
+			serviceReferenceServiceTuples = _converters.get(
 				modelClass.getName());
 
 		serviceReferenceServiceTuples.removeIf(
@@ -133,7 +128,7 @@ public class ProviderManager {
 
 	private final BundleContext _bundleContext;
 	private final Map
-		<String, TreeSet<ServiceReferenceServiceTuple<Provider<?>>>>
-			_providers = new ConcurrentHashMap<>();
+		<String, TreeSet<ServiceReferenceServiceTuple<Converter<?>>>>
+			_converters = new ConcurrentHashMap<>();
 
 }
