@@ -14,9 +14,13 @@
 
 package com.liferay.vulcan.wiring.osgi;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
+import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
-import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
+import com.liferay.vulcan.wiring.osgi.internal.BaseManager;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 
@@ -25,18 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * Provides methods to retrieve information provided by the different {@link
@@ -49,7 +47,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @see    Resource
  */
 @Component(immediate = true, service = ResourceManager.class)
-public class ResourceManager {
+public class ResourceManager extends BaseManager<Resource> {
 
 	/**
 	 * Returns the embedded related models for the model class.
@@ -128,20 +126,8 @@ public class ResourceManager {
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
 	public <T> Optional<Resource<T>> getResourceOptional(Class<T> modelClass) {
-		Optional<TreeSet<ServiceReferenceServiceTuple
-			<Resource<?>>>> optional = Optional.ofNullable(
-				_resources.get(modelClass.getName()));
-
-		return optional.filter(
-			serviceReferenceServiceTuples ->
-				!serviceReferenceServiceTuples.isEmpty()
-		).map(
-			TreeSet::first
-		).map(
-			serviceReferenceServiceTuple ->
-				(Resource<T>)
-					serviceReferenceServiceTuple.getService()
-		);
+		return getServiceOptional(modelClass).map(
+			resource -> (Resource<T>)resource);
 	}
 
 	/**
@@ -164,33 +150,19 @@ public class ResourceManager {
 		return _types.get(modelClass.getName());
 	}
 
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY
-	)
+	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
 	protected <T> void setServiceReference(
-		ServiceReference<Resource<T>> serviceReference) {
+		ServiceReference<Resource> serviceReference) {
 
-		Resource<T> resource = _bundleContext.getService(serviceReference);
-
-		Class<T> modelClass = GenericUtil.getGenericClass(
-			resource, Resource.class);
-
-		_addResource(serviceReference, resource, modelClass);
+		Class<T> modelClass = addService(serviceReference, Resource.class);
 
 		_addModelClassMaps(modelClass);
 	}
 
 	protected <T> void unsetServiceReference(
-		ServiceReference<Resource<T>> serviceReference) {
+		ServiceReference<Resource> serviceReference) {
 
-		Resource<T> resource = _bundleContext.getService(serviceReference);
-
-		Class<T> modelClass = GenericUtil.getGenericClass(
-			resource, Resource.class);
-
-		_removeResource(resource, modelClass);
+		Class<T> modelClass = removeService(serviceReference, Resource.class);
 
 		_removeModelClassMaps(modelClass);
 
@@ -236,24 +208,6 @@ public class ResourceManager {
 			});
 	}
 
-	private <T> void _addResource(
-		ServiceReference<Resource<T>> serviceReference, Resource<T> resource,
-		Class<T> modelClass) {
-
-		_resources.computeIfAbsent(
-			modelClass.getName(), name -> new TreeSet<>());
-
-		ServiceReferenceServiceTuple<Resource<?>> serviceReferenceServiceTuple =
-			(ServiceReferenceServiceTuple)new ServiceReferenceServiceTuple<>(
-				serviceReference, resource);
-
-		TreeSet<ServiceReferenceServiceTuple<Resource<?>>>
-			serviceReferenceServiceTuples = _resources.get(
-				modelClass.getName());
-
-		serviceReferenceServiceTuples.add(serviceReferenceServiceTuple);
-	}
-
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
 		_embeddedRelatedModels.remove(modelClass.getName());
 		_fieldFunctions.remove(modelClass.getName());
@@ -263,23 +217,6 @@ public class ResourceManager {
 		_types.remove(modelClass.getName());
 	}
 
-	private <T> void _removeResource(Resource resource, Class<T> modelClass) {
-		TreeSet<ServiceReferenceServiceTuple<Resource<?>>>
-			serviceReferenceServiceTuples = _resources.get(
-				modelClass.getName());
-
-		serviceReferenceServiceTuples.removeIf(
-			resourceTuple -> {
-				if (resourceTuple.getService() == resource) {
-					return true;
-				}
-
-				return false;
-			});
-	}
-
-	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
-		ResourceManager.class).getBundleContext();
 	private final Map<String, List<RelatedModel<?, ?>>> _embeddedRelatedModels =
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
@@ -290,9 +227,6 @@ public class ResourceManager {
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, String>> _links =
 		new ConcurrentHashMap<>();
-	private final Map<String,
-		TreeSet<ServiceReferenceServiceTuple<Resource<?>>>> _resources =
-			new ConcurrentHashMap<>();
 	private final Map<String, Routes<?>> _routes = new ConcurrentHashMap<>();
 	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
 

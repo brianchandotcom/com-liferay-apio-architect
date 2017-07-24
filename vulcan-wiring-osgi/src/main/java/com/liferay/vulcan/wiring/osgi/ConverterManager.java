@@ -14,23 +14,18 @@
 
 package com.liferay.vulcan.wiring.osgi;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
+import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+
 import com.liferay.vulcan.converter.Converter;
-import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
+import com.liferay.vulcan.wiring.osgi.internal.BaseManager;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * Provides methods to convert String identifiers to custom types.
@@ -38,13 +33,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Alejandro Hernández
  */
 @Component(immediate = true, service = ConverterManager.class)
-public class ConverterManager {
-
-	public ConverterManager() {
-		Bundle bundle = FrameworkUtil.getBundle(ConverterManager.class);
-
-		_bundleContext = bundle.getBundleContext();
-	}
+public class ConverterManager extends BaseManager<Converter> {
 
 	/**
 	 * Converts a string identifier to its equivalent of type T if a valid
@@ -57,78 +46,26 @@ public class ConverterManager {
 	 *         present; <code>Optional#empty()</code> otherwise.
 	 */
 	public <T> Optional<T> convert(Class<T> clazz, String id) {
-		TreeSet<ServiceReferenceServiceTuple<Converter<?>>>
-			serviceReferenceServiceTuples = _converters.get(clazz.getName());
+		Optional<Converter> optional = getServiceOptional(clazz);
 
-		Optional<TreeSet<ServiceReferenceServiceTuple<Converter<?>>>> optional =
-			Optional.ofNullable(serviceReferenceServiceTuples);
-
-		return optional.filter(
-			treeSet -> !treeSet.isEmpty()
-		).map(
-			TreeSet::first
-		).map(
-			serviceReferenceServiceTuple ->
-				(Converter<T>)
-					serviceReferenceServiceTuple.getService()
+		return optional.map(
+			converter -> (Converter<T>)converter
 		).map(
 			converter -> converter.convert(id)
 		);
 	}
 
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY
-	)
-	protected <T> void setServiceReference(
-		ServiceReference<Converter<T>> serviceReference) {
+	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
+	protected void setServiceReference(
+		ServiceReference<Converter> serviceReference) {
 
-		Converter<T> converter = _bundleContext.getService(serviceReference);
-
-		Class<T> modelClass = GenericUtil.getGenericClass(
-			converter, Converter.class);
-
-		_converters.computeIfAbsent(
-			modelClass.getName(), name -> new TreeSet<>());
-
-		TreeSet<ServiceReferenceServiceTuple<Converter<?>>>
-			serviceReferenceServiceTuples = _converters.get(
-				modelClass.getName());
-
-		ServiceReferenceServiceTuple<Converter<T>>
-			serviceReferenceServiceTuple = new ServiceReferenceServiceTuple<>(
-				serviceReference, converter);
-
-		serviceReferenceServiceTuples.add(
-			(ServiceReferenceServiceTuple)serviceReferenceServiceTuple);
+		addService(serviceReference, Converter.class);
 	}
 
-	protected <T> void unsetServiceReference(
-		ServiceReference<Converter<T>> serviceReference) {
+	protected void unsetServiceReference(
+		ServiceReference<Converter> serviceReference) {
 
-		Converter<T> resource = _bundleContext.getService(serviceReference);
-
-		Class<T> modelClass = GenericUtil.getGenericClass(
-			resource, Converter.class);
-
-		TreeSet<ServiceReferenceServiceTuple<Converter<?>>>
-			serviceReferenceServiceTuples = _converters.get(
-				modelClass.getName());
-
-		serviceReferenceServiceTuples.removeIf(
-			serviceReferenceServiceTuple -> {
-				if (serviceReferenceServiceTuple.getService() == resource) {
-					return true;
-				}
-
-				return false;
-			});
+		removeService(serviceReference, Converter.class);
 	}
-
-	private final BundleContext _bundleContext;
-	private final Map
-		<String, TreeSet<ServiceReferenceServiceTuple<Converter<?>>>>
-			_converters = new ConcurrentHashMap<>();
 
 }

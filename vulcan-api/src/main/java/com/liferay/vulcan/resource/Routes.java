@@ -15,7 +15,6 @@
 package com.liferay.vulcan.resource;
 
 import com.liferay.vulcan.pagination.PageItems;
-import com.liferay.vulcan.resource.builder.RoutesBuilder;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
