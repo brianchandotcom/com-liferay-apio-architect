@@ -4,4 +4,5 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.vulcan.liferay.context,\
 	com.liferay.vulcan.liferay.filter,\
+	com.liferay.vulcan.liferay.identifier,\
 	com.liferay.vulcan.liferay.scope
