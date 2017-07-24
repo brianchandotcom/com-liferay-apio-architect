@@ -32,6 +32,8 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.sample.rest.rating.AggregateRating;
+import com.liferay.vulcan.sample.rest.rating.AggregateRatingService;
 
 import java.text.DateFormat;
 
@@ -73,6 +75,9 @@ public class BlogPostingResource
 
 		representorBuilder.identifier(
 			blogsEntry -> String.valueOf(blogsEntry.getEntryId())
+		).addEmbeddedModel(
+			"aggregateRating", AggregateRating.class,
+			this::_getAggregateRatingOptional
 		).addEmbeddedModel(
 			"creator", User.class, this::_getUserOptional
 		).addField(
@@ -120,6 +125,14 @@ public class BlogPostingResource
 		).build();
 	}
 
+	private Optional<AggregateRating> _getAggregateRatingOptional(
+		BlogsEntry blogsEntry) {
+
+		return Optional.of(
+			_aggregateRatingService.getAggregateRating(
+				BlogsEntry.class.getName(), blogsEntry.getEntryId()));
+	}
+
 	private BlogsEntry _getBlogsEntry(Long id) {
 		try {
 			return _blogsService.getEntry(id);
@@ -157,6 +170,9 @@ public class BlogPostingResource
 			throw new ServerErrorException(500, pe);
 		}
 	}
+
+	@Reference
+	private AggregateRatingService _aggregateRatingService;
 
 	@Reference
 	private BlogsEntryService _blogsService;
