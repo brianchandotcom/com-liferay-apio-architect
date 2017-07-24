@@ -14,11 +14,11 @@
 
 package com.liferay.vulcan.wiring.osgi;
 
-import com.liferay.vulcan.representor.Resource;
-import com.liferay.vulcan.representor.Routes;
+import com.liferay.vulcan.resource.Resource;
+import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
-import com.liferay.vulcan.wiring.osgi.internal.representor.RoutesBuilderImpl;
-import com.liferay.vulcan.wiring.osgi.internal.representor.builder.RepresentorBuilderImpl;
+import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
+import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;

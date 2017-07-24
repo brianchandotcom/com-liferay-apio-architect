@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.internal.vulcan.representor;
+package com.liferay.vulcan.sample.rest.internal.resource;
 
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.blogs.kernel.model.BlogsEntry;
@@ -28,10 +28,10 @@ import com.liferay.vulcan.liferay.context.CurrentGroup;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
-import com.liferay.vulcan.representor.Resource;
-import com.liferay.vulcan.representor.Routes;
-import com.liferay.vulcan.representor.RoutesBuilder;
-import com.liferay.vulcan.representor.builder.RepresentorBuilder;
+import com.liferay.vulcan.resource.Resource;
+import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.resource.builder.RepresentorBuilder;
+import com.liferay.vulcan.resource.builder.RoutesBuilder;
 
 import java.text.DateFormat;
 

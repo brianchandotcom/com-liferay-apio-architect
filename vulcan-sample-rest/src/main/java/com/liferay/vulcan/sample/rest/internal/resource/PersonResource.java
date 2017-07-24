@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.internal.vulcan.representor;
+package com.liferay.vulcan.sample.rest.internal.resource;
 
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -23,10 +23,10 @@ import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
-import com.liferay.vulcan.representor.Resource;
-import com.liferay.vulcan.representor.Routes;
-import com.liferay.vulcan.representor.RoutesBuilder;
-import com.liferay.vulcan.representor.builder.RepresentorBuilder;
+import com.liferay.vulcan.resource.Resource;
+import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.resource.builder.RepresentorBuilder;
+import com.liferay.vulcan.resource.builder.RoutesBuilder;
 
 import java.text.DateFormat;
 

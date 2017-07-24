@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Allows resources to provide {@link ClassNameClassPKFilter} as a parameter in
- * {@link com.liferay.vulcan.representor.RoutesBuilder} methods.
+ * {@link com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
  *
  * @author Alejandro Hernández
  */

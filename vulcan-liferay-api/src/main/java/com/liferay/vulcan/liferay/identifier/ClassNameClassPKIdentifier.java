@@ -20,8 +20,7 @@ package com.liferay.vulcan.liferay.identifier;
  *
  * <p>
  * To use this class, add it as the first parameter in
- * <code>collectionItem</code> {@link
- * com.liferay.vulcan.representor.RoutesBuilder} methods.
+ * <code>collectionItem</code> {@link com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
  * </p>
  *
  * @author Alejandro Hernández

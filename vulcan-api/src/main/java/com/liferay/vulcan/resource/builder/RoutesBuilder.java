@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.representor;
+package com.liferay.vulcan.resource.builder;
 
 import com.liferay.vulcan.function.DecaFunction;
 import com.liferay.vulcan.function.EnneaFunction;
@@ -24,12 +24,13 @@ import com.liferay.vulcan.function.TetraFunction;
 import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.Routes;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Use instances of this builder to create {@link Routes} of a {@link Resource}.
+ * Use instances of this builder to create {@link Routes} of a {@link com.liferay.vulcan.resource.Resource}.
  *
  * @author Alejandro Hernández
  */

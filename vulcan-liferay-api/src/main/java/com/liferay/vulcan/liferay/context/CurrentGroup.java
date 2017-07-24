@@ -20,8 +20,7 @@ import com.liferay.portal.kernel.model.Group;
  * Provides the current {@link Group}.
  *
  * <p>
- * To use this class, add it as a parameter in {@link
- * com.liferay.vulcan.representor.RoutesBuilder} methods.
+ * To use this class, add it as a parameter in {@link com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
  * </p>
  *
  * @author Alejandro Hernández

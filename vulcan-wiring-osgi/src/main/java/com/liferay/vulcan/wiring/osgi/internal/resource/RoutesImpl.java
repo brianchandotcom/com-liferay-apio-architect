@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi.internal.representor;
+package com.liferay.vulcan.wiring.osgi.internal.resource;
 
 import com.liferay.vulcan.pagination.PageItems;
-import com.liferay.vulcan.representor.Routes;
+import com.liferay.vulcan.resource.Routes;
 
 import java.util.Optional;
 import java.util.function.BiFunction;

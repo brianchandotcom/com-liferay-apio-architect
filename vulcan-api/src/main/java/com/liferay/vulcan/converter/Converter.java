@@ -20,7 +20,7 @@ package com.liferay.vulcan.converter;
  *
  * The class of the converter can then be provided as a parameter in
  * <code>collectionItem</code> {@link
- * com.liferay.vulcan.representor.RoutesBuilder} methods.
+ * com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
  *
  * @author Alejandro Hernández
  */

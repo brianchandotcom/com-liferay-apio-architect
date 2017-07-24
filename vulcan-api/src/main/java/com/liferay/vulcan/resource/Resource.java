@@ -12,9 +12,10 @@
  * details.
  */
 
-package com.liferay.vulcan.representor;
+package com.liferay.vulcan.resource;
 
-import com.liferay.vulcan.representor.builder.RepresentorBuilder;
+import com.liferay.vulcan.resource.builder.RepresentorBuilder;
+import com.liferay.vulcan.resource.builder.RoutesBuilder;
 
 /**
  * Maps your domain models to resources that Vulcan can understand.

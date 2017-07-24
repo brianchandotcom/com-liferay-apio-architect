@@ -16,7 +16,7 @@ package com.liferay.vulcan.liferay.internal.uri;
 
 import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
-import com.liferay.vulcan.representor.Resource;
+import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
 import com.liferay.vulcan.wiring.osgi.ResourceManager;
 

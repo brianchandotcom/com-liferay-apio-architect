@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi.internal.representor.builder;
+package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
-import com.liferay.vulcan.representor.builder.RepresentorBuilder;
+import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 
 import java.util.List;

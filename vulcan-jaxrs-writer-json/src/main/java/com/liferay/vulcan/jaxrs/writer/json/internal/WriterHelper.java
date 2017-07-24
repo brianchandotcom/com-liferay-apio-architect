@@ -19,7 +19,7 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.representor.Resource;
+import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;

@@ -25,8 +25,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Allows resources to use {@link ClassNameClassPKIdentifier} as the identifier
- * in <code>collectionItem</code> {@link
- * com.liferay.vulcan.representor.RoutesBuilder} methods.
+ * in <code>collectionItem</code> {@link com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
  *
  * @author Alejandro Hernández
  */

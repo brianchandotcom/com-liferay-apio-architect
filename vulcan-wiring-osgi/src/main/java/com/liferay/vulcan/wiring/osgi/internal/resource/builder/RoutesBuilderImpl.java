@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi.internal.representor;
+package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveConverter;
@@ -27,8 +27,9 @@ import com.liferay.vulcan.function.TetraFunction;
 import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
-import com.liferay.vulcan.representor.Routes;
-import com.liferay.vulcan.representor.RoutesBuilder;
+import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
 
 import java.util.Optional;
 import java.util.function.BiFunction;

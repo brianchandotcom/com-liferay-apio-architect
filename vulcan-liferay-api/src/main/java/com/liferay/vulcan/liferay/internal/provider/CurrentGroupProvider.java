@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * Allows resources to provide the current {@link
  * com.liferay.portal.kernel.model.Group} as a parameter in {@link
- * com.liferay.vulcan.representor.RoutesBuilder} methods.
+ * com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
