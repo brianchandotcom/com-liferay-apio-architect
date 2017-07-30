@@ -54,9 +54,6 @@ public class PaginationProvider implements Provider<Pagination> {
 
 	private static final int _PAGE_NUMBER_DEFAULT = 1;
 
-	@Reference
-	private Http _http;
-
 	private static class DefaultPagination implements Pagination {
 
 		public DefaultPagination(int itemsPerPage, int pageNumber) {
