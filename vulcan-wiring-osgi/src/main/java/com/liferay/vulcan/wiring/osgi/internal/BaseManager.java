@@ -27,6 +27,8 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 /**
+ * Use descendants of this class to manage services that have a generic type.
+ *
  * @author Alejandro Hernández
  */
 public abstract class BaseManager<T> {
@@ -37,6 +39,13 @@ public abstract class BaseManager<T> {
 		_bundleContext = bundle.getBundleContext();
 	}
 
+	/**
+	 * Adds a new serviceReference/service tuple to the internal map.
+	 *
+	 * @param  serviceReference a service reference.
+	 * @param  clazz class of the service reference service.
+	 * @return the generic inner class of the service reference service.
+	 */
 	protected <U> Class<U> addService(
 		ServiceReference<T> serviceReference, Class<T> clazz) {
 
@@ -58,6 +67,13 @@ public abstract class BaseManager<T> {
 		return genericClass;
 	}
 
+	/**
+	 * Retrieves a service from the inner map based on its generic inner class
+	 * name. Returns <code>Optional#empty()</code> if no service is found.
+	 *
+	 * @param clazz
+	 * @return
+	 */
 	protected <U> Optional<T> getServiceOptional(Class<U> clazz) {
 		TreeSet<ServiceReferenceServiceTuple<T>> serviceReferenceServiceTuples =
 			_services.get(clazz.getName());
@@ -74,6 +90,13 @@ public abstract class BaseManager<T> {
 		);
 	}
 
+	/**
+	 * Removes a serviceReference/service tuple to the internal map.
+	 *
+	 * @param  serviceReference a service reference.
+	 * @param  clazz class of the service reference service.
+	 * @return the generic inner class of the service reference service.
+	 */
 	protected <U> Class<U> removeService(
 		ServiceReference<T> serviceReference, Class<T> clazz) {
 

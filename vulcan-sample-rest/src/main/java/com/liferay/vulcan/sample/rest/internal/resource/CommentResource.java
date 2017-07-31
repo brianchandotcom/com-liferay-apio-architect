@@ -48,6 +48,11 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
+ * Provides all the necessary information to expose <a
+ * href="http://schema.org/Comment">Comment</a> resources through a web API.
+ *
+ * The resources are mapped from the internal {@link Comment} model.
+ *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)

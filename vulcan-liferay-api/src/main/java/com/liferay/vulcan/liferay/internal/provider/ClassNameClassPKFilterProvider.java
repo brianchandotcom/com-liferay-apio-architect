@@ -28,6 +28,10 @@ import javax.ws.rs.BadRequestException;
 import org.osgi.service.component.annotations.Component;
 
 /**
+ * Allows resources to provide {@link ClassNameClassPKFilter} in {@link
+ * com.liferay.vulcan.resource.builder.RoutesBuilder}'s
+ * <code>filteredCollectionPage</code> methods.
+ *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)

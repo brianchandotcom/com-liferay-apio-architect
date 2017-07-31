@@ -52,6 +52,12 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
+ * Provides all the necessary information to expose <a
+ * href="http://schema.org/BlogPosting">BlogPosting</a> resources through a web
+ * API.
+ *
+ * The resources are mapped from the internal {@link BlogsEntry} model.
+ *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer

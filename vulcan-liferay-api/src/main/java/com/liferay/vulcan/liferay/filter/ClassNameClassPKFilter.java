@@ -20,6 +20,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Provides the className classPK filter applied to the current request.
+ *
+ * <p>
+ * To use this class, add it as a parameter in {@link
+ * com.liferay.vulcan.resource.builder.RoutesBuilder}
+ * <code>filteredCollectionPage</code> methods.
+ * </p>
+ *
  * @author Alejandro Hernández
  */
 public class ClassNameClassPKFilter implements QueryParamFilterType {
