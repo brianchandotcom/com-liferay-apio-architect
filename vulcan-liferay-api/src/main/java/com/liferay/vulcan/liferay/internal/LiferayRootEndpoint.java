@@ -114,8 +114,19 @@ public class LiferayRootEndpoint implements RootEndpoint {
 
 		Routes<T> routes = _resourceManager.getRoutes(modelClass);
 
+		String filterClassName = _httpServletRequest.getParameter(
+			"filterClassName");
+
 		Optional<Function<Function<Class<?>, Optional<?>>, PageItems<T>>>
+			optional = Optional.empty();
+
+		if (filterClassName != null) {
+			optional = routes.getFilteredPageItemsFunctionOptional(
+				filterClassName);
+		}
+		else {
 			optional = routes.getPageItemsFunctionOptional();
+		}
 
 		Function<Function<Class<?>, Optional<?>>, PageItems<T>>
 			pageItemsFunction = optional.orElseThrow(NotFoundException::new);
