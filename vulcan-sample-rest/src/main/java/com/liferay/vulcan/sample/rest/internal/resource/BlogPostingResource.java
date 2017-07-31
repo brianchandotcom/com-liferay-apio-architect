@@ -18,17 +18,18 @@ import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.service.BlogsEntryService;
 import com.liferay.portal.kernel.comment.Comment;
+import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.filter.QueryParamFilterType;
-import com.liferay.vulcan.liferay.context.CurrentGroup;
 import com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter;
-import com.liferay.vulcan.liferay.scope.GroupScoped;
+import com.liferay.vulcan.liferay.filter.GroupIdFilter;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -63,8 +64,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  */
 @Component(immediate = true)
-public class BlogPostingResource
-	implements GroupScoped<BlogsEntry>, Resource<BlogsEntry> {
+public class BlogPostingResource implements Resource<BlogsEntry> {
 
 	@Override
 	public void buildRepresentor(
@@ -82,6 +82,9 @@ public class BlogPostingResource
 
 		representorBuilder.identifier(
 			blogsEntry -> String.valueOf(blogsEntry.getEntryId())
+		).addBidirectionalLinkedModelRelatedCollection(
+			"group", "blogs", Group.class, this::_getGroupOptional,
+			this::_getGroupIdFilter
 		).addEmbeddedModel(
 			"aggregateRating", AggregateRating.class,
 			this::_getAggregateRatingOptional
@@ -116,19 +119,14 @@ public class BlogPostingResource
 	}
 
 	@Override
-	public long getGroupId(BlogsEntry blogsEntry) {
-		return blogsEntry.getGroupId();
-	}
-
-	@Override
 	public String getPath() {
 		return "blogs";
 	}
 
 	@Override
 	public Routes<BlogsEntry> routes(RoutesBuilder<BlogsEntry> routesBuilder) {
-		return routesBuilder.collectionPage(
-			this::_getPageItems, CurrentGroup.class
+		return routesBuilder.filteredCollectionPage(
+			this::_getPageItems, GroupIdFilter.class
 		).collectionItem(
 			this::_getBlogsEntry, Long.class
 		).build();
@@ -162,15 +160,32 @@ public class BlogPostingResource
 		return new ClassNameClassPKFilter(className, blogsEntry.getEntryId());
 	}
 
-	private PageItems<BlogsEntry> _getPageItems(
-		Pagination pagination, CurrentGroup currentGroup) {
+	private GroupIdFilter _getGroupIdFilter(Group group) {
+		return new GroupIdFilter(group.getGroupId());
+	}
 
-		Group group = currentGroup.getGroup();
+	private Optional<Group> _getGroupOptional(BlogsEntry blogsEntry) {
+		try {
+			return Optional.of(
+				_groupLocalService.getGroup(blogsEntry.getGroupId()));
+		}
+		catch (NoSuchGroupException nsge) {
+			throw new NotFoundException(nsge);
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
+	}
+
+	private PageItems<BlogsEntry> _getPageItems(
+		GroupIdFilter groupIdFilter, Pagination pagination) {
+
+		Long groupId = groupIdFilter.getGroupId();
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			group.getGroupId(), 0, pagination.getStartPosition(),
+			groupId, 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
-		int count = _blogsService.getGroupEntriesCount(group.getGroupId(), 0);
+		int count = _blogsService.getGroupEntriesCount(groupId, 0);
 
 		return new PageItems<>(blogsEntries, count);
 	}
@@ -193,6 +208,9 @@ public class BlogPostingResource
 
 	@Reference
 	private BlogsEntryService _blogsService;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private UserService _userService;

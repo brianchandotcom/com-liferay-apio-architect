@@ -18,7 +18,6 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapperFactory;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
-import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.vulcan.endpoint.RootEndpoint;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.pagination.Page;
@@ -40,8 +39,6 @@ import java.util.function.Function;
 import javax.servlet.http.HttpServletRequest;
 
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 
 import org.osgi.framework.BundleContext;
@@ -141,15 +138,6 @@ public class RootEndpointImpl implements RootEndpoint {
 		return new DefaultPage<>(
 			modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
 			pagination.getPageNumber(), pageItems.getTotalCount());
-	}
-
-	@Path("/group/{id}/")
-	public RootEndpointImpl getGroupLiferayRootEndpoint(
-		@PathParam("id") long id) {
-
-		GroupThreadLocal.setGroupId(id);
-
-		return this;
 	}
 
 	private <U> Optional<U> _convert(Class<U> clazz, String id) {
