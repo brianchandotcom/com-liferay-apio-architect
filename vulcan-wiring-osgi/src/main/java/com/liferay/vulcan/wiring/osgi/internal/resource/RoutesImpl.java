@@ -17,6 +17,8 @@ package com.liferay.vulcan.wiring.osgi.internal.resource;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.resource.Routes;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -25,6 +27,22 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  */
 public class RoutesImpl<T> implements Routes<T> {
+
+	public void addFilteredPageItemsFunction(
+		String filterClassName, Function<Function<Class<?>, Optional<?>>,
+			PageItems<T>> filteredPageItemFunction) {
+
+		_filteredPageItemsFunctions.put(
+			filterClassName, filteredPageItemFunction);
+	}
+
+	@Override
+	public Optional<Function<Function<Class<?>, Optional<?>>, PageItems<T>>>
+		getFilteredPageItemsFunctionOptional(String filterClassName) {
+
+		return Optional.ofNullable(
+			_filteredPageItemsFunctions.get(filterClassName));
+	}
 
 	@Override
 	public Optional<Function<BiFunction<Class<?>, String, ?>,
@@ -55,6 +73,8 @@ public class RoutesImpl<T> implements Routes<T> {
 		_pageItemsFunction = pageItemsFunction;
 	}
 
+	private final Map<String, Function<Function<Class<?>, Optional<?>>,
+		PageItems<T>>> _filteredPageItemsFunctions = new HashMap<>();
 	private Function<BiFunction<Class<?>, String, ?>, Function
 		<Function<Class<?>, Optional<?>>, Function<String, T>>> _modelFunction;
 	private Function<Function<Class<?>, Optional<?>>, PageItems<T>>

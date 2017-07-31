@@ -40,6 +40,24 @@ import java.util.function.Function;
 public interface Routes<T> {
 
 	/**
+	 * Returns the function used to create the filtered page of a {@link
+	 * Resource}. Returns <code>Optional#empty()</code> if the endpoint wasn't
+	 * added through the {@link
+	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
+	 *
+	 * <p>
+	 * This function will have as its only parameter another function which must
+	 * be able to provide instances of classes that have a {@link
+	 * com.liferay.vulcan.provider.Provider}.
+	 * </p>
+	 *
+	 * @return the function used to create the filtered page, if present;
+	 *         <code>Optional#empty()</code> otherwise.
+	 */
+	public Optional<Function<Function<Class<?>, Optional<?>>, PageItems<T>>>
+		getFilteredPageItemsFunctionOptional(String filterClassName);
+
+	/**
 	 * Returns the function used to create the single model of a {@link
 	 * Resource}. Returns <code>Optional#empty()</code> if the endpoint wasn't
 	 * added through the {@link
