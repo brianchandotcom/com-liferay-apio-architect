@@ -79,6 +79,22 @@ public class VulcanDeveloperError extends Error {
 	}
 
 	/**
+	 * Represents the error the developer should throw when a provider is
+	 * missing.
+	 */
+	public static class MustUseFilteredCollectionPage
+		extends VulcanDeveloperError {
+
+		public MustUseFilteredCollectionPage() {
+			super(
+				"QueryParamFilterType classes should not be used in " +
+					"RoutesBuilder#collectionPage methods, use " +
+						"RoutesBuilder#filteredCollectionPage instead");
+		}
+
+	}
+
+	/**
 	 * Represents the error the developer should throw when an URI cannot be
 	 * resolved.
 	 */

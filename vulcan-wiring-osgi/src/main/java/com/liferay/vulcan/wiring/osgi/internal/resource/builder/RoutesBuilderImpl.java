@@ -17,6 +17,8 @@ package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveConverter;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustUseFilteredCollectionPage;
+import com.liferay.vulcan.filter.QueryParamFilterType;
 import com.liferay.vulcan.function.DecaFunction;
 import com.liferay.vulcan.function.EnneaFunction;
 import com.liferay.vulcan.function.HeptaFunction;
@@ -25,6 +27,7 @@ import com.liferay.vulcan.function.OctaFunction;
 import com.liferay.vulcan.function.PentaFunction;
 import com.liferay.vulcan.function.TetraFunction;
 import com.liferay.vulcan.function.TriFunction;
+import com.liferay.vulcan.function.UndecaFunction;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Routes;
@@ -57,7 +60,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				identifierClass, convertFunction
 			).andThen(
 				id -> {
-					A a = _provide(aClass, provideFunction);
+					A a = _provideOrThrowIfFilter(aClass, provideFunction);
 
 					return biFunction.apply(id, a);
 				}
@@ -79,15 +82,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				identifierClass, convertFunction
 			).andThen(
 				id -> {
-					A a = _provide(aClass, provideFunction);
-					B b = _provide(bClass, provideFunction);
-					C c = _provide(cClass, provideFunction);
-					D d = _provide(dClass, provideFunction);
-					E e = _provide(eClass, provideFunction);
-					F f = _provide(fClass, provideFunction);
-					G g = _provide(gClass, provideFunction);
-					H h = _provide(hClass, provideFunction);
-					I i = _provide(iClass, provideFunction);
+					A a = _provideOrThrowIfFilter(aClass, provideFunction);
+					B b = _provideOrThrowIfFilter(bClass, provideFunction);
+					C c = _provideOrThrowIfFilter(cClass, provideFunction);
+					D d = _provideOrThrowIfFilter(dClass, provideFunction);
+					E e = _provideOrThrowIfFilter(eClass, provideFunction);
+					F f = _provideOrThrowIfFilter(fClass, provideFunction);
+					G g = _provideOrThrowIfFilter(gClass, provideFunction);
+					H h = _provideOrThrowIfFilter(hClass, provideFunction);
+					I i = _provideOrThrowIfFilter(iClass, provideFunction);
 
 					return decaFunction.apply(id, a, b, c, d, e, f, g, h, i);
 				}
@@ -108,14 +111,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				identifierClass, convertFunction
 			).andThen(
 				id -> {
-					A a = _provide(aClass, provideFunction);
-					B b = _provide(bClass, provideFunction);
-					C c = _provide(cClass, provideFunction);
-					D d = _provide(dClass, provideFunction);
-					E e = _provide(eClass, provideFunction);
-					F f = _provide(fClass, provideFunction);
-					G g = _provide(gClass, provideFunction);
-					H h = _provide(hClass, provideFunction);
+					A a = _provideOrThrowIfFilter(aClass, provideFunction);
+					B b = _provideOrThrowIfFilter(bClass, provideFunction);
+					C c = _provideOrThrowIfFilter(cClass, provideFunction);
+					D d = _provideOrThrowIfFilter(dClass, provideFunction);
+					E e = _provideOrThrowIfFilter(eClass, provideFunction);
+					F f = _provideOrThrowIfFilter(fClass, provideFunction);
+					G g = _provideOrThrowIfFilter(gClass, provideFunction);
+					H h = _provideOrThrowIfFilter(hClass, provideFunction);
 
 					return enneaFunction.apply(id, a, b, c, d, e, f, g, h);
 				}
@@ -149,12 +152,12 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				identifierClass, convertFunction
 			).andThen(
 				id -> {
-					A a = _provide(aClass, provideFunction);
-					B b = _provide(bClass, provideFunction);
-					C c = _provide(cClass, provideFunction);
-					D d = _provide(dClass, provideFunction);
-					E e = _provide(eClass, provideFunction);
-					F f = _provide(fClass, provideFunction);
+					A a = _provideOrThrowIfFilter(aClass, provideFunction);
+					B b = _provideOrThrowIfFilter(bClass, provideFunction);
+					C c = _provideOrThrowIfFilter(cClass, provideFunction);
+					D d = _provideOrThrowIfFilter(dClass, provideFunction);
+					E e = _provideOrThrowIfFilter(eClass, provideFunction);
+					F f = _provideOrThrowIfFilter(fClass, provideFunction);
 
 					return heptaFunction.apply(id, a, b, c, d, e, f);
 				}
@@ -174,11 +177,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				identifierClass, convertFunction
 			).andThen(
 				id -> {
-					A a = _provide(aClass, provideFunction);
-					B b = _provide(bClass, provideFunction);
-					C c = _provide(cClass, provideFunction);
-					D d = _provide(dClass, provideFunction);
-					E e = _provide(eClass, provideFunction);
+					A a = _provideOrThrowIfFilter(aClass, provideFunction);
+					B b = _provideOrThrowIfFilter(bClass, provideFunction);
+					C c = _provideOrThrowIfFilter(cClass, provideFunction);
+					D d = _provideOrThrowIfFilter(dClass, provideFunction);
+					E e = _provideOrThrowIfFilter(eClass, provideFunction);
 
 					return hexaFunction.apply(id, a, b, c, d, e);
 				}
@@ -199,13 +202,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				identifierClass, convertFunction
 			).andThen(
 				id -> {
-					A a = _provide(aClass, provideFunction);
-					B b = _provide(bClass, provideFunction);
-					C c = _provide(cClass, provideFunction);
-					D d = _provide(dClass, provideFunction);
-					E e = _provide(eClass, provideFunction);
-					F f = _provide(fClass, provideFunction);
-					G g = _provide(gClass, provideFunction);
+					A a = _provideOrThrowIfFilter(aClass, provideFunction);
+					B b = _provideOrThrowIfFilter(bClass, provideFunction);
+					C c = _provideOrThrowIfFilter(cClass, provideFunction);
+					D d = _provideOrThrowIfFilter(dClass, provideFunction);
+					E e = _provideOrThrowIfFilter(eClass, provideFunction);
+					F f = _provideOrThrowIfFilter(fClass, provideFunction);
+					G g = _provideOrThrowIfFilter(gClass, provideFunction);
 
 					return octaFunction.apply(id, a, b, c, d, e, f, g);
 				}
@@ -224,10 +227,10 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				identifierClass, convertFunction
 			).andThen(
 				id -> {
-					A a = _provide(aClass, provideFunction);
-					B b = _provide(bClass, provideFunction);
-					C c = _provide(cClass, provideFunction);
-					D d = _provide(dClass, provideFunction);
+					A a = _provideOrThrowIfFilter(aClass, provideFunction);
+					B b = _provideOrThrowIfFilter(bClass, provideFunction);
+					C c = _provideOrThrowIfFilter(cClass, provideFunction);
+					D d = _provideOrThrowIfFilter(dClass, provideFunction);
 
 					return pentaFunction.apply(id, a, b, c, d);
 				}
@@ -246,9 +249,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				identifierClass, convertFunction
 			).andThen(
 				id -> {
-					A a = _provide(aClass, provideFunction);
-					B b = _provide(bClass, provideFunction);
-					C c = _provide(cClass, provideFunction);
+					A a = _provideOrThrowIfFilter(aClass, provideFunction);
+					B b = _provideOrThrowIfFilter(bClass, provideFunction);
+					C c = _provideOrThrowIfFilter(cClass, provideFunction);
 
 					return tetraFunction.apply(id, a, b, c);
 				}
@@ -267,8 +270,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				identifierClass, convertFunction
 			).andThen(
 				id -> {
-					A a = _provide(aClass, provideFunction);
-					B b = _provide(bClass, provideFunction);
+					A a = _provideOrThrowIfFilter(aClass, provideFunction);
+					B b = _provideOrThrowIfFilter(bClass, provideFunction);
 
 					return triFunction.apply(id, a, b);
 				}
@@ -283,9 +286,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
-				Pagination pagination = _provide(
+				Pagination pagination = _provideOrThrowIfFilter(
 					Pagination.class, provideFunction);
-				A a = _provide(aClass, provideFunction);
+				A a = _provideOrThrowIfFilter(aClass, provideFunction);
 
 				return biFunction.apply(pagination, a);
 			});
@@ -302,17 +305,17 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
-				Pagination pagination = _provide(
+				Pagination pagination = _provideOrThrowIfFilter(
 					Pagination.class, provideFunction);
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
-				F f = _provide(fClass, provideFunction);
-				G g = _provide(gClass, provideFunction);
-				H h = _provide(hClass, provideFunction);
-				I i = _provide(iClass, provideFunction);
+				A a = _provideOrThrowIfFilter(aClass, provideFunction);
+				B b = _provideOrThrowIfFilter(bClass, provideFunction);
+				C c = _provideOrThrowIfFilter(cClass, provideFunction);
+				D d = _provideOrThrowIfFilter(dClass, provideFunction);
+				E e = _provideOrThrowIfFilter(eClass, provideFunction);
+				F f = _provideOrThrowIfFilter(fClass, provideFunction);
+				G g = _provideOrThrowIfFilter(gClass, provideFunction);
+				H h = _provideOrThrowIfFilter(hClass, provideFunction);
+				I i = _provideOrThrowIfFilter(iClass, provideFunction);
 
 				return decaFunction.apply(
 					pagination, a, b, c, d, e, f, g, h, i);
@@ -330,16 +333,16 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
-				Pagination pagination = _provide(
+				Pagination pagination = _provideOrThrowIfFilter(
 					Pagination.class, provideFunction);
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
-				F f = _provide(fClass, provideFunction);
-				G g = _provide(gClass, provideFunction);
-				H h = _provide(hClass, provideFunction);
+				A a = _provideOrThrowIfFilter(aClass, provideFunction);
+				B b = _provideOrThrowIfFilter(bClass, provideFunction);
+				C c = _provideOrThrowIfFilter(cClass, provideFunction);
+				D d = _provideOrThrowIfFilter(dClass, provideFunction);
+				E e = _provideOrThrowIfFilter(eClass, provideFunction);
+				F f = _provideOrThrowIfFilter(fClass, provideFunction);
+				G g = _provideOrThrowIfFilter(gClass, provideFunction);
+				H h = _provideOrThrowIfFilter(hClass, provideFunction);
 
 				return enneaFunction.apply(pagination, a, b, c, d, e, f, g, h);
 			});
@@ -353,7 +356,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
-				Pagination pagination = _provide(
+				Pagination pagination = _provideOrThrowIfFilter(
 					Pagination.class, provideFunction);
 
 				return function.apply(pagination);
@@ -370,14 +373,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
-				Pagination pagination = _provide(
+				Pagination pagination = _provideOrThrowIfFilter(
 					Pagination.class, provideFunction);
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
-				F f = _provide(fClass, provideFunction);
+				A a = _provideOrThrowIfFilter(aClass, provideFunction);
+				B b = _provideOrThrowIfFilter(bClass, provideFunction);
+				C c = _provideOrThrowIfFilter(cClass, provideFunction);
+				D d = _provideOrThrowIfFilter(dClass, provideFunction);
+				E e = _provideOrThrowIfFilter(eClass, provideFunction);
+				F f = _provideOrThrowIfFilter(fClass, provideFunction);
 
 				return heptaFunction.apply(pagination, a, b, c, d, e, f);
 			});
@@ -393,13 +396,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
-				Pagination pagination = _provide(
+				Pagination pagination = _provideOrThrowIfFilter(
 					Pagination.class, provideFunction);
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
+				A a = _provideOrThrowIfFilter(aClass, provideFunction);
+				B b = _provideOrThrowIfFilter(bClass, provideFunction);
+				C c = _provideOrThrowIfFilter(cClass, provideFunction);
+				D d = _provideOrThrowIfFilter(dClass, provideFunction);
+				E e = _provideOrThrowIfFilter(eClass, provideFunction);
 
 				return hexaFunction.apply(pagination, a, b, c, d, e);
 			});
@@ -415,15 +418,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
-				Pagination pagination = _provide(
+				Pagination pagination = _provideOrThrowIfFilter(
 					Pagination.class, provideFunction);
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
-				E e = _provide(eClass, provideFunction);
-				F f = _provide(fClass, provideFunction);
-				G g = _provide(gClass, provideFunction);
+				A a = _provideOrThrowIfFilter(aClass, provideFunction);
+				B b = _provideOrThrowIfFilter(bClass, provideFunction);
+				C c = _provideOrThrowIfFilter(cClass, provideFunction);
+				D d = _provideOrThrowIfFilter(dClass, provideFunction);
+				E e = _provideOrThrowIfFilter(eClass, provideFunction);
+				F f = _provideOrThrowIfFilter(fClass, provideFunction);
+				G g = _provideOrThrowIfFilter(gClass, provideFunction);
 
 				return octaFunction.apply(pagination, a, b, c, d, e, f, g);
 			});
@@ -438,12 +441,12 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
-				Pagination pagination = _provide(
+				Pagination pagination = _provideOrThrowIfFilter(
 					Pagination.class, provideFunction);
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
-				D d = _provide(dClass, provideFunction);
+				A a = _provideOrThrowIfFilter(aClass, provideFunction);
+				B b = _provideOrThrowIfFilter(bClass, provideFunction);
+				C c = _provideOrThrowIfFilter(cClass, provideFunction);
+				D d = _provideOrThrowIfFilter(dClass, provideFunction);
 
 				return pentaFunction.apply(pagination, a, b, c, d);
 			});
@@ -458,11 +461,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
-				Pagination pagination = _provide(
+				Pagination pagination = _provideOrThrowIfFilter(
 					Pagination.class, provideFunction);
-				A a = _provide(aClass, provideFunction);
-				B b = _provide(bClass, provideFunction);
-				C c = _provide(cClass, provideFunction);
+				A a = _provideOrThrowIfFilter(aClass, provideFunction);
+				B b = _provideOrThrowIfFilter(bClass, provideFunction);
+				C c = _provideOrThrowIfFilter(cClass, provideFunction);
 
 				return tetraFunction.apply(pagination, a, b, c);
 			});
@@ -477,12 +480,270 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageItemsFunction(
 			provideFunction -> {
+				Pagination pagination = _provideOrThrowIfFilter(
+					Pagination.class, provideFunction);
+				A a = _provideOrThrowIfFilter(aClass, provideFunction);
+				B b = _provideOrThrowIfFilter(bClass, provideFunction);
+
+				return triFunction.apply(pagination, a, b);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType> RoutesBuilder<T>
+		filteredCollectionPage(
+			BiFunction<Q, Pagination, PageItems<T>> function,
+			Class<Q> filterClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+
+				return function.apply(queryParamFilterType, pagination);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType, A, B, C, D, E, F, G, H>
+		RoutesBuilder<T> filteredCollectionPage(
+			DecaFunction<Q, Pagination, A, B, C, D, E, F, G, H,
+				PageItems<T>> decaFunction, Class<Q> filterClass,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass,
+			Class<H> hClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
+				F f = _provide(fClass, provideFunction);
+				G g = _provide(gClass, provideFunction);
+				H h = _provide(hClass, provideFunction);
+
+				return decaFunction.apply(
+					queryParamFilterType, pagination, a, b, c, d, e, f, g, h);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType, A, B, C, D, E, F, G>
+		RoutesBuilder<T> filteredCollectionPage(
+			EnneaFunction<Q, Pagination, A, B, C, D, E, F, G,
+				PageItems<T>> enneaFunction, Class<Q> filterClass,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
+				F f = _provide(fClass, provideFunction);
+				G g = _provide(gClass, provideFunction);
+
+				return enneaFunction.apply(
+					queryParamFilterType, pagination, a, b, c, d, e, f, g);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType, A, B, C, D, E> RoutesBuilder<T>
+		filteredCollectionPage(
+			HeptaFunction<Q, Pagination, A, B, C, D, E, PageItems<T>>
+				heptaFunction, Class<Q> filterClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
+
+				return heptaFunction.apply(
+					queryParamFilterType, pagination, a, b, c, d, e);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType, A, B, C, D> RoutesBuilder<T>
+		filteredCollectionPage(
+			HexaFunction<Q, Pagination, A, B, C, D, PageItems<T>> hexaFunction,
+			Class<Q> filterClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+
+				return hexaFunction.apply(
+					queryParamFilterType, pagination, a, b, c, d);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType, A, B, C, D, E, F> RoutesBuilder<T>
+		filteredCollectionPage(
+			OctaFunction<Q, Pagination, A, B, C, D, E, F, PageItems<T>>
+				octaFunction, Class<Q> filterClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
+				F f = _provide(fClass, provideFunction);
+
+				return octaFunction.apply(
+					queryParamFilterType, pagination, a, b, c, d, e, f);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType, A, B, C> RoutesBuilder<T>
+		filteredCollectionPage(
+			PentaFunction<Q, Pagination, A, B, C, PageItems<T>> pentaFunction,
+			Class<Q> filterClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+
+				return pentaFunction.apply(
+					queryParamFilterType, pagination, a, b, c);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType, A, B> RoutesBuilder<T>
+		filteredCollectionPage(
+			TetraFunction<Q, Pagination, A, B, PageItems<T>> tetraFunction,
+			Class<Q> filterClass, Class<A> aClass, Class<B> bClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
 				Pagination pagination = _provide(
 					Pagination.class, provideFunction);
 				A a = _provide(aClass, provideFunction);
 				B b = _provide(bClass, provideFunction);
 
-				return triFunction.apply(pagination, a, b);
+				return tetraFunction.apply(
+					queryParamFilterType, pagination, a, b);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType, A> RoutesBuilder<T>
+		filteredCollectionPage(
+			TriFunction<Q, Pagination, A, PageItems<T>> triFunction,
+			Class<Q> filterClass, Class<A> aClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+
+				return triFunction.apply(queryParamFilterType, pagination, a);
+			});
+
+		return this;
+	}
+
+	@Override
+	public <Q extends QueryParamFilterType, A, B, C, D, E, F, G, H, I>
+		RoutesBuilder<T> filteredCollectionPage(
+			UndecaFunction<Q, Pagination, A, B, C, D, E, F, G, H, I,
+				PageItems<T>> undecaFunction, Class<Q> filterClass,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
+			Class<I> iClass) {
+
+		_routesImpl.addFilteredPageItemsFunction(
+			filterClass.getName(),
+			provideFunction -> {
+				Q queryParamFilterType = _provide(filterClass, provideFunction);
+				Pagination pagination = _provide(
+					Pagination.class, provideFunction);
+				A a = _provide(aClass, provideFunction);
+				B b = _provide(bClass, provideFunction);
+				C c = _provide(cClass, provideFunction);
+				D d = _provide(dClass, provideFunction);
+				E e = _provide(eClass, provideFunction);
+				F f = _provide(fClass, provideFunction);
+				G g = _provide(gClass, provideFunction);
+				H h = _provide(hClass, provideFunction);
+				I i = _provide(iClass, provideFunction);
+
+				return undecaFunction.apply(
+					queryParamFilterType, pagination, a, b, c, d, e, f, g, h,
+					i);
 			});
 
 		return this;
@@ -530,6 +791,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 	private <U> U _provide(
 		Class<U> clazz, Function<Class<?>, Optional<?>> provideFunction) {
+
+		Optional<U> optional = (Optional<U>)provideFunction.apply(clazz);
+
+		return optional.orElseThrow(() -> new MustHaveProvider(clazz));
+	}
+
+	private <U> U _provideOrThrowIfFilter(
+		Class<U> clazz, Function<Class<?>, Optional<?>> provideFunction) {
+
+		if (QueryParamFilterType.class.isAssignableFrom(clazz)) {
+			throw new MustUseFilteredCollectionPage();
+		}
 
 		Optional<U> optional = (Optional<U>)provideFunction.apply(clazz);
 
