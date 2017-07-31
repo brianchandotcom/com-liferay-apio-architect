@@ -117,6 +117,18 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	/**
+	 * Returns the related collections for the model class.
+	 *
+	 * @param  modelClass the model class of a {@link Resource}.
+	 * @return the related collections for the model class.
+	 */
+	public <T> List<RelatedCollection<T, ?>> getRelatedCollections(
+		Class<T> modelClass) {
+
+		return (List)_relatedCollections.get(modelClass.getName());
+	}
+
+	/**
 	 * Returns the {@link Resource} of the model class. Returns
 	 * <code>Optional#empty()</code> if the {@link Resource} isn't present.
 	 *
@@ -189,6 +201,10 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		_links.put(modelClass.getName(), links);
 
+		List<RelatedCollection<?, ?>> relatedCollections = new ArrayList<>();
+
+		_relatedCollections.put(modelClass.getName(), relatedCollections);
+
 		List<String> types = new ArrayList<>();
 
 		_types.put(modelClass.getName(), types);
@@ -199,7 +215,7 @@ public class ResourceManager extends BaseManager<Resource> {
 					new RepresentorBuilderImpl<>(
 						modelClass, _identifierFunctions, fieldFunctions,
 						embeddedRelatedModels, linkedRelatedModels, links,
-						types));
+						relatedCollections, types));
 
 				Routes<T> routes = resource.routes(new RoutesBuilderImpl<>());
 
@@ -226,6 +242,8 @@ public class ResourceManager extends BaseManager<Resource> {
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, String>> _links =
 		new ConcurrentHashMap<>();
+	private final Map<String, List<RelatedCollection<?, ?>>>
+		_relatedCollections = new ConcurrentHashMap<>();
 	private final Map<String, Routes<?>> _routes = new ConcurrentHashMap<>();
 	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
 

@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.resource.builder;
 
+import com.liferay.vulcan.filter.QueryParamFilterType;
+
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -89,6 +91,18 @@ public interface RepresentorBuilder<T> {
 		public <S> FirstStep<T> addLinkedModel(
 			String key, Class<S> modelClass,
 			Function<T, Optional<S>> modelFunction);
+
+		/**
+		 * Use this method to provide information of a related collection.
+		 *
+		 * @param key name of the relation.
+		 * @param modelClass class of the collection's related models.
+		 * @param filterFunction function used to obtain the filter for the collection.
+		 * @return builder's actual step.
+		 */
+		public <S> FirstStep<T> addRelatedCollection(
+			String key, Class<S> modelClass,
+			Function<T, QueryParamFilterType> filterFunction);
 
 		/**
 		 * Use this method to provide a type for this model. Multiple types are

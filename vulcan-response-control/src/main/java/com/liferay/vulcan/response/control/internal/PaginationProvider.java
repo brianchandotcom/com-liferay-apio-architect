@@ -14,7 +14,6 @@
 
 package com.liferay.vulcan.response.control.internal;
 
-import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.provider.Provider;
@@ -24,7 +23,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * Allows resources to provide {@link Pagination} as a parameter in {@link

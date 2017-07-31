@@ -14,7 +14,9 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
+import com.liferay.vulcan.filter.QueryParamFilterType;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
+import com.liferay.vulcan.wiring.osgi.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
 
 import java.util.List;
@@ -35,7 +37,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		Map<String, Function<?, Object>> fieldFunctions,
 		List<RelatedModel<?, ?>> embeddedRelatedModels,
 		List<RelatedModel<?, ?>> linkedRelatedModels, Map<String, String> links,
-		List<String> types) {
+		List<RelatedCollection<?, ?>> relatedCollections, List<String> types) {
 
 		_modelClass = modelClass;
 		_identifierFunctions = identifierFunctions;
@@ -43,6 +45,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		_embeddedRelatedModels = embeddedRelatedModels;
 		_linkedRelatedModels = linkedRelatedModels;
 		_links = links;
+		_relatedCollections = relatedCollections;
 		_types = types;
 	}
 
@@ -91,6 +94,17 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 			}
 
 			@Override
+			public <S> FirstStep<T> addRelatedCollection(
+				String key, Class<S> modelClass,
+				Function<T, QueryParamFilterType> filterFunction) {
+
+				_relatedCollections.add(
+					new RelatedCollection<>(key, modelClass, filterFunction));
+
+				return this;
+			}
+
+			@Override
 			public FirstStep<T> addType(String type) {
 				_types.add(type);
 
@@ -106,6 +120,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	private final List<RelatedModel<?, ?>> _linkedRelatedModels;
 	private final Map<String, String> _links;
 	private final Class<T> _modelClass;
+	private final List<RelatedCollection<?, ?>> _relatedCollections;
 	private final List<String> _types;
 
 }
