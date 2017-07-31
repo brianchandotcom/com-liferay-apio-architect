@@ -14,12 +14,11 @@
 
 package com.liferay.vulcan.liferay.internal.provider;
 
-import static com.liferay.vulcan.liferay.internal.filter.ClassNameClassPKFilterImpl.CLASS_NAME;
-import static com.liferay.vulcan.liferay.internal.filter.ClassNameClassPKFilterImpl.CLASS_PK;
+import static com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter.CLASS_NAME;
+import static com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter.CLASS_PK;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter;
-import com.liferay.vulcan.liferay.internal.filter.ClassNameClassPKFilterImpl;
 import com.liferay.vulcan.provider.Provider;
 
 import java.util.Map;
@@ -31,9 +30,6 @@ import javax.ws.rs.BadRequestException;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Allows resources to provide {@link ClassNameClassPKFilter} as a parameter in
- * {@link com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
- *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
@@ -63,7 +59,7 @@ public class ClassNameClassPKFilterProvider
 			throw new BadRequestException();
 		}
 
-		return new ClassNameClassPKFilterImpl(className, classPK);
+		return new ClassNameClassPKFilter(className, classPK);
 	}
 
 }
