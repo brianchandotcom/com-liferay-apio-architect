@@ -17,6 +17,7 @@ package com.liferay.vulcan.sample.rest.internal.resource;
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.service.BlogsEntryService;
+import com.liferay.portal.kernel.comment.Comment;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
@@ -24,7 +25,9 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.vulcan.filter.QueryParamFilterType;
 import com.liferay.vulcan.liferay.context.CurrentGroup;
+import com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter;
 import com.liferay.vulcan.liferay.scope.GroupScoped;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -99,6 +102,8 @@ public class BlogPostingResource
 			"author", User.class, this::_getUserOptional
 		).addLink(
 			"license", "https://creativecommons.org/licenses/by/4.0"
+		).addRelatedCollection(
+			"comment", Comment.class, this::_getClassNameClassPKFilter
 		).addType(
 			"BlogPosting"
 		);
@@ -141,6 +146,14 @@ public class BlogPostingResource
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
+	}
+
+	private QueryParamFilterType _getClassNameClassPKFilter(
+		BlogsEntry blogsEntry) {
+
+		String className = BlogsEntry.class.getName();
+
+		return new ClassNameClassPKFilter(className, blogsEntry.getEntryId());
 	}
 
 	private PageItems<BlogsEntry> _getPageItems(
