@@ -21,8 +21,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter;
 import com.liferay.vulcan.provider.Provider;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import javax.ws.rs.BadRequestException;
@@ -40,22 +38,13 @@ public class ClassNameClassPKFilterProvider
 	public ClassNameClassPKFilter createContext(
 		HttpServletRequest httpServletRequest) {
 
-		Map<String, String[]> parameterMap =
-			httpServletRequest.getParameterMap();
+		String className = httpServletRequest.getParameter(CLASS_NAME);
 
-		String[] classNames = parameterMap.get(CLASS_NAME);
-		String[] classPKs = parameterMap.get(CLASS_PK);
+		String classPKString = httpServletRequest.getParameter(CLASS_PK);
 
-		if ((classNames == null) || (classPKs == null) ||
-			(classNames.length != 1) || (classPKs.length != 1)) {
+		Long classPK = GetterUtil.getLong(classPKString);
 
-			throw new BadRequestException();
-		}
-
-		String className = classNames[0];
-		Long classPK = GetterUtil.getLong(classPKs[0]);
-
-		if (classPK == GetterUtil.DEFAULT_LONG) {
+		if ((className == null) || (classPK == GetterUtil.DEFAULT_LONG)) {
 			throw new BadRequestException();
 		}
 
