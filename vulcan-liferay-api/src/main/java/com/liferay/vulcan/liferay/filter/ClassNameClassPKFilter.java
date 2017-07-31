@@ -20,7 +20,8 @@ import com.liferay.vulcan.filter.QueryParamFilterType;
  * Provides the className classPK filter applied to the current request.
  *
  * <p>
- * To use this class, add it as a parameter in {@link com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
+ * To use this class, add it as a parameter in {@link
+ * com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
  * </p>
  *
  * @author Alejandro Hernández

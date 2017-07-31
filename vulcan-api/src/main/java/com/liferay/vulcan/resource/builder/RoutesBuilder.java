@@ -30,7 +30,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Use instances of this builder to create {@link Routes} of a {@link com.liferay.vulcan.resource.Resource}.
+ * Use instances of this builder to create {@link Routes} of a {@link
+ * com.liferay.vulcan.resource.Resource}.
  *
  * @author Alejandro Hernández
  */

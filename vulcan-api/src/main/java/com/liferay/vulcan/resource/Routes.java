@@ -31,18 +31,19 @@ import java.util.function.Function;
  *
  * <p>
  * Instances of this interface should always be created by using a {@link
- * RoutesBuilder}.
+ * com.liferay.vulcan.resource.builder.RoutesBuilder}.
  * </p>
  *
  * @author Alejandro Hernández
- * @see    RoutesBuilder
+ * @see    com.liferay.vulcan.resource.builder.RoutesBuilder
  */
 public interface Routes<T> {
 
 	/**
 	 * Returns the function used to create the single model of a {@link
 	 * Resource}. Returns <code>Optional#empty()</code> if the endpoint wasn't
-	 * added through the {@link RoutesBuilder}.
+	 * added through the {@link
+	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
 	 * <p>
 	 * This function will have as its only parameter another function which must
@@ -67,7 +68,7 @@ public interface Routes<T> {
 	/**
 	 * Returns the function used to create the page of a {@link Resource}.
 	 * Returns <code>Optional#empty()</code> if the endpoint wasn't added
-	 * through the {@link RoutesBuilder}.
+	 * through the {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
 	 * <p>
 	 * This function will have as its only parameter another function which must

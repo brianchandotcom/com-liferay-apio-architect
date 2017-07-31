@@ -20,7 +20,8 @@ import com.liferay.portal.kernel.model.User;
  * Provides the current {@link User}.
  *
  * <p>
- * To use this class, add it as a parameter in {@link com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
+ * To use this class, add it as a parameter in {@link
+ * com.liferay.vulcan.resource.builder.RoutesBuilder} methods.
  * </p>
  *
  * @author Alejandro Hernández
