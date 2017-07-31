@@ -77,7 +77,7 @@ public class CommentResource implements Resource<Comment> {
 	public Routes<Comment> routes(RoutesBuilder<Comment> routesBuilder) {
 		return routesBuilder.collectionItem(
 			this::_getComment, Long.class
-		).collectionPage(
+		).filteredCollectionPage(
 			this::_getPageItems, ClassNameClassPKFilter.class, CurrentUser.class
 		).build();
 	}
@@ -87,7 +87,7 @@ public class CommentResource implements Resource<Comment> {
 	}
 
 	private PageItems<Comment> _getPageItems(
-		Pagination pagination, ClassNameClassPKFilter classNameClassPKFilter,
+		ClassNameClassPKFilter classNameClassPKFilter, Pagination pagination,
 		CurrentUser currentUser) {
 
 		String className = classNameClassPKFilter.getClassName();
