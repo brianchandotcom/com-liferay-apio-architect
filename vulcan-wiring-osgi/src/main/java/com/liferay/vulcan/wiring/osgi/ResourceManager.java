@@ -18,6 +18,8 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIP
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.liferay.vulcan.filter.QueryParamFilterType;
+import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.wiring.osgi.internal.BaseManager;
@@ -201,7 +203,9 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		_links.put(modelClass.getName(), links);
 
-		List<RelatedCollection<?, ?>> relatedCollections = new ArrayList<>();
+		List<RelatedCollection<?, ?>> relatedCollections =
+			_relatedCollections.computeIfAbsent(
+				modelClass.getName(), className -> new ArrayList<>());
 
 		_relatedCollections.put(modelClass.getName(), relatedCollections);
 
@@ -213,14 +217,29 @@ public class ResourceManager extends BaseManager<Resource> {
 			resource -> {
 				resource.buildRepresentor(
 					new RepresentorBuilderImpl<>(
-						modelClass, _identifierFunctions, fieldFunctions,
-						embeddedRelatedModels, linkedRelatedModels, links,
-						relatedCollections, types));
+						modelClass, _identifierFunctions,
+						_addRelatedCollectionFunction(modelClass),
+						fieldFunctions, embeddedRelatedModels,
+						linkedRelatedModels, links, relatedCollections, types));
 
 				Routes<T> routes = resource.routes(new RoutesBuilderImpl<>());
 
 				_routes.put(modelClass.getName(), routes);
 			});
+	}
+
+	private <T> TriConsumer<String, Class<?>, Function<?, QueryParamFilterType>>
+		_addRelatedCollectionFunction(Class<T> relatedModelClass) {
+
+		return (key, modelClass, filterFunction) -> {
+			List<RelatedCollection<?, ?>> relatedCollections =
+				_relatedCollections.computeIfAbsent(
+					modelClass.getName(), className -> new ArrayList<>());
+
+			relatedCollections.add(
+				new RelatedCollection<>(
+					key, relatedModelClass, filterFunction));
+		};
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {

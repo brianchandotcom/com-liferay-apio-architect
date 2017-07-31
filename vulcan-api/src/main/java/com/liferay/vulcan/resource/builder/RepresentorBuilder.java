@@ -48,6 +48,24 @@ public interface RepresentorBuilder<T> {
 	public interface FirstStep<T> {
 
 		/**
+		 * Use this method to provide information of a bidirectional relation of
+		 * a linked model in the actual resource and a related collection of
+		 * items of this Resource in the related resource.
+		 *
+		 * @param key name of the relation in this resource.
+		 * @param relatedKey name of the relation in the related resource.
+		 * @param modelClass class of the related model.
+		 * @param modelFunction function used to obtain the related model.
+		 * @param filterFunction function used to obtain the filter for the
+		 *                       collection.
+		 * @return builder's actual step.
+		 */
+		public <S> FirstStep<T> addBidirectionalLinkedModelRelatedCollection(
+			String key, String relatedKey, Class<S> modelClass,
+			Function<T, Optional<S>> modelFunction,
+			Function<S, QueryParamFilterType> filterFunction);
+
+		/**
 		 * Use this method to provide information of an embeddable related
 		 * model.
 		 *
@@ -97,7 +115,8 @@ public interface RepresentorBuilder<T> {
 		 *
 		 * @param key name of the relation.
 		 * @param modelClass class of the collection's related models.
-		 * @param filterFunction function used to obtain the filter for the collection.
+		 * @param filterFunction function used to obtain the filter for the
+		 *                       collection.
 		 * @return builder's actual step.
 		 */
 		public <S> FirstStep<T> addRelatedCollection(

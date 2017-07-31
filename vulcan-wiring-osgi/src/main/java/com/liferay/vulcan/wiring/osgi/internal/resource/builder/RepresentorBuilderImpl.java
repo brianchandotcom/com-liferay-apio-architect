@@ -15,6 +15,7 @@
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
 import com.liferay.vulcan.filter.QueryParamFilterType;
+import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.wiring.osgi.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;
@@ -34,6 +35,8 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	public RepresentorBuilderImpl(
 		Class<T> modelClass,
 		Map<String, Function<?, String>> identifierFunctions,
+		TriConsumer<String, Class<?>, Function<?, QueryParamFilterType>>
+			addRelatedCollectionFunction,
 		Map<String, Function<?, Object>> fieldFunctions,
 		List<RelatedModel<?, ?>> embeddedRelatedModels,
 		List<RelatedModel<?, ?>> linkedRelatedModels, Map<String, String> links,
@@ -41,6 +44,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 
 		_modelClass = modelClass;
 		_identifierFunctions = identifierFunctions;
+		_addRelatedCollectionFunction = addRelatedCollectionFunction;
 		_fieldFunctions = fieldFunctions;
 		_embeddedRelatedModels = embeddedRelatedModels;
 		_linkedRelatedModels = linkedRelatedModels;
@@ -54,6 +58,22 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		_identifierFunctions.put(_modelClass.getName(), identifierFunction);
 
 		return new FirstStep<T>() {
+
+			@Override
+			public <S> FirstStep<T>
+				addBidirectionalLinkedModelRelatedCollection(
+					String key, String relatedKey, Class<S> modelClass,
+					Function<T, Optional<S>> modelFunction,
+					Function<S, QueryParamFilterType> filterFunction) {
+
+				_linkedRelatedModels.add(
+					new RelatedModel<>(key, modelClass, modelFunction));
+
+				_addRelatedCollectionFunction.accept(
+					relatedKey, modelClass, filterFunction);
+
+				return this;
+			}
 
 			@Override
 			public <S> FirstStep<T> addEmbeddedModel(
@@ -114,6 +134,8 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		};
 	}
 
+	private final TriConsumer<String, Class<?>, Function<?,
+		QueryParamFilterType>> _addRelatedCollectionFunction;
 	private final List<RelatedModel<?, ?>> _embeddedRelatedModels;
 	private final Map<String, Function<?, Object>> _fieldFunctions;
 	private final Map<String, Function<?, String>> _identifierFunctions;
