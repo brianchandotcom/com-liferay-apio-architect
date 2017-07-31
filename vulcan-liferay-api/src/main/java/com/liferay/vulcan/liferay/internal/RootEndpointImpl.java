@@ -56,7 +56,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  */
 @Component(immediate = true)
-public class LiferayRootEndpoint implements RootEndpoint {
+public class RootEndpointImpl implements RootEndpoint {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
@@ -144,7 +144,7 @@ public class LiferayRootEndpoint implements RootEndpoint {
 	}
 
 	@Path("/group/{id}/")
-	public LiferayRootEndpoint getGroupLiferayRootEndpoint(
+	public RootEndpointImpl getGroupLiferayRootEndpoint(
 		@PathParam("id") long id) {
 
 		GroupThreadLocal.setGroupId(id);

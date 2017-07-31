@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class LiferayURITransformer implements CollectionResourceURITransformer {
+public class URITransformerImpl implements CollectionResourceURITransformer {
 
 	@Override
 	public <T> String transformCollectionItemSingleResourceURI(
