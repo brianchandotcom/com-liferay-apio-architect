@@ -26,20 +26,32 @@ package com.liferay.vulcan.liferay.identifier;
  *
  * @author Alejandro Hernández
  */
-public interface ClassNameClassPKIdentifier {
+public class ClassNameClassPKIdentifier {
+
+	public ClassNameClassPKIdentifier(String className, Long classPK) {
+		_className = className;
+		_classPK = classPK;
+	}
 
 	/**
 	 * Returns the className.
 	 *
 	 * @return className.
 	 */
-	public String getClassName();
+	public String getClassName() {
+		return _className;
+	}
 
 	/**
 	 * Returns the classPK.
 	 *
 	 * @return classPK.
 	 */
-	public Long getClassPK();
+	public Long getClassPK() {
+		return _classPK;
+	}
+
+	private final String _className;
+	private final Long _classPK;
 
 }

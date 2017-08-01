@@ -17,7 +17,6 @@ package com.liferay.vulcan.liferay.internal.converter;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.converter.Converter;
 import com.liferay.vulcan.liferay.identifier.ClassNameClassPKIdentifier;
-import com.liferay.vulcan.liferay.internal.identifier.ClassNameClassPKIdentifierImpl;
 
 import javax.ws.rs.BadRequestException;
 
@@ -46,7 +45,7 @@ public class ClassNameClassPKConverter
 			Long classPK = GetterUtil.getLong(classPKString);
 
 			if (classPK != GetterUtil.DEFAULT_LONG) {
-				return new ClassNameClassPKIdentifierImpl(className, classPK);
+				return new ClassNameClassPKIdentifier(className, classPK);
 			}
 		}
 
