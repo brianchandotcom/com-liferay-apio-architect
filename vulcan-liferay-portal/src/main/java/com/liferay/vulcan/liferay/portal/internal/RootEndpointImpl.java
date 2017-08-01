@@ -20,6 +20,7 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.vulcan.endpoint.RootEndpoint;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
+import com.liferay.vulcan.liferay.portal.internal.pagination.PageImpl;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -31,7 +32,6 @@ import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
-import java.util.Collection;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -135,7 +135,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Pagination pagination = paginationOptional.orElseThrow(
 			() -> new MustHaveProvider(Pagination.class));
 
-		return new DefaultPage<>(
+		return new PageImpl<>(
 			modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
 			pagination.getPageNumber(), pageItems.getTotalCount());
 	}
@@ -161,74 +161,5 @@ public class RootEndpointImpl implements RootEndpoint {
 	private ResourceManager _resourceManager;
 
 	private ServiceTrackerMap<String, Resource> _serviceTrackerMap;
-
-	private static class DefaultPage<T> implements Page<T> {
-
-		public DefaultPage(
-			Class<T> modelClass, Collection<T> items, int itemsPerPage,
-			int pageNumber, int totalCount) {
-
-			_modelClass = modelClass;
-			_items = items;
-			_itemsPerPage = itemsPerPage;
-			_pageNumber = pageNumber;
-			_totalCount = totalCount;
-		}
-
-		@Override
-		public Collection<T> getItems() {
-			return _items;
-		}
-
-		@Override
-		public int getItemsPerPage() {
-			return _itemsPerPage;
-		}
-
-		@Override
-		public int getLastPageNumber() {
-			return -Math.floorDiv(-_totalCount, _itemsPerPage);
-		}
-
-		@Override
-		public Class<T> getModelClass() {
-			return _modelClass;
-		}
-
-		@Override
-		public int getPageNumber() {
-			return _pageNumber;
-		}
-
-		@Override
-		public int getTotalCount() {
-			return _totalCount;
-		}
-
-		@Override
-		public boolean hasNext() {
-			if (getLastPageNumber() > _pageNumber) {
-				return true;
-			}
-
-			return false;
-		}
-
-		@Override
-		public boolean hasPrevious() {
-			if (_pageNumber > 1) {
-				return true;
-			}
-
-			return false;
-		}
-
-		private final Collection<T> _items;
-		private final int _itemsPerPage;
-		private final Class<T> _modelClass;
-		private final int _pageNumber;
-		private final int _totalCount;
-
-	}
 
 }
