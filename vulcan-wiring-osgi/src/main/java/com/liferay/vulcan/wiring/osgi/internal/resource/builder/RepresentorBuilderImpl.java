@@ -60,11 +60,10 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		return new FirstStep<T>() {
 
 			@Override
-			public <S> FirstStep<T>
-				addBidirectionalLinkedModelRelatedCollection(
-					String key, String relatedKey, Class<S> modelClass,
-					Function<T, Optional<S>> modelFunction,
-					Function<S, QueryParamFilterType> filterFunction) {
+			public <S> FirstStep<T> addBidirectionalModel(
+				String key, String relatedKey, Class<S> modelClass,
+				Function<T, Optional<S>> modelFunction,
+				Function<S, QueryParamFilterType> filterFunction) {
 
 				_linkedRelatedModels.add(
 					new RelatedModel<>(key, modelClass, modelFunction));

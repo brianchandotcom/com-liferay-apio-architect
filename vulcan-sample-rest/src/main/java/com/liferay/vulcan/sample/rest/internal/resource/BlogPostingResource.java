@@ -82,7 +82,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 
 		representorBuilder.identifier(
 			blogsEntry -> String.valueOf(blogsEntry.getEntryId())
-		).addBidirectionalLinkedModelRelatedCollection(
+		).addBidirectionalModel(
 			"group", "blogs", Group.class, this::_getGroupOptional,
 			this::_getGroupIdFilter
 		).addEmbeddedModel(

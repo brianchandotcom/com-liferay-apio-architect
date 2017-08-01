@@ -60,7 +60,7 @@ public interface RepresentorBuilder<T> {
 		 *                       collection.
 		 * @return builder's actual step.
 		 */
-		public <S> FirstStep<T> addBidirectionalLinkedModelRelatedCollection(
+		public <S> FirstStep<T> addBidirectionalModel(
 			String key, String relatedKey, Class<S> modelClass,
 			Function<T, Optional<S>> modelFunction,
 			Function<S, QueryParamFilterType> filterFunction);
