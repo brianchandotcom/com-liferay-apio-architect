@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.sample.rest.rating;
 
+import com.liferay.vulcan.liferay.identifier.ClassNameClassPKIdentifier;
+
 /**
  * An instance of this interface represents an average rating for a Thing based
  * on multiple ratings or reviews.
@@ -32,7 +34,7 @@ public interface AggregateRating {
 	 *
 	 * @return identifier.
 	 */
-	public String getId();
+	public ClassNameClassPKIdentifier getId();
 
 	/**
 	 * Returns the count of total number of ratings.

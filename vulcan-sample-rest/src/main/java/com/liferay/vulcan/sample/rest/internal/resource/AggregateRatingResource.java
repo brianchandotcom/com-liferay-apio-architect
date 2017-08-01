@@ -63,15 +63,9 @@ public class AggregateRatingResource implements Resource<AggregateRating> {
 		RoutesBuilder<AggregateRating> routesBuilder) {
 
 		return routesBuilder.collectionItem(
-			this::_getRatingsEntry, ClassNameClassPKIdentifier.class
+			_aggregateRatingService::getAggregateRating,
+			ClassNameClassPKIdentifier.class
 		).build();
-	}
-
-	private AggregateRating _getRatingsEntry(ClassNameClassPKIdentifier id) {
-		String className = id.getClassName();
-		Long classPK = id.getClassPK();
-
-		return _aggregateRatingService.getAggregateRating(className, classPK);
 	}
 
 	@Reference

@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.filter.QueryParamFilterType;
 import com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter;
 import com.liferay.vulcan.liferay.filter.GroupIdFilter;
+import com.liferay.vulcan.liferay.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -135,9 +136,11 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 	private Optional<AggregateRating> _getAggregateRatingOptional(
 		BlogsEntry blogsEntry) {
 
+		ClassNameClassPKIdentifier identifier = new ClassNameClassPKIdentifier(
+			BlogsEntry.class.getName(), blogsEntry.getEntryId());
+
 		return Optional.of(
-			_aggregateRatingService.getAggregateRating(
-				BlogsEntry.class.getName(), blogsEntry.getEntryId()));
+			_aggregateRatingService.getAggregateRating(identifier));
 	}
 
 	private BlogsEntry _getBlogsEntry(Long id) {
