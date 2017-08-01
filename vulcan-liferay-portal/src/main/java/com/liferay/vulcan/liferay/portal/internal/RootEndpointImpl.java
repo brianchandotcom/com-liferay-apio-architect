@@ -15,18 +15,11 @@
 package com.liferay.vulcan.liferay.portal.internal;
 
 import com.liferay.vulcan.endpoint.RootEndpoint;
-import com.liferay.vulcan.pagination.Page;
-import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import javax.servlet.http.HttpServletRequest;
 
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 
 import org.osgi.service.component.annotations.Component;
@@ -41,32 +34,8 @@ import org.osgi.service.component.annotations.Reference;
 public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
-	public <T> SingleModel<T> getCollectionItemSingleModel(
-		String path, String id) {
-
-		Routes<T> routes = _resourceManager.getRoutes(
-			path, _httpServletRequest);
-
-		Optional<Function<String, SingleModel<T>>> optional =
-			routes.getSingleModelFunctionOptional();
-
-		Function<String, SingleModel<T>> singleModelFunction =
-			optional.orElseThrow(NotFoundException::new);
-
-		return singleModelFunction.apply(id);
-	}
-
-	@Override
-	public <T> Page<T> getCollectionPage(String path) {
-		Routes<T> routes = _resourceManager.getRoutes(
-			path, _httpServletRequest);
-
-		Optional<Supplier<Page<T>>> optional = routes.getPageSupplierOptional();
-
-		Supplier<Page<T>> pageSupplier = optional.orElseThrow(
-			NotFoundException::new);
-
-		return pageSupplier.get();
+	public <T> Routes<T> getRoutes(String path) {
+		return _resourceManager.getRoutes(path, _httpServletRequest);
 	}
 
 	@Context
