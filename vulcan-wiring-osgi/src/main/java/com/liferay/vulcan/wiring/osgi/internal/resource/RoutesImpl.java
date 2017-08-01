@@ -15,6 +15,7 @@
 package com.liferay.vulcan.wiring.osgi.internal.resource;
 
 import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 
 import java.util.HashMap;
@@ -42,26 +43,30 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
-	public Optional<Function<String, T>> getModelFunctionOptional() {
-		return Optional.ofNullable(_modelFunction);
-	}
-
-	@Override
 	public Optional<Supplier<Page<T>>> getPageSupplierOptional() {
 		return Optional.ofNullable(_pageSupplier);
 	}
 
-	public void setModelFunction(Function<String, T> modelFunction) {
-		_modelFunction = modelFunction;
+	@Override
+	public Optional<Function<String, SingleModel<T>>>
+		getSingleModelFunctionOptional() {
+
+		return Optional.ofNullable(_singleModelFunction);
 	}
 
 	public void setPageSupplier(Supplier<Page<T>> pageSupplier) {
 		_pageSupplier = pageSupplier;
 	}
 
+	public void setSingleModelFunction(
+		Function<String, SingleModel<T>> singleModelFunction) {
+
+		_singleModelFunction = singleModelFunction;
+	}
+
 	private final Map<String, Supplier<Page<T>>> _filteredPageSuppliers =
 		new HashMap<>();
-	private Function<String, T> _modelFunction;
 	private Supplier<Page<T>> _pageSupplier;
+	private Function<String, SingleModel<T>> _singleModelFunction;
 
 }

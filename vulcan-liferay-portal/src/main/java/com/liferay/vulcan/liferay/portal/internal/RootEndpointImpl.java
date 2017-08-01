@@ -77,15 +77,13 @@ public class RootEndpointImpl implements RootEndpoint {
 		Routes<T> routes = _resourceManager.getRoutes(
 			modelClass, _httpServletRequest);
 
-		Optional<Function<String, T>> optional =
-			routes.getModelFunctionOptional();
+		Optional<Function<String, SingleModel<T>>> optional =
+			routes.getSingleModelFunctionOptional();
 
-		Function<String, T> modelFunction = optional.orElseThrow(
-			NotFoundException::new);
+		Function<String, SingleModel<T>> singleModelFunction =
+			optional.orElseThrow(NotFoundException::new);
 
-		T model = modelFunction.apply(id);
-
-		return new SingleModel<>(model, modelClass);
+		return singleModelFunction.apply(id);
 	}
 
 	@Override

@@ -30,6 +30,7 @@ import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.function.UndecaFunction;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.wiring.osgi.internal.pagination.PageImpl;
@@ -53,6 +54,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_modelClass = modelClass;
 		_convertFunction = convertFunction;
 		_provideFunction = provideFunction;
+		_createSingleModelFunction = t -> new SingleModel<>(t, modelClass);
 	}
 
 	@Override
@@ -65,13 +67,16 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		BiFunction<U, A, T> biFunction, Class<U> identifierClass,
 		Class<A> aClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(
 				id -> {
 					A a = _provideOrThrowIfFilter(aClass);
 
 					return biFunction.apply(id, a);
-				}));
+				}).andThen(_createSingleModelFunction));
 
 		return this;
 	}
@@ -83,8 +88,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 		Class<G> gClass, Class<H> hClass, Class<I> iClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(
 				id -> {
 					A a = _provideOrThrowIfFilter(aClass);
 					B b = _provideOrThrowIfFilter(bClass);
@@ -97,7 +105,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					I i = _provideOrThrowIfFilter(iClass);
 
 					return decaFunction.apply(id, a, b, c, d, e, f, g, h, i);
-				}));
+				}).andThen(_createSingleModelFunction));
 
 		return this;
 	}
@@ -109,8 +117,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 		Class<G> gClass, Class<H> hClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(
 				id -> {
 					A a = _provideOrThrowIfFilter(aClass);
 					B b = _provideOrThrowIfFilter(bClass);
@@ -122,7 +133,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					H h = _provideOrThrowIfFilter(hClass);
 
 					return enneaFunction.apply(id, a, b, c, d, e, f, g, h);
-				}));
+				}).andThen(_createSingleModelFunction));
 
 		return this;
 	}
@@ -131,8 +142,12 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	public <U> RoutesBuilder<T> collectionItem(
 		Function<U, T> function, Class<U> identifierClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(function));
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(function).andThen(
+				_createSingleModelFunction));
 
 		return this;
 	}
@@ -143,8 +158,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
 		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(
 				id -> {
 					A a = _provideOrThrowIfFilter(aClass);
 					B b = _provideOrThrowIfFilter(bClass);
@@ -154,7 +172,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					F f = _provideOrThrowIfFilter(fClass);
 
 					return heptaFunction.apply(id, a, b, c, d, e, f);
-				}));
+				}).andThen(_createSingleModelFunction));
 
 		return this;
 	}
@@ -165,8 +183,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
 		Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(
 				id -> {
 					A a = _provideOrThrowIfFilter(aClass);
 					B b = _provideOrThrowIfFilter(bClass);
@@ -175,7 +196,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					E e = _provideOrThrowIfFilter(eClass);
 
 					return hexaFunction.apply(id, a, b, c, d, e);
-				}));
+				}).andThen(_createSingleModelFunction));
 
 		return this;
 	}
@@ -187,8 +208,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 		Class<G> gClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(
 				id -> {
 					A a = _provideOrThrowIfFilter(aClass);
 					B b = _provideOrThrowIfFilter(bClass);
@@ -199,7 +223,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					G g = _provideOrThrowIfFilter(gClass);
 
 					return octaFunction.apply(id, a, b, c, d, e, f, g);
-				}));
+				}).andThen(_createSingleModelFunction));
 
 		return this;
 	}
@@ -209,8 +233,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<U> identifierClass,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(
 				id -> {
 					A a = _provideOrThrowIfFilter(aClass);
 					B b = _provideOrThrowIfFilter(bClass);
@@ -218,7 +245,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					D d = _provideOrThrowIfFilter(dClass);
 
 					return pentaFunction.apply(id, a, b, c, d);
-				}));
+				}).andThen(_createSingleModelFunction));
 
 		return this;
 	}
@@ -228,15 +255,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		TetraFunction<U, A, B, C, T> tetraFunction, Class<U> identifierClass,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(
 				id -> {
 					A a = _provideOrThrowIfFilter(aClass);
 					B b = _provideOrThrowIfFilter(bClass);
 					C c = _provideOrThrowIfFilter(cClass);
 
 					return tetraFunction.apply(id, a, b, c);
-				}));
+				}).andThen(_createSingleModelFunction));
 
 		return this;
 	}
@@ -246,14 +276,17 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		TriFunction<U, A, B, T> triFunction, Class<U> identifierClass,
 		Class<A> aClass, Class<B> bClass) {
 
-		_routesImpl.setModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+		Function<String, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setSingleModelFunction(
+			identifierFunction.andThen(
 				id -> {
 					A a = _provideOrThrowIfFilter(aClass);
 					B b = _provideOrThrowIfFilter(bClass);
 
 					return triFunction.apply(id, a, b);
-				}));
+				}).andThen(_createSingleModelFunction));
 
 		return this;
 	}
@@ -869,6 +902,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	private final BiFunction<Class<?>, String, ?> _convertFunction;
+	private final Function<T, SingleModel<T>> _createSingleModelFunction;
 	private final Class<T> _modelClass;
 	private final Function<Class<?>, Optional<?>> _provideFunction;
 	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();
