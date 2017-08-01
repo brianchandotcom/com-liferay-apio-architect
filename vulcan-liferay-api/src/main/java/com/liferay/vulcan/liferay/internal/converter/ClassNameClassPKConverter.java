@@ -34,8 +34,13 @@ public class ClassNameClassPKConverter
 	implements Converter<ClassNameClassPKIdentifier> {
 
 	@Override
+	public String convert(ClassNameClassPKIdentifier id) {
+		return id.getClassName() + "_" + String.valueOf(id.getClassPK());
+	}
+
+	@Override
 	public ClassNameClassPKIdentifier convert(String id) {
-		String[] components = id.split("-");
+		String[] components = id.split("_");
 
 		if (components.length == 2) {
 			String className = components[0];

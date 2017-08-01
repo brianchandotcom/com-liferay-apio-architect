@@ -15,8 +15,8 @@
 package com.liferay.vulcan.converter;
 
 /**
- * Instances of this interface will be used to convert string identifiers
- * provided in requests to the final endpoint method types.
+ * Instances of this interface will be used to convert between the string
+ * version of an identifier and its final endpoint method type.
  *
  * The class of the converter can then be provided as a parameter in
  * <code>collectionItem</code> {@link
@@ -33,5 +33,13 @@ public interface Converter<T> {
 	 * @return the model identifier in the custom format.
 	 */
 	public T convert(String id);
+
+	/**
+	 * Converts an identifier from its custom representation to the String one.
+	 *
+	 * @param  id model identifier in custom format.
+	 * @return the model identifier in the string format.
+	 */
+	public String convert(T id);
 
 }
