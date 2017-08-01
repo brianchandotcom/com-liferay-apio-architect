@@ -32,6 +32,7 @@ import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.wiring.osgi.internal.pagination.PageImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
 
 import java.util.Optional;
@@ -46,9 +47,10 @@ import javax.ws.rs.BadRequestException;
 public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 	public RoutesBuilderImpl(
-		BiFunction<Class<?>, String, ?> convertFunction,
+		Class<T> modelClass, BiFunction<Class<?>, String, ?> convertFunction,
 		Function<Class<?>, Optional<?>> provideFunction) {
 
+		_modelClass = modelClass;
 		_convertFunction = convertFunction;
 		_provideFunction = provideFunction;
 	}
@@ -260,13 +262,17 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	public <A> RoutesBuilder<T> collectionPage(
 		BiFunction<Pagination, A, PageItems<T>> biFunction, Class<A> aClass) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 				A a = _provideOrThrowIfFilter(aClass);
 
-				return biFunction.apply(pagination, a);
+				PageItems<T> pageItems = biFunction.apply(pagination, a);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -279,10 +285,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 		Class<G> gClass, Class<H> hClass, Class<I> iClass) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 				A a = _provideOrThrowIfFilter(aClass);
 				B b = _provideOrThrowIfFilter(bClass);
 				C c = _provideOrThrowIfFilter(cClass);
@@ -293,8 +298,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				H h = _provideOrThrowIfFilter(hClass);
 				I i = _provideOrThrowIfFilter(iClass);
 
-				return decaFunction.apply(
+				PageItems<T> pageItems = decaFunction.apply(
 					pagination, a, b, c, d, e, f, g, h, i);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -307,10 +317,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass,
 		Class<H> hClass) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 				A a = _provideOrThrowIfFilter(aClass);
 				B b = _provideOrThrowIfFilter(bClass);
 				C c = _provideOrThrowIfFilter(cClass);
@@ -320,7 +329,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				G g = _provideOrThrowIfFilter(gClass);
 				H h = _provideOrThrowIfFilter(hClass);
 
-				return enneaFunction.apply(pagination, a, b, c, d, e, f, g, h);
+				PageItems<T> pageItems = enneaFunction.apply(
+					pagination, a, b, c, d, e, f, g, h);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -330,12 +345,16 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	public RoutesBuilder<T> collectionPage(
 		Function<Pagination, PageItems<T>> function) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 
-				return function.apply(pagination);
+				PageItems<T> pageItems = function.apply(pagination);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -347,10 +366,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Class<E> eClass, Class<F> fClass) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 				A a = _provideOrThrowIfFilter(aClass);
 				B b = _provideOrThrowIfFilter(bClass);
 				C c = _provideOrThrowIfFilter(cClass);
@@ -358,7 +376,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				E e = _provideOrThrowIfFilter(eClass);
 				F f = _provideOrThrowIfFilter(fClass);
 
-				return heptaFunction.apply(pagination, a, b, c, d, e, f);
+				PageItems<T> pageItems = heptaFunction.apply(
+					pagination, a, b, c, d, e, f);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -370,17 +394,22 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Class<E> eClass) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 				A a = _provideOrThrowIfFilter(aClass);
 				B b = _provideOrThrowIfFilter(bClass);
 				C c = _provideOrThrowIfFilter(cClass);
 				D d = _provideOrThrowIfFilter(dClass);
 				E e = _provideOrThrowIfFilter(eClass);
 
-				return hexaFunction.apply(pagination, a, b, c, d, e);
+				PageItems<T> pageItems = hexaFunction.apply(
+					pagination, a, b, c, d, e);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -392,10 +421,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			octaFunction, Class<A> aClass, Class<B> bClass, Class<C> cClass,
 		Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 				A a = _provideOrThrowIfFilter(aClass);
 				B b = _provideOrThrowIfFilter(bClass);
 				C c = _provideOrThrowIfFilter(cClass);
@@ -404,7 +432,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				F f = _provideOrThrowIfFilter(fClass);
 				G g = _provideOrThrowIfFilter(gClass);
 
-				return octaFunction.apply(pagination, a, b, c, d, e, f, g);
+				PageItems<T> pageItems = octaFunction.apply(
+					pagination, a, b, c, d, e, f, g);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -415,16 +449,21 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		PentaFunction<Pagination, A, B, C, D, PageItems<T>> pentaFunction,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 				A a = _provideOrThrowIfFilter(aClass);
 				B b = _provideOrThrowIfFilter(bClass);
 				C c = _provideOrThrowIfFilter(cClass);
 				D d = _provideOrThrowIfFilter(dClass);
 
-				return pentaFunction.apply(pagination, a, b, c, d);
+				PageItems<T> pageItems = pentaFunction.apply(
+					pagination, a, b, c, d);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -435,15 +474,20 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		TetraFunction<Pagination, A, B, C, PageItems<T>> tetraFunction,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 				A a = _provideOrThrowIfFilter(aClass);
 				B b = _provideOrThrowIfFilter(bClass);
 				C c = _provideOrThrowIfFilter(cClass);
 
-				return tetraFunction.apply(pagination, a, b, c);
+				PageItems<T> pageItems = tetraFunction.apply(
+					pagination, a, b, c);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -454,14 +498,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		TriFunction<Pagination, A, B, PageItems<T>> triFunction,
 		Class<A> aClass, Class<B> bClass) {
 
-		_routesImpl.setPageItemsFunction(
+		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provideOrThrowIfFilter(
-					Pagination.class);
+				Pagination pagination = _provide(Pagination.class);
 				A a = _provideOrThrowIfFilter(aClass);
 				B b = _provideOrThrowIfFilter(bClass);
 
-				return triFunction.apply(pagination, a, b);
+				PageItems<T> pageItems = triFunction.apply(pagination, a, b);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -473,13 +521,19 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			BiFunction<Q, Pagination, PageItems<T>> function,
 			Class<Q> filterClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 
-				return function.apply(queryParamFilterType, pagination);
+				PageItems<T> pageItems = function.apply(
+					queryParamFilterType, pagination);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -494,7 +548,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
 			Class<H> hClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
@@ -508,8 +562,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				G g = _provide(gClass);
 				H h = _provide(hClass);
 
-				return decaFunction.apply(
+				PageItems<T> pageItems = decaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e, f, g, h);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -523,7 +582,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass, Class<F> fClass, Class<G> gClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
@@ -536,8 +595,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				F f = _provide(fClass);
 				G g = _provide(gClass);
 
-				return enneaFunction.apply(
+				PageItems<T> pageItems = enneaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e, f, g);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -551,7 +615,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
@@ -562,8 +626,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				D d = _provide(dClass);
 				E e = _provide(eClass);
 
-				return heptaFunction.apply(
+				PageItems<T> pageItems = heptaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -576,7 +645,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<Q> filterClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
@@ -586,8 +655,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				C c = _provide(cClass);
 				D d = _provide(dClass);
 
-				return hexaFunction.apply(
+				PageItems<T> pageItems = hexaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -601,7 +675,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
@@ -613,8 +687,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				E e = _provide(eClass);
 				F f = _provide(fClass);
 
-				return octaFunction.apply(
+				PageItems<T> pageItems = octaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e, f);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -627,7 +706,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<Q> filterClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
@@ -636,8 +715,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				B b = _provide(bClass);
 				C c = _provide(cClass);
 
-				return pentaFunction.apply(
+				PageItems<T> pageItems = pentaFunction.apply(
 					queryParamFilterType, pagination, a, b, c);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -649,7 +733,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			TetraFunction<Q, Pagination, A, B, PageItems<T>> tetraFunction,
 			Class<Q> filterClass, Class<A> aClass, Class<B> bClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
@@ -657,8 +741,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				A a = _provide(aClass);
 				B b = _provide(bClass);
 
-				return tetraFunction.apply(
+				PageItems<T> pageItems = tetraFunction.apply(
 					queryParamFilterType, pagination, a, b);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -670,14 +759,20 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			TriFunction<Q, Pagination, A, PageItems<T>> triFunction,
 			Class<Q> filterClass, Class<A> aClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 
-				return triFunction.apply(queryParamFilterType, pagination, a);
+				PageItems<T> pageItems = triFunction.apply(
+					queryParamFilterType, pagination, a);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -692,7 +787,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
 			Class<I> iClass) {
 
-		_routesImpl.addFilteredPageItemsFunction(
+		_routesImpl.addFilteredPageSupplier(
 			filterClass.getName(),
 			() -> {
 				Q queryParamFilterType = _provide(filterClass);
@@ -707,9 +802,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 				H h = _provide(hClass);
 				I i = _provide(iClass);
 
-				return undecaFunction.apply(
+				PageItems<T> pageItems = undecaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e, f, g, h,
 					i);
+
+				return new PageImpl<>(
+					_modelClass, pageItems.getItems(),
+					pagination.getItemsPerPage(), pagination.getPageNumber(),
+					pageItems.getTotalCount());
 			});
 
 		return this;
@@ -769,6 +869,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	private final BiFunction<Class<?>, String, ?> _convertFunction;
+	private final Class<T> _modelClass;
 	private final Function<Class<?>, Optional<?>> _provideFunction;
 	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();
 

@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource;
 
-import com.liferay.vulcan.pagination.PageItems;
+import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.resource.Routes;
 
 import java.util.HashMap;
@@ -28,20 +28,17 @@ import java.util.function.Supplier;
  */
 public class RoutesImpl<T> implements Routes<T> {
 
-	public void addFilteredPageItemsFunction(
-		String filterClassName,
-		Supplier<PageItems<T>> filteredPageItemFunction) {
+	public void addFilteredPageSupplier(
+		String filterClassName, Supplier<Page<T>> filteredPageSupplier) {
 
-		_filteredPageItemsFunctions.put(
-			filterClassName, filteredPageItemFunction);
+		_filteredPageSuppliers.put(filterClassName, filteredPageSupplier);
 	}
 
 	@Override
-	public Optional<Supplier<PageItems<T>>>
-		getFilteredPageItemsFunctionOptional(String filterClassName) {
+	public Optional<Supplier<Page<T>>>
+		getFilteredPageSupplierOptional(String filterClassName) {
 
-		return Optional.ofNullable(
-			_filteredPageItemsFunctions.get(filterClassName));
+		return Optional.ofNullable(_filteredPageSuppliers.get(filterClassName));
 	}
 
 	@Override
@@ -50,21 +47,21 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
-	public Optional<Supplier<PageItems<T>>> getPageItemsFunctionOptional() {
-		return Optional.ofNullable(_pageItemsFunction);
+	public Optional<Supplier<Page<T>>> getPageSupplierOptional() {
+		return Optional.ofNullable(_pageSupplier);
 	}
 
 	public void setModelFunction(Function<String, T> modelFunction) {
 		_modelFunction = modelFunction;
 	}
 
-	public void setPageItemsFunction(Supplier<PageItems<T>> pageItemsFunction) {
-		_pageItemsFunction = pageItemsFunction;
+	public void setPageSupplier(Supplier<Page<T>> pageSupplier) {
+		_pageSupplier = pageSupplier;
 	}
 
-	private final Map<String, Supplier<PageItems<T>>>
-		_filteredPageItemsFunctions = new HashMap<>();
+	private final Map<String, Supplier<Page<T>>> _filteredPageSuppliers =
+		new HashMap<>();
 	private Function<String, T> _modelFunction;
-	private Supplier<PageItems<T>> _pageItemsFunction;
+	private Supplier<Page<T>> _pageSupplier;
 
 }

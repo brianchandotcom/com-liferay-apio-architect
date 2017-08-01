@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.portal.internal.pagination;
+package com.liferay.vulcan.wiring.osgi.internal.pagination;
 
 import com.liferay.vulcan.pagination.Page;
 

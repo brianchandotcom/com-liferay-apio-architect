@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.resource;
 
-import com.liferay.vulcan.pagination.PageItems;
+import com.liferay.vulcan.pagination.Page;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -40,16 +40,16 @@ import java.util.function.Supplier;
 public interface Routes<T> {
 
 	/**
-	 * Returns the function used to create the filtered page of a {@link
+	 * Returns the supplier used to create the filtered page of a {@link
 	 * Resource}. Returns <code>Optional#empty()</code> if the endpoint wasn't
 	 * added through the {@link
 	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
-	 * @return the function used to create the filtered page, if present;
+	 * @return the supplier used to create the filtered page, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Supplier<PageItems<T>>>
-		getFilteredPageItemsFunctionOptional(String filterClassName);
+	public Optional<Supplier<Page<T>>>
+		getFilteredPageSupplierOptional(String filterClassName);
 
 	/**
 	 * Returns the function used to create the single model of a {@link
@@ -63,13 +63,13 @@ public interface Routes<T> {
 	public Optional<Function<String, T>> getModelFunctionOptional();
 
 	/**
-	 * Returns the function used to create the page of a {@link Resource}.
+	 * Returns the supplier used to create the page of a {@link Resource}.
 	 * Returns <code>Optional#empty()</code> if the endpoint wasn't added
 	 * through the {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
-	 * @return the function used to create the page, if present;
+	 * @return the supplier used to create the page, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Supplier<PageItems<T>>> getPageItemsFunctionOptional();
+	public Optional<Supplier<Page<T>>> getPageSupplierOptional();
 
 }

@@ -234,7 +234,8 @@ public class ResourceManager extends BaseManager<Resource> {
 				Function<HttpServletRequest, Routes<?>> routesFunction =
 					httpServletRequest -> resource.routes(
 						new RoutesBuilderImpl<>(
-							this::_convert, _provide(httpServletRequest)));
+							modelClass, this::_convert,
+							_provide(httpServletRequest)));
 
 				_routesFunctions.put(modelClass.getName(), routesFunction);
 			});

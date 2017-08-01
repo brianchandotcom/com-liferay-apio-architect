@@ -19,15 +19,10 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapperFa
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.vulcan.endpoint.RootEndpoint;
-import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
-import com.liferay.vulcan.liferay.portal.internal.pagination.PageImpl;
 import com.liferay.vulcan.pagination.Page;
-import com.liferay.vulcan.pagination.PageItems;
-import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
-import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
@@ -106,40 +101,23 @@ public class RootEndpointImpl implements RootEndpoint {
 		String filterClassName = _httpServletRequest.getParameter(
 			"filterClassName");
 
-		Optional<Supplier<PageItems<T>>> optional = Optional.empty();
+		Optional<Supplier<Page<T>>> optional = Optional.empty();
 
 		if (filterClassName != null) {
-			optional = routes.getFilteredPageItemsFunctionOptional(
-				filterClassName);
+			optional = routes.getFilteredPageSupplierOptional(filterClassName);
 		}
 		else {
-			optional = routes.getPageItemsFunctionOptional();
+			optional = routes.getPageSupplierOptional();
 		}
 
-		Supplier<PageItems<T>> pageItemsSupplier = optional.orElseThrow(
+		Supplier<Page<T>> pageSupplier = optional.orElseThrow(
 			NotFoundException::new);
 
-		PageItems<T> pageItems = pageItemsSupplier.get();
-
-		Optional<Pagination> paginationOptional = _provide(Pagination.class);
-
-		Pagination pagination = paginationOptional.orElseThrow(
-			() -> new MustHaveProvider(Pagination.class));
-
-		return new PageImpl<>(
-			modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-			pagination.getPageNumber(), pageItems.getTotalCount());
-	}
-
-	private <U> Optional<U> _provide(Class<U> clazz) {
-		return _providerManager.provide(clazz, _httpServletRequest);
+		return pageSupplier.get();
 	}
 
 	@Context
 	private HttpServletRequest _httpServletRequest;
-
-	@Reference
-	private ProviderManager _providerManager;
 
 	@Reference
 	private ResourceManager _resourceManager;
