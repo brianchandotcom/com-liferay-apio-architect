@@ -12,36 +12,27 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi;
+package com.liferay.vulcan.wiring.osgi.model;
 
-import com.liferay.vulcan.filter.QueryParamFilterType;
-
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Represents the relation between a thing and a collection.
+ * Represents the relation between two models.
  *
  * @author Alejandro Hernández
+ * @author Carlos Sierra Andrés
+ * @author Jorge Ferrer
  */
-public class RelatedCollection<T, S> {
+public class RelatedModel<T, S> {
 
-	public RelatedCollection(
+	public RelatedModel(
 		String key, Class<S> modelClass,
-		Function<T, QueryParamFilterType> filterFunction) {
+		Function<T, Optional<S>> modelFunction) {
 
 		_key = key;
 		_modelClass = modelClass;
-		_filterFunction = filterFunction;
-	}
-
-	/**
-	 * Returns the function that can be used to create the filter for the
-	 * related collection.
-	 *
-	 * @return function to calculate the related collection's filter.
-	 */
-	public Function<T, QueryParamFilterType> getFilterFunction() {
-		return _filterFunction;
+		_modelFunction = modelFunction;
 	}
 
 	/**
@@ -54,16 +45,26 @@ public class RelatedCollection<T, S> {
 	}
 
 	/**
-	 * Returns the class of the collection's related models.
+	 * Returns the class of the related model.
 	 *
-	 * @return class of the collection's related models.
+	 * @return class of the related model.
 	 */
 	public Class<S> getModelClass() {
 		return _modelClass;
 	}
 
-	private final Function<T, QueryParamFilterType> _filterFunction;
+	/**
+	 * Returns the function that can be used to retrieve the related model. It
+	 * needs a valid instance of the actual model.
+	 *
+	 * @return function to calculate the related model.
+	 */
+	public Function<T, Optional<S>> getModelFunction() {
+		return _modelFunction;
+	}
+
 	private final String _key;
 	private final Class<S> _modelClass;
+	private final Function<T, Optional<S>> _modelFunction;
 
 }

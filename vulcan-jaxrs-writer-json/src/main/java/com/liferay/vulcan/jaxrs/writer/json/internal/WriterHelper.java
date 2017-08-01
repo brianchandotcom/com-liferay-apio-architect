@@ -25,9 +25,9 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
-import com.liferay.vulcan.wiring.osgi.RelatedCollection;
-import com.liferay.vulcan.wiring.osgi.RelatedModel;
-import com.liferay.vulcan.wiring.osgi.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
+import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 
 import java.net.URI;
 

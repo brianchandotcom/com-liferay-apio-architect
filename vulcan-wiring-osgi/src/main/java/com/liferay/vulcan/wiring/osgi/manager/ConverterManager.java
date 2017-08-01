@@ -12,14 +12,13 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi;
+package com.liferay.vulcan.wiring.osgi.manager;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.vulcan.converter.Converter;
-import com.liferay.vulcan.wiring.osgi.internal.BaseManager;
 
 import java.util.Optional;
 

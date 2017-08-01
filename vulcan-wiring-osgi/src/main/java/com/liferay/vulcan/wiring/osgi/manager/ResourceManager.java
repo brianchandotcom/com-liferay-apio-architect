@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi;
+package com.liferay.vulcan.wiring.osgi.manager;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
@@ -22,9 +22,10 @@ import com.liferay.vulcan.filter.QueryParamFilterType;
 import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
-import com.liferay.vulcan.wiring.osgi.internal.BaseManager;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
+import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
+import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi;
+package com.liferay.vulcan.wiring.osgi.util;
 
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;

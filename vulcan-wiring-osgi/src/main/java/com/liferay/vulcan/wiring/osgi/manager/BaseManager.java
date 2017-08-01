@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi.internal;
+package com.liferay.vulcan.wiring.osgi.manager;
 
-import com.liferay.vulcan.wiring.osgi.GenericUtil;
+import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.util.Map;
 import java.util.Optional;

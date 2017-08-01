@@ -26,10 +26,10 @@ import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
-import com.liferay.vulcan.wiring.osgi.ConverterManager;
-import com.liferay.vulcan.wiring.osgi.GenericUtil;
-import com.liferay.vulcan.wiring.osgi.ProviderManager;
-import com.liferay.vulcan.wiring.osgi.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.manager.ConverterManager;
+import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
+import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.util.Collection;
 import java.util.Optional;
