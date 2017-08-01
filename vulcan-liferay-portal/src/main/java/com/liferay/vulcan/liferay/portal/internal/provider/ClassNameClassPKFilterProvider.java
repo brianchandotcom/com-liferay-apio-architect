@@ -12,12 +12,13 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.internal.provider;
+package com.liferay.vulcan.liferay.portal.internal.provider;
 
-import static com.liferay.vulcan.liferay.filter.GroupIdFilter.GROUP_ID;
+import static com.liferay.vulcan.liferay.portal.filter.ClassNameClassPKFilter.CLASS_NAME;
+import static com.liferay.vulcan.liferay.portal.filter.ClassNameClassPKFilter.CLASS_PK;
 
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.vulcan.liferay.filter.GroupIdFilter;
+import com.liferay.vulcan.liferay.portal.filter.ClassNameClassPKFilter;
 import com.liferay.vulcan.provider.Provider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,26 +28,31 @@ import javax.ws.rs.BadRequestException;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Allows resources to provide {@link GroupIdFilter} in {@link
+ * Allows resources to provide {@link ClassNameClassPKFilter} in {@link
  * com.liferay.vulcan.resource.builder.RoutesBuilder}'s
  * <code>filteredCollectionPage</code> methods.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class GroupIdFilterProvider implements Provider<GroupIdFilter> {
+public class ClassNameClassPKFilterProvider
+	implements Provider<ClassNameClassPKFilter> {
 
 	@Override
-	public GroupIdFilter createContext(HttpServletRequest httpServletRequest) {
-		String groupIdString = httpServletRequest.getParameter(GROUP_ID);
+	public ClassNameClassPKFilter createContext(
+		HttpServletRequest httpServletRequest) {
 
-		Long groupId = GetterUtil.getLong(groupIdString);
+		String className = httpServletRequest.getParameter(CLASS_NAME);
 
-		if ((groupIdString == null) || (groupId == GetterUtil.DEFAULT_LONG)) {
+		String classPKString = httpServletRequest.getParameter(CLASS_PK);
+
+		Long classPK = GetterUtil.getLong(classPKString);
+
+		if ((className == null) || (classPK == GetterUtil.DEFAULT_LONG)) {
 			throw new BadRequestException();
 		}
 
-		return new GroupIdFilter(groupId);
+		return new ClassNameClassPKFilter(className, classPK);
 	}
 
 }

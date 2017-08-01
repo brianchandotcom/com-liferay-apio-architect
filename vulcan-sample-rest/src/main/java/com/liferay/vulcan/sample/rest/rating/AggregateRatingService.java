@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.sample.rest.rating;
 
-import com.liferay.vulcan.liferay.identifier.ClassNameClassPKIdentifier;
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 
 /**
  * Instances of this service can be used to get the related {@link

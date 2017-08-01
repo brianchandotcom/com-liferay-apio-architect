@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.internal;
+package com.liferay.vulcan.liferay.portal.internal;
 
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapperFactory;

@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.sample.rest.internal.resource;
 
-import com.liferay.vulcan.liferay.identifier.ClassNameClassPKIdentifier;
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;

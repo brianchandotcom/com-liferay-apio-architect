@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.filter;
+package com.liferay.vulcan.liferay.portal.filter;
 
 import com.liferay.vulcan.filter.QueryParamFilterType;
 
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Provides the groupId filter applied to the current request.
+ * Provides the className classPK filter applied to the current request.
  *
  * <p>
  * To use this class, add it as a parameter in {@link
@@ -30,27 +30,36 @@ import java.util.Map;
  *
  * @author Alejandro Hernández
  */
-public class GroupIdFilter implements QueryParamFilterType {
+public class ClassNameClassPKFilter implements QueryParamFilterType {
 
-	public static final String GROUP_ID = "groupId";
+	public static final String CLASS_NAME = "className";
 
-	public GroupIdFilter(Long groupId) {
-		_groupId = groupId;
+	public static final String CLASS_PK = "classPK";
+
+	public ClassNameClassPKFilter(String className, Long classPK) {
+		_className = className;
+		_classPK = classPK;
 	}
 
-	public Long getGroupId() {
-		return _groupId;
+	public String getClassName() {
+		return _className;
+	}
+
+	public Long getClassPK() {
+		return _classPK;
 	}
 
 	@Override
 	public Map<String, String> getQueryParamMap() {
 		return new HashMap<String, String>() {
 			{
-				put(GROUP_ID, String.valueOf(_groupId));
+				put(CLASS_NAME, _className);
+				put(CLASS_PK, String.valueOf(_classPK));
 			}
 		};
 	}
 
-	private final Long _groupId;
+	private final String _className;
+	private final Long _classPK;
 
 }

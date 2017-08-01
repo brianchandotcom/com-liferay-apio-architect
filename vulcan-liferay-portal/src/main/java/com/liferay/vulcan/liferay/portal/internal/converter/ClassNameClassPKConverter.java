@@ -12,11 +12,11 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.internal.converter;
+package com.liferay.vulcan.liferay.portal.internal.converter;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.converter.Converter;
-import com.liferay.vulcan.liferay.identifier.ClassNameClassPKIdentifier;
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 
 import javax.ws.rs.BadRequestException;
 

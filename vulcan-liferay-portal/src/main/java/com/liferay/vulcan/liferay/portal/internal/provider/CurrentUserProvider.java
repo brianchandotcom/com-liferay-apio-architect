@@ -12,11 +12,11 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.internal.provider;
+package com.liferay.vulcan.liferay.portal.internal.provider;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.UserService;
-import com.liferay.vulcan.liferay.context.CurrentUser;
+import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.provider.Provider;
 
 import javax.servlet.http.HttpServletRequest;

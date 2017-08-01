@@ -15,7 +15,7 @@
 package com.liferay.vulcan.sample.rest.internal.rating;
 
 import com.liferay.ratings.kernel.model.RatingsEntry;
-import com.liferay.vulcan.liferay.identifier.ClassNameClassPKIdentifier;
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.sample.rest.rating.AggregateRating;
 
 import java.util.List;

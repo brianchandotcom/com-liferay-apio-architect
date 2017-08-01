@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.identifier;
+package com.liferay.vulcan.liferay.portal.identifier;
 
 /**
  * Allows developers to use a combination of className-classPK values as

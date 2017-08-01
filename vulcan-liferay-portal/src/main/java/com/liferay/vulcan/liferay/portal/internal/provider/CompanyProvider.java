@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.internal.provider;
+package com.liferay.vulcan.liferay.portal.internal.provider;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;

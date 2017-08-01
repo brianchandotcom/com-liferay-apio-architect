@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.sample.rest.rating;
 
-import com.liferay.vulcan.liferay.identifier.ClassNameClassPKIdentifier;
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 
 /**
  * An instance of this interface represents an average rating for a Thing based

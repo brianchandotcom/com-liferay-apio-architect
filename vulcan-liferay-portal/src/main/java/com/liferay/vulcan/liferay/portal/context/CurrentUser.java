@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.context;
+package com.liferay.vulcan.liferay.portal.context;
 
 import com.liferay.portal.kernel.model.User;
 

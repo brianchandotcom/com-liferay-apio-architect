@@ -12,13 +12,12 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.internal.provider;
+package com.liferay.vulcan.liferay.portal.internal.provider;
 
-import static com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter.CLASS_NAME;
-import static com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter.CLASS_PK;
+import static com.liferay.vulcan.liferay.portal.filter.GroupIdFilter.GROUP_ID;
 
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.vulcan.liferay.filter.ClassNameClassPKFilter;
+import com.liferay.vulcan.liferay.portal.filter.GroupIdFilter;
 import com.liferay.vulcan.provider.Provider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,31 +27,26 @@ import javax.ws.rs.BadRequestException;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Allows resources to provide {@link ClassNameClassPKFilter} in {@link
+ * Allows resources to provide {@link GroupIdFilter} in {@link
  * com.liferay.vulcan.resource.builder.RoutesBuilder}'s
  * <code>filteredCollectionPage</code> methods.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class ClassNameClassPKFilterProvider
-	implements Provider<ClassNameClassPKFilter> {
+public class GroupIdFilterProvider implements Provider<GroupIdFilter> {
 
 	@Override
-	public ClassNameClassPKFilter createContext(
-		HttpServletRequest httpServletRequest) {
+	public GroupIdFilter createContext(HttpServletRequest httpServletRequest) {
+		String groupIdString = httpServletRequest.getParameter(GROUP_ID);
 
-		String className = httpServletRequest.getParameter(CLASS_NAME);
+		Long groupId = GetterUtil.getLong(groupIdString);
 
-		String classPKString = httpServletRequest.getParameter(CLASS_PK);
-
-		Long classPK = GetterUtil.getLong(classPKString);
-
-		if ((className == null) || (classPK == GetterUtil.DEFAULT_LONG)) {
+		if ((groupIdString == null) || (groupId == GetterUtil.DEFAULT_LONG)) {
 			throw new BadRequestException();
 		}
 
-		return new ClassNameClassPKFilter(className, classPK);
+		return new GroupIdFilter(groupId);
 	}
 
 }
