@@ -20,8 +20,8 @@ import com.liferay.vulcan.resource.Routes;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @author Alejandro Hernández
@@ -29,15 +29,15 @@ import java.util.function.Function;
 public class RoutesImpl<T> implements Routes<T> {
 
 	public void addFilteredPageItemsFunction(
-		String filterClassName, Function<Function<Class<?>, Optional<?>>,
-			PageItems<T>> filteredPageItemFunction) {
+		String filterClassName,
+		Supplier<PageItems<T>> filteredPageItemFunction) {
 
 		_filteredPageItemsFunctions.put(
 			filterClassName, filteredPageItemFunction);
 	}
 
 	@Override
-	public Optional<Function<Function<Class<?>, Optional<?>>, PageItems<T>>>
+	public Optional<Supplier<PageItems<T>>>
 		getFilteredPageItemsFunctionOptional(String filterClassName) {
 
 		return Optional.ofNullable(
@@ -45,39 +45,26 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
-	public Optional<Function<BiFunction<Class<?>, String, ?>,
-		Function<Function<Class<?>, Optional<?>>, Function<String, T>>>>
-			getModelFunctionOptional() {
-
+	public Optional<Function<String, T>> getModelFunctionOptional() {
 		return Optional.ofNullable(_modelFunction);
 	}
 
 	@Override
-	public Optional<Function<Function<Class<?>, Optional<?>>, PageItems<T>>>
-		getPageItemsFunctionOptional() {
-
+	public Optional<Supplier<PageItems<T>>> getPageItemsFunctionOptional() {
 		return Optional.ofNullable(_pageItemsFunction);
 	}
 
-	public void setModelFunction(
-		Function<BiFunction<Class<?>, String, ?>, Function<Function<Class<?>,
-			Optional<?>>, Function<String, T>>> modelFunction) {
-
+	public void setModelFunction(Function<String, T> modelFunction) {
 		_modelFunction = modelFunction;
 	}
 
-	public void setPageItemsFunction(
-		Function<Function<Class<?>, Optional<?>>, PageItems<T>>
-			pageItemsFunction) {
-
+	public void setPageItemsFunction(Supplier<PageItems<T>> pageItemsFunction) {
 		_pageItemsFunction = pageItemsFunction;
 	}
 
-	private final Map<String, Function<Function<Class<?>, Optional<?>>,
-		PageItems<T>>> _filteredPageItemsFunctions = new HashMap<>();
-	private Function<BiFunction<Class<?>, String, ?>, Function
-		<Function<Class<?>, Optional<?>>, Function<String, T>>> _modelFunction;
-	private Function<Function<Class<?>, Optional<?>>, PageItems<T>>
-		_pageItemsFunction;
+	private final Map<String, Supplier<PageItems<T>>>
+		_filteredPageItemsFunctions = new HashMap<>();
+	private Function<String, T> _modelFunction;
+	private Supplier<PageItems<T>> _pageItemsFunction;
 
 }

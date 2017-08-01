@@ -27,14 +27,13 @@ import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
-import com.liferay.vulcan.wiring.osgi.manager.ConverterManager;
 import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -80,22 +79,14 @@ public class RootEndpointImpl implements RootEndpoint {
 		Class<T> modelClass = GenericUtil.getGenericClass(
 			resource, Resource.class);
 
-		Routes<T> routes = _resourceManager.getRoutes(modelClass);
+		Routes<T> routes = _resourceManager.getRoutes(
+			modelClass, _httpServletRequest);
 
-		Optional<Function<BiFunction<Class<?>, String, ?>,
-			Function<Function<Class<?>, Optional<?>>, Function<String, T>>>>
-				optional = routes.getModelFunctionOptional();
+		Optional<Function<String, T>> optional =
+			routes.getModelFunctionOptional();
 
-		Function<BiFunction<Class<?>, String, ?>,
-			Function<Function<Class<?>, Optional<?>>, Function<String, T>>>
-				routesModelFunction = optional.orElseThrow(
-					NotFoundException::new);
-
-		Function<String, T> modelFunction = routesModelFunction.apply(
-			this::_convert
-		).apply(
-			this::_provide
-		);
+		Function<String, T> modelFunction = optional.orElseThrow(
+			NotFoundException::new);
 
 		T model = modelFunction.apply(id);
 
@@ -109,13 +100,13 @@ public class RootEndpointImpl implements RootEndpoint {
 		Class<T> modelClass = GenericUtil.getGenericClass(
 			resource, Resource.class);
 
-		Routes<T> routes = _resourceManager.getRoutes(modelClass);
+		Routes<T> routes = _resourceManager.getRoutes(
+			modelClass, _httpServletRequest);
 
 		String filterClassName = _httpServletRequest.getParameter(
 			"filterClassName");
 
-		Optional<Function<Function<Class<?>, Optional<?>>, PageItems<T>>>
-			optional = Optional.empty();
+		Optional<Supplier<PageItems<T>>> optional = Optional.empty();
 
 		if (filterClassName != null) {
 			optional = routes.getFilteredPageItemsFunctionOptional(
@@ -125,10 +116,10 @@ public class RootEndpointImpl implements RootEndpoint {
 			optional = routes.getPageItemsFunctionOptional();
 		}
 
-		Function<Function<Class<?>, Optional<?>>, PageItems<T>>
-			pageItemsFunction = optional.orElseThrow(NotFoundException::new);
+		Supplier<PageItems<T>> pageItemsSupplier = optional.orElseThrow(
+			NotFoundException::new);
 
-		PageItems<T> pageItems = pageItemsFunction.apply(this::_provide);
+		PageItems<T> pageItems = pageItemsSupplier.get();
 
 		Optional<Pagination> paginationOptional = _provide(Pagination.class);
 
@@ -140,16 +131,9 @@ public class RootEndpointImpl implements RootEndpoint {
 			pagination.getPageNumber(), pageItems.getTotalCount());
 	}
 
-	private <U> Optional<U> _convert(Class<U> clazz, String id) {
-		return _converterManager.convert(clazz, id);
-	}
-
 	private <U> Optional<U> _provide(Class<U> clazz) {
 		return _providerManager.provide(clazz, _httpServletRequest);
 	}
-
-	@Reference
-	private ConverterManager _converterManager;
 
 	@Context
 	private HttpServletRequest _httpServletRequest;

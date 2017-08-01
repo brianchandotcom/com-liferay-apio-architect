@@ -35,6 +35,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -145,13 +147,19 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	/**
-	 * Returns the routes of the model class.
+	 * Returns the routes of the model class for a certain request.
 	 *
 	 * @param  modelClass the model class of a {@link Resource}.
+	 * @param  httpServletRequest the actual request.
 	 * @return the routes of the model class.
 	 */
-	public <T> Routes<T> getRoutes(Class<T> modelClass) {
-		return (Routes)_routes.get(modelClass.getName());
+	public <T> Routes<T> getRoutes(
+		Class<T> modelClass, HttpServletRequest httpServletRequest) {
+
+		Function<HttpServletRequest, Routes<?>> routesFunction =
+			_routesFunctions.get(modelClass.getName());
+
+		return (Routes<T>)routesFunction.apply(httpServletRequest);
 	}
 
 	/**
@@ -223,9 +231,12 @@ public class ResourceManager extends BaseManager<Resource> {
 						fieldFunctions, embeddedRelatedModels,
 						linkedRelatedModels, links, relatedCollections, types));
 
-				Routes<T> routes = resource.routes(new RoutesBuilderImpl<>());
+				Function<HttpServletRequest, Routes<?>> routesFunction =
+					httpServletRequest -> resource.routes(
+						new RoutesBuilderImpl<>(
+							this::_convert, _provide(httpServletRequest)));
 
-				_routes.put(modelClass.getName(), routes);
+				_routesFunctions.put(modelClass.getName(), routesFunction);
 			});
 	}
 
@@ -243,6 +254,16 @@ public class ResourceManager extends BaseManager<Resource> {
 		};
 	}
 
+	private <U> Optional<U> _convert(Class<U> clazz, String id) {
+		return _converterManager.convert(clazz, id);
+	}
+
+	private Function<Class<?>, Optional<?>> _provide(
+		HttpServletRequest httpServletRequest) {
+
+		return clazz -> _providerManager.provide(clazz, httpServletRequest);
+	}
+
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
 		_embeddedRelatedModels.remove(modelClass.getName());
 		_fieldFunctions.remove(modelClass.getName());
@@ -251,6 +272,9 @@ public class ResourceManager extends BaseManager<Resource> {
 		_links.remove(modelClass.getName());
 		_types.remove(modelClass.getName());
 	}
+
+	@Reference
+	private ConverterManager _converterManager;
 
 	private final Map<String, List<RelatedModel<?, ?>>> _embeddedRelatedModels =
 		new ConcurrentHashMap<>();
@@ -262,9 +286,14 @@ public class ResourceManager extends BaseManager<Resource> {
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, String>> _links =
 		new ConcurrentHashMap<>();
+
+	@Reference
+	private ProviderManager _providerManager;
+
 	private final Map<String, List<RelatedCollection<?, ?>>>
 		_relatedCollections = new ConcurrentHashMap<>();
-	private final Map<String, Routes<?>> _routes = new ConcurrentHashMap<>();
+	private final Map<String, Function<HttpServletRequest, Routes<?>>>
+		_routesFunctions = new ConcurrentHashMap<>();
 	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
 
 }
