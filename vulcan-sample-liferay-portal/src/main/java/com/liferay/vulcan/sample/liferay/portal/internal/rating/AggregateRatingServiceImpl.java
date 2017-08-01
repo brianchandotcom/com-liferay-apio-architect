@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.internal.rating;
+package com.liferay.vulcan.sample.liferay.portal.internal.rating;
 
 import com.liferay.ratings.kernel.model.RatingsEntry;
 import com.liferay.ratings.kernel.service.RatingsEntryLocalService;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
-import com.liferay.vulcan.sample.rest.rating.AggregateRating;
-import com.liferay.vulcan.sample.rest.rating.AggregateRatingService;
+import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
+import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
 
 import java.util.List;
 

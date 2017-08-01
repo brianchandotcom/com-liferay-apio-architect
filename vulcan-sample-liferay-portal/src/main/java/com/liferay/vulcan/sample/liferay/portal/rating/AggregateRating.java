@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.rating;
+package com.liferay.vulcan.sample.liferay.portal.rating;
 
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 

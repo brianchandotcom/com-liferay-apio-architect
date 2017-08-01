@@ -12,15 +12,15 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.rest.internal.resource;
+package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
-import com.liferay.vulcan.sample.rest.rating.AggregateRating;
-import com.liferay.vulcan.sample.rest.rating.AggregateRatingService;
+import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
+import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
