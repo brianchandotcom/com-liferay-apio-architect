@@ -147,17 +147,17 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	/**
-	 * Returns the routes of the model class for a certain request.
+	 * Returns the routes of the model class for a certain path.
 	 *
-	 * @param  modelClass the model class of a {@link Resource}.
+	 * @param  path the path of a {@link Resource}.
 	 * @param  httpServletRequest the actual request.
 	 * @return the routes of the model class.
 	 */
 	public <T> Routes<T> getRoutes(
-		Class<T> modelClass, HttpServletRequest httpServletRequest) {
+		String path, HttpServletRequest httpServletRequest) {
 
 		Function<HttpServletRequest, Routes<?>> routesFunction =
-			_routesFunctions.get(modelClass.getName());
+			_routesFunctions.get(path);
 
 		return (Routes<T>)routesFunction.apply(httpServletRequest);
 	}
@@ -237,7 +237,7 @@ public class ResourceManager extends BaseManager<Resource> {
 							modelClass, this::_convert,
 							_provide(httpServletRequest)));
 
-				_routesFunctions.put(modelClass.getName(), routesFunction);
+				_routesFunctions.put(resource.getPath(), routesFunction);
 			});
 	}
 
