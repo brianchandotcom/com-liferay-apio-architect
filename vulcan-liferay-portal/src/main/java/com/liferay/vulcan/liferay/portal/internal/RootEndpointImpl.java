@@ -61,17 +61,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Routes<T> routes = _resourceManager.getRoutes(
 			path, _httpServletRequest);
 
-		String filterClassName = _httpServletRequest.getParameter(
-			"filterClassName");
-
-		Optional<Supplier<Page<T>>> optional = Optional.empty();
-
-		if (filterClassName != null) {
-			optional = routes.getFilteredPageSupplierOptional(filterClassName);
-		}
-		else {
-			optional = routes.getPageSupplierOptional();
-		}
+		Optional<Supplier<Page<T>>> optional = routes.getPageSupplierOptional();
 
 		Supplier<Page<T>> pageSupplier = optional.orElseThrow(
 			NotFoundException::new);

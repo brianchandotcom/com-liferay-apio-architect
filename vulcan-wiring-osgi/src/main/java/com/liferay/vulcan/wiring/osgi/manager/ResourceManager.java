@@ -194,8 +194,6 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	private <T> void _addModelClassMaps(Class<T> modelClass) {
-		Optional<Resource<T>> optional = getResourceOptional(modelClass);
-
 		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
 
 		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
@@ -222,6 +220,8 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		_types.put(modelClass.getName(), types);
 
+		Optional<Resource<T>> optional = getResourceOptional(modelClass);
+
 		optional.ifPresent(
 			resource -> {
 				resource.buildRepresentor(
@@ -231,13 +231,8 @@ public class ResourceManager extends BaseManager<Resource> {
 						fieldFunctions, embeddedRelatedModels,
 						linkedRelatedModels, links, relatedCollections, types));
 
-				Function<HttpServletRequest, Routes<?>> routesFunction =
-					httpServletRequest -> resource.routes(
-						new RoutesBuilderImpl<>(
-							modelClass, this::_convert,
-							_provide(httpServletRequest)));
-
-				_routesFunctions.put(resource.getPath(), routesFunction);
+				_routesFunctions.put(
+					resource.getPath(), _getRoutes(modelClass, resource));
 			});
 	}
 
@@ -257,6 +252,20 @@ public class ResourceManager extends BaseManager<Resource> {
 
 	private <U> Optional<U> _convert(Class<U> clazz, String id) {
 		return _converterManager.convert(clazz, id);
+	}
+
+	private <T> Function<HttpServletRequest, Routes<?>> _getRoutes(
+		Class<T> modelClass, Resource<T> resource) {
+
+		return httpServletRequest -> {
+			String filterClassName = httpServletRequest.getParameter(
+				"filterClassName");
+
+			return resource.routes(
+				new RoutesBuilderImpl<>(
+					modelClass, this::_convert, _provide(httpServletRequest),
+					filterClassName));
+		};
 	}
 
 	private Function<Class<?>, Optional<?>> _provide(

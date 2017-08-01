@@ -18,8 +18,6 @@ import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -28,19 +26,6 @@ import java.util.function.Supplier;
  * @author Alejandro Hernández
  */
 public class RoutesImpl<T> implements Routes<T> {
-
-	public void addFilteredPageSupplier(
-		String filterClassName, Supplier<Page<T>> filteredPageSupplier) {
-
-		_filteredPageSuppliers.put(filterClassName, filteredPageSupplier);
-	}
-
-	@Override
-	public Optional<Supplier<Page<T>>>
-		getFilteredPageSupplierOptional(String filterClassName) {
-
-		return Optional.ofNullable(_filteredPageSuppliers.get(filterClassName));
-	}
 
 	@Override
 	public Optional<Supplier<Page<T>>> getPageSupplierOptional() {
@@ -64,8 +49,6 @@ public class RoutesImpl<T> implements Routes<T> {
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private final Map<String, Supplier<Page<T>>> _filteredPageSuppliers =
-		new HashMap<>();
 	private Supplier<Page<T>> _pageSupplier;
 	private Function<String, SingleModel<T>> _singleModelFunction;
 

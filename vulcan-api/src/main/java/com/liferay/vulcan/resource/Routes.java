@@ -41,18 +41,6 @@ import java.util.function.Supplier;
 public interface Routes<T> {
 
 	/**
-	 * Returns the supplier used to create the filtered page of a {@link
-	 * Resource}. Returns <code>Optional#empty()</code> if the endpoint wasn't
-	 * added through the {@link
-	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
-	 *
-	 * @return the supplier used to create the filtered page, if present;
-	 *         <code>Optional#empty()</code> otherwise.
-	 */
-	public Optional<Supplier<Page<T>>>
-		getFilteredPageSupplierOptional(String filterClassName);
-
-	/**
 	 * Returns the supplier used to create the page of a {@link Resource}.
 	 * Returns <code>Optional#empty()</code> if the endpoint wasn't added
 	 * through the {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
