@@ -14,8 +14,6 @@
 
 package com.liferay.vulcan.filter;
 
-import java.util.Map;
-
 /**
  * Represents a filter applicable to a collection via query params in the
  * request.
@@ -23,19 +21,4 @@ import java.util.Map;
  * @author Alejandro Hernández
  */
 public interface QueryParamFilterType {
-
-	/**
-	 * Returns the name for this filter.
-	 *
-	 * @return the name of this filter.
-	 */
-	public String getFilterName();
-
-	/**
-	 * Returns the query param map for this filter.
-	 *
-	 * @return the filter query param map.
-	 */
-	public Map<String, String> getQueryParamMap();
-
 }

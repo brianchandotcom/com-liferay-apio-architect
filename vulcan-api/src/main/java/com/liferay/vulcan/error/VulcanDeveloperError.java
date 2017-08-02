@@ -38,6 +38,19 @@ public class VulcanDeveloperError extends Error {
 	}
 
 	/**
+	 * Represents the error the developer should throw when a filter provider is
+	 * missing.
+	 */
+	public static class MustHaveFilterProvider extends VulcanDeveloperError {
+
+		public MustHaveFilterProvider(Class<?> modelClass) {
+			super(
+				"Filter " + modelClass.getName() + " does not have a provider");
+		}
+
+	}
+
+	/**
 	 * Represents the error the developer should throw when a message mapper is
 	 * missing.
 	 */
