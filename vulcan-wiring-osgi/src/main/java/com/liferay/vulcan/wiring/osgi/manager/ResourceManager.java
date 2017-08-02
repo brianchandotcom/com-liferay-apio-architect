@@ -258,13 +258,12 @@ public class ResourceManager extends BaseManager<Resource> {
 		Class<T> modelClass, Resource<T> resource) {
 
 		return httpServletRequest -> {
-			String filterClassName = httpServletRequest.getParameter(
-				"filterClassName");
+			String filterName = httpServletRequest.getParameter("filterName");
 
 			return resource.routes(
 				new RoutesBuilderImpl<>(
 					modelClass, this::_convert, _provide(httpServletRequest),
-					filterClassName));
+					filterName));
 		};
 	}
 

@@ -50,6 +50,11 @@ public class ClassNameClassPKFilter implements QueryParamFilterType {
 	}
 
 	@Override
+	public String getFilterName() {
+		return "classNameClassPK";
+	}
+
+	@Override
 	public Map<String, String> getQueryParamMap() {
 		return new HashMap<String, String>() {
 			{

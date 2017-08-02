@@ -136,11 +136,8 @@ public class WriterHelper {
 						key, queryParamMap.get(key));
 				}
 
-				Class<? extends QueryParamFilterType> filterClass =
-					queryParamFilterType.getClass();
-
 				return uriBuilder.queryParam(
-					"filterClassName", filterClass.getName()
+					"filterName", queryParamFilterType.getFilterName()
 				).build();
 			}
 		).map(

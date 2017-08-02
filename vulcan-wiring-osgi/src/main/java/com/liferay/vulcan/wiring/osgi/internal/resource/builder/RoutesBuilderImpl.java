@@ -49,14 +49,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 	public RoutesBuilderImpl(
 		Class<T> modelClass, BiFunction<Class<?>, String, ?> convertFunction,
-		Function<Class<?>, Optional<?>> provideFunction,
-		String filterClassName) {
+		Function<Class<?>, Optional<?>> provideFunction, String filterName) {
 
 		_modelClass = modelClass;
 		_convertFunction = convertFunction;
 		_provideFunction = provideFunction;
 		_createSingleModelFunction = t -> new SingleModel<>(t, modelClass);
-		_filterClassName = filterClassName;
+		_filterName = filterName;
 	}
 
 	@Override
@@ -297,7 +296,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	public <A> RoutesBuilder<T> collectionPage(
 		BiFunction<Pagination, A, PageItems<T>> biFunction, Class<A> aClass) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -324,7 +323,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 		Class<G> gClass, Class<H> hClass, Class<I> iClass) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -360,7 +359,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass,
 		Class<H> hClass) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -392,7 +391,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	public RoutesBuilder<T> collectionPage(
 		Function<Pagination, PageItems<T>> function) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -417,7 +416,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Class<E> eClass, Class<F> fClass) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -449,7 +448,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Class<E> eClass) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -480,7 +479,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			octaFunction, Class<A> aClass, Class<B> bClass, Class<C> cClass,
 		Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -512,7 +511,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		PentaFunction<Pagination, A, B, C, D, PageItems<T>> pentaFunction,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -541,7 +540,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		TetraFunction<Pagination, A, B, C, PageItems<T>> tetraFunction,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -569,7 +568,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		TriFunction<Pagination, A, B, PageItems<T>> triFunction,
 		Class<A> aClass, Class<B> bClass) {
 
-		if (_filterClassName != null) {
+		if (_filterName != null) {
 			return this;
 		}
 
@@ -596,15 +595,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			BiFunction<Q, Pagination, PageItems<T>> function,
 			Class<Q> filterClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 
 				PageItems<T> pageItems = function.apply(
@@ -628,15 +630,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
 			Class<H> hClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 				B b = _provide(bClass);
@@ -667,15 +672,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass, Class<F> fClass, Class<G> gClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 				B b = _provide(bClass);
@@ -705,15 +713,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 				B b = _provide(bClass);
@@ -740,15 +751,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<Q> filterClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 				B b = _provide(bClass);
@@ -775,15 +789,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 				B b = _provide(bClass);
@@ -811,15 +828,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<Q> filterClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 				B b = _provide(bClass);
@@ -843,15 +863,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			TetraFunction<Q, Pagination, A, B, PageItems<T>> tetraFunction,
 			Class<Q> filterClass, Class<A> aClass, Class<B> bClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 				B b = _provide(bClass);
@@ -874,15 +897,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			TriFunction<Q, Pagination, A, PageItems<T>> triFunction,
 			Class<Q> filterClass, Class<A> aClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 
@@ -907,15 +933,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
 			Class<I> iClass) {
 
-		if ((_filterClassName == null) ||
-			!_filterClassName.equals(filterClass.getName())) {
+		if (_filterName == null) {
+			return this;
+		}
 
+		Q queryParamFilterType = _provide(filterClass);
+
+		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Q queryParamFilterType = _provide(filterClass);
 				Pagination pagination = _provide(Pagination.class);
 				A a = _provide(aClass);
 				B b = _provide(bClass);
@@ -995,7 +1024,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 	private final BiFunction<Class<?>, String, ?> _convertFunction;
 	private final Function<T, SingleModel<T>> _createSingleModelFunction;
-	private final String _filterClassName;
+	private final String _filterName;
 	private final Class<T> _modelClass;
 	private final Function<Class<?>, Optional<?>> _provideFunction;
 	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();

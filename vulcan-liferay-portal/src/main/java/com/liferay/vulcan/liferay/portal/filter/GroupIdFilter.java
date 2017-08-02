@@ -38,6 +38,11 @@ public class GroupIdFilter implements QueryParamFilterType {
 		_groupId = groupId;
 	}
 
+	@Override
+	public String getFilterName() {
+		return "groupId";
+	}
+
 	public Long getGroupId() {
 		return _groupId;
 	}

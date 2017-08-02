@@ -25,6 +25,13 @@ import java.util.Map;
 public interface QueryParamFilterType {
 
 	/**
+	 * Returns the name for this filter.
+	 *
+	 * @return the name of this filter.
+	 */
+	public String getFilterName();
+
+	/**
 	 * Returns the query param map for this filter.
 	 *
 	 * @return the filter query param map.
