@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -100,12 +101,33 @@ public abstract class BaseManager<T> {
 	protected <U> Class<U> removeService(
 		ServiceReference<T> serviceReference, Class<T> clazz) {
 
+		Consumer<T> identityConsumer = t -> {
+		};
+
+		return removeService(serviceReference, clazz, identityConsumer);
+	}
+
+	/**
+	 * Removes a serviceReference/service tuple to the internal map.
+	 *
+	 * @param  serviceReference a service reference.
+	 * @param  clazz class of the service reference service.
+	 * @param  beforeRemovingConsumer consumer that will be called before
+	 *         removing the service.
+	 * @return the generic inner class of the service reference service.
+	 */
+	protected <U> Class<U> removeService(
+		ServiceReference<T> serviceReference, Class<T> clazz,
+		Consumer<T> beforeRemovingConsumer) {
+
 		T service = _bundleContext.getService(serviceReference);
 
 		Class<U> genericClass = GenericUtil.getGenericClass(service, clazz);
 
 		TreeSet<ServiceReferenceServiceTuple<T>> serviceReferenceServiceTuples =
 			_services.get(genericClass.getName());
+
+		beforeRemovingConsumer.accept(service);
 
 		serviceReferenceServiceTuples.removeIf(
 			serviceReferenceServiceTuple -> {

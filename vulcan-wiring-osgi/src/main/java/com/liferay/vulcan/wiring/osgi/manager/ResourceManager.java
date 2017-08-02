@@ -55,6 +55,16 @@ import org.osgi.service.component.annotations.Reference;
 public class ResourceManager extends BaseManager<Resource> {
 
 	/**
+	 * Returns the model class name, exposed in a certain path.
+	 *
+	 * @param  path path of the resource for the class name.
+	 * @return the class name exposed in the path.
+	 */
+	public String getClassName(String path) {
+		return _classNames.get(path);
+	}
+
+	/**
 	 * Returns the embedded related models for the model class.
 	 *
 	 * @param  modelClass the model class of a {@link Resource}.
@@ -178,6 +188,12 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		Class<T> modelClass = addService(serviceReference, Resource.class);
 
+		Optional<Resource> optional = getServiceOptional(modelClass);
+
+		optional.ifPresent(
+			resource -> _classNames.put(
+				resource.getPath(), modelClass.getName()));
+
 		_addModelClassMaps(modelClass);
 	}
 
@@ -281,6 +297,8 @@ public class ResourceManager extends BaseManager<Resource> {
 		_links.remove(modelClass.getName());
 		_types.remove(modelClass.getName());
 	}
+
+	private final Map<String, String> _classNames = new ConcurrentHashMap<>();
 
 	@Reference
 	private ConverterManager _converterManager;
