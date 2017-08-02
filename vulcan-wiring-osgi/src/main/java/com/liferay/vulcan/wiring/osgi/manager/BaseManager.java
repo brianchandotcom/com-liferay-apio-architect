@@ -69,15 +69,26 @@ public abstract class BaseManager<T> {
 	}
 
 	/**
+	 * Retrieves a service from the inner map based on its generic inner class.
+	 * Returns <code>Optional#empty()</code> if no service is found.
+	 *
+	 * @param  clazz the class.
+	 * @return the service, if present; <code>Optional#empty()</code> otherwise.
+	 */
+	protected <U> Optional<T> getServiceOptional(Class<U> clazz) {
+		return getServiceOptional(clazz.getName());
+	}
+
+	/**
 	 * Retrieves a service from the inner map based on its generic inner class
 	 * name. Returns <code>Optional#empty()</code> if no service is found.
 	 *
-	 * @param clazz
-	 * @return
+	 * @param  className the class name.
+	 * @return the service, if present; <code>Optional#empty()</code> otherwise.
 	 */
-	protected <U> Optional<T> getServiceOptional(Class<U> clazz) {
+	protected Optional<T> getServiceOptional(String className) {
 		TreeSet<ServiceReferenceServiceTuple<T>> serviceReferenceServiceTuples =
-			_services.get(clazz.getName());
+			_services.get(className);
 
 		Optional<TreeSet<ServiceReferenceServiceTuple<T>>> optional =
 			Optional.ofNullable(serviceReferenceServiceTuples);
