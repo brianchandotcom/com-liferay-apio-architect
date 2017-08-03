@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.error;
 
+import com.liferay.vulcan.filter.QueryParamFilterType;
+
 /**
  * Represents the errors that can occur while using Vulcan. Each error is a
  * nested error subclass.
@@ -43,7 +45,17 @@ public class VulcanDeveloperError extends Error {
 	 */
 	public static class MustHaveFilterProvider extends VulcanDeveloperError {
 
-		public MustHaveFilterProvider(Class<?> modelClass) {
+		public MustHaveFilterProvider(
+			QueryParamFilterType queryParamFilterType) {
+
+			super(
+				"Filter " + queryParamFilterType.toString() +
+					" does not have a provider");
+		}
+
+		public <Q extends QueryParamFilterType> MustHaveFilterProvider(
+			Class<Q> modelClass) {
+
 			super(
 				"Filter " + modelClass.getName() + " does not have a provider");
 		}

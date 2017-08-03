@@ -21,7 +21,11 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 import com.liferay.vulcan.filter.FilterProvider;
 import com.liferay.vulcan.filter.QueryParamFilterType;
 
+import java.lang.reflect.Type;
+
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,8 +54,8 @@ public class FilterProviderManager extends BaseManager<FilterProvider> {
 	public Optional<String> getFilterNameOptional(
 		QueryParamFilterType queryParamFilterType) {
 
-		Optional<FilterProvider> optional = getServiceOptional(
-			queryParamFilterType.getClass());
+		Optional<FilterProvider<QueryParamFilterType>> optional =
+			getFilterProviderOptional(queryParamFilterType);
 
 		return optional.map(FilterProvider::getFilterName);
 	}
@@ -71,6 +75,46 @@ public class FilterProviderManager extends BaseManager<FilterProvider> {
 		Optional<FilterProvider> optional = getServiceOptional(clazz);
 
 		return optional.map(service -> (FilterProvider<T>)service);
+	}
+
+	/**
+	 * Returns the {@link FilterProvider} of a filter. Returns
+	 * <code>Optional#empty()</code> if the {@link FilterProvider} isn't
+	 * present.
+	 *
+	 * @param  queryParamFilterType the filter instance.
+	 * @return the {@link FilterProvider}, if present;
+	 *         <code>Optional#empty()</code> otherwise.
+	 */
+	public <Q extends QueryParamFilterType> Optional<FilterProvider<Q>>
+		getFilterProviderOptional(Q queryParamFilterType) {
+
+		Class<Q> filterClass = (Class<Q>)queryParamFilterType.getClass();
+
+		Optional<FilterProvider<Q>> filterProviderOptional =
+			getFilterProviderOptional(filterClass);
+
+		if (filterProviderOptional.isPresent()) {
+			return filterProviderOptional;
+		}
+
+		Type[] genericInterfaces = filterClass.getGenericInterfaces();
+
+		Stream<Type> stream = Arrays.stream(genericInterfaces);
+
+		return stream.findFirst(
+		).flatMap(
+			type -> {
+				try {
+					return Optional.of((Class<Q>)type);
+				}
+				catch (ClassCastException cce) {
+					return Optional.empty();
+				}
+			}
+		).flatMap(
+			this::getFilterProviderOptional
+		);
 	}
 
 	/**

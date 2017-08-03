@@ -1022,7 +1022,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			queryParamFilterType);
 
 		String filterName = optional.orElseThrow(
-			() -> new MustHaveFilterProvider(queryParamFilterType.getClass()));
+			() -> new MustHaveFilterProvider(queryParamFilterType));
 
 		if (filterName.equals(_filterName)) {
 			return false;

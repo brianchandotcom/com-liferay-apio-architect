@@ -129,16 +129,13 @@ public class WriterHelper {
 
 		return optional.map(
 			url -> {
-				Class<Q> filterClass =
-					(Class<Q>)queryParamFilterType.getClass();
-
 				Optional<FilterProvider<Q>> filterProviderOptional =
 					_filterProviderManager.getFilterProviderOptional(
-						filterClass);
+						queryParamFilterType);
 
 				FilterProvider<Q> filterProvider =
 					filterProviderOptional.orElseThrow(
-						() -> new MustHaveFilterProvider(filterClass));
+						() -> new MustHaveFilterProvider(queryParamFilterType));
 
 				UriBuilder uriBuilder = UriBuilder.fromUri(url);
 
