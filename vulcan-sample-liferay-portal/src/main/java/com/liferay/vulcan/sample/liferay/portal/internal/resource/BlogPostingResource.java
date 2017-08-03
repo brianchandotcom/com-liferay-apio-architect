@@ -28,8 +28,8 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.filter.QueryParamFilterType;
-import com.liferay.vulcan.liferay.portal.filter.ClassNameClassPKFilter;
 import com.liferay.vulcan.liferay.portal.filter.GroupIdFilter;
+import com.liferay.vulcan.liferay.portal.filter.provider.ClassNameClassPKFilterProvider;
 import com.liferay.vulcan.liferay.portal.filter.provider.GroupIdFilterProvider;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
@@ -161,7 +161,8 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 
 		String className = BlogsEntry.class.getName();
 
-		return new ClassNameClassPKFilter(className, blogsEntry.getEntryId());
+		return _classNameClassPKFilterProvider.create(
+			className, blogsEntry.getEntryId());
 	}
 
 	private GroupIdFilter _getGroupIdFilter(Group group) {
@@ -212,6 +213,9 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 
 	@Reference
 	private BlogsEntryService _blogsService;
+
+	@Reference
+	private ClassNameClassPKFilterProvider _classNameClassPKFilterProvider;
 
 	@Reference
 	private GroupIdFilterProvider _groupIdFilterProvider;

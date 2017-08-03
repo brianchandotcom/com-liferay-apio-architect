@@ -12,15 +12,16 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.portal.internal.filter.provider;
+package com.liferay.vulcan.liferay.portal.filter.provider;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.filter.FilterProvider;
+import com.liferay.vulcan.filter.TypeIdFilterProviderHelper;
 import com.liferay.vulcan.liferay.portal.filter.ClassNameClassPKFilter;
+import com.liferay.vulcan.liferay.portal.internal.filter.ClassNameClassPKFilterImpl;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,60 +38,72 @@ import org.osgi.service.component.annotations.Reference;
  * com.liferay.vulcan.resource.builder.RoutesBuilder}'s
  * <code>filteredCollectionPage</code> methods.
  *
- * As well as some utility methods for getting a filter's query param map, or a
- * filter's name.
+ * As well as some utility methods for getting a filter's query param map, a
+ * filter's name or creating a new filter based on a <code>className</code> and
+ * a <code>classPK</code>.
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component(
+	immediate = true,
+	service = {ClassNameClassPKFilterProvider.class, FilterProvider.class}
+)
 public class ClassNameClassPKFilterProvider
 	implements FilterProvider<ClassNameClassPKFilter> {
 
+	/**
+	 * Creates a new {@link ClassNameClassPKFilter} from a given
+	 * <code>className</code> and <code>classPK</code>.
+	 *
+	 * @param  className the className that will be used to filter.
+	 * @param  classPK the classPK that will be used to filter.
+	 * @return an instance of a {@link ClassNameClassPKFilter}.
+	 */
+	public ClassNameClassPKFilter create(String className, Long classPK) {
+		Optional<Resource<Object>> optional =
+			_resourceManager.getResourceOptional(className);
+
+		Resource resource = optional.orElseThrow(NotFoundException::new);
+
+		return new ClassNameClassPKFilterImpl(
+			className, classPK, resource.getPath());
+	}
+
 	@Override
 	public String getFilterName() {
-		return "pathClassPK";
+		return "assetType_id";
 	}
 
 	@Override
 	public Map<String, String> getQueryParamMap(
 		ClassNameClassPKFilter queryParamFilterType) {
 
-		Optional<Resource<Object>> optional =
-			_resourceManager.getResourceOptional(
-				queryParamFilterType.getClassName());
-
-		Resource resource = optional.orElseThrow(NotFoundException::new);
-
-		return new HashMap<String, String>() {
-			{
-				put("path", resource.getPath());
-				put(
-					"classPK",
-					String.valueOf(queryParamFilterType.getClassPK()));
-			}
-		};
+		return _typeIdFilterProviderHelper.getQueryParamMap(
+			queryParamFilterType);
 	}
 
 	@Override
 	public ClassNameClassPKFilter provide(
 		HttpServletRequest httpServletRequest) {
 
-		String classPKString = httpServletRequest.getParameter("classPK");
+		String id = _typeIdFilterProviderHelper.getId(httpServletRequest);
+		String type = _typeIdFilterProviderHelper.getType(httpServletRequest);
 
-		Long classPK = GetterUtil.getLong(classPKString);
+		Long classPK = GetterUtil.getLong(id);
 
-		String path = httpServletRequest.getParameter("path");
-
-		if ((path == null) || (classPK == GetterUtil.DEFAULT_LONG)) {
+		if ((type == null) || (classPK == GetterUtil.DEFAULT_LONG)) {
 			throw new BadRequestException();
 		}
 
-		String className = _resourceManager.getClassName(path);
+		String className = _resourceManager.getClassName(type);
 
-		return new ClassNameClassPKFilter(className, classPK);
+		return new ClassNameClassPKFilterImpl(className, classPK, type);
 	}
 
 	@Reference
 	private ResourceManager _resourceManager;
+
+	@Reference
+	private TypeIdFilterProviderHelper _typeIdFilterProviderHelper;
 
 }

@@ -12,35 +12,22 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.portal.filter;
-
-import com.liferay.vulcan.filter.TypeIdFilter;
+package com.liferay.vulcan.filter;
 
 /**
- * Instances of this class represent a className-classPK filter.
+ * Instances of this class represent a Type+Id filter.
  *
- * <p>
- * To use this class, add it as a parameter in {@link
- * com.liferay.vulcan.resource.builder.RoutesBuilder}
- * <code>filteredCollectionPage</code> methods.
- * </p>
+ * Don't use this class directly, only descendants of this class must be use.
  *
  * @author Alejandro Hernández
  */
-public interface ClassNameClassPKFilter extends TypeIdFilter<Long> {
+public interface TypeIdFilter<T> extends IdFilter<T> {
 
 	/**
-	 * Returns the className to filter.
+	 * Returns the type that will be used to filter.
 	 *
-	 * @return className to filter.
+	 * @return the type that will be used to filter
 	 */
-	public String getClassName();
-
-	/**
-	 * Returns the classPK to filter.
-	 *
-	 * @return classPK to filter.
-	 */
-	public Long getClassPK();
+	public String getType();
 
 }
