@@ -152,7 +152,21 @@ public class ResourceManager extends BaseManager<Resource> {
 	 *         otherwise.
 	 */
 	public <T> Optional<Resource<T>> getResourceOptional(Class<T> modelClass) {
-		return getServiceOptional(modelClass).map(
+		return getResourceOptional(modelClass.getName());
+	}
+
+	/**
+	 * Returns the {@link Resource} of the model class name. Returns
+	 * <code>Optional#empty()</code> if the {@link Resource} isn't present.
+	 *
+	 * @param  modelClassName the model class name.
+	 * @return the {@link Resource}, if present; <code>Optional#empty()</code>
+	 *         otherwise.
+	 */
+	public <T> Optional<Resource<T>> getResourceOptional(
+		String modelClassName) {
+
+		return getServiceOptional(modelClassName).map(
 			resource -> (Resource<T>)resource);
 	}
 
