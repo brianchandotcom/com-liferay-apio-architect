@@ -16,11 +16,8 @@ package com.liferay.vulcan.liferay.portal.filter;
 
 import com.liferay.vulcan.filter.QueryParamFilterType;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * Provides the groupId filter applied to the current request.
+ * Instances of this class represent a groupId filter.
  *
  * <p>
  * To use this class, add it as a parameter in {@link
@@ -32,28 +29,12 @@ import java.util.Map;
  */
 public class GroupIdFilter implements QueryParamFilterType {
 
-	public static final String GROUP_ID = "groupId";
-
 	public GroupIdFilter(Long groupId) {
 		_groupId = groupId;
 	}
 
-	@Override
-	public String getFilterName() {
-		return "groupId";
-	}
-
 	public Long getGroupId() {
 		return _groupId;
-	}
-
-	@Override
-	public Map<String, String> getQueryParamMap() {
-		return new HashMap<String, String>() {
-			{
-				put(GROUP_ID, String.valueOf(_groupId));
-			}
-		};
 	}
 
 	private final Long _groupId;

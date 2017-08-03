@@ -16,11 +16,8 @@ package com.liferay.vulcan.liferay.portal.filter;
 
 import com.liferay.vulcan.filter.QueryParamFilterType;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * Provides the className classPK filter applied to the current request.
+ * Instances of this class represent a className-classPK filter.
  *
  * <p>
  * To use this class, add it as a parameter in {@link
@@ -31,10 +28,6 @@ import java.util.Map;
  * @author Alejandro Hernández
  */
 public class ClassNameClassPKFilter implements QueryParamFilterType {
-
-	public static final String CLASS_NAME = "className";
-
-	public static final String CLASS_PK = "classPK";
 
 	public ClassNameClassPKFilter(String className, Long classPK) {
 		_className = className;
@@ -47,21 +40,6 @@ public class ClassNameClassPKFilter implements QueryParamFilterType {
 
 	public Long getClassPK() {
 		return _classPK;
-	}
-
-	@Override
-	public String getFilterName() {
-		return "classNameClassPK";
-	}
-
-	@Override
-	public Map<String, String> getQueryParamMap() {
-		return new HashMap<String, String>() {
-			{
-				put(CLASS_NAME, _className);
-				put(CLASS_PK, String.valueOf(_classPK));
-			}
-		};
 	}
 
 	private final String _className;
