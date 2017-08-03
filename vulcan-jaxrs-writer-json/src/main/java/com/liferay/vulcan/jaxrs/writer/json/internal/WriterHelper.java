@@ -18,6 +18,8 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.OPTION
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveFilterProvider;
+import com.liferay.vulcan.filter.FilterProvider;
 import com.liferay.vulcan.filter.QueryParamFilterType;
 import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.list.FunctionalList;
@@ -25,6 +27,7 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
+import com.liferay.vulcan.wiring.osgi.manager.FilterProviderManager;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
@@ -117,27 +120,40 @@ public class WriterHelper {
 	 * @return the collection URL if a {@link Resource} for the model class can
 	 *         be found; <code>Optional#empty()</code> otherwise.
 	 */
-	public <T> Optional<String> getFilteredCollectionURLOptional(
-		Class<T> modelClass, QueryParamFilterType queryParamFilterType,
-		UriInfo uriInfo) {
+	public <T, Q extends QueryParamFilterType> Optional<String>
+		getFilteredCollectionURLOptional(
+			Class<T> modelClass, Q queryParamFilterType, UriInfo uriInfo) {
 
 		Optional<String> optional = getCollectionURLOptional(
 			modelClass, uriInfo);
 
 		return optional.map(
 			url -> {
-				Map<String, String> queryParamMap =
-					queryParamFilterType.getQueryParamMap();
+				Class<Q> filterClass =
+					(Class<Q>)queryParamFilterType.getClass();
+
+				Optional<FilterProvider<Q>> filterProviderOptional =
+					_filterProviderManager.getFilterProviderOptional(
+						filterClass);
+
+				FilterProvider<Q> filterProvider =
+					filterProviderOptional.orElseThrow(
+						() -> new MustHaveFilterProvider(filterClass));
 
 				UriBuilder uriBuilder = UriBuilder.fromUri(url);
+
+				Map<String, String> queryParamMap =
+					filterProvider.getQueryParamMap(queryParamFilterType);
 
 				for (String key : queryParamMap.keySet()) {
 					uriBuilder = uriBuilder.queryParam(
 						key, queryParamMap.get(key));
 				}
 
+				String filterName = filterProvider.getFilterName();
+
 				return uriBuilder.queryParam(
-					"filterName", queryParamFilterType.getFilterName()
+					"filterName", filterName
 				).build();
 			}
 		).map(
@@ -454,6 +470,9 @@ public class WriterHelper {
 
 	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private CollectionResourceURITransformer _collectionResourceURITransformer;
+
+	@Reference
+	private FilterProviderManager _filterProviderManager;
 
 	@Reference
 	private ResourceManager _resourceManager;
