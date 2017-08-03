@@ -12,20 +12,24 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.portal.filter;
+package com.liferay.vulcan.liferay.portal.internal.filter;
 
-import com.liferay.vulcan.filter.IdFilter;
+import com.liferay.vulcan.liferay.portal.filter.GroupIdFilter;
 
 /**
- * Instances of this class represent a groupId filter.
- *
- * <p>
- * To use this class, add it as a parameter in {@link
- * com.liferay.vulcan.resource.builder.RoutesBuilder}
- * <code>filteredCollectionPage</code> methods.
- * </p>
- *
  * @author Alejandro Hernández
  */
-public interface GroupIdFilter extends IdFilter<Long> {
+public class GroupIdFilterImpl implements GroupIdFilter {
+
+	public GroupIdFilterImpl(Long groupId) {
+		_groupId = groupId;
+	}
+
+	@Override
+	public Long getId() {
+		return _groupId;
+	}
+
+	private final Long _groupId;
+
 }

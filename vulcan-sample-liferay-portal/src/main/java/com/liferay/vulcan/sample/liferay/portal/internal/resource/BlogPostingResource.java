@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.filter.QueryParamFilterType;
 import com.liferay.vulcan.liferay.portal.filter.ClassNameClassPKFilter;
 import com.liferay.vulcan.liferay.portal.filter.GroupIdFilter;
+import com.liferay.vulcan.liferay.portal.filter.provider.GroupIdFilterProvider;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -164,7 +165,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 	}
 
 	private GroupIdFilter _getGroupIdFilter(Group group) {
-		return new GroupIdFilter(group.getGroupId());
+		return _groupIdFilterProvider.create(group.getGroupId());
 	}
 
 	private Optional<Group> _getGroupOptional(BlogsEntry blogsEntry) {
@@ -183,7 +184,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 	private PageItems<BlogsEntry> _getPageItems(
 		GroupIdFilter groupIdFilter, Pagination pagination) {
 
-		Long groupId = groupIdFilter.getGroupId();
+		Long groupId = groupIdFilter.getId();
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
 			groupId, 0, pagination.getStartPosition(),
@@ -211,6 +212,9 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 
 	@Reference
 	private BlogsEntryService _blogsService;
+
+	@Reference
+	private GroupIdFilterProvider _groupIdFilterProvider;
 
 	@Reference
 	private GroupLocalService _groupLocalService;

@@ -4,4 +4,5 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.vulcan.liferay.portal.context,\
 	com.liferay.vulcan.liferay.portal.filter,\
+	com.liferay.vulcan.liferay.portal.filter.provider,\
 	com.liferay.vulcan.liferay.portal.identifier

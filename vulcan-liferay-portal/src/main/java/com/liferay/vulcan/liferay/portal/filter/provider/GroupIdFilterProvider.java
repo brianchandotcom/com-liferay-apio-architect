@@ -12,13 +12,14 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.portal.internal.filter.provider;
+package com.liferay.vulcan.liferay.portal.filter.provider;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.filter.FilterProvider;
+import com.liferay.vulcan.filter.IdFilterProviderHelper;
 import com.liferay.vulcan.liferay.portal.filter.GroupIdFilter;
+import com.liferay.vulcan.liferay.portal.internal.filter.GroupIdFilterImpl;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,45 +27,60 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * Allows resources to provide {@link GroupIdFilter} in {@link
  * com.liferay.vulcan.resource.builder.RoutesBuilder}'s
  * <code>filteredCollectionPage</code> methods.
  *
- * As well as some utility methods for getting a filter's query param map, or a
- * filter's name.
+ * As well as some utility methods for getting a filter's query param map, a
+ * filter's name or creating a new filter based on a <code>groupId</code>.
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component(
+	immediate = true,
+	service = {FilterProvider.class, GroupIdFilterProvider.class}
+)
 public class GroupIdFilterProvider implements FilterProvider<GroupIdFilter> {
 
-	@Override
-	public String getFilterName() {
-		return "group";
+	/**
+	 * Creates a new {@link GroupIdFilter} from a given <code>groupId</code>.
+	 *
+	 * @param  groupId the groupId that will be used to filter.
+	 * @return an instance of a {@link GroupIdFilter}.
+	 */
+	public GroupIdFilter create(Long groupId) {
+		return new GroupIdFilterImpl(groupId);
 	}
 
 	@Override
-	public Map<String, String> getQueryParamMap(GroupIdFilter groupIdFilter) {
-		return new HashMap<String, String>() {
-			{
-				put("groupId", String.valueOf(groupIdFilter.getGroupId()));
-			}
-		};
+	public String getFilterName() {
+		return "groupId";
+	}
+
+	@Override
+	public Map<String, String> getQueryParamMap(
+		GroupIdFilter queryParamFilterType) {
+
+		return _idFilterProviderHelper.getQueryParamMap(queryParamFilterType);
 	}
 
 	@Override
 	public GroupIdFilter provide(HttpServletRequest httpServletRequest) {
-		String groupIdString = httpServletRequest.getParameter("groupId");
+		String id = _idFilterProviderHelper.getId(httpServletRequest);
 
-		Long groupId = GetterUtil.getLong(groupIdString);
+		Long groupId = GetterUtil.getLong(id);
 
-		if ((groupIdString == null) || (groupId == GetterUtil.DEFAULT_LONG)) {
+		if (groupId == GetterUtil.DEFAULT_LONG) {
 			throw new BadRequestException();
 		}
 
-		return new GroupIdFilter(groupId);
+		return new GroupIdFilterImpl(groupId);
 	}
+
+	@Reference
+	private IdFilterProviderHelper _idFilterProviderHelper;
 
 }
