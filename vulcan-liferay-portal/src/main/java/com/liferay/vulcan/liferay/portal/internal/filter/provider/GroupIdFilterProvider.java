@@ -12,13 +12,14 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.portal.internal.provider;
-
-import static com.liferay.vulcan.liferay.portal.filter.GroupIdFilter.GROUP_ID;
+package com.liferay.vulcan.liferay.portal.internal.filter.provider;
 
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.vulcan.filter.FilterProvider;
 import com.liferay.vulcan.liferay.portal.filter.GroupIdFilter;
-import com.liferay.vulcan.provider.Provider;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,14 +32,31 @@ import org.osgi.service.component.annotations.Component;
  * com.liferay.vulcan.resource.builder.RoutesBuilder}'s
  * <code>filteredCollectionPage</code> methods.
  *
+ * As well as some utility methods for getting a filter's query param map, or a
+ * filter's name.
+ *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class GroupIdFilterProvider implements Provider<GroupIdFilter> {
+public class GroupIdFilterProvider implements FilterProvider<GroupIdFilter> {
 
 	@Override
-	public GroupIdFilter createContext(HttpServletRequest httpServletRequest) {
-		String groupIdString = httpServletRequest.getParameter(GROUP_ID);
+	public String getFilterName() {
+		return "group";
+	}
+
+	@Override
+	public Map<String, String> getQueryParamMap(GroupIdFilter groupIdFilter) {
+		return new HashMap<String, String>() {
+			{
+				put("groupId", String.valueOf(groupIdFilter.getGroupId()));
+			}
+		};
+	}
+
+	@Override
+	public GroupIdFilter provide(HttpServletRequest httpServletRequest) {
+		String groupIdString = httpServletRequest.getParameter("groupId");
 
 		Long groupId = GetterUtil.getLong(groupIdString);
 
