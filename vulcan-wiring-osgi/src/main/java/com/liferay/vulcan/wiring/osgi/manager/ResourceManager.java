@@ -284,6 +284,27 @@ public class ResourceManager extends BaseManager<Resource> {
 		return _converterManager.convert(clazz, id);
 	}
 
+	private Optional<String> _getFilterName(
+		QueryParamFilterType queryParamFilterType) {
+
+		return _filterProviderManager.getFilterNameOptional(
+			queryParamFilterType);
+	}
+
+	private Function<Class<?>, Optional<?>> _getProvideClassFunction(
+		HttpServletRequest httpServletRequest) {
+
+		return clazz -> _providerManager.provide(clazz, httpServletRequest);
+	}
+
+	private Function<Class<? extends QueryParamFilterType>,
+		Optional<? extends QueryParamFilterType>>
+			_getProvideFilterFunction(HttpServletRequest httpServletRequest) {
+
+		return clazz -> _filterProviderManager.provide(
+			clazz, httpServletRequest);
+	}
+
 	private <T> Function<HttpServletRequest, Routes<?>> _getRoutes(
 		Class<T> modelClass, Resource<T> resource) {
 
@@ -292,15 +313,11 @@ public class ResourceManager extends BaseManager<Resource> {
 
 			return resource.routes(
 				new RoutesBuilderImpl<>(
-					modelClass, this::_convert, _provide(httpServletRequest),
-					filterName));
+					modelClass, this::_convert,
+					_getProvideClassFunction(httpServletRequest),
+					_getProvideFilterFunction(httpServletRequest),
+					this::_getFilterName, filterName));
 		};
-	}
-
-	private Function<Class<?>, Optional<?>> _provide(
-		HttpServletRequest httpServletRequest) {
-
-		return clazz -> _providerManager.provide(clazz, httpServletRequest);
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
@@ -321,6 +338,10 @@ public class ResourceManager extends BaseManager<Resource> {
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
 		_fieldFunctions = new ConcurrentHashMap<>();
+
+	@Reference
+	private FilterProviderManager _filterProviderManager;
+
 	private final Map<String, Function<?, String>> _identifierFunctions =
 		new ConcurrentHashMap<>();
 	private final Map<String, List<RelatedModel<?, ?>>> _linkedRelatedModels =

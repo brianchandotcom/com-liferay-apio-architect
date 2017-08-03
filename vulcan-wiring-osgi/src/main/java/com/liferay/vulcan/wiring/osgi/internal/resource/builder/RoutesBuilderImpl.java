@@ -16,6 +16,7 @@ package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveConverter;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveFilterProvider;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustUseFilteredCollectionPage;
 import com.liferay.vulcan.filter.QueryParamFilterType;
@@ -49,12 +50,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 	public RoutesBuilderImpl(
 		Class<T> modelClass, BiFunction<Class<?>, String, ?> convertFunction,
-		Function<Class<?>, Optional<?>> provideFunction, String filterName) {
+		Function<Class<?>, Optional<?>> provideClassFunction,
+		Function<Class<? extends QueryParamFilterType>,
+			Optional<? extends QueryParamFilterType>> provideFilterFunction,
+		Function<QueryParamFilterType, Optional<String>> getFilterNameFunction,
+		String filterName) {
 
 		_modelClass = modelClass;
 		_convertFunction = convertFunction;
-		_provideFunction = provideFunction;
+		_provideClassFunction = provideClassFunction;
+		_provideFilterFunction = provideFilterFunction;
 		_createSingleModelFunction = t -> new SingleModel<>(t, modelClass);
+		_getFilterNameFunction = getFilterNameFunction;
 		_filterName = filterName;
 	}
 
@@ -74,7 +81,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_routesImpl.setSingleModelFunction(
 			identifierFunction.andThen(
 				id -> {
-					A a = _provideOrThrowIfFilter(aClass);
+					A a = _provideClass(aClass);
 
 					return biFunction.apply(id, a);
 				}).andThen(_createSingleModelFunction));
@@ -95,15 +102,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_routesImpl.setSingleModelFunction(
 			identifierFunction.andThen(
 				id -> {
-					A a = _provideOrThrowIfFilter(aClass);
-					B b = _provideOrThrowIfFilter(bClass);
-					C c = _provideOrThrowIfFilter(cClass);
-					D d = _provideOrThrowIfFilter(dClass);
-					E e = _provideOrThrowIfFilter(eClass);
-					F f = _provideOrThrowIfFilter(fClass);
-					G g = _provideOrThrowIfFilter(gClass);
-					H h = _provideOrThrowIfFilter(hClass);
-					I i = _provideOrThrowIfFilter(iClass);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+					H h = _provideClass(hClass);
+					I i = _provideClass(iClass);
 
 					return decaFunction.apply(id, a, b, c, d, e, f, g, h, i);
 				}).andThen(_createSingleModelFunction));
@@ -124,14 +131,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_routesImpl.setSingleModelFunction(
 			identifierFunction.andThen(
 				id -> {
-					A a = _provideOrThrowIfFilter(aClass);
-					B b = _provideOrThrowIfFilter(bClass);
-					C c = _provideOrThrowIfFilter(cClass);
-					D d = _provideOrThrowIfFilter(dClass);
-					E e = _provideOrThrowIfFilter(eClass);
-					F f = _provideOrThrowIfFilter(fClass);
-					G g = _provideOrThrowIfFilter(gClass);
-					H h = _provideOrThrowIfFilter(hClass);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+					H h = _provideClass(hClass);
 
 					return enneaFunction.apply(id, a, b, c, d, e, f, g, h);
 				}).andThen(_createSingleModelFunction));
@@ -165,12 +172,12 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_routesImpl.setSingleModelFunction(
 			identifierFunction.andThen(
 				id -> {
-					A a = _provideOrThrowIfFilter(aClass);
-					B b = _provideOrThrowIfFilter(bClass);
-					C c = _provideOrThrowIfFilter(cClass);
-					D d = _provideOrThrowIfFilter(dClass);
-					E e = _provideOrThrowIfFilter(eClass);
-					F f = _provideOrThrowIfFilter(fClass);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
 
 					return heptaFunction.apply(id, a, b, c, d, e, f);
 				}).andThen(_createSingleModelFunction));
@@ -190,11 +197,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_routesImpl.setSingleModelFunction(
 			identifierFunction.andThen(
 				id -> {
-					A a = _provideOrThrowIfFilter(aClass);
-					B b = _provideOrThrowIfFilter(bClass);
-					C c = _provideOrThrowIfFilter(cClass);
-					D d = _provideOrThrowIfFilter(dClass);
-					E e = _provideOrThrowIfFilter(eClass);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
 
 					return hexaFunction.apply(id, a, b, c, d, e);
 				}).andThen(_createSingleModelFunction));
@@ -215,13 +222,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_routesImpl.setSingleModelFunction(
 			identifierFunction.andThen(
 				id -> {
-					A a = _provideOrThrowIfFilter(aClass);
-					B b = _provideOrThrowIfFilter(bClass);
-					C c = _provideOrThrowIfFilter(cClass);
-					D d = _provideOrThrowIfFilter(dClass);
-					E e = _provideOrThrowIfFilter(eClass);
-					F f = _provideOrThrowIfFilter(fClass);
-					G g = _provideOrThrowIfFilter(gClass);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
 
 					return octaFunction.apply(id, a, b, c, d, e, f, g);
 				}).andThen(_createSingleModelFunction));
@@ -240,10 +247,10 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_routesImpl.setSingleModelFunction(
 			identifierFunction.andThen(
 				id -> {
-					A a = _provideOrThrowIfFilter(aClass);
-					B b = _provideOrThrowIfFilter(bClass);
-					C c = _provideOrThrowIfFilter(cClass);
-					D d = _provideOrThrowIfFilter(dClass);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
 
 					return pentaFunction.apply(id, a, b, c, d);
 				}).andThen(_createSingleModelFunction));
@@ -262,9 +269,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_routesImpl.setSingleModelFunction(
 			identifierFunction.andThen(
 				id -> {
-					A a = _provideOrThrowIfFilter(aClass);
-					B b = _provideOrThrowIfFilter(bClass);
-					C c = _provideOrThrowIfFilter(cClass);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
 
 					return tetraFunction.apply(id, a, b, c);
 				}).andThen(_createSingleModelFunction));
@@ -283,8 +290,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		_routesImpl.setSingleModelFunction(
 			identifierFunction.andThen(
 				id -> {
-					A a = _provideOrThrowIfFilter(aClass);
-					B b = _provideOrThrowIfFilter(bClass);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
 
 					return triFunction.apply(id, a, b);
 				}).andThen(_createSingleModelFunction));
@@ -302,8 +309,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provideOrThrowIfFilter(aClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
 
 				PageItems<T> pageItems = biFunction.apply(pagination, a);
 
@@ -329,16 +336,16 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provideOrThrowIfFilter(aClass);
-				B b = _provideOrThrowIfFilter(bClass);
-				C c = _provideOrThrowIfFilter(cClass);
-				D d = _provideOrThrowIfFilter(dClass);
-				E e = _provideOrThrowIfFilter(eClass);
-				F f = _provideOrThrowIfFilter(fClass);
-				G g = _provideOrThrowIfFilter(gClass);
-				H h = _provideOrThrowIfFilter(hClass);
-				I i = _provideOrThrowIfFilter(iClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
+				G g = _provideClass(gClass);
+				H h = _provideClass(hClass);
+				I i = _provideClass(iClass);
 
 				PageItems<T> pageItems = decaFunction.apply(
 					pagination, a, b, c, d, e, f, g, h, i);
@@ -365,15 +372,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provideOrThrowIfFilter(aClass);
-				B b = _provideOrThrowIfFilter(bClass);
-				C c = _provideOrThrowIfFilter(cClass);
-				D d = _provideOrThrowIfFilter(dClass);
-				E e = _provideOrThrowIfFilter(eClass);
-				F f = _provideOrThrowIfFilter(fClass);
-				G g = _provideOrThrowIfFilter(gClass);
-				H h = _provideOrThrowIfFilter(hClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
+				G g = _provideClass(gClass);
+				H h = _provideClass(hClass);
 
 				PageItems<T> pageItems = enneaFunction.apply(
 					pagination, a, b, c, d, e, f, g, h);
@@ -397,7 +404,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
+				Pagination pagination = _provideClass(Pagination.class);
 
 				PageItems<T> pageItems = function.apply(pagination);
 
@@ -422,13 +429,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provideOrThrowIfFilter(aClass);
-				B b = _provideOrThrowIfFilter(bClass);
-				C c = _provideOrThrowIfFilter(cClass);
-				D d = _provideOrThrowIfFilter(dClass);
-				E e = _provideOrThrowIfFilter(eClass);
-				F f = _provideOrThrowIfFilter(fClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
 
 				PageItems<T> pageItems = heptaFunction.apply(
 					pagination, a, b, c, d, e, f);
@@ -454,12 +461,12 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provideOrThrowIfFilter(aClass);
-				B b = _provideOrThrowIfFilter(bClass);
-				C c = _provideOrThrowIfFilter(cClass);
-				D d = _provideOrThrowIfFilter(dClass);
-				E e = _provideOrThrowIfFilter(eClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
 
 				PageItems<T> pageItems = hexaFunction.apply(
 					pagination, a, b, c, d, e);
@@ -485,14 +492,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provideOrThrowIfFilter(aClass);
-				B b = _provideOrThrowIfFilter(bClass);
-				C c = _provideOrThrowIfFilter(cClass);
-				D d = _provideOrThrowIfFilter(dClass);
-				E e = _provideOrThrowIfFilter(eClass);
-				F f = _provideOrThrowIfFilter(fClass);
-				G g = _provideOrThrowIfFilter(gClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
+				G g = _provideClass(gClass);
 
 				PageItems<T> pageItems = octaFunction.apply(
 					pagination, a, b, c, d, e, f, g);
@@ -517,11 +524,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provideOrThrowIfFilter(aClass);
-				B b = _provideOrThrowIfFilter(bClass);
-				C c = _provideOrThrowIfFilter(cClass);
-				D d = _provideOrThrowIfFilter(dClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
 
 				PageItems<T> pageItems = pentaFunction.apply(
 					pagination, a, b, c, d);
@@ -546,10 +553,10 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provideOrThrowIfFilter(aClass);
-				B b = _provideOrThrowIfFilter(bClass);
-				C c = _provideOrThrowIfFilter(cClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
 
 				PageItems<T> pageItems = tetraFunction.apply(
 					pagination, a, b, c);
@@ -574,9 +581,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provideOrThrowIfFilter(aClass);
-				B b = _provideOrThrowIfFilter(bClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
 
 				PageItems<T> pageItems = triFunction.apply(pagination, a, b);
 
@@ -599,15 +606,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
+				Pagination pagination = _provideClass(Pagination.class);
 
 				PageItems<T> pageItems = function.apply(
 					queryParamFilterType, pagination);
@@ -634,23 +641,23 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provide(aClass);
-				B b = _provide(bClass);
-				C c = _provide(cClass);
-				D d = _provide(dClass);
-				E e = _provide(eClass);
-				F f = _provide(fClass);
-				G g = _provide(gClass);
-				H h = _provide(hClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
+				G g = _provideClass(gClass);
+				H h = _provideClass(hClass);
 
 				PageItems<T> pageItems = decaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e, f, g, h);
@@ -676,22 +683,22 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provide(aClass);
-				B b = _provide(bClass);
-				C c = _provide(cClass);
-				D d = _provide(dClass);
-				E e = _provide(eClass);
-				F f = _provide(fClass);
-				G g = _provide(gClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
+				G g = _provideClass(gClass);
 
 				PageItems<T> pageItems = enneaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e, f, g);
@@ -717,20 +724,20 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provide(aClass);
-				B b = _provide(bClass);
-				C c = _provide(cClass);
-				D d = _provide(dClass);
-				E e = _provide(eClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
 
 				PageItems<T> pageItems = heptaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e);
@@ -755,19 +762,19 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provide(aClass);
-				B b = _provide(bClass);
-				C c = _provide(cClass);
-				D d = _provide(dClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
 
 				PageItems<T> pageItems = hexaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d);
@@ -793,21 +800,21 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provide(aClass);
-				B b = _provide(bClass);
-				C c = _provide(cClass);
-				D d = _provide(dClass);
-				E e = _provide(eClass);
-				F f = _provide(fClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
 
 				PageItems<T> pageItems = octaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e, f);
@@ -832,18 +839,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provide(aClass);
-				B b = _provide(bClass);
-				C c = _provide(cClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
 
 				PageItems<T> pageItems = pentaFunction.apply(
 					queryParamFilterType, pagination, a, b, c);
@@ -867,17 +874,17 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provide(aClass);
-				B b = _provide(bClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
 
 				PageItems<T> pageItems = tetraFunction.apply(
 					queryParamFilterType, pagination, a, b);
@@ -901,16 +908,16 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provide(aClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
 
 				PageItems<T> pageItems = triFunction.apply(
 					queryParamFilterType, pagination, a);
@@ -937,24 +944,24 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 			return this;
 		}
 
-		Q queryParamFilterType = _provide(filterClass);
+		Q queryParamFilterType = _provideFilter(filterClass);
 
-		if (!queryParamFilterType.getFilterName().equals(_filterName)) {
+		if (_isNotActiveFilter(queryParamFilterType)) {
 			return this;
 		}
 
 		_routesImpl.setPageSupplier(
 			() -> {
-				Pagination pagination = _provide(Pagination.class);
-				A a = _provide(aClass);
-				B b = _provide(bClass);
-				C c = _provide(cClass);
-				D d = _provide(dClass);
-				E e = _provide(eClass);
-				F f = _provide(fClass);
-				G g = _provide(gClass);
-				H h = _provide(hClass);
-				I i = _provide(iClass);
+				Pagination pagination = _provideClass(Pagination.class);
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
+				G g = _provideClass(gClass);
+				H h = _provideClass(hClass);
+				I i = _provideClass(iClass);
 
 				PageItems<T> pageItems = undecaFunction.apply(
 					queryParamFilterType, pagination, a, b, c, d, e, f, g, h,
@@ -1008,25 +1015,48 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		}
 	}
 
-	private <U> U _provide(Class<U> clazz) {
-		Optional<U> optional = (Optional<U>)_provideFunction.apply(clazz);
+	private Boolean _isNotActiveFilter(
+		QueryParamFilterType queryParamFilterType) {
 
-		return optional.orElseThrow(() -> new MustHaveProvider(clazz));
+		Optional<String> optional = _getFilterNameFunction.apply(
+			queryParamFilterType);
+
+		String filterName = optional.orElseThrow(
+			() -> new MustHaveFilterProvider(queryParamFilterType.getClass()));
+
+		if (filterName.equals(_filterName)) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 
-	private <U> U _provideOrThrowIfFilter(Class<U> clazz) {
+	private <U> U _provideClass(Class<U> clazz) {
 		if (QueryParamFilterType.class.isAssignableFrom(clazz)) {
 			throw new MustUseFilteredCollectionPage();
 		}
 
-		return _provide(clazz);
+		Optional<U> optional = (Optional<U>)_provideClassFunction.apply(clazz);
+
+		return optional.orElseThrow(() -> new MustHaveProvider(clazz));
+	}
+
+	private <U extends QueryParamFilterType> U _provideFilter(Class<U> clazz) {
+		Optional<U> optional = (Optional<U>)_provideFilterFunction.apply(clazz);
+
+		return optional.orElseThrow(() -> new MustHaveFilterProvider(clazz));
 	}
 
 	private final BiFunction<Class<?>, String, ?> _convertFunction;
 	private final Function<T, SingleModel<T>> _createSingleModelFunction;
 	private final String _filterName;
+	private final Function<QueryParamFilterType, Optional<String>>
+		_getFilterNameFunction;
 	private final Class<T> _modelClass;
-	private final Function<Class<?>, Optional<?>> _provideFunction;
+	private final Function<Class<?>, Optional<?>> _provideClassFunction;
+	private final Function<Class<? extends QueryParamFilterType>,
+		Optional<? extends QueryParamFilterType>> _provideFilterFunction;
 	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();
 
 }
