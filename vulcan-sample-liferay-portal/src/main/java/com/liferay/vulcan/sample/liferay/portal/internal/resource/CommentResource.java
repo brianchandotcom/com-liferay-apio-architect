@@ -123,14 +123,12 @@ public class CommentResource implements Resource<Comment> {
 		DiscussionComment rootDiscussionComment =
 			discussion.getRootDiscussionComment();
 
-		int start = pagination.getStartPosition();
-
-		int end = pagination.getEndPosition();
-
 		DiscussionCommentIterator threadDiscussionCommentIterator =
-			rootDiscussionComment.getThreadDiscussionCommentIterator(start);
+			rootDiscussionComment.getThreadDiscussionCommentIterator(
+				pagination.getStartPosition());
 
-		int itemCount = end - start;
+		int itemCount =
+			pagination.getEndPosition() - pagination.getStartPosition();
 
 		List<Comment> comments = new ArrayList<>();
 
