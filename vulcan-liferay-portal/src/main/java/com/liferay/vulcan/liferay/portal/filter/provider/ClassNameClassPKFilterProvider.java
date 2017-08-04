@@ -59,7 +59,7 @@ public class ClassNameClassPKFilterProvider
 	 * @param  classPK the class PK that will be used to filter.
 	 * @return an instance of a {@link ClassNameClassPKFilter}.
 	 */
-	public ClassNameClassPKFilter create(String className, Long classPK) {
+	public ClassNameClassPKFilter create(String className, long classPK) {
 		Optional<Resource<Object>> optional =
 			_resourceManager.getResourceOptional(className);
 
@@ -88,7 +88,7 @@ public class ClassNameClassPKFilterProvider
 
 		String id = _typeIdFilterProviderHelper.getId(httpServletRequest);
 
-		Long classPK = GetterUtil.getLong(id);
+		long classPK = GetterUtil.getLong(id);
 
 		String type = _typeIdFilterProviderHelper.getType(httpServletRequest);
 
