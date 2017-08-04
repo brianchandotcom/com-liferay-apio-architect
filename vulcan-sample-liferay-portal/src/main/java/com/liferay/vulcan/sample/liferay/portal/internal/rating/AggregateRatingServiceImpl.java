@@ -35,10 +35,10 @@ public class AggregateRatingServiceImpl implements AggregateRatingService {
 	public AggregateRating getAggregateRating(
 		ClassNameClassPKIdentifier identifier) {
 
-		List<RatingsEntry> entries = _ratingsEntryLocalService.getEntries(
+		List<RatingsEntry> ratingsEntries = _ratingsEntryLocalService.getEntries(
 			identifier.getClassName(), identifier.getClassPK());
 
-		return new AggregateRatingImpl(identifier, entries);
+		return new AggregateRatingImpl(identifier, ratingsEntries);
 	}
 
 	@Reference
