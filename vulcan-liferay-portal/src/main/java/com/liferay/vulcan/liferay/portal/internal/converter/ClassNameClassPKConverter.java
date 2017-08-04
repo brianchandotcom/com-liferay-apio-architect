@@ -46,7 +46,7 @@ public class ClassNameClassPKConverter
 			String className = components[0];
 			String classPKString = components[1];
 
-			Long classPK = GetterUtil.getLong(classPKString);
+			long classPK = GetterUtil.getLong(classPKString);
 
 			if (classPK != GetterUtil.DEFAULT_LONG) {
 				return new ClassNameClassPKIdentifier(className, classPK);
