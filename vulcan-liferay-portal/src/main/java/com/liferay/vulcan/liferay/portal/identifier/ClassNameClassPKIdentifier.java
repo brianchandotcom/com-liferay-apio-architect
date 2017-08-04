@@ -34,7 +34,7 @@ public class ClassNameClassPKIdentifier {
 	}
 
 	/**
-	 * Returns the className.
+	 * Returns the class name.
 	 *
 	 * @return className.
 	 */
@@ -43,7 +43,7 @@ public class ClassNameClassPKIdentifier {
 	}
 
 	/**
-	 * Returns the classPK.
+	 * Returns the class PK.
 	 *
 	 * @return classPK.
 	 */

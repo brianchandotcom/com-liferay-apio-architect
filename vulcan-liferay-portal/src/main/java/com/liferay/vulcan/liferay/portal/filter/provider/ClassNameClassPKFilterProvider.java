@@ -55,8 +55,8 @@ public class ClassNameClassPKFilterProvider
 	 * Creates a new {@link ClassNameClassPKFilter} from a given
 	 * <code>className</code> and <code>classPK</code>.
 	 *
-	 * @param  className the className that will be used to filter.
-	 * @param  classPK the classPK that will be used to filter.
+	 * @param  className the class name that will be used to filter.
+	 * @param  classPK the class PK that will be used to filter.
 	 * @return an instance of a {@link ClassNameClassPKFilter}.
 	 */
 	public ClassNameClassPKFilter create(String className, Long classPK) {
