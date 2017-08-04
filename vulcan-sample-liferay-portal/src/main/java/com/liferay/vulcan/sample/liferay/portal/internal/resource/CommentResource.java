@@ -111,11 +111,9 @@ public class CommentResource implements Resource<Comment> {
 			throw new ServerErrorException(500, pe);
 		}
 
-		long groupId = assetEntry.getGroupId();
-
 		try {
 			discussion = _commentManager.getDiscussion(
-				user.getUserId(), groupId, className, classPK,
+				user.getUserId(), assetEntry.getGroupId(), className, classPK,
 				new IdentityServiceContextFunction(new ServiceContext()));
 		}
 		catch (PortalException pe) {
