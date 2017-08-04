@@ -41,6 +41,6 @@ public interface ClassNameClassPKFilter extends TypeIdFilter<Long> {
 	 *
 	 * @return class PK to filter.
 	 */
-	public Long getClassPK();
+	public long getClassPK();
 
 }
