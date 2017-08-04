@@ -87,11 +87,12 @@ public class ClassNameClassPKFilterProvider
 		HttpServletRequest httpServletRequest) {
 
 		String id = _typeIdFilterProviderHelper.getId(httpServletRequest);
-		String type = _typeIdFilterProviderHelper.getType(httpServletRequest);
 
 		Long classPK = GetterUtil.getLong(id);
 
-		if ((type == null) || (classPK == GetterUtil.DEFAULT_LONG)) {
+		String type = _typeIdFilterProviderHelper.getType(httpServletRequest);
+
+		if ((classPK == GetterUtil.DEFAULT_LONG) || (type == null)) {
 			throw new BadRequestException();
 		}
 
