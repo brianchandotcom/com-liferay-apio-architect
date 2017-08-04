@@ -37,7 +37,10 @@ public class AggregateRatingImpl implements AggregateRating {
 
 		_ratingValue = stream.mapToDouble(
 			RatingsEntry::getScore
-		).average().orElse(0);
+		).average(
+		).orElse(
+			0
+		);
 	}
 
 	@Override
