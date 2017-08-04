@@ -44,7 +44,6 @@ public class ClassNameClassPKConverter
 
 		if (components.length == 2) {
 			String className = components[0];
-
 			String classPKString = components[1];
 
 			Long classPK = GetterUtil.getLong(classPKString);
