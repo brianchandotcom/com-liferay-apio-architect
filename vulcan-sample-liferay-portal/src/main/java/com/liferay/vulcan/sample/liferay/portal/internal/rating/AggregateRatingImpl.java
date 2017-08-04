@@ -27,10 +27,10 @@ import java.util.stream.Stream;
 public class AggregateRatingImpl implements AggregateRating {
 
 	public AggregateRatingImpl(
-		ClassNameClassPKIdentifier identifier,
+		ClassNameClassPKIdentifier classNameClassPKIdentifier,
 		List<RatingsEntry> ratingsEntries) {
 
-		_id = identifier;
+		_classNameClassPKIdentifier = classNameClassPKIdentifier;
 		_ratingCount = ratingsEntries.size();
 
 		Stream<RatingsEntry> stream = ratingsEntries.stream();
@@ -44,8 +44,8 @@ public class AggregateRatingImpl implements AggregateRating {
 	}
 
 	@Override
-	public ClassNameClassPKIdentifier getId() {
-		return _id;
+	public ClassNameClassPKIdentifier getClassNameClassPKIdentifier() {
+		return _classNameClassPKIdentifier;
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class AggregateRatingImpl implements AggregateRating {
 		return _ratingValue;
 	}
 
-	private final ClassNameClassPKIdentifier _id;
+	private final ClassNameClassPKIdentifier _classNameClassPKIdentifier;
 	private final Integer _ratingCount;
 	private final Double _ratingValue;
 
