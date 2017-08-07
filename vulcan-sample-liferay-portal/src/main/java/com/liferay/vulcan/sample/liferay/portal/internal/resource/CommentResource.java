@@ -130,11 +130,6 @@ public class CommentResource implements Resource<Comment> {
 		ClassNameClassPKFilter classNameClassPKFilter, Pagination pagination,
 		CurrentUser currentUser) {
 
-		String className = classNameClassPKFilter.getClassName();
-		Long classPK = classNameClassPKFilter.getClassPK();
-
-		User user = currentUser.getUser();
-
 		DiscussionCommentIterator threadDiscussionCommentIterator =
 			_getDiscussionCommentIterator(
 				classNameClassPKFilter, pagination, currentUser);
@@ -154,7 +149,8 @@ public class CommentResource implements Resource<Comment> {
 		}
 
 		int commentsCount = _commentManager.getCommentsCount(
-			className, classPK);
+			classNameClassPKFilter.getClassName(),
+			classNameClassPKFilter.getClassPK());
 
 		return new PageItems<>(comments, commentsCount);
 	}
