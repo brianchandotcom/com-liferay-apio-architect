@@ -133,8 +133,9 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		};
 	}
 
-	private final TriConsumer<String, Class<?>, Function<?,
-		QueryParamFilterType>> _addRelatedCollectionTriConsumer;
+	private final TriConsumer
+		<String, Class<?>, Function<?, QueryParamFilterType>>
+			_addRelatedCollectionTriConsumer;
 	private final List<RelatedModel<?, ?>> _embeddedRelatedModels;
 	private final Map<String, Function<?, Object>> _fieldFunctions;
 	private final Map<String, Function<?, String>> _identifierFunctions;
