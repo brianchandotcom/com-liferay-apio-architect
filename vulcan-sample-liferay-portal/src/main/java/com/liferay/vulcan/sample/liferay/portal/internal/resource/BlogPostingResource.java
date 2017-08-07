@@ -185,12 +185,11 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 	private PageItems<BlogsEntry> _getPageItems(
 		GroupIdFilter groupIdFilter, Pagination pagination) {
 
-		Long groupId = groupIdFilter.getId();
-
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			groupId, 0, pagination.getStartPosition(),
+			groupIdFilter.getId(), 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
-		int count = _blogsService.getGroupEntriesCount(groupId, 0);
+		int count = _blogsService.getGroupEntriesCount(
+			groupIdFilter.getId(), 0);
 
 		return new PageItems<>(blogsEntries, count);
 	}
