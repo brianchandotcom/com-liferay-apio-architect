@@ -15,4 +15,5 @@ Export-Package:\
 	com.liferay.vulcan.resource,\
 	com.liferay.vulcan.resource.builder,\
 	com.liferay.vulcan.response.control,\
+	com.liferay.vulcan.result,\
 	com.liferay.vulcan.uri
