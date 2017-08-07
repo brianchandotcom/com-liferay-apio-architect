@@ -130,22 +130,21 @@ public class CommentResource implements Resource<Comment> {
 		ClassNameClassPKFilter classNameClassPKFilter, Pagination pagination,
 		CurrentUser currentUser) {
 
-		DiscussionCommentIterator threadDiscussionCommentIterator =
+		List<Comment> comments = new ArrayList<>();
+
+		DiscussionCommentIterator discussionCommentIterator =
 			_getDiscussionCommentIterator(
 				classNameClassPKFilter, pagination, currentUser);
 
-		int itemCount =
-			pagination.getEndPosition() - pagination.getStartPosition();
+		int i = pagination.getEndPosition() - pagination.getStartPosition();
 
-		List<Comment> comments = new ArrayList<>();
-
-		while (threadDiscussionCommentIterator.hasNext() && (itemCount > 0)) {
+		while (discussionCommentIterator.hasNext() && (i > 0)) {
 			DiscussionComment discussionComment =
-				threadDiscussionCommentIterator.next();
+				discussionCommentIterator.next();
 
 			comments.add(discussionComment);
 
-			itemCount--;
+			i--;
 		}
 
 		int commentsCount = _commentManager.getCommentsCount(
