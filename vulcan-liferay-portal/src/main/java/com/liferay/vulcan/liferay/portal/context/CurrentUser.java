@@ -37,4 +37,10 @@ public interface CurrentUser {
 	 */
 	public User getUser();
 
+	public default long getUserId() {
+		User user = getUser();
+
+		return user.getUserId();
+	}
+
 }

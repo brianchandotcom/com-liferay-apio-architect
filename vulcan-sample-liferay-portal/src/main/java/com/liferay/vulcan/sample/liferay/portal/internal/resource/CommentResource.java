@@ -91,6 +91,41 @@ public class CommentResource implements Resource<Comment> {
 		return _commentManager.fetchComment(id);
 	}
 
+	private DiscussionCommentIterator _getDiscussionCommentIterator(
+		ClassNameClassPKFilter classNameClassPKFilter, Pagination pagination,
+		CurrentUser currentUser) {
+
+		AssetEntry assetEntry = null;
+
+		try {
+			assetEntry = _assetEntryLocalService.getEntry(
+				classNameClassPKFilter.getClassName(),
+				classNameClassPKFilter.getClassPK());
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
+
+		Discussion discussion = null;
+
+		try {
+			discussion = _commentManager.getDiscussion(
+				currentUser.getUserId(), assetEntry.getGroupId(),
+				classNameClassPKFilter.getClassName(),
+				classNameClassPKFilter.getClassPK(),
+				new IdentityServiceContextFunction(new ServiceContext()));
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
+
+		DiscussionComment discussionComment =
+			discussion.getRootDiscussionComment();
+
+		return discussionComment.getThreadDiscussionCommentIterator(
+			pagination.getStartPosition());
+	}
+
 	private PageItems<Comment> _getPageItems(
 		ClassNameClassPKFilter classNameClassPKFilter, Pagination pagination,
 		CurrentUser currentUser) {
@@ -100,32 +135,9 @@ public class CommentResource implements Resource<Comment> {
 
 		User user = currentUser.getUser();
 
-		Discussion discussion = null;
-
-		AssetEntry assetEntry = null;
-
-		try {
-			assetEntry = _assetEntryLocalService.getEntry(className, classPK);
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
-
-		try {
-			discussion = _commentManager.getDiscussion(
-				user.getUserId(), assetEntry.getGroupId(), className, classPK,
-				new IdentityServiceContextFunction(new ServiceContext()));
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
-
-		DiscussionComment rootDiscussionComment =
-			discussion.getRootDiscussionComment();
-
 		DiscussionCommentIterator threadDiscussionCommentIterator =
-			rootDiscussionComment.getThreadDiscussionCommentIterator(
-				pagination.getStartPosition());
+			_getDiscussionCommentIterator(
+				classNameClassPKFilter, pagination, currentUser);
 
 		int itemCount =
 			pagination.getEndPosition() - pagination.getStartPosition();
