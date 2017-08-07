@@ -92,6 +92,24 @@ public abstract class Try<T> {
 	 */
 	public abstract T get() throws Throwable;
 
+	/**
+	 * Returns <code>true</code> if this {@code Try} instance is a failure.
+	 * Returns <code>false</code> otherwise.
+	 *
+	 * @return <code>true</code> if instance is a failure; <code>false</code>
+	 *         otherwise.
+	 */
+	public abstract boolean isFailure();
+
+	/**
+	 * Returns <code>true</code> if this {@code Try} instance is a success.
+	 * Returns <code>false</code> otherwise.
+	 *
+	 * @return <code>true</code> if instance is a success; <code>false</code>
+	 *         otherwise.
+	 */
+	public abstract boolean isSuccess();
+
 	protected Try() {
 	}
 

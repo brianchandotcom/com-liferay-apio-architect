@@ -31,6 +31,16 @@ public class Success<T> extends Try<T> {
 		return _value;
 	}
 
+	@Override
+	public boolean isFailure() {
+		return false;
+	}
+
+	@Override
+	public boolean isSuccess() {
+		return true;
+	}
+
 	protected Success(T value) {
 		_value = value;
 	}

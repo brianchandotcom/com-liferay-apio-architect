@@ -31,6 +31,16 @@ public class Failure<T> extends Try<T> {
 		throw _throwable;
 	}
 
+	@Override
+	public boolean isFailure() {
+		return true;
+	}
+
+	@Override
+	public boolean isSuccess() {
+		return false;
+	}
+
 	protected Failure(Throwable throwable) {
 		_throwable = throwable;
 	}
