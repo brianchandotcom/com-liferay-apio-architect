@@ -44,6 +44,18 @@ public class Success<T> extends Try<T> {
 	}
 
 	@Override
+	public <U> Try<U> flatMap(ThrowableFunction<? super T, Try<U>> function) {
+		Objects.requireNonNull(function);
+
+		try {
+			return function.apply(_value);
+		}
+		catch (Throwable t) {
+			return Try.fail(t);
+		}
+	}
+
+	@Override
 	public T get() throws Throwable {
 		return _value;
 	}
@@ -56,6 +68,20 @@ public class Success<T> extends Try<T> {
 	@Override
 	public boolean isSuccess() {
 		return true;
+	}
+
+	@Override
+	public <U> Try<U> map(
+		ThrowableFunction<? super T, ? extends U> throwableFunction) {
+
+		Objects.requireNonNull(throwableFunction);
+
+		try {
+			return Try.success(throwableFunction.apply(_value));
+		}
+		catch (Throwable t) {
+			return Try.fail(t);
+		}
 	}
 
 	protected Success(T value) {

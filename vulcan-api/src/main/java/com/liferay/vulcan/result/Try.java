@@ -100,6 +100,24 @@ public abstract class Try<T> {
 	public abstract Try<T> filter(Predicate<T> predicate);
 
 	/**
+	 * If success case, apply the provided {@code Try}-bearing mapping function
+	 * to it, return that result; otherwise propagate the failure.
+	 *
+	 * <p>
+	 * This method is similar to {@link #map(ThrowableFunction)}, but the
+	 * provided mapper is one whose result is already a {@code Try}, and if
+	 * invoked, {@code flatMap} does not wrap it with an additional {@code Try}.
+	 * </p>
+	 *
+	 * @param  function a mapping function to apply to the value, if success.
+	 * @return the result of applying a {@code Try}-bearing mapping function to
+	 *         the value of this {@code Try}, if a success, otherwise propagates
+	 *         the failure.
+	 */
+	public abstract <U> Try<U> flatMap(
+		ThrowableFunction<? super T, Try<U>> function);
+
+	/**
 	 * Returns the value T on success or throws the cause of the failure.
 	 *
 	 * @return T if success case, throws {@code Throwable} otherwise.
@@ -123,6 +141,20 @@ public abstract class Try<T> {
 	 *         otherwise.
 	 */
 	public abstract boolean isSuccess();
+
+	/**
+	 * If success, apply the provided mapping function to it, and if the
+	 * function doesn't throw an exception, return in inside a {@code Try}.
+	 * Otherwise return a {@code Failure}.
+	 *
+	 * @param  throwableFunction a mapping function to apply to the value, if
+	 *         success.
+	 * @return a {@code Try} with the result of applying a mapping function to
+	 *         the value inside this {@code Try}, if success case; a {@code
+	 *         Failure} describing the exception otherwise.
+	 */
+	public abstract <U> Try<U> map(
+		ThrowableFunction<? super T, ? extends U> throwableFunction);
 
 	protected Try() {
 	}
