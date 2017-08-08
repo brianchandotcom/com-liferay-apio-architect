@@ -27,10 +27,13 @@ import com.liferay.vulcan.message.json.SingleModelMessageMapper;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
+import com.liferay.vulcan.result.Success;
+import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
+import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -69,11 +72,11 @@ import org.osgi.service.component.annotations.Reference;
 )
 @Provider
 public class SingleModelMessageBodyWriter<T>
-	implements MessageBodyWriter<SingleModel<T>> {
+	implements MessageBodyWriter<Success<SingleModel<T>>> {
 
 	@Override
 	public long getSize(
-		SingleModel<T> model, Class<?> clazz, Type genericType,
+		Success<SingleModel<T>> success, Class<?> clazz, Type genericType,
 		Annotation[] annotations, MediaType mediaType) {
 
 		return -1;
@@ -84,20 +87,23 @@ public class SingleModelMessageBodyWriter<T>
 		Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
-		if (clazz.isAssignableFrom(SingleModel.class)) {
-			return true;
-		}
+		Try<Class<Object>> classTry = GenericUtil.getGenericClassTry(
+			genericType, Try.class);
 
-		return false;
+		return classTry.filter(
+			SingleModel.class::equals
+		).isSuccess();
 	}
 
 	@Override
 	public void writeTo(
-			SingleModel<T> singleModel, Class<?> clazz, Type genericType,
+			Success<SingleModel<T>> success, Class<?> clazz, Type genericType,
 			Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> httpHeaders,
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
+
+		SingleModel<T> singleModel = success.getValue();
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
