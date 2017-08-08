@@ -15,6 +15,7 @@
 package com.liferay.vulcan.result;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Implementation of the monadic "Try" type.
@@ -84,6 +85,19 @@ public abstract class Try<T> {
 	public static <U> Try<U> success(U u) {
 		return new Success<>(u);
 	}
+
+	/**
+	 * If a value is present, and the value matches the given predicate, return
+	 * a {@code Try} with the value, otherwise return a {@code Try} with an
+	 * exception indicating the <code>false</code> predicate.
+	 *
+	 * @param  predicate a predicate to apply to the value, if present
+	 * @return a {@code Try} with the value of this {@code Try} if a value is
+	 *         present and the value matches the given predicate, otherwise a
+	 *         {@code Try} with and exception for a <code>false</code>
+	 *         predicate.
+	 */
+	public abstract Try<T> filter(Predicate<T> predicate);
 
 	/**
 	 * Returns the value T on success or throws the cause of the failure.
