@@ -14,6 +14,11 @@
 
 package com.liferay.vulcan.result;
 
+import com.liferay.vulcan.exception.FalsePredicateException;
+
+import java.util.Objects;
+import java.util.function.Predicate;
+
 /**
  * Implementation of the success case of a {@code Try}.
  *
@@ -25,6 +30,18 @@ package com.liferay.vulcan.result;
  * @author Alejandro Hernández
  */
 public class Success<T> extends Try<T> {
+
+	@Override
+	public Try<T> filter(Predicate<T> predicate) {
+		Objects.requireNonNull(predicate);
+
+		if (predicate.test(_value)) {
+			return this;
+		}
+		else {
+			return Try.fail(new FalsePredicateException(_value));
+		}
+	}
 
 	@Override
 	public T get() throws Throwable {
