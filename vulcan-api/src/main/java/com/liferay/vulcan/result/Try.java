@@ -15,6 +15,7 @@
 package com.liferay.vulcan.result;
 
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -155,6 +156,38 @@ public abstract class Try<T> {
 	 */
 	public abstract <U> Try<U> map(
 		ThrowableFunction<? super T, ? extends U> throwableFunction);
+
+	/**
+	 * Returns the result extracted from the provided function if this instance
+	 * is a failure case. Returns the inner result in success case.
+	 *
+	 * <p>
+	 * The lambda passed as parameter gives access to the exception in the case
+	 * of failure.
+	 * </p>
+	 *
+	 * @param  function function to execute on failure result.
+	 * @return the result from the function, if failure; the inner value on
+	 *         success.
+	 */
+	public abstract T recover(Function<? super Throwable, T> function);
+
+	/**
+	 * Returns a new {@code Try} instance, extracted from the provided function
+	 * if this instance is a failure case. Returns the current success,
+	 * otherwise.
+	 *
+	 * <p>
+	 * The lambda passed as parameter gives access to the exception in the case
+	 * of failure.
+	 * </p>
+	 *
+	 * @param  throwableFunction function to execute on failure result.
+	 * @return the new {@code Try} result from the function, if failure; the
+	 *         current success, otherwise.
+	 */
+	public abstract Try<T> recoverWith(
+		ThrowableFunction<? super Throwable, Try<T>> throwableFunction);
 
 	protected Try() {
 	}
