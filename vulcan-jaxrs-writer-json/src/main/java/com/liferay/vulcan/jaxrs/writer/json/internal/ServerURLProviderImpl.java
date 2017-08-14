@@ -16,6 +16,7 @@ package com.liferay.vulcan.jaxrs.writer.json.internal;
 
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.vulcan.provider.ServerURLProvider;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,8 +28,8 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Javier Gamarra
  */
-@Component(immediate = true)
-public class ServerURLProvider {
+@Component(immediate = true, service = ServerURLProvider.class)
+public class ServerURLProviderImpl implements ServerURLProvider {
 
 	/**
 	 * Returns the original url of the request without proxy redirection
