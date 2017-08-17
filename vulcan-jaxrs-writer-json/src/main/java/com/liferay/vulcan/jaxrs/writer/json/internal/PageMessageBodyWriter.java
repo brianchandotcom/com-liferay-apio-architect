@@ -20,7 +20,6 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
@@ -51,6 +50,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
@@ -112,12 +112,11 @@ public class PageMessageBodyWriter<T>
 
 		String mediaTypeString = mediaType.toString();
 		Class<T> modelClass = page.getModelClass();
-		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
 		PageMessageMapper<T> pageMessageMapper = stream.filter(
 			bodyWriter ->
 				mediaTypeString.equals(bodyWriter.getMediaType()) &&
-				bodyWriter.supports(page, modelClass, requestInfo)
+				bodyWriter.supports(page, modelClass, _httpHeaders)
 		).findFirst(
 		).orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveMessageMapper(
@@ -127,7 +126,7 @@ public class PageMessageBodyWriter<T>
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
 
 		pageMessageMapper.onStart(
-			jsonObjectBuilder, page, modelClass, requestInfo);
+			jsonObjectBuilder, page, modelClass, _httpHeaders);
 
 		Optional<Fields> fieldsOptional = _providerManager.provide(
 			Fields.class, _httpServletRequest);
@@ -142,8 +141,8 @@ public class PageMessageBodyWriter<T>
 			() -> new VulcanDeveloperError.MustHaveProvider(Embedded.class));
 
 		_writeItems(
-			pageMessageMapper, jsonObjectBuilder, page, modelClass, requestInfo,
-			fields, embedded);
+			pageMessageMapper, jsonObjectBuilder, page, modelClass, fields,
+			embedded);
 
 		_writeItemTotalCount(pageMessageMapper, jsonObjectBuilder, page);
 
@@ -154,7 +153,7 @@ public class PageMessageBodyWriter<T>
 		_writeCollectionURL(pageMessageMapper, jsonObjectBuilder, modelClass);
 
 		pageMessageMapper.onFinish(
-			jsonObjectBuilder, page, modelClass, requestInfo);
+			jsonObjectBuilder, page, modelClass, _httpHeaders);
 
 		JSONObject jsonObject = jsonObjectBuilder.build();
 
@@ -265,7 +264,7 @@ public class PageMessageBodyWriter<T>
 	private void _writeItems(
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
-		RequestInfo requestInfo, Fields fields, Embedded embedded) {
+		Fields fields, Embedded embedded) {
 
 		Collection<T> items = page.getItems();
 
@@ -276,7 +275,7 @@ public class PageMessageBodyWriter<T>
 
 				pageMessageMapper.onStartItem(
 					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
-					requestInfo);
+					_httpHeaders);
 
 				_writerHelper.writeFields(
 					item, modelClass, fields,
@@ -329,7 +328,7 @@ public class PageMessageBodyWriter<T>
 
 				pageMessageMapper.onFinishItem(
 					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
-					requestInfo);
+					_httpHeaders);
 			});
 	}
 
@@ -420,6 +419,9 @@ public class PageMessageBodyWriter<T>
 					pageJSONObjectBuilder, itemJSONObjectBuilder,
 					embeddedPathElements, url));
 	}
+
+	@Context
+	private HttpHeaders _httpHeaders;
 
 	@Context
 	private HttpServletRequest _httpServletRequest;
