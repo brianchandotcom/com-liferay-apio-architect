@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal;
+package com.liferay.vulcan.jaxrs.writer.json.internal.writer;
 
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
