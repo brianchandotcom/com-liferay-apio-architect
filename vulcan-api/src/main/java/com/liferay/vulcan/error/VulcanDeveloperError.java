@@ -40,6 +40,21 @@ public class VulcanDeveloperError extends Error {
 	}
 
 	/**
+	 * Represents the error the developer should throw when an exception
+	 * converter is missing.
+	 */
+	public static class MustHaveExceptionConverter
+		extends VulcanDeveloperError {
+
+		public MustHaveExceptionConverter(Class<?> exceptionClass) {
+			super(
+				"Exception class " + exceptionClass.getName() +
+					" does not have a converter");
+		}
+
+	}
+
+	/**
 	 * Represents the error the developer should throw when a filter provider is
 	 * missing.
 	 */
