@@ -27,6 +27,7 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.MessageBodyWriter;
 
 import org.apache.cxf.jaxrs.ext.ContextProvider;
@@ -57,6 +58,7 @@ public class VulcanApplication extends Application {
 		singletons.addAll(_contextProviders);
 		singletons.addAll(_messageBodyWriters);
 		singletons.addAll(_containerResponseFilters);
+		singletons.addAll(_exceptionMappers);
 
 		return singletons;
 	}
@@ -71,6 +73,18 @@ public class VulcanApplication extends Application {
 
 		_containerResponseFilters.add(containerResponseFilter);
 	}
+
+	@Reference(
+		policyOption = GREEDY, target = "(liferay.vulcan.exception.mapper=true)"
+	)
+	public void setExceptionMapper(
+		ServiceReference<ExceptionMapper> serviceReference,
+		ExceptionMapper exceptionMapper) {
+
+		_exceptionMappers.add(exceptionMapper);
+	}
+
+	@Reference(
 		cardinality = AT_LEAST_ONE, policyOption = GREEDY,
 		target = "(liferay.vulcan.message.body.writer=true)"
 	)
@@ -88,6 +102,15 @@ public class VulcanApplication extends Application {
 
 		_containerResponseFilters.remove(containerResponseFilter);
 	}
+
+	@SuppressWarnings("unused")
+	public void unsetExceptionMapper(
+		ServiceReference<ExceptionMapper> serviceReference,
+		ExceptionMapper exceptionMapper) {
+
+		_exceptionMappers.remove(exceptionMapper);
+	}
+
 	@SuppressWarnings("unused")
 	public <T> void unsetMessageBodyWriter(
 		ServiceReference<MessageBodyWriter<T>> serviceReference,
@@ -103,6 +126,7 @@ public class VulcanApplication extends Application {
 
 	private final List<ContainerResponseFilter> _containerResponseFilters =
 		new ArrayList<>();
+	private final List<ExceptionMapper> _exceptionMappers = new ArrayList<>();
 	private final List<MessageBodyWriter> _messageBodyWriters =
 		new ArrayList<>();
 
