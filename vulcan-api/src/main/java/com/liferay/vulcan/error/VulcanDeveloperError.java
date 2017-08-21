@@ -77,6 +77,21 @@ public class VulcanDeveloperError extends Error {
 	}
 
 	/**
+	 * Represents the error the developer should throw when a problem JSON error
+	 * message mapper is missing.
+	 */
+	public static class MustHaveProblemJSONErrorMessageMapper
+		extends VulcanDeveloperError {
+
+		public MustHaveProblemJSONErrorMessageMapper() {
+			super(
+				"Media type application/problem+json does not have a message " +
+					"mapper");
+		}
+
+	}
+
+	/**
 	 * Represents the error the developer should throw when a provider is
 	 * missing.
 	 */
