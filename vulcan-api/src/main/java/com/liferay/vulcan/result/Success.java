@@ -52,13 +52,13 @@ public class Success<T> extends Try<T> {
 		try {
 			return function.apply(_value);
 		}
-		catch (Throwable t) {
-			return Try.fail(t);
+		catch (Exception e) {
+			return Try.fail(e);
 		}
 	}
 
 	@Override
-	public T get() throws Throwable {
+	public T get() throws Exception {
 		return _value;
 	}
 
@@ -90,8 +90,8 @@ public class Success<T> extends Try<T> {
 		try {
 			return Try.success(throwableFunction.apply(_value));
 		}
-		catch (Throwable t) {
-			return Try.fail(t);
+		catch (Exception e) {
+			return Try.fail(e);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class Success<T> extends Try<T> {
 	}
 
 	@Override
-	public T recover(Function<? super Throwable, T> function) {
+	public T recover(Function<? super Exception, T> function) {
 		Objects.requireNonNull(function);
 
 		return _value;
@@ -121,7 +121,7 @@ public class Success<T> extends Try<T> {
 
 	@Override
 	public Try<T> recoverWith(
-		ThrowableFunction<? super Throwable, Try<T>> throwableFunction) {
+		ThrowableFunction<? super Exception, Try<T>> throwableFunction) {
 
 		Objects.requireNonNull(throwableFunction);
 

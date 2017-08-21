@@ -24,8 +24,8 @@ import java.util.function.Supplier;
  *
  * Don't try to directly instantiate this class. To create an instance of this
  * class, use {@link #fromFallible(ThrowableSupplier)} if you don't know if the
- * operation is going to fail or not. Or {@link #fail(Throwable)} to directly
- * create a {@link Failure} from a {@code Throwable}.
+ * operation is going to fail or not. Or {@link #fail(Exception)} to directly
+ * create a {@link Failure} from an {@code Exception}.
  *
  * @author Alejandro Hernández
  */
@@ -42,12 +42,12 @@ public class Failure<T> extends Try<T> {
 
 		Objects.requireNonNull(throwableFunction);
 
-		return Try.fail(_throwable);
+		return Try.fail(_exception);
 	}
 
 	@Override
-	public T get() throws Throwable {
-		throw _throwable;
+	public T get() throws Exception {
+		throw _exception;
 	}
 
 	/**
@@ -55,8 +55,8 @@ public class Failure<T> extends Try<T> {
 	 *
 	 * @return the cause of this failure.
 	 */
-	public Throwable getThrowable() {
-		return _throwable;
+	public Exception getException() {
+		return _exception;
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class Failure<T> extends Try<T> {
 
 		Objects.requireNonNull(throwableFunction);
 
-		return Try.fail(_throwable);
+		return Try.fail(_exception);
 	}
 
 	@Override
@@ -96,29 +96,29 @@ public class Failure<T> extends Try<T> {
 	}
 
 	@Override
-	public T recover(Function<? super Throwable, T> function) {
+	public T recover(Function<? super Exception, T> function) {
 		Objects.requireNonNull(function);
 
-		return function.apply(_throwable);
+		return function.apply(_exception);
 	}
 
 	@Override
 	public Try<T> recoverWith(
-		ThrowableFunction<? super Throwable, Try<T>> throwableFunction) {
+		ThrowableFunction<? super Exception, Try<T>> throwableFunction) {
 
 		Objects.requireNonNull(throwableFunction);
 		try {
-			return throwableFunction.apply(_throwable);
+			return throwableFunction.apply(_exception);
 		}
-		catch (Throwable t) {
-			return Try.fail(t);
+		catch (Exception e) {
+			return Try.fail(e);
 		}
 	}
 
-	protected Failure(Throwable throwable) {
-		_throwable = throwable;
+	protected Failure(Exception exception) {
+		_exception = exception;
 	}
 
-	private final Throwable _throwable;
+	private final Exception _exception;
 
 }
