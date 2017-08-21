@@ -14,27 +14,45 @@
 
 package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.core.Response;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts any exception to its {@link APIError} representation.
+ * Converts a {@link NotAuthorizedException} into its {@link APIError}
+ * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class GenericExceptionConverter
-	implements ExceptionConverter<Exception> {
+public class NotAuthorizedExceptionConverter
+	extends WebApplicationExceptionConverter
+	implements ExceptionConverter<NotAuthorizedException> {
 
 	@Override
-	public APIError convert(Exception exception) {
-		return new APIErrorImpl(
-			"General server error", "server-error",
-			INTERNAL_SERVER_ERROR.getStatusCode());
+	public APIError convert(NotAuthorizedException exception) {
+		return super.convert(exception);
+	}
+
+	@Override
+	protected Response.StatusType getStatusType() {
+		return UNAUTHORIZED;
+	}
+
+	@Override
+	protected String getTitle() {
+		return "Authentication failure";
+	}
+
+	@Override
+	protected String getType() {
+		return "not-authorized";
 	}
 
 }
