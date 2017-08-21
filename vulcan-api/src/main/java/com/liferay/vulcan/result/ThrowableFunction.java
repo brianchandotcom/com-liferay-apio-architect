@@ -17,8 +17,8 @@ package com.liferay.vulcan.result;
 import java.util.Objects;
 
 /**
- * A version of the Java {@link java.util.function.Function} that can throw a
- * {@code Throwable}.
+ * A version of the Java {@link java.util.function.Function} that can throw an
+ * {@code Exception}.
  *
  * @author Alejandro Hernández
  */
@@ -49,7 +49,7 @@ public interface ThrowableFunction<T, R> {
 	 * @param  t the function argument
 	 * @return the function result
 	 */
-	public R apply(T t) throws Throwable;
+	public R apply(T t) throws Exception;
 
 	/**
 	 * Returns a composed function that first applies the {@code before}

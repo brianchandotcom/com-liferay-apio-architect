@@ -23,7 +23,7 @@ import java.util.function.Supplier;
  * Implementation of the monadic "Try" type.
  *
  * Represents the result of an operation that could have succeeded (with a type
- * T) or failed (with a {@link Throwable}).
+ * T) or failed (with an {@link Exception}).
  *
  * Only two descendants of this class are allowed: {@link Success} for the
  * success case and {@link Failure} for the failure one.
@@ -32,8 +32,8 @@ import java.util.function.Supplier;
  * use {@link
  * #fromFallible(ThrowableSupplier)}
  * if you don't know if the operation is going to fail or not. {@link
- * #fail(Throwable)}
- * to directly create a {@link Failure} from a {@link Throwable}. Or {@link
+ * #fail(Exception)}
+ * to directly create a {@link Failure} from an {@link Exception}. Or {@link
  * #success(Object)}
  * to directly create a {@link Success} from a T.
  *
@@ -42,14 +42,14 @@ import java.util.function.Supplier;
 public abstract class Try<T> {
 
 	/**
-	 * Creates a new {@code Try} instance from a {@link Throwable}. The instance
-	 * will be created as a {@link Failure}.
+	 * Creates a new {@code Try} instance from an {@link Exception}. The
+	 * instance will be created as a {@link Failure}.
 	 *
-	 * @param  throwable the throwable to include in the {@link Failure}
-	 * @return the {@code Try} instance for the throwable.
+	 * @param  exception the exception to include in the {@link Failure}
+	 * @return the {@code Try} instance for the exception.
 	 */
-	public static <U> Try<U> fail(Throwable throwable) {
-		return new Failure<>(throwable);
+	public static <U> Try<U> fail(Exception exception) {
+		return new Failure<>(exception);
 	}
 
 	/**
@@ -72,8 +72,8 @@ public abstract class Try<T> {
 		try {
 			return success(throwableSupplier.get());
 		}
-		catch (Throwable throwable) {
-			return fail(throwable);
+		catch (Exception exception) {
+			return fail(exception);
 		}
 	}
 
@@ -122,9 +122,9 @@ public abstract class Try<T> {
 	/**
 	 * Returns the value T on success or throws the cause of the failure.
 	 *
-	 * @return T if success case, throws {@code Throwable} otherwise.
+	 * @return T if success case, throws {@code Exception} otherwise.
 	 */
-	public abstract T get() throws Throwable;
+	public abstract T get() throws Exception;
 
 	/**
 	 * Returns <code>true</code> if this {@code Try} instance is a failure.
@@ -201,7 +201,7 @@ public abstract class Try<T> {
 	 * @return the result from the function, if failure; the inner value on
 	 *         success.
 	 */
-	public abstract T recover(Function<? super Throwable, T> function);
+	public abstract T recover(Function<? super Exception, T> function);
 
 	/**
 	 * Returns a new {@code Try} instance, extracted from the provided function
@@ -218,7 +218,7 @@ public abstract class Try<T> {
 	 *         current success, otherwise.
 	 */
 	public abstract Try<T> recoverWith(
-		ThrowableFunction<? super Throwable, Try<T>> throwableFunction);
+		ThrowableFunction<? super Exception, Try<T>> throwableFunction);
 
 	protected Try() {
 	}
