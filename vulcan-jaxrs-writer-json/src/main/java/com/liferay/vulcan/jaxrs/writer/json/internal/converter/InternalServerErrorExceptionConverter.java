@@ -19,22 +19,40 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.Response;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts any exception to its {@link APIError} representation.
+ * Converts a {@link InternalServerErrorException} into its {@link APIError}
+ * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class GenericExceptionConverter
-	implements ExceptionConverter<Exception> {
+public class InternalServerErrorExceptionConverter
+	extends WebApplicationExceptionConverter
+	implements ExceptionConverter<InternalServerErrorException> {
 
 	@Override
-	public APIError convert(Exception exception) {
-		return new APIErrorImpl(
-			"General server error", "server-error",
-			INTERNAL_SERVER_ERROR.getStatusCode());
+	public APIError convert(InternalServerErrorException exception) {
+		return super.convert(exception);
+	}
+
+	@Override
+	protected Response.StatusType getStatusType() {
+		return INTERNAL_SERVER_ERROR;
+	}
+
+	@Override
+	protected String getTitle() {
+		return "General server error";
+	}
+
+	@Override
+	protected String getType() {
+		return "server-error";
 	}
 
 }

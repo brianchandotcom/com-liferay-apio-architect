@@ -14,27 +14,45 @@
 
 package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
+import javax.ws.rs.ServiceUnavailableException;
+import javax.ws.rs.core.Response;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts any exception to its {@link APIError} representation.
+ * Converts a {@link ServiceUnavailableException} into its {@link APIError}
+ * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class GenericExceptionConverter
-	implements ExceptionConverter<Exception> {
+public class ServiceUnavailableExceptionConverter
+	extends WebApplicationExceptionConverter
+	implements ExceptionConverter<ServiceUnavailableException> {
 
 	@Override
-	public APIError convert(Exception exception) {
-		return new APIErrorImpl(
-			"General server error", "server-error",
-			INTERNAL_SERVER_ERROR.getStatusCode());
+	public APIError convert(ServiceUnavailableException exception) {
+		return super.convert(exception);
+	}
+
+	@Override
+	protected Response.StatusType getStatusType() {
+		return SERVICE_UNAVAILABLE;
+	}
+
+	@Override
+	protected String getTitle() {
+		return "Server is temporarily unavailable or busy";
+	}
+
+	@Override
+	protected String getType() {
+		return "unavailable";
 	}
 
 }

@@ -14,27 +14,45 @@
 
 package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static javax.ws.rs.core.Response.Status.UNSUPPORTED_MEDIA_TYPE;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
+import javax.ws.rs.NotSupportedException;
+import javax.ws.rs.core.Response;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts any exception to its {@link APIError} representation.
+ * Converts a {@link NotSupportedException} into its {@link APIError}
+ * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class GenericExceptionConverter
-	implements ExceptionConverter<Exception> {
+public class NotSupportedExceptionConverter
+	extends WebApplicationExceptionConverter
+	implements ExceptionConverter<NotSupportedException> {
 
 	@Override
-	public APIError convert(Exception exception) {
-		return new APIErrorImpl(
-			"General server error", "server-error",
-			INTERNAL_SERVER_ERROR.getStatusCode());
+	public APIError convert(NotSupportedException exception) {
+		return super.convert(exception);
+	}
+
+	@Override
+	protected Response.StatusType getStatusType() {
+		return UNSUPPORTED_MEDIA_TYPE;
+	}
+
+	@Override
+	protected String getTitle() {
+		return "Client posted media type not supported";
+	}
+
+	@Override
+	protected String getType() {
+		return "not-supported";
 	}
 
 }
