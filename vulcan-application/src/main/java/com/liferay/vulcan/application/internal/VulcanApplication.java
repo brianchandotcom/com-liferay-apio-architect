@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.ext.MessageBodyWriter;
 
@@ -55,15 +56,25 @@ public class VulcanApplication extends Application {
 
 		singletons.addAll(_contextProviders);
 		singletons.addAll(_messageBodyWriters);
+		singletons.addAll(_containerResponseFilters);
 
 		return singletons;
 	}
 
 	@Reference(
+		policyOption = GREEDY,
+		target = "(liferay.vulcan.container.response.filter=true)"
+	)
+	public void setContainerResponseFilter(
+		ServiceReference<ContainerResponseFilter> serviceReference,
+		ContainerResponseFilter containerResponseFilter) {
+
+		_containerResponseFilters.add(containerResponseFilter);
+	}
 		cardinality = AT_LEAST_ONE, policyOption = GREEDY,
 		target = "(liferay.vulcan.message.body.writer=true)"
 	)
-	public <T> void setServiceReference(
+	public <T> void setMessageBodyWriter(
 		ServiceReference<MessageBodyWriter<T>> serviceReference,
 		MessageBodyWriter<T> messageBodyWriter) {
 
@@ -71,7 +82,14 @@ public class VulcanApplication extends Application {
 	}
 
 	@SuppressWarnings("unused")
-	public <T> void unsetServiceReference(
+	public <T> void unsetContainerResponseFilter(
+		ServiceReference<ContainerResponseFilter> serviceReference,
+		ContainerResponseFilter containerResponseFilter) {
+
+		_containerResponseFilters.remove(containerResponseFilter);
+	}
+	@SuppressWarnings("unused")
+	public <T> void unsetMessageBodyWriter(
 		ServiceReference<MessageBodyWriter<T>> serviceReference,
 		MessageBodyWriter<T> messageBodyWriter) {
 
@@ -83,6 +101,8 @@ public class VulcanApplication extends Application {
 	)
 	private List<ContextProvider> _contextProviders;
 
+	private final List<ContainerResponseFilter> _containerResponseFilters =
+		new ArrayList<>();
 	private final List<MessageBodyWriter> _messageBodyWriters =
 		new ArrayList<>();
 
