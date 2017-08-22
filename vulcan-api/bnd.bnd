@@ -9,6 +9,7 @@ Export-Package:\
 	com.liferay.vulcan.exception,\
 	com.liferay.vulcan.function,\
 	com.liferay.vulcan.identifier,\
+	com.liferay.vulcan.identifier.converter,\
 	com.liferay.vulcan.list,\
 	com.liferay.vulcan.logger,\
 	com.liferay.vulcan.message.json,\
