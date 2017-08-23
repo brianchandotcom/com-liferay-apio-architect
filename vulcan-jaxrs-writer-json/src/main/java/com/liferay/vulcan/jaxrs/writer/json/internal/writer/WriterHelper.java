@@ -344,6 +344,31 @@ public class WriterHelper {
 		if (!fieldsPredicate.test(key)) {
 			return;
 		}
+
+		Class<V> modelClass = relatedCollection.getModelClass();
+
+		Optional<String> optional = getSingleURLOptional(
+			parentModelClass, parentModel, httpServletRequest);
+
+		optional.flatMap(
+			url -> {
+				Optional<Resource<V>> resourceOptional =
+					_resourceManager.getResourceOptional(modelClass);
+
+				return resourceOptional.map(
+					Resource::getPath
+				).map(
+					path -> url + "/" + path
+				);
+			}
+		).ifPresent(
+			url -> {
+				FunctionalList<String> embeddedPathElements =
+					new StringFunctionalList(parentEmbeddedPathElements, key);
+
+				biConsumer.accept(url, embeddedPathElements);
+			}
+		);
 	}
 
 	/**
