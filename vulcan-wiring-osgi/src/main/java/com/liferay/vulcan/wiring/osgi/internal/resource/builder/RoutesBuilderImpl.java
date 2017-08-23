@@ -52,7 +52,6 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		_modelClass = modelClass;
 		_provideClassFunction = provideClassFunction;
-		_createSingleModelFunction = t -> new SingleModel<>(t, modelClass);
 		_identifierFunction = identifierFunction;
 	}
 
@@ -77,13 +76,19 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
-		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(
-				id -> {
-					A a = _provideClass(aClass);
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			id -> {
+				A a = _provideClass(aClass);
 
-					return biFunction.apply(id, a);
-				}).andThen(_createSingleModelFunction));
+				return biFunction.apply(id, a);
+			});
+
+		_routesImpl.setSingleModelFunction(
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -99,21 +104,27 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
-		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(
-				id -> {
-					A a = _provideClass(aClass);
-					B b = _provideClass(bClass);
-					C c = _provideClass(cClass);
-					D d = _provideClass(dClass);
-					E e = _provideClass(eClass);
-					F f = _provideClass(fClass);
-					G g = _provideClass(gClass);
-					H h = _provideClass(hClass);
-					I i = _provideClass(iClass);
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			id -> {
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
+				G g = _provideClass(gClass);
+				H h = _provideClass(hClass);
+				I i = _provideClass(iClass);
 
-					return decaFunction.apply(id, a, b, c, d, e, f, g, h, i);
-				}).andThen(_createSingleModelFunction));
+				return decaFunction.apply(id, a, b, c, d, e, f, g, h, i);
+			});
+
+		_routesImpl.setSingleModelFunction(
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -129,20 +140,26 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
-		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(
-				id -> {
-					A a = _provideClass(aClass);
-					B b = _provideClass(bClass);
-					C c = _provideClass(cClass);
-					D d = _provideClass(dClass);
-					E e = _provideClass(eClass);
-					F f = _provideClass(fClass);
-					G g = _provideClass(gClass);
-					H h = _provideClass(hClass);
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			id -> {
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
+				G g = _provideClass(gClass);
+				H h = _provideClass(hClass);
 
-					return enneaFunction.apply(id, a, b, c, d, e, f, g, h);
-				}).andThen(_createSingleModelFunction));
+				return enneaFunction.apply(id, a, b, c, d, e, f, g, h);
+			});
+
+		_routesImpl.setSingleModelFunction(
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -154,9 +171,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			function);
+
 		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(function).andThen(
-				_createSingleModelFunction));
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -172,18 +195,24 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
-		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(
-				id -> {
-					A a = _provideClass(aClass);
-					B b = _provideClass(bClass);
-					C c = _provideClass(cClass);
-					D d = _provideClass(dClass);
-					E e = _provideClass(eClass);
-					F f = _provideClass(fClass);
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			id -> {
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
 
-					return heptaFunction.apply(id, a, b, c, d, e, f);
-				}).andThen(_createSingleModelFunction));
+				return heptaFunction.apply(id, a, b, c, d, e, f);
+			});
+
+		_routesImpl.setSingleModelFunction(
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -198,17 +227,23 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
-		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(
-				id -> {
-					A a = _provideClass(aClass);
-					B b = _provideClass(bClass);
-					C c = _provideClass(cClass);
-					D d = _provideClass(dClass);
-					E e = _provideClass(eClass);
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			id -> {
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
 
-					return hexaFunction.apply(id, a, b, c, d, e);
-				}).andThen(_createSingleModelFunction));
+				return hexaFunction.apply(id, a, b, c, d, e);
+			});
+
+		_routesImpl.setSingleModelFunction(
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -224,19 +259,25 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
-		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(
-				id -> {
-					A a = _provideClass(aClass);
-					B b = _provideClass(bClass);
-					C c = _provideClass(cClass);
-					D d = _provideClass(dClass);
-					E e = _provideClass(eClass);
-					F f = _provideClass(fClass);
-					G g = _provideClass(gClass);
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			id -> {
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
+				E e = _provideClass(eClass);
+				F f = _provideClass(fClass);
+				G g = _provideClass(gClass);
 
-					return octaFunction.apply(id, a, b, c, d, e, f, g);
-				}).andThen(_createSingleModelFunction));
+				return octaFunction.apply(id, a, b, c, d, e, f, g);
+			});
+
+		_routesImpl.setSingleModelFunction(
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -249,16 +290,22 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
-		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(
-				id -> {
-					A a = _provideClass(aClass);
-					B b = _provideClass(bClass);
-					C c = _provideClass(cClass);
-					D d = _provideClass(dClass);
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			id -> {
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
+				D d = _provideClass(dClass);
 
-					return pentaFunction.apply(id, a, b, c, d);
-				}).andThen(_createSingleModelFunction));
+				return pentaFunction.apply(id, a, b, c, d);
+			});
+
+		_routesImpl.setSingleModelFunction(
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -271,15 +318,21 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
-		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(
-				id -> {
-					A a = _provideClass(aClass);
-					B b = _provideClass(bClass);
-					C c = _provideClass(cClass);
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			id -> {
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
+				C c = _provideClass(cClass);
 
-					return tetraFunction.apply(id, a, b, c);
-				}).andThen(_createSingleModelFunction));
+				return tetraFunction.apply(id, a, b, c);
+			});
+
+		_routesImpl.setSingleModelFunction(
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -292,14 +345,20 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
-		_routesImpl.setSingleModelFunction(
-			identifierFunction.andThen(
-				id -> {
-					A a = _provideClass(aClass);
-					B b = _provideClass(bClass);
+		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+			id -> {
+				A a = _provideClass(aClass);
+				B b = _provideClass(bClass);
 
-					return triFunction.apply(id, a, b);
-				}).andThen(_createSingleModelFunction));
+				return triFunction.apply(id, a, b);
+			});
+
+		_routesImpl.setSingleModelFunction(
+			identifier -> modelFunction.andThen(
+				_createSingleModelFunction(identifier)
+			).apply(
+				identifier
+			));
 
 		return this;
 	}
@@ -323,7 +382,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					return new PageImpl<>(
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
-						pagination.getPageNumber(), pageItems.getTotalCount());
+						pagination.getPageNumber(), pageItems.getTotalCount(),
+						identifier);
 				}));
 
 		return this;
@@ -360,7 +420,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					return new PageImpl<>(
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
-						pagination.getPageNumber(), pageItems.getTotalCount());
+						pagination.getPageNumber(), pageItems.getTotalCount(),
+						identifier);
 				}));
 
 		return this;
@@ -395,7 +456,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					return new PageImpl<>(
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
-						pagination.getPageNumber(), pageItems.getTotalCount());
+						pagination.getPageNumber(), pageItems.getTotalCount(),
+						identifier);
 				}));
 
 		return this;
@@ -428,7 +490,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					return new PageImpl<>(
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
-						pagination.getPageNumber(), pageItems.getTotalCount());
+						pagination.getPageNumber(), pageItems.getTotalCount(),
+						identifier);
 				}));
 
 		return this;
@@ -458,7 +521,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					return new PageImpl<>(
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
-						pagination.getPageNumber(), pageItems.getTotalCount());
+						pagination.getPageNumber(), pageItems.getTotalCount(),
+						identifier);
 				}));
 
 		return this;
@@ -492,7 +556,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					return new PageImpl<>(
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
-						pagination.getPageNumber(), pageItems.getTotalCount());
+						pagination.getPageNumber(), pageItems.getTotalCount(),
+						identifier);
 				}));
 
 		return this;
@@ -521,7 +586,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					return new PageImpl<>(
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
-						pagination.getPageNumber(), pageItems.getTotalCount());
+						pagination.getPageNumber(), pageItems.getTotalCount(),
+						identifier);
 				}));
 
 		return this;
@@ -548,7 +614,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					return new PageImpl<>(
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
-						pagination.getPageNumber(), pageItems.getTotalCount());
+						pagination.getPageNumber(), pageItems.getTotalCount(),
+						identifier);
 				}));
 
 		return this;
@@ -574,7 +641,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 					return new PageImpl<>(
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
-						pagination.getPageNumber(), pageItems.getTotalCount());
+						pagination.getPageNumber(), pageItems.getTotalCount(),
+						identifier);
 				}));
 
 		return this;
@@ -592,13 +660,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		};
 	}
 
+	private Function<T, SingleModel<T>> _createSingleModelFunction(
+		Identifier identifier) {
+
+		return t -> new SingleModel<>(t, _modelClass, identifier);
+	}
+
 	private <U> U _provideClass(Class<U> clazz) {
 		Optional<U> optional = (Optional<U>)_provideClassFunction.apply(clazz);
 
 		return optional.orElseThrow(() -> new MustHaveProvider(clazz));
 	}
 
-	private final Function<T, SingleModel<T>> _createSingleModelFunction;
 	private final BiFunction<Class<? extends Identifier>, Identifier,
 		Optional<? extends Identifier>> _identifierFunction;
 	private final Class<T> _modelClass;
