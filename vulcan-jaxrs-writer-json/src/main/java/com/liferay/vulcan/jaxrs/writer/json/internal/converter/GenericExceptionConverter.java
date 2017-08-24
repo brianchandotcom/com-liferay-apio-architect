@@ -14,10 +14,11 @@
 
 package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
-
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -32,9 +33,19 @@ public class GenericExceptionConverter
 
 	@Override
 	public APIError convert(Exception exception) {
-		return new APIErrorImpl(
-			"General server error", "server-error",
-			INTERNAL_SERVER_ERROR.getStatusCode());
+		if (exception instanceof WebApplicationException) {
+			WebApplicationException webApplicationException =
+				(WebApplicationException)exception;
+
+			Response response = webApplicationException.getResponse();
+
+			return new APIErrorImpl(
+				"An error occurred", exception.getMessage(), "web-application",
+				response.getStatus());
+		}
+		else {
+			return new APIErrorImpl("An error occurred", "server-error", 500);
+		}
 	}
 
 }
