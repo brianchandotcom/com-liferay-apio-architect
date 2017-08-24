@@ -19,7 +19,6 @@ import com.liferay.vulcan.exception.FalsePredicateException;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * Implementation of the success case of a {@code Try}.
@@ -84,23 +83,6 @@ public class Success<T> extends Try<T> {
 		catch (Throwable t) {
 			return Try.fail(t);
 		}
-	}
-
-	@Override
-	public T orElse(T other) {
-		return _value;
-	}
-
-	@Override
-	public T orElseGet(Supplier<? extends T> supplier) {
-		return _value;
-	}
-
-	@Override
-	public <X extends Throwable> T orElseThrow(Supplier<? extends X> supplier)
-		throws X {
-
-		return _value;
 	}
 
 	@Override

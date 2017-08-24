@@ -17,7 +17,6 @@ package com.liferay.vulcan.result;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * Implementation of the monadic "Try" type.
@@ -157,36 +156,6 @@ public abstract class Try<T> {
 	 */
 	public abstract <U> Try<U> map(
 		ThrowableFunction<? super T, ? extends U> throwableFunction);
-
-	/**
-	 * Return the value if success, otherwise return {@code other}.
-	 *
-	 * @param  other the value to be returned if failure.
-	 * @return the value, if success, otherwise {@code other}.
-	 */
-	public abstract T orElse(T other);
-
-	/**
-	 * Return the value if success, otherwise invoke {@code supplier} and return
-	 * the result of that invocation.
-	 *
-	 * @param  supplier a {@code Supplier} whose result is returned if failure.
-	 * @return the value if success otherwise the result of {@code
-	 *         supplier.get()}.
-	 */
-	public abstract T orElseGet(Supplier<? extends T> supplier);
-
-	/**
-	 * Return the contained value, if success, otherwise throw an exception to
-	 * be created by the provided supplier.
-	 *
-	 * @param  supplier The supplier which will return the exception to be
-	 *         thrown
-	 * @return the present value
-	 */
-	public abstract <X extends Throwable> T orElseThrow(
-			Supplier<? extends X> supplier)
-		throws X;
 
 	/**
 	 * Returns the result extracted from the provided function if this instance

@@ -17,7 +17,6 @@ package com.liferay.vulcan.result;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * Implementation of the failure case of a {@code Try}.
@@ -67,23 +66,6 @@ public class Failure<T> extends Try<T> {
 		Objects.requireNonNull(throwableFunction);
 
 		return Try.fail(_throwable);
-	}
-
-	@Override
-	public T orElse(T other) {
-		return other;
-	}
-
-	@Override
-	public T orElseGet(Supplier<? extends T> supplier) {
-		return supplier.get();
-	}
-
-	@Override
-	public <X extends Throwable> T orElseThrow(Supplier<? extends X> supplier)
-		throws X {
-
-		throw supplier.get();
 	}
 
 	@Override
