@@ -15,7 +15,6 @@
 package com.liferay.vulcan.result;
 
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -66,26 +65,6 @@ public class Failure<T> extends Try<T> {
 		Objects.requireNonNull(throwableFunction);
 
 		return Try.fail(_throwable);
-	}
-
-	@Override
-	public T recover(Function<? super Throwable, T> function) {
-		Objects.requireNonNull(function);
-
-		return function.apply(_throwable);
-	}
-
-	@Override
-	public Try<T> recoverWith(
-		ThrowableFunction<? super Throwable, Try<T>> throwableFunction) {
-
-		Objects.requireNonNull(throwableFunction);
-		try {
-			return throwableFunction.apply(_throwable);
-		}
-		catch (Throwable t) {
-			return Try.fail(t);
-		}
 	}
 
 	protected Failure(Throwable throwable) {

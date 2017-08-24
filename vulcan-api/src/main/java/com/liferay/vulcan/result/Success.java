@@ -17,7 +17,6 @@ package com.liferay.vulcan.result;
 import com.liferay.vulcan.exception.FalsePredicateException;
 
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -83,22 +82,6 @@ public class Success<T> extends Try<T> {
 		catch (Throwable t) {
 			return Try.fail(t);
 		}
-	}
-
-	@Override
-	public T recover(Function<? super Throwable, T> function) {
-		Objects.requireNonNull(function);
-
-		return _value;
-	}
-
-	@Override
-	public Try<T> recoverWith(
-		ThrowableFunction<? super Throwable, Try<T>> throwableFunction) {
-
-		Objects.requireNonNull(throwableFunction);
-
-		return this;
 	}
 
 	protected Success(T value) {
