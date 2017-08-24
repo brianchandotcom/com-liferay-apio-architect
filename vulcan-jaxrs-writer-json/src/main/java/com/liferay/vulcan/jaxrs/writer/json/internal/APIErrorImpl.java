@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
+package com.liferay.vulcan.jaxrs.writer.json.internal;
 
 import com.liferay.vulcan.result.APIError;
 

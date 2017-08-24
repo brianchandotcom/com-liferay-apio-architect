@@ -12,10 +12,9 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.exception.mapper;
+package com.liferay.vulcan.jaxrs.writer.json.internal;
 
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveExceptionConverter;
-import com.liferay.vulcan.jaxrs.writer.json.internal.writer.WriterHelper;
 import com.liferay.vulcan.message.json.ErrorMessageMapper;
 import com.liferay.vulcan.result.APIError;
 import com.liferay.vulcan.wiring.osgi.manager.ErrorMessageMapperManager;
