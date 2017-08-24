@@ -30,6 +30,8 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.MessageBodyWriter;
 
+import org.apache.cxf.jaxrs.ext.ContextProvider;
+
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -53,6 +55,7 @@ public class VulcanApplication extends Application {
 
 		singletons.add(_rootEndpoint);
 
+		singletons.addAll(_contextProviders);
 		singletons.addAll(_messageBodyWriters);
 		singletons.addAll(_containerResponseFilters);
 		singletons.addAll(_exceptionMappers);
@@ -115,6 +118,11 @@ public class VulcanApplication extends Application {
 
 		_messageBodyWriters.remove(messageBodyWriter);
 	}
+
+	@Reference(
+		policyOption = GREEDY, target = "(liferay.vulcan.context.provider=true)"
+	)
+	private List<ContextProvider> _contextProviders;
 
 	private final List<ContainerResponseFilter> _containerResponseFilters =
 		new ArrayList<>();
