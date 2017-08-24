@@ -192,7 +192,7 @@ public abstract class Try<T> {
 
 	/**
 	 * Returns the result extracted from the provided function if this instance
-	 * is a failure case. Returns the inner result in success case.
+	 * is a failure case. Returns the inner result in the success case.
 	 *
 	 * <p>
 	 * The lambda passed as parameter gives access to the exception in the case
@@ -207,7 +207,7 @@ public abstract class Try<T> {
 
 	/**
 	 * Returns a new {@code Try} instance, extracted from the provided function
-	 * if this instance is a failure case. Returns the current success,
+	 * if this instance is a failure case. Returns the current success
 	 * otherwise.
 	 *
 	 * <p>
