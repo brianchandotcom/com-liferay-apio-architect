@@ -50,15 +50,6 @@ public class Failure<T> extends Try<T> {
 		throw _throwable;
 	}
 
-	/**
-	 * Returns the cause of this failure.
-	 *
-	 * @return the cause of this failure.
-	 */
-	public Throwable getThrowable() {
-		return _throwable;
-	}
-
 	@Override
 	public boolean isFailure() {
 		return true;

@@ -62,15 +62,6 @@ public class Success<T> extends Try<T> {
 		return _value;
 	}
 
-	/**
-	 * Returns the inner value of this {@code Success}.
-	 *
-	 * @return the inner value of the {@code Success}.
-	 */
-	public T getValue() {
-		return _value;
-	}
-
 	@Override
 	public boolean isFailure() {
 		return false;
