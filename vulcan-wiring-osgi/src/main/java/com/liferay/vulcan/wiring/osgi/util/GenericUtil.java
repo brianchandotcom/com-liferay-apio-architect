@@ -14,7 +14,9 @@
 
 package com.liferay.vulcan.wiring.osgi.util;
 
-import com.liferay.vulcan.result.Try;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ReflectionUtil;
+import com.liferay.vulcan.error.VulcanDeveloperError;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -29,71 +31,36 @@ import java.lang.reflect.Type;
 public class GenericUtil {
 
 	/**
-	 * Given a type denoted by {@code T<S>} returns S class or an exception, if
-	 * the class couldn't be get.
+	 * Given a type denoted by <code>T&lt;S&gt;</code> returns S class or throws
+	 * a {@link VulcanDeveloperError.MustHaveValidGenericType}.
 	 *
-	 * @param  clazz class of the actual instance.
-	 * @param  interfaceClass class of type T.
-	 * @return class of type S, or an exception, if the class couldn't be get.
-	 */
-	public static <T, S> Try<Class<S>> getGenericClassTry(
-		Class<?> clazz, Class<T> interfaceClass) {
-
-		Type[] genericInterfaces = clazz.getGenericInterfaces();
-
-		Try<Class<S>> classTry = Try.fail(
-			new IllegalArgumentException(
-				"Class " + clazz + " does not implement any interfaces."));
-
-		for (Type genericInterface : genericInterfaces) {
-			classTry = classTry.recoverWith(
-				throwable -> getGenericClassTry(
-					genericInterface, interfaceClass));
-		}
-
-		return classTry.recoverWith(
-			throwable -> getGenericClassTry(
-				clazz.getSuperclass(), interfaceClass));
-	}
-
-	/**
-	 * Given a type denoted by {@code T<S>} returns S class or an exception, if
-	 * the class couldn't be get.
-	 *
-	 * @param  type type of the actual instance.
+	 * @param  t instance of type T.
 	 * @param  clazz class of type T.
-	 * @return class of type S, or an exception, if the class couldn't be get.
+	 * @return class of type S.
 	 */
-	public static <T, S> Try<Class<S>> getGenericClassTry(
-		Type type, Class<T> clazz) {
+	public static <T, S> Class<S> getGenericClass(T t, Class<T> clazz) {
+		Type genericType = ReflectionUtil.getGenericInterface(t, clazz);
 
-		Try<Type> typeTry = Try.success(type);
+		if ((genericType != null) &&
+			(genericType instanceof ParameterizedType)) {
 
-		return typeTry.filter(
-			ParameterizedType.class::isInstance
-		).map(
-			ParameterizedType.class::cast
-		).filter(
-			parameterizedType ->
-				parameterizedType.getRawType().equals(clazz)
-		).map(
-			ParameterizedType::getActualTypeArguments
-		).filter(
-			typeArguments -> typeArguments.length == 1
-		).map(
-			typeArguments -> typeArguments[0]
-		).map(
-			typeArgument -> {
-				if (typeArgument instanceof ParameterizedType) {
-					return ((ParameterizedType)typeArgument).getRawType();
+			ParameterizedType parameterizedType =
+				(ParameterizedType)genericType;
+
+			Type[] typeArguments = parameterizedType.getActualTypeArguments();
+
+			if (!ArrayUtil.isEmpty(typeArguments) &&
+				(typeArguments.length == 1)) {
+
+				try {
+					return (Class<S>)typeArguments[0];
 				}
-				else {
-					return typeArgument;
+				catch (ClassCastException cce) {
 				}
 			}
-		).map(
-			typeArgument -> (Class<S>)typeArgument
-		);
+		}
+
+		throw new VulcanDeveloperError.MustHaveValidGenericType(t.getClass());
 	}
 
 }
