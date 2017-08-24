@@ -14,8 +14,6 @@
 
 package com.liferay.vulcan.result;
 
-import java.util.Objects;
-import java.util.function.Predicate;
 /**
  * Implementation of the failure case of a {@code Try}.
  *
@@ -27,11 +25,6 @@ import java.util.function.Predicate;
  * @author Alejandro Hernández
  */
 public class Failure<T> extends Try<T> {
-
-	@Override
-	public Try<T> filter(Predicate<T> predicate) {
-		return this;
-	}
 
 	@Override
 	public T get() throws Throwable {
