@@ -16,7 +16,6 @@ package com.liferay.vulcan.result;
 
 import java.util.Objects;
 import java.util.function.Predicate;
-
 /**
  * Implementation of the failure case of a {@code Try}.
  *
@@ -35,15 +34,6 @@ public class Failure<T> extends Try<T> {
 	}
 
 	@Override
-	public <U> Try<U> flatMap(
-		ThrowableFunction<? super T, Try<U>> throwableFunction) {
-
-		Objects.requireNonNull(throwableFunction);
-
-		return Try.fail(_throwable);
-	}
-
-	@Override
 	public T get() throws Throwable {
 		throw _throwable;
 	}
@@ -56,15 +46,6 @@ public class Failure<T> extends Try<T> {
 	@Override
 	public boolean isSuccess() {
 		return false;
-	}
-
-	@Override
-	public <U> Try<U> map(
-		ThrowableFunction<? super T, ? extends U> throwableFunction) {
-
-		Objects.requireNonNull(throwableFunction);
-
-		return Try.fail(_throwable);
 	}
 
 	protected Failure(Throwable throwable) {
