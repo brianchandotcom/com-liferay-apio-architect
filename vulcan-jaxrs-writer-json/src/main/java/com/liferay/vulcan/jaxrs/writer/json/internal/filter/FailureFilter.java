@@ -18,7 +18,7 @@ import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveExceptionConverter;
 import com.liferay.vulcan.jaxrs.writer.json.internal.writer.WriterHelper;
 import com.liferay.vulcan.message.json.ErrorMessageMapper;
 import com.liferay.vulcan.result.APIError;
-import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.result.Failure;
 import com.liferay.vulcan.wiring.osgi.manager.ErrorMessageMapperManager;
 import com.liferay.vulcan.wiring.osgi.manager.ExceptionConverterManager;
 
@@ -37,9 +37,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * This filter is responsible of filtering {@link Try.Failure} entities,
- * converting them to its corresponding {@link APIError} and writing the error
- * to the response.
+ * This filter is responsible of filtering {@link Failure} entities, converting
+ * them to its corresponding {@link APIError} and writing the error to the
+ * response.
  *
  * @author Alejandro Hernández
  */
@@ -56,8 +56,8 @@ public class FailureFilter implements ContainerResponseFilter {
 
 		Object entity = containerResponseContext.getEntity();
 
-		if (entity instanceof Try.Failure) {
-			Try.Failure failure = (Try.Failure)entity;
+		if (entity instanceof Failure) {
+			Failure failure = (Failure)entity;
 
 			Exception exception = failure.getException();
 

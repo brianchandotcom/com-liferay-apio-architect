@@ -26,6 +26,7 @@ import com.liferay.vulcan.message.json.SingleModelMessageMapper;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
+import com.liferay.vulcan.result.Success;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
@@ -71,11 +72,11 @@ import org.osgi.service.component.annotations.Reference;
 )
 @Provider
 public class SingleModelMessageBodyWriter<T>
-	implements MessageBodyWriter<Try.Success<SingleModel<T>>> {
+	implements MessageBodyWriter<Success<SingleModel<T>>> {
 
 	@Override
 	public long getSize(
-		Try.Success<SingleModel<T>> success, Class<?> clazz, Type genericType,
+		Success<SingleModel<T>> success, Class<?> clazz, Type genericType,
 		Annotation[] annotations, MediaType mediaType) {
 
 		return -1;
@@ -96,8 +97,8 @@ public class SingleModelMessageBodyWriter<T>
 
 	@Override
 	public void writeTo(
-			Try.Success<SingleModel<T>> success, Class<?> clazz,
-			Type genericType, Annotation[] annotations, MediaType mediaType,
+			Success<SingleModel<T>> success, Class<?> clazz, Type genericType,
+			Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> httpHeaders,
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
