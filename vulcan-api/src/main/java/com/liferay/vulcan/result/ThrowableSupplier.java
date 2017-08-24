@@ -15,8 +15,8 @@
 package com.liferay.vulcan.result;
 
 /**
- * A version of the Java {@link java.util.function.Supplier} that can throw an
- * {@code Exception}.
+ * A version of the Java {@link java.util.function.Supplier} that can throw a
+ * {@code Throwable}.
  *
  * @author Alejandro Hernández
  */
@@ -24,10 +24,10 @@ package com.liferay.vulcan.result;
 public interface ThrowableSupplier<T> {
 
 	/**
-	 * Gets a result or throws an {@code Exception}.
+	 * Gets a result or throws a {@code Throwable}.
 	 *
-	 * @return a result if no {@code Exception} is thrown.
+	 * @return a result if no {@code Throwable} is thrown.
 	 */
-	public T get() throws Exception;
+	public T get() throws Throwable;
 
 }
