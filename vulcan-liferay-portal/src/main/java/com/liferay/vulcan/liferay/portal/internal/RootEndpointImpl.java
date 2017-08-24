@@ -16,14 +16,10 @@ package com.liferay.vulcan.liferay.portal.internal;
 
 import com.liferay.vulcan.endpoint.RootEndpoint;
 import com.liferay.vulcan.resource.Routes;
-import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
-
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 
 import org.osgi.service.component.annotations.Component;
@@ -38,12 +34,8 @@ import org.osgi.service.component.annotations.Reference;
 public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
-	public <T> Try<Routes<T>> getRoutes(String path) {
-		Optional<Routes<T>> optional = _resourceManager.getRoutes(
-			path, _httpServletRequest);
-
-		return Try.fromFallible(
-			() -> optional.orElseThrow(NotFoundException::new));
+	public <T> Routes<T> getRoutes(String path) {
+		return _resourceManager.getRoutes(path, _httpServletRequest);
 	}
 
 	@Context
