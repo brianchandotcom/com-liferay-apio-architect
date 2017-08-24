@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.list.FunctionalList;
+import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.SingleModelMessageMapper;
 import com.liferay.vulcan.pagination.SingleModel;
@@ -49,7 +50,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
@@ -113,11 +113,12 @@ public class SingleModelMessageBodyWriter<T>
 		String mediaTypeString = mediaType.toString();
 		T model = singleModel.getModel();
 		Class<T> modelClass = singleModel.getModelClass();
+		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
 		SingleModelMessageMapper<T> singleModelMessageMapper = stream.filter(
 			messageMapper ->
 				mediaTypeString.equals(messageMapper.getMediaType()) &&
-				messageMapper.supports(model, modelClass, _httpHeaders)
+				messageMapper.supports(model, modelClass, requestInfo)
 		).findFirst(
 		).orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveMessageMapper(
@@ -140,7 +141,7 @@ public class SingleModelMessageBodyWriter<T>
 
 		_writeModel(
 			singleModelMessageMapper, jsonObjectBuilder, model, modelClass,
-			fields, embedded);
+			requestInfo, fields, embedded);
 
 		JSONObject jsonObject = jsonObjectBuilder.build();
 
@@ -236,10 +237,10 @@ public class SingleModelMessageBodyWriter<T>
 	private <U> void _writeModel(
 		SingleModelMessageMapper<U> singleModelMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, U model, Class<U> modelClass,
-		Fields fields, Embedded embedded) {
+		RequestInfo requestInfo, Fields fields, Embedded embedded) {
 
 		singleModelMessageMapper.onStart(
-			jsonObjectBuilder, model, modelClass, _httpHeaders);
+			jsonObjectBuilder, model, modelClass, requestInfo);
 
 		_writerHelper.writeFields(
 			model, modelClass, fields,
@@ -286,7 +287,7 @@ public class SingleModelMessageBodyWriter<T>
 				model, modelClass, null, fields));
 
 		singleModelMessageMapper.onFinish(
-			jsonObjectBuilder, model, modelClass, _httpHeaders);
+			jsonObjectBuilder, model, modelClass, requestInfo);
 	}
 
 	private <U, V> void _writeRelatedCollection(
@@ -303,9 +304,6 @@ public class SingleModelMessageBodyWriter<T>
 				singleModelMessageMapper.mapLinkedResourceURL(
 					jsonObjectBuilder, embeddedPathElements, url));
 	}
-
-	@Context
-	private HttpHeaders _httpHeaders;
 
 	@Context
 	private HttpServletRequest _httpServletRequest;

@@ -15,13 +15,12 @@
 package com.liferay.vulcan.message.hal.internal;
 
 import com.liferay.vulcan.list.FunctionalList;
+import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
 import java.util.List;
-
-import javax.ws.rs.core.HttpHeaders;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -212,7 +211,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	public void onFinishItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, T model, Class<T> modelClass,
-		HttpHeaders httpHeaders) {
+		RequestInfo requestInfo) {
 
 		List<String> types = _resourceManager.getTypes(modelClass);
 

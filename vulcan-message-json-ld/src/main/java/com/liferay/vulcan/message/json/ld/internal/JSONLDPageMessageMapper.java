@@ -15,14 +15,13 @@
 package com.liferay.vulcan.message.json.ld.internal;
 
 import com.liferay.vulcan.list.FunctionalList;
+import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 
 import java.util.List;
 import java.util.stream.Stream;
-
-import javax.ws.rs.core.HttpHeaders;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -227,7 +226,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	@Override
 	public void onFinish(
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
-		HttpHeaders httpHeaders) {
+		RequestInfo requestInfo) {
 
 		jsonObjectBuilder.nestedField(
 			"@context", "Collection"
@@ -260,7 +259,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	public void onFinishItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, T model, Class<T> modelClass,
-		HttpHeaders httpHeaders) {
+		RequestInfo requestInfo) {
 
 		pageJSONObjectBuilder.field(
 			"members"

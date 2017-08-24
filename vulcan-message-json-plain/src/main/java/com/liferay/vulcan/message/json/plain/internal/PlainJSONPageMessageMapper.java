@@ -15,10 +15,9 @@
 package com.liferay.vulcan.message.json.plain.internal;
 
 import com.liferay.vulcan.list.FunctionalList;
+import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
-
-import javax.ws.rs.core.HttpHeaders;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -194,7 +193,7 @@ public class PlainJSONPageMessageMapper<T> implements PageMessageMapper<T> {
 	public void onFinishItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, T item, Class<T> modelClass,
-		HttpHeaders httpHeaders) {
+		RequestInfo requestInfo) {
 
 		pageJSONObjectBuilder.field(
 			"elements"
