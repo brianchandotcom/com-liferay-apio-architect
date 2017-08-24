@@ -57,9 +57,7 @@ public interface RootEndpoint {
 		return routesTry.map(
 			Routes::getSingleModelFunctionOptional
 		).map(
-			optional -> optional.orElseThrow(
-				() -> new NotFoundException("No endpoint found at path: " +
-					path))
+			optional -> optional.orElseThrow(NotFoundException::new)
 		).map(
 			singleModelFunction -> singleModelFunction.apply(id)
 		);
@@ -83,9 +81,7 @@ public interface RootEndpoint {
 		return routesTry.map(
 			Routes::getPageSupplierOptional
 		).map(
-			optional -> optional.orElseThrow(
-				() -> new NotFoundException("No endpoint found at path: " +
-					path))
+			optional -> optional.orElseThrow(NotFoundException::new)
 		).map(
 			Supplier::get
 		);

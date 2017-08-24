@@ -43,9 +43,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			path, _httpServletRequest);
 
 		return Try.fromFallible(
-			() -> optional.orElseThrow(
-				() -> new NotFoundException("No resource found for path: " +
-					path)));
+			() -> optional.orElseThrow(NotFoundException::new));
 	}
 
 	@Context
