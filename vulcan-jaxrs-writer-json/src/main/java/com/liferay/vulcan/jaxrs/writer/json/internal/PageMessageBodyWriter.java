@@ -26,19 +26,17 @@ import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
-import com.liferay.vulcan.result.Success;
-import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
-import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 import java.util.Collection;
@@ -72,12 +70,11 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true, property = "liferay.vulcan.message.body.writer=true"
 )
 @Provider
-public class PageMessageBodyWriter<T>
-	implements MessageBodyWriter<Success<Page<T>>> {
+public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 
 	@Override
 	public long getSize(
-		Success<Page<T>> success, Class<?> clazz, Type genericType,
+		Page<T> page, Class<?> clazz, Type genericType,
 		Annotation[] annotations, MediaType mediaType) {
 
 		return -1;
@@ -88,23 +85,24 @@ public class PageMessageBodyWriter<T>
 		Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
-		Try<Class<Object>> classTry = GenericUtil.getGenericClassTry(
-			genericType, Try.class);
+		Method resourceMethod = _resourceInfo.getResourceMethod();
 
-		return classTry.filter(
-			Page.class::equals
-		).isSuccess();
+		Class<?> returnType = resourceMethod.getReturnType();
+
+		if (!returnType.isAssignableFrom(Page.class)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
 	public void writeTo(
-			Success<Page<T>> success, Class<?> clazz, Type genericType,
+			Page<T> page, Class<?> clazz, Type genericType,
 			Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> httpHeaders,
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
-
-		Page<T> page = success.getValue();
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
