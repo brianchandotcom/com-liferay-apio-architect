@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveConverter;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveFilterProvider;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
@@ -33,7 +34,6 @@ import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
-import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.internal.pagination.PageImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
 
@@ -981,25 +981,24 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 		if (identifierClass.isAssignableFrom(Long.class)) {
 			return id -> {
-				Try<Long> longTry = Try.fromFallible(() -> Long.parseLong(id));
+				Long longId = GetterUtil.getLong(id);
 
-				return longTry.map(
-					longIdentifier -> (U)longIdentifier
-				).orElseThrow(
-					BadRequestException::new
-				);
+				if (longId == GetterUtil.DEFAULT_LONG) {
+					throw new BadRequestException();
+				}
+
+				return (U)longId;
 			};
 		}
 		else if (identifierClass.isAssignableFrom(Integer.class)) {
 			return id -> {
-				Try<Integer> integerTry = Try.fromFallible(
-					() -> Integer.parseInt(id));
+				Integer integerId = GetterUtil.getInteger(id);
 
-				return integerTry.map(
-					integer -> (U)integer
-				).orElseThrow(
-					BadRequestException::new
-				);
+				if (integerId == GetterUtil.DEFAULT_INTEGER) {
+					throw new BadRequestException();
+				}
+
+				return (U)integerId;
 			};
 		}
 		else if (identifierClass.isAssignableFrom(String.class)) {
