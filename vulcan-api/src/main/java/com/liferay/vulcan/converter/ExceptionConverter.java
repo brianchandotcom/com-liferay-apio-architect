@@ -18,8 +18,7 @@ import com.liferay.vulcan.result.APIError;
 
 /**
  * Instances of this interface will be used to convert between a Java exception
- * and its {@link APIError} representation. Use the exception message to provide
- * meaningful information about the error.
+ * and its {@link APIError} representation.
  *
  * @author Alejandro Hernández
  */

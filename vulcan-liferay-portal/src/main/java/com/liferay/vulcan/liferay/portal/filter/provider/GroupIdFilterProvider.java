@@ -74,7 +74,7 @@ public class GroupIdFilterProvider implements FilterProvider<GroupIdFilter> {
 		long groupId = GetterUtil.getLong(id);
 
 		if (groupId == GetterUtil.DEFAULT_LONG) {
-			throw new BadRequestException("Invalid groupId");
+			throw new BadRequestException();
 		}
 
 		return new GroupIdFilterImpl(groupId);
