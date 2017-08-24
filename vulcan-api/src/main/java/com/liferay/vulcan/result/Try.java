@@ -148,7 +148,7 @@ public abstract class Try<T> {
 
 	/**
 	 * If success, apply the provided mapping function to it, and if the
-	 * function doesn't throw an exception, return in inside a {@code Try}.
+	 * function doesn't throw an exception, return it inside a {@code Try}.
 	 * Otherwise return a {@code Failure}.
 	 *
 	 * @param  throwableFunction a mapping function to apply to the value, if
@@ -159,6 +159,33 @@ public abstract class Try<T> {
 	 */
 	public abstract <U> Try<U> map(
 		ThrowableFunction<? super T, ? extends U> throwableFunction);
+
+	/**
+	 * If failure, apply the provided mapping function to the exception.
+	 * Otherwise return the {@code Success}.
+	 *
+	 * @param  function a mapping function to apply to the exception, if
+	 *         failure.
+	 * @return a {@code Try} with the result of applying a mapping function to
+	 *         the exception inside this {@code Try}, if failure case: the same
+	 *         {@code Success}, otherwise.
+	 */
+	public abstract <X extends Exception> Try<T> mapFail(
+		Function<Exception, X> function);
+
+	/**
+	 * If failure, and the class of the exception match the handed param class,
+	 * replace the actual exception with the one provided by the supplier.
+	 * Otherwise return the {@code Success}.
+	 *
+	 * @param  supplier a supplier for getting the new exception, if failure and
+	 *         exception classes match.
+	 * @return a {@code Try} with the result of the exception supplier, if
+	 *         failure case and exception classes match: the same {@code
+	 *         Success}, otherwise.
+	 */
+	public abstract <X extends Exception, Y extends Exception> Try<T>
+		mapFailMatching(Class<Y> exceptionClass, Supplier<X> supplier);
 
 	/**
 	 * Return the value if success, otherwise return {@code other}.
@@ -283,6 +310,30 @@ public abstract class Try<T> {
 		}
 
 		@Override
+		public <X extends Exception> Try<T> mapFail(
+			Function<Exception, X> function) {
+
+			Objects.requireNonNull(function);
+
+			return Try.fail(function.apply(_exception));
+		}
+
+		@Override
+		public <X extends Exception, Y extends Exception> Try<T>
+			mapFailMatching(Class<Y> exceptionClass, Supplier<X> supplier) {
+
+			Objects.requireNonNull(supplier);
+
+			Class<? extends Exception> causeClass = _exception.getClass();
+
+			if (causeClass.equals(exceptionClass)) {
+				return Try.fail(supplier.get());
+			}
+
+			return this;
+		}
+
+		@Override
 		public T orElse(T other) {
 			return other;
 		}
@@ -402,6 +453,24 @@ public abstract class Try<T> {
 			catch (Exception e) {
 				return Try.fail(e);
 			}
+		}
+
+		@Override
+		public <X extends Exception> Try<T> mapFail(
+			Function<Exception, X> function) {
+
+			Objects.requireNonNull(function);
+
+			return this;
+		}
+
+		@Override
+		public <X extends Exception, Y extends Exception> Try<T>
+			mapFailMatching(Class<Y> exceptionClass, Supplier<X> supplier) {
+
+			Objects.requireNonNull(supplier);
+
+			return this;
 		}
 
 		@Override

@@ -39,13 +39,15 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public <T> Try<Routes<T>> getRoutes(String path) {
-		Optional<Routes<T>> optional = _resourceManager.getRoutes(
-			path, _httpServletRequest);
+		Try<Optional<Routes<T>>> optionalTry = Try.success(
+			_resourceManager.getRoutes(path, _httpServletRequest));
 
-		return Try.fromFallible(
-			() -> optional.orElseThrow(
-				() -> new NotFoundException("No resource found for path: " +
-					path)));
+		return optionalTry.map(
+			Optional::get
+		).mapFailMatching(
+			NullPointerException.class,
+			() -> new NotFoundException("No resource found for path: " + path)
+		);
 	}
 
 	@Context

@@ -19,6 +19,7 @@ import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.Try;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.ws.rs.GET;
@@ -57,9 +58,10 @@ public interface RootEndpoint {
 		return routesTry.map(
 			Routes::getSingleModelFunctionOptional
 		).map(
-			optional -> optional.orElseThrow(
-				() -> new NotFoundException("No endpoint found at path: " +
-					path))
+			Optional::get
+		).mapFailMatching(
+			NullPointerException.class,
+			() -> new NotFoundException("No endpoint found at path: " + path)
 		).map(
 			singleModelFunction -> singleModelFunction.apply(id)
 		);
@@ -83,9 +85,10 @@ public interface RootEndpoint {
 		return routesTry.map(
 			Routes::getPageSupplierOptional
 		).map(
-			optional -> optional.orElseThrow(
-				() -> new NotFoundException("No endpoint found at path: " +
-					path))
+			Optional::get
+		).mapFailMatching(
+			NullPointerException.class,
+			() -> new NotFoundException("No endpoint found at path: " + path)
 		).map(
 			Supplier::get
 		);
