@@ -32,27 +32,28 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(immediate = true)
 public class BadRequestExceptionConverter
-	extends WebApplicationExceptionConverter
 	implements ExceptionConverter<BadRequestException> {
 
 	@Override
 	public APIError convert(BadRequestException exception) {
-		return super.convert(exception);
+		String description = _getDescription(exception.getMessage());
+
+		return new APIErrorImpl(
+			"Malformed request message", description, "bad-request", 400);
 	}
 
-	@Override
-	protected Response.StatusType getStatusType() {
-		return BAD_REQUEST;
-	}
+	private String _getDescription(String message) {
+		Response.StatusType statusType = BAD_REQUEST;
 
-	@Override
-	protected String getTitle() {
-		return "Malformed request message";
-	}
+		String defaultMessage =
+			"HTTP " + statusType.getStatusCode() + ' ' +
+				statusType.getReasonPhrase();
 
-	@Override
-	protected String getType() {
-		return "bad-request";
+		if (defaultMessage.equals(message)) {
+			return null;
+		}
+
+		return message;
 	}
 
 }
