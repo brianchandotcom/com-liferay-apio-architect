@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.application.internal;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
+import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.vulcan.endpoint.RootEndpoint;
@@ -36,8 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * The VulcanApplication is the center piece of a Vulcan API. Developers only
- * need to provide a valid {@link RootEndpoint}, and at least, one
- * {@link MessageBodyWriter}.
+ * need to provide a valid {@link RootEndpoint}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra
@@ -61,7 +60,7 @@ public class VulcanApplication extends Application {
 	}
 
 	@Reference(
-		policyOption = GREEDY,
+		cardinality = MULTIPLE, policyOption = GREEDY,
 		target = "(liferay.vulcan.container.response.filter=true)"
 	)
 	public void setContainerResponseFilter(
@@ -72,7 +71,8 @@ public class VulcanApplication extends Application {
 	}
 
 	@Reference(
-		policyOption = GREEDY, target = "(liferay.vulcan.exception.mapper=true)"
+		cardinality = MULTIPLE, policyOption = GREEDY,
+		target = "(liferay.vulcan.exception.mapper=true)"
 	)
 	public void setExceptionMapper(
 		ServiceReference<ExceptionMapper> serviceReference,
@@ -82,7 +82,7 @@ public class VulcanApplication extends Application {
 	}
 
 	@Reference(
-		cardinality = AT_LEAST_ONE, policyOption = GREEDY,
+		cardinality = MULTIPLE, policyOption = GREEDY,
 		target = "(liferay.vulcan.message.body.writer=true)"
 	)
 	public <T> void setMessageBodyWriter(
