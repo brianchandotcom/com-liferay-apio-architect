@@ -142,14 +142,16 @@ public abstract class BaseManager<T> {
 
 		beforeRemovingConsumer.accept(service);
 
-		serviceReferenceServiceTuples.removeIf(
-			serviceReferenceServiceTuple -> {
-				if (serviceReferenceServiceTuple.getService() == service) {
-					return true;
-				}
+		if (serviceReferenceServiceTuples != null) {
+			serviceReferenceServiceTuples.removeIf(
+				serviceReferenceServiceTuple -> {
+					if (serviceReferenceServiceTuple.getService() == service) {
+						return true;
+					}
 
-				return false;
-			});
+					return false;
+				});
+		}
 
 		return genericClass;
 	}
