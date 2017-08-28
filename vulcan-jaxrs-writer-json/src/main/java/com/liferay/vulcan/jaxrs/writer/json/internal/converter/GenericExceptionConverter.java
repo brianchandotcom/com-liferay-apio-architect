@@ -33,7 +33,7 @@ public class GenericExceptionConverter
 	@Override
 	public APIError convert(Exception exception) {
 		return new APIErrorImpl(
-			"General server error", "server-error",
+			exception, "General server error", "server-error",
 			INTERNAL_SERVER_ERROR.getStatusCode());
 	}
 

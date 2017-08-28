@@ -16,21 +16,27 @@ package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
 
 import com.liferay.vulcan.result.APIError;
 
+import java.util.Optional;
+
 /**
  * @author Alejandro Hernández
  */
 public class APIErrorImpl implements APIError {
 
-	public APIErrorImpl(String title, String type, int statusCode) {
+	public APIErrorImpl(
+		Exception exception, String title, String type, int statusCode) {
+
+		_exception = exception;
 		_title = title;
 		_type = type;
-		_description = "";
 		_statusCode = statusCode;
 	}
 
 	public APIErrorImpl(
-		String title, String description, String type, int statusCode) {
+		Exception exception, String title, String description, String type,
+		int statusCode) {
 
+		_exception = exception;
 		_title = title;
 		_description = description;
 		_type = type;
@@ -38,8 +44,13 @@ public class APIErrorImpl implements APIError {
 	}
 
 	@Override
-	public String getDescription() {
-		return _description;
+	public Optional<String> getDescription() {
+		return Optional.ofNullable(_description);
+	}
+
+	@Override
+	public Exception getException() {
+		return _exception;
 	}
 
 	@Override
@@ -57,7 +68,8 @@ public class APIErrorImpl implements APIError {
 		return _type;
 	}
 
-	private final String _description;
+	private String _description;
+	private final Exception _exception;
 	private final int _statusCode;
 	private final String _title;
 	private final String _type;

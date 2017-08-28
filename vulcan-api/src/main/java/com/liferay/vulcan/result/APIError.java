@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.result;
 
+import java.util.Optional;
+
 /**
  * Instances of this interface describe an API error. Thrown {@link
  * javax.ws.rs.WebApplicationException} and descendants will be converted to a
@@ -25,30 +27,39 @@ package com.liferay.vulcan.result;
 public interface APIError {
 
 	/**
-	 * The description of this {@code APIError}. Specific to this {@code
-	 * APIError} instance.
+	 * Returns the description of this {@code APIError}, specific to this {@code
+	 * APIError} instance, if present. Returns {@code Optional#empty()}
+	 * otherwise.
 	 *
-	 * @return the description of this error.
+	 * @return the description of this error if present; {@code
+	 *         Optional#empty()} otherwise.
 	 */
-	public String getDescription();
+	public Optional<String> getDescription();
 
 	/**
-	 * The HTTP status code for this {@code APIError}.
+	 * Returns the original exception of this error.
+	 *
+	 * @return the original exception of this error.
+	 */
+	public Exception getException();
+
+	/**
+	 * Returns the HTTP status code for this {@code APIError}.
 	 *
 	 * @return the http status code of this error.
 	 */
 	public int getStatusCode();
 
 	/**
-	 * The title of this {@code APIError}. The same for all {@code APIErrors} of
-	 * the same type.
+	 * Returns the title of this {@code APIError}. The same for all {@code
+	 * APIErrors} of the same type.
 	 *
 	 * @return the title of this error.
 	 */
 	public String getTitle();
 
 	/**
-	 * The type of this error. Identifies errors with the same meaning.
+	 * Returns the type of this error. Identifies errors with the same meaning.
 	 *
 	 * @return the type of this error.
 	 */
