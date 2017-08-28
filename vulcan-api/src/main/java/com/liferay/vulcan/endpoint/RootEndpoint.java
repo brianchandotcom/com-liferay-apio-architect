@@ -19,6 +19,8 @@ import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.Try;
 
+import java.io.InputStream;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -40,6 +42,35 @@ import javax.ws.rs.PathParam;
  * @author Jorge Ferrer
  */
 public interface RootEndpoint {
+
+	/**
+	 * Returns the {@link InputStream} for a given resource identifier or an
+	 * exception if an error occurred.
+	 *
+	 * @param  path the path from the URL.
+	 * @param  id the id to the resource.
+	 * @param  binaryResourceId the id to the binary resource.
+	 * @return the input stream of the binary file, or an exception it there was an
+	 *         error.
+	 */
+	@GET
+	@Path("/p/{path}/{id}/{binaryResourceId}")
+	public default <T> Try<InputStream> getBinaryResource(
+		@PathParam("path") String path, @PathParam("id") String id,
+		@PathParam("binaryResourceId") String binaryResourceId) {
+
+		Try<Routes<T>> routesTry = getRoutes(path);
+
+		Try<SingleModel<T>> collectionItemSingleModel =
+			getCollectionItemSingleModel(path, id);
+
+		return collectionItemSingleModel.map(
+			SingleModel::getModel
+		).flatMap(
+			model -> getRouteForBinaryResource(
+				routesTry, binaryResourceId, model)
+		);
+	}
 
 	/**
 	 * Returns the {@link SingleModel} for a given path or an exception if an
@@ -92,6 +123,33 @@ public interface RootEndpoint {
 			() -> new NotFoundException("No endpoint found at path: " + path)
 		).map(
 			Supplier::get
+		);
+	}
+
+	/**
+	 * Returns the {@link InputStream} for a given resource identifier or an
+	 * exception if an error occurred.
+	 *
+	 * @param  routesTry the try of routes
+	 * @param  binaryResourceId the id to the binary resource.
+	 * @param  model the entity that contains the binary resource
+	 * @return the input stream of the binary resource, or an exception it there was an
+	 *         error.
+	 */
+	public default <T> Try<InputStream> getRouteForBinaryResource(
+		Try<Routes<T>> routesTry, String binaryResourceId, T model) {
+
+		return routesTry.map(
+			Routes::getBinaryResourceOptional
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NullPointerException.class,
+			() -> new NotFoundException(
+				"No endpoint found at path: " + binaryResourceId)
+		).map(
+			singleModelFunction -> singleModelFunction.apply(
+				model, binaryResourceId)
 		);
 	}
 
