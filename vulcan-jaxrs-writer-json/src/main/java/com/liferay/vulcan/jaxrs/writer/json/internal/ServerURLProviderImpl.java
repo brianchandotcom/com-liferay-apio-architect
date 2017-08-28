@@ -35,8 +35,8 @@ public class ServerURLProviderImpl implements ServerURLProvider {
 	 * Returns the original url of the request without proxy redirection
 	 *
 	 * @param  httpServletRequest the http request
-	 * @return an URL built based on the forwarded host header if exist
-	 *         or the serverName
+	 * @return an URL built based on the forwarded host header if exist or the
+	 *         serverName
 	 */
 	public String getServerURL(HttpServletRequest httpServletRequest) {
 		StringBuilder sb = new StringBuilder(httpServletRequest.getScheme());
