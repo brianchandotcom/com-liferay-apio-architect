@@ -20,6 +20,8 @@ import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 
+import java.io.InputStream;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +42,9 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		Map<String, Function<?, Object>> fieldFunctions,
 		List<RelatedModel<?, ?>> embeddedRelatedModels,
 		List<RelatedModel<?, ?>> linkedRelatedModels, Map<String, String> links,
-		List<RelatedCollection<?, ?>> relatedCollections, List<String> types) {
+		List<RelatedCollection<?, ?>> relatedCollections,
+		Map<String, Function<?, InputStream>> binaryResources,
+		List<String> types) {
 
 		_modelClass = modelClass;
 		_identifierFunctions = identifierFunctions;
@@ -50,6 +54,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		_linkedRelatedModels = linkedRelatedModels;
 		_links = links;
 		_relatedCollections = relatedCollections;
+		_binaryResources = binaryResources;
 		_types = types;
 	}
 
@@ -70,6 +75,15 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 
 				_addRelatedCollectionTriConsumer.accept(
 					relatedKey, modelClass, filterFunction);
+
+				return this;
+			}
+
+			@Override
+			public <S> FirstStep<T> addBinaryResource(
+				String key, Function<T, InputStream> modelFunction) {
+
+				_binaryResources.put(key, modelFunction);
 
 				return this;
 			}
@@ -136,6 +150,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	private final TriConsumer
 		<String, Class<?>, Function<?, QueryParamFilterType>>
 			_addRelatedCollectionTriConsumer;
+	private final Map<String, Function<?, InputStream>> _binaryResources;
 	private final List<RelatedModel<?, ?>> _embeddedRelatedModels;
 	private final Map<String, Function<?, Object>> _fieldFunctions;
 	private final Map<String, Function<?, String>> _identifierFunctions;

@@ -16,6 +16,8 @@ package com.liferay.vulcan.resource.builder;
 
 import com.liferay.vulcan.filter.QueryParamFilterType;
 
+import java.io.InputStream;
+
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -64,6 +66,14 @@ public interface RepresentorBuilder<T> {
 			String key, String relatedKey, Class<S> modelClass,
 			Function<T, Optional<S>> modelFunction,
 			Function<S, QueryParamFilterType> filterFunction);
+
+		/**
+		 * @param key     		 name of the binary resource
+		 * @param modelFunction  function used to obtain the related model.
+		 * @return builder's actual step.
+		 */
+		public <S> FirstStep<T> addBinaryResource(
+			String key, Function<T, InputStream> modelFunction);
 
 		/**
 		 * Use this method to provide information of an embeddable related
