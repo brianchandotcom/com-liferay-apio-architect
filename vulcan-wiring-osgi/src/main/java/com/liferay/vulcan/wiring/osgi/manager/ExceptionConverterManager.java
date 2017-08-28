@@ -39,8 +39,12 @@ public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
 	/**
 	 * Converts an exception to its generic {@code APIError} representation. If
 	 * no {@link ExceptionConverter} can be found for the actual exception
-	 * class, a generic converter ({@code ExceptionConverter<Exception>} will be
-	 * used.
+	 * class, it tries to use the superclass {@link ExceptionConverter}.
+	 *
+	 * <p>
+	 * If non {@link ExceptionConverter} can be found a generic converter
+	 * ({@code ExceptionConverter<Exception>} will be used.
+	 * </p>
 	 *
 	 * @param  exception the exception to be converted.
 	 * @return the corresponding error, if a valid {@link ExceptionConverter} is
@@ -64,17 +68,20 @@ public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
 	}
 
 	private <T extends Exception> Optional<APIError> _convert(
-		T exception, Class<T> clazz) {
+		T exception, Class<T> exceptionClass) {
 
-		Optional<ExceptionConverter> optional = getServiceOptional(clazz);
+		Optional<ExceptionConverter> optional = getServiceOptional(
+			exceptionClass);
 
 		if (!optional.isPresent()) {
-			if (!clazz.isAssignableFrom(Exception.class)) {
-				return _convert(exception, Exception.class);
-			}
-			else {
-				return Optional.empty();
-			}
+			Optional<Class<?>> classOptional = Optional.ofNullable(
+				exceptionClass.getSuperclass());
+
+			return classOptional.filter(
+				Exception.class::isAssignableFrom
+			).flatMap(
+				clazz -> _convert(exception, (Class<T>)clazz)
+			);
 		}
 
 		return optional.map(
