@@ -19,6 +19,7 @@ import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +46,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		return optionalTry.map(
 			Optional::get
 		).mapFailMatching(
-			NullPointerException.class,
+			NoSuchElementException.class,
 			() -> new NotFoundException("No resource found for path: " + path)
 		);
 	}
