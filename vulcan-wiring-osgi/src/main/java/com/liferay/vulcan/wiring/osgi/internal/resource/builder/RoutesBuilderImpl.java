@@ -37,6 +37,9 @@ import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.internal.pagination.PageImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
 
+import java.io.InputStream;
+
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -68,6 +71,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	@Override
 	public Routes<T> build() {
 		return _routesImpl;
+	}
+
+	public <U> RoutesBuilder<T> collectionBinaryResource(
+		Map<String, Function<T, InputStream>> biFunction) {
+
+		_routesImpl.setBinaryResourceFunction(
+			(T object, String key) -> biFunction.get(key).apply(object));
+
+		return this;
 	}
 
 	@Override

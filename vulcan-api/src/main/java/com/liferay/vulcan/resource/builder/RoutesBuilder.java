@@ -28,6 +28,9 @@ import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Routes;
 
+import java.io.InputStream;
+
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -47,6 +50,15 @@ public interface RoutesBuilder<T> {
 	 * @return the <code>Routes</code> instance.
 	 */
 	public Routes<T> build();
+
+	/**
+	 * Adds a route related to a binary resource that is contained in the model
+	 *
+	 * @param  biFunction the function that will be used to return the binary resource.
+	 * @return the updated builder.
+	 */
+	public <U> RoutesBuilder<T> collectionBinaryResource(
+		Map<String, Function<T, InputStream>> biFunction);
 
 	/**
 	 * Adds a route to a single model function.
