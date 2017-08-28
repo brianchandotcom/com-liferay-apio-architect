@@ -38,6 +38,8 @@ import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 
+import java.io.InputStream;
+
 import java.net.URI;
 
 import java.util.List;
@@ -236,6 +238,38 @@ public class WriterHelper {
 		).map(
 			uri -> getAbsoluteURL(httpServletRequest, uri)
 		);
+	}
+
+	/**
+	 * Helper method to write binary resources. It uses a biconsumer so each {@link
+	 * javax.ws.rs.ext.MessageBodyWriter} can write each field differently.
+	 *
+	 * @param model      an instance of the model.
+	 * @param modelClass the model class.
+	 * @param biConsumer the consumer that will be called to write each field.
+	 */
+	public <T> void writeBinaryResources(
+		Map<String, Function<T, InputStream>> binaryResources,
+		Class<T> modelClass, T model, UriInfo uriInfo,
+		BiConsumer<String, Object> biConsumer) {
+
+		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
+			modelClass);
+
+		String identifier = _resourceManager.getIdentifier(modelClass, model);
+
+		if (binaryResources != null) {
+			for (Map.Entry<String, Function<T, InputStream>> entry :
+					binaryResources.entrySet()) {
+
+				String identifierWithKey = identifier + "/" + entry.getKey();
+
+				Optional<String> url = _getUrl(
+					modelClass, model, uriInfo, optional, identifierWithKey);
+
+				url.ifPresent(y -> biConsumer.accept(entry.getKey(), y));
+			}
+		}
 	}
 
 	/**
@@ -511,6 +545,24 @@ public class WriterHelper {
 				uri
 			);
 		};
+	}
+
+	private <T> Optional<String> _getUrl(
+		Class<T> modelClass, T model, UriInfo uriInfo,
+		Optional<Resource<T>> optional, String identifier) {
+
+		return optional.map(
+			Resource::getPath
+		).map(
+			path -> "/p/" + path + "/" + identifier
+		).map(
+			_getTransformURIFunction(
+				(uri, transformer) ->
+					transformer.transformCollectionItemSingleResourceURI(
+						uri, modelClass, model))
+		).map(
+			uri -> getAbsoluteURL(uriInfo, uri)
+		);
 	}
 
 	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
