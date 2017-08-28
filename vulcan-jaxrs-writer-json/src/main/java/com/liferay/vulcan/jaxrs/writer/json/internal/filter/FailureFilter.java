@@ -16,6 +16,7 @@ package com.liferay.vulcan.jaxrs.writer.json.internal.filter;
 
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveExceptionConverter;
 import com.liferay.vulcan.jaxrs.writer.json.internal.writer.WriterHelper;
+import com.liferay.vulcan.logger.VulcanLogger;
 import com.liferay.vulcan.message.json.ErrorMessageMapper;
 import com.liferay.vulcan.result.APIError;
 import com.liferay.vulcan.result.Try;
@@ -67,6 +68,8 @@ public class FailureFilter implements ContainerResponseFilter {
 			APIError apiError = optional.orElseThrow(
 				() -> new MustHaveExceptionConverter(exception.getClass()));
 
+			_vulcanLogger.error(apiError);
+
 			ErrorMessageMapper errorMessageMapper =
 				_errorMessageMapperManager.getErrorMessageMapper(
 					apiError, _httpHeaders);
@@ -93,5 +96,8 @@ public class FailureFilter implements ContainerResponseFilter {
 
 	@Context
 	private HttpHeaders _httpHeaders;
+
+	@Reference
+	private VulcanLogger _vulcanLogger;
 
 }
