@@ -27,6 +27,8 @@ import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImp
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 
+import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +55,18 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true, service = ResourceManager.class)
 public class ResourceManager extends BaseManager<Resource> {
+
+	/**
+	 * Returns the binary resources linked to a model
+	 *
+	 * @param  modelClass class name indexing the binary resources
+	 * @return the binary resources for the model class
+	 */
+	public <T> Map<String, Function<T, InputStream>>
+		getBinaryResources(Class<T> modelClass) {
+
+		return (Map)_binaryResources.get(modelClass.getName());
+	}
 
 	/**
 	 * Returns the model class name, exposed in a certain path.
@@ -254,19 +268,25 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		_types.put(modelClass.getName(), types);
 
+		Map<String, Function<T, InputStream>> binaryResources = new HashMap<>();
+
+		_binaryResources.put(modelClass.getName(), (Map)binaryResources);
+
 		Optional<Resource<T>> optional = getResourceOptional(modelClass);
 
 		optional.ifPresent(
 			resource -> {
 				resource.buildRepresentor(
-					new RepresentorBuilderImpl<>(
+					new RepresentorBuilderImpl(
 						modelClass, _identifierFunctions,
 						_addRelatedCollectionTriConsumer(modelClass),
 						fieldFunctions, embeddedRelatedModels,
-						linkedRelatedModels, links, relatedCollections, types));
+						linkedRelatedModels, links, relatedCollections,
+						binaryResources, types));
 
 				_routesFunctions.put(
-					resource.getPath(), _getRoutes(modelClass, resource));
+					resource.getPath(),
+					_getRoutes(modelClass, resource, binaryResources));
 			});
 	}
 
@@ -330,9 +350,12 @@ public class ResourceManager extends BaseManager<Resource> {
 		_identifierFunctions.remove(modelClass.getName());
 		_linkedRelatedModels.remove(modelClass.getName());
 		_links.remove(modelClass.getName());
+		_binaryResources.remove(modelClass.getName());
 		_types.remove(modelClass.getName());
 	}
 
+	private final Map<String, Map<String, Function<?, InputStream>>>
+		_binaryResources = new ConcurrentHashMap<>();
 	private final Map<String, String> _classNames = new ConcurrentHashMap<>();
 
 	@Reference
