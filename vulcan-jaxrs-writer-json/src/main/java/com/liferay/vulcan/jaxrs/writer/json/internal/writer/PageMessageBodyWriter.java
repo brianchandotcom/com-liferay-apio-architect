@@ -23,7 +23,6 @@ import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
-import com.liferay.vulcan.provider.ServerURLProvider;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.Try;
@@ -53,7 +52,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
@@ -164,7 +162,7 @@ public class PageMessageBodyWriter<T>
 
 	private String _getCollectionURL(Class<T> modelClass) {
 		Optional<String> optional = _writerHelper.getCollectionURLOptional(
-			modelClass, _uriInfo);
+			modelClass, _httpServletRequest);
 
 		return optional.orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
@@ -198,7 +196,7 @@ public class PageMessageBodyWriter<T>
 
 		_writerHelper.writeRelatedModel(
 			relatedModel, parentModel, parentModelClass,
-			parentEmbeddedPathElements, _uriInfo, fields, embedded,
+			parentEmbeddedPathElements, _httpServletRequest, fields, embedded,
 			(model, modelClass, embeddedPathElements) -> {
 				_writerHelper.writeFields(
 					model, modelClass, fields,
@@ -295,7 +293,7 @@ public class PageMessageBodyWriter<T>
 						jsonObjectBuilder, itemJSONObjectBuilder, types));
 
 				_writerHelper.writeSingleResourceURL(
-					item, modelClass, _uriInfo,
+					item, modelClass, _httpServletRequest,
 					url -> pageMessageMapper.mapItemSelfURL(
 						jsonObjectBuilder, itemJSONObjectBuilder, url));
 
@@ -351,7 +349,7 @@ public class PageMessageBodyWriter<T>
 
 		_writerHelper.writeLinkedRelatedModel(
 			relatedModel, parentModel, parentModelClass,
-			parentEmbeddedPathElements, _uriInfo, fields, embedded,
+			parentEmbeddedPathElements, _httpServletRequest, fields, embedded,
 			(url, embeddedPathElements) ->
 				pageMessageMapper.mapItemLinkedResourceURL(
 					pageJSONObjectBuilder, itemJSONObjectBuilder,
@@ -413,7 +411,7 @@ public class PageMessageBodyWriter<T>
 
 		_writerHelper.writeRelatedCollection(
 			relatedCollection, parentModel, parentModelClass,
-			parentEmbeddedPathElements, _uriInfo, fields,
+			parentEmbeddedPathElements, _httpServletRequest, fields,
 			(url, embeddedPathElements) ->
 				pageMessageMapper.mapItemLinkedResourceURL(
 					pageJSONObjectBuilder, itemJSONObjectBuilder,
@@ -437,9 +435,6 @@ public class PageMessageBodyWriter<T>
 
 	@Reference
 	private ResourceManager _resourceManager;
-
-	@Context
-	private UriInfo _uriInfo;
 
 	@Reference
 	private WriterHelper _writerHelper;

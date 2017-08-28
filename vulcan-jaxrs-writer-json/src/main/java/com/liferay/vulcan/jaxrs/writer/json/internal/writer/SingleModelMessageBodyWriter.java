@@ -24,7 +24,6 @@ import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.SingleModelMessageMapper;
 import com.liferay.vulcan.pagination.SingleModel;
-import com.liferay.vulcan.provider.ServerURLProvider;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.Try;
@@ -52,7 +51,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
@@ -158,7 +156,7 @@ public class SingleModelMessageBodyWriter<T>
 
 		_writerHelper.writeRelatedModel(
 			relatedModel, parentModel, parentModelClass,
-			parentEmbeddedPathElements, _uriInfo, fields, embedded,
+			parentEmbeddedPathElements, _httpServletRequest, fields, embedded,
 			(model, modelClass, embeddedPathElements) -> {
 				_writerHelper.writeFields(
 					model, modelClass, fields,
@@ -227,7 +225,7 @@ public class SingleModelMessageBodyWriter<T>
 
 		_writerHelper.writeLinkedRelatedModel(
 			relatedModel, parentModel, parentModelClass,
-			parentEmbeddedPathElements, _uriInfo, fields, embedded,
+			parentEmbeddedPathElements, _httpServletRequest, fields, embedded,
 			(url, embeddedPathElements) ->
 				singleModelMessageMapper.mapLinkedResourceURL(
 					jsonObjectBuilder, embeddedPathElements, url));
@@ -257,7 +255,7 @@ public class SingleModelMessageBodyWriter<T>
 				jsonObjectBuilder, types));
 
 		_writerHelper.writeSingleResourceURL(
-			model, modelClass, _uriInfo,
+			model, modelClass, _httpServletRequest,
 			url -> singleModelMessageMapper.mapSelfURL(jsonObjectBuilder, url));
 
 		List<RelatedModel<U, ?>> embeddedRelatedModels =
@@ -298,7 +296,7 @@ public class SingleModelMessageBodyWriter<T>
 
 		_writerHelper.writeRelatedCollection(
 			relatedCollection, parentModel, parentModelClass,
-			parentEmbeddedPathElements, _uriInfo, fields,
+			parentEmbeddedPathElements, _httpServletRequest, fields,
 			(url, embeddedPathElements) ->
 				singleModelMessageMapper.mapLinkedResourceURL(
 					jsonObjectBuilder, embeddedPathElements, url));
@@ -318,9 +316,6 @@ public class SingleModelMessageBodyWriter<T>
 
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
 	private List<SingleModelMessageMapper<T>> _singleModelMessageMappers;
-
-	@Context
-	private UriInfo _uriInfo;
 
 	@Reference
 	private WriterHelper _writerHelper;

@@ -27,6 +27,7 @@ import com.liferay.vulcan.jaxrs.writer.json.internal.StringFunctionalList;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.ErrorMessageMapper;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
+import com.liferay.vulcan.provider.ServerURLProvider;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
@@ -50,9 +51,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.servlet.http.HttpServletRequest;
+
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -105,12 +107,16 @@ public class WriterHelper {
 	/**
 	 * Returns the absolute URL from a relative URI.
 	 *
-	 * @param  uriInfo uri info of the actual request.
+	 * @param  httpServletRequest the actual http servlet request.
 	 * @param  relativeURI a relative URI.
 	 * @return the absolute URL.
 	 */
-	public String getAbsoluteURL(UriInfo uriInfo, String relativeURI) {
-		UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
+	public String getAbsoluteURL(
+		HttpServletRequest httpServletRequest, String relativeURI) {
+
+		String serverURL = _serverURLProvider.getServerURL(httpServletRequest);
+
+		UriBuilder uriBuilder = UriBuilder.fromPath(serverURL);
 
 		uriBuilder = uriBuilder.clone();
 
@@ -126,12 +132,12 @@ public class WriterHelper {
 	 * that model class cannot be found, returns <code>Optional#empty()</code>.
 	 *
 	 * @param  modelClass the model class of the {@link Resource}.
-	 * @param  uriInfo uri info of the actual request.
+	 * @param  httpServletRequest the actual http servlet request.
 	 * @return the collection URL if a {@link Resource} for the model class can
 	 *         be found; <code>Optional#empty()</code> otherwise.
 	 */
 	public <T> Optional<String> getCollectionURLOptional(
-		Class<T> modelClass, UriInfo uriInfo) {
+		Class<T> modelClass, HttpServletRequest httpServletRequest) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
 			modelClass);
@@ -145,7 +151,7 @@ public class WriterHelper {
 				(uri, transformer) -> transformer.transformPageURI(
 					uri, modelClass))
 		).map(
-			uri -> getAbsoluteURL(uriInfo, uri)
+			uri -> getAbsoluteURL(httpServletRequest, uri)
 		);
 	}
 
@@ -156,16 +162,17 @@ public class WriterHelper {
 	 *
 	 * @param  modelClass the model class of the {@link Resource}.
 	 * @param  queryParamFilterType the filter type applied to this collection.
-	 * @param  uriInfo uri info of the actual request.
+	 * @param  httpServletRequest the actual http servlet request.
 	 * @return the collection URL if a {@link Resource} for the model class can
 	 *         be found; <code>Optional#empty()</code> otherwise.
 	 */
 	public <T, Q extends QueryParamFilterType> Optional<String>
 		getFilteredCollectionURLOptional(
-			Class<T> modelClass, Q queryParamFilterType, UriInfo uriInfo) {
+			Class<T> modelClass, Q queryParamFilterType,
+			HttpServletRequest httpServletRequest) {
 
 		Optional<String> optional = getCollectionURLOptional(
-			modelClass, uriInfo);
+			modelClass, httpServletRequest);
 
 		return optional.map(
 			url -> {
@@ -205,12 +212,12 @@ public class WriterHelper {
 	 *
 	 * @param  modelClass the model class of the {@link Resource}.
 	 * @param  model an instance of the model
-	 * @param  uriInfo uri info of the actual request.
+	 * @param  httpServletRequest the actual http servlet request.
 	 * @return the single URL if a {@link Resource} for the model class can be
 	 *         found; <code>Optional#empty()</code> otherwise.
 	 */
 	public <T> Optional<String> getSingleURLOptional(
-		Class<T> modelClass, T model, UriInfo uriInfo) {
+		Class<T> modelClass, T model, HttpServletRequest httpServletRequest) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
 			modelClass);
@@ -227,7 +234,7 @@ public class WriterHelper {
 					transformer.transformCollectionItemSingleResourceURI(
 						uri, modelClass, model))
 		).map(
-			uri -> getAbsoluteURL(uriInfo, uri)
+			uri -> getAbsoluteURL(httpServletRequest, uri)
 		);
 	}
 
@@ -272,7 +279,7 @@ public class WriterHelper {
 	 * @param parentModel the instance of the parent model.
 	 * @param parentModelClass the parent model class.
 	 * @param parentEmbeddedPathElements list of embedded path elements.
-	 * @param uriInfo uri info of the actual request.
+	 * @param httpServletRequest the actual http servlet request.
 	 * @param fields the requested fields.
 	 * @param embedded the embedded resources info.
 	 * @param biConsumer the consumer that will be called to write the related
@@ -281,13 +288,13 @@ public class WriterHelper {
 	public <T, U> void writeLinkedRelatedModel(
 		RelatedModel<T, U> relatedModel, T parentModel,
 		Class<T> parentModelClass,
-		FunctionalList<String> parentEmbeddedPathElements, UriInfo uriInfo,
-		Fields fields, Embedded embedded,
+		FunctionalList<String> parentEmbeddedPathElements,
+		HttpServletRequest httpServletRequest, Fields fields, Embedded embedded,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
 		writeRelatedModel(
 			relatedModel, parentModel, parentModelClass,
-			parentEmbeddedPathElements, uriInfo, fields, embedded,
+			parentEmbeddedPathElements, httpServletRequest, fields, embedded,
 			(model, modelClass, embeddedPathElements) -> {
 			},
 			(url, embeddedPathElements, isEmbedded) -> biConsumer.accept(
@@ -326,7 +333,7 @@ public class WriterHelper {
 	 * @param parentModel the instance of the parent model.
 	 * @param parentModelClass the parent model class.
 	 * @param parentEmbeddedPathElements list of embedded path elements.
-	 * @param uriInfo uri info of the actual request.
+	 * @param httpServletRequest the actual http servlet request.
 	 * @param fields the requested fields.
 	 * @param biConsumer the consumer that will be called to write the related
 	 *        collection URL.
@@ -334,8 +341,9 @@ public class WriterHelper {
 	public <U, V> void writeRelatedCollection(
 		RelatedCollection<U, V> relatedCollection, U parentModel,
 		Class<U> parentModelClass,
-		FunctionalList<String> parentEmbeddedPathElements, UriInfo uriInfo,
-		Fields fields, BiConsumer<String, FunctionalList<String>> biConsumer) {
+		FunctionalList<String> parentEmbeddedPathElements,
+		HttpServletRequest httpServletRequest, Fields fields,
+		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
 		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			parentModelClass, fields);
@@ -355,7 +363,7 @@ public class WriterHelper {
 		Class<V> modelClass = relatedCollection.getModelClass();
 
 		Optional<String> optional = getFilteredCollectionURLOptional(
-			modelClass, queryParamFilterType, uriInfo);
+			modelClass, queryParamFilterType, httpServletRequest);
 
 		optional.ifPresent(
 			url -> {
@@ -376,7 +384,7 @@ public class WriterHelper {
 	 * @param parentModel the instance of the parent model.
 	 * @param parentModelClass the parent model class.
 	 * @param parentEmbeddedPathElements list of embedded path elements.
-	 * @param uriInfo uri info of the actual request.
+	 * @param httpServletRequest the actual http servlet request.
 	 * @param fields the requested fields.
 	 * @param embedded the embedded resources info.
 	 * @param modelTriConsumer the consumer that will be called to write the
@@ -387,8 +395,8 @@ public class WriterHelper {
 	public <T, U> void writeRelatedModel(
 		RelatedModel<T, U> relatedModel, T parentModel,
 		Class<T> parentModelClass,
-		FunctionalList<String> parentEmbeddedPathElements, UriInfo uriInfo,
-		Fields fields, Embedded embedded,
+		FunctionalList<String> parentEmbeddedPathElements,
+		HttpServletRequest httpServletRequest, Fields fields, Embedded embedded,
 		TriConsumer<U, Class<U>, FunctionalList<String>> modelTriConsumer,
 		TriConsumer<String, FunctionalList<String>, Boolean> urlTriConsumer) {
 
@@ -415,7 +423,7 @@ public class WriterHelper {
 		Class<U> modelClass = relatedModel.getModelClass();
 
 		Optional<String> singleURLOptional = getSingleURLOptional(
-			modelClass, model, uriInfo);
+			modelClass, model, httpServletRequest);
 
 		singleURLOptional.ifPresent(
 			url -> {
@@ -449,15 +457,15 @@ public class WriterHelper {
 	 *
 	 * @param model the instance of the model.
 	 * @param modelClass the model class.
-	 * @param uriInfo uri info of the actual request.
+	 * @param httpServletRequest the actual http servlet request.
 	 * @param consumer the consumer that will be called to write the URL.
 	 */
 	public <T> void writeSingleResourceURL(
-		T model, Class<T> modelClass, UriInfo uriInfo,
+		T model, Class<T> modelClass, HttpServletRequest httpServletRequest,
 		Consumer<String> consumer) {
 
 		Optional<String> singleURLOptional = getSingleURLOptional(
-			modelClass, model, uriInfo);
+			modelClass, model, httpServletRequest);
 
 		String singleURL = singleURLOptional.orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
@@ -513,5 +521,8 @@ public class WriterHelper {
 
 	@Reference
 	private ResourceManager _resourceManager;
+
+	@Reference
+	private ServerURLProvider _serverURLProvider;
 
 }
