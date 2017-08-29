@@ -152,7 +152,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"No blogs entry exists with ID " + id, e);
+				"Unable to get blogs entry " + id, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -178,7 +178,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		}
 		catch (NoSuchGroupException nsge) {
 			throw new NotFoundException(
-				"No group exists with ID " + groupId, nsge);
+				"Unable to get group " + groupId, nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -205,7 +205,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		}
 		catch (NoSuchUserException | PrincipalException e) {
 			throw new NotFoundException(
-				"No user exists with ID " + userId, e);
+				"Unable to get user " + userId, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

@@ -162,7 +162,7 @@ public class CommentResource implements Resource<Comment> {
 		}
 		catch (NoSuchUserException | PrincipalException e) {
 			throw new NotFoundException(
-				"No User can be found with id: " + userId, e);
+				"Unable to get user " + userId, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
