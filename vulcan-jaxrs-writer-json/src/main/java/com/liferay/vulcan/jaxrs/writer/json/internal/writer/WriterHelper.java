@@ -250,7 +250,7 @@ public class WriterHelper {
 	 */
 	public <T> void writeBinaryResources(
 		Map<String, Function<T, InputStream>> binaryResources,
-		Class<T> modelClass, T model, UriInfo uriInfo,
+		Class<T> modelClass, T model, HttpServletRequest httpServletRequest,
 		BiConsumer<String, Object> biConsumer) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
@@ -265,7 +265,8 @@ public class WriterHelper {
 				String identifierWithKey = identifier + "/" + entry.getKey();
 
 				Optional<String> url = _getUrl(
-					modelClass, model, uriInfo, optional, identifierWithKey);
+					modelClass, model, httpServletRequest, optional,
+					identifierWithKey);
 
 				url.ifPresent(y -> biConsumer.accept(entry.getKey(), y));
 			}
@@ -548,7 +549,7 @@ public class WriterHelper {
 	}
 
 	private <T> Optional<String> _getUrl(
-		Class<T> modelClass, T model, UriInfo uriInfo,
+		Class<T> modelClass, T model, HttpServletRequest httpServletRequest,
 		Optional<Resource<T>> optional, String identifier) {
 
 		return optional.map(
@@ -561,7 +562,7 @@ public class WriterHelper {
 					transformer.transformCollectionItemSingleResourceURI(
 						uri, modelClass, model))
 		).map(
-			uri -> getAbsoluteURL(uriInfo, uri)
+			uri -> getAbsoluteURL(httpServletRequest, uri)
 		);
 	}
 
