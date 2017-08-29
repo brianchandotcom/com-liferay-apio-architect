@@ -271,7 +271,7 @@ public interface PageMessageMapper<T> {
 	 * @param jsonObjectBuilder the json object builder for the page.
 	 * @param page the actual page.
 	 * @param modelClass the model class of the page.
-	 * @param httpHeaders the http headers of the current request.
+	 * @param httpHeaders the HTTP headers of the current request.
 	 */
 	public default void onFinish(
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
@@ -286,7 +286,7 @@ public interface PageMessageMapper<T> {
 	 * @param itemJSONObjectBuilder the json object builder for the item.
 	 * @param item the actual item.
 	 * @param modelClass the model class of the item.
-	 * @param httpHeaders the http headers of the current request.
+	 * @param httpHeaders the HTTP headers of the current request.
 	 */
 	public default void onFinishItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -300,7 +300,7 @@ public interface PageMessageMapper<T> {
 	 * @param jsonObjectBuilder the json object builder for the page.
 	 * @param page the actual page.
 	 * @param modelClass the model class of the page.
-	 * @param httpHeaders the http headers of the current request.
+	 * @param httpHeaders the HTTP headers of the current request.
 	 */
 	public default void onStart(
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
@@ -314,7 +314,7 @@ public interface PageMessageMapper<T> {
 	 * @param itemJSONObjectBuilder the json object builder for the item.
 	 * @param item the actual item.
 	 * @param modelClass the model class of the item.
-	 * @param httpHeaders the http headers of the current request.
+	 * @param httpHeaders the HTTP headers of the current request.
 	 */
 	public default void onStartItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -328,7 +328,7 @@ public interface PageMessageMapper<T> {
 	 *
 	 * @param  page the actual page.
 	 * @param  modelClass the model class of the page.
-	 * @param  httpHeaders the http headers of the current request.
+	 * @param  httpHeaders the HTTP headers of the current request.
 	 * @return <code>true</code> if mapper supports mapping this request;
 	 *         <code>false</code> otherwise.
 	 */

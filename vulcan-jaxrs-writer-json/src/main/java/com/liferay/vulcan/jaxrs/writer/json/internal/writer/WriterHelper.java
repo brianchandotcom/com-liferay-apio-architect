@@ -76,7 +76,7 @@ public class WriterHelper {
 	 * @param  errorMessageMapper the correct {@code ErrorMessageMapper} for
 	 *         this combination of {@code APIError}/{@code HttpHeaders}.
 	 * @param  apiError an instance of the apiError.
-	 * @param  httpHeaders the http headers of the current request.
+	 * @param  httpHeaders the HTTP headers of the current request.
 	 * @return the apiError written in a JSON string.
 	 */
 	public static String writeError(
