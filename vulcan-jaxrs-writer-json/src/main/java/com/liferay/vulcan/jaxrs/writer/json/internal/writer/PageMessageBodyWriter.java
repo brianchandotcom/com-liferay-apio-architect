@@ -102,13 +102,14 @@ public class PageMessageBodyWriter<T>
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
-		Page<T> page = success.getValue();
-
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
 		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
+
+		Page<T> page = success.getValue();
+
 		Class<T> modelClass = page.getModelClass();
 
 		PageMessageMapper<T> pageMessageMapper = stream.filter(
