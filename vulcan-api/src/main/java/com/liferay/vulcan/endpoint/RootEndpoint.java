@@ -62,7 +62,7 @@ public interface RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path: " + path)
+			() -> new NotFoundException("No endpoint found at path " + path)
 		).map(
 			singleModelFunction -> singleModelFunction.apply(id)
 		);
