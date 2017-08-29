@@ -28,14 +28,6 @@ import java.lang.reflect.Type;
  */
 public class GenericUtil {
 
-	/**
-	 * Given a type denoted by {@code T<S>} returns S class or an exception, if
-	 * the class couldn't be get.
-	 *
-	 * @param  clazz class of the actual instance.
-	 * @param  interfaceClass class of type T.
-	 * @return class of type S, or an exception, if the class couldn't be get.
-	 */
 	public static <T, S> Try<Class<S>> getGenericClassTry(
 		Class<?> clazz, Class<T> interfaceClass) {
 
@@ -56,14 +48,6 @@ public class GenericUtil {
 				clazz.getSuperclass(), interfaceClass));
 	}
 
-	/**
-	 * Given a type denoted by {@code T<S>} returns S class or an exception, if
-	 * the class couldn't be get.
-	 *
-	 * @param  type type of the actual instance.
-	 * @param  clazz class of type T.
-	 * @return class of type S, or an exception, if the class couldn't be get.
-	 */
 	public static <T, S> Try<Class<S>> getGenericClassTry(
 		Type type, Class<T> clazz) {
 
