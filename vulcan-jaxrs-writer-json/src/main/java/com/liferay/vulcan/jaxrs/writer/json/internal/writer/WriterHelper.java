@@ -107,7 +107,7 @@ public class WriterHelper {
 	/**
 	 * Returns the absolute URL from a relative URI.
 	 *
-	 * @param  httpServletRequest the actual http servlet request.
+	 * @param  httpServletRequest the actual HTTP servlet request.
 	 * @param  relativeURI a relative URI.
 	 * @return the absolute URL.
 	 */
@@ -132,7 +132,7 @@ public class WriterHelper {
 	 * that model class cannot be found, returns <code>Optional#empty()</code>.
 	 *
 	 * @param  modelClass the model class of the {@link Resource}.
-	 * @param  httpServletRequest the actual http servlet request.
+	 * @param  httpServletRequest the actual HTTP servlet request.
 	 * @return the collection URL if a {@link Resource} for the model class can
 	 *         be found; <code>Optional#empty()</code> otherwise.
 	 */
@@ -162,7 +162,7 @@ public class WriterHelper {
 	 *
 	 * @param  modelClass the model class of the {@link Resource}.
 	 * @param  queryParamFilterType the filter type applied to this collection.
-	 * @param  httpServletRequest the actual http servlet request.
+	 * @param  httpServletRequest the actual HTTP servlet request.
 	 * @return the collection URL if a {@link Resource} for the model class can
 	 *         be found; <code>Optional#empty()</code> otherwise.
 	 */
@@ -212,7 +212,7 @@ public class WriterHelper {
 	 *
 	 * @param  modelClass the model class of the {@link Resource}.
 	 * @param  model an instance of the model
-	 * @param  httpServletRequest the actual http servlet request.
+	 * @param  httpServletRequest the actual HTTP servlet request.
 	 * @return the single URL if a {@link Resource} for the model class can be
 	 *         found; <code>Optional#empty()</code> otherwise.
 	 */
@@ -279,7 +279,7 @@ public class WriterHelper {
 	 * @param parentModel the instance of the parent model.
 	 * @param parentModelClass the parent model class.
 	 * @param parentEmbeddedPathElements list of embedded path elements.
-	 * @param httpServletRequest the actual http servlet request.
+	 * @param httpServletRequest the actual HTTP servlet request.
 	 * @param fields the requested fields.
 	 * @param embedded the embedded resources info.
 	 * @param biConsumer the consumer that will be called to write the related
@@ -333,7 +333,7 @@ public class WriterHelper {
 	 * @param parentModel the instance of the parent model.
 	 * @param parentModelClass the parent model class.
 	 * @param parentEmbeddedPathElements list of embedded path elements.
-	 * @param httpServletRequest the actual http servlet request.
+	 * @param httpServletRequest the actual HTTP servlet request.
 	 * @param fields the requested fields.
 	 * @param biConsumer the consumer that will be called to write the related
 	 *        collection URL.
@@ -384,7 +384,7 @@ public class WriterHelper {
 	 * @param parentModel the instance of the parent model.
 	 * @param parentModelClass the parent model class.
 	 * @param parentEmbeddedPathElements list of embedded path elements.
-	 * @param httpServletRequest the actual http servlet request.
+	 * @param httpServletRequest the actual HTTP servlet request.
 	 * @param fields the requested fields.
 	 * @param embedded the embedded resources info.
 	 * @param modelTriConsumer the consumer that will be called to write the
@@ -457,7 +457,7 @@ public class WriterHelper {
 	 *
 	 * @param model the instance of the model.
 	 * @param modelClass the model class.
-	 * @param httpServletRequest the actual http servlet request.
+	 * @param httpServletRequest the actual HTTP servlet request.
 	 * @param consumer the consumer that will be called to write the URL.
 	 */
 	public <T> void writeSingleResourceURL(
