@@ -47,7 +47,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotFoundException("No resource found for path: " + path)
+			() -> new NotFoundException("No resource found for path " + path)
 		);
 	}
 
