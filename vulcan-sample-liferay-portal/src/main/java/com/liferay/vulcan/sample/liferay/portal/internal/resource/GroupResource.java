@@ -75,7 +75,7 @@ public class GroupResource implements Resource<Group> {
 		}
 		catch (NoSuchGroupException nsge) {
 			throw new NotFoundException(
-				"No Group can be found with id: " + id, nsge);
+				"Unable to get group " + id, nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

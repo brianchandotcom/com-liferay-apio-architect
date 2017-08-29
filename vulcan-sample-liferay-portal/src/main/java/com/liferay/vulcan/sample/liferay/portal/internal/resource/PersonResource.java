@@ -122,7 +122,7 @@ public class PersonResource implements Resource<User> {
 		}
 		catch (NoSuchUserException | PrincipalException e) {
 			throw new NotFoundException(
-				"No User can be found with id: " + id, e);
+				"Unable to get user " + id, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
