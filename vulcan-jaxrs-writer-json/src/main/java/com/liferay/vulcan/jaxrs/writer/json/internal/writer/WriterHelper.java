@@ -95,11 +95,8 @@ public class WriterHelper {
 
 		errorMessageMapper.mapStatusCode(
 			jsonObjectBuilder, apiError.getStatusCode());
-
 		errorMessageMapper.mapTitle(jsonObjectBuilder, apiError.getTitle());
-
 		errorMessageMapper.mapType(jsonObjectBuilder, apiError.getType());
-
 		errorMessageMapper.onFinish(jsonObjectBuilder, apiError, httpHeaders);
 
 		JSONObject jsonObject = jsonObjectBuilder.build();
