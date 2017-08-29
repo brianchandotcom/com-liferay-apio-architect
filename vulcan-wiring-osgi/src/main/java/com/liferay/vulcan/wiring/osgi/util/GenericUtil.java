@@ -43,7 +43,7 @@ public class GenericUtil {
 
 		Try<Class<S>> classTry = Try.fail(
 			new IllegalArgumentException(
-				"Class " + clazz + " does not implement any interfaces."));
+				"Class " + clazz + " does not implement any interfaces"));
 
 		for (Type genericInterface : genericInterfaces) {
 			classTry = classTry.recoverWith(
