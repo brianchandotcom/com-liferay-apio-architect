@@ -101,15 +101,17 @@ public class SingleModelMessageBodyWriter<T>
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
-		SingleModel<T> singleModel = success.getValue();
-
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
 		Stream<SingleModelMessageMapper<T>> stream =
 			_singleModelMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
+
+		SingleModel<T> singleModel = success.getValue();
+
 		T model = singleModel.getModel();
+
 		Class<T> modelClass = singleModel.getModelClass();
 
 		SingleModelMessageMapper<T> singleModelMessageMapper = stream.filter(
