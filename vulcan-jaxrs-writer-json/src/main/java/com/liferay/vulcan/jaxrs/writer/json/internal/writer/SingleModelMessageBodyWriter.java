@@ -258,7 +258,7 @@ public class SingleModelMessageBodyWriter<T>
 			_resourceManager.getBinaryResources(modelClass);
 
 		_writerHelper.writeBinaryResources(
-			binaryResources, modelClass, model, _uriInfo,
+			binaryResources, modelClass, model, _httpServletRequest,
 			(field, value) -> singleModelMessageMapper.mapField(
 				jsonObjectBuilder, field, value));
 
