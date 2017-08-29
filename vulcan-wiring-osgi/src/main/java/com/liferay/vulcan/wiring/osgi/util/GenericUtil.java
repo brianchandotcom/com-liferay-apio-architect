@@ -58,12 +58,21 @@ public class GenericUtil {
 		).map(
 			ParameterizedType.class::cast
 		).filter(
-			parameterizedType ->
-				parameterizedType.getRawType().equals(clazz)
+			parameterizedType -> {
+				Type rawType = parameterizedType.getRawType();
+
+				return rawType.equals(clazz);
+			}
 		).map(
 			ParameterizedType::getActualTypeArguments
 		).filter(
-			typeArguments -> typeArguments.length == 1
+			typeArguments -> {
+				if (typeArguments.length == 1) {
+					return true;
+				}
+
+				return false;
+			}
 		).map(
 			typeArguments -> typeArguments[0]
 		).map(
@@ -71,9 +80,8 @@ public class GenericUtil {
 				if (typeArgument instanceof ParameterizedType) {
 					return ((ParameterizedType)typeArgument).getRawType();
 				}
-				else {
-					return typeArgument;
-				}
+
+				return typeArgument;
 			}
 		).map(
 			typeArgument -> (Class<S>)typeArgument
