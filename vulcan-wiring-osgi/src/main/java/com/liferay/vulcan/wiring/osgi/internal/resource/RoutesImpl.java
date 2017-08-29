@@ -31,10 +31,8 @@ import java.util.function.Supplier;
 public class RoutesImpl<T> implements Routes<T> {
 
 	@Override
-	public Optional<BiFunction<T, String, InputStream>>
-		getBinaryResourceOptional() {
-
-		return Optional.ofNullable(_binaryResourceFunction);
+	public Optional<BiFunction<T, String, InputStream>> getBinaryOptional() {
+		return Optional.ofNullable(_binaryFunction);
 	}
 
 	@Override
@@ -49,10 +47,8 @@ public class RoutesImpl<T> implements Routes<T> {
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
-	public void setBinaryResourceFunction(
-		BiFunction<T, String, InputStream> binaryResourceFunction) {
-
-		_binaryResourceFunction = binaryResourceFunction;
+	public void setBinary(BiFunction<T, String, InputStream> binaryFunction) {
+		_binaryFunction = binaryFunction;
 	}
 
 	public void setPageSupplier(Supplier<Page<T>> pageSupplier) {
@@ -65,7 +61,7 @@ public class RoutesImpl<T> implements Routes<T> {
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private BiFunction<T, String, InputStream> _binaryResourceFunction;
+	private BiFunction<T, String, InputStream> _binaryFunction;
 	private Supplier<Page<T>> _pageSupplier;
 	private Function<String, SingleModel<T>> _singleModelFunction;
 

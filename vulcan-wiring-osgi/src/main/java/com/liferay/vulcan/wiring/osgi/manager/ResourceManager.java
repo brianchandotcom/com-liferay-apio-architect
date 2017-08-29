@@ -63,9 +63,9 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the binary resources for the model class
 	 */
 	public <T> Map<String, Function<T, InputStream>>
-		getBinaryResources(Class<T> modelClass) {
+		getBinaries(Class<T> modelClass) {
 
-		return (Map)_binaryResources.get(modelClass.getName());
+		return (Map)_binaries.get(modelClass.getName());
 	}
 
 	/**
@@ -268,9 +268,9 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		_types.put(modelClass.getName(), types);
 
-		Map<String, Function<T, InputStream>> binaryResources = new HashMap<>();
+		Map<String, Function<T, InputStream>> binaries = new HashMap<>();
 
-		_binaryResources.put(modelClass.getName(), (Map)binaryResources);
+		_binaries.put(modelClass.getName(), (Map)binaries);
 
 		Optional<Resource<T>> optional = getResourceOptional(modelClass);
 
@@ -282,11 +282,11 @@ public class ResourceManager extends BaseManager<Resource> {
 						_addRelatedCollectionTriConsumer(modelClass),
 						fieldFunctions, embeddedRelatedModels,
 						linkedRelatedModels, links, relatedCollections,
-						binaryResources, types));
+						binaries, types));
 
 				_routesFunctions.put(
 					resource.getPath(),
-					_getRoutes(modelClass, resource, binaryResources));
+					_getRoutes(modelClass, resource, binaries));
 			});
 	}
 
@@ -331,7 +331,7 @@ public class ResourceManager extends BaseManager<Resource> {
 
 	private <T> Function<HttpServletRequest, Routes<?>> _getRoutes(
 		Class<T> modelClass, Resource<T> resource,
-		Map<String, Function<T, InputStream>> binaryResources) {
+		Map<String, Function<T, InputStream>> binaries) {
 
 		return httpServletRequest -> {
 			String filterName = httpServletRequest.getParameter("filterName");
@@ -342,7 +342,7 @@ public class ResourceManager extends BaseManager<Resource> {
 				_getProvideFilterFunction(httpServletRequest),
 				this::_getFilterName, filterName);
 
-			routesBuilder.collectionBinaryResource(binaryResources);
+			routesBuilder.collectionBinary(binaries);
 
 			return resource.routes(routesBuilder);
 		};
@@ -354,12 +354,12 @@ public class ResourceManager extends BaseManager<Resource> {
 		_identifierFunctions.remove(modelClass.getName());
 		_linkedRelatedModels.remove(modelClass.getName());
 		_links.remove(modelClass.getName());
-		_binaryResources.remove(modelClass.getName());
+		_binaries.remove(modelClass.getName());
 		_types.remove(modelClass.getName());
 	}
 
-	private final Map<String, Map<String, Function<?, InputStream>>>
-		_binaryResources = new ConcurrentHashMap<>();
+	private final Map<String, Map<String, Function<?, InputStream>>> _binaries =
+		new ConcurrentHashMap<>();
 	private final Map<String, String> _classNames = new ConcurrentHashMap<>();
 
 	@Reference
