@@ -254,11 +254,11 @@ public class SingleModelMessageBodyWriter<T>
 			(fieldName, link) -> singleModelMessageMapper.mapLink(
 				jsonObjectBuilder, fieldName, link));
 
-		Map<String, Function<U, InputStream>> binaryResources =
-			_resourceManager.getBinaryResources(modelClass);
+		Map<String, Function<U, InputStream>> binaries =
+			_resourceManager.getBinaries(modelClass);
 
-		_writerHelper.writeBinaryResources(
-			binaryResources, modelClass, model, _httpServletRequest,
+		_writerHelper.writeBinaries(
+			binaries, modelClass, model, _httpServletRequest,
 			(field, value) -> singleModelMessageMapper.mapField(
 				jsonObjectBuilder, field, value));
 

@@ -49,15 +49,15 @@ public interface RootEndpoint {
 	 *
 	 * @param  path the path from the URL.
 	 * @param  id the id to the resource.
-	 * @param  binaryResourceId the id to the binary resource.
+	 * @param  binaryId the id to the binary resource.
 	 * @return the input stream of the binary file, or an exception it there was an
 	 *         error.
 	 */
 	@GET
-	@Path("/p/{path}/{id}/{binaryResourceId}")
-	public default <T> Try<InputStream> getBinaryResource(
+	@Path("/p/{path}/{id}/{binaryId}")
+	public default <T> Try<InputStream> getBinary(
 		@PathParam("path") String path, @PathParam("id") String id,
-		@PathParam("binaryResourceId") String binaryResourceId) {
+		@PathParam("binaryId") String binaryId) {
 
 		Try<Routes<T>> routesTry = getRoutes(path);
 
@@ -67,8 +67,7 @@ public interface RootEndpoint {
 		return collectionItemSingleModel.map(
 			SingleModel::getModel
 		).flatMap(
-			model -> getRouteForBinaryResource(
-				routesTry, binaryResourceId, model)
+			model -> getRouteForBinary(routesTry, binaryId, model)
 		);
 	}
 
@@ -131,25 +130,24 @@ public interface RootEndpoint {
 	 * exception if an error occurred.
 	 *
 	 * @param  routesTry the try of routes
-	 * @param  binaryResourceId the id to the binary resource.
+	 * @param  binaryId the id to the binary resource.
 	 * @param  model the entity that contains the binary resource
 	 * @return the input stream of the binary resource, or an exception it there was an
 	 *         error.
 	 */
-	public default <T> Try<InputStream> getRouteForBinaryResource(
-		Try<Routes<T>> routesTry, String binaryResourceId, T model) {
+	public default <T> Try<InputStream> getRouteForBinary(
+		Try<Routes<T>> routesTry, String binaryId, T model) {
 
 		return routesTry.map(
-			Routes::getBinaryResourceOptional
+			Routes::getBinaryOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
 			NullPointerException.class,
 			() -> new NotFoundException(
-				"No endpoint found at path: " + binaryResourceId)
+				"No endpoint found at path: " + binaryId)
 		).map(
-			singleModelFunction -> singleModelFunction.apply(
-				model, binaryResourceId)
+			singleModelFunction -> singleModelFunction.apply(model, binaryId)
 		);
 	}
 

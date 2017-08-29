@@ -248,9 +248,9 @@ public class WriterHelper {
 	 * @param modelClass the model class.
 	 * @param biConsumer the consumer that will be called to write each field.
 	 */
-	public <T> void writeBinaryResources(
-		Map<String, Function<T, InputStream>> binaryResources,
-		Class<T> modelClass, T model, HttpServletRequest httpServletRequest,
+	public <T> void writeBinaries(
+		Map<String, Function<T, InputStream>> binaries, Class<T> modelClass,
+		T model, HttpServletRequest httpServletRequest,
 		BiConsumer<String, Object> biConsumer) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
@@ -258,9 +258,9 @@ public class WriterHelper {
 
 		String identifier = _resourceManager.getIdentifier(modelClass, model);
 
-		if (binaryResources != null) {
+		if (binaries != null) {
 			for (Map.Entry<String, Function<T, InputStream>> entry :
-					binaryResources.entrySet()) {
+					binaries.entrySet()) {
 
 				String identifierWithKey = identifier + "/" + entry.getKey();
 

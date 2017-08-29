@@ -72,7 +72,7 @@ public interface RepresentorBuilder<T> {
 		 * @param modelFunction  function used to obtain the related model.
 		 * @return builder's actual step.
 		 */
-		public <S> FirstStep<T> addBinaryResource(
+		public <S> FirstStep<T> addBinary(
 			String key, Function<T, InputStream> modelFunction);
 
 		/**

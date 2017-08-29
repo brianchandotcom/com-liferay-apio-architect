@@ -57,7 +57,7 @@ public interface RoutesBuilder<T> {
 	 * @param  biFunction the function that will be used to return the binary resource.
 	 * @return the updated builder.
 	 */
-	public <U> RoutesBuilder<T> collectionBinaryResource(
+	public <U> RoutesBuilder<T> collectionBinary(
 		Map<String, Function<T, InputStream>> biFunction);
 
 	/**
