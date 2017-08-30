@@ -76,7 +76,7 @@ public class FolderResource implements Resource<DLFolder> {
 
 	@Override
 	public String getPath() {
-		return "digitalDocuments";
+		return "folders";
 	}
 
 	@Override
