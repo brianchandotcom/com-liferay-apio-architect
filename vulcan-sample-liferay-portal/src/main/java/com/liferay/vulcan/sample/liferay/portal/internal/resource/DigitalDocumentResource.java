@@ -65,7 +65,7 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		).addBidirectionalModel(
 			"group", "digitalDocuments", Group.class, this::_getGroupOptional,
 			this::_getFolderIdGroupIdFilter
-		).addBinary(
+		).addBinaryResource(
 			"contentStream", this::_getContentStream
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional

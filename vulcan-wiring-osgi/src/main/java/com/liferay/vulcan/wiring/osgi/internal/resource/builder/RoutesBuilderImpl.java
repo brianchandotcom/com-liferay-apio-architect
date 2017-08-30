@@ -73,10 +73,10 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		return _routesImpl;
 	}
 
-	public <U> RoutesBuilder<T> collectionBinary(
+	public <U> RoutesBuilder<T> collectionBinaryResource(
 		Map<String, Function<T, InputStream>> biFunction) {
 
-		_routesImpl.setBinary(
+		_routesImpl.setBinaryResourceFunction(
 			(T object, String key) -> biFunction.get(key).apply(object));
 
 		return this;

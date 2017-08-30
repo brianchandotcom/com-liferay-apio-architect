@@ -49,7 +49,8 @@ public interface Routes<T> {
 	 *
 	 * @return an InputStream with the content of the binary resource
 	 */
-	public Optional<BiFunction<T, String, InputStream>> getBinaryOptional();
+	public Optional<BiFunction<T, String, InputStream>>
+		getBinaryResourceOptional();
 
 	/**
 	 * Returns the supplier used to create the page of a {@link Resource}.
