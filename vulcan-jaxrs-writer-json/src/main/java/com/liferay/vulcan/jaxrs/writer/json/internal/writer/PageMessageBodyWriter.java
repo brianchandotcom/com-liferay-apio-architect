@@ -33,6 +33,7 @@ import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
@@ -41,7 +42,9 @@ import java.lang.reflect.Type;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -139,9 +142,12 @@ public class PageMessageBodyWriter<T>
 		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Embedded.class));
 
+		Map<String, Function<T, InputStream>> binaries =
+			_resourceManager.getBinaries(modelClass);
+
 		_writeItems(
 			pageMessageMapper, jsonObjectBuilder, page, modelClass, fields,
-			embedded);
+			embedded, binaries);
 
 		_writeItemTotalCount(pageMessageMapper, jsonObjectBuilder, page);
 
@@ -213,6 +219,16 @@ public class PageMessageBodyWriter<T>
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, fieldName, link));
 
+				Map<String, Function<V, InputStream>> binariesRelatedModels =
+					_resourceManager.getBinaries(modelClass);
+
+				_writerHelper.writeBinaries(
+					binariesRelatedModels, modelClass, model,
+					_httpServletRequest,
+					(fieldName, value) -> pageMessageMapper.mapItemField(
+						pageJSONObjectBuilder, itemJSONObjectBuilder, fieldName,
+						value));
+
 				_writerHelper.writeTypes(
 					modelClass,
 					types -> pageMessageMapper.mapItemEmbeddedResourceTypes(
@@ -263,7 +279,8 @@ public class PageMessageBodyWriter<T>
 	private void _writeItems(
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
-		Fields fields, Embedded embedded) {
+		Fields fields, Embedded embedded,
+		Map<String, Function<T, InputStream>> binaries) {
 
 		Collection<T> items = page.getItems();
 
@@ -287,6 +304,12 @@ public class PageMessageBodyWriter<T>
 					(fieldName, link) -> pageMessageMapper.mapItemLink(
 						jsonObjectBuilder, itemJSONObjectBuilder, fieldName,
 						link));
+
+				_writerHelper.writeBinaries(
+					binaries, modelClass, item, _httpServletRequest,
+					(fieldName, value) -> pageMessageMapper.mapItemField(
+						jsonObjectBuilder, itemJSONObjectBuilder, fieldName,
+						value));
 
 				_writerHelper.writeTypes(
 					modelClass,
