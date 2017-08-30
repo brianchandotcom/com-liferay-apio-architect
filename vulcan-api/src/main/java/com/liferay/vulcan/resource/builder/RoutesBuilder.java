@@ -54,7 +54,8 @@ public interface RoutesBuilder<T> {
 	/**
 	 * Adds a route related to a binary resource that is contained in the model
 	 *
-	 * @param  biFunction the function that will be used to return the binary resource.
+	 * @param  biFunction the function that will be used to return the binary
+	 *         resource.
 	 * @return the updated builder.
 	 */
 	public <U> RoutesBuilder<T> collectionBinary(
