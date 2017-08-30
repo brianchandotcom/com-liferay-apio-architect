@@ -43,8 +43,7 @@ public class ServerURLProviderImpl implements ServerURLProvider {
 
 		sb.append(Http.PROTOCOL_DELIMITER);
 
-		String forwardedHost = httpServletRequest.getHeader(
-			"X-Forwarded-Host");
+		String forwardedHost = httpServletRequest.getHeader("X-Forwarded-Host");
 
 		if (forwardedHost == null) {
 			sb.append(httpServletRequest.getServerName());

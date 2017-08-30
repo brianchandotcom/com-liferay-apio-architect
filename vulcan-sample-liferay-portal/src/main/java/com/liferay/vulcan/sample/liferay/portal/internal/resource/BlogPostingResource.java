@@ -151,8 +151,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 			return _blogsService.getEntry(id);
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
-			throw new NotFoundException(
-				"Unable to get blogs entry " + id, e);
+			throw new NotFoundException("Unable to get blogs entry " + id, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -177,8 +176,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 			return Optional.of(_groupLocalService.getGroup(groupId));
 		}
 		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException(
-				"Unable to get group " + groupId, nsge);
+			throw new NotFoundException("Unable to get group " + groupId, nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -204,8 +202,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 			return Optional.ofNullable(_userService.getUserById(userId));
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException(
-				"Unable to get user " + userId, e);
+			throw new NotFoundException("Unable to get user " + userId, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

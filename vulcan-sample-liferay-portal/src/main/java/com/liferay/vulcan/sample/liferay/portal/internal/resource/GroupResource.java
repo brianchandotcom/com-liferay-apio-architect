@@ -74,8 +74,7 @@ public class GroupResource implements Resource<Group> {
 			return _groupLocalService.getGroup(id);
 		}
 		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException(
-				"Unable to get group " + id, nsge);
+			throw new NotFoundException("Unable to get group " + id, nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

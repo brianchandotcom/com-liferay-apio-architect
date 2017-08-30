@@ -161,8 +161,7 @@ public class CommentResource implements Resource<Comment> {
 			return Optional.ofNullable(_userService.getUserById(userId));
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException(
-				"Unable to get user " + userId, e);
+			throw new NotFoundException("Unable to get user " + userId, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
