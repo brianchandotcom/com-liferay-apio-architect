@@ -39,14 +39,13 @@ import java.util.function.Supplier;
  * </p>
  *
  * @author Alejandro Hernández
- * @see    com.liferay.vulcan.resource.builder.RoutesBuilder
+ * @see com.liferay.vulcan.resource.builder.RoutesBuilder
  */
 public interface Routes<T> {
 
 	/**
-	 * Returns the BiFunction used to create a binary resource of a {@link
-	 * Resource}. Returns an <code>InputStream</code> with the bytes of the
-	 * binary resource
+	 * Returns the BiFunction used to create a binary resource of a {@link Resource}.
+	 * Returns an <code>InputStream</code> with the bytes of the binary resource
 	 *
 	 * @return an InputStream with the content of the binary resource
 	 */
@@ -58,7 +57,7 @@ public interface Routes<T> {
 	 * through the {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
 	 * @return the supplier used to create the page, if present;
-	 *         <code>Optional#empty()</code> otherwise.
+	 * <code>Optional#empty()</code> otherwise.
 	 */
 	public Optional<Supplier<Page<T>>> getPageSupplierOptional();
 

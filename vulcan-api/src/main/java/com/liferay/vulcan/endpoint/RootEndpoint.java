@@ -48,10 +48,10 @@ public interface RootEndpoint {
 	 * exception if an error occurred.
 	 *
 	 * @param  path the path from the URL.
-	 * @param  id the ID to the resource.
-	 * @param  binaryId the ID to the binary resource.
-	 * @return the input stream of the binary file, or an exception it there was
-	 *         an error.
+	 * @param  id the id to the resource.
+	 * @param  binaryId the id to the binary resource.
+	 * @return the input stream of the binary file, or an exception it there was an
+	 *         error.
 	 */
 	@GET
 	@Path("/p/{path}/{id}/{binaryId}")
@@ -130,10 +130,10 @@ public interface RootEndpoint {
 	 * exception if an error occurred.
 	 *
 	 * @param  routesTry the try of routes
-	 * @param  binaryId the ID to the binary resource.
+	 * @param  binaryId the id to the binary resource.
 	 * @param  model the entity that contains the binary resource
-	 * @return the input stream of the binary resource, or an exception it there
-	 *         was an error.
+	 * @return the input stream of the binary resource, or an exception it there was an
+	 *         error.
 	 */
 	public default <T> Try<InputStream> getRouteForBinary(
 		Try<Routes<T>> routesTry, String binaryId, T model) {
