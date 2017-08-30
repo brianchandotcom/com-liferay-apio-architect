@@ -55,11 +55,9 @@ public interface RootEndpoint {
 	 */
 	@GET
 	@Path("/b/{path}/{id}/{binaryId}")
-	public default <T> Try<InputStream> getBinary(
+	public default <T> Try<InputStream> getCollectionItemInputStream(
 		@PathParam("path") String path, @PathParam("id") String id,
 		@PathParam("binaryId") String binaryId) {
-
-		Try<Routes<T>> routesTry = getRoutes(path);
 
 		Try<SingleModel<T>> collectionItemSingleModel =
 			getCollectionItemSingleModel(path, id);
@@ -67,7 +65,35 @@ public interface RootEndpoint {
 		return collectionItemSingleModel.map(
 			SingleModel::getModel
 		).flatMap(
-			model -> getRouteForBinary(routesTry, binaryId, model)
+			model -> getCollectionItemInputStream(path, model, binaryId)
+		);
+	}
+
+	/**
+	 * Returns the {@link InputStream} for a given resource model or an
+	 * exception if an error occurred.
+	 *
+	 * @param  path the path from the URL.
+	 * @param  model the entity that contains the binary resource
+	 * @param  binaryId the ID to the binary resource.
+	 * @return the input stream of the binary resource, or an exception it there
+	 *         was an error.
+	 */
+	public default <T> Try<InputStream> getCollectionItemInputStream(
+		String path, T model, String binaryId) {
+
+		Try<Routes<T>> routesTry = getRoutes(path);
+
+		return routesTry.map(
+			Routes::getBinaryBiFunctionsOptional
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NullPointerException.class,
+			() -> new NotFoundException(
+				"No endpoint found at path: " + binaryId)
+		).map(
+			singleModelFunction -> singleModelFunction.apply(model, binaryId)
 		);
 	}
 
@@ -122,32 +148,6 @@ public interface RootEndpoint {
 			() -> new NotFoundException("No endpoint found at path: " + path)
 		).map(
 			Supplier::get
-		);
-	}
-
-	/**
-	 * Returns the {@link InputStream} for a given resource identifier or an
-	 * exception if an error occurred.
-	 *
-	 * @param  routesTry the try of routes
-	 * @param  binaryId the ID to the binary resource.
-	 * @param  model the entity that contains the binary resource
-	 * @return the input stream of the binary resource, or an exception it there
-	 *         was an error.
-	 */
-	public default <T> Try<InputStream> getRouteForBinary(
-		Try<Routes<T>> routesTry, String binaryId, T model) {
-
-		return routesTry.map(
-			Routes::getBinaryOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NullPointerException.class,
-			() -> new NotFoundException(
-				"No endpoint found at path: " + binaryId)
-		).map(
-			singleModelFunction -> singleModelFunction.apply(model, binaryId)
 		);
 	}
 

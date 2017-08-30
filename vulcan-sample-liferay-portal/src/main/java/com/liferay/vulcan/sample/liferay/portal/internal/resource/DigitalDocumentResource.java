@@ -66,7 +66,7 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 			"folder", "digitalDocuments", DLFolder.class,
 			this::_getDLFolderOptional, this::_getFolderIdFilter
 		).addBinary(
-			"contentStream", this::_getContentStream
+			"contentStream", this::_getInputStream
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional
 		).addField(
@@ -108,15 +108,6 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		).build();
 	}
 
-	private InputStream _getContentStream(DLFileEntry dlFileEntry) {
-		try {
-			return dlFileEntry.getContentStream();
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
-	}
-
 	private DLFileEntry _getDLFileEntry(Long id) {
 		try {
 			return _dlFileEntryService.getFileEntry(id);
@@ -144,6 +135,15 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 
 	private FolderIdFilter _getFolderIdFilter(DLFolder dlFolder) {
 		return _folderIdFilterProvider.create(dlFolder.getFolderId());
+	}
+
+	private InputStream _getInputStream(DLFileEntry dlFileEntry) {
+		try {
+			return dlFileEntry.getContentStream();
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	private PageItems<DLFileEntry> _getPageItems(

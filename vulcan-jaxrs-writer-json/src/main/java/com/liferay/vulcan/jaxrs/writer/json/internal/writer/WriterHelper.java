@@ -250,8 +250,8 @@ public class WriterHelper {
 	 * @param biConsumer the consumer that will be called to write each field.
 	 */
 	public <T> void writeBinaries(
-		Map<String, Function<T, InputStream>> binaries, Class<T> modelClass,
-		T model, HttpServletRequest httpServletRequest,
+		Map<String, Function<T, InputStream>> binaryFunctions,
+		Class<T> modelClass, T model, HttpServletRequest httpServletRequest,
 		BiConsumer<String, Object> biConsumer) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
@@ -259,17 +259,14 @@ public class WriterHelper {
 
 		String identifier = _resourceManager.getIdentifier(modelClass, model);
 
-		if (binaries != null) {
-			for (Map.Entry<String, Function<T, InputStream>> entry :
-					binaries.entrySet()) {
-
-				String identifierWithKey = identifier + "/" + entry.getKey();
+		if (binaryFunctions != null) {
+			for (String key : binaryFunctions.keySet()) {
+				String path = identifier + "/" + key;
 
 				Optional<String> url = _getUrl(
-					modelClass, model, httpServletRequest, optional,
-					identifierWithKey);
+					modelClass, model, httpServletRequest, optional, path);
 
-				url.ifPresent(y -> biConsumer.accept(entry.getKey(), y));
+				url.ifPresent(y -> biConsumer.accept(key, y));
 			}
 		}
 	}
@@ -551,12 +548,12 @@ public class WriterHelper {
 
 	private <T> Optional<String> _getUrl(
 		Class<T> modelClass, T model, HttpServletRequest httpServletRequest,
-		Optional<Resource<T>> optional, String identifier) {
+		Optional<Resource<T>> optional, String path) {
 
 		return optional.map(
 			Resource::getPath
 		).map(
-			path -> "/b/" + path + "/" + identifier
+			uri -> "/b/" + uri + "/" + path
 		).map(
 			_getTransformURIFunction(
 				(uri, transformer) ->

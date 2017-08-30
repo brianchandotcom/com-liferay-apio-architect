@@ -45,8 +45,7 @@ import org.osgi.service.component.annotations.Reference;
 public class FolderIdFilterProvider implements FilterProvider<FolderIdFilter> {
 
 	/**
-	 * Creates a new {@link FolderIdFilter} from a given
-	 * <code>folderId</code>.
+	 * Creates a new {@link FolderIdFilter} from a given <code>folderId</code>.
 	 *
 	 * @param  folderId the folder ID that will be used to filter.
 	 * @return an instance of a {@link FolderIdFilter}.

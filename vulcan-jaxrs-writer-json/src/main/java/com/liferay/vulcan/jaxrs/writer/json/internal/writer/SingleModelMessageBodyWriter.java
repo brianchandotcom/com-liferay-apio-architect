@@ -141,9 +141,12 @@ public class SingleModelMessageBodyWriter<T>
 		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new MustHaveProvider(Embedded.class));
 
+		Map<String, Function<T, InputStream>> binaryFunctions =
+			_resourceManager.getBinaryFunctions(modelClass);
+
 		_writeModel(
 			singleModelMessageMapper, jsonObjectBuilder, model, modelClass,
-			fields, embedded);
+			fields, embedded, binaryFunctions);
 
 		JSONObject jsonObject = jsonObjectBuilder.build();
 
@@ -177,11 +180,11 @@ public class SingleModelMessageBodyWriter<T>
 							jsonObjectBuilder, embeddedPathElements, fieldName,
 							link));
 
-				Map<String, Function<V, InputStream>> binaries =
-					_resourceManager.getBinaries(modelClass);
+				Map<String, Function<V, InputStream>> binaryFunctions =
+					_resourceManager.getBinaryFunctions(modelClass);
 
 				_writerHelper.writeBinaries(
-					binaries, modelClass, model, _httpServletRequest,
+					binaryFunctions, modelClass, model, _httpServletRequest,
 					(fieldName, value) ->
 						singleModelMessageMapper.mapEmbeddedResourceField(
 							jsonObjectBuilder, embeddedPathElements, fieldName,
@@ -249,7 +252,8 @@ public class SingleModelMessageBodyWriter<T>
 	private <U> void _writeModel(
 		SingleModelMessageMapper<U> singleModelMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, U model, Class<U> modelClass,
-		Fields fields, Embedded embedded) {
+		Fields fields, Embedded embedded,
+		Map<String, Function<U, InputStream>> binaries) {
 
 		singleModelMessageMapper.onStart(
 			jsonObjectBuilder, model, modelClass, _httpHeaders);
@@ -263,9 +267,6 @@ public class SingleModelMessageBodyWriter<T>
 			modelClass, fields,
 			(fieldName, link) -> singleModelMessageMapper.mapLink(
 				jsonObjectBuilder, fieldName, link));
-
-		Map<String, Function<U, InputStream>> binaries =
-			_resourceManager.getBinaries(modelClass);
 
 		_writerHelper.writeBinaries(
 			binaries, modelClass, model, _httpServletRequest,

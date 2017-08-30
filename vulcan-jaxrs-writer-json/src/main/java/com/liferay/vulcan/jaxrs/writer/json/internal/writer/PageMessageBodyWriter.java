@@ -142,12 +142,12 @@ public class PageMessageBodyWriter<T>
 		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Embedded.class));
 
-		Map<String, Function<T, InputStream>> binaries =
-			_resourceManager.getBinaries(modelClass);
+		Map<String, Function<T, InputStream>> binaryFunctions =
+			_resourceManager.getBinaryFunctions(modelClass);
 
 		_writeItems(
 			pageMessageMapper, jsonObjectBuilder, page, modelClass, fields,
-			embedded, binaries);
+			embedded, binaryFunctions);
 
 		_writeItemTotalCount(pageMessageMapper, jsonObjectBuilder, page);
 
@@ -219,12 +219,11 @@ public class PageMessageBodyWriter<T>
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, fieldName, link));
 
-				Map<String, Function<V, InputStream>> binariesRelatedModels =
-					_resourceManager.getBinaries(modelClass);
+				Map<String, Function<V, InputStream>> binaryFunctions =
+					_resourceManager.getBinaryFunctions(modelClass);
 
 				_writerHelper.writeBinaries(
-					binariesRelatedModels, modelClass, model,
-					_httpServletRequest,
+					binaryFunctions, modelClass, model, _httpServletRequest,
 					(fieldName, value) -> pageMessageMapper.mapItemField(
 						pageJSONObjectBuilder, itemJSONObjectBuilder, fieldName,
 						value));
@@ -280,7 +279,7 @@ public class PageMessageBodyWriter<T>
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
 		Fields fields, Embedded embedded,
-		Map<String, Function<T, InputStream>> binaries) {
+		Map<String, Function<T, InputStream>> binaryFunctions) {
 
 		Collection<T> items = page.getItems();
 
@@ -306,7 +305,7 @@ public class PageMessageBodyWriter<T>
 						link));
 
 				_writerHelper.writeBinaries(
-					binaries, modelClass, item, _httpServletRequest,
+					binaryFunctions, modelClass, item, _httpServletRequest,
 					(fieldName, value) -> pageMessageMapper.mapItemField(
 						jsonObjectBuilder, itemJSONObjectBuilder, fieldName,
 						value));

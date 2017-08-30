@@ -43,7 +43,8 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		List<RelatedModel<?, ?>> embeddedRelatedModels,
 		List<RelatedModel<?, ?>> linkedRelatedModels, Map<String, String> links,
 		List<RelatedCollection<?, ?>> relatedCollections,
-		Map<String, Function<?, InputStream>> binaries, List<String> types) {
+		Map<String, Function<?, InputStream>> binaryFunctions,
+		List<String> types) {
 
 		_modelClass = modelClass;
 		_identifierFunctions = identifierFunctions;
@@ -53,7 +54,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		_linkedRelatedModels = linkedRelatedModels;
 		_links = links;
 		_relatedCollections = relatedCollections;
-		_binaries = binaries;
+		_binaryFunctions = binaryFunctions;
 		_types = types;
 	}
 
@@ -82,7 +83,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 			public <S> FirstStep<T> addBinary(
 				String key, Function<T, InputStream> modelFunction) {
 
-				_binaries.put(key, modelFunction);
+				_binaryFunctions.put(key, modelFunction);
 
 				return this;
 			}
@@ -149,7 +150,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	private final TriConsumer
 		<String, Class<?>, Function<?, QueryParamFilterType>>
 			_addRelatedCollectionTriConsumer;
-	private final Map<String, Function<?, InputStream>> _binaries;
+	private final Map<String, Function<?, InputStream>> _binaryFunctions;
 	private final List<RelatedModel<?, ?>> _embeddedRelatedModels;
 	private final Map<String, Function<?, Object>> _fieldFunctions;
 	private final Map<String, Function<?, String>> _identifierFunctions;

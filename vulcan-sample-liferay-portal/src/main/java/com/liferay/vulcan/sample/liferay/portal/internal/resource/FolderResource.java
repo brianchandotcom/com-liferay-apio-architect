@@ -41,8 +41,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides all the necessary information to expose folder resource through
- * a web API. <p> The resources are mapped from the internal {@link DLFolder}
+ * Provides all the necessary information to expose folder resource through a
+ * web API. <p> The resources are mapped from the internal {@link DLFolder}
  * model.
  *
  * @author Javier Gamarra
@@ -127,9 +127,9 @@ public class FolderResource implements Resource<DLFolder> {
 				groupId, 0, pagination.getStartPosition(),
 				pagination.getEndPosition(), null);
 
-			int fileEntriesCount = _dlFolderService.getFoldersCount(groupId, 0);
+			int foldersCount = _dlFolderService.getFoldersCount(groupId, 0);
 
-			return new PageItems<>(folders, fileEntriesCount);
+			return new PageItems<>(folders, foldersCount);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
