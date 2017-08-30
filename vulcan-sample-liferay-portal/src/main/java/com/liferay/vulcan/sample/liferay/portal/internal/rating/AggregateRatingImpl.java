@@ -30,7 +30,6 @@ public class AggregateRatingImpl implements AggregateRating {
 
 		_className = className;
 		_classPK = classPK;
-
 		_ratingCount = ratingsEntries.size();
 
 		Stream<RatingsEntry> stream = ratingsEntries.stream();

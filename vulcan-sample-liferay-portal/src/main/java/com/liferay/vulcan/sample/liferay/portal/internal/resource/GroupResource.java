@@ -84,6 +84,7 @@ public class GroupResource implements Resource<Group> {
 	private PageItems<Group> _getPageItems(Pagination pagination) {
 		List<Group> groups = _groupLocalService.getGroups(
 			pagination.getStartPosition(), pagination.getEndPosition());
+
 		int groupsCount = _groupLocalService.getGroupsCount();
 
 		return new PageItems<>(groups, groupsCount);

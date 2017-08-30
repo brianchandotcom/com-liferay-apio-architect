@@ -28,7 +28,7 @@ package com.liferay.vulcan.sample.liferay.portal.rating;
 public interface AggregateRating {
 
 	/**
-	 * * Returns the class name.
+	 * Returns the class name.
 	 *
 	 * @return the className.
 	 */
