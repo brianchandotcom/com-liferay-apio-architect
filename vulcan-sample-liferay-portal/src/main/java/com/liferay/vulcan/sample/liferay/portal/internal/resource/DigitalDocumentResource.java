@@ -52,6 +52,8 @@ import org.osgi.service.component.annotations.Reference;
  * model.
  *
  * @author Javier Gamarra
+ *
+ * @review
  */
 @Component(immediate = true)
 public class DigitalDocumentResource implements Resource<DLFileEntry> {

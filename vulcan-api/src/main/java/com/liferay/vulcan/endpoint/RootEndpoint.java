@@ -52,6 +52,8 @@ public interface RootEndpoint {
 	 * @param  binaryId the ID to the binary resource.
 	 * @return the input stream of the binary file, or an exception it there was
 	 *         an error.
+	 *
+	 * @review
 	 */
 	@GET
 	@Path("/b/{path}/{id}/{binaryId}")
@@ -78,6 +80,8 @@ public interface RootEndpoint {
 	 * @param  binaryId the ID to the binary resource.
 	 * @return the input stream of the binary resource, or an exception it there
 	 *         was an error.
+	 *
+	 * @review
 	 */
 	public default <T> Try<InputStream> getCollectionItemInputStream(
 		String path, T model, String binaryId) {

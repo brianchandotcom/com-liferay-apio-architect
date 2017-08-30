@@ -61,6 +61,8 @@ public class ResourceManager extends BaseManager<Resource> {
 	 *
 	 * @param  modelClass class name indexing the binary resources
 	 * @return the binary resources for the model class
+	 *
+	 * @review
 	 */
 	public <T> Map<String, Function<T, InputStream>>
 		getBinaryFunctions(Class<T> modelClass) {

@@ -46,6 +46,8 @@ import org.osgi.service.component.annotations.Reference;
  * model.
  *
  * @author Javier Gamarra
+ *
+ * @review
  */
 @Component(immediate = true)
 public class FolderResource implements Resource<DLFolder> {
