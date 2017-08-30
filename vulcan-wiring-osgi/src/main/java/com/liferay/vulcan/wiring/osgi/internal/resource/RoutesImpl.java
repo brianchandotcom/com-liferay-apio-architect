@@ -18,10 +18,7 @@ import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 
-import java.io.InputStream;
-
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -29,13 +26,6 @@ import java.util.function.Supplier;
  * @author Alejandro Hernández
  */
 public class RoutesImpl<T> implements Routes<T> {
-
-	@Override
-	public Optional<BiFunction<T, String, InputStream>>
-		getBinaryResourceOptional() {
-
-		return Optional.ofNullable(_binaryResourceFunction);
-	}
 
 	@Override
 	public Optional<Supplier<Page<T>>> getPageSupplierOptional() {
@@ -49,12 +39,6 @@ public class RoutesImpl<T> implements Routes<T> {
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
-	public void setBinaryResourceFunction(
-		BiFunction<T, String, InputStream> binaryResourceFunction) {
-
-		_binaryResourceFunction = binaryResourceFunction;
-	}
-
 	public void setPageSupplier(Supplier<Page<T>> pageSupplier) {
 		_pageSupplier = pageSupplier;
 	}
@@ -65,7 +49,6 @@ public class RoutesImpl<T> implements Routes<T> {
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private BiFunction<T, String, InputStream> _binaryResourceFunction;
 	private Supplier<Page<T>> _pageSupplier;
 	private Function<String, SingleModel<T>> _singleModelFunction;
 

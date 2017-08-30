@@ -330,21 +330,17 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	private <T> Function<HttpServletRequest, Routes<?>> _getRoutes(
-		Class<T> modelClass, Resource<T> resource,
-		Map<String, Function<T, InputStream>> binaryResources) {
+		Class<T> modelClass, Resource<T> resource) {
 
 		return httpServletRequest -> {
 			String filterName = httpServletRequest.getParameter("filterName");
 
-			RoutesBuilderImpl<T> routesBuilder = new RoutesBuilderImpl<>(
-				modelClass, this::_convert,
-				_getProvideClassFunction(httpServletRequest),
-				_getProvideFilterFunction(httpServletRequest),
-				this::_getFilterName, filterName);
-
-			routesBuilder.collectionBinaryResource(binaryResources);
-
-			return resource.routes(routesBuilder);
+			return resource.routes(
+				new RoutesBuilderImpl<>(
+					modelClass, this::_convert,
+					_getProvideClassFunction(httpServletRequest),
+					_getProvideFilterFunction(httpServletRequest),
+					this::_getFilterName, filterName));
 		};
 	}
 
