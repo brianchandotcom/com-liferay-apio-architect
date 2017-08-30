@@ -34,18 +34,18 @@ public class FolderIdGroupIdIdentifier {
 	}
 
 	/**
-	 * Returns the folder id to filter.
+	 * Returns the folder ID to filter.
 	 *
-	 * @return folder id to filter.
+	 * @return folder ID to filter.
 	 */
 	public long getFolderId() {
 		return _folderId;
 	}
 
 	/**
-	 * Returns the group id to filter.
+	 * Returns the group ID to filter.
 	 *
-	 * @return group id to filter.
+	 * @return group ID to filter.
 	 */
 	public long getGroupId() {
 		return _groupId;

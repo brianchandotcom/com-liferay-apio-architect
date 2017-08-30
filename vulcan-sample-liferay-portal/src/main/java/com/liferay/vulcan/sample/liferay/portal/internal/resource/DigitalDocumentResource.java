@@ -47,9 +47,9 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides all the necessary information to expose <a
- * href="http://schema.org/DigitalDocument">DigitalDocument</a> resource through a web API.
- * <p>
- * The resources are mapped from the internal {@link DLFileEntry} model.
+ * href="http://schema.org/DigitalDocument">DigitalDocument</a> resource through
+ * a web API. <p> The resources are mapped from the internal {@link DLFileEntry}
+ * model.
  *
  * @author Javier Gamarra
  */

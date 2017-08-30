@@ -241,11 +241,12 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Helper method to write binary resources. It uses a biconsumer so each {@link
-	 * javax.ws.rs.ext.MessageBodyWriter} can write each field differently.
+	 * Helper method to write binary resources. It uses a biconsumer so each
+	 * {@link javax.ws.rs.ext.MessageBodyWriter} can write each field
+	 * differently.
 	 *
-	 * @param model      an instance of the model.
 	 * @param modelClass the model class.
+	 * @param model an instance of the model.
 	 * @param biConsumer the consumer that will be called to write each field.
 	 */
 	public <T> void writeBinaries(

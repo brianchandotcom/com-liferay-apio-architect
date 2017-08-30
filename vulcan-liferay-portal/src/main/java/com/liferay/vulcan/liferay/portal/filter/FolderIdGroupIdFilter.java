@@ -28,9 +28,9 @@ package com.liferay.vulcan.liferay.portal.filter;
 public interface FolderIdGroupIdFilter extends GroupIdFilter {
 
 	/**
-	 * Returns the folder id to filter.
+	 * Returns the folder ID to filter.
 	 *
-	 * @return folder id to filter.
+	 * @return folder ID to filter.
 	 */
 	public long getFolderId();
 

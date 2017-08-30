@@ -49,8 +49,8 @@ public class FolderIdGroupIdFilterProvider
 	 * Creates a new {@link FolderIdGroupIdFilter} from a given
 	 * <code>folderId</code> and <code>groupId</code>.
 	 *
-	 * @param  folderId the folder id that will be used to filter.
-	 * @param  groupId the group id that will be used to filter.
+	 * @param  folderId the folder ID that will be used to filter.
+	 * @param  groupId the group ID that will be used to filter.
 	 * @return an instance of a {@link FolderIdGroupIdFilter}.
 	 */
 	public FolderIdGroupIdFilter create(long folderId, long groupId) {
