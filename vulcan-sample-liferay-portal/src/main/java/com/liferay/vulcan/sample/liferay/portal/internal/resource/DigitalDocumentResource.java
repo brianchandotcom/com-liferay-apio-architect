@@ -16,17 +16,17 @@ package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.document.library.kernel.model.DLFileEntry;
-import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.service.DLFileEntryService;
-import com.liferay.document.library.kernel.service.DLFolderService;
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.vulcan.liferay.portal.filter.FolderIdFilter;
-import com.liferay.vulcan.liferay.portal.filter.provider.FolderIdFilterProvider;
+import com.liferay.vulcan.liferay.portal.filter.FolderIdGroupIdFilter;
+import com.liferay.vulcan.liferay.portal.filter.provider.FolderIdGroupIdFilterProvider;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -63,8 +63,8 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		representorBuilder.identifier(
 			dlFileEntry -> String.valueOf(dlFileEntry.getFileEntryId())
 		).addBidirectionalModel(
-			"folder", "digitalDocuments", DLFolder.class,
-			this::_getDLFolderOptional, this::_getFolderIdFilter
+			"group", "digitalDocuments", Group.class, this::_getGroupOptional,
+			this::_getFolderIdGroupIdFilter
 		).addBinary(
 			"contentStream", this::_getContentStream
 		).addEmbeddedModel(
@@ -104,7 +104,7 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		return routesBuilder.collectionItem(
 			this::_getDLFileEntry, Long.class
 		).filteredCollectionPage(
-			this::_getPageItems, FolderIdFilter.class
+			this::_getPageItems, FolderIdGroupIdFilter.class
 		).build();
 	}
 
@@ -129,10 +129,15 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		}
 	}
 
-	private Optional<DLFolder> _getDLFolderOptional(DLFileEntry dlFileEntry) {
+	private FolderIdGroupIdFilter _getFolderIdGroupIdFilter(Group group) {
+		return _folderIdGroupIdFilterProvider.create(
+			group.getGroupId(), group.getGroupId());
+	}
+
+	private Optional<Group> _getGroupOptional(DLFileEntry dlFileEntry) {
 		try {
 			return Optional.of(
-				_dlFolderService.getFolder(dlFileEntry.getFolderId()));
+				_groupLocalService.getGroup(dlFileEntry.getGroupId()));
 		}
 		catch (NoSuchGroupException nsge) {
 			throw new NotFoundException(nsge);
@@ -142,24 +147,19 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		}
 	}
 
-	private FolderIdFilter _getFolderIdFilter(DLFolder dlFolder) {
-		return _folderIdFilterProvider.create(dlFolder.getFolderId());
-	}
-
 	private PageItems<DLFileEntry> _getPageItems(
-		FolderIdFilter folderIdFilter, Pagination pagination) {
+		FolderIdGroupIdFilter folderIdGroupIdFilter, Pagination pagination) {
 
 		try {
-			Long folderId = folderIdFilter.getId();
-
-			DLFolder dlFolder = _dlFolderService.getFolder(folderId);
+			Long folderId = folderIdGroupIdFilter.getFolderId();
+			Long groupId = folderIdGroupIdFilter.getId();
 
 			List<DLFileEntry> fileEntries = _dlFileEntryService.getFileEntries(
-				dlFolder.getGroupId(), folderId, pagination.getStartPosition(),
+				groupId, folderId, pagination.getStartPosition(),
 				pagination.getEndPosition(), null);
 
 			int fileEntriesCount = _dlFileEntryService.getFileEntriesCount(
-				dlFolder.getGroupId(), folderId);
+				groupId, folderId);
 
 			return new PageItems<>(fileEntries, fileEntriesCount);
 		}
@@ -185,10 +185,10 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 	private DLFileEntryService _dlFileEntryService;
 
 	@Reference
-	private DLFolderService _dlFolderService;
+	private FolderIdGroupIdFilterProvider _folderIdGroupIdFilterProvider;
 
 	@Reference
-	private FolderIdFilterProvider _folderIdFilterProvider;
+	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private UserLocalService _userService;
