@@ -34,7 +34,6 @@ import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
@@ -42,9 +41,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -253,14 +250,6 @@ public class SingleModelMessageBodyWriter<T>
 			modelClass, fields,
 			(fieldName, link) -> singleModelMessageMapper.mapLink(
 				jsonObjectBuilder, fieldName, link));
-
-		Map<String, Function<U, InputStream>> binaryResources =
-			_resourceManager.getBinaryResources(modelClass);
-
-		_writerHelper.writeBinaryResources(
-			binaryResources, modelClass, model, _uriInfo,
-			(field, value) -> singleModelMessageMapper.mapField(
-				jsonObjectBuilder, field, value));
 
 		_writerHelper.writeTypes(
 			modelClass,
