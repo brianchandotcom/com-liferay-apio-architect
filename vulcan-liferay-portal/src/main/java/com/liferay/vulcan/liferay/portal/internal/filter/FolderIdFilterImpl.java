@@ -12,26 +12,24 @@
  * details.
  */
 
-package com.liferay.vulcan.liferay.portal.filter;
+package com.liferay.vulcan.liferay.portal.internal.filter;
+
+import com.liferay.vulcan.liferay.portal.filter.FolderIdFilter;
 
 /**
- * Instances of this class represent a folderId and groupId filter.
- *
- * <p>
- * To use this class, add it as a parameter in {@link
- * com.liferay.vulcan.resource.builder.RoutesBuilder}
- * <code>filteredCollectionPage</code> methods.
- * </p>
- *
  * @author Javier Gamarra
  */
-public interface FolderIdGroupIdFilter extends GroupIdFilter {
+public class FolderIdFilterImpl implements FolderIdFilter {
 
-	/**
-	 * Returns the folder ID to filter.
-	 *
-	 * @return folder ID to filter.
-	 */
-	public long getFolderId();
+	public FolderIdFilterImpl(long folderId) {
+		_folderId = folderId;
+	}
+
+	@Override
+	public Long getId() {
+		return _folderId;
+	}
+
+	private final long _folderId;
 
 }

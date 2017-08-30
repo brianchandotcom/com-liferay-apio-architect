@@ -17,8 +17,8 @@ package com.liferay.vulcan.liferay.portal.filter.provider;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.vulcan.filter.FilterProvider;
 import com.liferay.vulcan.filter.IdFilterProviderHelper;
-import com.liferay.vulcan.liferay.portal.filter.FolderIdGroupIdFilter;
-import com.liferay.vulcan.liferay.portal.internal.filter.FolderIdGroupIdFilterImpl;
+import com.liferay.vulcan.liferay.portal.filter.FolderIdFilter;
+import com.liferay.vulcan.liferay.portal.internal.filter.FolderIdFilterImpl;
 
 import java.util.Map;
 
@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Allows resources to provide {@link FolderIdGroupIdFilter} in {@link
+ * Allows resources to provide {@link FolderIdFilter} in {@link
  * com.liferay.vulcan.resource.builder.RoutesBuilder}'s
  * <code>filteredCollectionPage</code> methods.
  *
@@ -40,21 +40,19 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	service = {FilterProvider.class, FolderIdGroupIdFilterProvider.class}
+	service = {FilterProvider.class, FolderIdFilterProvider.class}
 )
-public class FolderIdGroupIdFilterProvider
-	implements FilterProvider<FolderIdGroupIdFilter> {
+public class FolderIdFilterProvider implements FilterProvider<FolderIdFilter> {
 
 	/**
-	 * Creates a new {@link FolderIdGroupIdFilter} from a given
-	 * <code>folderId</code> and <code>groupId</code>.
+	 * Creates a new {@link FolderIdFilter} from a given
+	 * <code>folderId</code>.
 	 *
 	 * @param  folderId the folder ID that will be used to filter.
-	 * @param  groupId the group ID that will be used to filter.
-	 * @return an instance of a {@link FolderIdGroupIdFilter}.
+	 * @return an instance of a {@link FolderIdFilter}.
 	 */
-	public FolderIdGroupIdFilter create(long folderId, long groupId) {
-		return new FolderIdGroupIdFilterImpl(folderId, groupId);
+	public FolderIdFilter create(long folderId) {
+		return new FolderIdFilterImpl(folderId);
 	}
 
 	@Override
@@ -64,25 +62,19 @@ public class FolderIdGroupIdFilterProvider
 
 	@Override
 	public Map<String, String> getQueryParamMap(
-		FolderIdGroupIdFilter queryParamFilterType) {
+		FolderIdFilter queryParamFilterType) {
 
 		return _idFilterProviderHelper.getQueryParamMap(queryParamFilterType);
 	}
 
 	@Override
-	public FolderIdGroupIdFilter provide(
-		HttpServletRequest httpServletRequest) {
-
-		String groupIdString = _idFilterProviderHelper.getId(
+	public FolderIdFilter provide(HttpServletRequest httpServletRequest) {
+		String folderIdString = _idFilterProviderHelper.getId(
 			httpServletRequest);
-
-		long groupId = GetterUtil.getLong(groupIdString);
-
-		String folderIdString = httpServletRequest.getParameter("folderId");
 
 		long folderId = GetterUtil.getLong(folderIdString);
 
-		return new FolderIdGroupIdFilterImpl(folderId, groupId);
+		return new FolderIdFilterImpl(folderId);
 	}
 
 	@Reference
