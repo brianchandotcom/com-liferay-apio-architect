@@ -177,16 +177,6 @@ public class SingleModelMessageBodyWriter<T>
 							jsonObjectBuilder, embeddedPathElements, fieldName,
 							link));
 
-				Map<String, Function<V, InputStream>> binaries =
-					_resourceManager.getBinaries(modelClass);
-
-				_writerHelper.writeBinaries(
-					binaries, modelClass, model, _httpServletRequest,
-					(fieldName, value) ->
-						singleModelMessageMapper.mapEmbeddedResourceField(
-							jsonObjectBuilder, embeddedPathElements, fieldName,
-							value));
-
 				_writerHelper.writeTypes(
 					modelClass,
 					types -> singleModelMessageMapper.mapEmbeddedResourceTypes(
