@@ -54,7 +54,7 @@ public interface RootEndpoint {
 	 *         an error.
 	 */
 	@GET
-	@Path("/b/{path}/{id}/{binaryId}")
+	@Path("/p/{path}/{id}/{binaryId}")
 	public default <T> Try<InputStream> getBinary(
 		@PathParam("path") String path, @PathParam("id") String id,
 		@PathParam("binaryId") String binaryId) {

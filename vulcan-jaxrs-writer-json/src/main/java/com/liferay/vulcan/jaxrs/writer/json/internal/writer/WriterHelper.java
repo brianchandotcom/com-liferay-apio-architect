@@ -556,7 +556,7 @@ public class WriterHelper {
 		return optional.map(
 			Resource::getPath
 		).map(
-			path -> "/b/" + path + "/" + identifier
+			path -> "/p/" + path + "/" + identifier
 		).map(
 			_getTransformURIFunction(
 				(uri, transformer) ->
