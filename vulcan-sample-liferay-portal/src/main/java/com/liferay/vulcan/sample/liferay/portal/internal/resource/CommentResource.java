@@ -147,11 +147,11 @@ public class CommentResource implements Resource<Comment> {
 			i--;
 		}
 
-		int commentsCount = _commentManager.getCommentsCount(
+		int count = _commentManager.getCommentsCount(
 			classNameClassPKFilter.getClassName(),
 			classNameClassPKFilter.getClassPK());
 
-		return new PageItems<>(comments, commentsCount);
+		return new PageItems<>(comments, count);
 	}
 
 	private Optional<User> _getUserOptional(Comment comment) {
