@@ -90,8 +90,7 @@ public interface RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotFoundException(
-				"No endpoint found at path: " + binaryId)
+			() -> new NotFoundException("No endpoint found at path " + binaryId)
 		).map(
 			binaryFunction -> binaryFunction.apply(binaryId)
 		).map(
@@ -147,7 +146,7 @@ public interface RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path: " + path)
+			() -> new NotFoundException("No endpoint found at path " + path)
 		).map(
 			Supplier::get
 		);
