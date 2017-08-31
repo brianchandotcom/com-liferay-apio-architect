@@ -28,9 +28,9 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.IdentityServiceContextFunction;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -84,7 +84,8 @@ public class CommentResource implements Resource<Comment> {
 		return routesBuilder.collectionItem(
 			this::_getComment, LongIdentifier.class
 		).collectionPage(
-			this::_getPageItems, Identifier.class, CurrentUser.class
+			this::_getPageItems, ClassNameClassPKIdentifier.class,
+			CurrentUser.class
 		).build();
 	}
 
@@ -127,10 +128,12 @@ public class CommentResource implements Resource<Comment> {
 	}
 
 	private PageItems<Comment> _getPageItems(
-		Pagination pagination, Identifier identifier, CurrentUser currentUser) {
+		Pagination pagination,
+		ClassNameClassPKIdentifier classNameClassPKIdentifier,
+		CurrentUser currentUser) {
 
-		String className = "";
-		long classPK = 0;
+		String className = classNameClassPKIdentifier.getClassName();
+		long classPK = classNameClassPKIdentifier.getClassPK();
 
 		List<Comment> comments = new ArrayList<>();
 
