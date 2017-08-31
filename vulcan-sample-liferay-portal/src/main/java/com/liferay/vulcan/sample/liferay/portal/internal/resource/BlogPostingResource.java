@@ -173,10 +173,12 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		long groupId = blogsEntry.getGroupId();
 
 		try {
-			return Optional.of(_groupLocalService.getGroup(groupId));
+			return Optional.of(
+				_groupLocalService.getGroup(blogsEntry.getGroupId()));
 		}
 		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException("Unable to get group " + groupId, nsge);
+			throw new NotFoundException(
+				"Unable to get group " + blogsEntry.getGroupId(), nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -196,13 +198,13 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 	}
 
 	private Optional<User> _getUserOptional(BlogsEntry blogsEntry) {
-		long userId = blogsEntry.getUserId();
-
 		try {
-			return Optional.ofNullable(_userService.getUserById(userId));
+			return Optional.ofNullable(
+				_userService.getUserById(blogsEntry.getUserId()));
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException("Unable to get user " + userId, e);
+			throw new NotFoundException(
+				"Unable to get user " + blogsEntry.getUserId(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

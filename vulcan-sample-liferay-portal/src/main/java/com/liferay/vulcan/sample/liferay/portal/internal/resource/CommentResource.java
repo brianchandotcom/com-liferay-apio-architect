@@ -155,13 +155,13 @@ public class CommentResource implements Resource<Comment> {
 	}
 
 	private Optional<User> _getUserOptional(Comment comment) {
-		long userId = comment.getUserId();
-
 		try {
-			return Optional.ofNullable(_userService.getUserById(userId));
+			return Optional.ofNullable(
+				_userService.getUserById(comment.getUserId()));
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException("Unable to get user " + userId, e);
+			throw new NotFoundException(
+				"Unable to get user " + comment.getUserId(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
