@@ -17,11 +17,12 @@ package com.liferay.vulcan.liferay.portal.internal.identifier.converter;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.identifier.converter.IdentifierConverter;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
+import com.liferay.vulcan.liferay.portal.internal.identifier.ClassNameClassPKIdentifierImpl;
+import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
-import java.util.Optional;
-
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -37,10 +38,13 @@ import org.osgi.service.component.annotations.Reference;
  * </p>
  *
  * <p>
- * The class name is extracted from the type obtained by calling {@link
- * Identifier#getType()} and getting the <code>Resource's</code> class name
- * matching the <code>type</code> as its path. If no matching resource is found,
- * throws an exception.
+ * The <code>className</code>/<code>classPK</code> are extracted from the
+ * destructuring of the ID in the case this is the identifier of a single
+ * resource. In the case of a collection, the <code>className</code> is
+ * extracted by finding the <code>Resource's</code> class name matching the
+ * <code>type</code> as its path. If no matching resource is found, throws an
+ * exception. Secondly, the <code>classPK</code> is extracted by converting the
+ * ID to long.
  * </p>
  *
  * @author Alejandro Hernández
@@ -51,30 +55,40 @@ public class ClassNameClassPKIdentifierConverter
 
 	@Override
 	public ClassNameClassPKIdentifier convert(Identifier identifier) {
-		return new ClassNameClassPKIdentifier() {
+		String id = identifier.getId();
+		String type = identifier.getType();
 
-			@Override
-			public String getClassName() {
-				String className = _resourceManager.getClassName(getType());
+		String[] components = id.split(":");
 
-				Optional<String> optional = Optional.ofNullable(className);
+		if (components.length == 2) {
+			return _getClassNameClassPKIdentifier(
+				type, id, components[0], components[1]);
+		}
 
-				return optional.orElseThrow(
-					() -> new BadRequestException(
-						"Unable to find a resource with type " + getType()));
-			}
+		return _getClassNameClassPKIdentifier(type, id, type, id);
+	}
 
-			@Override
-			public String getId() {
-				return identifier.getId();
-			}
+	private Long _getAsLong(String id) {
+		Try<Long> longTry = Try.fromFallible(() -> Long.parseLong(id));
 
-			@Override
-			public String getType() {
-				return identifier.getType();
-			}
+		return longTry.orElseThrow(
+			() -> new BadRequestException(
+				"Unable to convert " + id + " to a long classPK"));
+	}
 
-		};
+	private ClassNameClassPKIdentifier _getClassNameClassPKIdentifier(
+		String oldType, String oldId, String type, String id) {
+
+		Long classPK = _getAsLong(id);
+		String className = _resourceManager.getClassName(type);
+
+		if (className == null) {
+			throw new NotFoundException(
+				"Unable to find a resource with type " + type);
+		}
+
+		return new ClassNameClassPKIdentifierImpl(
+			className, classPK, oldType, oldId);
 	}
 
 	@Reference

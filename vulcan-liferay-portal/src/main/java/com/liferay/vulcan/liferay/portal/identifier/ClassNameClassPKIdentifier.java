@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.liferay.portal.identifier;
 
-import com.liferay.vulcan.identifier.LongIdentifier;
+import com.liferay.vulcan.identifier.Identifier;
 
 /**
  * Instances of this identifier represents an identifier with a class name and a
@@ -27,7 +27,7 @@ import com.liferay.vulcan.identifier.LongIdentifier;
  *
  * @author Alejandro Hernández
  */
-public interface ClassNameClassPKIdentifier extends LongIdentifier {
+public interface ClassNameClassPKIdentifier extends Identifier {
 
 	/**
 	 * Returns the class name.
@@ -41,8 +41,6 @@ public interface ClassNameClassPKIdentifier extends LongIdentifier {
 	 *
 	 * @return the <code>classPK</code>.
 	 */
-	public default long getClassPK() {
-		return getIdAsLong();
-	}
+	public long getClassPK();
 
 }
