@@ -14,8 +14,6 @@
 
 package com.liferay.vulcan.sample.liferay.portal.rating;
 
-import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
-
 /**
  * An instance of this interface represents an average rating for a Thing based
  * on multiple ratings or reviews.
@@ -30,11 +28,18 @@ import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 public interface AggregateRating {
 
 	/**
-	 * Returns this aggregate rating identifier.
+	 * * Returns the class name.
 	 *
-	 * @return identifier.
+	 * @return the className.
 	 */
-	public ClassNameClassPKIdentifier getClassNameClassPKIdentifier();
+	public String getClassName();
+
+	/**
+	 * Returns the class PK.
+	 *
+	 * @return the classPK.
+	 */
+	public Long getClassPK();
 
 	/**
 	 * Returns the count of total number of ratings.

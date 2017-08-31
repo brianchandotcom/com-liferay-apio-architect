@@ -22,8 +22,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.vulcan.liferay.portal.filter.GroupIdFilter;
-import com.liferay.vulcan.liferay.portal.filter.provider.GroupIdFilterProvider;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -57,8 +55,7 @@ public class FolderResource implements Resource<DLFolder> {
 		representorBuilder.identifier(
 			dlFolder -> String.valueOf(dlFolder.getFolderId())
 		).addBidirectionalModel(
-			"group", "folders", Group.class, this::_getGroupOptional,
-			this::_getGroupIdFilter
+			"group", "folders", Group.class, this::_getGroupOptional
 		).addField(
 			"dateCreated", DLFolder::getCreateDate
 		).addField(
@@ -83,8 +80,8 @@ public class FolderResource implements Resource<DLFolder> {
 	public Routes<DLFolder> routes(RoutesBuilder<DLFolder> routesBuilder) {
 		return routesBuilder.collectionItem(
 			this::_getDLFolder, Long.class
-		).filteredCollectionPage(
-			this::_getPageItems, GroupIdFilter.class
+		).collectionPage(
+			this::_getPageItems
 		).build();
 	}
 
@@ -100,10 +97,6 @@ public class FolderResource implements Resource<DLFolder> {
 		}
 	}
 
-	private GroupIdFilter _getGroupIdFilter(Group group) {
-		return _groupIdFilterProvider.create(group.getGroupId());
-	}
-
 	private Optional<Group> _getGroupOptional(DLFolder dlFolder) {
 		try {
 			return Optional.of(
@@ -117,15 +110,15 @@ public class FolderResource implements Resource<DLFolder> {
 		}
 	}
 
-	private PageItems<DLFolder> _getPageItems(
-		GroupIdFilter groupIdFilter, Pagination pagination) {
-
+	private PageItems<DLFolder> _getPageItems(Pagination pagination) {
 		try {
+			long groupId = 0;
+
 			List<DLFolder> dlFolders = _dlFolderService.getFolders(
-				groupIdFilter.getId(), 0, pagination.getStartPosition(),
+				groupId, 0, pagination.getStartPosition(),
 				pagination.getEndPosition(), null);
-			int count = _dlFolderService.getFoldersCount(
-				groupIdFilter.getId(), 0);
+
+			int count = _dlFolderService.getFoldersCount(groupId, 0);
 
 			return new PageItems<>(dlFolders, count);
 		}
@@ -145,9 +138,6 @@ public class FolderResource implements Resource<DLFolder> {
 
 	@Reference
 	private DLFolderService _dlFolderService;
-
-	@Reference
-	private GroupIdFilterProvider _groupIdFilterProvider;
 
 	@Reference
 	private GroupLocalService _groupLocalService;

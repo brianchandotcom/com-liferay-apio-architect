@@ -27,11 +27,6 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
-import com.liferay.vulcan.filter.QueryParamFilterType;
-import com.liferay.vulcan.liferay.portal.filter.GroupIdFilter;
-import com.liferay.vulcan.liferay.portal.filter.provider.ClassNameClassPKFilterProvider;
-import com.liferay.vulcan.liferay.portal.filter.provider.GroupIdFilterProvider;
-import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -85,8 +80,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		representorBuilder.identifier(
 			blogsEntry -> String.valueOf(blogsEntry.getEntryId())
 		).addBidirectionalModel(
-			"group", "blogs", Group.class, this::_getGroupOptional,
-			this::_getGroupIdFilter
+			"group", "blogs", Group.class, this::_getGroupOptional
 		).addEmbeddedModel(
 			"aggregateRating", AggregateRating.class,
 			this::_getAggregateRatingOptional
@@ -114,7 +108,7 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
 		).addRelatedCollection(
-			"comment", Comment.class, this::_getClassNameClassPKFilter
+			"comment", Comment.class
 		).addType(
 			"BlogPosting"
 		);
@@ -127,8 +121,8 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 
 	@Override
 	public Routes<BlogsEntry> routes(RoutesBuilder<BlogsEntry> routesBuilder) {
-		return routesBuilder.filteredCollectionPage(
-			this::_getPageItems, GroupIdFilter.class
+		return routesBuilder.collectionPage(
+			this::_getPageItems
 		).collectionItem(
 			this::_getBlogsEntry, Long.class
 		).build();
@@ -137,13 +131,9 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 	private Optional<AggregateRating> _getAggregateRatingOptional(
 		BlogsEntry blogsEntry) {
 
-		ClassNameClassPKIdentifier classNameClassPKIdentifier =
-			new ClassNameClassPKIdentifier(
-				BlogsEntry.class.getName(), blogsEntry.getEntryId());
-
 		return Optional.of(
 			_aggregateRatingService.getAggregateRating(
-				classNameClassPKIdentifier));
+				BlogsEntry.class.getName(), blogsEntry.getEntryId()));
 	}
 
 	private BlogsEntry _getBlogsEntry(Long id) {
@@ -156,17 +146,6 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
-	}
-
-	private QueryParamFilterType _getClassNameClassPKFilter(
-		BlogsEntry blogsEntry) {
-
-		return _classNameClassPKFilterProvider.create(
-			BlogsEntry.class.getName(), blogsEntry.getEntryId());
-	}
-
-	private GroupIdFilter _getGroupIdFilter(Group group) {
-		return _groupIdFilterProvider.create(group.getGroupId());
 	}
 
 	private Optional<Group> _getGroupOptional(BlogsEntry blogsEntry) {
@@ -183,14 +162,13 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		}
 	}
 
-	private PageItems<BlogsEntry> _getPageItems(
-		GroupIdFilter groupIdFilter, Pagination pagination) {
+	private PageItems<BlogsEntry> _getPageItems(Pagination pagination) {
+		long groupId = 0;
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			groupIdFilter.getId(), 0, pagination.getStartPosition(),
+			groupId, 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
-		int count = _blogsService.getGroupEntriesCount(
-			groupIdFilter.getId(), 0);
+		int count = _blogsService.getGroupEntriesCount(groupId, 0);
 
 		return new PageItems<>(blogsEntries, count);
 	}
@@ -214,12 +192,6 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 
 	@Reference
 	private BlogsEntryService _blogsService;
-
-	@Reference
-	private ClassNameClassPKFilterProvider _classNameClassPKFilterProvider;
-
-	@Reference
-	private GroupIdFilterProvider _groupIdFilterProvider;
 
 	@Reference
 	private GroupLocalService _groupLocalService;

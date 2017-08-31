@@ -15,8 +15,6 @@
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
 import com.liferay.vulcan.binary.BinaryFunction;
-import com.liferay.vulcan.filter.QueryParamFilterType;
-import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
@@ -24,6 +22,7 @@ import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
@@ -36,8 +35,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	public RepresentorBuilderImpl(
 		Class<T> modelClass,
 		Map<String, Function<?, String>> identifierFunctions,
-		TriConsumer<String, Class<?>, Function<?, QueryParamFilterType>>
-			addRelatedCollectionTriConsumer,
+		BiConsumer<String, Class<?>> addRelatedCollectionBiConsumer,
 		Map<String, Function<?, Object>> fieldFunctions,
 		List<RelatedModel<?, ?>> embeddedRelatedModels,
 		List<RelatedModel<?, ?>> linkedRelatedModels, Map<String, String> links,
@@ -46,7 +44,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 
 		_modelClass = modelClass;
 		_identifierFunctions = identifierFunctions;
-		_addRelatedCollectionTriConsumer = addRelatedCollectionTriConsumer;
+		_addRelatedCollectionBiConsumer = addRelatedCollectionBiConsumer;
 		_fieldFunctions = fieldFunctions;
 		_embeddedRelatedModels = embeddedRelatedModels;
 		_linkedRelatedModels = linkedRelatedModels;
@@ -65,14 +63,12 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 			@Override
 			public <S> FirstStep<T> addBidirectionalModel(
 				String key, String relatedKey, Class<S> modelClass,
-				Function<T, Optional<S>> modelFunction,
-				Function<S, QueryParamFilterType> filterFunction) {
+				Function<T, Optional<S>> modelFunction) {
 
 				_linkedRelatedModels.add(
 					new RelatedModel<>(key, modelClass, modelFunction));
 
-				_addRelatedCollectionTriConsumer.accept(
-					relatedKey, modelClass, filterFunction);
+				_addRelatedCollectionBiConsumer.accept(relatedKey, modelClass);
 
 				return this;
 			}
@@ -126,11 +122,10 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 
 			@Override
 			public <S> FirstStep<T> addRelatedCollection(
-				String key, Class<S> modelClass,
-				Function<T, QueryParamFilterType> filterFunction) {
+				String key, Class<S> modelClass) {
 
 				_relatedCollections.add(
-					new RelatedCollection<>(key, modelClass, filterFunction));
+					new RelatedCollection<>(key, modelClass));
 
 				return this;
 			}
@@ -145,9 +140,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 		};
 	}
 
-	private final TriConsumer
-		<String, Class<?>, Function<?, QueryParamFilterType>>
-			_addRelatedCollectionTriConsumer;
+	private final BiConsumer<String, Class<?>> _addRelatedCollectionBiConsumer;
 	private final Map<String, BinaryFunction<?>> _binaryFunctions;
 	private final List<RelatedModel<?, ?>> _embeddedRelatedModels;
 	private final Map<String, Function<?, Object>> _fieldFunctions;

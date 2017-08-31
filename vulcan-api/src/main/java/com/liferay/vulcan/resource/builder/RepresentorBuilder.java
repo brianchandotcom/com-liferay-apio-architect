@@ -15,7 +15,6 @@
 package com.liferay.vulcan.resource.builder;
 
 import com.liferay.vulcan.binary.BinaryFunction;
-import com.liferay.vulcan.filter.QueryParamFilterType;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -57,14 +56,11 @@ public interface RepresentorBuilder<T> {
 		 * @param relatedKey name of the relation in the related resource.
 		 * @param modelClass class of the related model.
 		 * @param modelFunction function used to obtain the related model.
-		 * @param filterFunction function used to obtain the filter for the
-		 *                       collection.
 		 * @return builder's actual step.
 		 */
 		public <S> FirstStep<T> addBidirectionalModel(
 			String key, String relatedKey, Class<S> modelClass,
-			Function<T, Optional<S>> modelFunction,
-			Function<S, QueryParamFilterType> filterFunction);
+			Function<T, Optional<S>> modelFunction);
 
 		/**
 		 * @param key     		 name of the binary resource
@@ -126,13 +122,10 @@ public interface RepresentorBuilder<T> {
 		 *
 		 * @param key name of the relation.
 		 * @param modelClass class of the collection's related models.
-		 * @param filterFunction function used to obtain the filter for the
-		 *                       collection.
 		 * @return builder's actual step.
 		 */
 		public <S> FirstStep<T> addRelatedCollection(
-			String key, Class<S> modelClass,
-			Function<T, QueryParamFilterType> filterFunction);
+			String key, Class<S> modelClass);
 
 		/**
 		 * Use this method to provide a type for this model. Multiple types are

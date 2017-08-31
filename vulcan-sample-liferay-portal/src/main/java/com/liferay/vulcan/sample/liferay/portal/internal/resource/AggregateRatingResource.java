@@ -14,7 +14,6 @@
 
 package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
-import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
@@ -40,7 +39,8 @@ public class AggregateRatingResource implements Resource<AggregateRating> {
 
 		representorBuilder.identifier(
 			aggregateRating ->
-				String.valueOf(aggregateRating.getClassNameClassPKIdentifier())
+				aggregateRating.getClassName() + "-" +
+					String.valueOf(aggregateRating.getClassPK())
 		).addField(
 			"bestRating", aggregateRating -> 1
 		).addField(
@@ -63,10 +63,7 @@ public class AggregateRatingResource implements Resource<AggregateRating> {
 	public Routes<AggregateRating> routes(
 		RoutesBuilder<AggregateRating> routesBuilder) {
 
-		return routesBuilder.collectionItem(
-			_aggregateRatingService::getAggregateRating,
-			ClassNameClassPKIdentifier.class
-		).build();
+		return routesBuilder.build();
 	}
 
 	@Reference

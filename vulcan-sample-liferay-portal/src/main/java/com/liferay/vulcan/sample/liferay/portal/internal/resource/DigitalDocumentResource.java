@@ -25,8 +25,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.vulcan.liferay.portal.filter.FolderIdFilter;
-import com.liferay.vulcan.liferay.portal.filter.provider.FolderIdFilterProvider;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -64,7 +62,7 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 			dlFileEntry -> String.valueOf(dlFileEntry.getFileEntryId())
 		).addBidirectionalModel(
 			"folder", "digitalDocuments", DLFolder.class,
-			this::_getDLFolderOptional, this::_getFolderIdFilter
+			this::_getDLFolderOptional
 		).addBinary(
 			"contentStream", this::_getInputStream
 		).addEmbeddedModel(
@@ -103,8 +101,8 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 
 		return routesBuilder.collectionItem(
 			this::_getDLFileEntry, Long.class
-		).filteredCollectionPage(
-			this::_getPageItems, FolderIdFilter.class
+		).collectionPage(
+			this::_getPageItems
 		).build();
 	}
 
@@ -133,10 +131,6 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		}
 	}
 
-	private FolderIdFilter _getFolderIdFilter(DLFolder dlFolder) {
-		return _folderIdFilterProvider.create(dlFolder.getFolderId());
-	}
-
 	private InputStream _getInputStream(DLFileEntry dlFileEntry) {
 		try {
 			return dlFileEntry.getContentStream();
@@ -146,12 +140,11 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		}
 	}
 
-	private PageItems<DLFileEntry> _getPageItems(
-		FolderIdFilter folderIdFilter, Pagination pagination) {
-
+	private PageItems<DLFileEntry> _getPageItems(Pagination pagination) {
 		try {
-			DLFolder dlFolder = _dlFolderService.getFolder(
-				folderIdFilter.getId());
+			long folderId = 0;
+
+			DLFolder dlFolder = _dlFolderService.getFolder(folderId);
 
 			List<DLFileEntry> dlFileEntries =
 				_dlFileEntryService.getFileEntries(
@@ -186,9 +179,6 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 
 	@Reference
 	private DLFolderService _dlFolderService;
-
-	@Reference
-	private FolderIdFilterProvider _folderIdFilterProvider;
 
 	@Reference
 	private UserLocalService _userService;

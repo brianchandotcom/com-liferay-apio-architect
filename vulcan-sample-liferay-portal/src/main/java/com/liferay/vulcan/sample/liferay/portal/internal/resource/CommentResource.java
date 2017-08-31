@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.service.IdentityServiceContextFunction;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
-import com.liferay.vulcan.liferay.portal.filter.ClassNameClassPKFilter;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -82,8 +81,8 @@ public class CommentResource implements Resource<Comment> {
 	public Routes<Comment> routes(RoutesBuilder<Comment> routesBuilder) {
 		return routesBuilder.collectionItem(
 			this::_getComment, Long.class
-		).filteredCollectionPage(
-			this::_getPageItems, ClassNameClassPKFilter.class, CurrentUser.class
+		).collectionPage(
+			this::_getPageItems, CurrentUser.class
 		).build();
 	}
 
@@ -92,15 +91,13 @@ public class CommentResource implements Resource<Comment> {
 	}
 
 	private DiscussionCommentIterator _getDiscussionCommentIterator(
-		ClassNameClassPKFilter classNameClassPKFilter, Pagination pagination,
+		String className, long classPK, Pagination pagination,
 		CurrentUser currentUser) {
 
 		AssetEntry assetEntry = null;
 
 		try {
-			assetEntry = _assetEntryLocalService.getEntry(
-				classNameClassPKFilter.getClassName(),
-				classNameClassPKFilter.getClassPK());
+			assetEntry = _assetEntryLocalService.getEntry(className, classPK);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -110,9 +107,8 @@ public class CommentResource implements Resource<Comment> {
 
 		try {
 			discussion = _commentManager.getDiscussion(
-				currentUser.getUserId(), assetEntry.getGroupId(),
-				classNameClassPKFilter.getClassName(),
-				classNameClassPKFilter.getClassPK(),
+				currentUser.getUserId(), assetEntry.getGroupId(), className,
+				classPK,
 				new IdentityServiceContextFunction(new ServiceContext()));
 		}
 		catch (PortalException pe) {
@@ -127,14 +123,16 @@ public class CommentResource implements Resource<Comment> {
 	}
 
 	private PageItems<Comment> _getPageItems(
-		ClassNameClassPKFilter classNameClassPKFilter, Pagination pagination,
-		CurrentUser currentUser) {
+		Pagination pagination, CurrentUser currentUser) {
+
+		String className = "";
+		long classPK = 0;
 
 		List<Comment> comments = new ArrayList<>();
 
 		DiscussionCommentIterator discussionCommentIterator =
 			_getDiscussionCommentIterator(
-				classNameClassPKFilter, pagination, currentUser);
+				className, classPK, pagination, currentUser);
 
 		int i = pagination.getEndPosition() - pagination.getStartPosition();
 
@@ -147,9 +145,7 @@ public class CommentResource implements Resource<Comment> {
 			i--;
 		}
 
-		int count = _commentManager.getCommentsCount(
-			classNameClassPKFilter.getClassName(),
-			classNameClassPKFilter.getClassPK());
+		int count = _commentManager.getCommentsCount(className, classPK);
 
 		return new PageItems<>(comments, count);
 	}

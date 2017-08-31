@@ -19,8 +19,6 @@ import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.vulcan.binary.BinaryFunction;
-import com.liferay.vulcan.filter.QueryParamFilterType;
-import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
@@ -34,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
@@ -278,7 +277,7 @@ public class ResourceManager extends BaseManager<Resource> {
 				resource.buildRepresentor(
 					new RepresentorBuilderImpl(
 						modelClass, _identifierFunctions,
-						_addRelatedCollectionTriConsumer(modelClass),
+						_addRelatedCollectionBiConsumer(modelClass),
 						fieldFunctions, embeddedRelatedModels,
 						linkedRelatedModels, links, relatedCollections,
 						binaryFunctions, types));
@@ -289,29 +288,17 @@ public class ResourceManager extends BaseManager<Resource> {
 			});
 	}
 
-	private <T> TriConsumer<String, Class<?>, Function<?, QueryParamFilterType>>
-		_addRelatedCollectionTriConsumer(Class<T> relatedModelClass) {
+	private <T> BiConsumer<String, Class<?>>
+		_addRelatedCollectionBiConsumer(Class<T> relatedModelClass) {
 
-		return (key, modelClass, filterFunction) -> {
+		return (key, modelClass) -> {
 			List<RelatedCollection<?, ?>> relatedCollections =
 				_relatedCollections.computeIfAbsent(
 					modelClass.getName(), className -> new ArrayList<>());
 
 			relatedCollections.add(
-				new RelatedCollection<>(
-					key, relatedModelClass, filterFunction));
+				new RelatedCollection<>(key, relatedModelClass));
 		};
-	}
-
-	private <U> Optional<U> _convert(Class<U> clazz, String id) {
-		return _converterManager.convert(clazz, id);
-	}
-
-	private Optional<String> _getFilterName(
-		QueryParamFilterType queryParamFilterType) {
-
-		return _filterProviderManager.getFilterNameOptional(
-			queryParamFilterType);
 	}
 
 	private Function<Class<?>, Optional<?>> _getProvideClassFunction(
@@ -320,26 +307,13 @@ public class ResourceManager extends BaseManager<Resource> {
 		return clazz -> _providerManager.provide(clazz, httpServletRequest);
 	}
 
-	private Function<Class<? extends QueryParamFilterType>,
-		Optional<? extends QueryParamFilterType>>
-			_getProvideFilterFunction(HttpServletRequest httpServletRequest) {
-
-		return clazz -> _filterProviderManager.provide(
-			clazz, httpServletRequest);
-	}
-
 	private <T> Function<HttpServletRequest, Routes<?>> _getRoutes(
 		Class<T> modelClass, Resource<T> resource,
 		Map<String, BinaryFunction<T>> binaryFunctions) {
 
 		return httpServletRequest -> {
-			String filterName = httpServletRequest.getParameter("filterName");
-
 			RoutesBuilderImpl<T> routesBuilder = new RoutesBuilderImpl<>(
-				modelClass, this::_convert,
-				_getProvideClassFunction(httpServletRequest),
-				_getProvideFilterFunction(httpServletRequest),
-				this::_getFilterName, filterName);
+				modelClass, _getProvideClassFunction(httpServletRequest));
 
 			routesBuilder.collectionBinary(binaryFunctions);
 
@@ -360,18 +334,10 @@ public class ResourceManager extends BaseManager<Resource> {
 	private final Map<String, Map<String, BinaryFunction<?>>> _binaryFunctions =
 		new ConcurrentHashMap<>();
 	private final Map<String, String> _classNames = new ConcurrentHashMap<>();
-
-	@Reference
-	private ConverterManager _converterManager;
-
 	private final Map<String, List<RelatedModel<?, ?>>> _embeddedRelatedModels =
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
 		_fieldFunctions = new ConcurrentHashMap<>();
-
-	@Reference
-	private FilterProviderManager _filterProviderManager;
-
 	private final Map<String, Function<?, String>> _identifierFunctions =
 		new ConcurrentHashMap<>();
 	private final Map<String, List<RelatedModel<?, ?>>> _linkedRelatedModels =
