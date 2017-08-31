@@ -21,6 +21,8 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.vulcan.identifier.LongIdentifier;
+import com.liferay.vulcan.identifier.RootIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -93,14 +95,14 @@ public class PersonResource implements Resource<User> {
 
 	public Routes<User> routes(RoutesBuilder<User> routesBuilder) {
 		return routesBuilder.collectionPage(
-			this::_getPageItems, Company.class
+			this::_getPageItems, RootIdentifier.class, Company.class
 		).collectionItem(
-			this::_getUser, Long.class
+			this::_getUser, LongIdentifier.class
 		).build();
 	}
 
 	private PageItems<User> _getPageItems(
-		Pagination pagination, Company company) {
+		Pagination pagination, RootIdentifier rootIdentifier, Company company) {
 
 		try {
 			List<User> users = _userService.getCompanyUsers(
@@ -116,12 +118,14 @@ public class PersonResource implements Resource<User> {
 		}
 	}
 
-	private User _getUser(Long id) {
+	private User _getUser(LongIdentifier userIdentifier) {
+		long userId = userIdentifier.getIdAsLong();
+
 		try {
-			return _userService.getUserById(id);
+			return _userService.getUserById(userId);
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException("Unable to get user " + id, e);
+			throw new NotFoundException("Unable to get user " + userId, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

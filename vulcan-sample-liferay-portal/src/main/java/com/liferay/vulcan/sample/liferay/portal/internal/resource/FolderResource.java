@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -79,18 +80,20 @@ public class FolderResource implements Resource<DLFolder> {
 	@Override
 	public Routes<DLFolder> routes(RoutesBuilder<DLFolder> routesBuilder) {
 		return routesBuilder.collectionItem(
-			this::_getDLFolder, Long.class
+			this::_getDLFolder, LongIdentifier.class
 		).collectionPage(
-			this::_getPageItems
+			this::_getPageItems, LongIdentifier.class
 		).build();
 	}
 
-	private DLFolder _getDLFolder(Long id) {
+	private DLFolder _getDLFolder(LongIdentifier folderIdentifier) {
+		long folderId = folderIdentifier.getIdAsLong();
+
 		try {
-			return _dlFolderService.getFolder(id);
+			return _dlFolderService.getFolder(folderId);
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException("Unable to get folder " + folderId, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -110,9 +113,11 @@ public class FolderResource implements Resource<DLFolder> {
 		}
 	}
 
-	private PageItems<DLFolder> _getPageItems(Pagination pagination) {
+	private PageItems<DLFolder> _getPageItems(
+		Pagination pagination, LongIdentifier groupIdentifier) {
+
 		try {
-			long groupId = 0;
+			long groupId = groupIdentifier.getIdAsLong();
 
 			List<DLFolder> dlFolders = _dlFolderService.getFolders(
 				groupId, 0, pagination.getStartPosition(),

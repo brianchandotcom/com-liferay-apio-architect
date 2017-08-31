@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.vulcan.identifier.LongIdentifier;
+import com.liferay.vulcan.identifier.RootIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -63,25 +65,29 @@ public class GroupResource implements Resource<Group> {
 	@Override
 	public Routes<Group> routes(RoutesBuilder<Group> routesBuilder) {
 		return routesBuilder.collectionPage(
-			this::_getPageItems
+			this::_getPageItems, RootIdentifier.class
 		).collectionItem(
-			this::_getGroup, Long.class
+			this::_getGroup, LongIdentifier.class
 		).build();
 	}
 
-	private Group _getGroup(Long id) {
+	private Group _getGroup(LongIdentifier groupIdentifier) {
+		long groupId = groupIdentifier.getIdAsLong();
+
 		try {
-			return _groupLocalService.getGroup(id);
+			return _groupLocalService.getGroup(groupId);
 		}
 		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException("Unable to get group " + id, nsge);
+			throw new NotFoundException("Unable to get group " + groupId, nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
 	}
 
-	private PageItems<Group> _getPageItems(Pagination pagination) {
+	private PageItems<Group> _getPageItems(
+		Pagination pagination, RootIdentifier rootIdentifier) {
+
 		List<Group> groups = _groupLocalService.getGroups(
 			pagination.getStartPosition(), pagination.getEndPosition());
 

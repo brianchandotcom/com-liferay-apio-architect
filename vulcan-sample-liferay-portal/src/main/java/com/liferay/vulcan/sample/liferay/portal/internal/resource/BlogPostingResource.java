@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -122,9 +123,9 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 	@Override
 	public Routes<BlogsEntry> routes(RoutesBuilder<BlogsEntry> routesBuilder) {
 		return routesBuilder.collectionPage(
-			this::_getPageItems
+			this::_getPageItems, LongIdentifier.class
 		).collectionItem(
-			this::_getBlogsEntry, Long.class
+			this::_getBlogsEntry, LongIdentifier.class
 		).build();
 	}
 
@@ -136,12 +137,15 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 				BlogsEntry.class.getName(), blogsEntry.getEntryId()));
 	}
 
-	private BlogsEntry _getBlogsEntry(Long id) {
+	private BlogsEntry _getBlogsEntry(LongIdentifier blogsEntryIdentifier) {
+		long blogsEntryId = blogsEntryIdentifier.getIdAsLong();
+
 		try {
-			return _blogsService.getEntry(id);
+			return _blogsService.getEntry(blogsEntryId);
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
-			throw new NotFoundException("Unable to get blogs entry " + id, e);
+			throw new NotFoundException(
+				"Unable to get blogs entry " + blogsEntryId, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -162,12 +166,15 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		}
 	}
 
-	private PageItems<BlogsEntry> _getPageItems(Pagination pagination) {
-		long groupId = 0;
+	private PageItems<BlogsEntry> _getPageItems(
+		Pagination pagination, LongIdentifier groupIdentifier) {
+
+		long groupId = groupIdentifier.getIdAsLong();
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
 			groupId, 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
+
 		int count = _blogsService.getGroupEntriesCount(groupId, 0);
 
 		return new PageItems<>(blogsEntries, count);

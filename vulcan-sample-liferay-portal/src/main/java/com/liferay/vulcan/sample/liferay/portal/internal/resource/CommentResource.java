@@ -28,6 +28,8 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.IdentityServiceContextFunction;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.vulcan.identifier.Identifier;
+import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -80,14 +82,16 @@ public class CommentResource implements Resource<Comment> {
 	@Override
 	public Routes<Comment> routes(RoutesBuilder<Comment> routesBuilder) {
 		return routesBuilder.collectionItem(
-			this::_getComment, Long.class
+			this::_getComment, LongIdentifier.class
 		).collectionPage(
-			this::_getPageItems, CurrentUser.class
+			this::_getPageItems, Identifier.class, CurrentUser.class
 		).build();
 	}
 
-	private Comment _getComment(Long id) {
-		return _commentManager.fetchComment(id);
+	private Comment _getComment(LongIdentifier commentIdentifier) {
+		long commentId = commentIdentifier.getIdAsLong();
+
+		return _commentManager.fetchComment(commentId);
 	}
 
 	private DiscussionCommentIterator _getDiscussionCommentIterator(
@@ -123,7 +127,7 @@ public class CommentResource implements Resource<Comment> {
 	}
 
 	private PageItems<Comment> _getPageItems(
-		Pagination pagination, CurrentUser currentUser) {
+		Pagination pagination, Identifier identifier, CurrentUser currentUser) {
 
 		String className = "";
 		long classPK = 0;

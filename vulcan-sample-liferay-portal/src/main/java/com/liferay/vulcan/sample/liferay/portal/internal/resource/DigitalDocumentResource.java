@@ -15,16 +15,17 @@
 package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;
+import com.liferay.document.library.kernel.exception.NoSuchFolderException;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.service.DLFileEntryService;
 import com.liferay.document.library.kernel.service.DLFolderService;
-import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -100,18 +101,20 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		RoutesBuilder<DLFileEntry> routesBuilder) {
 
 		return routesBuilder.collectionItem(
-			this::_getDLFileEntry, Long.class
+			this::_getDLFileEntry, LongIdentifier.class
 		).collectionPage(
-			this::_getPageItems
+			this::_getPageItems, LongIdentifier.class
 		).build();
 	}
 
-	private DLFileEntry _getDLFileEntry(Long id) {
+	private DLFileEntry _getDLFileEntry(LongIdentifier fileEntryIdentifier) {
+		long fileEntryId = fileEntryIdentifier.getIdAsLong();
+
 		try {
-			return _dlFileEntryService.getFileEntry(id);
+			return _dlFileEntryService.getFileEntry(fileEntryId);
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException("Unable to get file " + fileEntryId, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -119,12 +122,14 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 	}
 
 	private Optional<DLFolder> _getDLFolderOptional(DLFileEntry dlFileEntry) {
+		long folderId = dlFileEntry.getFolderId();
+
 		try {
-			return Optional.of(
-				_dlFolderService.getFolder(dlFileEntry.getFolderId()));
+			return Optional.of(_dlFolderService.getFolder(folderId));
 		}
-		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException(nsge);
+		catch (NoSuchFolderException nsfe) {
+			throw new NotFoundException(
+				"Unable to get group " + folderId, nsfe);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -140,9 +145,11 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		}
 	}
 
-	private PageItems<DLFileEntry> _getPageItems(Pagination pagination) {
+	private PageItems<DLFileEntry> _getPageItems(
+		Pagination pagination, LongIdentifier folderIdentifier) {
+
 		try {
-			long folderId = 0;
+			long folderId = folderIdentifier.getIdAsLong();
 
 			DLFolder dlFolder = _dlFolderService.getFolder(folderId);
 
@@ -162,12 +169,13 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 	}
 
 	private Optional<User> _getUserOptional(DLFileEntry dlFileEntry) {
+		long userId = dlFileEntry.getUserId();
+
 		try {
-			return Optional.ofNullable(
-				_userService.getUserById(dlFileEntry.getUserId()));
+			return Optional.ofNullable(_userService.getUserById(userId));
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException("Unable to get user " + userId, e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
