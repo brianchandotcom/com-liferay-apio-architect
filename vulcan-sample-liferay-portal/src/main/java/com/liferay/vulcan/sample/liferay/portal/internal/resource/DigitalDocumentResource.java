@@ -150,7 +150,7 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		FolderIdFilter folderIdFilter, Pagination pagination) {
 
 		try {
-			Long folderId = folderIdFilter.getId();
+			long folderId = folderIdFilter.getId();
 
 			DLFolder dlFolder = _dlFolderService.getFolder(folderId);
 
