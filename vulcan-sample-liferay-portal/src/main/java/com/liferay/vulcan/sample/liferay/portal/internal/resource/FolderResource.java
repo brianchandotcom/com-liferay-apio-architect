@@ -121,7 +121,7 @@ public class FolderResource implements Resource<DLFolder> {
 		GroupIdFilter groupIdFilter, Pagination pagination) {
 
 		try {
-			Long groupId = groupIdFilter.getId();
+			long groupId = groupIdFilter.getId();
 
 			List<DLFolder> folders = _dlFolderService.getFolders(
 				groupId, 0, pagination.getStartPosition(),
