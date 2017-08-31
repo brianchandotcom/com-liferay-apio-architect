@@ -123,13 +123,12 @@ public class FolderResource implements Resource<DLFolder> {
 		try {
 			long groupId = groupIdFilter.getId();
 
-			List<DLFolder> folders = _dlFolderService.getFolders(
+			List<DLFolder> dlFolders = _dlFolderService.getFolders(
 				groupId, 0, pagination.getStartPosition(),
 				pagination.getEndPosition(), null);
+			int count = _dlFolderService.getFoldersCount(groupId, 0);
 
-			int foldersCount = _dlFolderService.getFoldersCount(groupId, 0);
-
-			return new PageItems<>(folders, foldersCount);
+			return new PageItems<>(dlFolders, count);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
