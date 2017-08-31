@@ -15,6 +15,7 @@
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
 import com.liferay.vulcan.binary.BinaryFunction;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveIdentifierConverter;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.function.DecaFunction;
 import com.liferay.vulcan.function.EnneaFunction;
@@ -24,12 +25,12 @@ import com.liferay.vulcan.function.OctaFunction;
 import com.liferay.vulcan.function.PentaFunction;
 import com.liferay.vulcan.function.TetraFunction;
 import com.liferay.vulcan.function.TriFunction;
+import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
-import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.internal.pagination.PageImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
 
@@ -38,8 +39,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import javax.ws.rs.BadRequestException;
-
 /**
  * @author Alejandro Hernández
  */
@@ -47,11 +46,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 
 	public RoutesBuilderImpl(
 		Class<T> modelClass,
-		Function<Class<?>, Optional<?>> provideClassFunction) {
+		Function<Class<?>, Optional<?>> provideClassFunction,
+		BiFunction<Class<? extends Identifier>, Identifier,
+			Optional<? extends Identifier>> identifierFunction) {
 
 		_modelClass = modelClass;
 		_provideClassFunction = provideClassFunction;
 		_createSingleModelFunction = t -> new SingleModel<>(t, modelClass);
+		_identifierFunction = identifierFunction;
 	}
 
 	@Override
@@ -68,11 +70,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U, A> RoutesBuilder<T> collectionItem(
+	public <U extends Identifier, A> RoutesBuilder<T> collectionItem(
 		BiFunction<U, A, T> biFunction, Class<U> identifierClass,
 		Class<A> aClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -87,13 +89,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U, A, B, C, D, E, F, G, H, I> RoutesBuilder<T> collectionItem(
-		DecaFunction<U, A, B, C, D, E, F, G, H, I, T> decaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-		Class<G> gClass, Class<H> hClass, Class<I> iClass) {
+	public <U extends Identifier, A, B, C, D, E, F, G, H, I> RoutesBuilder<T>
+		collectionItem(
+			DecaFunction<U, A, B, C, D, E, F, G, H, I, T> decaFunction,
+			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+			Class<G> gClass, Class<H> hClass, Class<I> iClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -116,13 +119,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U, A, B, C, D, E, F, G, H> RoutesBuilder<T> collectionItem(
-		EnneaFunction<U, A, B, C, D, E, F, G, H, T> enneaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-		Class<G> gClass, Class<H> hClass) {
+	public <U extends Identifier, A, B, C, D, E, F, G, H> RoutesBuilder<T>
+		collectionItem(
+			EnneaFunction<U, A, B, C, D, E, F, G, H, T> enneaFunction,
+			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+			Class<G> gClass, Class<H> hClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -144,10 +148,10 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U> RoutesBuilder<T> collectionItem(
+	public <U extends Identifier> RoutesBuilder<T> collectionItem(
 		Function<U, T> function, Class<U> identifierClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -158,12 +162,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U, A, B, C, D, E, F> RoutesBuilder<T> collectionItem(
-		HeptaFunction<U, A, B, C, D, E, F, T> heptaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass) {
+	public <U extends Identifier, A, B, C, D, E, F> RoutesBuilder<T>
+		collectionItem(
+			HeptaFunction<U, A, B, C, D, E, F, T> heptaFunction,
+			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -183,12 +189,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U, A, B, C, D, E> RoutesBuilder<T> collectionItem(
-		HexaFunction<U, A, B, C, D, E, T> hexaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass) {
+	public <U extends Identifier, A, B, C, D, E> RoutesBuilder<T>
+		collectionItem(
+			HexaFunction<U, A, B, C, D, E, T> hexaFunction,
+			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -207,13 +214,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U, A, B, C, D, E, F, G> RoutesBuilder<T> collectionItem(
-		OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-		Class<G> gClass) {
+	public <U extends Identifier, A, B, C, D, E, F, G> RoutesBuilder<T>
+		collectionItem(
+			OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction,
+			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+			Class<G> gClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -234,11 +242,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U, A, B, C, D> RoutesBuilder<T> collectionItem(
+	public <U extends Identifier, A, B, C, D> RoutesBuilder<T> collectionItem(
 		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<U> identifierClass,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -256,11 +264,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U, A, B, C> RoutesBuilder<T> collectionItem(
+	public <U extends Identifier, A, B, C> RoutesBuilder<T> collectionItem(
 		TetraFunction<U, A, B, C, T> tetraFunction, Class<U> identifierClass,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -277,11 +285,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U, A, B> RoutesBuilder<T> collectionItem(
+	public <U extends Identifier, A, B> RoutesBuilder<T> collectionItem(
 		TriFunction<U, A, B, T> triFunction, Class<U> identifierClass,
 		Class<A> aClass, Class<B> bClass) {
 
-		Function<String, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setSingleModelFunction(
@@ -297,294 +305,291 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <A> RoutesBuilder<T> collectionPage(
-		BiFunction<Pagination, A, PageItems<T>> biFunction, Class<A> aClass) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-				A a = _provideClass(aClass);
-
-				PageItems<T> pageItems = biFunction.apply(pagination, a);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	@Override
-	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T> collectionPage(
-		DecaFunction<Pagination, A, B, C, D, E, F, G, H, I,
-			PageItems<T>> decaFunction, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-		Class<G> gClass, Class<H> hClass, Class<I> iClass) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-				A a = _provideClass(aClass);
-				B b = _provideClass(bClass);
-				C c = _provideClass(cClass);
-				D d = _provideClass(dClass);
-				E e = _provideClass(eClass);
-				F f = _provideClass(fClass);
-				G g = _provideClass(gClass);
-				H h = _provideClass(hClass);
-				I i = _provideClass(iClass);
-
-				PageItems<T> pageItems = decaFunction.apply(
-					pagination, a, b, c, d, e, f, g, h, i);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	@Override
-	public <A, B, C, D, E, F, G, H> RoutesBuilder<T> collectionPage(
-		EnneaFunction<Pagination, A, B, C, D, E, F, G, H, PageItems<T>>
-			enneaFunction, Class<A> aClass, Class<B> bClass, Class<C> cClass,
-		Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass,
-		Class<H> hClass) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-				A a = _provideClass(aClass);
-				B b = _provideClass(bClass);
-				C c = _provideClass(cClass);
-				D d = _provideClass(dClass);
-				E e = _provideClass(eClass);
-				F f = _provideClass(fClass);
-				G g = _provideClass(gClass);
-				H h = _provideClass(hClass);
-
-				PageItems<T> pageItems = enneaFunction.apply(
-					pagination, a, b, c, d, e, f, g, h);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	@Override
-	public RoutesBuilder<T> collectionPage(
-		Function<Pagination, PageItems<T>> function) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-
-				PageItems<T> pageItems = function.apply(pagination);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	@Override
-	public <A, B, C, D, E, F> RoutesBuilder<T> collectionPage(
-		HeptaFunction<Pagination, A, B, C, D, E, F, PageItems<T>> heptaFunction,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
-		Class<E> eClass, Class<F> fClass) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-				A a = _provideClass(aClass);
-				B b = _provideClass(bClass);
-				C c = _provideClass(cClass);
-				D d = _provideClass(dClass);
-				E e = _provideClass(eClass);
-				F f = _provideClass(fClass);
-
-				PageItems<T> pageItems = heptaFunction.apply(
-					pagination, a, b, c, d, e, f);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	@Override
-	public <A, B, C, D, E> RoutesBuilder<T> collectionPage(
-		HexaFunction<Pagination, A, B, C, D, E, PageItems<T>> hexaFunction,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
-		Class<E> eClass) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-				A a = _provideClass(aClass);
-				B b = _provideClass(bClass);
-				C c = _provideClass(cClass);
-				D d = _provideClass(dClass);
-				E e = _provideClass(eClass);
-
-				PageItems<T> pageItems = hexaFunction.apply(
-					pagination, a, b, c, d, e);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	@Override
-	public <A, B, C, D, E, F, G> RoutesBuilder<T> collectionPage(
-		OctaFunction<Pagination, A, B, C, D, E, F, G, PageItems<T>>
-			octaFunction, Class<A> aClass, Class<B> bClass, Class<C> cClass,
-		Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-				A a = _provideClass(aClass);
-				B b = _provideClass(bClass);
-				C c = _provideClass(cClass);
-				D d = _provideClass(dClass);
-				E e = _provideClass(eClass);
-				F f = _provideClass(fClass);
-				G g = _provideClass(gClass);
-
-				PageItems<T> pageItems = octaFunction.apply(
-					pagination, a, b, c, d, e, f, g);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	@Override
-	public <A, B, C, D> RoutesBuilder<T> collectionPage(
-		PentaFunction<Pagination, A, B, C, D, PageItems<T>> pentaFunction,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-				A a = _provideClass(aClass);
-				B b = _provideClass(bClass);
-				C c = _provideClass(cClass);
-				D d = _provideClass(dClass);
-
-				PageItems<T> pageItems = pentaFunction.apply(
-					pagination, a, b, c, d);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	@Override
-	public <A, B, C> RoutesBuilder<T> collectionPage(
-		TetraFunction<Pagination, A, B, C, PageItems<T>> tetraFunction,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-				A a = _provideClass(aClass);
-				B b = _provideClass(bClass);
-				C c = _provideClass(cClass);
-
-				PageItems<T> pageItems = tetraFunction.apply(
-					pagination, a, b, c);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	@Override
-	public <A, B> RoutesBuilder<T> collectionPage(
-		TriFunction<Pagination, A, B, PageItems<T>> triFunction,
-		Class<A> aClass, Class<B> bClass) {
-
-		_routesImpl.setPageSupplier(
-			() -> {
-				Pagination pagination = _provideClass(Pagination.class);
-				A a = _provideClass(aClass);
-				B b = _provideClass(bClass);
-
-				PageItems<T> pageItems = triFunction.apply(pagination, a, b);
-
-				return new PageImpl<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount());
-			});
-
-		return this;
-	}
-
-	private <U> Function<String, U> _convertIdentifier(
+	public <U extends Identifier> RoutesBuilder<T> collectionPage(
+		BiFunction<Pagination, U, PageItems<T>> biFunction,
 		Class<U> identifierClass) {
 
-		if (identifierClass.isAssignableFrom(Long.class)) {
-			return id -> {
-				Try<Long> longTry = Try.fromFallible(() -> Long.parseLong(id));
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
+			identifierClass);
 
-				return longTry.map(
-					longIdentifier -> (U)longIdentifier
-				).orElseThrow(
-					BadRequestException::new
-				);
-			};
-		}
-		else if (identifierClass.isAssignableFrom(Integer.class)) {
-			return id -> {
-				Try<Integer> integerTry = Try.fromFallible(
-					() -> Integer.parseInt(id));
+		_routesImpl.setPageFunction(
+			identifierFunction.andThen(
+				identifier -> {
+					Pagination pagination = _provideClass(Pagination.class);
 
-				return integerTry.map(
-					integer -> (U)integer
-				).orElseThrow(
-					BadRequestException::new
-				);
-			};
-		}
-		else if (identifierClass.isAssignableFrom(String.class)) {
-			return id -> (U)id;
-		}
-		else {
-			throw new BadRequestException();
-		}
+					PageItems<T> pageItems = biFunction.apply(
+						pagination, identifier);
+
+					return new PageImpl<>(
+						_modelClass, pageItems.getItems(),
+						pagination.getItemsPerPage(),
+						pagination.getPageNumber(), pageItems.getTotalCount());
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <U extends Identifier, A, B, C, D, E, F, G, H> RoutesBuilder<T>
+		collectionPage(
+			DecaFunction<Pagination, U, A, B, C, D, E, F, G, H,
+				PageItems<T>> decaFunction, Class<U> identifierClass,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass,
+			Class<H> hClass) {
+
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setPageFunction(
+			identifierFunction.andThen(
+				identifier -> {
+					Pagination pagination = _provideClass(Pagination.class);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+					H h = _provideClass(hClass);
+
+					PageItems<T> pageItems = decaFunction.apply(
+						pagination, identifier, a, b, c, d, e, f, g, h);
+
+					return new PageImpl<>(
+						_modelClass, pageItems.getItems(),
+						pagination.getItemsPerPage(),
+						pagination.getPageNumber(), pageItems.getTotalCount());
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <U extends Identifier, A, B, C, D, E, F, G> RoutesBuilder<T>
+		collectionPage(
+			EnneaFunction<Pagination, U, A, B, C, D, E, F, G, PageItems<T>>
+				enneaFunction, Class<U> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass, Class<G> gClass) {
+
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setPageFunction(
+			identifierFunction.andThen(
+				identifier -> {
+					Pagination pagination = _provideClass(Pagination.class);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+
+					PageItems<T> pageItems = enneaFunction.apply(
+						pagination, identifier, a, b, c, d, e, f, g);
+
+					return new PageImpl<>(
+						_modelClass, pageItems.getItems(),
+						pagination.getItemsPerPage(),
+						pagination.getPageNumber(), pageItems.getTotalCount());
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <U extends Identifier, A, B, C, D, E> RoutesBuilder<T>
+		collectionPage(
+			HeptaFunction<Pagination, U, A, B, C, D, E, PageItems<T>>
+				heptaFunction, Class<U> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass) {
+
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setPageFunction(
+			identifierFunction.andThen(
+				identifier -> {
+					Pagination pagination = _provideClass(Pagination.class);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+
+					PageItems<T> pageItems = heptaFunction.apply(
+						pagination, identifier, a, b, c, d, e);
+
+					return new PageImpl<>(
+						_modelClass, pageItems.getItems(),
+						pagination.getItemsPerPage(),
+						pagination.getPageNumber(), pageItems.getTotalCount());
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <U extends Identifier, A, B, C, D> RoutesBuilder<T> collectionPage(
+		HexaFunction<Pagination, U, A, B, C, D, PageItems<T>> hexaFunction,
+		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass, Class<D> dClass) {
+
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setPageFunction(
+			identifierFunction.andThen(
+				identifier -> {
+					Pagination pagination = _provideClass(Pagination.class);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+
+					PageItems<T> pageItems = hexaFunction.apply(
+						pagination, identifier, a, b, c, d);
+
+					return new PageImpl<>(
+						_modelClass, pageItems.getItems(),
+						pagination.getItemsPerPage(),
+						pagination.getPageNumber(), pageItems.getTotalCount());
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <U extends Identifier, A, B, C, D, E, F> RoutesBuilder<T>
+		collectionPage(
+			OctaFunction<Pagination, U, A, B, C, D, E, F, PageItems<T>>
+				octaFunction, Class<U> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass) {
+
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setPageFunction(
+			identifierFunction.andThen(
+				identifier -> {
+					Pagination pagination = _provideClass(Pagination.class);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+
+					PageItems<T> pageItems = octaFunction.apply(
+						pagination, identifier, a, b, c, d, e, f);
+
+					return new PageImpl<>(
+						_modelClass, pageItems.getItems(),
+						pagination.getItemsPerPage(),
+						pagination.getPageNumber(), pageItems.getTotalCount());
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <U extends Identifier, A, B, C> RoutesBuilder<T> collectionPage(
+		PentaFunction<Pagination, U, A, B, C, PageItems<T>> pentaFunction,
+		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass) {
+
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setPageFunction(
+			identifierFunction.andThen(
+				identifier -> {
+					Pagination pagination = _provideClass(Pagination.class);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+
+					PageItems<T> pageItems = pentaFunction.apply(
+						pagination, identifier, a, b, c);
+
+					return new PageImpl<>(
+						_modelClass, pageItems.getItems(),
+						pagination.getItemsPerPage(),
+						pagination.getPageNumber(), pageItems.getTotalCount());
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <U extends Identifier, A, B> RoutesBuilder<T> collectionPage(
+		TetraFunction<Pagination, U, A, B, PageItems<T>> tetraFunction,
+		Class<U> identifierClass, Class<A> aClass, Class<B> bClass) {
+
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setPageFunction(
+			identifierFunction.andThen(
+				identifier -> {
+					Pagination pagination = _provideClass(Pagination.class);
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+
+					PageItems<T> pageItems = tetraFunction.apply(
+						pagination, identifier, a, b);
+
+					return new PageImpl<>(
+						_modelClass, pageItems.getItems(),
+						pagination.getItemsPerPage(),
+						pagination.getPageNumber(), pageItems.getTotalCount());
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <U extends Identifier, A> RoutesBuilder<T> collectionPage(
+		TriFunction<Pagination, U, A, PageItems<T>> triFunction,
+		Class<U> identifierClass, Class<A> aClass) {
+
+		Function<Identifier, U> identifierFunction = _convertIdentifier(
+			identifierClass);
+
+		_routesImpl.setPageFunction(
+			identifierFunction.andThen(
+				identifier -> {
+					Pagination pagination = _provideClass(Pagination.class);
+					A a = _provideClass(aClass);
+
+					PageItems<T> pageItems = triFunction.apply(
+						pagination, identifier, a);
+
+					return new PageImpl<>(
+						_modelClass, pageItems.getItems(),
+						pagination.getItemsPerPage(),
+						pagination.getPageNumber(), pageItems.getTotalCount());
+				}));
+
+		return this;
+	}
+
+	private <U extends Identifier> Function<Identifier, U> _convertIdentifier(
+		Class<U> identifierClass) {
+
+		return identifier -> {
+			Optional<U> optional = (Optional<U>)_identifierFunction.apply(
+				identifierClass, identifier);
+
+			return optional.orElseThrow(
+				() -> new MustHaveIdentifierConverter(identifierClass));
+		};
 	}
 
 	private <U> U _provideClass(Class<U> clazz) {
@@ -594,6 +599,8 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	private final Function<T, SingleModel<T>> _createSingleModelFunction;
+	private final BiFunction<Class<? extends Identifier>, Identifier,
+		Optional<? extends Identifier>> _identifierFunction;
 	private final Class<T> _modelClass;
 	private final Function<Class<?>, Optional<?>> _provideClassFunction;
 	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();

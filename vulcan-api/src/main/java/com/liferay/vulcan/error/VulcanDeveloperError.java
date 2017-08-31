@@ -39,6 +39,19 @@ public class VulcanDeveloperError extends Error {
 	}
 
 	/**
+	 * Represents the error the developer should throw when an identifier
+	 * converter is missing.
+	 */
+	public static class MustHaveIdentifierConverter
+		extends VulcanDeveloperError {
+
+		public MustHaveIdentifierConverter(Class<?> identifier) {
+			super("Identifier " + identifier + " does not have a converter");
+		}
+
+	}
+
+	/**
 	 * Represents the error the developer should throw when a message mapper is
 	 * missing.
 	 */

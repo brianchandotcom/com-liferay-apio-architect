@@ -313,7 +313,8 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		return httpServletRequest -> {
 			RoutesBuilderImpl<T> routesBuilder = new RoutesBuilderImpl<>(
-				modelClass, _getProvideClassFunction(httpServletRequest));
+				modelClass, _getProvideClassFunction(httpServletRequest),
+				_identifierConverterManager::convert);
 
 			routesBuilder.collectionBinary(binaryFunctions);
 
@@ -338,6 +339,10 @@ public class ResourceManager extends BaseManager<Resource> {
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
 		_fieldFunctions = new ConcurrentHashMap<>();
+
+	@Reference
+	private IdentifierConverterManager _identifierConverterManager;
+
 	private final Map<String, Function<?, String>> _identifierFunctions =
 		new ConcurrentHashMap<>();
 	private final Map<String, List<RelatedModel<?, ?>>> _linkedRelatedModels =
