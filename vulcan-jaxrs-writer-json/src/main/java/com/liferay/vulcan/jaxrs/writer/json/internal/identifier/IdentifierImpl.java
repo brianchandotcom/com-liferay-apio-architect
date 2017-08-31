@@ -12,30 +12,31 @@
  * details.
  */
 
-package com.liferay.vulcan.identifier;
+package com.liferay.vulcan.jaxrs.writer.json.internal.identifier;
+
+import com.liferay.vulcan.identifier.Identifier;
 
 /**
- * Instances of this interface represents the root identifier of a resource.
- * Resources hanging directly from the root of the application will have this
- * identifier as its only identifier.
- *
  * @author Alejandro Hernández
  */
-public interface RootIdentifier extends Identifier {
+public class IdentifierImpl implements Identifier {
 
-	@Override
-	public default String asURI() {
-		return "";
+	public IdentifierImpl(String type, String id) {
+		_type = type;
+		_id = id;
 	}
 
 	@Override
-	public default String getId() {
-		return "";
+	public String getId() {
+		return _id;
 	}
 
 	@Override
-	public default String getType() {
-		return "";
+	public String getType() {
+		return _type;
 	}
+
+	private final String _id;
+	private final String _type;
 
 }

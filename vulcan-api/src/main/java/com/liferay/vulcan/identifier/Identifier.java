@@ -29,6 +29,15 @@ package com.liferay.vulcan.identifier;
 public interface Identifier {
 
 	/**
+	 * Returns the chain of identifiers as a URI.
+	 *
+	 * @return the chain of identifiers as a URI.
+	 */
+	public default String asURI() {
+		return "/" + getType() + "/" + getId();
+	}
+
+	/**
 	 * Returns the ID from this identifier.
 	 *
 	 * <p>
