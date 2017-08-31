@@ -71,10 +71,8 @@ public class BinaryResourceBodyWriter
 			OutputStream outputStream)
 		throws IOException, WebApplicationException {
 
+		byte[] bytes = new byte[1024];
 		InputStream inputStream = success.getValue();
-
-		byte[] bytes = new byte[_DEFAULT_INITIAL_BUFFER_SIZE];
-
 		int value = -1;
 
 		while ((value = inputStream.read(bytes)) != -1) {
@@ -83,7 +81,5 @@ public class BinaryResourceBodyWriter
 
 		outputStream.close();
 	}
-
-	private static final int _DEFAULT_INITIAL_BUFFER_SIZE = 1024;
 
 }
