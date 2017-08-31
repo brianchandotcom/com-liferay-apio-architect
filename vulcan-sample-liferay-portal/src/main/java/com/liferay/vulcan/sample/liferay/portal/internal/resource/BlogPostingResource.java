@@ -109,10 +109,10 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 		).addField(
 			"publishedDate",
 			blogsEntry -> formatFunction.apply(blogsEntry.getLastPublishDate())
-		).addLinkedModel(
-			"author", User.class, this::_getUserOptional
 		).addLink(
 			"license", "https://creativecommons.org/licenses/by/4.0"
+		).addLinkedModel(
+			"author", User.class, this::_getUserOptional
 		).addRelatedCollection(
 			"comment", Comment.class, this::_getClassNameClassPKFilter
 		).addType(

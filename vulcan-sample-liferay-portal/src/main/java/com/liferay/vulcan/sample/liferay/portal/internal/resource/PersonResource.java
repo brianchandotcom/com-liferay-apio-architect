@@ -78,9 +78,9 @@ public class PersonResource implements Resource<User> {
 		).addField(
 			"givenName", User::getFirstName
 		).addField(
-			"name", User::getFullName
-		).addField(
 			"jobTitle", User::getJobTitle
+		).addField(
+			"name", User::getFullName
 		).addType(
 			"Person"
 		);
