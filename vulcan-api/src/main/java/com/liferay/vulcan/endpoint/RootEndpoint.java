@@ -93,7 +93,7 @@ public interface RootEndpoint {
 		).map(
 			Optional::get
 		).mapFailMatching(
-			NullPointerException.class,
+			NoSuchElementException.class,
 			() -> new NotFoundException(
 				"No endpoint found at path: " + binaryId)
 		).map(
