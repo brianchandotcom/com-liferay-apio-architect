@@ -14,12 +14,18 @@
 
 package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
+import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+
+import java.util.Optional;
+
+import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -38,9 +44,24 @@ public class AggregateRatingResource implements Resource<AggregateRating> {
 		RepresentorBuilder<AggregateRating> representorBuilder) {
 
 		representorBuilder.identifier(
-			aggregateRating ->
-				aggregateRating.getClassName() + "-" +
-					String.valueOf(aggregateRating.getClassPK())
+			aggregateRating -> {
+				String className = aggregateRating.getClassName();
+
+				Optional<Resource<Object>> optional =
+					_resourceManager.getResourceOptional(className);
+
+				String type = optional.map(
+					Resource::getPath
+				).orElseThrow(
+					() -> new NotFoundException(
+						"Unable to find an API for " + className +
+							" resources")
+				);
+
+				String id = String.valueOf(aggregateRating.getClassPK());
+
+				return type + ":" + id;
+			}
 		).addField(
 			"bestRating", aggregateRating -> 1
 		).addField(
@@ -63,10 +84,24 @@ public class AggregateRatingResource implements Resource<AggregateRating> {
 	public Routes<AggregateRating> routes(
 		RoutesBuilder<AggregateRating> routesBuilder) {
 
-		return routesBuilder.build();
+		return routesBuilder.collectionItem(
+			this::_getAggregateRating, ClassNameClassPKIdentifier.class
+		).build();
+	}
+
+	private AggregateRating _getAggregateRating(
+		ClassNameClassPKIdentifier classNameClassPKIdentifier) {
+
+		String className = classNameClassPKIdentifier.getClassName();
+		Long classPK = classNameClassPKIdentifier.getClassPK();
+
+		return _aggregateRatingService.getAggregateRating(className, classPK);
 	}
 
 	@Reference
 	private AggregateRatingService _aggregateRatingService;
+
+	@Reference
+	private ResourceManager _resourceManager;
 
 }
