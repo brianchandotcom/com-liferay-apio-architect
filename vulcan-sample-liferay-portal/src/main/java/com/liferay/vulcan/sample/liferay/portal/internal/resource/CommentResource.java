@@ -64,10 +64,10 @@ public class CommentResource implements Resource<Comment> {
 
 		representorBuilder.identifier(
 			comment -> String.valueOf(comment.getCommentId())
-		).addField(
-			"text", Comment::getBody
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional
+		).addField(
+			"text", Comment::getBody
 		).addType(
 			"Comment"
 		);

@@ -70,8 +70,6 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional
 		).addField(
-			"folderId", DLFileEntry::getFolderId
-		).addField(
 			"contentSize", DLFileEntry::getSize
 		).addField(
 			"dateCreated", DLFileEntry::getCreateDate
@@ -81,6 +79,8 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 			"datePublished", DLFileEntry::getLastPublishDate
 		).addField(
 			"fileFormat", DLFileEntry::getMimeType
+		).addField(
+			"folderId", DLFileEntry::getFolderId
 		).addField(
 			"headline", DLFileEntry::getTitle
 		).addField(
