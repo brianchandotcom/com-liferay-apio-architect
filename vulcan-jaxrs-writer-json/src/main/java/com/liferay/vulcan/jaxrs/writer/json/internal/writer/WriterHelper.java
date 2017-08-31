@@ -248,8 +248,6 @@ public class WriterHelper {
 	 * @param modelClass the model class.
 	 * @param model an instance of the model.
 	 * @param biConsumer the consumer that will be called to write each field.
-	 *
-	 * @review
 	 */
 	public <T> void writeBinaries(
 		Map<String, Function<T, InputStream>> binaryFunctions,

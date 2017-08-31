@@ -37,8 +37,6 @@ import org.osgi.service.component.annotations.Reference;
  * a <code>groupId</code>.
  *
  * @author Javier Gamarra
- *
- * @review
  */
 @Component(
 	immediate = true,
@@ -51,8 +49,6 @@ public class FolderIdFilterProvider implements FilterProvider<FolderIdFilter> {
 	 *
 	 * @param  folderId the folder ID that will be used to filter.
 	 * @return an instance of a {@link FolderIdFilter}.
-	 *
-	 * @review
 	 */
 	public FolderIdFilter create(long folderId) {
 		return new FolderIdFilterImpl(folderId);

@@ -26,8 +26,6 @@ import com.liferay.vulcan.filter.IdFilter;
  * </p>
  *
  * @author Javier Gamarra
- *
- * @review
  */
 public interface FolderIdFilter extends IdFilter<Long> {
 }

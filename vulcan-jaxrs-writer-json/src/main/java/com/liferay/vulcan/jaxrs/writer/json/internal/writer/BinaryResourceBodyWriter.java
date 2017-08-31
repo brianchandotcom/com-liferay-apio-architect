@@ -36,8 +36,6 @@ import org.osgi.service.component.annotations.Component;
  * Gives Vulcan the ability to write input stream as binary output streams
  *
  * @author Javier Gamarra
- *
- * @review
  */
 @Component(
 	immediate = true, property = "liferay.vulcan.message.body.writer=true"

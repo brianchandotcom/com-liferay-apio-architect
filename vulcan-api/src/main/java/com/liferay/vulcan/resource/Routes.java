@@ -49,8 +49,6 @@ public interface Routes<T> {
 	 * binary resource
 	 *
 	 * @return an InputStream with the content of the binary resource
-	 *
-	 * @review
 	 */
 	public Optional<BiFunction<T, String, InputStream>>
 		getBinaryBiFunctionsOptional();
