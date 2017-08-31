@@ -154,14 +154,15 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 
 			DLFolder dlFolder = _dlFolderService.getFolder(folderId);
 
-			List<DLFileEntry> fileEntries = _dlFileEntryService.getFileEntries(
-				dlFolder.getGroupId(), folderId, pagination.getStartPosition(),
-				pagination.getEndPosition(), null);
-
-			int fileEntriesCount = _dlFileEntryService.getFileEntriesCount(
+			List<DLFileEntry> dlFileEntries =
+				_dlFileEntryService.getFileEntries(
+					dlFolder.getGroupId(), folderId,
+					pagination.getStartPosition(), pagination.getEndPosition(),
+					null);
+			int count = _dlFileEntryService.getFileEntriesCount(
 				dlFolder.getGroupId(), folderId);
 
-			return new PageItems<>(fileEntries, fileEntriesCount);
+			return new PageItems<>(dlFileEntries, count);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
