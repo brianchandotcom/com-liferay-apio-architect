@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.application.internal.endpoint;
 
+import com.liferay.vulcan.application.internal.identifier.IdentifierImpl;
+import com.liferay.vulcan.application.internal.identifier.RootIdentifierImpl;
 import com.liferay.vulcan.endpoint.RootEndpoint;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
@@ -25,7 +27,6 @@ import java.io.InputStream;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -84,9 +85,11 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path " + path)
+			() -> new NotFoundException("No endpoint found at path " + path +
+				"/" + id)
 		).map(
-			singleModelFunction -> singleModelFunction.apply(id)
+			singleModelFunction -> singleModelFunction.apply(
+				new IdentifierImpl(path, id))
 		);
 	}
 
@@ -95,14 +98,31 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<Routes<T>> routesTry = _getRoutesTry(path);
 
 		return routesTry.map(
-			Routes::getPageSupplierOptional
+			Routes::getPageFunctionOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
 			() -> new NotFoundException("No endpoint found at path " + path)
 		).map(
-			Supplier::get
+			function -> function.apply(new RootIdentifierImpl())
+		);
+	}
+
+	@Override
+	public <T> Try<Page<T>> getNestedCollectionPage(
+		String path, String id, String nestedPath) {
+
+		Try<Routes<T>> routesTry = _getRoutesTry(nestedPath);
+
+		return routesTry.map(
+			Routes::getPageFunctionOptional
+		).map(
+			optional -> optional.orElseThrow(
+				() -> new NotFoundException("No endpoint found at path " +
+					nestedPath + "/" + id + "/" + nestedPath))
+		).map(
+			pageFunction -> pageFunction.apply(new IdentifierImpl(path, id))
 		);
 	}
 

@@ -42,7 +42,7 @@ public interface RootEndpoint {
 	 * exception if an error occurred.
 	 *
 	 * @param  path the path from the URL.
-	 * @param  id the ID to the resource.
+	 * @param  id the ID of the resource.
 	 * @param  binaryId the ID to the binary resource.
 	 * @return the input stream of the binary file, or an exception it there was
 	 *         an error.
@@ -58,6 +58,7 @@ public interface RootEndpoint {
 	 * error occurred.
 	 *
 	 * @param  path the path from the URL.
+	 * @param  id the ID of the resource.
 	 * @return the single model at the path, or an exception it there was an
 	 *         error.
 	 */
@@ -71,12 +72,28 @@ public interface RootEndpoint {
 	 * an error occurred.
 	 *
 	 * @param  path the path from the URL.
-	 * @return the collection page at the path, or an exception it there was an
+	 * @return the collection page at the path, or an exception if there was an
 	 *         error.
 	 */
 	@GET
 	@Path("/p/{path}")
 	public <T> Try<Page<T>> getCollectionPageTry(
 		@PathParam("path") String path);
+
+	/**
+	 * Returns a nested collection {@link Page} for a given set of
+	 * path-id-nestedPath or an exception if an error occurred.
+	 *
+	 * @param  path the path from the URL.
+	 * @param  id the ID of the resource.
+	 * @param  nestedPath the path of the nested resource.
+	 * @return the collection page at the path, or an exception if there was an
+	 *         error.
+	 */
+	@GET
+	@Path("/p/{path}/{id}/{nestedPath}")
+	public <T> Try<Page<T>> getNestedCollectionPage(
+		@PathParam("path") String path, @PathParam("id") String id,
+		@PathParam("nestedPath") String nestedPath);
 
 }

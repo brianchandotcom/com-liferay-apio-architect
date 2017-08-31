@@ -15,12 +15,12 @@
 package com.liferay.vulcan.resource;
 
 import com.liferay.vulcan.binary.BinaryFunction;
+import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Instances of this interface will hold information about the routes supported
@@ -62,7 +62,7 @@ public interface Routes<T> {
 	 * @return the supplier used to create the page, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Supplier<Page<T>>> getPageSupplierOptional();
+	public Optional<Function<Identifier, Page<T>>> getPageFunctionOptional();
 
 	/**
 	 * Returns the function used to create the single model of a {@link
@@ -73,7 +73,7 @@ public interface Routes<T> {
 	 * @return the function used to create the single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Function<String, SingleModel<T>>>
+	public Optional<Function<Identifier, SingleModel<T>>>
 		getSingleModelFunctionOptional();
 
 }
