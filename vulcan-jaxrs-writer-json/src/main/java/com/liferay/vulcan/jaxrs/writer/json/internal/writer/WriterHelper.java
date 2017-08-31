@@ -258,17 +258,28 @@ public class WriterHelper {
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
 			modelClass);
 
-		String identifier = _resourceManager.getIdentifier(modelClass, model);
+		Optional<Function<String, String>> uriFunctionOptional = optional.map(
+			Resource::getPath
+		).map(
+			"/b/"::concat
+		).map(
+			uri -> uri + "/" + _resourceManager.getIdentifier(modelClass, model)
+		).map(
+			uri -> binaryId -> uri + "/" + binaryId
+		);
 
-		if (binaryFunctions != null) {
-			for (String key : binaryFunctions.keySet()) {
-				String path = identifier + "/" + key;
-
-				Optional<String> url = _getUrl(
-					modelClass, model, httpServletRequest, optional, path);
-
-				url.ifPresent(y -> biConsumer.accept(key, y));
-			}
+		for (String binaryId : binaryFunctions.keySet()) {
+			uriFunctionOptional.map(
+				uriFunction -> uriFunction.apply(binaryId)
+			).map(
+				_getTransformURIFunction(
+					(uri, transformer) -> transformer.transformBinaryURI(
+						uri, modelClass, model, binaryId))
+			).map(
+				uri -> getAbsoluteURL(httpServletRequest, uri)
+			).ifPresent(
+				url -> biConsumer.accept(binaryId, url)
+			);
 		}
 	}
 
@@ -545,24 +556,6 @@ public class WriterHelper {
 				uri
 			);
 		};
-	}
-
-	private <T> Optional<String> _getUrl(
-		Class<T> modelClass, T model, HttpServletRequest httpServletRequest,
-		Optional<Resource<T>> optional, String path) {
-
-		return optional.map(
-			Resource::getPath
-		).map(
-			uri -> "/b/" + uri + "/" + path
-		).map(
-			_getTransformURIFunction(
-				(uri, transformer) ->
-					transformer.transformCollectionItemSingleResourceURI(
-						uri, modelClass, model))
-		).map(
-			uri -> getAbsoluteURL(httpServletRequest, uri)
-		);
 	}
 
 	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
