@@ -39,7 +39,7 @@ import org.osgi.service.component.annotations.Reference;
 public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
-	public <T> Try<Routes<T>> getRoutes(String path) {
+	public <T> Try<Routes<T>> getRoutesTry(String path) {
 		Try<Optional<Routes<T>>> optionalTry = Try.success(
 			_resourceManager.getRoutes(path, _httpServletRequest));
 

@@ -37,7 +37,7 @@ public interface RepresentorBuilder<T> {
 	 *
 	 * <p>
 	 * This identifier will be the same obtained in the {@link
-	 * com.liferay.vulcan.endpoint.RootEndpoint#getCollectionItemSingleModel(
+	 * com.liferay.vulcan.endpoint.RootEndpoint#getCollectionItemSingleModelTry(
 	 * String, String)}} method of a {@link
 	 * com.liferay.vulcan.endpoint.RootEndpoint} instance.
 	 * </p>

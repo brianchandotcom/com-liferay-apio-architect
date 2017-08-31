@@ -55,17 +55,17 @@ public interface RootEndpoint {
 	 */
 	@GET
 	@Path("/b/{path}/{id}/{binaryId}")
-	public default <T> Try<InputStream> getCollectionItemInputStream(
+	public default <T> Try<InputStream> getCollectionItemInputStreamTry(
 		@PathParam("path") String path, @PathParam("id") String id,
 		@PathParam("binaryId") String binaryId) {
 
-		Try<SingleModel<T>> collectionItemSingleModel =
-			getCollectionItemSingleModel(path, id);
+		Try<SingleModel<T>> singleModelTry = getCollectionItemSingleModelTry(
+			path, id);
 
-		return collectionItemSingleModel.map(
+		return singleModelTry.map(
 			SingleModel::getModel
 		).flatMap(
-			model -> getCollectionItemInputStream(path, model, binaryId)
+			model -> getCollectionItemInputStreamTry(path, model, binaryId)
 		);
 	}
 
@@ -79,10 +79,10 @@ public interface RootEndpoint {
 	 * @return the input stream of the binary resource, or an exception it there
 	 *         was an error.
 	 */
-	public default <T> Try<InputStream> getCollectionItemInputStream(
+	public default <T> Try<InputStream> getCollectionItemInputStreamTry(
 		String path, T model, String binaryId) {
 
-		Try<Routes<T>> routesTry = getRoutes(path);
+		Try<Routes<T>> routesTry = getRoutesTry(path);
 
 		return routesTry.map(
 			Routes::getBinaryBiFunctionsOptional
@@ -107,10 +107,10 @@ public interface RootEndpoint {
 	 */
 	@GET
 	@Path("/p/{path}/{id}")
-	public default <T> Try<SingleModel<T>> getCollectionItemSingleModel(
+	public default <T> Try<SingleModel<T>> getCollectionItemSingleModelTry(
 		@PathParam("path") String path, @PathParam("id") String id) {
 
-		Try<Routes<T>> routesTry = getRoutes(path);
+		Try<Routes<T>> routesTry = getRoutesTry(path);
 
 		return routesTry.map(
 			Routes::getSingleModelFunctionOptional
@@ -134,10 +134,10 @@ public interface RootEndpoint {
 	 */
 	@GET
 	@Path("/p/{path}")
-	public default <T> Try<Page<T>> getCollectionPage(
+	public default <T> Try<Page<T>> getCollectionPageTry(
 		@PathParam("path") String path) {
 
-		Try<Routes<T>> routesTry = getRoutes(path);
+		Try<Routes<T>> routesTry = getRoutesTry(path);
 
 		return routesTry.map(
 			Routes::getPageSupplierOptional
@@ -158,6 +158,6 @@ public interface RootEndpoint {
 	 * @param  path the path from the URL.
 	 * @return the {@link Routes} instance for the path.
 	 */
-	public <T> Try<Routes<T>> getRoutes(String path);
+	public <T> Try<Routes<T>> getRoutesTry(String path);
 
 }
