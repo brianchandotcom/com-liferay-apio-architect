@@ -18,6 +18,7 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIP
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.filter.QueryParamFilterType;
 import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.resource.Resource;
@@ -26,8 +27,6 @@ import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuild
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
-
-import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +61,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  modelClass class name indexing the binary resources
 	 * @return the binary resources for the model class
 	 */
-	public <T> Map<String, Function<T, InputStream>>
+	public <T> Map<String, BinaryFunction<T>>
 		getBinaryFunctions(Class<T> modelClass) {
 
 		return (Map)_binaryFunctions.get(modelClass.getName());
@@ -268,7 +267,7 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		_types.put(modelClass.getName(), types);
 
-		Map<String, Function<T, InputStream>> binaryFunctions = new HashMap<>();
+		Map<String, BinaryFunction<T>> binaryFunctions = new HashMap<>();
 
 		_binaryFunctions.put(modelClass.getName(), (Map)binaryFunctions);
 
@@ -331,7 +330,7 @@ public class ResourceManager extends BaseManager<Resource> {
 
 	private <T> Function<HttpServletRequest, Routes<?>> _getRoutes(
 		Class<T> modelClass, Resource<T> resource,
-		Map<String, Function<T, InputStream>> binaryFunctions) {
+		Map<String, BinaryFunction<T>> binaryFunctions) {
 
 		return httpServletRequest -> {
 			String filterName = httpServletRequest.getParameter("filterName");
@@ -358,8 +357,8 @@ public class ResourceManager extends BaseManager<Resource> {
 		_types.remove(modelClass.getName());
 	}
 
-	private final Map<String, Map<String, Function<?, InputStream>>>
-		_binaryFunctions = new ConcurrentHashMap<>();
+	private final Map<String, Map<String, BinaryFunction<?>>> _binaryFunctions =
+		new ConcurrentHashMap<>();
 	private final Map<String, String> _classNames = new ConcurrentHashMap<>();
 
 	@Reference

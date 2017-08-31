@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
+import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveConverter;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveFilterProvider;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
@@ -36,8 +37,6 @@ import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.internal.pagination.PageImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
-
-import java.io.InputStream;
 
 import java.util.Map;
 import java.util.Optional;
@@ -74,10 +73,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	public RoutesBuilder<T> collectionBinary(
-		Map<String, Function<T, InputStream>> function) {
+		Map<String, BinaryFunction<T>> binaryFunction) {
 
-		_routesImpl.setBinaryBiFunction(
-			(T object, String key) -> function.get(key).apply(object));
+		_routesImpl.setBinaryFunction(binaryFunction::get);
 
 		return this;
 	}

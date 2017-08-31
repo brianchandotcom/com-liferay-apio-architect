@@ -85,7 +85,7 @@ public interface RootEndpoint {
 		Try<Routes<T>> routesTry = getRoutesTry(path);
 
 		return routesTry.map(
-			Routes::getBinaryBiFunctionsOptional
+			Routes::getBinaryFunctionOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
@@ -93,7 +93,9 @@ public interface RootEndpoint {
 			() -> new NotFoundException(
 				"No endpoint found at path: " + binaryId)
 		).map(
-			singleModelFunction -> singleModelFunction.apply(model, binaryId)
+			binaryFunction -> binaryFunction.apply(binaryId)
+		).map(
+			binaryFunction -> binaryFunction.apply(model)
 		);
 	}
 

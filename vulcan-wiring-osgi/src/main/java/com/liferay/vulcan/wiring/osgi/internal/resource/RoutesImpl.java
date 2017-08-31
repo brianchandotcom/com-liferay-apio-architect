@@ -14,14 +14,12 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource;
 
+import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 
-import java.io.InputStream;
-
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -31,10 +29,10 @@ import java.util.function.Supplier;
 public class RoutesImpl<T> implements Routes<T> {
 
 	@Override
-	public Optional<BiFunction<T, String, InputStream>>
-		getBinaryBiFunctionsOptional() {
+	public Optional<Function<String, BinaryFunction<T>>>
+		getBinaryFunctionOptional() {
 
-		return Optional.ofNullable(_binaryBiFunction);
+		return Optional.ofNullable(_binaryFunction);
 	}
 
 	@Override
@@ -49,10 +47,10 @@ public class RoutesImpl<T> implements Routes<T> {
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
-	public void setBinaryBiFunction(
-		BiFunction<T, String, InputStream> binaryFunction) {
+	public void setBinaryFunction(
+		Function<String, BinaryFunction<T>> binaryFunction) {
 
-		_binaryBiFunction = binaryFunction;
+		_binaryFunction = binaryFunction;
 	}
 
 	public void setPageSupplier(Supplier<Page<T>> pageSupplier) {
@@ -65,7 +63,7 @@ public class RoutesImpl<T> implements Routes<T> {
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private BiFunction<T, String, InputStream> _binaryBiFunction;
+	private Function<String, BinaryFunction<T>> _binaryFunction;
 	private Supplier<Page<T>> _pageSupplier;
 	private Function<String, SingleModel<T>> _singleModelFunction;
 

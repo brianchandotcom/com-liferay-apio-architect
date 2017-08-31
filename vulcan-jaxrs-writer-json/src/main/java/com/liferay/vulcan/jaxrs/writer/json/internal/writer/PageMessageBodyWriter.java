@@ -18,6 +18,7 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEA
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -33,7 +34,6 @@ import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
@@ -44,7 +44,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -142,7 +141,7 @@ public class PageMessageBodyWriter<T>
 		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Embedded.class));
 
-		Map<String, Function<T, InputStream>> binaryFunctions =
+		Map<String, BinaryFunction<T>> binaryFunctions =
 			_resourceManager.getBinaryFunctions(modelClass);
 
 		_writeItems(
@@ -219,7 +218,7 @@ public class PageMessageBodyWriter<T>
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, fieldName, link));
 
-				Map<String, Function<V, InputStream>> binaryFunctions =
+				Map<String, BinaryFunction<V>> binaryFunctions =
 					_resourceManager.getBinaryFunctions(modelClass);
 
 				_writerHelper.writeBinaries(
@@ -279,7 +278,7 @@ public class PageMessageBodyWriter<T>
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
 		Fields fields, Embedded embedded,
-		Map<String, Function<T, InputStream>> binaryFunctions) {
+		Map<String, BinaryFunction<T>> binaryFunctions) {
 
 		Collection<T> items = page.getItems();
 

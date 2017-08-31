@@ -18,6 +18,7 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEA
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.list.FunctionalList;
@@ -34,7 +35,6 @@ import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
@@ -44,7 +44,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -141,7 +140,7 @@ public class SingleModelMessageBodyWriter<T>
 		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new MustHaveProvider(Embedded.class));
 
-		Map<String, Function<T, InputStream>> binaryFunctions =
+		Map<String, BinaryFunction<T>> binaryFunctions =
 			_resourceManager.getBinaryFunctions(modelClass);
 
 		_writeModel(
@@ -180,7 +179,7 @@ public class SingleModelMessageBodyWriter<T>
 							jsonObjectBuilder, embeddedPathElements, fieldName,
 							link));
 
-				Map<String, Function<V, InputStream>> binaryFunctions =
+				Map<String, BinaryFunction<V>> binaryFunctions =
 					_resourceManager.getBinaryFunctions(modelClass);
 
 				_writerHelper.writeBinaries(
@@ -253,7 +252,7 @@ public class SingleModelMessageBodyWriter<T>
 		SingleModelMessageMapper<U> singleModelMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, U model, Class<U> modelClass,
 		Fields fields, Embedded embedded,
-		Map<String, Function<U, InputStream>> binaries) {
+		Map<String, BinaryFunction<U>> binaryFunctions) {
 
 		singleModelMessageMapper.onStart(
 			jsonObjectBuilder, model, modelClass, _httpHeaders);
@@ -269,7 +268,7 @@ public class SingleModelMessageBodyWriter<T>
 				jsonObjectBuilder, fieldName, link));
 
 		_writerHelper.writeBinaries(
-			binaries, modelClass, model, _httpServletRequest,
+			binaryFunctions, modelClass, model, _httpServletRequest,
 			(field, value) -> singleModelMessageMapper.mapField(
 				jsonObjectBuilder, field, value));
 

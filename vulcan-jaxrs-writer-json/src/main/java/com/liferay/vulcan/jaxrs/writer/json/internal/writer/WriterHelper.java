@@ -18,6 +18,7 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.OPTION
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveFilterProvider;
 import com.liferay.vulcan.filter.FilterProvider;
@@ -37,8 +38,6 @@ import com.liferay.vulcan.wiring.osgi.manager.FilterProviderManager;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
-
-import java.io.InputStream;
 
 import java.net.URI;
 
@@ -241,17 +240,19 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Helper method to write binary resources. It uses a biconsumer so each
-	 * {@link javax.ws.rs.ext.MessageBodyWriter} can write each field
+	 * Helper method to write binary resources. It uses a bi consumer so each
+	 * {@link javax.ws.rs.ext.MessageBodyWriter} can write each binary
 	 * differently.
 	 *
+	 * @param binaryFunctions functions used to obtain the binaries.
 	 * @param modelClass the model class.
 	 * @param model an instance of the model.
-	 * @param biConsumer the consumer that will be called to write each field.
+	 * @param httpServletRequest the actual HTTP request.
+	 * @param biConsumer the consumer that will be called to write each binary.
 	 */
 	public <T> void writeBinaries(
-		Map<String, Function<T, InputStream>> binaryFunctions,
-		Class<T> modelClass, T model, HttpServletRequest httpServletRequest,
+		Map<String, BinaryFunction<T>> binaryFunctions, Class<T> modelClass,
+		T model, HttpServletRequest httpServletRequest,
 		BiConsumer<String, Object> biConsumer) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(

@@ -14,13 +14,11 @@
 
 package com.liferay.vulcan.resource;
 
+import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 
-import java.io.InputStream;
-
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -44,14 +42,17 @@ import java.util.function.Supplier;
 public interface Routes<T> {
 
 	/**
-	 * Returns the BiFunction used to create a binary resource of a {@link
-	 * Resource}. Returns an <code>InputStream</code> with the bytes of the
-	 * binary resource
+	 * Returns the function used to create a binary resource of a {@link
+	 * Resource}. Returns <code>Optional#empty()</code> if no binary resource
+	 * has been added through {@link
+	 * com.liferay.vulcan.resource.builder.RepresentorBuilder.FirstStep#addBinary(
+	 * String, BinaryFunction)}.
 	 *
-	 * @return an InputStream with the content of the binary resource
+	 * @return the function used to create the binary resource, if present;
+	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<BiFunction<T, String, InputStream>>
-		getBinaryBiFunctionsOptional();
+	public Optional<Function<String, BinaryFunction<T>>>
+		getBinaryFunctionOptional();
 
 	/**
 	 * Returns the supplier used to create the page of a {@link Resource}.
