@@ -170,8 +170,6 @@ public class BlogPostingResource implements Resource<BlogsEntry> {
 	}
 
 	private Optional<Group> _getGroupOptional(BlogsEntry blogsEntry) {
-		long groupId = blogsEntry.getGroupId();
-
 		try {
 			return Optional.of(
 				_groupLocalService.getGroup(blogsEntry.getGroupId()));
