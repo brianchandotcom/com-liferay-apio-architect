@@ -263,13 +263,13 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		_relatedCollections.put(modelClass.getName(), relatedCollections);
 
-		List<String> types = new ArrayList<>();
-
-		_types.put(modelClass.getName(), types);
-
 		Map<String, BinaryFunction<T>> binaryFunctions = new HashMap<>();
 
 		_binaryFunctions.put(modelClass.getName(), (Map)binaryFunctions);
+
+		List<String> types = new ArrayList<>();
+
+		_types.put(modelClass.getName(), types);
 
 		Optional<Resource<T>> optional = getResourceOptional(modelClass);
 
