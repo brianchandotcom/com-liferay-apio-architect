@@ -16,17 +16,11 @@ package com.liferay.vulcan.endpoint;
 
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
-import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.Try;
 
 import java.io.InputStream;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.function.Supplier;
-
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
@@ -55,48 +49,9 @@ public interface RootEndpoint {
 	 */
 	@GET
 	@Path("/b/{path}/{id}/{binaryId}")
-	public default <T> Try<InputStream> getCollectionItemInputStreamTry(
+	public <T> Try<InputStream> getCollectionItemInputStreamTry(
 		@PathParam("path") String path, @PathParam("id") String id,
-		@PathParam("binaryId") String binaryId) {
-
-		Try<SingleModel<T>> singleModelTry = getCollectionItemSingleModelTry(
-			path, id);
-
-		return singleModelTry.map(
-			SingleModel::getModel
-		).flatMap(
-			model -> getCollectionItemInputStreamTry(path, model, binaryId)
-		);
-	}
-
-	/**
-	 * Returns the {@link InputStream} for a given resource model or an
-	 * exception if an error occurred.
-	 *
-	 * @param  path the path from the URL.
-	 * @param  model the entity that contains the binary resource
-	 * @param  binaryId the ID to the binary resource.
-	 * @return the input stream of the binary resource, or an exception it there
-	 *         was an error.
-	 */
-	public default <T> Try<InputStream> getCollectionItemInputStreamTry(
-		String path, T model, String binaryId) {
-
-		Try<Routes<T>> routesTry = getRoutesTry(path);
-
-		return routesTry.map(
-			Routes::getBinaryFunctionOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path " + binaryId)
-		).map(
-			binaryFunction -> binaryFunction.apply(binaryId)
-		).map(
-			binaryFunction -> binaryFunction.apply(model)
-		);
-	}
+		@PathParam("binaryId") String binaryId);
 
 	/**
 	 * Returns the {@link SingleModel} for a given path or an exception if an
@@ -108,22 +63,8 @@ public interface RootEndpoint {
 	 */
 	@GET
 	@Path("/p/{path}/{id}")
-	public default <T> Try<SingleModel<T>> getCollectionItemSingleModelTry(
-		@PathParam("path") String path, @PathParam("id") String id) {
-
-		Try<Routes<T>> routesTry = getRoutesTry(path);
-
-		return routesTry.map(
-			Routes::getSingleModelFunctionOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path " + path)
-		).map(
-			singleModelFunction -> singleModelFunction.apply(id)
-		);
-	}
+	public <T> Try<SingleModel<T>> getCollectionItemSingleModelTry(
+		@PathParam("path") String path, @PathParam("id") String id);
 
 	/**
 	 * Returns the collection {@link Page} for a given path or an exception if
@@ -135,30 +76,7 @@ public interface RootEndpoint {
 	 */
 	@GET
 	@Path("/p/{path}")
-	public default <T> Try<Page<T>> getCollectionPageTry(
-		@PathParam("path") String path) {
-
-		Try<Routes<T>> routesTry = getRoutesTry(path);
-
-		return routesTry.map(
-			Routes::getPageSupplierOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path " + path)
-		).map(
-			Supplier::get
-		);
-	}
-
-	/**
-	 * Returns the {@link Routes} instance for a given path. The result of this
-	 * method may vary depending on implementation.
-	 *
-	 * @param  path the path from the URL.
-	 * @return the {@link Routes} instance for the path.
-	 */
-	public <T> Try<Routes<T>> getRoutesTry(String path);
+	public <T> Try<Page<T>> getCollectionPageTry(
+		@PathParam("path") String path);
 
 }

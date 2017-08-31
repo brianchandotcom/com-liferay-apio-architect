@@ -1,0 +1,127 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.vulcan.application.internal.endpoint;
+
+import com.liferay.vulcan.endpoint.RootEndpoint;
+import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.pagination.SingleModel;
+import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+
+import java.io.InputStream;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import javax.servlet.http.HttpServletRequest;
+
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Context;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+/**
+ * @author Alejandro Hernández
+ * @author Carlos Sierra Andrés
+ * @author Jorge Ferrer
+ */
+@Component(immediate = true)
+public class RootEndpointImpl implements RootEndpoint {
+
+	@Override
+	public <T> Try<InputStream> getCollectionItemInputStreamTry(
+		String path, String id, String binaryId) {
+
+		Try<Routes<T>> routesTry = _getRoutesTry(path);
+
+		return routesTry.map(
+			Routes::getBinaryFunctionOptional
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class,
+			() -> new NotFoundException("No endpoint found at path " + binaryId)
+		).map(
+			binaryFunction -> binaryFunction.apply(binaryId)
+		).flatMap(
+			binaryFunction -> {
+				Try<SingleModel<T>> singleModelTry =
+					getCollectionItemSingleModelTry(path, id);
+
+				return singleModelTry.map(
+					SingleModel::getModel
+				).map(
+					binaryFunction::apply
+				);
+			}
+		);
+	}
+
+	@Override
+	public <T> Try<SingleModel<T>> getCollectionItemSingleModelTry(
+		String path, String id) {
+
+		Try<Routes<T>> routesTry = _getRoutesTry(path);
+
+		return routesTry.map(
+			Routes::getSingleModelFunctionOptional
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class,
+			() -> new NotFoundException("No endpoint found at path " + path)
+		).map(
+			singleModelFunction -> singleModelFunction.apply(id)
+		);
+	}
+
+	@Override
+	public <T> Try<Page<T>> getCollectionPageTry(String path) {
+		Try<Routes<T>> routesTry = _getRoutesTry(path);
+
+		return routesTry.map(
+			Routes::getPageSupplierOptional
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class,
+			() -> new NotFoundException("No endpoint found at path " + path)
+		).map(
+			Supplier::get
+		);
+	}
+
+	private <T> Try<Routes<T>> _getRoutesTry(String path) {
+		Try<Optional<Routes<T>>> optionalTry = Try.success(
+			_resourceManager.getRoutes(path, _httpServletRequest));
+
+		return optionalTry.map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class,
+			() -> new NotFoundException("No resource found for path " + path)
+		);
+	}
+
+	@Context
+	private HttpServletRequest _httpServletRequest;
+
+	@Reference
+	private ResourceManager _resourceManager;
+
+}
