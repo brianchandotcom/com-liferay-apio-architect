@@ -15,6 +15,7 @@
 package com.liferay.vulcan.resource.builder;
 
 import com.liferay.vulcan.binary.BinaryFunction;
+import com.liferay.vulcan.identifier.Identifier;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -30,8 +31,8 @@ import java.util.function.Function;
 public interface RepresentorBuilder<T> {
 
 	/**
-	 * Provide a lambda function that can be used to obtain the identifier used
-	 * for a model.
+	 * Provide a lambda function that can be used to obtain the {@link
+	 * Identifier} used for a model.
 	 *
 	 * <p>
 	 * This identifier will be the same obtained in the {@link
@@ -43,7 +44,8 @@ public interface RepresentorBuilder<T> {
 	 * @param  identifierFunction function used to obtain a model's identifier.
 	 * @return builder's next step.
 	 */
-	public FirstStep<T> identifier(Function<T, String> identifierFunction);
+	public <U extends Identifier> FirstStep<T> identifier(
+		Function<T, U> identifierFunction);
 
 	public interface FirstStep<T> {
 

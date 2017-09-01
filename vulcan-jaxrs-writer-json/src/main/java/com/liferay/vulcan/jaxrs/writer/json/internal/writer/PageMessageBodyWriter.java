@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.identifier.Identifier;
-import com.liferay.vulcan.jaxrs.writer.json.internal.identifier.IdentifierImpl;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
@@ -305,16 +304,13 @@ public class PageMessageBodyWriter<T>
 					types -> pageMessageMapper.mapItemTypes(
 						jsonObjectBuilder, itemJSONObjectBuilder, types));
 
-				String id = _resourceManager.getIdentifier(modelClass, item);
-
 				Optional<Resource<T>> optional =
 					_resourceManager.getResourceOptional(modelClass);
 
 				optional.ifPresent(
 					resource -> {
-						String type = resource.getPath();
-
-						Identifier identifier = new IdentifierImpl(type, id);
+						Identifier identifier = _resourceManager.getIdentifier(
+							modelClass, item);
 
 						SingleModel<T> singleModel = new SingleModel<>(
 							item, modelClass, identifier);

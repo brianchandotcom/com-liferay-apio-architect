@@ -23,10 +23,6 @@ import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
-import java.util.Optional;
-
-import javax.ws.rs.NotFoundException;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -44,24 +40,7 @@ public class AggregateRatingResource implements Resource<AggregateRating> {
 		RepresentorBuilder<AggregateRating> representorBuilder) {
 
 		representorBuilder.identifier(
-			aggregateRating -> {
-				String className = aggregateRating.getClassName();
-
-				Optional<Resource<Object>> optional =
-					_resourceManager.getResourceOptional(className);
-
-				String type = optional.map(
-					Resource::getPath
-				).orElseThrow(
-					() -> new NotFoundException(
-						"Unable to find an API for " + className +
-							" resources")
-				);
-
-				String id = String.valueOf(aggregateRating.getClassPK());
-
-				return type + ":" + id;
-			}
+			aggregateRating -> null
 		).addField(
 			"bestRating", aggregateRating -> 1
 		).addField(

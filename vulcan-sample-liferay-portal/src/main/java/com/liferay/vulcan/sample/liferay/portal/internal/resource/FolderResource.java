@@ -54,7 +54,7 @@ public class FolderResource implements Resource<DLFolder> {
 		RepresentorBuilder<DLFolder> representorBuilder) {
 
 		representorBuilder.identifier(
-			dlFolder -> String.valueOf(dlFolder.getFolderId())
+			dlFolder -> null
 		).addBidirectionalModel(
 			"group", "folders", Group.class, this::_getGroupOptional
 		).addField(

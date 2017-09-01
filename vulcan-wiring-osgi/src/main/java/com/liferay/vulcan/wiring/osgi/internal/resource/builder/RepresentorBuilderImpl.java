@@ -15,6 +15,7 @@
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
 import com.liferay.vulcan.binary.BinaryFunction;
+import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
@@ -34,7 +35,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 
 	public RepresentorBuilderImpl(
 		Class<T> modelClass,
-		Map<String, Function<?, String>> identifierFunctions,
+		Map<String, Function<?, ? extends Identifier>> identifierFunctions,
 		BiConsumer<String, Class<?>> addRelatedCollectionBiConsumer,
 		Map<String, Function<?, Object>> fieldFunctions,
 		List<RelatedModel<?, ?>> embeddedRelatedModels,
@@ -55,7 +56,9 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	}
 
 	@Override
-	public FirstStep<T> identifier(Function<T, String> identifierFunction) {
+	public <U extends Identifier> FirstStep<T> identifier(
+		Function<T, U> identifierFunction) {
+
 		_identifierFunctions.put(_modelClass.getName(), identifierFunction);
 
 		return new FirstStep<T>() {
@@ -144,7 +147,8 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	private final Map<String, BinaryFunction<?>> _binaryFunctions;
 	private final List<RelatedModel<?, ?>> _embeddedRelatedModels;
 	private final Map<String, Function<?, Object>> _fieldFunctions;
-	private final Map<String, Function<?, String>> _identifierFunctions;
+	private final Map<String, Function<?, ? extends Identifier>>
+		_identifierFunctions;
 	private final List<RelatedModel<?, ?>> _linkedRelatedModels;
 	private final Map<String, String> _links;
 	private final Class<T> _modelClass;

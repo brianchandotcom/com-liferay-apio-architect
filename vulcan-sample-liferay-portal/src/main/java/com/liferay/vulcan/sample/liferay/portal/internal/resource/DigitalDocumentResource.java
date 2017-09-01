@@ -60,7 +60,7 @@ public class DigitalDocumentResource implements Resource<DLFileEntry> {
 		RepresentorBuilder<DLFileEntry> representorBuilder) {
 
 		representorBuilder.identifier(
-			dlFileEntry -> String.valueOf(dlFileEntry.getFileEntryId())
+			dlFileEntry -> null
 		).addBidirectionalModel(
 			"folder", "digitalDocuments", DLFolder.class,
 			this::_getDLFolderOptional

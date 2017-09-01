@@ -22,7 +22,6 @@ import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.jaxrs.writer.json.internal.StringFunctionalList;
-import com.liferay.vulcan.jaxrs.writer.json.internal.identifier.IdentifierImpl;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.ErrorMessageMapper;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -201,35 +200,23 @@ public class WriterHelper {
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest,
 		BiConsumer<String, Object> biConsumer) {
 
-		Class<T> modelClass = singleModel.getModelClass();
+		Identifier identifier = singleModel.getIdentifier();
 
-		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
-			modelClass);
-
-		T model = singleModel.getModel();
-
-		Optional<Function<String, String>> uriFunctionOptional = optional.map(
-			Resource::getPath
-		).map(
-			"/b/"::concat
-		).map(
-			uri -> uri + "/" + _resourceManager.getIdentifier(modelClass, model)
-		).map(
-			uri -> binaryId -> uri + "/" + binaryId
-		);
+		String resourceURI = "/b/" + identifier.asURI() + "/";
 
 		for (String binaryId : binaryFunctions.keySet()) {
-			uriFunctionOptional.map(
-				uriFunction -> uriFunction.apply(binaryId)
-			).map(
+			String binaryURI = resourceURI + binaryId;
+
+			Function<String, String> transformURIFunction =
 				_getTransformURIFunction(
 					(uri, transformer) -> transformer.transformBinaryURI(
-						uri, modelClass, model, binaryId))
-			).map(
-				uri -> getAbsoluteURL(httpServletRequest, uri)
-			).ifPresent(
-				url -> biConsumer.accept(binaryId, url)
-			);
+						uri, singleModel, binaryId));
+
+			String transformedURI = transformURIFunction.apply(binaryURI);
+
+			String url = getAbsoluteURL(httpServletRequest, transformedURI);
+
+			biConsumer.accept(binaryId, url);
 		}
 	}
 
@@ -416,45 +403,33 @@ public class WriterHelper {
 
 		Class<U> modelClass = relatedModel.getModelClass();
 
-		Optional<Resource<U>> optional = _resourceManager.getResourceOptional(
-			modelClass);
+		Identifier identifier = _resourceManager.getIdentifier(
+			modelClass, model);
 
-		optional.map(
-			Resource::getPath
-		).map(
-			type -> {
-				String id = _resourceManager.getIdentifier(modelClass, model);
+		SingleModel<U> singleModel = new SingleModel<>(
+			model, modelClass, identifier);
 
-				return new IdentifierImpl(type, id);
-			}
-		).map(
-			identifier -> new SingleModel<>(model, modelClass, identifier)
-		).ifPresent(
-			singleModel -> {
-				Predicate<String> embeddedPredicate =
-					embedded.getEmbeddedPredicate();
+		Predicate<String> embeddedPredicate = embedded.getEmbeddedPredicate();
 
-				FunctionalList<String> embeddedPathElements =
-					new StringFunctionalList(parentEmbeddedPathElements, key);
+		FunctionalList<String> embeddedPathElements = new StringFunctionalList(
+			parentEmbeddedPathElements, key);
 
-				Stream<String> stream = Stream.concat(
-					Stream.of(embeddedPathElements.head()),
-					embeddedPathElements.tailStream());
+		Stream<String> stream = Stream.concat(
+			Stream.of(embeddedPathElements.head()),
+			embeddedPathElements.tailStream());
 
-				String embeddedPath = String.join(
-					".", stream.collect(Collectors.toList()));
+		String embeddedPath = String.join(
+			".", stream.collect(Collectors.toList()));
 
-				boolean isEmbedded = embeddedPredicate.test(embeddedPath);
+		boolean isEmbedded = embeddedPredicate.test(embeddedPath);
 
-				String url = getSingleURL(singleModel, httpServletRequest);
+		String url = getSingleURL(singleModel, httpServletRequest);
 
-				urlTriConsumer.accept(url, embeddedPathElements, isEmbedded);
+		urlTriConsumer.accept(url, embeddedPathElements, isEmbedded);
 
-				if (isEmbedded) {
-					modelBiConsumer.accept(singleModel, embeddedPathElements);
-				}
-			}
-		);
+		if (isEmbedded) {
+			modelBiConsumer.accept(singleModel, embeddedPathElements);
+		}
 	}
 
 	/**

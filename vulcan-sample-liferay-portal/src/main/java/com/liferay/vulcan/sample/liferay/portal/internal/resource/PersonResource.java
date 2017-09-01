@@ -68,7 +68,7 @@ public class PersonResource implements Resource<User> {
 		};
 
 		representorBuilder.identifier(
-			user -> String.valueOf(user.getUserId())
+			user -> null
 		).addField(
 			"additionalName", User::getMiddleName
 		).addField(

@@ -49,7 +49,7 @@ public class GroupResource implements Resource<Group> {
 	@Override
 	public void buildRepresentor(RepresentorBuilder<Group> representorBuilder) {
 		representorBuilder.identifier(
-			group -> String.valueOf(group.getGroupId())
+			group -> null
 		).addField(
 			"groupType", Group::getTypeLabel
 		).addType(

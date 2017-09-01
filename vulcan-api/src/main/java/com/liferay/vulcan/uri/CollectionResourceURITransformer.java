@@ -36,13 +36,12 @@ public interface CollectionResourceURITransformer {
 	 * Returns the transformed URI of a binary endpoint.
 	 *
 	 * @param  uri the binary URI.
-	 * @param  modelClass the model class.
-	 * @param  model the model instance.
+	 * @param  singleModel the single model.
 	 * @param  binaryId the binary ID.
 	 * @return the transformed URI.
 	 */
 	public <T> String transformBinaryURI(
-		String uri, Class<T> modelClass, T model, String binaryId);
+		String uri, SingleModel<T> singleModel, String binaryId);
 
 	/**
 	 * Returns the transformed URI of a collection item endpoint.

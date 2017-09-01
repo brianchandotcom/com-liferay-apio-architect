@@ -19,6 +19,7 @@ import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.vulcan.binary.BinaryFunction;
+import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
@@ -114,9 +115,11 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the identifier of the model.
 	 * @see    Resource
 	 */
-	public <T> String getIdentifier(Class<T> modelClass, T model) {
-		Function<T, String> identifierFunction =
-			(Function<T, String>)_identifierFunctions.get(modelClass.getName());
+	public <T, U extends Identifier> Identifier getIdentifier(
+		Class<T> modelClass, T model) {
+
+		Function<T, U> identifierFunction =
+			(Function<T, U>)_identifierFunctions.get(modelClass.getName());
 
 		return identifierFunction.apply(model);
 	}
@@ -343,8 +346,8 @@ public class ResourceManager extends BaseManager<Resource> {
 	@Reference
 	private IdentifierConverterManager _identifierConverterManager;
 
-	private final Map<String, Function<?, String>> _identifierFunctions =
-		new ConcurrentHashMap<>();
+	private final Map<String, Function<?, ? extends Identifier>>
+		_identifierFunctions = new ConcurrentHashMap<>();
 	private final Map<String, List<RelatedModel<?, ?>>> _linkedRelatedModels =
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, String>> _links =
