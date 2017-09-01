@@ -122,11 +122,13 @@ public class BlogPostingResource
 	}
 
 	@Override
-	public Routes<BlogsEntry> routes(RoutesBuilder<BlogsEntry> routesBuilder) {
+	public Routes<BlogsEntry> routes(
+		RoutesBuilder<BlogsEntry, LongIdentifier> routesBuilder) {
+
 		return routesBuilder.collectionPage(
 			this::_getPageItems, LongIdentifier.class
 		).collectionItem(
-			this::_getBlogsEntry, LongIdentifier.class
+			this::_getBlogsEntry
 		).build();
 	}
 

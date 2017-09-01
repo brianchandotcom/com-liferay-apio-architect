@@ -63,10 +63,11 @@ public class AggregateRatingResource
 
 	@Override
 	public Routes<AggregateRating> routes(
-		RoutesBuilder<AggregateRating> routesBuilder) {
+		RoutesBuilder<AggregateRating, ClassNameClassPKIdentifier>
+			routesBuilder) {
 
 		return routesBuilder.collectionItem(
-			this::_getAggregateRating, ClassNameClassPKIdentifier.class
+			this::_getAggregateRating
 		).build();
 	}
 

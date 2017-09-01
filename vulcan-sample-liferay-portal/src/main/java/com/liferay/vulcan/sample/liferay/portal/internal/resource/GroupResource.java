@@ -65,11 +65,13 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 	}
 
 	@Override
-	public Routes<Group> routes(RoutesBuilder<Group> routesBuilder) {
+	public Routes<Group> routes(
+		RoutesBuilder<Group, LongIdentifier> routesBuilder) {
+
 		return routesBuilder.collectionPage(
 			this::_getPageItems, RootIdentifier.class
 		).collectionItem(
-			this::_getGroup, LongIdentifier.class
+			this::_getGroup
 		).build();
 	}
 

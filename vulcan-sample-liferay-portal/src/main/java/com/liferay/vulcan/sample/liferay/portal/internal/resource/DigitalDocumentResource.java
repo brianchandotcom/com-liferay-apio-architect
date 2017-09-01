@@ -99,10 +99,10 @@ public class DigitalDocumentResource
 
 	@Override
 	public Routes<DLFileEntry> routes(
-		RoutesBuilder<DLFileEntry> routesBuilder) {
+		RoutesBuilder<DLFileEntry, LongIdentifier> routesBuilder) {
 
 		return routesBuilder.collectionItem(
-			this::_getDLFileEntry, LongIdentifier.class
+			this::_getDLFileEntry
 		).collectionPage(
 			this::_getPageItems, LongIdentifier.class
 		).build();

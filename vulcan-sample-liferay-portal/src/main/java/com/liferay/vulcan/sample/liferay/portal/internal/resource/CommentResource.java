@@ -80,9 +80,11 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 	}
 
 	@Override
-	public Routes<Comment> routes(RoutesBuilder<Comment> routesBuilder) {
+	public Routes<Comment> routes(
+		RoutesBuilder<Comment, LongIdentifier> routesBuilder) {
+
 		return routesBuilder.collectionItem(
-			this::_getComment, LongIdentifier.class
+			this::_getComment
 		).collectionPage(
 			this::_getPageItems, ClassNameClassPKIdentifier.class,
 			CurrentUser.class

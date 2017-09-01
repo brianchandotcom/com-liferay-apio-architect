@@ -78,9 +78,11 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 	}
 
 	@Override
-	public Routes<DLFolder> routes(RoutesBuilder<DLFolder> routesBuilder) {
+	public Routes<DLFolder> routes(
+		RoutesBuilder<DLFolder, LongIdentifier> routesBuilder) {
+
 		return routesBuilder.collectionItem(
-			this::_getDLFolder, LongIdentifier.class
+			this::_getDLFolder
 		).collectionPage(
 			this::_getPageItems, LongIdentifier.class
 		).build();
