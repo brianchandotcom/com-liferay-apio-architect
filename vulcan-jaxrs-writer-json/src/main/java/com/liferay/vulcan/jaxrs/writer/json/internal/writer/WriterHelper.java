@@ -135,11 +135,11 @@ public class WriterHelper {
 	 * @return the page collection URL if a {@link Resource} for the model class
 	 *         can be found; <code>Optional#empty()</code> otherwise.
 	 */
-	public <T> Optional<String> getCollectionURLOptional(
+	public <T, U extends Identifier> Optional<String> getCollectionURLOptional(
 		Page<T> page, HttpServletRequest httpServletRequest) {
 
-		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
-			page.getModelClass());
+		Optional<Resource<T, U>> optional =
+			_resourceManager.getResourceOptional(page.getModelClass());
 
 		return optional.map(
 			Resource::getPath
@@ -319,7 +319,7 @@ public class WriterHelper {
 	 * @param biConsumer the consumer that will be called to write the related
 	 *        collection URL.
 	 */
-	public <U, V> void writeRelatedCollection(
+	public <U, V, W extends Identifier> void writeRelatedCollection(
 		RelatedCollection<U, V> relatedCollection,
 		SingleModel<U> parentSingleModel,
 		FunctionalList<String> parentEmbeddedPathElements,
@@ -339,7 +339,7 @@ public class WriterHelper {
 
 		String singleURL = getSingleURL(parentSingleModel, httpServletRequest);
 
-		Optional<Resource<V>> resourceOptional =
+		Optional<Resource<V, W>> resourceOptional =
 			_resourceManager.getResourceOptional(modelClass);
 
 		resourceOptional.map(

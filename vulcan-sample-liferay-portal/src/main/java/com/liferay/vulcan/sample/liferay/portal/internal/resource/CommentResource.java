@@ -57,11 +57,11 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class CommentResource implements Resource<Comment> {
+public class CommentResource implements Resource<Comment, LongIdentifier> {
 
 	@Override
 	public void buildRepresentor(
-		RepresentorBuilder<Comment> representorBuilder) {
+		RepresentorBuilder<Comment, LongIdentifier> representorBuilder) {
 
 		representorBuilder.identifier(
 			comment -> null

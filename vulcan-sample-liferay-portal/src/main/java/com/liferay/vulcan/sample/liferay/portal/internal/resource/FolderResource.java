@@ -47,11 +47,11 @@ import org.osgi.service.component.annotations.Reference;
  * @author Javier Gamarra
  */
 @Component(immediate = true)
-public class FolderResource implements Resource<DLFolder> {
+public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 
 	@Override
 	public void buildRepresentor(
-		RepresentorBuilder<DLFolder> representorBuilder) {
+		RepresentorBuilder<DLFolder, LongIdentifier> representorBuilder) {
 
 		representorBuilder.identifier(
 			dlFolder -> null

@@ -33,11 +33,13 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class AggregateRatingResource implements Resource<AggregateRating> {
+public class AggregateRatingResource
+	implements Resource<AggregateRating, ClassNameClassPKIdentifier> {
 
 	@Override
 	public void buildRepresentor(
-		RepresentorBuilder<AggregateRating> representorBuilder) {
+		RepresentorBuilder<AggregateRating, ClassNameClassPKIdentifier>
+			representorBuilder) {
 
 		representorBuilder.identifier(
 			aggregateRating -> null

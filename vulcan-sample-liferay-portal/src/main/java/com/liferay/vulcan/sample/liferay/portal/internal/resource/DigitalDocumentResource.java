@@ -53,11 +53,12 @@ import org.osgi.service.component.annotations.Reference;
  * @author Javier Gamarra
  */
 @Component(immediate = true)
-public class DigitalDocumentResource implements Resource<DLFileEntry> {
+public class DigitalDocumentResource
+	implements Resource<DLFileEntry, LongIdentifier> {
 
 	@Override
 	public void buildRepresentor(
-		RepresentorBuilder<DLFileEntry> representorBuilder) {
+		RepresentorBuilder<DLFileEntry, LongIdentifier> representorBuilder) {
 
 		representorBuilder.identifier(
 			dlFileEntry -> null

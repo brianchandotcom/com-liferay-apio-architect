@@ -52,10 +52,12 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  */
 @Component(immediate = true)
-public class PersonResource implements Resource<User> {
+public class PersonResource implements Resource<User, LongIdentifier> {
 
 	@Override
-	public void buildRepresentor(RepresentorBuilder<User> representorBuilder) {
+	public void buildRepresentor(
+		RepresentorBuilder<User, LongIdentifier> representorBuilder) {
+
 		Function<User, Object> birthDateFunction = user -> {
 			try {
 				DateFormat dateFormat = DateUtil.getISO8601Format();

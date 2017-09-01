@@ -62,11 +62,12 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  */
 @Component(immediate = true)
-public class BlogPostingResource implements Resource<BlogsEntry> {
+public class BlogPostingResource
+	implements Resource<BlogsEntry, LongIdentifier> {
 
 	@Override
 	public void buildRepresentor(
-		RepresentorBuilder<BlogsEntry> representorBuilder) {
+		RepresentorBuilder<BlogsEntry, LongIdentifier> representorBuilder) {
 
 		Function<Date, Object> formatFunction = date -> {
 			if (date == null) {

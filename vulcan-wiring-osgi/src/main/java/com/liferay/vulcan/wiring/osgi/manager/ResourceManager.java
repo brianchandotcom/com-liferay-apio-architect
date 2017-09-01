@@ -166,7 +166,9 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the {@link Resource}, if present; <code>Optional#empty()</code>
 	 *         otherwise.
 	 */
-	public <T> Optional<Resource<T>> getResourceOptional(Class<T> modelClass) {
+	public <T, U extends Identifier> Optional<Resource<T, U>>
+		getResourceOptional(Class<T> modelClass) {
+
 		return getResourceOptional(modelClass.getName());
 	}
 
@@ -178,11 +180,11 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the {@link Resource}, if present; <code>Optional#empty()</code>
 	 *         otherwise.
 	 */
-	public <T> Optional<Resource<T>> getResourceOptional(
-		String modelClassName) {
+	public <T, U extends Identifier> Optional<Resource<T, U>>
+		getResourceOptional(String modelClassName) {
 
 		return getServiceOptional(modelClassName).map(
-			resource -> (Resource<T>)resource);
+			resource -> (Resource<T, U>)resource);
 	}
 
 	/**
@@ -230,19 +232,21 @@ public class ResourceManager extends BaseManager<Resource> {
 		_addModelClassMaps(modelClass);
 	}
 
-	protected <T> void unsetServiceReference(
+	protected <T, U extends Identifier> void unsetServiceReference(
 		ServiceReference<Resource> serviceReference) {
 
 		Class<T> modelClass = removeService(serviceReference, Resource.class);
 
 		_removeModelClassMaps(modelClass);
 
-		Optional<Resource<T>> optional = getResourceOptional(modelClass);
+		Optional<Resource<T, U>> optional = getResourceOptional(modelClass);
 
 		optional.ifPresent(firstResource -> _addModelClassMaps(modelClass));
 	}
 
-	private <T> void _addModelClassMaps(Class<T> modelClass) {
+	private <T, U extends Identifier> void _addModelClassMaps(
+		Class<T> modelClass) {
+
 		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
 
 		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
@@ -273,7 +277,7 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		_types.put(modelClass.getName(), types);
 
-		Optional<Resource<T>> optional = getResourceOptional(modelClass);
+		Optional<Resource<T, U>> optional = getResourceOptional(modelClass);
 
 		optional.ifPresent(
 			resource -> {
@@ -310,9 +314,10 @@ public class ResourceManager extends BaseManager<Resource> {
 		return clazz -> _providerManager.provide(clazz, httpServletRequest);
 	}
 
-	private <T> Function<HttpServletRequest, Routes<?>> _getRoutes(
-		Class<T> modelClass, Resource<T> resource,
-		Map<String, BinaryFunction<T>> binaryFunctions) {
+	private <T, U extends Identifier> Function<HttpServletRequest, Routes<?>>
+		_getRoutes(
+			Class<T> modelClass, Resource<T, U> resource,
+			Map<String, BinaryFunction<T>> binaryFunctions) {
 
 		return httpServletRequest -> {
 			RoutesBuilderImpl<T> routesBuilder = new RoutesBuilderImpl<>(

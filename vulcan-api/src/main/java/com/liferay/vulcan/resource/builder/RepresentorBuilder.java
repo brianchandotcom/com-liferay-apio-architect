@@ -28,7 +28,7 @@ import java.util.function.Function;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public interface RepresentorBuilder<T> {
+public interface RepresentorBuilder<T, U extends Identifier> {
 
 	/**
 	 * Provide a lambda function that can be used to obtain the {@link
@@ -44,8 +44,7 @@ public interface RepresentorBuilder<T> {
 	 * @param  identifierFunction function used to obtain a model's identifier.
 	 * @return builder's next step.
 	 */
-	public <U extends Identifier> FirstStep<T> identifier(
-		Function<T, U> identifierFunction);
+	public FirstStep<T> identifier(Function<T, U> identifierFunction);
 
 	public interface FirstStep<T> {
 

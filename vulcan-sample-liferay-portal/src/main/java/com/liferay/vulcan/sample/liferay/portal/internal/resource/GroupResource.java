@@ -44,10 +44,12 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class GroupResource implements Resource<Group> {
+public class GroupResource implements Resource<Group, LongIdentifier> {
 
 	@Override
-	public void buildRepresentor(RepresentorBuilder<Group> representorBuilder) {
+	public void buildRepresentor(
+		RepresentorBuilder<Group, LongIdentifier> representorBuilder) {
+
 		representorBuilder.identifier(
 			group -> null
 		).addField(

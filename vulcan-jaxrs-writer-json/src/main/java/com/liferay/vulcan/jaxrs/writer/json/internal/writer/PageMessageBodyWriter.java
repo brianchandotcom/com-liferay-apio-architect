@@ -269,7 +269,7 @@ public class PageMessageBodyWriter<T>
 			});
 	}
 
-	private void _writeItems(
+	private <U extends Identifier> void _writeItems(
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Fields fields,
 		Embedded embedded) {
@@ -304,7 +304,7 @@ public class PageMessageBodyWriter<T>
 					types -> pageMessageMapper.mapItemTypes(
 						jsonObjectBuilder, itemJSONObjectBuilder, types));
 
-				Optional<Resource<T>> optional =
+				Optional<Resource<T, U>> optional =
 					_resourceManager.getResourceOptional(modelClass);
 
 				optional.ifPresent(

@@ -31,7 +31,8 @@ import java.util.function.Function;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
+public class RepresentorBuilderImpl<T, U extends Identifier>
+	implements RepresentorBuilder<T, U> {
 
 	public RepresentorBuilderImpl(
 		Class<T> modelClass,
@@ -56,9 +57,7 @@ public class RepresentorBuilderImpl<T> implements RepresentorBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier> FirstStep<T> identifier(
-		Function<T, U> identifierFunction) {
-
+	public FirstStep<T> identifier(Function<T, U> identifierFunction) {
 		_identifierFunctions.put(_modelClass.getName(), identifierFunction);
 
 		return new FirstStep<T>() {
