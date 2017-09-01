@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
+import com.liferay.vulcan.liferay.portal.identifier.creator.ClassNameClassPKIdentifierCreator;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -137,24 +138,8 @@ public class BlogPostingResource
 		BlogsEntry blogsEntry) {
 
 		ClassNameClassPKIdentifier classNameClassPKIdentifier =
-			new ClassNameClassPKIdentifier() {
-
-				@Override
-				public String getClassName() {
-					return BlogsEntry.class.getName();
-				}
-
-				@Override
-				public long getClassPK() {
-					return blogsEntry.getEntryId();
-				}
-
-				@Override
-				public String getId() {
-					return "blogs:" + String.valueOf(getClassPK());
-				}
-
-			};
+			_classNameClassPKIdentifierCreator.create(
+				BlogsEntry.class.getName(), blogsEntry.getEntryId());
 
 		return Optional.of(
 			_aggregateRatingService.getAggregateRating(
@@ -223,6 +208,10 @@ public class BlogPostingResource
 
 	@Reference
 	private BlogsEntryService _blogsService;
+
+	@Reference
+	private ClassNameClassPKIdentifierCreator
+		_classNameClassPKIdentifierCreator;
 
 	@Reference
 	private GroupLocalService _groupLocalService;
