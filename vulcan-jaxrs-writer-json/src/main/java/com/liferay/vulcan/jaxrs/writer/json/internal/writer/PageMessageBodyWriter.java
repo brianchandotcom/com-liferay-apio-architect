@@ -26,7 +26,6 @@ import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
-import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.Try;
@@ -269,7 +268,7 @@ public class PageMessageBodyWriter<T>
 			});
 	}
 
-	private <U extends Identifier> void _writeItems(
+	private void _writeItems(
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Fields fields,
 		Embedded embedded) {
@@ -304,17 +303,14 @@ public class PageMessageBodyWriter<T>
 					types -> pageMessageMapper.mapItemTypes(
 						jsonObjectBuilder, itemJSONObjectBuilder, types));
 
-				Optional<Resource<T, U>> optional =
-					_resourceManager.getResourceOptional(modelClass);
+				Optional<Identifier> optional =
+					_resourceManager.getIdentifierOptional(modelClass, item);
 
-				optional.ifPresent(
-					resource -> {
-						Identifier identifier = _resourceManager.getIdentifier(
-							modelClass, item);
-
-						SingleModel<T> singleModel = new SingleModel<>(
-							item, modelClass, identifier);
-
+				optional.map(
+					identifier ->
+						new SingleModel<>(item, modelClass, identifier)
+				).ifPresent(
+					singleModel -> {
 						String url = _writerHelper.getSingleURL(
 							singleModel, _httpServletRequest);
 
@@ -358,11 +354,12 @@ public class PageMessageBodyWriter<T>
 								pageMessageMapper, jsonObjectBuilder,
 								itemJSONObjectBuilder, relatedCollection,
 								singleModel, null, fields));
+					}
+				);
 
-						pageMessageMapper.onFinishItem(
-							jsonObjectBuilder, itemJSONObjectBuilder, item,
-							modelClass, _httpHeaders);
-					});
+				pageMessageMapper.onFinishItem(
+					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
+					_httpHeaders);
 			});
 	}
 

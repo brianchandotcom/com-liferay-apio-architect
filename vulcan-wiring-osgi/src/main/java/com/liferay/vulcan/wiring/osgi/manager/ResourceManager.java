@@ -111,20 +111,51 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	/**
-	 * Returns the identifier of the model.
+	 * Returns the identifier of the model if present. Returns {@code
+	 * Optional#empty()} otherwise.
 	 *
 	 * @param  modelClass the model class of a {@link Resource}.
 	 * @param  model the model instance.
-	 * @return the identifier of the model.
+	 * @return the identifier of the model if present; {@code Optional#empty()}
+	 *         otherwise.
 	 * @see    Resource
 	 */
-	public <T, U extends Identifier> Identifier getIdentifier(
+	public <T> Optional<Identifier> getIdentifierOptional(
 		Class<T> modelClass, T model) {
 
-		Function<T, U> identifierFunction =
-			(Function<T, U>)_identifierFunctions.get(modelClass.getName());
+		Function<T, Identifier> identifierFunction =
+			(Function<T, Identifier>)_identifierFunctions.get(
+				modelClass.getName());
 
-		return identifierFunction.apply(model);
+		Optional<Function<T, Identifier>> optional = Optional.ofNullable(
+			identifierFunction);
+
+		return optional.map(
+			function -> function.apply(model)
+		).flatMap(
+			identifier -> {
+				Optional<Resource<T, Identifier>> resourceOptional =
+					getResourceOptional(modelClass);
+
+				return resourceOptional.map(
+					Resource::getPath
+				).map(
+					path -> new Identifier() {
+
+						@Override
+						public String getId() {
+							return identifier.getId();
+						}
+
+						@Override
+						public String getType() {
+							return path;
+						}
+
+					}
+				);
+			}
+		);
 	}
 
 	/**

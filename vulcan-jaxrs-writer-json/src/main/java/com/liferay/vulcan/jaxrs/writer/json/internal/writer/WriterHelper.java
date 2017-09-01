@@ -403,8 +403,14 @@ public class WriterHelper {
 
 		Class<U> modelClass = relatedModel.getModelClass();
 
-		Identifier identifier = _resourceManager.getIdentifier(
-			modelClass, model);
+		Optional<Identifier> identifierOptional =
+			_resourceManager.getIdentifierOptional(modelClass, model);
+
+		if (!identifierOptional.isPresent()) {
+			return;
+		}
+
+		Identifier identifier = identifierOptional.get();
 
 		SingleModel<U> singleModel = new SingleModel<>(
 			model, modelClass, identifier);
