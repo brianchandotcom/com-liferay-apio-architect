@@ -54,7 +54,7 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 		RepresentorBuilder<DLFolder, LongIdentifier> representorBuilder) {
 
 		representorBuilder.identifier(
-			dlFolder -> null
+			dlFolder -> dlFolder::getFolderId
 		).addBidirectionalModel(
 			"group", "folders", Group.class, this::_getGroupOptional
 		).addField(

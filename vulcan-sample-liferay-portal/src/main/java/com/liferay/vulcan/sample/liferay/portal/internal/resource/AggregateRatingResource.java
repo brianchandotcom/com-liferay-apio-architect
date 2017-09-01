@@ -42,7 +42,7 @@ public class AggregateRatingResource
 			representorBuilder) {
 
 		representorBuilder.identifier(
-			aggregateRating -> null
+			AggregateRating::getIdentifier
 		).addField(
 			"bestRating", aggregateRating -> 1
 		).addField(
@@ -67,17 +67,8 @@ public class AggregateRatingResource
 			routesBuilder) {
 
 		return routesBuilder.collectionItem(
-			this::_getAggregateRating
+			_aggregateRatingService::getAggregateRating
 		).build();
-	}
-
-	private AggregateRating _getAggregateRating(
-		ClassNameClassPKIdentifier classNameClassPKIdentifier) {
-
-		String className = classNameClassPKIdentifier.getClassName();
-		Long classPK = classNameClassPKIdentifier.getClassPK();
-
-		return _aggregateRatingService.getAggregateRating(className, classPK);
 	}
 
 	@Reference

@@ -70,7 +70,7 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 		};
 
 		representorBuilder.identifier(
-			user -> null
+			user -> user::getUserId
 		).addField(
 			"additionalName", User::getMiddleName
 		).addField(

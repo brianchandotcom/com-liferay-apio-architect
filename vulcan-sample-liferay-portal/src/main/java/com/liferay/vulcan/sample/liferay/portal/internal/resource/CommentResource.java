@@ -64,7 +64,7 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 		RepresentorBuilder<Comment, LongIdentifier> representorBuilder) {
 
 		representorBuilder.identifier(
-			comment -> null
+			comment -> comment::getCommentId
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional
 		).addField(

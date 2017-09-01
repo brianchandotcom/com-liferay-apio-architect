@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.identifier.LongIdentifier;
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
@@ -80,7 +81,7 @@ public class BlogPostingResource
 		};
 
 		representorBuilder.identifier(
-			blogsEntry -> null
+			blogsEntry -> blogsEntry::getEntryId
 		).addBidirectionalModel(
 			"group", "blogs", Group.class, this::_getGroupOptional
 		).addEmbeddedModel(
@@ -135,9 +136,29 @@ public class BlogPostingResource
 	private Optional<AggregateRating> _getAggregateRatingOptional(
 		BlogsEntry blogsEntry) {
 
+		ClassNameClassPKIdentifier classNameClassPKIdentifier =
+			new ClassNameClassPKIdentifier() {
+
+				@Override
+				public String getClassName() {
+					return BlogsEntry.class.getName();
+				}
+
+				@Override
+				public long getClassPK() {
+					return blogsEntry.getEntryId();
+				}
+
+				@Override
+				public String getId() {
+					return "blogs:" + String.valueOf(getClassPK());
+				}
+
+			};
+
 		return Optional.of(
 			_aggregateRatingService.getAggregateRating(
-				BlogsEntry.class.getName(), blogsEntry.getEntryId()));
+				classNameClassPKIdentifier));
 	}
 
 	private BlogsEntry _getBlogsEntry(LongIdentifier blogsEntryIdentifier) {

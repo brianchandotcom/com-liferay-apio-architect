@@ -51,7 +51,7 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 		RepresentorBuilder<Group, LongIdentifier> representorBuilder) {
 
 		representorBuilder.identifier(
-			group -> null
+			group -> group::getGroupId
 		).addField(
 			"groupType", Group::getTypeLabel
 		).addType(

@@ -61,7 +61,7 @@ public class DigitalDocumentResource
 		RepresentorBuilder<DLFileEntry, LongIdentifier> representorBuilder) {
 
 		representorBuilder.identifier(
-			dlFileEntry -> null
+			dlFileEntry -> dlFileEntry::getFileEntryId
 		).addBidirectionalModel(
 			"folder", "digitalDocuments", DLFolder.class,
 			this::_getDLFolderOptional
