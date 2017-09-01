@@ -15,6 +15,7 @@
 package com.liferay.vulcan.sample.liferay.portal.internal.rating;
 
 import com.liferay.ratings.kernel.model.RatingsEntry;
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 
 import java.util.List;
@@ -26,10 +27,11 @@ import java.util.stream.Stream;
 public class AggregateRatingImpl implements AggregateRating {
 
 	public AggregateRatingImpl(
-		String className, Long classPK, List<RatingsEntry> ratingsEntries) {
+		ClassNameClassPKIdentifier classNameClassPKIdentifier,
+		List<RatingsEntry> ratingsEntries) {
 
-		_className = className;
-		_classPK = classPK;
+		_classNameClassPKIdentifier = classNameClassPKIdentifier;
+
 		_ratingCount = ratingsEntries.size();
 
 		Stream<RatingsEntry> stream = ratingsEntries.stream();
@@ -43,13 +45,8 @@ public class AggregateRatingImpl implements AggregateRating {
 	}
 
 	@Override
-	public String getClassName() {
-		return _className;
-	}
-
-	@Override
-	public Long getClassPK() {
-		return _classPK;
+	public ClassNameClassPKIdentifier getIdentifier() {
+		return _classNameClassPKIdentifier;
 	}
 
 	@Override
@@ -62,8 +59,7 @@ public class AggregateRatingImpl implements AggregateRating {
 		return _ratingValue;
 	}
 
-	private final String _className;
-	private final Long _classPK;
+	private final ClassNameClassPKIdentifier _classNameClassPKIdentifier;
 	private final Integer _ratingCount;
 	private final Double _ratingValue;
 

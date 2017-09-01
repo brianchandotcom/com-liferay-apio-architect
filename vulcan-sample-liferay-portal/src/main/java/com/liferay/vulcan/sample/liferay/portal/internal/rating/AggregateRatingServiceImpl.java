@@ -16,6 +16,7 @@ package com.liferay.vulcan.sample.liferay.portal.internal.rating;
 
 import com.liferay.ratings.kernel.model.RatingsEntry;
 import com.liferay.ratings.kernel.service.RatingsEntryLocalService;
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
 
@@ -31,11 +32,17 @@ import org.osgi.service.component.annotations.Reference;
 public class AggregateRatingServiceImpl implements AggregateRatingService {
 
 	@Override
-	public AggregateRating getAggregateRating(String className, Long classPK) {
+	public AggregateRating getAggregateRating(
+		ClassNameClassPKIdentifier classNameClassPKIdentifier) {
+
+		String className = classNameClassPKIdentifier.getClassName();
+		long classPK = classNameClassPKIdentifier.getClassPK();
+
 		List<RatingsEntry> ratingsEntries =
 			_ratingsEntryLocalService.getEntries(className, classPK);
 
-		return new AggregateRatingImpl(className, classPK, ratingsEntries);
+		return new AggregateRatingImpl(
+			classNameClassPKIdentifier, ratingsEntries);
 	}
 
 	@Reference

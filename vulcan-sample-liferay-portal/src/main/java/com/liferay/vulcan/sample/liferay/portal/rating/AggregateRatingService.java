@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.sample.liferay.portal.rating;
 
+import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
+
 /**
  * Instances of this service can be used to get the related {@link
  * AggregateRating} for a certain combination of className/classPK.
@@ -25,10 +27,10 @@ public interface AggregateRatingService {
 	/**
 	 * Returns the {@link AggregateRating} for a className/classPK combination.
 	 *
-	 * @param  className the className.
-	 * @param  classPK the classPK.
+	 * @param  classNameClassPKIdentifier the className/classPK identifier.
 	 * @return the aggregate rating.
 	 */
-	public AggregateRating getAggregateRating(String className, Long classPK);
+	public AggregateRating getAggregateRating(
+		ClassNameClassPKIdentifier classNameClassPKIdentifier);
 
 }
