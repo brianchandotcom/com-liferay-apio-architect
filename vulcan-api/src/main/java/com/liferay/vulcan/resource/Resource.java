@@ -77,6 +77,6 @@ public interface Resource<T, U extends Identifier> {
 	 * @param routesBuilder the builder used to create the routes.
 	 * @see   RoutesBuilder
 	 */
-	public Routes<T> routes(RoutesBuilder<T> routesBuilder);
+	public Routes<T> routes(RoutesBuilder<T, U> routesBuilder);
 
 }
