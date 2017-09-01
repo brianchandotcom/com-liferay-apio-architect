@@ -17,9 +17,13 @@ package com.liferay.vulcan.liferay.portal.internal.identifier.converter;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.identifier.converter.IdentifierConverter;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
+import com.liferay.vulcan.liferay.portal.identifier.creator.ClassNameClassPKIdentifierCreator;
 import com.liferay.vulcan.liferay.portal.internal.identifier.ClassNameClassPKIdentifierImpl;
+import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+
+import java.util.Optional;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -51,7 +55,8 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class ClassNameClassPKIdentifierConverter
-	implements IdentifierConverter<ClassNameClassPKIdentifier> {
+	implements IdentifierConverter<ClassNameClassPKIdentifier>,
+			   ClassNameClassPKIdentifierCreator {
 
 	@Override
 	public ClassNameClassPKIdentifier convert(Identifier identifier) {
@@ -66,6 +71,38 @@ public class ClassNameClassPKIdentifierConverter
 		}
 
 		return _getClassNameClassPKIdentifier(type, id, type, id);
+	}
+
+	@Override
+	public ClassNameClassPKIdentifier create(String className, long classPK) {
+		Optional<Resource<Object, Identifier>> optional =
+			_resourceManager.getResourceOptional(className);
+
+		if (!optional.isPresent()) {
+			throw new NotFoundException(
+				"Unable to find a resource with type " + className);
+		}
+
+		Resource<Object, Identifier> resource = optional.get();
+
+		return new ClassNameClassPKIdentifier() {
+
+			@Override
+			public String getClassName() {
+				return className;
+			}
+
+			@Override
+			public long getClassPK() {
+				return classPK;
+			}
+
+			@Override
+			public String getId() {
+				return resource.getPath() + ":" + getClassPK();
+			}
+
+		};
 	}
 
 	private Long _getAsLong(String id) {
