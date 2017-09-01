@@ -31,6 +31,12 @@ public class GenericUtil {
 	public static <T, S> Try<Class<S>> getGenericClassTry(
 		Class<?> clazz, Class<T> interfaceClass) {
 
+		return getGenericClassTry(clazz, interfaceClass, 0);
+	}
+
+	public static <T, S> Try<Class<S>> getGenericClassTry(
+		Class<?> clazz, Class<T> interfaceClass, int position) {
+
 		Type[] genericInterfaces = clazz.getGenericInterfaces();
 
 		Try<Class<S>> classTry = Try.fail(
@@ -40,16 +46,22 @@ public class GenericUtil {
 		for (Type genericInterface : genericInterfaces) {
 			classTry = classTry.recoverWith(
 				throwable -> getGenericClassTry(
-					genericInterface, interfaceClass));
+					genericInterface, interfaceClass, position));
 		}
 
 		return classTry.recoverWith(
 			throwable -> getGenericClassTry(
-				clazz.getSuperclass(), interfaceClass));
+				clazz.getSuperclass(), interfaceClass, position));
 	}
 
 	public static <T, S> Try<Class<S>> getGenericClassTry(
 		Type type, Class<T> clazz) {
+
+		return getGenericClassTry(type, clazz, 0);
+	}
+
+	public static <T, S> Try<Class<S>> getGenericClassTry(
+		Type type, Class<T> clazz, int position) {
 
 		Try<Type> typeTry = Try.success(type);
 
@@ -67,14 +79,14 @@ public class GenericUtil {
 			ParameterizedType::getActualTypeArguments
 		).filter(
 			typeArguments -> {
-				if (typeArguments.length == 1) {
+				if (typeArguments.length >= 1) {
 					return true;
 				}
 
 				return false;
 			}
 		).map(
-			typeArguments -> typeArguments[0]
+			typeArguments -> typeArguments[position]
 		).map(
 			typeArgument -> {
 				if (typeArgument instanceof ParameterizedType) {
