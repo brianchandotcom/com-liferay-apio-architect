@@ -19,13 +19,16 @@ import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.vulcan.binary.BinaryFunction;
+import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
+import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -289,9 +292,12 @@ public class ResourceManager extends BaseManager<Resource> {
 						linkedRelatedModels, links, relatedCollections,
 						binaryFunctions, types));
 
-				_routesFunctions.put(
-					resource.getPath(),
-					_getRoutes(modelClass, resource, binaryFunctions));
+				Function<HttpServletRequest, Routes<?>> routesFunction =
+					_getRoutesFunction(
+						modelClass, _getIdentifierClass(resource), resource,
+						binaryFunctions);
+
+				_routesFunctions.put(resource.getPath(), routesFunction);
 			});
 	}
 
@@ -308,6 +314,19 @@ public class ResourceManager extends BaseManager<Resource> {
 		};
 	}
 
+	private <T, U extends Identifier> Class<U> _getIdentifierClass(
+		Resource<T, U> resource) {
+
+		Class<? extends Resource> resourceClass = resource.getClass();
+
+		Try<Class<U>> classTry = GenericUtil.getGenericClassTry(
+			resourceClass, Resource.class, 1);
+
+		return classTry.orElseThrow(
+			() -> new VulcanDeveloperError.MustHaveValidGenericType(
+				resourceClass));
+	}
+
 	private Function<Class<?>, Optional<?>> _getProvideClassFunction(
 		HttpServletRequest httpServletRequest) {
 
@@ -315,13 +334,15 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	private <T, U extends Identifier> Function<HttpServletRequest, Routes<?>>
-		_getRoutes(
-			Class<T> modelClass, Resource<T, U> resource,
+		_getRoutesFunction(
+			Class<T> modelClass, Class<U> identifierClass,
+			Resource<T, U> resource,
 			Map<String, BinaryFunction<T>> binaryFunctions) {
 
 		return httpServletRequest -> {
-			RoutesBuilderImpl<T> routesBuilder = new RoutesBuilderImpl<>(
-				modelClass, _getProvideClassFunction(httpServletRequest),
+			RoutesBuilderImpl<T, U> routesBuilder = new RoutesBuilderImpl<>(
+				modelClass, identifierClass,
+				_getProvideClassFunction(httpServletRequest),
 				_identifierConverterManager::convert);
 
 			routesBuilder.collectionBinary(binaryFunctions);

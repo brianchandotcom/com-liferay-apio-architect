@@ -42,15 +42,17 @@ import java.util.function.Function;
 /**
  * @author Alejandro Hernández
  */
-public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
+public class RoutesBuilderImpl<T, U extends Identifier>
+	implements RoutesBuilder<T, U> {
 
 	public RoutesBuilderImpl(
-		Class<T> modelClass,
+		Class<T> modelClass, Class<U> singleModelIdentifierClass,
 		Function<Class<?>, Optional<?>> provideClassFunction,
 		BiFunction<Class<? extends Identifier>, Identifier,
 			Optional<? extends Identifier>> identifierFunction) {
 
 		_modelClass = modelClass;
+		_singleModelIdentifierClass = singleModelIdentifierClass;
 		_provideClassFunction = provideClassFunction;
 		_identifierFunction = identifierFunction;
 	}
@@ -60,7 +62,7 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		return _routesImpl;
 	}
 
-	public RoutesBuilder<T> collectionBinary(
+	public RoutesBuilder<T, U> collectionBinary(
 		Map<String, BinaryFunction<T>> binaryFunction) {
 
 		_routesImpl.setBinaryFunction(binaryFunction::get);
@@ -69,12 +71,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A> RoutesBuilder<T> collectionItem(
-		BiFunction<U, A, T> biFunction, Class<U> identifierClass,
-		Class<A> aClass) {
+	public <A> RoutesBuilder<T, U> collectionItem(
+		BiFunction<U, A, T> biFunction, Class<A> aClass) {
 
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			id -> {
@@ -94,15 +95,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D, E, F, G, H, I> RoutesBuilder<T>
-		collectionItem(
-			DecaFunction<U, A, B, C, D, E, F, G, H, I, T> decaFunction,
-			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-			Class<G> gClass, Class<H> hClass, Class<I> iClass) {
+	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T, U> collectionItem(
+		DecaFunction<U, A, B, C, D, E, F, G, H, I, T> decaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+		Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
+		Class<I> iClass) {
 
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			id -> {
@@ -130,15 +130,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D, E, F, G, H> RoutesBuilder<T>
-		collectionItem(
-			EnneaFunction<U, A, B, C, D, E, F, G, H, T> enneaFunction,
-			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-			Class<G> gClass, Class<H> hClass) {
+	public <A, B, C, D, E, F, G, H> RoutesBuilder<T, U> collectionItem(
+		EnneaFunction<U, A, B, C, D, E, F, G, H, T> enneaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+		Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass) {
 
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			id -> {
@@ -165,11 +163,9 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier> RoutesBuilder<T> collectionItem(
-		Function<U, T> function, Class<U> identifierClass) {
-
+	public RoutesBuilder<T, U> collectionItem(Function<U, T> function) {
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			function);
@@ -185,15 +181,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D, E, F> RoutesBuilder<T>
-		collectionItem(
-			HeptaFunction<U, A, B, C, D, E, F, T> heptaFunction,
-			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-			Class<C> cClass, Class<D> dClass, Class<E> eClass,
-			Class<F> fClass) {
+	public <A, B, C, D, E, F> RoutesBuilder<T, U> collectionItem(
+		HeptaFunction<U, A, B, C, D, E, F, T> heptaFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+		Class<F> fClass) {
 
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			id -> {
@@ -218,14 +212,12 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D, E> RoutesBuilder<T>
-		collectionItem(
-			HexaFunction<U, A, B, C, D, E, T> hexaFunction,
-			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-			Class<C> cClass, Class<D> dClass, Class<E> eClass) {
+	public <A, B, C, D, E> RoutesBuilder<T, U> collectionItem(
+		HexaFunction<U, A, B, C, D, E, T> hexaFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			id -> {
@@ -249,15 +241,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D, E, F, G> RoutesBuilder<T>
-		collectionItem(
-			OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction,
-			Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-			Class<G> gClass) {
+	public <A, B, C, D, E, F, G> RoutesBuilder<T, U> collectionItem(
+		OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+		Class<F> fClass, Class<G> gClass) {
 
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			id -> {
@@ -283,12 +273,12 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D> RoutesBuilder<T> collectionItem(
-		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<U> identifierClass,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
+	public <A, B, C, D> RoutesBuilder<T, U> collectionItem(
+		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			id -> {
@@ -311,12 +301,12 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C> RoutesBuilder<T> collectionItem(
-		TetraFunction<U, A, B, C, T> tetraFunction, Class<U> identifierClass,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
+	public <A, B, C> RoutesBuilder<T, U> collectionItem(
+		TetraFunction<U, A, B, C, T> tetraFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass) {
 
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			id -> {
@@ -338,12 +328,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B> RoutesBuilder<T> collectionItem(
-		TriFunction<U, A, B, T> triFunction, Class<U> identifierClass,
-		Class<A> aClass, Class<B> bClass) {
+	public <A, B> RoutesBuilder<T, U> collectionItem(
+		TriFunction<U, A, B, T> triFunction, Class<A> aClass, Class<B> bClass) {
 
 		Function<Identifier, U> identifierFunction = _convertIdentifier(
-			identifierClass);
+			_singleModelIdentifierClass);
 
 		Function<Identifier, T> modelFunction = identifierFunction.andThen(
 			id -> {
@@ -364,11 +353,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier> RoutesBuilder<T> collectionPage(
-		BiFunction<Pagination, U, PageItems<T>> biFunction,
-		Class<U> identifierClass) {
+	public <V extends Identifier> RoutesBuilder<T, U> collectionPage(
+		BiFunction<Pagination, V, PageItems<T>> biFunction,
+		Class<V> identifierClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, V> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setPageFunction(
@@ -390,15 +379,15 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D, E, F, G, H> RoutesBuilder<T>
+	public <V extends Identifier, A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
 		collectionPage(
-			DecaFunction<Pagination, U, A, B, C, D, E, F, G, H,
-				PageItems<T>> decaFunction, Class<U> identifierClass,
+			DecaFunction<Pagination, V, A, B, C, D, E, F, G, H,
+				PageItems<T>> decaFunction, Class<V> identifierClass,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
 			Class<H> hClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, V> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setPageFunction(
@@ -428,14 +417,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D, E, F, G> RoutesBuilder<T>
+	public <V extends Identifier, A, B, C, D, E, F, G> RoutesBuilder<T, U>
 		collectionPage(
-			EnneaFunction<Pagination, U, A, B, C, D, E, F, G, PageItems<T>>
-				enneaFunction, Class<U> identifierClass, Class<A> aClass,
+			EnneaFunction<Pagination, V, A, B, C, D, E, F, G, PageItems<T>>
+				enneaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass, Class<G> gClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, V> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setPageFunction(
@@ -464,14 +453,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D, E> RoutesBuilder<T>
+	public <V extends Identifier, A, B, C, D, E> RoutesBuilder<T, U>
 		collectionPage(
-			HeptaFunction<Pagination, U, A, B, C, D, E, PageItems<T>>
-				heptaFunction, Class<U> identifierClass, Class<A> aClass,
+			HeptaFunction<Pagination, V, A, B, C, D, E, PageItems<T>>
+				heptaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, V> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setPageFunction(
@@ -498,12 +487,13 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D> RoutesBuilder<T> collectionPage(
-		HexaFunction<Pagination, U, A, B, C, D, PageItems<T>> hexaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass) {
+	public <V extends Identifier, A, B, C, D> RoutesBuilder<T, U>
+		collectionPage(
+			HexaFunction<Pagination, V, A, B, C, D, PageItems<T>> hexaFunction,
+			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, V> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setPageFunction(
@@ -529,14 +519,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C, D, E, F> RoutesBuilder<T>
+	public <V extends Identifier, A, B, C, D, E, F> RoutesBuilder<T, U>
 		collectionPage(
-			OctaFunction<Pagination, U, A, B, C, D, E, F, PageItems<T>>
-				octaFunction, Class<U> identifierClass, Class<A> aClass,
+			OctaFunction<Pagination, V, A, B, C, D, E, F, PageItems<T>>
+				octaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, V> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setPageFunction(
@@ -564,12 +554,12 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B, C> RoutesBuilder<T> collectionPage(
-		PentaFunction<Pagination, U, A, B, C, PageItems<T>> pentaFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass,
+	public <V extends Identifier, A, B, C> RoutesBuilder<T, U> collectionPage(
+		PentaFunction<Pagination, V, A, B, C, PageItems<T>> pentaFunction,
+		Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 		Class<C> cClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, V> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setPageFunction(
@@ -594,11 +584,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A, B> RoutesBuilder<T> collectionPage(
-		TetraFunction<Pagination, U, A, B, PageItems<T>> tetraFunction,
-		Class<U> identifierClass, Class<A> aClass, Class<B> bClass) {
+	public <V extends Identifier, A, B> RoutesBuilder<T, U> collectionPage(
+		TetraFunction<Pagination, V, A, B, PageItems<T>> tetraFunction,
+		Class<V> identifierClass, Class<A> aClass, Class<B> bClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, V> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setPageFunction(
@@ -622,11 +612,11 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	}
 
 	@Override
-	public <U extends Identifier, A> RoutesBuilder<T> collectionPage(
-		TriFunction<Pagination, U, A, PageItems<T>> triFunction,
-		Class<U> identifierClass, Class<A> aClass) {
+	public <V extends Identifier, A> RoutesBuilder<T, U> collectionPage(
+		TriFunction<Pagination, V, A, PageItems<T>> triFunction,
+		Class<V> identifierClass, Class<A> aClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Identifier, V> identifierFunction = _convertIdentifier(
 			identifierClass);
 
 		_routesImpl.setPageFunction(
@@ -648,15 +638,18 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		return this;
 	}
 
-	private <U extends Identifier> Function<Identifier, U> _convertIdentifier(
-		Class<U> identifierClass) {
+	private <V extends Identifier> Function<Identifier, V> _convertIdentifier(
+		Class<V> identifierClass) {
 
 		return identifier -> {
-			Optional<U> optional = (Optional<U>)_identifierFunction.apply(
+			Optional<? extends Identifier> optional = _identifierFunction.apply(
 				identifierClass, identifier);
 
-			return optional.orElseThrow(
-				() -> new MustHaveIdentifierConverter(identifierClass));
+			return optional.map(
+				convertedIdentifier -> (V)convertedIdentifier
+			).orElseThrow(
+				() -> new MustHaveIdentifierConverter(identifierClass)
+			);
 		};
 	}
 
@@ -666,10 +659,14 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 		return t -> new SingleModel<>(t, _modelClass, identifier);
 	}
 
-	private <U> U _provideClass(Class<U> clazz) {
-		Optional<U> optional = (Optional<U>)_provideClassFunction.apply(clazz);
+	private <V> V _provideClass(Class<V> clazz) {
+		Optional<?> optional = _provideClassFunction.apply(clazz);
 
-		return optional.orElseThrow(() -> new MustHaveProvider(clazz));
+		return optional.map(
+			provided -> (V)provided
+		).orElseThrow(
+			() -> new MustHaveProvider(clazz)
+		);
 	}
 
 	private final BiFunction<Class<? extends Identifier>, Identifier,
@@ -677,5 +674,6 @@ public class RoutesBuilderImpl<T> implements RoutesBuilder<T> {
 	private final Class<T> _modelClass;
 	private final Function<Class<?>, Optional<?>> _provideClassFunction;
 	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();
+	private final Class<U> _singleModelIdentifierClass;
 
 }
