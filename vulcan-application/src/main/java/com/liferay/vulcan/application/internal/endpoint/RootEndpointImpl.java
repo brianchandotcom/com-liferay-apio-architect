@@ -28,6 +28,7 @@ import java.io.InputStream;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,7 +58,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path " + binaryId)
+			_getNotFoundExceptionSupplier(path + "/" + id + "/" + binaryId)
 		).map(
 			binaryFunction -> binaryFunction.apply(binaryId)
 		).flatMap(
@@ -77,8 +78,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path " + path +
-				"/" + id)
+			_getNotFoundExceptionSupplier(path + "/" + id)
 		).map(
 			singleModelFunction -> singleModelFunction.apply(
 				new IdentifierImpl(path, id))
@@ -94,8 +94,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			Optional::get
 		).mapFailMatching(
-			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path " + path)
+			NoSuchElementException.class, _getNotFoundExceptionSupplier(path)
 		).map(
 			function -> function.apply(new RootIdentifierImpl())
 		);
@@ -113,8 +112,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotFoundException("No endpoint found at path " +
-				nestedPath + "/" + id + "/" + nestedPath)
+			_getNotFoundExceptionSupplier(path + "/" + id + "/" + nestedPath)
 		).map(
 			pageFunction -> pageFunction.apply(new IdentifierImpl(path, id))
 		);
@@ -131,6 +129,12 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			binaryFunction::apply
 		);
+	}
+
+	private Supplier<NotFoundException> _getNotFoundExceptionSupplier(
+		String path) {
+
+		return () -> new NotFoundException("No endpoint found at path " + path);
 	}
 
 	private <T> Try<Routes<T>> _getRoutesTry(String path) {
