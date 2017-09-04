@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.writer;
+package com.liferay.vulcan.jaxrs.json.internal.writer;
 
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;

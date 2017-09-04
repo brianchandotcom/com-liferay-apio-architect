@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal;
+package com.liferay.vulcan.jaxrs.json.internal;
 
 import com.liferay.vulcan.list.FunctionalList;
 
