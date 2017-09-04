@@ -19,6 +19,7 @@ import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -63,6 +64,18 @@ public interface Routes<T> {
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
 	public Optional<Function<Identifier, Page<T>>> getPageFunctionOptional();
+
+	/**
+	 * Returns the function used to create the single model of a {@link
+	 * Resource}. Returns <code>Optional#empty()</code> if the endpoint wasn't
+	 * added through the {@link
+	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
+	 *
+	 * @return the function used to create the single model, if present;
+	 *         <code>Optional#empty()</code> otherwise.
+	 */
+	public Optional<Function<Identifier, Function<Map<String, Object>,
+		SingleModel<T>>>> getPostSingleModelFunctionOptional();
 
 	/**
 	 * Returns the function used to create the single model of a {@link

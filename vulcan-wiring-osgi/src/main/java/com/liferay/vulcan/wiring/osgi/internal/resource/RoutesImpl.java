@@ -20,6 +20,7 @@ import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -41,6 +42,13 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
+	public Optional<Function<Identifier, Function<Map<String, Object>,
+		SingleModel<T>>>> getPostSingleModelFunctionOptional() {
+
+		return Optional.ofNullable(_postSingleModelFunction);
+	}
+
+	@Override
 	public Optional<Function<Identifier, SingleModel<T>>>
 		getSingleModelFunctionOptional() {
 
@@ -57,6 +65,13 @@ public class RoutesImpl<T> implements Routes<T> {
 		_pageFunction = pageFunction;
 	}
 
+	public void setPostSingleModelFunction(
+		Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
+			postSingleModelFunction) {
+
+		_postSingleModelFunction = postSingleModelFunction;
+	}
+
 	public void setSingleModelFunction(
 		Function<Identifier, SingleModel<T>> singleModelFunction) {
 
@@ -65,6 +80,8 @@ public class RoutesImpl<T> implements Routes<T> {
 
 	private Function<String, BinaryFunction<T>> _binaryFunction;
 	private Function<Identifier, Page<T>> _pageFunction;
+	private Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
+		_postSingleModelFunction;
 	private Function<Identifier, SingleModel<T>> _singleModelFunction;
 
 }
