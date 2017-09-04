@@ -16,6 +16,7 @@ package com.liferay.vulcan.application.internal.endpoint;
 
 import com.liferay.vulcan.application.internal.identifier.IdentifierImpl;
 import com.liferay.vulcan.application.internal.identifier.RootIdentifierImpl;
+import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.endpoint.RootEndpoint;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
@@ -60,16 +61,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			binaryFunction -> binaryFunction.apply(binaryId)
 		).flatMap(
-			binaryFunction -> {
-				Try<SingleModel<T>> singleModelTry =
-					getCollectionItemSingleModelTry(path, id);
-
-				return singleModelTry.map(
-					SingleModel::getModel
-				).map(
-					binaryFunction::apply
-				);
-			}
+			binaryFunction -> _getInputStreamTry(path, id, binaryFunction)
 		);
 	}
 
@@ -125,6 +117,19 @@ public class RootEndpointImpl implements RootEndpoint {
 				nestedPath + "/" + id + "/" + nestedPath)
 		).map(
 			pageFunction -> pageFunction.apply(new IdentifierImpl(path, id))
+		);
+	}
+
+	private <T> Try<InputStream> _getInputStreamTry(
+		String path, String id, BinaryFunction<T> binaryFunction) {
+
+		Try<SingleModel<T>> singleModelTry = getCollectionItemSingleModelTry(
+			path, id);
+
+		return singleModelTry.map(
+			SingleModel::getModel
+		).map(
+			binaryFunction::apply
 		);
 	}
 
