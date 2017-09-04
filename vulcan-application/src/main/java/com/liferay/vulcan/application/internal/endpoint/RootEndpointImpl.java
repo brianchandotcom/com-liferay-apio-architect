@@ -118,9 +118,11 @@ public class RootEndpointImpl implements RootEndpoint {
 		return routesTry.map(
 			Routes::getPageFunctionOptional
 		).map(
-			optional -> optional.orElseThrow(
-				() -> new NotFoundException("No endpoint found at path " +
-					nestedPath + "/" + id + "/" + nestedPath))
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class,
+			() -> new NotFoundException("No endpoint found at path " +
+				nestedPath + "/" + id + "/" + nestedPath)
 		).map(
 			pageFunction -> pageFunction.apply(new IdentifierImpl(path, id))
 		);
