@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.identifier.Identifier;
+import com.liferay.vulcan.jaxrs.writer.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
