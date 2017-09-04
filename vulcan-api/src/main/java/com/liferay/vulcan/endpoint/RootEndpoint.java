@@ -47,7 +47,7 @@ public interface RootEndpoint {
 	 * path or an exception if an error occurred.
 	 *
 	 * @param  path the path from the URL.
-	 * @return the created single model, or an exception it there was an error.
+	 * @return the created single model, or an exception if there was an error.
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{path}")
