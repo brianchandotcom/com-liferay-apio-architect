@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal;
+package com.liferay.vulcan.error.problem.json.internal;
 
 import com.liferay.vulcan.message.json.ErrorMessageMapper;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
