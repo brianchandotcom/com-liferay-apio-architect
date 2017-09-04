@@ -25,6 +25,7 @@ import com.liferay.vulcan.function.OctaFunction;
 import com.liferay.vulcan.function.PentaFunction;
 import com.liferay.vulcan.function.TetraFunction;
 import com.liferay.vulcan.function.TriFunction;
+import com.liferay.vulcan.function.UndecaFunction;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -633,6 +634,271 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
 						identifier);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <V extends Identifier> RoutesBuilder<T, U> postCollectionItem(
+		BiFunction<V, Map<String, Object>, T> biFunction,
+		Class<V> identifierClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					T t = biFunction.apply(v, body);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <A, B, C, D, E, F, G, H, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			DecaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, H, T>
+				decaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass, Class<G> gClass, Class<H> hClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+					H h = _provideClass(hClass);
+
+					T t = decaFunction.apply(v, body, a, b, c, d, e, f, g, h);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <A, B, C, D, E, F, G, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			EnneaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, T>
+				enneaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass, Class<G> gClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+
+					T t = enneaFunction.apply(v, body, a, b, c, d, e, f, g);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <A, B, C, D, E, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			HeptaFunction<V, Map<String, Object>, A, B, C, D, E, T>
+				heptaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+
+					T t = heptaFunction.apply(v, body, a, b, c, d, e);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <A, B, C, D, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			HexaFunction<V, Map<String, Object>, A, B, C, D, T> hexaFunction,
+			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+
+					T t = hexaFunction.apply(v, body, a, b, c, d);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <A, B, C, D, E, F, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			OctaFunction<V, Map<String, Object>, A, B, C, D, E, F, T>
+				octaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+
+					T t = octaFunction.apply(v, body, a, b, c, d, e, f);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <A, B, C, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			PentaFunction<V, Map<String, Object>, A, B, C, T> pentaFunction,
+			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+
+					T t = pentaFunction.apply(v, body, a, b, c);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <A, B, V extends Identifier> RoutesBuilder<T, U> postCollectionItem(
+		TetraFunction<V, Map<String, Object>, A, B, T> tetraFunction,
+		Class<V> identifierClass, Class<A> aClass, Class<B> bClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+
+					T t = tetraFunction.apply(v, body, a, b);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <A, V extends Identifier> RoutesBuilder<T, U> postCollectionItem(
+		TriFunction<V, Map<String, Object>, A, T> triFunction,
+		Class<V> identifierClass, Class<A> aClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					A a = _provideClass(aClass);
+
+					T t = triFunction.apply(v, body, a);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
+				}));
+
+		return this;
+	}
+
+	@Override
+	public <A, B, C, D, E, F, G, H, I, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			UndecaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, H, I, T>
+				undecaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass, Class<G> gClass, Class<H> hClass,
+			Class<I> iClass) {
+
+		_routesImpl.setPostSingleModelFunction(
+			_convertIdentifier(identifierClass).andThen(
+				v -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+					H h = _provideClass(hClass);
+					I i = _provideClass(iClass);
+
+					T t = undecaFunction.apply(
+						v, body, a, b, c, d, e, f, g, h, i);
+
+					Function<T, SingleModel<T>> singleModelFunction =
+						_createSingleModelFunction(v);
+
+					return singleModelFunction.apply(t);
 				}));
 
 		return this;

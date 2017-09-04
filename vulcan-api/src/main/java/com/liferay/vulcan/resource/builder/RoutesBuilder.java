@@ -22,11 +22,13 @@ import com.liferay.vulcan.function.OctaFunction;
 import com.liferay.vulcan.function.PentaFunction;
 import com.liferay.vulcan.function.TetraFunction;
 import com.liferay.vulcan.function.TriFunction;
+import com.liferay.vulcan.function.UndecaFunction;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Routes;
 
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -404,5 +406,233 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	public <V extends Identifier, A> RoutesBuilder<T, U> collectionPage(
 		TriFunction<Pagination, V, A, PageItems<T>> triFunction,
 		Class<V> identifierClass, Class<A> aClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  biFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @return the updated builder.
+	 */
+	public <V extends Identifier> RoutesBuilder<T, U> postCollectionItem(
+		BiFunction<V, Map<String, Object>, T> biFunction,
+		Class<V> identifierClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  decaFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @param  fClass the class of the seventh parameter of the single model
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the single model
+	 *         function.
+	 * @param  hClass the class of the ninth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G, H, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			DecaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, H, T>
+				decaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass, Class<G> gClass, Class<H> hClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  enneaFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @param  fClass the class of the seventh parameter of the single model
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			EnneaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, T>
+				enneaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass, Class<G> gClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  heptaFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			HeptaFunction<V, Map<String, Object>, A, B, C, D, E, T>
+				heptaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  hexaFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			HexaFunction<V, Map<String, Object>, A, B, C, D, T> hexaFunction,
+			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  octaFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @param  fClass the class of the seventh parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			OctaFunction<V, Map<String, Object>, A, B, C, D, E, F, T>
+				octaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  pentaFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			PentaFunction<V, Map<String, Object>, A, B, C, T> pentaFunction,
+			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  tetraFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, V extends Identifier> RoutesBuilder<T, U> postCollectionItem(
+		TetraFunction<V, Map<String, Object>, A, B, T> tetraFunction,
+		Class<V> identifierClass, Class<A> aClass, Class<B> bClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  triFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, V extends Identifier> RoutesBuilder<T, U> postCollectionItem(
+		TriFunction<V, Map<String, Object>, A, T> triFunction,
+		Class<V> identifierClass, Class<A> aClass);
+
+	/**
+	 * Adds a route to a single model post function.
+	 *
+	 * @param  undecaFunction the function that will be used to add the single
+	 *         model.
+	 * @param  identifierClass the class of the identifier.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @param  fClass the class of the seventh parameter of the single model
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the single model
+	 *         function.
+	 * @param  hClass the class of the ninth parameter of the single model
+	 *         function.
+	 * @param  iClass the class of the tenth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G, H, I, V extends Identifier> RoutesBuilder<T, U>
+		postCollectionItem(
+			UndecaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, H, I, T>
+				undecaFunction, Class<V> identifierClass, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass, Class<G> gClass, Class<H> hClass, Class<I> iClass);
 
 }
