@@ -160,6 +160,14 @@ public abstract class Try<T> {
 	public abstract T get() throws Exception;
 
 	/**
+	 * Returns the value T on success or throws a {@link RuntimeException} with
+	 * the cause of the failure.
+	 *
+	 * @return T if success case, throws {@code RuntimeException} otherwise.
+	 */
+	public abstract T getUnchecked();
+
+	/**
 	 * Returns <code>true</code> if this {@code Try} instance is a failure.
 	 * Returns <code>false</code> otherwise.
 	 *
@@ -322,6 +330,15 @@ public abstract class Try<T> {
 		}
 
 		@Override
+		public T getUnchecked() {
+			if (_exception instanceof RuntimeException) {
+				throw (RuntimeException)_exception;
+			}
+
+			throw new RuntimeException(_exception);
+		}
+
+		@Override
 		public boolean isFailure() {
 			return true;
 		}
@@ -450,6 +467,11 @@ public abstract class Try<T> {
 
 		@Override
 		public T get() throws Exception {
+			return _value;
+		}
+
+		@Override
+		public T getUnchecked() {
 			return _value;
 		}
 
