@@ -255,27 +255,26 @@ public class ResourceManager extends BaseManager<Resource> {
 	protected <T> void setServiceReference(
 		ServiceReference<Resource> serviceReference) {
 
-		Class<T> modelClass = addService(serviceReference, Resource.class);
+		Optional<Class<Object>> optional = addService(
+			serviceReference, Resource.class);
 
-		Optional<Resource> optional = getServiceOptional(modelClass);
-
-		optional.ifPresent(
-			resource -> _classNames.put(
-				resource.getPath(), modelClass.getName()));
-
-		_addModelClassMaps(modelClass);
+		optional.ifPresent(this::_addModelClassMaps);
 	}
 
-	protected <T, U extends Identifier> void unsetServiceReference(
+	@SuppressWarnings("unused")
+	protected void unsetServiceReference(
 		ServiceReference<Resource> serviceReference) {
 
-		Class<T> modelClass = removeService(serviceReference, Resource.class);
+		Optional<Class<Object>> optional = removeService(
+			serviceReference, Resource.class);
 
-		_removeModelClassMaps(modelClass);
+		optional.ifPresent(this::_removeModelClassMaps);
 
-		Optional<Resource<T, U>> optional = getResourceOptional(modelClass);
-
-		optional.ifPresent(firstResource -> _addModelClassMaps(modelClass));
+		optional.filter(
+			modelClass -> getResourceOptional(modelClass).isPresent()
+		).ifPresent(
+			this::_addModelClassMaps
+		);
 	}
 
 	private <T, U extends Identifier> void _addModelClassMaps(
@@ -315,6 +314,8 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		optional.ifPresent(
 			resource -> {
+				_classNames.put(resource.getPath(), modelClass.getName());
+
 				resource.buildRepresentor(
 					new RepresentorBuilderImpl(
 						modelClass, _identifierFunctions,
