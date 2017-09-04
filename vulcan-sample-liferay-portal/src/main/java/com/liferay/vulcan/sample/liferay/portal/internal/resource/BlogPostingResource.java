@@ -25,8 +25,10 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.liferay.portal.identifier.creator.ClassNameClassPKIdentifierCreator;
@@ -36,16 +38,22 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
@@ -98,6 +106,11 @@ public class BlogPostingResource
 			"createDate",
 			blogsEntry -> formatFunction.apply(blogsEntry.getCreateDate())
 		).addField(
+			"description", BlogsEntry::getDescription
+		).addField(
+			"displayDate",
+			blogsEntry -> formatFunction.apply(blogsEntry.getDisplayDate())
+		).addField(
 			"fileFormat", blogsEntry -> "text/html"
 		).addField(
 			"headline", BlogsEntry::getTitle
@@ -131,7 +144,61 @@ public class BlogPostingResource
 			this::_getBlogsEntry
 		).collectionPage(
 			this::_getPageItems, LongIdentifier.class
+		).postCollectionItem(
+			this::_addBlogsEntry, LongIdentifier.class
 		).build();
+	}
+
+	private BlogsEntry _addBlogsEntry(
+		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setAddGuestPermissions(true);
+		serviceContext.setScopeGroupId(groupLongIdentifier.getIdAsLong());
+
+		String title = (String)body.get("headline");
+		String subtitle = (String)body.get("alternativeHeadline");
+		String description = (String)body.get("description");
+		String content = (String)body.get("articleBody");
+		String displayDateString = (String)body.get("displayDate");
+
+		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
+			() -> new BadRequestException("Incorrect body");
+
+		if (Validator.isNull(title) || Validator.isNull(subtitle) ||
+			Validator.isNull(description) || Validator.isNull(content) ||
+			Validator.isNull(displayDateString)) {
+
+			throw incorrectBodyExceptionSupplier.get();
+		}
+
+		Try<DateFormat> dateFormatTry = Try.success(
+			DateUtil.getISO8601Format());
+
+		Date displayDate = dateFormatTry.map(
+			dateFormat -> dateFormat.parse(displayDateString)
+		).mapFailMatching(
+			ParseException.class, incorrectBodyExceptionSupplier
+		).getUnchecked();
+
+		Calendar calendar = Calendar.getInstance();
+
+		calendar.setTime(displayDate);
+
+		int month = calendar.get(Calendar.MONTH);
+		int day = calendar.get(Calendar.DATE);
+		int year = calendar.get(Calendar.YEAR);
+		int hour = calendar.get(Calendar.HOUR);
+		int minute = calendar.get(Calendar.MINUTE);
+
+		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
+			() -> _blogsService.addEntry(
+				title, subtitle, description, content, month, day, year, hour,
+				minute, false, false, null, null, null, null, serviceContext));
+
+		return blogsEntryTry.getUnchecked();
 	}
 
 	private Optional<AggregateRating> _getAggregateRatingOptional(
