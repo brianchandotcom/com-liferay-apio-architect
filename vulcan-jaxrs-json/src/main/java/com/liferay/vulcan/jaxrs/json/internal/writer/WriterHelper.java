@@ -160,30 +160,30 @@ public class WriterHelper {
 
 	/**
 	 * Returns the URL to the resource of a certain model. If a {@link Resource}
-	 * for that model class cannot be found, returns
-	 * <code>Optional#empty()</code>.
+	 * for that model class cannot be found, returns {@code Optional#empty()}.
 	 *
 	 * @param  singleModel a single model.
 	 * @param  httpServletRequest the actual HTTP servlet request.
-	 * @return the single URL for the {@code Resource}.
+	 * @return the single URL for the {@code Resource} if present; {@code
+	 *         Optional#empty()} otherwise.
 	 */
-	public <T> String getSingleURL(
+	public <T> Optional<String> getSingleURLOptional(
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest) {
 
-		Identifier identifier = singleModel.getIdentifier();
+		Optional<Identifier> optional = _resourceManager.getIdentifierOptional(
+			singleModel.getModelClass(), singleModel.getModel());
 
-		String resourceURI =
-			"/p/" + identifier.getType() + "/" + identifier.getId();
-
-		String transformedURI = _getTransformURIFunction(
-			(uri, transformer) ->
-				transformer.transformCollectionItemSingleResourceURI(
-					uri, singleModel)
-		).apply(
-			resourceURI
+		return optional.map(
+			identifier -> "/p/" + identifier.getType() + "/" +
+				identifier.getId()
+		).map(
+			_getTransformURIFunction(
+				(uri, transformer) ->
+					transformer.transformCollectionItemSingleResourceURI(
+						uri, singleModel))
+		).map(
+			uri -> getAbsoluteURL(httpServletRequest, uri)
 		);
-
-		return getAbsoluteURL(httpServletRequest, transformedURI);
 	}
 
 	/**
@@ -201,24 +201,32 @@ public class WriterHelper {
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest,
 		BiConsumer<String, Object> biConsumer) {
 
-		Identifier identifier = singleModel.getIdentifier();
+		Optional<Identifier> optional = _resourceManager.getIdentifierOptional(
+			singleModel.getModelClass(), singleModel.getModel());
 
-		String resourceURI = "/b/" + identifier.asURI() + "/";
+		optional.map(
+			identifier -> "/b/" + identifier.asURI() + "/"
+		).ifPresent(
+			resourceURI -> {
+				for (String binaryId : binaryFunctions.keySet()) {
+					String binaryURI = resourceURI + binaryId;
 
-		for (String binaryId : binaryFunctions.keySet()) {
-			String binaryURI = resourceURI + binaryId;
+					Function<String, String> transformURIFunction =
+						_getTransformURIFunction(
+							(uri, transformer) ->
+								transformer.transformBinaryURI(
+									uri, singleModel, binaryId));
 
-			Function<String, String> transformURIFunction =
-				_getTransformURIFunction(
-					(uri, transformer) -> transformer.transformBinaryURI(
-						uri, singleModel, binaryId));
+					String transformedURI = transformURIFunction.apply(
+						binaryURI);
 
-			String transformedURI = transformURIFunction.apply(binaryURI);
+					String url = getAbsoluteURL(
+						httpServletRequest, transformedURI);
 
-			String url = getAbsoluteURL(httpServletRequest, transformedURI);
-
-			biConsumer.accept(binaryId, url);
-		}
+					biConsumer.accept(binaryId, url);
+				}
+			}
+		);
 	}
 
 	/**
@@ -336,7 +344,10 @@ public class WriterHelper {
 			return;
 		}
 
-		String singleURL = getSingleURL(parentSingleModel, httpServletRequest);
+		Class<V> modelClass = relatedCollection.getModelClass();
+
+		Optional<String> singleURLOptional = getSingleURLOptional(
+			parentSingleModel, httpServletRequest);
 
 		Class<V> modelClass = relatedCollection.getModelClass();
 
@@ -345,8 +356,8 @@ public class WriterHelper {
 
 		resourceOptional.map(
 			Resource::getPath
-		).map(
-			path -> singleURL + "/" + path
+		).flatMap(
+			path -> singleURLOptional.map(singleURL -> singleURL + "/" + path)
 		).ifPresent(
 			url -> {
 				FunctionalList<String> embeddedPathElements =
@@ -404,19 +415,7 @@ public class WriterHelper {
 
 		Class<U> modelClass = relatedModel.getModelClass();
 
-		Optional<Identifier> identifierOptional =
-			_resourceManager.getIdentifierOptional(modelClass, model);
-
-		if (!identifierOptional.isPresent()) {
-			return;
-		}
-
-		Identifier identifier = identifierOptional.get();
-
-		SingleModel<U> singleModel = new SingleModel<>(
-			model, modelClass, identifier);
-
-		String url = getSingleURL(singleModel, httpServletRequest);
+		SingleModel<U> singleModel = new SingleModel<>(model, modelClass);
 
 		Predicate<String> embeddedPredicate = embedded.getEmbeddedPredicate();
 
@@ -432,11 +431,17 @@ public class WriterHelper {
 
 		boolean isEmbedded = embeddedPredicate.test(embeddedPath);
 
-		urlTriConsumer.accept(url, embeddedPathElements, isEmbedded);
+		Optional<String> optional = getSingleURLOptional(
+			singleModel, httpServletRequest);
 
-		if (isEmbedded) {
-			modelBiConsumer.accept(singleModel, embeddedPathElements);
-		}
+		optional.ifPresent(
+			url -> {
+				urlTriConsumer.accept(url, embeddedPathElements, isEmbedded);
+
+				if (isEmbedded) {
+					modelBiConsumer.accept(singleModel, embeddedPathElements);
+				}
+			});
 	}
 
 	/**

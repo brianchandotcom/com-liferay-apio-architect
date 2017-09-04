@@ -283,10 +283,11 @@ public class SingleModelMessageBodyWriter<T>
 			types -> singleModelMessageMapper.mapTypes(
 				jsonObjectBuilder, types));
 
-		String url = _writerHelper.getSingleURL(
+		Optional<String> optional = _writerHelper.getSingleURLOptional(
 			singleModel, _httpServletRequest);
 
-		singleModelMessageMapper.mapSelfURL(jsonObjectBuilder, url);
+		optional.ifPresent(
+			url -> singleModelMessageMapper.mapSelfURL(jsonObjectBuilder, url));
 
 		List<RelatedModel<U, ?>> embeddedRelatedModels =
 			_resourceManager.getEmbeddedRelatedModels(modelClass);

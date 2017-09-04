@@ -86,11 +86,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			});
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -121,11 +117,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			});
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -154,11 +146,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			});
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -172,11 +160,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			function);
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -203,11 +187,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			});
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -232,11 +212,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			});
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -264,11 +240,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			});
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -292,11 +264,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			});
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -319,11 +287,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			});
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -344,11 +308,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			});
 
 		_routesImpl.setSingleModelFunction(
-			identifier -> modelFunction.andThen(
-				_createSingleModelFunction(identifier)
-			).apply(
-				identifier
-			));
+			modelFunction.andThen(_getCreateSingleModelFunction()));
 
 		return this;
 	}
@@ -649,10 +609,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				v -> body -> {
 					T t = biFunction.apply(v, body);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -680,10 +637,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 					T t = decaFunction.apply(v, body, a, b, c, d, e, f, g, h);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -710,10 +664,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 					T t = enneaFunction.apply(v, body, a, b, c, d, e, f, g);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -738,10 +689,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 					T t = heptaFunction.apply(v, body, a, b, c, d, e);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -764,10 +712,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 					T t = hexaFunction.apply(v, body, a, b, c, d);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -793,10 +738,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 					T t = octaFunction.apply(v, body, a, b, c, d, e, f);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -818,10 +760,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 					T t = pentaFunction.apply(v, body, a, b, c);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -840,10 +779,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 					T t = tetraFunction.apply(v, body, a, b);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -861,10 +797,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 					T t = triFunction.apply(v, body, a);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -895,10 +828,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 					T t = undecaFunction.apply(
 						v, body, a, b, c, d, e, f, g, h, i);
 
-					Function<T, SingleModel<T>> singleModelFunction =
-						_createSingleModelFunction(v);
-
-					return singleModelFunction.apply(t);
+					return _getCreateSingleModelFunction().apply(t);
 				}));
 
 		return this;
@@ -919,10 +849,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		};
 	}
 
-	private Function<T, SingleModel<T>> _createSingleModelFunction(
-		Identifier identifier) {
-
-		return t -> new SingleModel<>(t, _modelClass, identifier);
+	private Function<T, SingleModel<T>> _getCreateSingleModelFunction() {
+		return t -> new SingleModel<>(t, _modelClass);
 	}
 
 	private <V> V _provideClass(Class<V> clazz) {

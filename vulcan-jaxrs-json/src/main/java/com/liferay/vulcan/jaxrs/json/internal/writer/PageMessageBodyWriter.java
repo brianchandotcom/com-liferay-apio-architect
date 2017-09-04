@@ -20,7 +20,6 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -304,59 +303,51 @@ public class PageMessageBodyWriter<T>
 					types -> pageMessageMapper.mapItemTypes(
 						jsonObjectBuilder, itemJSONObjectBuilder, types));
 
-				Optional<Identifier> optional =
-					_resourceManager.getIdentifierOptional(modelClass, item);
+				SingleModel<T> singleModel = new SingleModel<>(
+					item, modelClass);
 
-				optional.map(
-					identifier ->
-						new SingleModel<>(item, modelClass, identifier)
-				).ifPresent(
-					singleModel -> {
-						String url = _writerHelper.getSingleURL(
-							singleModel, _httpServletRequest);
+				Optional<String> optional = _writerHelper.getSingleURLOptional(
+					singleModel, _httpServletRequest);
 
-						pageMessageMapper.mapItemSelfURL(
-							jsonObjectBuilder, itemJSONObjectBuilder, url);
+				optional.ifPresent(
+					url -> pageMessageMapper.mapItemSelfURL(
+						jsonObjectBuilder, itemJSONObjectBuilder, url));
 
-						Map<String, BinaryFunction<T>> binaryFunctions =
-							_resourceManager.getBinaryFunctions(modelClass);
+				Map<String, BinaryFunction<T>> binaryFunctions =
+					_resourceManager.getBinaryFunctions(modelClass);
 
-						_writerHelper.writeBinaries(
-							binaryFunctions, singleModel, _httpServletRequest,
-							(fieldName, value) ->
-								pageMessageMapper.mapItemField(
-									jsonObjectBuilder, itemJSONObjectBuilder,
-									fieldName, value));
+				_writerHelper.writeBinaries(
+					binaryFunctions, singleModel, _httpServletRequest,
+					(fieldName, value) -> pageMessageMapper.mapItemField(
+						jsonObjectBuilder, itemJSONObjectBuilder, fieldName,
+						value));
 
-						List<RelatedModel<T, ?>> embeddedRelatedModels =
-							_resourceManager.getEmbeddedRelatedModels(
-								modelClass);
+				List<RelatedModel<T, ?>> embeddedRelatedModels =
+					_resourceManager.getEmbeddedRelatedModels(modelClass);
 
-						embeddedRelatedModels.forEach(
-							embeddedRelatedModel -> _writeEmbeddedRelatedModel(
-								pageMessageMapper, jsonObjectBuilder,
-								itemJSONObjectBuilder, embeddedRelatedModel,
-								singleModel, null, fields, embedded));
+				embeddedRelatedModels.forEach(
+					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
+						pageMessageMapper, jsonObjectBuilder,
+						itemJSONObjectBuilder, embeddedRelatedModel,
+						singleModel, null, fields, embedded));
 
-						List<RelatedModel<T, ?>> linkedRelatedModels =
-							_resourceManager.getLinkedRelatedModels(modelClass);
+				List<RelatedModel<T, ?>> linkedRelatedModels =
+					_resourceManager.getLinkedRelatedModels(modelClass);
 
-						linkedRelatedModels.forEach(
-							linkedRelatedModel -> _writeLinkedRelatedModel(
-								pageMessageMapper, jsonObjectBuilder,
-								itemJSONObjectBuilder, linkedRelatedModel,
-								singleModel, null, fields, embedded));
+				linkedRelatedModels.forEach(
+					linkedRelatedModel -> _writeLinkedRelatedModel(
+						pageMessageMapper, jsonObjectBuilder,
+						itemJSONObjectBuilder, linkedRelatedModel, singleModel,
+						null, fields, embedded));
 
-						List<RelatedCollection<T, ?>> relatedCollections =
-							_resourceManager.getRelatedCollections(modelClass);
+				List<RelatedCollection<T, ?>> relatedCollections =
+					_resourceManager.getRelatedCollections(modelClass);
 
-						relatedCollections.forEach(
-							relatedCollection -> _writeRelatedCollection(
-								pageMessageMapper, jsonObjectBuilder,
-								itemJSONObjectBuilder, relatedCollection,
-								singleModel, null, fields));
-					}
-				);
+				relatedCollections.forEach(
+					relatedCollection -> _writeRelatedCollection(
+						pageMessageMapper, jsonObjectBuilder,
+						itemJSONObjectBuilder, relatedCollection, singleModel,
+						null, fields));
 
 				pageMessageMapper.onFinishItem(
 					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
