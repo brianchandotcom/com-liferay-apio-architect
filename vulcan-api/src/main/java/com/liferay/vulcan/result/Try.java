@@ -16,6 +16,8 @@ package com.liferay.vulcan.result;
 
 import com.liferay.vulcan.exception.FalsePredicateException;
 
+import java.io.Closeable;
+
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -73,6 +75,35 @@ public abstract class Try<T> {
 
 		try {
 			return success(throwableSupplier.get());
+		}
+		catch (Exception exception) {
+			return fail(exception);
+		}
+	}
+
+	/**
+	 * Creates a new {@code Try} instance by executing a fallible lambda with
+	 * resources. If executing the lambda throws an exception a {@link Failure}
+	 * instance will be created; otherwise, a {@link Success} instance with the
+	 * lambda result will be created.
+	 *
+	 * @param  closeableSupplier the supplier to be executed in order to obtain
+	 *         the closeable value.
+	 * @param  throwableFunction the function to be executed in order to obtain
+	 *         the value.
+	 * @return a {@code Try} instance with the value obtained by the supplier:
+	 *         {@link Failure} if the supplier throws an exception; {@link
+	 *         Success} otherwise.
+	 */
+	public static <U, V extends Closeable> Try<U> fromFallibleWithResources(
+		ThrowableSupplier<V> closeableSupplier,
+		ThrowableFunction<V, U> throwableFunction) {
+
+		Objects.requireNonNull(throwableFunction);
+		Objects.requireNonNull(closeableSupplier);
+
+		try (V v = closeableSupplier.get()) {
+			return success(throwableFunction.apply(v));
 		}
 		catch (Exception exception) {
 			return fail(exception);
