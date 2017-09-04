@@ -29,16 +29,16 @@ package com.liferay.vulcan.identifier;
 public interface Identifier {
 
 	/**
-	 * Returns the chain of identifiers as a URI.
+	 * Returns the chain of identifiers as an URI.
 	 *
-	 * @return the chain of identifiers as a URI.
+	 * @return the chain of identifiers as an URI.
 	 */
 	public default String asURI() {
 		return "/" + getType() + "/" + getId();
 	}
 
 	/**
-	 * Returns the ID from this identifier.
+	 * Returns the ID of this identifier.
 	 *
 	 * <p>
 	 * For example with a resource obtained in the URL:
@@ -50,7 +50,7 @@ public interface Identifier {
 	public String getId();
 
 	/**
-	 * Returns the type from this identifier.
+	 * Returns the type of this identifier.
 	 *
 	 * <p>
 	 * For example with a resource obtained in the URL:
