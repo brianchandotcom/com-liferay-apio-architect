@@ -41,14 +41,9 @@ public class LongIdentifierConverter
 		return new LongIdentifier() {
 
 			@Override
-			public String getId() {
-				return identifier.getId();
-			}
-
-			@Override
 			public long getIdAsLong() {
 				Try<Long> longTry = Try.fromFallible(
-					() -> Long.parseLong(getId()));
+					() -> Long.parseLong(identifier.getId()));
 
 				return longTry.orElseThrow(BadRequestException::new);
 			}
