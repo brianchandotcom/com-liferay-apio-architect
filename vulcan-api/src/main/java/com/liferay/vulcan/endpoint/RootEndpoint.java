@@ -56,6 +56,22 @@ public interface RootEndpoint {
 		@PathParam("path") String path, Map<String, Object> body);
 
 	/**
+	 * Adds a new {@link SingleModel} by performing a POST request to the given
+	 * path or an exception if an error occurred.
+	 *
+	 * @param  path the path from the URL.
+	 * @param  id the ID of the resource.
+	 * @param  nestedPath the path of the nested resource.
+	 * @return the created single model, or an exception if there was an error.
+	 */
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/p/{path}/{id}/{nestedPath}")
+	@POST
+	public <T> Try<SingleModel<T>> addNestedCollectionItemSingleModel(
+		@PathParam("path") String path, @PathParam("id") String id,
+		@PathParam("nestedPath") String nestedPath, Map<String, Object> body);
+
+	/**
 	 * Returns the {@link InputStream} for a given resource identifier or an
 	 * exception if an error occurred.
 	 *

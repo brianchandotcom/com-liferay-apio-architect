@@ -71,6 +71,29 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	@Override
+	public <T> Try<SingleModel<T>> addNestedCollectionItemSingleModel(
+		String path, String id, String nestedPath, Map<String, Object> body) {
+
+		Try<Routes<T>> routesTry = _getRoutesTry(nestedPath);
+
+		return routesTry.map(
+			Routes::getPostSingleModelFunctionOptional
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class,
+			() -> new NotAllowedException(
+				"POST method is not allowed for path: " + path + "/" + id +
+					"/" + nestedPath)
+		).map(
+			postSingleModelFunction ->
+				postSingleModelFunction.apply(new IdentifierImpl(path, id))
+		).map(
+			postSingleModelFunction -> postSingleModelFunction.apply(body)
+		);
+	}
+
+	@Override
 	public <T> Try<InputStream> getCollectionItemInputStreamTry(
 		String path, String id, String binaryId) {
 
