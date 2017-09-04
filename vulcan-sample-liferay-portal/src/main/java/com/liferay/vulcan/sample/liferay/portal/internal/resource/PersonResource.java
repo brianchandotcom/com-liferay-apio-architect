@@ -98,10 +98,10 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 	public Routes<User> routes(
 		RoutesBuilder<User, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionPage(
-			this::_getPageItems, RootIdentifier.class, Company.class
-		).collectionItem(
+		return routesBuilder.collectionItem(
 			this::_getUser
+		).collectionPage(
+			this::_getPageItems, RootIdentifier.class, Company.class
 		).build();
 	}
 

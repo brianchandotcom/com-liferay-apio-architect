@@ -68,10 +68,10 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 	public Routes<Group> routes(
 		RoutesBuilder<Group, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionPage(
-			this::_getPageItems, RootIdentifier.class
-		).collectionItem(
+		return routesBuilder.collectionItem(
 			this::_getGroup
+		).collectionPage(
+			this::_getPageItems, RootIdentifier.class
 		).build();
 	}
 

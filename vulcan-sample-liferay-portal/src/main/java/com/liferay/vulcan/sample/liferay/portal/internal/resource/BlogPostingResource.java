@@ -127,10 +127,10 @@ public class BlogPostingResource
 	public Routes<BlogsEntry> routes(
 		RoutesBuilder<BlogsEntry, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionPage(
-			this::_getPageItems, LongIdentifier.class
-		).collectionItem(
+		return routesBuilder.collectionItem(
 			this::_getBlogsEntry
+		).collectionPage(
+			this::_getPageItems, LongIdentifier.class
 		).build();
 	}
 
