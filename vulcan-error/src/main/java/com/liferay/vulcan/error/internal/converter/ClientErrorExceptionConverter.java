@@ -12,29 +12,34 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
-
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+package com.liferay.vulcan.error.internal.converter;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.Response;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts any exception to its {@link APIError} representation.
+ * Converts a {@link ClientErrorException} into its {@link APIError}
+ * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class GenericExceptionConverter
-	implements ExceptionConverter<Exception> {
+public class ClientErrorExceptionConverter
+	implements ExceptionConverter<ClientErrorException> {
 
 	@Override
-	public APIError convert(Exception exception) {
+	public APIError convert(ClientErrorException exception) {
+		Response response = exception.getResponse();
+
+		int status = response.getStatus();
+
 		return new APIErrorImpl(
-			exception, "General server error", "server-error",
-			INTERNAL_SERVER_ERROR.getStatusCode());
+			exception, "General server error", "client-error", status);
 	}
 
 }

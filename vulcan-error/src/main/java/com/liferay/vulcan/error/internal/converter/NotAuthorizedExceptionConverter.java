@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
+package com.liferay.vulcan.error.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
-import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@link BadRequestException} into its {@link APIError}
+ * Converts a {@link NotAuthorizedException} into its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class BadRequestExceptionConverter
+public class NotAuthorizedExceptionConverter
 	extends WebApplicationExceptionConverter
-	implements ExceptionConverter<BadRequestException> {
+	implements ExceptionConverter<NotAuthorizedException> {
 
 	@Override
-	public APIError convert(BadRequestException exception) {
+	public APIError convert(NotAuthorizedException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return BAD_REQUEST;
+		return UNAUTHORIZED;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Malformed request message";
+		return "Authentication failure";
 	}
 
 	@Override
 	protected String getType() {
-		return "bad-request";
+		return "not-authorized";
 	}
 
 }

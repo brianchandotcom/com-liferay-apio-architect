@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
+package com.liferay.vulcan.error.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.UNSUPPORTED_MEDIA_TYPE;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
-import javax.ws.rs.NotSupportedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@link NotSupportedException} into its {@link APIError}
+ * Converts a {@link NotFoundException} into its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class NotSupportedExceptionConverter
+public class NotFoundExceptionConverter
 	extends WebApplicationExceptionConverter
-	implements ExceptionConverter<NotSupportedException> {
+	implements ExceptionConverter<NotFoundException> {
 
 	@Override
-	public APIError convert(NotSupportedException exception) {
+	public APIError convert(NotFoundException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return UNSUPPORTED_MEDIA_TYPE;
+		return NOT_FOUND;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Client posted media type not supported";
+		return "Resource not found";
 	}
 
 	@Override
 	protected String getType() {
-		return "not-supported";
+		return "not-found";
 	}
 
 }

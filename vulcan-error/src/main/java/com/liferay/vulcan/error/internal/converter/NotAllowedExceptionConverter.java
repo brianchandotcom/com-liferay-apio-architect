@@ -12,34 +12,47 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
+package com.liferay.vulcan.error.internal.converter;
+
+import static javax.ws.rs.core.Response.Status.METHOD_NOT_ALLOWED;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
-import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@link ClientErrorException} into its {@link APIError}
+ * Converts a {@link NotAllowedException} into its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class ClientErrorExceptionConverter
-	implements ExceptionConverter<ClientErrorException> {
+public class NotAllowedExceptionConverter
+	extends WebApplicationExceptionConverter
+	implements ExceptionConverter<NotAllowedException> {
 
 	@Override
-	public APIError convert(ClientErrorException exception) {
-		Response response = exception.getResponse();
+	public APIError convert(NotAllowedException exception) {
+		return super.convert(exception);
+	}
 
-		int status = response.getStatus();
+	@Override
+	protected Response.StatusType getStatusType() {
+		return METHOD_NOT_ALLOWED;
+	}
 
-		return new APIErrorImpl(
-			exception, "General server error", "client-error", status);
+	@Override
+	protected String getTitle() {
+		return "HTTP method not supported";
+	}
+
+	@Override
+	protected String getType() {
+		return "not-allowed";
 	}
 
 }

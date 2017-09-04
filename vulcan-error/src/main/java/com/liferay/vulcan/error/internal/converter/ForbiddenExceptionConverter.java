@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
+package com.liferay.vulcan.error.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
+import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
-import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@link NotAuthorizedException} into its {@link APIError}
+ * Converts a {@link ForbiddenException} into its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class NotAuthorizedExceptionConverter
+public class ForbiddenExceptionConverter
 	extends WebApplicationExceptionConverter
-	implements ExceptionConverter<NotAuthorizedException> {
+	implements ExceptionConverter<ForbiddenException> {
 
 	@Override
-	public APIError convert(NotAuthorizedException exception) {
+	public APIError convert(ForbiddenException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return UNAUTHORIZED;
+		return FORBIDDEN;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Authentication failure";
+		return "Not permitted to access";
 	}
 
 	@Override
 	protected String getType() {
-		return "not-authorized";
+		return "forbidden";
 	}
 
 }

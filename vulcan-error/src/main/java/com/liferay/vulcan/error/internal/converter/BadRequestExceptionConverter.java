@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
+package com.liferay.vulcan.error.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
-import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@link ForbiddenException} into its {@link APIError}
+ * Converts a {@link BadRequestException} into its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class ForbiddenExceptionConverter
+public class BadRequestExceptionConverter
 	extends WebApplicationExceptionConverter
-	implements ExceptionConverter<ForbiddenException> {
+	implements ExceptionConverter<BadRequestException> {
 
 	@Override
-	public APIError convert(ForbiddenException exception) {
+	public APIError convert(BadRequestException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return FORBIDDEN;
+		return BAD_REQUEST;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Not permitted to access";
+		return "Malformed request message";
 	}
 
 	@Override
 	protected String getType() {
-		return "forbidden";
+		return "bad-request";
 	}
 
 }

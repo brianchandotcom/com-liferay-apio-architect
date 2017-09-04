@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
+package com.liferay.vulcan.error.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
-import javax.ws.rs.NotFoundException;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@link NotFoundException} into its {@link APIError}
+ * Converts a {@link InternalServerErrorException} into its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class NotFoundExceptionConverter
+public class InternalServerErrorExceptionConverter
 	extends WebApplicationExceptionConverter
-	implements ExceptionConverter<NotFoundException> {
+	implements ExceptionConverter<InternalServerErrorException> {
 
 	@Override
-	public APIError convert(NotFoundException exception) {
+	public APIError convert(InternalServerErrorException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return NOT_FOUND;
+		return INTERNAL_SERVER_ERROR;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Resource not found";
+		return "General server error";
 	}
 
 	@Override
 	protected String getType() {
-		return "not-found";
+		return "server-error";
 	}
 
 }

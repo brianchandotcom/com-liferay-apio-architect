@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.vulcan.jaxrs.writer.json.internal.converter;
+package com.liferay.vulcan.error.internal.converter;
 
-import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
+import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
 
 import com.liferay.vulcan.converter.ExceptionConverter;
 import com.liferay.vulcan.result.APIError;
 
-import javax.ws.rs.ServiceUnavailableException;
+import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@link ServiceUnavailableException} into its {@link APIError}
+ * Converts a {@link NotAcceptableException} into its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class ServiceUnavailableExceptionConverter
+public class NotAcceptableExceptionConverter
 	extends WebApplicationExceptionConverter
-	implements ExceptionConverter<ServiceUnavailableException> {
+	implements ExceptionConverter<NotAcceptableException> {
 
 	@Override
-	public APIError convert(ServiceUnavailableException exception) {
+	public APIError convert(NotAcceptableException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return SERVICE_UNAVAILABLE;
+		return NOT_ACCEPTABLE;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Server is temporarily unavailable or busy";
+		return "Client media type requested not supported";
 	}
 
 	@Override
 	protected String getType() {
-		return "unavailable";
+		return "not-acceptable";
 	}
 
 }
