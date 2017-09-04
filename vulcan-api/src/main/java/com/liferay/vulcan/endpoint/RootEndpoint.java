@@ -20,9 +20,14 @@ import com.liferay.vulcan.result.Try;
 
 import java.io.InputStream;
 
+import java.util.Map;
+
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Declares the endpoint from which all of your APIs originate.
@@ -36,6 +41,19 @@ import javax.ws.rs.PathParam;
  * @author Jorge Ferrer
  */
 public interface RootEndpoint {
+
+	/**
+	 * Adds a new {@link SingleModel} by performing a POST request to the given
+	 * path or an exception if an error occurred.
+	 *
+	 * @param  path the path from the URL.
+	 * @return the created single model, or an exception it there was an error.
+	 */
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/p/{path}")
+	@POST
+	public <T> Try<SingleModel<T>> addCollectionItemSingleModel(
+		@PathParam("path") String path, Map<String, Object> body);
 
 	/**
 	 * Returns the {@link InputStream} for a given resource identifier or an

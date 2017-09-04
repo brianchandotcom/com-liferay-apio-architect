@@ -26,12 +26,14 @@ import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
 import java.io.InputStream;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 
@@ -45,6 +47,28 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class RootEndpointImpl implements RootEndpoint {
+
+	@Override
+	public <T> Try<SingleModel<T>> addCollectionItemSingleModel(
+		String path, Map<String, Object> body) {
+
+		Try<Routes<T>> routesTry = _getRoutesTry(path);
+
+		return routesTry.map(
+			Routes::getPostSingleModelFunctionOptional
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class,
+			() -> new NotAllowedException(
+				"POST method is not allowed for path: " + path)
+		).map(
+			postSingleModelFunction ->
+				postSingleModelFunction.apply(new RootIdentifierImpl())
+		).map(
+			postSingleModelFunction -> postSingleModelFunction.apply(body)
+		);
+	}
 
 	@Override
 	public <T> Try<InputStream> getCollectionItemInputStreamTry(
