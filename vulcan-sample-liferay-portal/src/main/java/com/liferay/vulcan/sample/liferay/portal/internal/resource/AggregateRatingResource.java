@@ -42,7 +42,7 @@ public class AggregateRatingResource
 			representorBuilder) {
 
 		representorBuilder.identifier(
-			AggregateRating::getIdentifier
+			AggregateRating::getClassNameClassPKIdentifier
 		).addField(
 			"bestRating", aggregateRating -> 1
 		).addField(

@@ -35,11 +35,10 @@ public class AggregateRatingServiceImpl implements AggregateRatingService {
 	public AggregateRating getAggregateRating(
 		ClassNameClassPKIdentifier classNameClassPKIdentifier) {
 
-		String className = classNameClassPKIdentifier.getClassName();
-		long classPK = classNameClassPKIdentifier.getClassPK();
-
 		List<RatingsEntry> ratingsEntries =
-			_ratingsEntryLocalService.getEntries(className, classPK);
+			_ratingsEntryLocalService.getEntries(
+				classNameClassPKIdentifier.getClassName(),
+				classNameClassPKIdentifier.getClassPK());
 
 		return new AggregateRatingImpl(
 			classNameClassPKIdentifier, ratingsEntries);

@@ -45,7 +45,7 @@ public class AggregateRatingImpl implements AggregateRating {
 	}
 
 	@Override
-	public ClassNameClassPKIdentifier getIdentifier() {
+	public ClassNameClassPKIdentifier getClassNameClassPKIdentifier() {
 		return _classNameClassPKIdentifier;
 	}
 
