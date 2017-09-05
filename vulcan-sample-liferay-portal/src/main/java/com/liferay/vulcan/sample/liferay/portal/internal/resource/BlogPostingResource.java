@@ -146,15 +146,16 @@ public class BlogPostingResource
 				classNameClassPKIdentifier));
 	}
 
-	private BlogsEntry _getBlogsEntry(LongIdentifier blogsEntryIdentifier) {
-		long blogsEntryId = blogsEntryIdentifier.getIdAsLong();
-
+	private BlogsEntry _getBlogsEntry(LongIdentifier blogsEntryLongIdentifier) {
 		try {
-			return _blogsService.getEntry(blogsEntryId);
+			return _blogsService.getEntry(
+				blogsEntryLongIdentifier.getIdAsLong());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get blogs entry " + blogsEntryId, e);
+				"Unable to get blogs entry " +
+					blogsEntryLongIdentifier.getIdAsLong(),
+				e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -176,15 +177,14 @@ public class BlogPostingResource
 	}
 
 	private PageItems<BlogsEntry> _getPageItems(
-		Pagination pagination, LongIdentifier groupIdentifier) {
-
-		long groupId = groupIdentifier.getIdAsLong();
+		Pagination pagination, LongIdentifier groupLongIdentifier) {
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			groupId, 0, pagination.getStartPosition(),
+			groupLongIdentifier.getIdAsLong(), 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
 
-		int count = _blogsService.getGroupEntriesCount(groupId, 0);
+		int count = _blogsService.getGroupEntriesCount(
+			groupLongIdentifier.getIdAsLong(), 0);
 
 		return new PageItems<>(blogsEntries, count);
 	}
