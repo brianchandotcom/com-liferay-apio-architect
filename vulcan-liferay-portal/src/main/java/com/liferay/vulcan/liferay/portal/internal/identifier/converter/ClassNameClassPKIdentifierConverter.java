@@ -55,8 +55,8 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class ClassNameClassPKIdentifierConverter
-	implements IdentifierConverter<ClassNameClassPKIdentifier>,
-			   ClassNameClassPKIdentifierCreator {
+	implements ClassNameClassPKIdentifierCreator,
+			   IdentifierConverter<ClassNameClassPKIdentifier> {
 
 	@Override
 	public ClassNameClassPKIdentifier convert(Identifier identifier) {
