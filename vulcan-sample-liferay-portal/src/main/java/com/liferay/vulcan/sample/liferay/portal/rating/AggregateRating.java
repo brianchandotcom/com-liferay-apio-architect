@@ -34,7 +34,7 @@ public interface AggregateRating {
 	 *
 	 * @return the identifier.
 	 */
-	public ClassNameClassPKIdentifier getIdentifier();
+	public ClassNameClassPKIdentifier getClassNameClassPKIdentifier();
 
 	/**
 	 * Returns the count of total number of ratings.
