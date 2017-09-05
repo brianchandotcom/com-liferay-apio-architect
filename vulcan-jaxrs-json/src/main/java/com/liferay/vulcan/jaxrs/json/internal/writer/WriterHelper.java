@@ -344,8 +344,6 @@ public class WriterHelper {
 			return;
 		}
 
-		Class<V> modelClass = relatedCollection.getModelClass();
-
 		Optional<String> singleURLOptional = getSingleURLOptional(
 			parentSingleModel, httpServletRequest);
 

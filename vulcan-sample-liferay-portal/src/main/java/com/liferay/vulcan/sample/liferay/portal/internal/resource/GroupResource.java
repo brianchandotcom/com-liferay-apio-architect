@@ -14,21 +14,32 @@
 
 package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
+import static com.liferay.portal.kernel.model.GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION;
+import static com.liferay.portal.kernel.model.GroupConstants.TYPE_SITE_OPEN;
+
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.identifier.RootIdentifier;
+import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.result.Try;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
@@ -53,6 +64,8 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 		representorBuilder.identifier(
 			group -> group::getGroupId
 		).addField(
+			"name", group -> group.getName(Locale.US)
+		).addField(
 			"groupType", Group::getTypeLabel
 		).addType(
 			"Group"
@@ -72,7 +85,43 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 			this::_getGroup
 		).collectionPage(
 			this::_getPageItems, RootIdentifier.class
+		).postCollectionItem(
+			this::_addGroup, RootIdentifier.class, CurrentUser.class
 		).build();
+	}
+
+	private Group _addGroup(
+		RootIdentifier rootIdentifier, Map<String, Object> body,
+		CurrentUser currentUser) {
+
+		long userId = currentUser.getUserId();
+		int parentGroupId = 0;
+
+		String name = (String)body.get("name");
+
+		if (Validator.isNull(name)) {
+			throw new BadRequestException("Incorrect body");
+		}
+
+		String className = Group.class.getName();
+		int classPK = 0;
+		int liveGroupId = 0;
+		Map<Locale, String> nameMap = Collections.singletonMap(Locale.US, name);
+		Map<Locale, String> descriptionMap = Collections.emptyMap();
+		boolean manualMembership = false;
+		String friendlyURL = null;
+		boolean site = true;
+		boolean active = true;
+		ServiceContext serviceContext = null;
+
+		Try<Group> groupTry = Try.fromFallible(
+			() -> _groupLocalService.addGroup(
+				userId, parentGroupId, className, classPK, liveGroupId, nameMap,
+				descriptionMap, TYPE_SITE_OPEN, manualMembership,
+				DEFAULT_MEMBERSHIP_RESTRICTION, friendlyURL, site, active,
+				serviceContext));
+
+		return groupTry.getUnchecked();
 	}
 
 	private Group _getGroup(LongIdentifier groupLongIdentifier) {
