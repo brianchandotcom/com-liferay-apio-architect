@@ -95,7 +95,6 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 
 		List<Group> groups = _groupLocalService.getGroups(
 			pagination.getStartPosition(), pagination.getEndPosition());
-
 		int groupsCount = _groupLocalService.getGroupsCount();
 
 		return new PageItems<>(groups, groupsCount);
