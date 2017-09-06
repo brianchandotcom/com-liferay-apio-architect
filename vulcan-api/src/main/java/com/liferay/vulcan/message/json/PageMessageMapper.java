@@ -270,7 +270,7 @@ public interface PageMessageMapper<T> {
 	 *
 	 * @param jsonObjectBuilder the json object builder for the page.
 	 * @param page the actual page.
-	 * @param httpHeaders the http headers of the current request.
+	 * @param httpHeaders the HTTP headers of the current request.
 	 */
 	public default void onFinish(
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
@@ -298,7 +298,7 @@ public interface PageMessageMapper<T> {
 	 *
 	 * @param jsonObjectBuilder the json object builder for the page.
 	 * @param page the actual page.
-	 * @param httpHeaders the http headers of the current request.
+	 * @param httpHeaders the HTTP headers of the current request.
 	 */
 	public default void onStart(
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
@@ -325,7 +325,7 @@ public interface PageMessageMapper<T> {
 	 * related to the current request.
 	 *
 	 * @param  page the actual page.
-	 * @param  httpHeaders the http headers of the current request.
+	 * @param  httpHeaders the HTTP headers of the current request.
 	 * @return <code>true</code> if mapper supports mapping this request;
 	 *         <code>false</code> otherwise.
 	 */

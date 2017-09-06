@@ -28,7 +28,7 @@ public interface ServerURLProvider {
 	/**
 	 * Returns the original url of the HTTP servlet request
 	 *
-	 * @param  httpServletRequest the http request
+	 * @param  httpServletRequest the HTTP request
 	 * @return an string URL built based on the HTTP servlet request
 	 */
 	public String getServerURL(HttpServletRequest httpServletRequest);
