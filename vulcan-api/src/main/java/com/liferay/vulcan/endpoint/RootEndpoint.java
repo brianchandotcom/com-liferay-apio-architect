@@ -92,7 +92,7 @@ public interface RootEndpoint {
 	 */
 	@GET
 	@Path("/p/{path}/{id}/{nestedPath}")
-	public <T> Try<Page<T>> getNestedCollectionPage(
+	public <T> Try<Page<T>> getNestedCollectionPageTry(
 		@PathParam("path") String path, @PathParam("id") String id,
 		@PathParam("nestedPath") String nestedPath);
 
