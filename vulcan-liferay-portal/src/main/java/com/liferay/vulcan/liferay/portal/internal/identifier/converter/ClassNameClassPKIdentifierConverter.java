@@ -80,7 +80,7 @@ public class ClassNameClassPKIdentifierConverter
 
 		if (!optional.isPresent()) {
 			throw new NotFoundException(
-				"Unable to find a resource with type " + className);
+				"Unable to get a resource with class name " + className);
 		}
 
 		Resource<Object, Identifier> resource = optional.get();
@@ -110,7 +110,7 @@ public class ClassNameClassPKIdentifierConverter
 
 		return longTry.orElseThrow(
 			() -> new BadRequestException(
-				"Unable to convert " + id + " to a long classPK"));
+				"Unable to convert " + id + " to a long class PK"));
 	}
 
 	private ClassNameClassPKIdentifier _getClassNameClassPKIdentifier(
@@ -121,7 +121,7 @@ public class ClassNameClassPKIdentifierConverter
 
 		if (className == null) {
 			throw new NotFoundException(
-				"Unable to find a resource with type " + type);
+				"Unable to get a resource with type " + type);
 		}
 
 		return new ClassNameClassPKIdentifierImpl(
