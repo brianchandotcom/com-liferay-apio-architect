@@ -58,7 +58,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			_getNotFoundExceptionSupplier(path + "/" + id + "/" + binaryId)
+			_getSupplierNotFoundException(path + "/" + id + "/" + binaryId)
 		).map(
 			binaryFunction -> binaryFunction.apply(binaryId)
 		).flatMap(
@@ -78,7 +78,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			_getNotFoundExceptionSupplier(path + "/" + id)
+			_getSupplierNotFoundException(path + "/" + id)
 		).map(
 			singleModelFunction -> singleModelFunction.apply(
 				new IdentifierImpl(path, id))
@@ -94,7 +94,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			Optional::get
 		).mapFailMatching(
-			NoSuchElementException.class, _getNotFoundExceptionSupplier(path)
+			NoSuchElementException.class, _getSupplierNotFoundException(path)
 		).map(
 			function -> function.apply(new RootIdentifierImpl())
 		);
@@ -112,7 +112,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			_getNotFoundExceptionSupplier(path + "/" + id + "/" + nestedPath)
+			_getSupplierNotFoundException(path + "/" + id + "/" + nestedPath)
 		).map(
 			pageFunction -> pageFunction.apply(new IdentifierImpl(path, id))
 		);
@@ -131,7 +131,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		);
 	}
 
-	private Supplier<NotFoundException> _getNotFoundExceptionSupplier(
+	private Supplier<NotFoundException> _getSupplierNotFoundException(
 		String path) {
 
 		return () -> new NotFoundException("No endpoint found at path " + path);
