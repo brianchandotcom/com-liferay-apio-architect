@@ -108,14 +108,17 @@ public class DigitalDocumentResource
 		).build();
 	}
 
-	private DLFileEntry _getDLFileEntry(LongIdentifier fileEntryIdentifier) {
-		long fileEntryId = fileEntryIdentifier.getIdAsLong();
+	private DLFileEntry _getDLFileEntry(
+		LongIdentifier dlFileEntryLongIdentifier) {
 
 		try {
-			return _dlFileEntryService.getFileEntry(fileEntryId);
+			return _dlFileEntryService.getFileEntry(
+				dlFileEntryLongIdentifier.getIdAsLong());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
-			throw new NotFoundException("Unable to get file " + fileEntryId, e);
+			throw new NotFoundException(
+				"Unable to get file " + dlFileEntryLongIdentifier.getIdAsLong(),
+				e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -123,10 +126,9 @@ public class DigitalDocumentResource
 	}
 
 	private Optional<DLFolder> _getDLFolderOptional(DLFileEntry dlFileEntry) {
-		long folderId = dlFileEntry.getFolderId();
-
 		try {
-			return Optional.of(_dlFolderService.getFolder(folderId));
+			return Optional.of(
+				_dlFolderService.getFolder(dlFileEntry.getFolderId()));
 		}
 		catch (NoSuchFolderException nsfe) {
 			throw new NotFoundException(
@@ -147,12 +149,11 @@ public class DigitalDocumentResource
 	}
 
 	private PageItems<DLFileEntry> _getPageItems(
-		Pagination pagination, LongIdentifier folderIdentifier) {
+		Pagination pagination, LongIdentifier dlFolderLongIdentifier) {
 
 		try {
-			long folderId = folderIdentifier.getIdAsLong();
-
-			DLFolder dlFolder = _dlFolderService.getFolder(folderId);
+			DLFolder dlFolder = _dlFolderService.getFolder(
+				dlFolderLongIdentifier.getIdAsLong());
 
 			List<DLFileEntry> dlFileEntries =
 				_dlFileEntryService.getFileEntries(
@@ -170,13 +171,13 @@ public class DigitalDocumentResource
 	}
 
 	private Optional<User> _getUserOptional(DLFileEntry dlFileEntry) {
-		long userId = dlFileEntry.getUserId();
-
 		try {
-			return Optional.ofNullable(_userService.getUserById(userId));
+			return Optional.ofNullable(
+				_userService.getUserById(dlFileEntry.getUserId()));
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException("Unable to get user " + userId, e);
+			throw new NotFoundException(
+				"Unable to get user " + dlFileEntry.getUserId(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
