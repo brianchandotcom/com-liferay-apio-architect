@@ -132,7 +132,7 @@ public class DigitalDocumentResource
 		}
 		catch (NoSuchFolderException nsfe) {
 			throw new NotFoundException(
-				"Unable to get group " + folderId, nsfe);
+				"Unable to get group " + dlFileEntry.getFolderId(), nsfe);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
