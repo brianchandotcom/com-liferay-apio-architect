@@ -75,14 +75,15 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 		).build();
 	}
 
-	private Group _getGroup(LongIdentifier groupIdentifier) {
-		long groupId = groupIdentifier.getIdAsLong();
-
+	private Group _getGroup(LongIdentifier groupLongIdentifier) {
 		try {
-			return _groupLocalService.getGroup(groupId);
+			return _groupLocalService.getGroup(
+				groupLongIdentifier.getIdAsLong());
 		}
 		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException("Unable to get group " + groupId, nsge);
+			throw new NotFoundException(
+				"Unable to get group " + groupLongIdentifier.getIdAsLong(),
+				nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
