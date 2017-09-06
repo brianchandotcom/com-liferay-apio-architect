@@ -22,6 +22,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -29,10 +31,13 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.result.Try;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
@@ -85,7 +90,42 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 			this::_getDLFolder
 		).collectionPage(
 			this::_getPageItems, LongIdentifier.class
+		).postCollectionItem(
+			this::_addDLFolder, LongIdentifier.class
 		).build();
+	}
+
+	private DLFolder _addDLFolder(
+		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
+
+		String name = (String)body.get("name");
+		String description = (String)body.get("description");
+
+		if (Validator.isNull(name) || Validator.isNull(description)) {
+			throw new BadRequestException("Incorrect body");
+		}
+
+		int parentFolderId = 0;
+
+		Try<DLFolder> dlFolderTry = Try.fromFallible(
+			() -> _dlFolderService.getFolder(
+				groupLongIdentifier.getIdAsLong(), parentFolderId, name));
+
+		if (dlFolderTry.isSuccess()) {
+			throw new BadRequestException(
+				"A folder with that name already exists");
+		}
+
+		boolean mountPoint = false;
+		ServiceContext serviceContext = new ServiceContext();
+
+		dlFolderTry = Try.fromFallible(
+			() -> _dlFolderService.addFolder(
+				groupLongIdentifier.getIdAsLong(),
+				groupLongIdentifier.getIdAsLong(), mountPoint, parentFolderId,
+				name, description, serviceContext));
+
+		return dlFolderTry.getUnchecked();
 	}
 
 	private DLFolder _getDLFolder(LongIdentifier dlFolderLongIdentifier) {
