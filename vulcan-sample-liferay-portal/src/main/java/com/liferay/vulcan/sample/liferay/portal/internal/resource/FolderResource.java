@@ -88,14 +88,15 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 		).build();
 	}
 
-	private DLFolder _getDLFolder(LongIdentifier folderIdentifier) {
-		long folderId = folderIdentifier.getIdAsLong();
-
+	private DLFolder _getDLFolder(LongIdentifier folderLongIdentifier) {
 		try {
-			return _dlFolderService.getFolder(folderId);
+			return _dlFolderService.getFolder(
+				folderLongIdentifier.getIdAsLong());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
-			throw new NotFoundException("Unable to get folder " + folderId, e);
+			throw new NotFoundException(
+				"Unable to get folder " + folderLongIdentifier.getIdAsLong(),
+				e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -116,16 +117,15 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 	}
 
 	private PageItems<DLFolder> _getPageItems(
-		Pagination pagination, LongIdentifier groupIdentifier) {
+		Pagination pagination, LongIdentifier groupLongIdentifier) {
 
 		try {
-			long groupId = groupIdentifier.getIdAsLong();
-
 			List<DLFolder> dlFolders = _dlFolderService.getFolders(
-				groupId, 0, pagination.getStartPosition(),
-				pagination.getEndPosition(), null);
-
-			int count = _dlFolderService.getFoldersCount(groupId, 0);
+				groupLongIdentifier.getIdAsLong(), 0,
+				pagination.getStartPosition(), pagination.getEndPosition(),
+				null);
+			int count = _dlFolderService.getFoldersCount(
+				groupLongIdentifier.getIdAsLong(), 0);
 
 			return new PageItems<>(dlFolders, count);
 		}
