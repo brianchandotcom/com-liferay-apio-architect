@@ -106,6 +106,8 @@ public class PageMessageBodyWriter<T>
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
+		PrintWriter printWriter = new PrintWriter(entityStream, true);
+
 		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
@@ -152,8 +154,6 @@ public class PageMessageBodyWriter<T>
 		pageMessageMapper.onFinish(jsonObjectBuilder, page, _httpHeaders);
 
 		JSONObject jsonObject = jsonObjectBuilder.build();
-
-		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
 		printWriter.println(jsonObject.toString());
 
