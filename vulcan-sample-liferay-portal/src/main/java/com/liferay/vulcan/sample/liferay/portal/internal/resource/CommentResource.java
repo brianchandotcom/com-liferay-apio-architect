@@ -134,14 +134,13 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 		ClassNameClassPKIdentifier classNameClassPKIdentifier,
 		CurrentUser currentUser) {
 
-		String className = classNameClassPKIdentifier.getClassName();
-		long classPK = classNameClassPKIdentifier.getClassPK();
-
 		List<Comment> comments = new ArrayList<>();
 
 		DiscussionCommentIterator discussionCommentIterator =
 			_getDiscussionCommentIterator(
-				className, classPK, pagination, currentUser);
+				classNameClassPKIdentifier.getClassName(),
+				classNameClassPKIdentifier.getClassPK(), pagination,
+				currentUser);
 
 		int i = pagination.getEndPosition() - pagination.getStartPosition();
 
@@ -154,7 +153,9 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 			i--;
 		}
 
-		int count = _commentManager.getCommentsCount(className, classPK);
+		int count = _commentManager.getCommentsCount(
+			classNameClassPKIdentifier.getClassName(),
+			classNameClassPKIdentifier.getClassPK());
 
 		return new PageItems<>(comments, count);
 	}
