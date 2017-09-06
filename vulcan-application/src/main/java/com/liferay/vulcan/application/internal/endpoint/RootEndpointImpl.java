@@ -101,7 +101,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	@Override
-	public <T> Try<Page<T>> getNestedCollectionPage(
+	public <T> Try<Page<T>> getNestedCollectionPageTry(
 		String path, String id, String nestedPath) {
 
 		Try<Routes<T>> routesTry = _getRoutesTry(nestedPath);
