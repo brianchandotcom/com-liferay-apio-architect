@@ -28,6 +28,9 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.IdentityServiceContextFunction;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.Function;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
@@ -37,11 +40,14 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.result.Try;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
@@ -88,7 +94,40 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 		).collectionPage(
 			this::_getPageItems, ClassNameClassPKIdentifier.class,
 			CurrentUser.class
+		).postCollectionItem(
+			this::_addComment, ClassNameClassPKIdentifier.class,
+			CurrentUser.class
 		).build();
+	}
+
+	private Comment _addComment(
+		ClassNameClassPKIdentifier classNameClassPKIdentifier,
+		Map<String, Object> body, CurrentUser currentUser) {
+
+		User user = currentUser.getUser();
+
+		int parentCommentId = 0;
+		String subject = StringPool.BLANK;
+
+		String content = (String)body.get("text");
+
+		if (Validator.isNull(content)) {
+			throw new BadRequestException("Incorrect body");
+		}
+
+		Function<String, ServiceContext> createServiceContextFunction =
+			string -> new ServiceContext();
+
+		Try<Long> longTry = Try.fromFallible(
+			() -> _commentManager.addComment(
+				user.getUserId(), classNameClassPKIdentifier.getClassName(),
+				classNameClassPKIdentifier.getClassPK(), user.getFullName(),
+				parentCommentId, subject, content,
+				createServiceContextFunction));
+
+		return longTry.map(
+			_commentManager::fetchComment
+		).getUnchecked();
 	}
 
 	private Comment _getComment(LongIdentifier commentIdentifier) {
