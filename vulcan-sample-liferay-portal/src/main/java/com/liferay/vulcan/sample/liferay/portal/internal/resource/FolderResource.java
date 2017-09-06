@@ -88,14 +88,14 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 		).build();
 	}
 
-	private DLFolder _getDLFolder(LongIdentifier folderLongIdentifier) {
+	private DLFolder _getDLFolder(LongIdentifier dlFolderLongIdentifier) {
 		try {
 			return _dlFolderService.getFolder(
-				folderLongIdentifier.getIdAsLong());
+				dlFolderLongIdentifier.getIdAsLong());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get folder " + folderLongIdentifier.getIdAsLong(),
+				"Unable to get folder " + dlFolderLongIdentifier.getIdAsLong(),
 				e);
 		}
 		catch (PortalException pe) {
