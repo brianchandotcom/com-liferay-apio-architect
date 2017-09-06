@@ -64,7 +64,8 @@ public class DigitalDocumentResource
 			dlFileEntry -> dlFileEntry::getFileEntryId
 		).addBidirectionalModel(
 			"folder", "digitalDocuments", DLFolder.class,
-			this::_getDLFolderOptional
+			this::_getDLFolderOptional,
+			dlFolder -> (LongIdentifier)dlFolder::getFolderId
 		).addBinary(
 			"contentStream", this::_getInputStream
 		).addEmbeddedModel(

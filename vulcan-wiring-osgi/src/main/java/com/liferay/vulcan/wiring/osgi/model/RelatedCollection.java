@@ -14,6 +14,10 @@
 
 package com.liferay.vulcan.wiring.osgi.model;
 
+import com.liferay.vulcan.identifier.Identifier;
+
+import java.util.function.Function;
+
 /**
  * Represents the relation between a thing and a collection.
  *
@@ -21,9 +25,23 @@ package com.liferay.vulcan.wiring.osgi.model;
  */
 public class RelatedCollection<T, S> {
 
-	public RelatedCollection(String key, Class<S> modelClass) {
+	public RelatedCollection(
+		String key, Class<S> modelClass,
+		Function<T, Identifier> identifierFunction) {
+
 		_key = key;
 		_modelClass = modelClass;
+		_identifierFunction = identifierFunction;
+	}
+
+	/**
+	 * Returns the function that can be used to create the identifier for the
+	 * related collection.
+	 *
+	 * @return function to calculate the related collection's identifier.
+	 */
+	public Function<T, Identifier> getIdentifierFunction() {
+		return _identifierFunction;
 	}
 
 	/**
@@ -44,6 +62,7 @@ public class RelatedCollection<T, S> {
 		return _modelClass;
 	}
 
+	private final Function<T, Identifier> _identifierFunction;
 	private final String _key;
 	private final Class<S> _modelClass;
 

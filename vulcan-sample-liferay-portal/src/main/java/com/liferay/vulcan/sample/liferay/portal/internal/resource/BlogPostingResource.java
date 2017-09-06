@@ -92,7 +92,8 @@ public class BlogPostingResource
 		representorBuilder.identifier(
 			blogsEntry -> blogsEntry::getEntryId
 		).addBidirectionalModel(
-			"group", "blogs", Group.class, this::_getGroupOptional
+			"group", "blogs", Group.class, this::_getGroupOptional,
+			group -> (LongIdentifier)group::getGroupId
 		).addEmbeddedModel(
 			"aggregateRating", AggregateRating.class,
 			this::_getAggregateRatingOptional
@@ -125,7 +126,9 @@ public class BlogPostingResource
 		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
 		).addRelatedCollection(
-			"comment", Comment.class
+			"comment", Comment.class,
+			blogsEntry -> _classNameClassPKIdentifierCreator.create(
+				BlogsEntry.class.getName(), blogsEntry.getEntryId())
 		).addType(
 			"BlogPosting"
 		);

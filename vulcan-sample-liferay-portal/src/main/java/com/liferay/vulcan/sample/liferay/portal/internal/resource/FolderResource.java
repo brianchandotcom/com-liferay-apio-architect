@@ -61,7 +61,8 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 		representorBuilder.identifier(
 			dlFolder -> dlFolder::getFolderId
 		).addBidirectionalModel(
-			"group", "folders", Group.class, this::_getGroupOptional
+			"group", "folders", Group.class, this::_getGroupOptional,
+			group -> (LongIdentifier)group::getGroupId
 		).addField(
 			"dateCreated", DLFolder::getCreateDate
 		).addField(

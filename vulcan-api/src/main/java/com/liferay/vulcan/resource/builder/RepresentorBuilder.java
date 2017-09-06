@@ -57,11 +57,14 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param relatedKey name of the relation in the related resource.
 		 * @param modelClass class of the related model.
 		 * @param modelFunction function used to obtain the related model.
+		 * @param identifierFunction function used to obtain the identifier for the
+		 *                       collection.
 		 * @return builder's actual step.
 		 */
 		public <S> FirstStep<T> addBidirectionalModel(
 			String key, String relatedKey, Class<S> modelClass,
-			Function<T, Optional<S>> modelFunction);
+			Function<T, Optional<S>> modelFunction,
+			Function<S, Identifier> identifierFunction);
 
 		/**
 		 * @param key     		 name of the binary resource
@@ -123,10 +126,13 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 *
 		 * @param key name of the relation.
 		 * @param modelClass class of the collection's related models.
+		 * @param identifierFunction function used to obtain the identifier for the
+		 *                       collection.
 		 * @return builder's actual step.
 		 */
 		public <S> FirstStep<T> addRelatedCollection(
-			String key, Class<S> modelClass);
+			String key, Class<S> modelClass,
+			Function<T, Identifier> identifierFunction);
 
 		/**
 		 * Use this method to provide a type for this model. Multiple types are

@@ -20,6 +20,7 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
@@ -36,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
@@ -319,7 +319,7 @@ public class ResourceManager extends BaseManager<Resource> {
 				resource.buildRepresentor(
 					new RepresentorBuilderImpl(
 						modelClass, _identifierFunctions,
-						_addRelatedCollectionBiConsumer(modelClass),
+						_addRelatedCollectionTriConsumer(modelClass),
 						fieldFunctions, embeddedRelatedModels,
 						linkedRelatedModels, links, relatedCollections,
 						binaryFunctions, types));
@@ -333,16 +333,44 @@ public class ResourceManager extends BaseManager<Resource> {
 			});
 	}
 
-	private <T> BiConsumer<String, Class<?>>
-		_addRelatedCollectionBiConsumer(Class<T> relatedModelClass) {
+	private <T> TriConsumer<String, Class<?>, Function<Object, Identifier>>
+		_addRelatedCollectionTriConsumer(Class<T> relatedModelClass) {
 
-		return (key, modelClass) -> {
+		return (key, modelClass, identifierFunction) -> {
 			List<RelatedCollection<?, ?>> relatedCollections =
 				_relatedCollections.computeIfAbsent(
 					modelClass.getName(), className -> new ArrayList<>());
 
 			relatedCollections.add(
-				new RelatedCollection<>(key, relatedModelClass));
+				new RelatedCollection<>(
+					key, relatedModelClass,
+					object -> {
+						Identifier identifier = identifierFunction.apply(
+							object);
+
+						Optional<? extends Resource<?, Identifier>>
+							resourceOptional = getResourceOptional(modelClass);
+
+						String type = resourceOptional.map(
+							Resource::getPath
+						).orElse(
+							""
+						);
+
+						return new Identifier() {
+
+							@Override
+							public String getId() {
+								return identifier.getId();
+							}
+
+							@Override
+							public String getType() {
+								return type;
+							}
+
+						};
+					}));
 		};
 	}
 
