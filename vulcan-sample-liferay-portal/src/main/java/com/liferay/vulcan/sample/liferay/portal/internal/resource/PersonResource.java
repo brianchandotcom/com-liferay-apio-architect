@@ -122,14 +122,13 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 		}
 	}
 
-	private User _getUser(LongIdentifier userIdentifier) {
-		long userId = userIdentifier.getIdAsLong();
-
+	private User _getUser(LongIdentifier userLongIdentifier) {
 		try {
-			return _userService.getUserById(userId);
+			return _userService.getUserById(userLongIdentifier.getIdAsLong());
 		}
 		catch (NoSuchUserException | PrincipalException e) {
-			throw new NotFoundException("Unable to get user " + userId, e);
+			throw new NotFoundException(
+				"Unable to get user " + userLongIdentifier.getIdAsLong(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
