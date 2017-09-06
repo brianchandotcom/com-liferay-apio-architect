@@ -335,9 +335,9 @@ public class WriterHelper {
 			return;
 		}
 
-		Class<V> modelClass = relatedCollection.getModelClass();
-
 		String singleURL = getSingleURL(parentSingleModel, httpServletRequest);
+
+		Class<V> modelClass = relatedCollection.getModelClass();
 
 		Optional<Resource<V, W>> resourceOptional =
 			_resourceManager.getResourceOptional(modelClass);
@@ -415,6 +415,8 @@ public class WriterHelper {
 		SingleModel<U> singleModel = new SingleModel<>(
 			model, modelClass, identifier);
 
+		String url = getSingleURL(singleModel, httpServletRequest);
+
 		Predicate<String> embeddedPredicate = embedded.getEmbeddedPredicate();
 
 		FunctionalList<String> embeddedPathElements = new StringFunctionalList(
@@ -428,8 +430,6 @@ public class WriterHelper {
 			".", stream.collect(Collectors.toList()));
 
 		boolean isEmbedded = embeddedPredicate.test(embeddedPath);
-
-		String url = getSingleURL(singleModel, httpServletRequest);
 
 		urlTriConsumer.accept(url, embeddedPathElements, isEmbedded);
 
