@@ -131,12 +131,6 @@ public class RootEndpointImpl implements RootEndpoint {
 		);
 	}
 
-	private Supplier<NotFoundException> _getSupplierNotFoundException(
-		String path) {
-
-		return () -> new NotFoundException("No endpoint found at path " + path);
-	}
-
 	private <T> Try<Routes<T>> _getRoutesTry(String path) {
 		Try<Optional<Routes<T>>> optionalTry = Try.success(
 			_resourceManager.getRoutes(path, _httpServletRequest));
@@ -147,6 +141,12 @@ public class RootEndpointImpl implements RootEndpoint {
 			NoSuchElementException.class,
 			() -> new NotFoundException("No resource found for path " + path)
 		);
+	}
+
+	private Supplier<NotFoundException> _getSupplierNotFoundException(
+		String path) {
+
+		return () -> new NotFoundException("No endpoint found at path " + path);
 	}
 
 	@Context
