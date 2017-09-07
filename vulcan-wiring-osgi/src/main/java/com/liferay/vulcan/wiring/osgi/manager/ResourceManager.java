@@ -22,13 +22,13 @@ import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.identifier.Identifier;
+import com.liferay.vulcan.resource.RelatedCollection;
+import com.liferay.vulcan.resource.RelatedModel;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
-import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
-import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.util.ArrayList;

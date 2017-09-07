@@ -21,11 +21,11 @@ import com.liferay.vulcan.endpoint.RootEndpoint;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
+import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.ThrowableFunction;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
-import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 
 import java.io.InputStream;
 

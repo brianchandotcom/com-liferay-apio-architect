@@ -29,14 +29,14 @@ import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.provider.ServerURLProvider;
+import com.liferay.vulcan.resource.RelatedCollection;
+import com.liferay.vulcan.resource.RelatedModel;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.APIError;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
-import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
-import com.liferay.vulcan.wiring.osgi.model.RelatedModel;
 
 import java.net.URI;
 
