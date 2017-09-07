@@ -32,6 +32,7 @@ import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImp
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the class name exposed in the path.
 	 */
 	public String getClassName(String path) {
-		return _classNames.get(path);
+		return getModelClass(path).getName();
 	}
 
 	/**
@@ -178,6 +179,16 @@ public class ResourceManager extends BaseManager<Resource> {
 	 */
 	public <T> Map<String, String> getLinks(Class<T> modelClass) {
 		return _links.get(modelClass.getName());
+	}
+
+	/**
+	 * Returns the model class, exposed in a certain path.
+	 *
+	 * @param  path path of the resource for the class.
+	 * @return the class exposed in the path.
+	 */
+	public <T> Class<T> getModelClass(String path) {
+		return (Class<T>)_classes.get(path);
 	}
 
 	/**
@@ -314,7 +325,7 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		optional.ifPresent(
 			resource -> {
-				_classNames.put(resource.getPath(), modelClass.getName());
+				_classes.put(resource.getPath(), modelClass);
 
 				resource.buildRepresentor(
 					new RepresentorBuilderImpl(
@@ -419,6 +430,9 @@ public class ResourceManager extends BaseManager<Resource> {
 		_links.remove(modelClass.getName());
 		_binaryFunctions.remove(modelClass.getName());
 		_types.remove(modelClass.getName());
+		Collection<Class<?>> classes = _classes.values();
+
+		classes.removeIf(next -> next.equals(modelClass));
 	}
 
 	private final Map<String, Map<String, BinaryFunction<?>>> _binaryFunctions =
@@ -428,6 +442,7 @@ public class ResourceManager extends BaseManager<Resource> {
 		new ConcurrentHashMap<>();
 	private final Map<String, Map<String, Function<?, Object>>>
 		_fieldFunctions = new ConcurrentHashMap<>();
+	private final Map<String, Class<?>> _classes = new ConcurrentHashMap<>();
 
 	@Reference
 	private IdentifierConverterManager _identifierConverterManager;
