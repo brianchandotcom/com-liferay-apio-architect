@@ -19,8 +19,11 @@ import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.RelatedModel;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,129 +38,213 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 	implements RepresentorBuilder<T, U> {
 
 	public RepresentorBuilderImpl(
-		Class<T> modelClass,
-		Map<String, Function<?, ? extends Identifier>> identifierFunctions,
-		TriConsumer<String, Class<?>, Function<?, Identifier>>
-			addRelatedCollectionTriConsumer,
-		Map<String, Function<?, Object>>
-			fieldFunctions, List<RelatedModel<?, ?>> embeddedRelatedModels,
-		List<RelatedModel<?, ?>> linkedRelatedModels, Map<String, String> links,
-		List<RelatedCollection<?, ?>> relatedCollections,
-		Map<String, BinaryFunction<?>> binaryFunctions, List<String> types) {
+		TriConsumer<String, Class<?>, Function<Object, Identifier>>
+			addRelatedCollectionTriConsumer) {
 
-		_modelClass = modelClass;
-		_identifierFunctions = identifierFunctions;
 		_addRelatedCollectionTriConsumer = addRelatedCollectionTriConsumer;
-		_fieldFunctions = fieldFunctions;
-		_embeddedRelatedModels = embeddedRelatedModels;
-		_linkedRelatedModels = linkedRelatedModels;
-		_links = links;
-		_relatedCollections = relatedCollections;
-		_binaryFunctions = binaryFunctions;
-		_types = types;
 	}
 
 	@Override
-	public FirstStep<T> identifier(Function<T, U> identifierFunction) {
-		_identifierFunctions.put(_modelClass.getName(), identifierFunction);
-
-		return new FirstStep<T>() {
-
-			@Override
-			public <S> FirstStep<T> addBidirectionalModel(
-				String key, String relatedKey, Class<S> modelClass,
-				Function<T, Optional<S>> modelFunction,
-				Function<S, Identifier> identifierFunction) {
-
-				_linkedRelatedModels.add(
-					new RelatedModel<>(key, modelClass, modelFunction));
-
-				_addRelatedCollectionTriConsumer.accept(
-					relatedKey, modelClass, identifierFunction);
-
-				return this;
-			}
-
-			@Override
-			public <S> FirstStep<T> addBinary(
-				String key, BinaryFunction<T> binaryFunction) {
-
-				_binaryFunctions.put(key, binaryFunction);
-
-				return this;
-			}
-
-			@Override
-			public <S> FirstStep<T> addEmbeddedModel(
-				String key, Class<S> modelClass,
-				Function<T, Optional<S>> modelFunction) {
-
-				_embeddedRelatedModels.add(
-					new RelatedModel<>(key, modelClass, modelFunction));
-
-				return this;
-			}
-
-			@Override
-			public FirstStep<T> addField(
-				String key, Function<T, Object> fieldFunction) {
-
-				_fieldFunctions.put(key, fieldFunction);
-
-				return this;
-			}
-
-			@Override
-			public FirstStep<T> addLink(String key, String url) {
-				_links.put(key, url);
-
-				return this;
-			}
-
-			@Override
-			public <S> FirstStep<T> addLinkedModel(
-				String key, Class<S> modelClass,
-				Function<T, Optional<S>> modelFunction) {
-
-				_linkedRelatedModels.add(
-					new RelatedModel<>(key, modelClass, modelFunction));
-
-				return this;
-			}
-
-			@Override
-			public <S> FirstStep<T> addRelatedCollection(
-				String key, Class<S> modelClass,
-				Function<T, Identifier> identifierFunction) {
-
-				_relatedCollections.add(
-					new RelatedCollection<>(
-						key, modelClass, identifierFunction));
-
-				return this;
-			}
-
-			@Override
-			public FirstStep<T> addType(String type) {
-				_types.add(type);
-
-				return this;
-			}
-
-		};
+	public FirstStep<T, U> identifier(Function<T, U> identifierFunction) {
+		return new FirstStepImpl(identifierFunction);
 	}
 
-	private final TriConsumer<String, Class<?>, Function<?, Identifier>>
+	public class RepresentorImpl implements Representor<T, U> {
+
+		public RepresentorImpl(Function<T, U> identifierFunction) {
+			_identifierFunction = identifierFunction;
+		}
+
+		@Override
+		public Map<String, BinaryFunction<T>> getBinaryFunctions() {
+			return _binaryFunctions;
+		}
+
+		@Override
+		public List<RelatedModel<T, ?>> getEmbeddedRelatedModels() {
+			return _embeddedRelatedModels;
+		}
+
+		@Override
+		public Map<String, Function<T, Object>> getFieldFunctions() {
+			return _fieldFunctions;
+		}
+
+		@Override
+		public U getIdentifier(T model) {
+			return _identifierFunction.apply(model);
+		}
+
+		@Override
+		public List<RelatedModel<T, ?>> getLinkedRelatedModels() {
+			return _linkedRelatedModels;
+		}
+
+		@Override
+		public Map<String, String> getLinks() {
+			return _links;
+		}
+
+		@Override
+		public List<RelatedCollection<T, ?>> getRelatedCollections() {
+			return _relatedCollections;
+		}
+
+		@Override
+		public List<String> getTypes() {
+			return _types;
+		}
+
+		private void _addBinary(String key, BinaryFunction<T> binaryFunction) {
+			_binaryFunctions.put(key, binaryFunction);
+		}
+
+		private <S> void _addEmbeddedModel(
+			String key, Class<S> modelClass,
+			Function<T, Optional<S>> modelFunction) {
+
+			_embeddedRelatedModels.add(
+				new RelatedModel<>(key, modelClass, modelFunction));
+		}
+
+		private void _addField(String key, Function<T, Object> fieldFunction) {
+			_fieldFunctions.put(key, fieldFunction);
+		}
+
+		private void _addLink(String key, String url) {
+			_links.put(key, url);
+		}
+
+		private <S> void _addLinkedModel(
+			String key, Class<S> modelClass,
+			Function<T, Optional<S>> modelFunction) {
+
+			_linkedRelatedModels.add(
+				new RelatedModel<>(key, modelClass, modelFunction));
+		}
+
+		private <S> void _addRelatedCollection(
+			String key, Class<S> modelClass,
+			Function<T, Identifier> identifierFunction) {
+
+			_relatedCollections.add(
+				new RelatedCollection<>(key, modelClass, identifierFunction));
+		}
+
+		private void _addType(String type) {
+			_types.add(type);
+		}
+
+		private Map<String, BinaryFunction<T>> _binaryFunctions =
+			new HashMap<>();
+		private List<RelatedModel<T, ?>> _embeddedRelatedModels =
+			new ArrayList<>();
+		private Map<String, Function<T, Object>> _fieldFunctions =
+			new HashMap<>();
+		private final Function<T, U> _identifierFunction;
+		private List<RelatedModel<T, ?>> _linkedRelatedModels =
+			new ArrayList<>();
+		private Map<String, String> _links = new HashMap<>();
+		private List<RelatedCollection<T, ?>> _relatedCollections =
+			new ArrayList<>();
+		private List<String> _types = new ArrayList<>();
+
+	}
+
+	private final TriConsumer<String, Class<?>, Function<Object, Identifier>>
 		_addRelatedCollectionTriConsumer;
-	private final Map<String, BinaryFunction<?>> _binaryFunctions;
-	private final List<RelatedModel<?, ?>> _embeddedRelatedModels;
-	private final Map<String, Function<?, Object>> _fieldFunctions;
-	private final Map<String, Function<?, ? extends Identifier>>
-		_identifierFunctions;
-	private final List<RelatedModel<?, ?>> _linkedRelatedModels;
-	private final Map<String, String> _links;
-	private final Class<T> _modelClass;
-	private final List<RelatedCollection<?, ?>> _relatedCollections;
-	private final List<String> _types;
+
+	private class FirstStepImpl implements FirstStep<T, U> {
+
+		public FirstStepImpl(Function<T, U> identifierFunction) {
+			_representor = new RepresentorImpl(identifierFunction);
+		}
+
+		@Override
+		public <S> FirstStep<T, U> addBidirectionalModel(
+			String key, String relatedKey, Class<S> modelClass,
+			Function<T, Optional<S>> modelFunction,
+			Function<S, Identifier> identifierFunction) {
+
+			_representor._addLinkedModel(key, modelClass, modelFunction);
+
+			_addRelatedCollectionTriConsumer.accept(
+				relatedKey, modelClass,
+				(Function<Object, Identifier>)identifierFunction);
+
+			return this;
+		}
+
+		@Override
+		public <S> FirstStep<T, U> addBinary(
+			String key, BinaryFunction<T> binaryFunction) {
+
+			_representor._addBinary(key, binaryFunction);
+
+			return this;
+		}
+
+		@Override
+		public <S> FirstStep<T, U> addEmbeddedModel(
+			String key, Class<S> modelClass,
+			Function<T, Optional<S>> modelFunction) {
+
+			_representor._addEmbeddedModel(key, modelClass, modelFunction);
+
+			return this;
+		}
+
+		@Override
+		public FirstStep<T, U> addField(
+			String key, Function<T, Object> fieldFunction) {
+
+			_representor._addField(key, fieldFunction);
+
+			return this;
+		}
+
+		@Override
+		public FirstStep<T, U> addLink(String key, String url) {
+			_representor._addLink(key, url);
+
+			return this;
+		}
+
+		@Override
+		public <S> FirstStep<T, U> addLinkedModel(
+			String key, Class<S> modelClass,
+			Function<T, Optional<S>> modelFunction) {
+
+			_representor._addLinkedModel(key, modelClass, modelFunction);
+
+			return this;
+		}
+
+		@Override
+		public <S> FirstStep<T, U> addRelatedCollection(
+			String key, Class<S> modelClass,
+			Function<T, Identifier> identifierFunction) {
+
+			_representor._addRelatedCollection(
+				key, modelClass, identifierFunction);
+
+			return this;
+		}
+
+		@Override
+		public FirstStep<T, U> addType(String type) {
+			_representor._addType(type);
+
+			return this;
+		}
+
+		@Override
+		public Representor<T, U> build() {
+			return _representor;
+		}
+
+		private final RepresentorImpl _representor;
+
+	}
 
 }
