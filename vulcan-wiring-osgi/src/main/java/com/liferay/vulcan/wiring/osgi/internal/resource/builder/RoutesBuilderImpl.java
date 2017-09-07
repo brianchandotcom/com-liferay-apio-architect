@@ -17,6 +17,7 @@ package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveIdentifierConverter;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustUseSameIdentifier;
 import com.liferay.vulcan.function.DecaFunction;
 import com.liferay.vulcan.function.EnneaFunction;
 import com.liferay.vulcan.function.HeptaFunction;
@@ -318,11 +319,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		BiFunction<Pagination, V, PageItems<T>> biFunction,
 		Class<V> identifierClass) {
 
-		Function<Identifier, V> identifierFunction = _convertIdentifier(
-			identifierClass);
-
 		_routesImpl.setPageFunction(
-			identifierFunction.andThen(
+			_getCollectionIdentifierFunction(identifierClass).andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 
@@ -348,11 +346,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
 			Class<H> hClass) {
 
-		Function<Identifier, V> identifierFunction = _convertIdentifier(
-			identifierClass);
-
 		_routesImpl.setPageFunction(
-			identifierFunction.andThen(
+			_getCollectionIdentifierFunction(identifierClass).andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -385,11 +380,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass, Class<G> gClass) {
 
-		Function<Identifier, V> identifierFunction = _convertIdentifier(
-			identifierClass);
-
 		_routesImpl.setPageFunction(
-			identifierFunction.andThen(
+			_getCollectionIdentifierFunction(identifierClass).andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -421,11 +413,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass) {
 
-		Function<Identifier, V> identifierFunction = _convertIdentifier(
-			identifierClass);
-
 		_routesImpl.setPageFunction(
-			identifierFunction.andThen(
+			_getCollectionIdentifierFunction(identifierClass).andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -454,11 +443,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass) {
 
-		Function<Identifier, V> identifierFunction = _convertIdentifier(
-			identifierClass);
-
 		_routesImpl.setPageFunction(
-			identifierFunction.andThen(
+			_getCollectionIdentifierFunction(identifierClass).andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -487,11 +473,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass) {
 
-		Function<Identifier, V> identifierFunction = _convertIdentifier(
-			identifierClass);
-
 		_routesImpl.setPageFunction(
-			identifierFunction.andThen(
+			_getCollectionIdentifierFunction(identifierClass).andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -520,11 +503,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 		Class<C> cClass) {
 
-		Function<Identifier, V> identifierFunction = _convertIdentifier(
-			identifierClass);
-
 		_routesImpl.setPageFunction(
-			identifierFunction.andThen(
+			_getCollectionIdentifierFunction(identifierClass).andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -549,11 +529,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		TetraFunction<Pagination, V, A, B, PageItems<T>> tetraFunction,
 		Class<V> identifierClass, Class<A> aClass, Class<B> bClass) {
 
-		Function<Identifier, V> identifierFunction = _convertIdentifier(
-			identifierClass);
-
 		_routesImpl.setPageFunction(
-			identifierFunction.andThen(
+			_getCollectionIdentifierFunction(identifierClass).andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -577,11 +554,8 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		TriFunction<Pagination, V, A, PageItems<T>> triFunction,
 		Class<V> identifierClass, Class<A> aClass) {
 
-		Function<Identifier, V> identifierFunction = _convertIdentifier(
-			identifierClass);
-
 		_routesImpl.setPageFunction(
-			identifierFunction.andThen(
+			_getCollectionIdentifierFunction(identifierClass).andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -846,6 +820,20 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			).orElseThrow(
 				() -> new MustHaveIdentifierConverter(identifierClass)
 			);
+		};
+	}
+
+	private <V extends Identifier> Function<Identifier, V>
+		_getCollectionIdentifierFunction(Class<V> identifierClass) {
+
+		return identifier -> {
+			Class<? extends Identifier> clazz = identifier.getClass();
+
+			if (!identifierClass.isAssignableFrom(clazz)) {
+				throw new MustUseSameIdentifier(clazz, identifierClass);
+			}
+
+			return (V)identifier;
 		};
 	}
 

@@ -108,6 +108,23 @@ public class VulcanDeveloperError extends Error {
 	}
 
 	/**
+	 * Represents the error the developer should throw when the identifier
+	 * used for a related collection is not the same as the one required by the
+	 * collection.
+	 */
+	public static class MustUseSameIdentifier extends VulcanDeveloperError {
+
+		public MustUseSameIdentifier(
+			Class<?> identifierClass, Class<?> collectionIdentifierClass) {
+
+			super(
+				"Identifier " + identifierClass + " must be " +
+					collectionIdentifierClass);
+		}
+
+	}
+
+	/**
 	 * Represents the error the developer should throw when an URI cannot be
 	 * resolved.
 	 */
