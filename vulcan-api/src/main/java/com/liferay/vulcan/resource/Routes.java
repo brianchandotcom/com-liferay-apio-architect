@@ -14,10 +14,10 @@
 
 package com.liferay.vulcan.resource;
 
-import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
+import com.liferay.vulcan.typealias.BinaryFunction;
 
 import java.util.Map;
 import java.util.Optional;

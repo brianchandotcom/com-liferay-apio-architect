@@ -14,7 +14,6 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
-import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveIdentifierConverter;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustUseSameIdentifier;
@@ -33,6 +32,7 @@ import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.typealias.BinaryFunction;
 import com.liferay.vulcan.wiring.osgi.internal.pagination.PageImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
 
