@@ -18,18 +18,25 @@ import com.liferay.vulcan.application.internal.identifier.IdentifierImpl;
 import com.liferay.vulcan.application.internal.identifier.RootIdentifierImpl;
 import com.liferay.vulcan.binary.BinaryFunction;
 import com.liferay.vulcan.endpoint.RootEndpoint;
+import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.result.ThrowableFunction;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 
 import java.io.InputStream;
 
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -160,9 +167,50 @@ public class RootEndpointImpl implements RootEndpoint {
 		).mapFailMatching(
 			NoSuchElementException.class,
 			_getSupplierNotFoundException(path + "/" + id + "/" + nestedPath)
-		).map(
-			pageFunction -> pageFunction.apply(new IdentifierImpl(path, id))
+		).flatMap(
+			_getNestedCollectionPageTryFunction(path, id, nestedPath)
 		);
+	}
+
+	private <T> Predicate<RelatedCollection<T, ?>>
+		_getFilterRelatedCollectionPredicate(String nestedPath) {
+
+		return relatedCollection -> {
+			Class<?> modelClass = relatedCollection.getModelClass();
+
+			String relatedClassName = modelClass.getName();
+
+			String className = _resourceManager.getClassName(nestedPath);
+
+			if (relatedClassName.equals(className)) {
+				return true;
+			}
+
+			return false;
+		};
+	}
+
+	private <T> ThrowableFunction<SingleModel<T>, Identifier>
+		_getIdentifierFunction(String nestedPath) {
+
+		return parentSingleModel -> {
+			List<RelatedCollection<T, ?>> relatedCollections =
+				_resourceManager.getRelatedCollections(
+					parentSingleModel.getModelClass());
+
+			Stream<RelatedCollection<T, ?>> stream =
+				relatedCollections.stream();
+
+			return stream.filter(
+				_getFilterRelatedCollectionPredicate(nestedPath)
+			).findFirst(
+			).map(
+				RelatedCollection::getIdentifierFunction
+			).map(
+				identifierFunction -> identifierFunction.apply(
+					parentSingleModel.getModel())
+			).get();
+		};
 	}
 
 	private <T> Try<InputStream> _getInputStreamTry(
@@ -176,6 +224,22 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			binaryFunction::apply
 		);
+	}
+
+	private <T, S> ThrowableFunction<Function<Identifier, Page<S>>,
+		Try<Page<S>>> _getNestedCollectionPageTryFunction(
+			String path, String id, String nestedPath) {
+
+		return pageFunction -> {
+			Try<SingleModel<T>> parentSingleModelTry =
+				getCollectionItemSingleModelTry(path, id);
+
+			return parentSingleModelTry.map(
+				_getIdentifierFunction(nestedPath)
+			).map(
+				pageFunction::apply
+			);
+		};
 	}
 
 	private <T> Try<Routes<T>> _getRoutesTry(String path) {
