@@ -14,7 +14,6 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource;
 
-import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
@@ -28,13 +27,6 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  */
 public class RoutesImpl<T> implements Routes<T> {
-
-	@Override
-	public Optional<Function<String, BinaryFunction<T>>>
-		getBinaryFunctionOptional() {
-
-		return Optional.ofNullable(_binaryFunction);
-	}
 
 	@Override
 	public Optional<Function<Identifier, Page<T>>> getPageFunctionOptional() {
@@ -55,12 +47,6 @@ public class RoutesImpl<T> implements Routes<T> {
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
-	public void setBinaryFunction(
-		Function<String, BinaryFunction<T>> binaryFunction) {
-
-		_binaryFunction = binaryFunction;
-	}
-
 	public void setPageFunction(Function<Identifier, Page<T>> pageFunction) {
 		_pageFunction = pageFunction;
 	}
@@ -78,7 +64,6 @@ public class RoutesImpl<T> implements Routes<T> {
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private Function<String, BinaryFunction<T>> _binaryFunction;
 	private Function<Identifier, Page<T>> _pageFunction;
 	private Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
 		_postSingleModelFunction;

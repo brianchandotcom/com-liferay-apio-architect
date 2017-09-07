@@ -104,17 +104,19 @@ public class RootEndpointImpl implements RootEndpoint {
 	public <T> Try<InputStream> getCollectionItemInputStreamTry(
 		String path, String id, String binaryId) {
 
-		Try<Routes<T>> routesTry = _getRoutesTry(path);
+		Class<T> modelClass = _resourceManager.getModelClass(path);
 
-		return routesTry.map(
-			Routes::getBinaryFunctionOptional
-		).map(
+		Map<String, BinaryFunction<T>> binaryFunctions =
+			_resourceManager.getBinaryFunctions(modelClass);
+
+		Try<Optional<BinaryFunction<T>>> binaryFunctionTry = Try.success(
+			Optional.ofNullable(binaryFunctions.get(binaryId)));
+
+		return binaryFunctionTry.map(
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
 			_getSupplierNotFoundException(path + "/" + id + "/" + binaryId)
-		).map(
-			binaryFunction -> binaryFunction.apply(binaryId)
 		).flatMap(
 			binaryFunction -> _getInputStreamTry(path, id, binaryFunction)
 		);

@@ -14,7 +14,6 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
-import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveIdentifierConverter;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustUseSameIdentifier;
@@ -62,14 +61,6 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	@Override
 	public Routes<T> build() {
 		return _routesImpl;
-	}
-
-	public RoutesBuilder<T, U> collectionBinary(
-		Map<String, BinaryFunction<T>> binaryFunction) {
-
-		_routesImpl.setBinaryFunction(binaryFunction::get);
-
-		return this;
 	}
 
 	@Override
