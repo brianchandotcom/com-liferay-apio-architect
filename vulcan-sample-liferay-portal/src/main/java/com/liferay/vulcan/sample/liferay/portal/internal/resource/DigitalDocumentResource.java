@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
@@ -57,10 +58,10 @@ public class DigitalDocumentResource
 	implements Resource<DLFileEntry, LongIdentifier> {
 
 	@Override
-	public void buildRepresentor(
+	public Representor<DLFileEntry, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<DLFileEntry, LongIdentifier> representorBuilder) {
 
-		representorBuilder.identifier(
+		return representorBuilder.identifier(
 			dlFileEntry -> dlFileEntry::getFileEntryId
 		).addBidirectionalModel(
 			"folder", "digitalDocuments", DLFolder.class,
@@ -90,7 +91,7 @@ public class DigitalDocumentResource
 			"text", DLFileEntry::getDescription
 		).addType(
 			"MediaObject"
-		);
+		).build();
 	}
 
 	@Override

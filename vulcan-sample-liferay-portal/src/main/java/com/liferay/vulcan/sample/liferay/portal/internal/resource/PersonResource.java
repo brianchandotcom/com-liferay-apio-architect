@@ -30,6 +30,7 @@ import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.identifier.RootIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
@@ -67,7 +68,7 @@ import org.osgi.service.component.annotations.Reference;
 public class PersonResource implements Resource<User, LongIdentifier> {
 
 	@Override
-	public void buildRepresentor(
+	public Representor<User, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<User, LongIdentifier> representorBuilder) {
 
 		Function<User, Object> birthDateFunction = user -> {
@@ -81,7 +82,7 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 			);
 		};
 
-		representorBuilder.identifier(
+		return representorBuilder.identifier(
 			user -> user::getUserId
 		).addField(
 			"additionalName", User::getMiddleName
@@ -112,7 +113,7 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 			"name", User::getFullName
 		).addType(
 			"Person"
-		);
+		).build();
 	}
 
 	@Override

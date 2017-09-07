@@ -27,6 +27,7 @@ import com.liferay.vulcan.identifier.RootIdentifier;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
@@ -57,10 +58,10 @@ import org.osgi.service.component.annotations.Reference;
 public class GroupResource implements Resource<Group, LongIdentifier> {
 
 	@Override
-	public void buildRepresentor(
+	public Representor<Group, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<Group, LongIdentifier> representorBuilder) {
 
-		representorBuilder.identifier(
+		return representorBuilder.identifier(
 			group -> group::getGroupId
 		).addField(
 			"name", group -> group.getName(Locale.US)
@@ -68,7 +69,7 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 			"groupType", Group::getTypeLabel
 		).addType(
 			"Group"
-		);
+		).build();
 	}
 
 	@Override

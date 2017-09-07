@@ -15,6 +15,7 @@
 package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
@@ -37,11 +38,12 @@ public class AggregateRatingResource
 	implements Resource<AggregateRating, ClassNameClassPKIdentifier> {
 
 	@Override
-	public void buildRepresentor(
-		RepresentorBuilder<AggregateRating, ClassNameClassPKIdentifier>
-			representorBuilder) {
+	public Representor<AggregateRating, ClassNameClassPKIdentifier>
+		buildRepresentor(
+			RepresentorBuilder<AggregateRating, ClassNameClassPKIdentifier>
+				representorBuilder) {
 
-		representorBuilder.identifier(
+		return representorBuilder.identifier(
 			AggregateRating::getClassNameClassPKIdentifier
 		).addField(
 			"bestRating", aggregateRating -> 1
@@ -53,7 +55,7 @@ public class AggregateRatingResource
 			"worstRating", aggregateRating -> 0
 		).addType(
 			"AggregateRating"
-		);
+		).build();
 	}
 
 	@Override

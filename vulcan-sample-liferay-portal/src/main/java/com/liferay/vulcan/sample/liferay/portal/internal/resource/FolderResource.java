@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
@@ -55,10 +56,10 @@ import org.osgi.service.component.annotations.Reference;
 public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 
 	@Override
-	public void buildRepresentor(
+	public Representor<DLFolder, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<DLFolder, LongIdentifier> representorBuilder) {
 
-		representorBuilder.identifier(
+		return representorBuilder.identifier(
 			dlFolder -> dlFolder::getFolderId
 		).addBidirectionalModel(
 			"group", "folders", Group.class, this::_getGroupOptional,
@@ -75,7 +76,7 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 			"path", this::_getPath
 		).addType(
 			"Folder"
-		);
+		).build();
 	}
 
 	@Override

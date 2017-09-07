@@ -36,6 +36,7 @@ import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
@@ -66,10 +67,10 @@ import org.osgi.service.component.annotations.Reference;
 public class CommentResource implements Resource<Comment, LongIdentifier> {
 
 	@Override
-	public void buildRepresentor(
+	public Representor<Comment, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<Comment, LongIdentifier> representorBuilder) {
 
-		representorBuilder.identifier(
+		return representorBuilder.identifier(
 			comment -> comment::getCommentId
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional
@@ -77,7 +78,7 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 			"text", Comment::getBody
 		).addType(
 			"Comment"
-		);
+		).build();
 	}
 
 	@Override

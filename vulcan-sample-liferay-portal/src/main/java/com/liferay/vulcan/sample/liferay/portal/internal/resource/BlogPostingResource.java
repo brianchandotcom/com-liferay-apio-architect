@@ -34,6 +34,7 @@ import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.liferay.portal.identifier.creator.ClassNameClassPKIdentifierCreator;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
@@ -76,7 +77,7 @@ public class BlogPostingResource
 	implements Resource<BlogsEntry, LongIdentifier> {
 
 	@Override
-	public void buildRepresentor(
+	public Representor<BlogsEntry, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<BlogsEntry, LongIdentifier> representorBuilder) {
 
 		Function<Date, Object> formatFunction = date -> {
@@ -89,7 +90,7 @@ public class BlogPostingResource
 			return dateFormat.format(date);
 		};
 
-		representorBuilder.identifier(
+		return representorBuilder.identifier(
 			blogsEntry -> blogsEntry::getEntryId
 		).addBidirectionalModel(
 			"group", "blogs", Group.class, this::_getGroupOptional,
@@ -131,7 +132,7 @@ public class BlogPostingResource
 				BlogsEntry.class.getName(), blogsEntry.getEntryId())
 		).addType(
 			"BlogPosting"
-		);
+		).build();
 	}
 
 	@Override
