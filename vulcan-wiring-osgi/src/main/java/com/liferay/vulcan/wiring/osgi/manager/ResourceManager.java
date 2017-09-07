@@ -24,16 +24,16 @@ import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.RelatedModel;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
+import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl.RepresentorImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -65,10 +65,12 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  modelClass class name indexing the binary resources
 	 * @return the binary resources for the model class
 	 */
-	public <T> Map<String, BinaryFunction<T>>
+	public <T, U extends Identifier> Map<String, BinaryFunction<T>>
 		getBinaryFunctions(Class<T> modelClass) {
 
-		return (Map)_binaryFunctions.get(modelClass.getName());
+		Representor<T, U> representor = getRepresentor(modelClass);
+
+		return representor.getBinaryFunctions();
 	}
 
 	/**
@@ -88,10 +90,12 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the embedded related models for the model class.
 	 * @see    Resource
 	 */
-	public <T> List<RelatedModel<T, ?>> getEmbeddedRelatedModels(
-		Class<T> modelClass) {
+	public <T, U extends Identifier> List<RelatedModel<T, ?>>
+		getEmbeddedRelatedModels(Class<T> modelClass) {
 
-		return (List)_embeddedRelatedModels.get(modelClass.getName());
+		Representor<T, U> representor = getRepresentor(modelClass);
+
+		return representor.getEmbeddedRelatedModels();
 	}
 
 	/**
@@ -105,10 +109,12 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the field names and functions of the model class.
 	 * @see    Resource
 	 */
-	public <T> Map<String, Function<T, Object>> getFieldFunctions(
-		Class<T> modelClass) {
+	public <T, U extends Identifier> Map<String, Function<T, Object>>
+		getFieldFunctions(Class<T> modelClass) {
 
-		return (Map)_fieldFunctions.get(modelClass.getName());
+		Representor<T, U> representor = getRepresentor(modelClass);
+
+		return representor.getFieldFunctions();
 	}
 
 	/**
@@ -121,15 +127,13 @@ public class ResourceManager extends BaseManager<Resource> {
 	 *         otherwise.
 	 * @see    Resource
 	 */
-	public <T> Optional<Identifier> getIdentifierOptional(
+	public <T, U extends Identifier> Optional<Identifier> getIdentifierOptional(
 		Class<T> modelClass, T model) {
 
-		Function<T, Identifier> identifierFunction =
-			(Function<T, Identifier>)_identifierFunctions.get(
-				modelClass.getName());
+		Representor<T, U> representor = getRepresentor(modelClass);
 
-		Optional<Function<T, Identifier>> optional = Optional.ofNullable(
-			identifierFunction);
+		Optional<Function<T, Identifier>> optional = Optional.of(
+			representor::getIdentifier);
 
 		return optional.map(
 			function -> function.apply(model)
@@ -165,10 +169,12 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  modelClass the model class of a {@link Resource}.
 	 * @return the linked related models for the model class.
 	 */
-	public <T> List<RelatedModel<T, ?>> getLinkedRelatedModels(
-		Class<T> modelClass) {
+	public <T, U extends Identifier> List<RelatedModel<T, ?>>
+		getLinkedRelatedModels(Class<T> modelClass) {
 
-		return (List)_linkedRelatedModels.get(modelClass.getName());
+		Representor<T, U> representor = getRepresentor(modelClass);
+
+		return representor.getLinkedRelatedModels();
 	}
 
 	/**
@@ -177,8 +183,12 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  modelClass the model class of a {@link Resource}.
 	 * @return the links for the model class.
 	 */
-	public <T> Map<String, String> getLinks(Class<T> modelClass) {
-		return _links.get(modelClass.getName());
+	public <T, U extends Identifier> Map<String, String> getLinks(
+		Class<T> modelClass) {
+
+		Representor<T, U> representor = getRepresentor(modelClass);
+
+		return representor.getLinks();
 	}
 
 	/**
@@ -197,10 +207,24 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  modelClass the model class of a {@link Resource}.
 	 * @return the related collections for the model class.
 	 */
-	public <T> List<RelatedCollection<T, ?>> getRelatedCollections(
+	public <T, U extends Identifier> List<RelatedCollection<T, ?>>
+		getRelatedCollections(Class<T> modelClass) {
+
+		Representor<T, U> representor = getRepresentor(modelClass);
+
+		return representor.getRelatedCollections();
+	}
+
+	/**
+	 * Returns the representor of the model class.
+	 *
+	 * @param  modelClass the model class of a {@link Resource}.
+	 * @return the representor of the model class.
+	 */
+	public <T, U extends Identifier> Representor<T, U> getRepresentor(
 		Class<T> modelClass) {
 
-		return (List)_relatedCollections.get(modelClass.getName());
+		return (Representor<T, U>)_representors.get(modelClass.getName());
 	}
 
 	/**
@@ -258,8 +282,12 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  modelClass the model class of a {@link Resource}.
 	 * @return the types of the model class.
 	 */
-	public <T> List<String> getTypes(Class<T> modelClass) {
-		return _types.get(modelClass.getName());
+	public <T, U extends Identifier> List<String> getTypes(
+		Class<T> modelClass) {
+
+		Representor<T, U> representor = getRepresentor(modelClass);
+
+		return representor.getTypes();
 	}
 
 	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
@@ -291,54 +319,22 @@ public class ResourceManager extends BaseManager<Resource> {
 	private <T, U extends Identifier> void _addModelClassMaps(
 		Class<T> modelClass) {
 
-		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
-
-		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
-
-		List<RelatedModel<?, ?>> embeddedRelatedModels = new ArrayList<>();
-
-		_embeddedRelatedModels.put(modelClass.getName(), embeddedRelatedModels);
-
-		List<RelatedModel<?, ?>> linkedRelatedModels = new ArrayList<>();
-
-		_linkedRelatedModels.put(modelClass.getName(), linkedRelatedModels);
-
-		Map<String, String> links = new HashMap<>();
-
-		_links.put(modelClass.getName(), links);
-
-		List<RelatedCollection<?, ?>> relatedCollections =
-			_relatedCollections.computeIfAbsent(
-				modelClass.getName(), className -> new ArrayList<>());
-
-		_relatedCollections.put(modelClass.getName(), relatedCollections);
-
-		Map<String, BinaryFunction<T>> binaryFunctions = new HashMap<>();
-
-		_binaryFunctions.put(modelClass.getName(), (Map)binaryFunctions);
-
-		List<String> types = new ArrayList<>();
-
-		_types.put(modelClass.getName(), types);
-
 		Optional<Resource<T, U>> optional = getResourceOptional(modelClass);
 
 		optional.ifPresent(
 			resource -> {
 				_classes.put(resource.getPath(), modelClass);
 
-				resource.buildRepresentor(
-					new RepresentorBuilderImpl(
-						modelClass, _identifierFunctions,
-						_addRelatedCollectionTriConsumer(modelClass),
-						fieldFunctions, embeddedRelatedModels,
-						linkedRelatedModels, links, relatedCollections,
-						binaryFunctions, types));
+				RepresentorImpl representor =
+					(RepresentorImpl)resource.buildRepresentor(
+						new RepresentorBuilderImpl<>(
+							_addRelatedCollectionTriConsumer(modelClass)));
+
+				_representors.put(modelClass.getName(), representor);
 
 				Function<HttpServletRequest, Routes<?>> routesFunction =
 					_getRoutesFunction(
-						modelClass, _getIdentifierClass(resource), resource,
-						binaryFunctions);
+						modelClass, _getIdentifierClass(resource), resource);
 
 				_routesFunctions.put(resource.getPath(), routesFunction);
 			});
@@ -348,40 +344,7 @@ public class ResourceManager extends BaseManager<Resource> {
 		_addRelatedCollectionTriConsumer(Class<T> relatedModelClass) {
 
 		return (key, modelClass, identifierFunction) -> {
-			List<RelatedCollection<?, ?>> relatedCollections =
-				_relatedCollections.computeIfAbsent(
-					modelClass.getName(), className -> new ArrayList<>());
 
-			relatedCollections.add(
-				new RelatedCollection<>(
-					key, relatedModelClass,
-					object -> {
-						Identifier identifier = identifierFunction.apply(
-							object);
-
-						Optional<? extends Resource<?, Identifier>>
-							resourceOptional = getResourceOptional(modelClass);
-
-						String type = resourceOptional.map(
-							Resource::getPath
-						).orElse(
-							""
-						);
-
-						return new Identifier() {
-
-							@Override
-							public String getId() {
-								return identifier.getId();
-							}
-
-							@Override
-							public String getType() {
-								return type;
-							}
-
-						};
-					}));
 		};
 	}
 
@@ -407,8 +370,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	private <T, U extends Identifier> Function<HttpServletRequest, Routes<?>>
 		_getRoutesFunction(
 			Class<T> modelClass, Class<U> identifierClass,
-			Resource<T, U> resource,
-			Map<String, BinaryFunction<T>> binaryFunctions) {
+			Resource<T, U> resource) {
 
 		return httpServletRequest -> {
 			RoutesBuilderImpl<T, U> routesBuilder = new RoutesBuilderImpl<>(
@@ -416,51 +378,28 @@ public class ResourceManager extends BaseManager<Resource> {
 				_getProvideClassFunction(httpServletRequest),
 				_identifierConverterManager::convert);
 
-			routesBuilder.collectionBinary(binaryFunctions);
-
 			return resource.routes(routesBuilder);
 		};
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
-		_embeddedRelatedModels.remove(modelClass.getName());
-		_fieldFunctions.remove(modelClass.getName());
-		_identifierFunctions.remove(modelClass.getName());
-		_linkedRelatedModels.remove(modelClass.getName());
-		_links.remove(modelClass.getName());
-		_binaryFunctions.remove(modelClass.getName());
-		_types.remove(modelClass.getName());
+		_representors.remove(modelClass.getName());
 		Collection<Class<?>> classes = _classes.values();
 
 		classes.removeIf(next -> next.equals(modelClass));
 	}
 
-	private final Map<String, Map<String, BinaryFunction<?>>> _binaryFunctions =
-		new ConcurrentHashMap<>();
-	private final Map<String, String> _classNames = new ConcurrentHashMap<>();
-	private final Map<String, List<RelatedModel<?, ?>>> _embeddedRelatedModels =
-		new ConcurrentHashMap<>();
-	private final Map<String, Map<String, Function<?, Object>>>
-		_fieldFunctions = new ConcurrentHashMap<>();
 	private final Map<String, Class<?>> _classes = new ConcurrentHashMap<>();
 
 	@Reference
 	private IdentifierConverterManager _identifierConverterManager;
 
-	private final Map<String, Function<?, ? extends Identifier>>
-		_identifierFunctions = new ConcurrentHashMap<>();
-	private final Map<String, List<RelatedModel<?, ?>>> _linkedRelatedModels =
-		new ConcurrentHashMap<>();
-	private final Map<String, Map<String, String>> _links =
-		new ConcurrentHashMap<>();
-
 	@Reference
 	private ProviderManager _providerManager;
 
-	private final Map<String, List<RelatedCollection<?, ?>>>
-		_relatedCollections = new ConcurrentHashMap<>();
+	private final Map<String, RepresentorImpl> _representors =
+		new ConcurrentHashMap<>();
 	private final Map<String, Function<HttpServletRequest, Routes<?>>>
 		_routesFunctions = new ConcurrentHashMap<>();
-	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
 
 }
