@@ -57,7 +57,8 @@ public interface Resource<T, U extends Identifier> {
 	 * @param representorBuilder the builder used to create the representor.
 	 * @see   RepresentorBuilder
 	 */
-	public void buildRepresentor(RepresentorBuilder<T, U> representorBuilder);
+	public Representor<T, U> buildRepresentor(
+		RepresentorBuilder<T, U> representorBuilder);
 
 	/**
 	 * Returns the path for this resource.

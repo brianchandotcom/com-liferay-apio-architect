@@ -16,6 +16,7 @@ package com.liferay.vulcan.resource.builder;
 
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.identifier.Identifier;
+import com.liferay.vulcan.resource.Representor;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -44,9 +45,9 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 	 * @param  identifierFunction function used to obtain a model's identifier.
 	 * @return builder's next step.
 	 */
-	public FirstStep<T> identifier(Function<T, U> identifierFunction);
+	public FirstStep<T, U> identifier(Function<T, U> identifierFunction);
 
-	public interface FirstStep<T> {
+	public interface FirstStep<T, U extends Identifier> {
 
 		/**
 		 * Use this method to provide information of a bidirectional relation of
@@ -61,7 +62,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 *                       collection.
 		 * @return builder's actual step.
 		 */
-		public <S> FirstStep<T> addBidirectionalModel(
+		public <S> FirstStep<T, U> addBidirectionalModel(
 			String key, String relatedKey, Class<S> modelClass,
 			Function<T, Optional<S>> modelFunction,
 			Function<S, Identifier> identifierFunction);
@@ -73,7 +74,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 *
 		 * @review
 		 */
-		public <S> FirstStep<T> addBinary(
+		public <S> FirstStep<T, U> addBinary(
 			String key, BinaryFunction<T> binaryFunction);
 
 		/**
@@ -85,7 +86,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param modelFunction function used to obtain the related model.
 		 * @return builder's actual step.
 		 */
-		public <S> FirstStep<T> addEmbeddedModel(
+		public <S> FirstStep<T, U> addEmbeddedModel(
 			String key, Class<S> modelClass,
 			Function<T, Optional<S>> modelFunction);
 
@@ -96,7 +97,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param fieldFunction function used to obtain the field value.
 		 * @return builder's actual step.
 		 */
-		public FirstStep<T> addField(
+		public FirstStep<T, U> addField(
 			String key, Function<T, Object> fieldFunction);
 
 		/**
@@ -106,7 +107,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param url url link's url.
 		 * @return builder's actual step.
 		 */
-		public FirstStep<T> addLink(String key, String url);
+		public FirstStep<T, U> addLink(String key, String url);
 
 		/**
 		 * Use this method to provide information of a non embeddable related
@@ -117,7 +118,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param modelFunction function used to obtain the related model.
 		 * @return builder's actual step.
 		 */
-		public <S> FirstStep<T> addLinkedModel(
+		public <S> FirstStep<T, U> addLinkedModel(
 			String key, Class<S> modelClass,
 			Function<T, Optional<S>> modelFunction);
 
@@ -130,7 +131,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 *                       collection.
 		 * @return builder's actual step.
 		 */
-		public <S> FirstStep<T> addRelatedCollection(
+		public <S> FirstStep<T, U> addRelatedCollection(
 			String key, Class<S> modelClass,
 			Function<T, Identifier> identifierFunction);
 
@@ -141,7 +142,15 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param type type name.
 		 * @return builder's actual step.
 		 */
-		public FirstStep<T> addType(String type);
+		public FirstStep<T, U> addType(String type);
+
+		/**
+		 * Constructs the <code>Representor</code> instance with the information provided
+		 * to the builder.
+		 *
+		 * @return the <code>Representor</code> instance.
+		 */
+		public Representor<T, U> build();
 
 	}
 
