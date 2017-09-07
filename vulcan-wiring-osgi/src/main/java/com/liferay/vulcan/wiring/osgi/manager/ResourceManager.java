@@ -212,7 +212,13 @@ public class ResourceManager extends BaseManager<Resource> {
 
 		Representor<T, U> representor = getRepresentor(modelClass);
 
-		return representor.getRelatedCollections();
+		List<RelatedCollection<T, ?>> relatedCollections = new ArrayList<>(
+			representor.getRelatedCollections());
+
+		relatedCollections.addAll(
+			(List)_relatedCollections.get(modelClass.getName()));
+
+		return relatedCollections;
 	}
 
 	/**
@@ -344,7 +350,40 @@ public class ResourceManager extends BaseManager<Resource> {
 		_addRelatedCollectionTriConsumer(Class<T> relatedModelClass) {
 
 		return (key, modelClass, identifierFunction) -> {
+			List<RelatedCollection<?, ?>> relatedCollections =
+				_relatedCollections.computeIfAbsent(
+					modelClass.getName(), className -> new ArrayList<>());
 
+			relatedCollections.add(
+				new RelatedCollection<>(
+					key, relatedModelClass,
+					object -> {
+						Identifier identifier = identifierFunction.apply(
+							object);
+
+						Optional<? extends Resource<?, Identifier>>
+							resourceOptional = getResourceOptional(modelClass);
+
+						String type = resourceOptional.map(
+							Resource::getPath
+						).orElse(
+							""
+						);
+
+						return new Identifier() {
+
+							@Override
+							public String getId() {
+								return identifier.getId();
+							}
+
+							@Override
+							public String getType() {
+								return type;
+							}
+
+						};
+					}));
 		};
 	}
 
@@ -383,10 +422,15 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
-		_representors.remove(modelClass.getName());
 		Collection<Class<?>> classes = _classes.values();
 
 		classes.removeIf(next -> next.equals(modelClass));
+
+		_relatedCollections.forEach(
+			(className, relatedCollections) -> relatedCollections.removeIf(
+				relatedCollection ->
+					relatedCollection.getModelClass().equals(modelClass)));
+		_representors.remove(modelClass.getName());
 	}
 
 	private final Map<String, Class<?>> _classes = new ConcurrentHashMap<>();
@@ -397,6 +441,8 @@ public class ResourceManager extends BaseManager<Resource> {
 	@Reference
 	private ProviderManager _providerManager;
 
+	private final Map<String, List<RelatedCollection<?, ?>>>
+		_relatedCollections = new ConcurrentHashMap<>();
 	private final Map<String, RepresentorImpl> _representors =
 		new ConcurrentHashMap<>();
 	private final Map<String, Function<HttpServletRequest, Routes<?>>>
