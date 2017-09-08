@@ -31,6 +31,7 @@ import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.provider.ServerURLProvider;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.RelatedModel;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.APIError;
@@ -171,10 +172,12 @@ public class WriterHelper {
 	public <T> Optional<String> getSingleURLOptional(
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest) {
 
-		Optional<Identifier> optional = _resourceManager.getIdentifierOptional(
-			singleModel.getModelClass(), singleModel.getModel());
+		Optional<Representor<T, Identifier>> optional =
+			_resourceManager.getRepresentor(singleModel.getModelClass());
 
 		return optional.map(
+			representor -> representor.getIdentifier(singleModel.getModel())
+		).map(
 			identifier -> "/p/" + identifier.getType() + "/" +
 				identifier.getId()
 		).map(
@@ -202,10 +205,12 @@ public class WriterHelper {
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest,
 		BiConsumer<String, Object> biConsumer) {
 
-		Optional<Identifier> optional = _resourceManager.getIdentifierOptional(
-			singleModel.getModelClass(), singleModel.getModel());
+		Optional<Representor<T, Identifier>> optional =
+			_resourceManager.getRepresentor(singleModel.getModelClass());
 
 		optional.map(
+			representor -> representor.getIdentifier(singleModel.getModel())
+		).map(
 			identifier -> "/b/" + identifier.asURI() + "/"
 		).ifPresent(
 			resourceURI -> {
@@ -246,20 +251,27 @@ public class WriterHelper {
 		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			modelClass, fields);
 
-		Map<String, Function<T, Object>> fieldFunctions =
-			_resourceManager.getFieldFunctions(modelClass);
+		Optional<Representor<T, Identifier>> optional =
+			_resourceManager.getRepresentor(modelClass);
 
-		for (String field : fieldFunctions.keySet()) {
-			if (fieldsPredicate.test(field)) {
-				Function<T, Object> fieldFunction = fieldFunctions.get(field);
+		optional.map(
+			Representor::getFieldFunctions
+		).ifPresent(
+			fieldFunctions -> {
+				for (String field : fieldFunctions.keySet()) {
+					if (fieldsPredicate.test(field)) {
+						Function<T, Object> fieldFunction = fieldFunctions.get(
+							field);
 
-				Object data = fieldFunction.apply(model);
+						Object data = fieldFunction.apply(model);
 
-				if (data != null) {
-					biConsumer.accept(field, data);
+						if (data != null) {
+							biConsumer.accept(field, data);
+						}
+					}
 				}
 			}
-		}
+		);
 	}
 
 	/**
@@ -308,13 +320,20 @@ public class WriterHelper {
 		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			modelClass, fields);
 
-		Map<String, String> links = _resourceManager.getLinks(modelClass);
+		Optional<Representor<T, Identifier>> optional =
+			_resourceManager.getRepresentor(modelClass);
 
-		for (String key : links.keySet()) {
-			if (fieldsPredicate.test(key)) {
-				biConsumer.accept(key, links.get(key));
+		optional.map(
+			Representor::getLinks
+		).ifPresent(
+			links -> {
+				for (String key : links.keySet()) {
+					if (fieldsPredicate.test(key)) {
+						biConsumer.accept(key, links.get(key));
+					}
+				}
 			}
-		}
+		);
 	}
 
 	/**
@@ -450,17 +469,29 @@ public class WriterHelper {
 	public <U> void writeTypes(
 		Class<U> modelClass, Consumer<List<String>> consumer) {
 
-		List<String> types = _resourceManager.getTypes(modelClass);
+		Optional<Representor<U, Identifier>> optional =
+			_resourceManager.getRepresentor(modelClass);
 
-		consumer.accept(types);
+		optional.map(
+			Representor::getTypes
+		).ifPresent(
+			consumer
+		);
 	}
 
 	private <T> Predicate<String> _getFieldsPredicate(
 		Class<T> modelClass, Fields fields) {
 
-		List<String> types = _resourceManager.getTypes(modelClass);
+		Optional<Representor<T, Identifier>> optional =
+			_resourceManager.getRepresentor(modelClass);
 
-		return fields.getFieldsPredicate(types);
+		return optional.map(
+			Representor::getTypes
+		).map(
+			fields::getFieldsPredicate
+		).orElseGet(
+			() -> field -> true
+		);
 	}
 
 	private Function<String, String> _getTransformURIFunction(

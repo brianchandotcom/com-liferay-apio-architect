@@ -14,12 +14,15 @@
 
 package com.liferay.vulcan.message.hal.internal;
 
+import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -214,13 +217,18 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, T model, Class<T> modelClass,
 		HttpHeaders httpHeaders) {
 
-		List<String> types = _resourceManager.getTypes(modelClass);
+		Optional<Representor<T, Identifier>> optional =
+			_resourceManager.getRepresentor(modelClass);
 
-		pageJSONObjectBuilder.nestedField(
-			"_embedded", types.get(0)
-		).arrayValue(
-		).add(
-			itemJSONObjectBuilder
+		optional.map(
+			Representor::getTypes
+		).ifPresent(
+			types -> pageJSONObjectBuilder.nestedField(
+				"_embedded", types.get(0)
+			).arrayValue(
+			).add(
+				itemJSONObjectBuilder
+			)
 		);
 	}
 

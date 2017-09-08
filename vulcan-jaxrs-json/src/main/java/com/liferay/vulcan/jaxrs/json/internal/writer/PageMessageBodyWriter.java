@@ -20,6 +20,7 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -28,6 +29,7 @@ import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.RelatedModel;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.Try;
@@ -212,47 +214,58 @@ public class PageMessageBodyWriter<T>
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, fieldName, link));
 
-				Map<String, BinaryFunction<V>> binaryFunctions =
-					_resourceManager.getBinaryFunctions(modelClass);
-
-				_writerHelper.writeBinaries(
-					binaryFunctions, singleModel, _httpServletRequest,
-					(fieldName, value) -> pageMessageMapper.mapItemField(
-						pageJSONObjectBuilder, itemJSONObjectBuilder, fieldName,
-						value));
-
 				_writerHelper.writeTypes(
 					modelClass,
 					types -> pageMessageMapper.mapItemEmbeddedResourceTypes(
 						pageJSONObjectBuilder, itemJSONObjectBuilder,
 						embeddedPathElements, types));
 
-				List<RelatedModel<V, ?>> embeddedRelatedModels =
-					_resourceManager.getEmbeddedRelatedModels(modelClass);
+				Optional<Stream<RelatedCollection<V, ?>>>
+					relatedCollectionsOptional =
+						_resourceManager.getRelatedCollections(modelClass);
 
-				embeddedRelatedModels.forEach(
-					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
-						pageMessageMapper, pageJSONObjectBuilder,
-						itemJSONObjectBuilder, embeddedRelatedModel,
-						singleModel, embeddedPathElements, fields, embedded));
+				relatedCollectionsOptional.ifPresent(
+					relatedCollections -> relatedCollections.forEach(
+						relatedCollection -> _writeRelatedCollection(
+							pageMessageMapper, pageJSONObjectBuilder,
+							itemJSONObjectBuilder, relatedCollection,
+							singleModel, embeddedPathElements, fields)));
 
-				List<RelatedModel<V, ?>> linkedRelatedModels =
-					_resourceManager.getLinkedRelatedModels(modelClass);
+				Optional<Representor<V, Identifier>> representorOptional =
+					_resourceManager.getRepresentor(modelClass);
 
-				linkedRelatedModels.forEach(
-					linkedRelatedModel -> _writeLinkedRelatedModel(
-						pageMessageMapper, pageJSONObjectBuilder,
-						itemJSONObjectBuilder, linkedRelatedModel, singleModel,
-						embeddedPathElements, fields, embedded));
+				representorOptional.ifPresent(
+					representor -> {
+						Map<String, BinaryFunction<V>> binaryFunctions =
+							representor.getBinaryFunctions();
 
-				List<RelatedCollection<V, ?>> relatedCollections =
-					_resourceManager.getRelatedCollections(modelClass);
+						_writerHelper.writeBinaries(
+							binaryFunctions, singleModel, _httpServletRequest,
+							(fieldName, value) ->
+								pageMessageMapper.mapItemField(
+									pageJSONObjectBuilder,
+									itemJSONObjectBuilder, fieldName, value));
 
-				relatedCollections.forEach(
-					relatedCollection -> _writeRelatedCollection(
-						pageMessageMapper, pageJSONObjectBuilder,
-						itemJSONObjectBuilder, relatedCollection, singleModel,
-						embeddedPathElements, fields));
+						List<RelatedModel<V, ?>> embeddedRelatedModels =
+							representor.getEmbeddedRelatedModels();
+
+						embeddedRelatedModels.forEach(
+							embeddedRelatedModel -> _writeEmbeddedRelatedModel(
+								pageMessageMapper, pageJSONObjectBuilder,
+								itemJSONObjectBuilder, embeddedRelatedModel,
+								singleModel, embeddedPathElements, fields,
+								embedded));
+
+						List<RelatedModel<V, ?>> linkedRelatedModels =
+							representor.getLinkedRelatedModels();
+
+						linkedRelatedModels.forEach(
+							linkedRelatedModel -> _writeLinkedRelatedModel(
+								pageMessageMapper, pageJSONObjectBuilder,
+								itemJSONObjectBuilder, linkedRelatedModel,
+								singleModel, embeddedPathElements, fields,
+								embedded));
+					});
 			},
 			(url, embeddedPathElements, isEmbedded) -> {
 				if (isEmbedded) {
@@ -313,41 +326,50 @@ public class PageMessageBodyWriter<T>
 					url -> pageMessageMapper.mapItemSelfURL(
 						jsonObjectBuilder, itemJSONObjectBuilder, url));
 
-				Map<String, BinaryFunction<T>> binaryFunctions =
-					_resourceManager.getBinaryFunctions(modelClass);
+				Optional<Stream<RelatedCollection<T, ?>>>
+					relatedCollectionOptional =
+						_resourceManager.getRelatedCollections(modelClass);
 
-				_writerHelper.writeBinaries(
-					binaryFunctions, singleModel, _httpServletRequest,
-					(fieldName, value) -> pageMessageMapper.mapItemField(
-						jsonObjectBuilder, itemJSONObjectBuilder, fieldName,
-						value));
+				relatedCollectionOptional.ifPresent(
+					relatedCollections -> relatedCollections.forEach(
+						relatedCollection -> _writeRelatedCollection(
+							pageMessageMapper, jsonObjectBuilder,
+							itemJSONObjectBuilder, relatedCollection,
+							singleModel, null, fields)));
 
-				List<RelatedModel<T, ?>> embeddedRelatedModels =
-					_resourceManager.getEmbeddedRelatedModels(modelClass);
+				Optional<Representor<T, Identifier>> representorOptional =
+					_resourceManager.getRepresentor(modelClass);
 
-				embeddedRelatedModels.forEach(
-					embeddedRelatedModel -> _writeEmbeddedRelatedModel(
-						pageMessageMapper, jsonObjectBuilder,
-						itemJSONObjectBuilder, embeddedRelatedModel,
-						singleModel, null, fields, embedded));
+				representorOptional.ifPresent(
+					representor -> {
+						Map<String, BinaryFunction<T>> binaryFunctions =
+							representor.getBinaryFunctions();
 
-				List<RelatedModel<T, ?>> linkedRelatedModels =
-					_resourceManager.getLinkedRelatedModels(modelClass);
+						_writerHelper.writeBinaries(
+							binaryFunctions, singleModel, _httpServletRequest,
+							(fieldName, value) ->
+								pageMessageMapper.mapItemField(
+									jsonObjectBuilder, itemJSONObjectBuilder,
+									fieldName, value));
 
-				linkedRelatedModels.forEach(
-					linkedRelatedModel -> _writeLinkedRelatedModel(
-						pageMessageMapper, jsonObjectBuilder,
-						itemJSONObjectBuilder, linkedRelatedModel, singleModel,
-						null, fields, embedded));
+						List<RelatedModel<T, ?>> embeddedRelatedModels =
+							representor.getEmbeddedRelatedModels();
 
-				List<RelatedCollection<T, ?>> relatedCollections =
-					_resourceManager.getRelatedCollections(modelClass);
+						embeddedRelatedModels.forEach(
+							embeddedRelatedModel -> _writeEmbeddedRelatedModel(
+								pageMessageMapper, jsonObjectBuilder,
+								itemJSONObjectBuilder, embeddedRelatedModel,
+								singleModel, null, fields, embedded));
 
-				relatedCollections.forEach(
-					relatedCollection -> _writeRelatedCollection(
-						pageMessageMapper, jsonObjectBuilder,
-						itemJSONObjectBuilder, relatedCollection, singleModel,
-						null, fields));
+						List<RelatedModel<T, ?>> linkedRelatedModels =
+							representor.getLinkedRelatedModels();
+
+						linkedRelatedModels.forEach(
+							linkedRelatedModel -> _writeLinkedRelatedModel(
+								pageMessageMapper, jsonObjectBuilder,
+								itemJSONObjectBuilder, linkedRelatedModel,
+								singleModel, null, fields, embedded));
+					});
 
 				pageMessageMapper.onFinishItem(
 					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
