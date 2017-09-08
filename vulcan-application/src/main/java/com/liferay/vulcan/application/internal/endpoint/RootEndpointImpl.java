@@ -22,6 +22,7 @@ import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.RelatedCollection;
+import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.ThrowableFunction;
 import com.liferay.vulcan.result.Try;
@@ -29,7 +30,6 @@ import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
 import java.io.InputStream;
 
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -106,15 +106,20 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		Class<T> modelClass = _resourceManager.getModelClass(path);
 
-		Map<String, BinaryFunction<T>> binaryFunctions =
-			_resourceManager.getBinaryFunctions(modelClass);
+		Optional<Representor<T, Identifier>> representorOptional =
+			_resourceManager.getRepresentor(modelClass);
 
-		Try<Optional<BinaryFunction<T>>> binaryFunctionTry = Try.success(
-			Optional.ofNullable(binaryFunctions.get(binaryId)));
+		Optional<BinaryFunction<T>> binaryFunctionOptional =
+			representorOptional.map(
+				Representor::getBinaryFunctions
+			).map(
+				binaryFunctions -> binaryFunctions.get(binaryId)
+			);
 
-		return binaryFunctionTry.map(
-			Optional::get
-		).mapFailMatching(
+		Try<BinaryFunction<T>> binaryFunctionTry = Try.fromFallible(
+			binaryFunctionOptional::get);
+
+		return binaryFunctionTry.mapFailMatching(
 			NoSuchElementException.class,
 			_getSupplierNotFoundException(path + "/" + id + "/" + binaryId)
 		).flatMap(
@@ -162,15 +167,19 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		Try<Routes<T>> routesTry = _getRoutesTry(nestedPath);
 
+		Supplier<NotFoundException> supplierNotFoundException =
+			_getSupplierNotFoundException(path + "/" + id + "/" + nestedPath);
+
 		return routesTry.map(
 			Routes::getPageFunctionOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
-			NoSuchElementException.class,
-			_getSupplierNotFoundException(path + "/" + id + "/" + nestedPath)
+			NoSuchElementException.class, supplierNotFoundException
 		).flatMap(
 			_getNestedCollectionPageTryFunction(path, id, nestedPath)
+		).map(
+			optional -> optional.orElseThrow(supplierNotFoundException)
 		);
 	}
 
@@ -192,26 +201,25 @@ public class RootEndpointImpl implements RootEndpoint {
 		};
 	}
 
-	private <T> ThrowableFunction<SingleModel<T>, Identifier>
+	private <T> ThrowableFunction<SingleModel<T>, Optional<Identifier>>
 		_getIdentifierFunction(String nestedPath) {
 
 		return parentSingleModel -> {
-			List<RelatedCollection<T, ?>> relatedCollections =
+			Optional<Stream<RelatedCollection<T, ?>>> optional =
 				_resourceManager.getRelatedCollections(
 					parentSingleModel.getModelClass());
 
-			Stream<RelatedCollection<T, ?>> stream =
-				relatedCollections.stream();
-
-			return stream.filter(
-				_getFilterRelatedCollectionPredicate(nestedPath)
-			).findFirst(
-			).map(
-				RelatedCollection::getIdentifierFunction
-			).map(
-				identifierFunction -> identifierFunction.apply(
-					parentSingleModel.getModel())
-			).get();
+			return optional.flatMap(
+				(Stream<RelatedCollection<T, ?>> stream) -> stream.filter(
+					_getFilterRelatedCollectionPredicate(nestedPath)
+				).findFirst(
+				).map(
+					RelatedCollection::getIdentifierFunction
+				).map(
+					identifierFunction -> identifierFunction.apply(
+						parentSingleModel.getModel())
+				)
+			);
 		};
 	}
 
@@ -229,7 +237,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	private <T, S> ThrowableFunction<Function<Identifier, Page<S>>,
-		Try<Page<S>>> _getNestedCollectionPageTryFunction(
+		Try<Optional<Page<S>>>> _getNestedCollectionPageTryFunction(
 			String path, String id, String nestedPath) {
 
 		return pageFunction -> {
@@ -239,7 +247,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			return parentSingleModelTry.map(
 				_getIdentifierFunction(nestedPath)
 			).map(
-				pageFunction::apply
+				optional -> optional.map(pageFunction)
 			);
 		};
 	}
