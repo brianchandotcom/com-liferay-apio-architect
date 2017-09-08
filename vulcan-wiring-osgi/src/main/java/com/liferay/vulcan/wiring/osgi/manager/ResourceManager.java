@@ -122,15 +122,20 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	/**
-	 * Returns the representor of the model class.
+	 * Returns the representor of the model class, if present. Returns {@code
+	 * Optional#empty()} if no representor can be found.
 	 *
 	 * @param  modelClass the model class of a {@link Resource}.
-	 * @return the representor of the model class.
+	 * @return the representor of the model class, if present; {@code
+	 *         Optional#empty()} otherwise.
 	 */
-	public <T, U extends Identifier> Representor<T, U> getRepresentor(
+	public <T, U extends Identifier> Optional<Representor<T, U>> getRepresentor(
 		Class<T> modelClass) {
 
-		return (Representor<T, U>)_representors.get(modelClass.getName());
+		Optional<RepresentorImpl> optional = Optional.ofNullable(
+			_representors.get(modelClass.getName()));
+
+		return optional.map(representor -> (Representor<T, U>)representor);
 	}
 
 	/**
