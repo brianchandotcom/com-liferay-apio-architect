@@ -18,7 +18,6 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIP
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
-import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.identifier.Identifier;
@@ -32,12 +31,15 @@ import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuild
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -102,23 +104,34 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	/**
-	 * Returns the related collections for the model class.
+	 * Returns a stream with the related collections for the model class, if
+	 * present. Returns {@code Optional#empty()} if no related collections can
+	 * be found.
 	 *
 	 * @param  modelClass the model class of a {@link Resource}.
-	 * @return the related collections for the model class.
+	 * @return the related collections for the model class, if present; {@code
+	 *         Optional#empty()} otherwise.
 	 */
-	public <T, U extends Identifier> List<RelatedCollection<T, ?>>
+	public <T, U extends Identifier> Optional<Stream<RelatedCollection<T, ?>>>
 		getRelatedCollections(Class<T> modelClass) {
 
-		Representor<T, U> representor = getRepresentor(modelClass);
+		Optional<Representor<T, U>> optional = getRepresentor(modelClass);
 
-		List<RelatedCollection<T, ?>> relatedCollections = new ArrayList<>(
-			representor.getRelatedCollections());
+		List<RelatedCollection<T, ?>> extraRelatedCollections =
+			(List)_relatedCollections.get(modelClass.getName());
 
-		relatedCollections.addAll(
-			(List)_relatedCollections.get(modelClass.getName()));
-
-		return relatedCollections;
+		return optional.map(
+			Representor::getRelatedCollections
+		).map(
+			relatedCollections ->
+				Stream.of(relatedCollections, extraRelatedCollections)
+		).map(
+			stream -> stream.filter(
+				Objects::nonNull
+			).flatMap(
+				Collection::stream
+			)
+		);
 	}
 
 	/**
