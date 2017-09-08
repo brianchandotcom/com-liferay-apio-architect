@@ -138,7 +138,7 @@ public class WriterHelper {
 	 *         com.liferay.vulcan.resource.Resource} for the model class can be
 	 *         found; <code>Optional#empty()</code> otherwise.
 	 */
-	public <T, U extends Identifier> Optional<String> getCollectionURLOptional(
+	public <T> Optional<String> getCollectionURLOptional(
 		Page<T> page, HttpServletRequest httpServletRequest) {
 
 		Optional<String> optional = _resourceManager.getPath(
@@ -329,7 +329,7 @@ public class WriterHelper {
 	 * @param biConsumer the consumer that will be called to write the related
 	 *        collection URL.
 	 */
-	public <U, V, W extends Identifier> void writeRelatedCollection(
+	public <U, V> void writeRelatedCollection(
 		RelatedCollection<U, V> relatedCollection,
 		SingleModel<U> parentSingleModel,
 		FunctionalList<String> parentEmbeddedPathElements,

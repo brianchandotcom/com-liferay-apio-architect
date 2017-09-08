@@ -74,7 +74,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 *
 		 * @review
 		 */
-		public <S> FirstStep<T, U> addBinary(
+		public FirstStep<T, U> addBinary(
 			String key, BinaryFunction<T> binaryFunction);
 
 		/**

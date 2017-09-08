@@ -176,7 +176,7 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public <S> FirstStep<T, U> addBinary(
+		public FirstStep<T, U> addBinary(
 			String key, BinaryFunction<T> binaryFunction) {
 
 			_representor._addBinary(key, binaryFunction);
