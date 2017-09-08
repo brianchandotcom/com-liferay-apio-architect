@@ -31,7 +31,6 @@ import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.provider.ServerURLProvider;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.RelatedModel;
-import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.APIError;
@@ -128,23 +127,24 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Returns the page collection URL. If a {@link Resource} for that model
-	 * class cannot be found, returns <code>Optional#empty()</code>.
+	 * Returns the page collection URL. If a {@link
+	 * com.liferay.vulcan.resource.Resource} for that model class cannot be
+	 * found, returns <code>Optional#empty()</code>.
 	 *
-	 * @param  page the page of the {@link Resource} collection.
+	 * @param  page the page of the {@link com.liferay.vulcan.resource.Resource}
+	 *         collection.
 	 * @param  httpServletRequest the actual HTTP servlet request.
-	 * @return the page collection URL if a {@link Resource} for the model class
-	 *         can be found; <code>Optional#empty()</code> otherwise.
+	 * @return the page collection URL if a {@link
+	 *         com.liferay.vulcan.resource.Resource} for the model class can be
+	 *         found; <code>Optional#empty()</code> otherwise.
 	 */
 	public <T, U extends Identifier> Optional<String> getCollectionURLOptional(
 		Page<T> page, HttpServletRequest httpServletRequest) {
 
-		Optional<Resource<T, U>> optional =
-			_resourceManager.getResourceOptional(page.getModelClass());
+		Optional<String> optional = _resourceManager.getPath(
+			page.getModelClass());
 
 		return optional.map(
-			Resource::getPath
-		).map(
 			path -> {
 				Identifier identifier = page.getIdentifier();
 
@@ -159,8 +159,9 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Returns the URL to the resource of a certain model. If a {@link Resource}
-	 * for that model class cannot be found, returns {@code Optional#empty()}.
+	 * Returns the URL to the resource of a certain model. If a {@link
+	 * com.liferay.vulcan.resource.Resource} for that model class cannot be
+	 * found, returns {@code Optional#empty()}.
 	 *
 	 * @param  singleModel a single model.
 	 * @param  httpServletRequest the actual HTTP servlet request.
@@ -349,12 +350,9 @@ public class WriterHelper {
 
 		Class<V> modelClass = relatedCollection.getModelClass();
 
-		Optional<Resource<V, W>> resourceOptional =
-			_resourceManager.getResourceOptional(modelClass);
+		Optional<String> pathOptional = _resourceManager.getPath(modelClass);
 
-		resourceOptional.map(
-			Resource::getPath
-		).flatMap(
+		pathOptional.flatMap(
 			path -> singleURLOptional.map(singleURL -> singleURL + "/" + path)
 		).ifPresent(
 			url -> {

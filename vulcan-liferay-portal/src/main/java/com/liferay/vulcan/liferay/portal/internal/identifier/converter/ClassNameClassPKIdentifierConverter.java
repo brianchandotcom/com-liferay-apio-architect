@@ -19,7 +19,6 @@ import com.liferay.vulcan.identifier.converter.IdentifierConverter;
 import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.liferay.portal.identifier.creator.ClassNameClassPKIdentifierCreator;
 import com.liferay.vulcan.liferay.portal.internal.identifier.ClassNameClassPKIdentifierImpl;
-import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
@@ -75,15 +74,11 @@ public class ClassNameClassPKIdentifierConverter
 
 	@Override
 	public ClassNameClassPKIdentifier create(String className, long classPK) {
-		Optional<Resource<Object, Identifier>> optional =
-			_resourceManager.getResourceOptional(className);
+		Optional<String> optional = _resourceManager.getPath(className);
 
-		if (!optional.isPresent()) {
-			throw new NotFoundException(
-				"Unable to get a resource with class name " + className);
-		}
-
-		Resource<Object, Identifier> resource = optional.get();
+		String path = optional.orElseThrow(
+			() -> new NotFoundException(
+				"Unable to get a resource with class name " + className));
 
 		return new ClassNameClassPKIdentifier() {
 
@@ -99,7 +94,7 @@ public class ClassNameClassPKIdentifierConverter
 
 			@Override
 			public String getId() {
-				return resource.getPath() + ":" + getClassPK();
+				return path + ":" + getClassPK();
 			}
 
 		};

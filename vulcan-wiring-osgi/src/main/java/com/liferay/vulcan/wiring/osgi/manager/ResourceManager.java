@@ -139,12 +139,9 @@ public class ResourceManager extends BaseManager<Resource> {
 			function -> function.apply(model)
 		).flatMap(
 			identifier -> {
-				Optional<Resource<T, Identifier>> resourceOptional =
-					getResourceOptional(modelClass);
+				Optional<String> resourceOptional = getPath(modelClass);
 
 				return resourceOptional.map(
-					Resource::getPath
-				).map(
 					path -> new Identifier() {
 
 						@Override
@@ -157,8 +154,7 @@ public class ResourceManager extends BaseManager<Resource> {
 							return path;
 						}
 
-					}
-				);
+					});
 			}
 		);
 	}
@@ -199,6 +195,29 @@ public class ResourceManager extends BaseManager<Resource> {
 	 */
 	public <T> Class<T> getModelClass(String path) {
 		return (Class<T>)_classes.get(path);
+	}
+
+	/**
+	 * Returns the path in which a class is exposed.
+	 *
+	 * @param  modelClass the class of a {@link Resource}
+	 * @return the path in which the class is exposed.
+	 */
+	public Optional<String> getPath(Class<?> modelClass) {
+		return getPath(modelClass.getName());
+	}
+
+	/**
+	 * Returns the path in which a class name is exposed.
+	 *
+	 * @param  className the class name of a {@link Resource}
+	 * @return the path in which the class name is exposed.
+	 */
+	public Optional<String> getPath(String className) {
+		Optional<? extends Resource<?, Identifier>> optional =
+			getResourceOptional(className);
+
+		return optional.map(Resource::getPath);
 	}
 
 	/**
@@ -361,14 +380,7 @@ public class ResourceManager extends BaseManager<Resource> {
 						Identifier identifier = identifierFunction.apply(
 							object);
 
-						Optional<? extends Resource<?, Identifier>>
-							resourceOptional = getResourceOptional(modelClass);
-
-						String type = resourceOptional.map(
-							Resource::getPath
-						).orElse(
-							""
-						);
+						Optional<String> optional = getPath(modelClass);
 
 						return new Identifier() {
 
@@ -379,7 +391,7 @@ public class ResourceManager extends BaseManager<Resource> {
 
 							@Override
 							public String getType() {
-								return type;
+								return optional.orElse("");
 							}
 
 						};
