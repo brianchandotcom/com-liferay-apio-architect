@@ -23,7 +23,6 @@ import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.RelatedCollection;
-import com.liferay.vulcan.resource.RelatedModel;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
@@ -60,20 +59,6 @@ import org.osgi.service.component.annotations.Reference;
 public class ResourceManager extends BaseManager<Resource> {
 
 	/**
-	 * Returns the binary resources linked to a model
-	 *
-	 * @param  modelClass class name indexing the binary resources
-	 * @return the binary resources for the model class
-	 */
-	public <T, U extends Identifier> Map<String, BinaryFunction<T>>
-		getBinaryFunctions(Class<T> modelClass) {
-
-		Representor<T, U> representor = getRepresentor(modelClass);
-
-		return representor.getBinaryFunctions();
-	}
-
-	/**
 	 * Returns the model class name, exposed in a certain path.
 	 *
 	 * @param  path path of the resource for the class name.
@@ -81,110 +66,6 @@ public class ResourceManager extends BaseManager<Resource> {
 	 */
 	public String getClassName(String path) {
 		return getModelClass(path).getName();
-	}
-
-	/**
-	 * Returns the embedded related models for the model class.
-	 *
-	 * @param  modelClass the model class of a {@link Resource}.
-	 * @return the embedded related models for the model class.
-	 * @see    Resource
-	 */
-	public <T, U extends Identifier> List<RelatedModel<T, ?>>
-		getEmbeddedRelatedModels(Class<T> modelClass) {
-
-		Representor<T, U> representor = getRepresentor(modelClass);
-
-		return representor.getEmbeddedRelatedModels();
-	}
-
-	/**
-	 * Returns the field names and functions of the model class.
-	 *
-	 * <p>
-	 * These functions are separated in a map with the field names as keys.
-	 * </p>
-	 *
-	 * @param  modelClass the model class of a {@link Resource}.
-	 * @return the field names and functions of the model class.
-	 * @see    Resource
-	 */
-	public <T, U extends Identifier> Map<String, Function<T, Object>>
-		getFieldFunctions(Class<T> modelClass) {
-
-		Representor<T, U> representor = getRepresentor(modelClass);
-
-		return representor.getFieldFunctions();
-	}
-
-	/**
-	 * Returns the identifier of the model if present. Returns {@code
-	 * Optional#empty()} otherwise.
-	 *
-	 * @param  modelClass the model class of a {@link Resource}.
-	 * @param  model the model instance.
-	 * @return the identifier of the model if present; {@code Optional#empty()}
-	 *         otherwise.
-	 * @see    Resource
-	 */
-	public <T, U extends Identifier> Optional<Identifier> getIdentifierOptional(
-		Class<T> modelClass, T model) {
-
-		Representor<T, U> representor = getRepresentor(modelClass);
-
-		Optional<Function<T, Identifier>> optional = Optional.of(
-			representor::getIdentifier);
-
-		return optional.map(
-			function -> function.apply(model)
-		).flatMap(
-			identifier -> {
-				Optional<String> resourceOptional = getPath(modelClass);
-
-				return resourceOptional.map(
-					path -> new Identifier() {
-
-						@Override
-						public String getId() {
-							return identifier.getId();
-						}
-
-						@Override
-						public String getType() {
-							return path;
-						}
-
-					});
-			}
-		);
-	}
-
-	/**
-	 * Returns the linked related models for the model class.
-	 *
-	 * @param  modelClass the model class of a {@link Resource}.
-	 * @return the linked related models for the model class.
-	 */
-	public <T, U extends Identifier> List<RelatedModel<T, ?>>
-		getLinkedRelatedModels(Class<T> modelClass) {
-
-		Representor<T, U> representor = getRepresentor(modelClass);
-
-		return representor.getLinkedRelatedModels();
-	}
-
-	/**
-	 * Returns the links for the model class.
-	 *
-	 * @param  modelClass the model class of a {@link Resource}.
-	 * @return the links for the model class.
-	 */
-	public <T, U extends Identifier> Map<String, String> getLinks(
-		Class<T> modelClass) {
-
-		Representor<T, U> representor = getRepresentor(modelClass);
-
-		return representor.getLinks();
 	}
 
 	/**
@@ -301,20 +182,6 @@ public class ResourceManager extends BaseManager<Resource> {
 		);
 	}
 
-	/**
-	 * Returns the types of the model class.
-	 *
-	 * @param  modelClass the model class of a {@link Resource}.
-	 * @return the types of the model class.
-	 */
-	public <T, U extends Identifier> List<String> getTypes(
-		Class<T> modelClass) {
-
-		Representor<T, U> representor = getRepresentor(modelClass);
-
-		return representor.getTypes();
-	}
-
 	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
 	protected <T> void setServiceReference(
 		ServiceReference<Resource> serviceReference) {
@@ -353,6 +220,7 @@ public class ResourceManager extends BaseManager<Resource> {
 				RepresentorImpl representor =
 					(RepresentorImpl)resource.buildRepresentor(
 						new RepresentorBuilderImpl<>(
+							resource.getPath(),
 							_addRelatedCollectionTriConsumer(modelClass)));
 
 				_representors.put(modelClass.getName(), representor);
