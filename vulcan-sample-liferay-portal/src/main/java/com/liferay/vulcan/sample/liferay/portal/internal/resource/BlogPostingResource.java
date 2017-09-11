@@ -144,12 +144,12 @@ public class BlogPostingResource
 	public Routes<BlogsEntry> routes(
 		RoutesBuilder<BlogsEntry, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionItem(
-			this::_getBlogsEntry
-		).collectionPage(
+		return routesBuilder.collectionPageGetter(
 			this::_getPageItems, LongIdentifier.class
-		).postCollectionItem(
+		).collectionPageItemCreator(
 			this::_addBlogsEntry, LongIdentifier.class
+		).collectionPageItemGetter(
+			this::_getBlogsEntry
 		).build();
 	}
 

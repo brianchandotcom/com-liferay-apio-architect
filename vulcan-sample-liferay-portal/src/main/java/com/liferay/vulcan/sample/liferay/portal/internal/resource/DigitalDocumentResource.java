@@ -103,10 +103,10 @@ public class DigitalDocumentResource
 	public Routes<DLFileEntry> routes(
 		RoutesBuilder<DLFileEntry, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionItem(
-			this::_getDLFileEntry
-		).collectionPage(
+		return routesBuilder.collectionPageGetter(
 			this::_getPageItems, LongIdentifier.class
+		).collectionPageItemGetter(
+			this::_getDLFileEntry
 		).build();
 	}
 

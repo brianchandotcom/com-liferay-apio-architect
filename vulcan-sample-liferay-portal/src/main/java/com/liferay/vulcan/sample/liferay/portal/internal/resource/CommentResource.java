@@ -90,14 +90,14 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 	public Routes<Comment> routes(
 		RoutesBuilder<Comment, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionItem(
-			this::_getComment
-		).collectionPage(
+		return routesBuilder.collectionPageGetter(
 			this::_getPageItems, ClassNameClassPKIdentifier.class,
 			CurrentUser.class
-		).postCollectionItem(
+		).collectionPageItemCreator(
 			this::_addComment, ClassNameClassPKIdentifier.class,
 			CurrentUser.class
+		).collectionPageItemGetter(
+			this::_getComment
 		).build();
 	}
 

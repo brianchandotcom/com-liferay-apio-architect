@@ -50,214 +50,13 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	public Routes<T> build();
 
 	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  biFunction the function that will be used to calculate the single
-	 *         model.
-	 * @param  aClass the class of the second parameter of the single model
-	 *         function.
-	 * @return the updated builder.
-	 */
-	public <A> RoutesBuilder<T, U> collectionItem(
-		BiFunction<U, A, T> biFunction, Class<A> aClass);
-
-	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  decaFunction the function that will be used to calculate the
-	 *         single model.
-	 * @param  aClass the class of the second parameter of the single model
-	 *         function.
-	 * @param  bClass the class of the third parameter of the single model
-	 *         function.
-	 * @param  cClass the class of the fourth parameter of the single model
-	 *         function.
-	 * @param  dClass the class of the fifth parameter of the single model
-	 *         function.
-	 * @param  eClass the class of the sixth parameter of the single model
-	 *         function.
-	 * @param  fClass the class of the seventh parameter of the single model
-	 *         function.
-	 * @param  gClass the class of the eighth parameter of the single model
-	 *         function.
-	 * @param  hClass the class of the ninth parameter of the single model
-	 *         function.
-	 * @param  iClass the class of the tenth parameter of the single model
-	 *         function.
-	 * @return the updated builder.
-	 */
-	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T, U> collectionItem(
-		DecaFunction<U, A, B, C, D, E, F, G, H, I, T> decaFunction,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
-		Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
-		Class<I> iClass);
-
-	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  enneaFunction the function that will be used to calculate the
-	 *         single model.
-	 * @param  aClass the class of the second parameter of the single model
-	 *         function.
-	 * @param  bClass the class of the third parameter of the single model
-	 *         function.
-	 * @param  cClass the class of the fourth parameter of the single model
-	 *         function.
-	 * @param  dClass the class of the fifth parameter of the single model
-	 *         function.
-	 * @param  eClass the class of the sixth parameter of the single model
-	 *         function.
-	 * @param  fClass the class of the seventh parameter of the single model
-	 *         function.
-	 * @param  gClass the class of the eighth parameter of the single model
-	 *         function.
-	 * @param  hClass the class of the ninth parameter of the single model
-	 *         function.
-	 * @return the updated builder.
-	 */
-	public <A, B, C, D, E, F, G, H> RoutesBuilder<T, U> collectionItem(
-		EnneaFunction<U, A, B, C, D, E, F, G, H, T> enneaFunction,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
-		Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass);
-
-	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  function the function that will be used to calculate the single
-	 *         model.
-	 * @return the updated builder.
-	 */
-	public RoutesBuilder<T, U> collectionItem(Function<U, T> function);
-
-	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  heptaFunction the function that will be used to calculate the
-	 *         single model.
-	 * @param  aClass the class of the second parameter of the single model
-	 *         function.
-	 * @param  bClass the class of the third parameter of the single model
-	 *         function.
-	 * @param  cClass the class of the fourth parameter of the single model
-	 *         function.
-	 * @param  dClass the class of the fifth parameter of the single model
-	 *         function.
-	 * @param  eClass the class of the sixth parameter of the single model
-	 *         function.
-	 * @param  fClass the class of the seventh parameter of the single model
-	 *         function.
-	 * @return the updated builder.
-	 */
-	public <A, B, C, D, E, F> RoutesBuilder<T, U> collectionItem(
-		HeptaFunction<U, A, B, C, D, E, F, T> heptaFunction, Class<A> aClass,
-		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
-		Class<F> fClass);
-
-	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  hexaFunction the function that will be used to calculate the
-	 *         single model.
-	 * @param  aClass the class of the second parameter of the single model
-	 *         function.
-	 * @param  bClass the class of the third parameter of the single model
-	 *         function.
-	 * @param  cClass the class of the fourth parameter of the single model
-	 *         function.
-	 * @param  dClass the class of the fifth parameter of the single model
-	 *         function.
-	 * @param  eClass the class of the sixth parameter of the single model
-	 *         function.
-	 * @return the updated builder.
-	 */
-	public <A, B, C, D, E> RoutesBuilder<T, U> collectionItem(
-		HexaFunction<U, A, B, C, D, E, T> hexaFunction, Class<A> aClass,
-		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass);
-
-	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  octaFunction the function that will be used to calculate the
-	 *         single model.
-	 * @param  aClass the class of the second parameter of the single model
-	 *         function.
-	 * @param  bClass the class of the third parameter of the single model
-	 *         function.
-	 * @param  cClass the class of the fourth parameter of the single model
-	 *         function.
-	 * @param  dClass the class of the fifth parameter of the single model
-	 *         function.
-	 * @param  eClass the class of the sixth parameter of the single model
-	 *         function.
-	 * @param  fClass the class of the seventh parameter of the single model
-	 *         function.
-	 * @param  gClass the class of the eighth parameter of the single model
-	 *         function.
-	 * @return the updated builder.
-	 */
-	public <A, B, C, D, E, F, G> RoutesBuilder<T, U> collectionItem(
-		OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction, Class<A> aClass,
-		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
-		Class<F> fClass, Class<G> gClass);
-
-	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  pentaFunction the function that will be used to calculate the
-	 *         single model.
-	 * @param  aClass the class of the second parameter of the single model
-	 *         function.
-	 * @param  bClass the class of the third parameter of the single model
-	 *         function.
-	 * @param  cClass the class of the fourth parameter of the single model
-	 *         function.
-	 * @param  dClass the class of the fifth parameter of the single model
-	 *         function.
-	 * @return the updated builder.
-	 */
-	public <A, B, C, D> RoutesBuilder<T, U> collectionItem(
-		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<A> aClass,
-		Class<B> bClass, Class<C> cClass, Class<D> dClass);
-
-	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  tetraFunction the function that will be used to calculate the
-	 *         single model.
-	 * @param  aClass the class of the second parameter of the single model
-	 *         function.
-	 * @param  bClass the class of the third parameter of the single model
-	 *         function.
-	 * @param  cClass the class of the fourth parameter of the single model
-	 *         function.
-	 * @return the updated builder.
-	 */
-	public <A, B, C> RoutesBuilder<T, U> collectionItem(
-		TetraFunction<U, A, B, C, T> tetraFunction, Class<A> aClass,
-		Class<B> bClass, Class<C> cClass);
-
-	/**
-	 * Adds a route to a single model function.
-	 *
-	 * @param  triFunction the function that will be used to calculate the
-	 *         single model.
-	 * @param  aClass the class of the second parameter of the single model
-	 *         function.
-	 * @param  bClass the class of the third parameter of the single model
-	 *         function.
-	 * @return the updated builder.
-	 */
-	public <A, B> RoutesBuilder<T, U> collectionItem(
-		TriFunction<U, A, B, T> triFunction, Class<A> aClass, Class<B> bClass);
-
-	/**
 	 * Adds a route to a collection page function.
 	 *
 	 * @param  biFunction the function that will be used to calculate the page.
 	 * @param  identifierClass the class of the identifier.
 	 * @return the updated builder.
 	 */
-	public <V extends Identifier> RoutesBuilder<T, U> collectionPage(
+	public <V extends Identifier> RoutesBuilder<T, U> collectionPageGetter(
 		BiFunction<Pagination, V, PageItems<T>> biFunction,
 		Class<V> identifierClass);
 
@@ -278,7 +77,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <V extends Identifier, A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
-		collectionPage(
+		collectionPageGetter(
 			DecaFunction<Pagination, V, A, B, C, D, E, F, G, H,
 				PageItems<T>> decaFunction, Class<V> identifierClass,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
@@ -300,7 +99,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <V extends Identifier, A, B, C, D, E, F, G> RoutesBuilder<T, U>
-		collectionPage(
+		collectionPageGetter(
 			EnneaFunction<Pagination, V, A, B, C, D, E, F, G, PageItems<T>>
 				enneaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -320,7 +119,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <V extends Identifier, A, B, C, D, E> RoutesBuilder<T, U>
-		collectionPage(
+		collectionPageGetter(
 			HeptaFunction<Pagination, V, A, B, C, D, E, PageItems<T>>
 				heptaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass);
@@ -338,7 +137,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <V extends Identifier, A, B, C, D> RoutesBuilder<T, U>
-		collectionPage(
+		collectionPageGetter(
 			HexaFunction<Pagination, V, A, B, C, D, PageItems<T>> hexaFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass);
@@ -358,7 +157,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <V extends Identifier, A, B, C, D, E, F> RoutesBuilder<T, U>
-		collectionPage(
+		collectionPageGetter(
 			OctaFunction<Pagination, V, A, B, C, D, E, F, PageItems<T>>
 				octaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -375,10 +174,11 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @param  cClass the class of the fourth parameter of the page function.
 	 * @return the updated builder.
 	 */
-	public <V extends Identifier, A, B, C> RoutesBuilder<T, U> collectionPage(
-		PentaFunction<Pagination, V, A, B, C, PageItems<T>> pentaFunction,
-		Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass);
+	public <V extends Identifier, A, B, C> RoutesBuilder<T, U>
+		collectionPageGetter(
+			PentaFunction<Pagination, V, A, B, C, PageItems<T>> pentaFunction,
+			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass);
 
 	/**
 	 * Adds a route to a collection page function.
@@ -390,9 +190,10 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @param  bClass the class of the third parameter of the page function.
 	 * @return the updated builder.
 	 */
-	public <V extends Identifier, A, B> RoutesBuilder<T, U> collectionPage(
-		TetraFunction<Pagination, V, A, B, PageItems<T>> tetraFunction,
-		Class<V> identifierClass, Class<A> aClass, Class<B> bClass);
+	public <V extends Identifier, A, B> RoutesBuilder<T, U>
+		collectionPageGetter(
+			TetraFunction<Pagination, V, A, B, PageItems<T>> tetraFunction,
+			Class<V> identifierClass, Class<A> aClass, Class<B> bClass);
 
 	/**
 	 * Adds a route to a collection page function.
@@ -403,7 +204,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @param  aClass the class of the second parameter of the page function.
 	 * @return the updated builder.
 	 */
-	public <V extends Identifier, A> RoutesBuilder<T, U> collectionPage(
+	public <V extends Identifier, A> RoutesBuilder<T, U> collectionPageGetter(
 		TriFunction<Pagination, V, A, PageItems<T>> triFunction,
 		Class<V> identifierClass, Class<A> aClass);
 
@@ -415,7 +216,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @param  identifierClass the class of the identifier.
 	 * @return the updated builder.
 	 */
-	public <V extends Identifier> RoutesBuilder<T, U> postCollectionItem(
+	public <V extends Identifier> RoutesBuilder<T, U> collectionPageItemCreator(
 		BiFunction<V, Map<String, Object>, T> biFunction,
 		Class<V> identifierClass);
 
@@ -444,7 +245,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <A, B, C, D, E, F, G, H, V extends Identifier> RoutesBuilder<T, U>
-		postCollectionItem(
+		collectionPageItemCreator(
 			DecaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, H, T>
 				decaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -473,7 +274,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <A, B, C, D, E, F, G, V extends Identifier> RoutesBuilder<T, U>
-		postCollectionItem(
+		collectionPageItemCreator(
 			EnneaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, T>
 				enneaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -498,7 +299,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <A, B, C, D, E, V extends Identifier> RoutesBuilder<T, U>
-		postCollectionItem(
+		collectionPageItemCreator(
 			HeptaFunction<V, Map<String, Object>, A, B, C, D, E, T>
 				heptaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass);
@@ -520,7 +321,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <A, B, C, D, V extends Identifier> RoutesBuilder<T, U>
-		postCollectionItem(
+		collectionPageItemCreator(
 			HexaFunction<V, Map<String, Object>, A, B, C, D, T> hexaFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass);
@@ -546,7 +347,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <A, B, C, D, E, F, V extends Identifier> RoutesBuilder<T, U>
-		postCollectionItem(
+		collectionPageItemCreator(
 			OctaFunction<V, Map<String, Object>, A, B, C, D, E, F, T>
 				octaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -567,7 +368,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <A, B, C, V extends Identifier> RoutesBuilder<T, U>
-		postCollectionItem(
+		collectionPageItemCreator(
 			PentaFunction<V, Map<String, Object>, A, B, C, T> pentaFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass);
@@ -584,9 +385,10 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 *         function.
 	 * @return the updated builder.
 	 */
-	public <A, B, V extends Identifier> RoutesBuilder<T, U> postCollectionItem(
-		TetraFunction<V, Map<String, Object>, A, B, T> tetraFunction,
-		Class<V> identifierClass, Class<A> aClass, Class<B> bClass);
+	public <A, B, V extends Identifier> RoutesBuilder<T, U>
+		collectionPageItemCreator(
+			TetraFunction<V, Map<String, Object>, A, B, T> tetraFunction,
+			Class<V> identifierClass, Class<A> aClass, Class<B> bClass);
 
 	/**
 	 * Adds a route to a single model post function.
@@ -598,9 +400,10 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 *         function.
 	 * @return the updated builder.
 	 */
-	public <A, V extends Identifier> RoutesBuilder<T, U> postCollectionItem(
-		TriFunction<V, Map<String, Object>, A, T> triFunction,
-		Class<V> identifierClass, Class<A> aClass);
+	public <A, V extends Identifier> RoutesBuilder<T, U>
+		collectionPageItemCreator(
+			TriFunction<V, Map<String, Object>, A, T> triFunction,
+			Class<V> identifierClass, Class<A> aClass);
 
 	/**
 	 * Adds a route to a single model post function.
@@ -629,11 +432,215 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 * @return the updated builder.
 	 */
 	public <A, B, C, D, E, F, G, H, I, V extends Identifier> RoutesBuilder<T, U>
-		postCollectionItem(
+		collectionPageItemCreator(
 			UndecaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, H, I, T>
 				undecaFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 			Class<G> gClass, Class<H> hClass, Class<I> iClass);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  biFunction the function that will be used to calculate the single
+	 *         model.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A> RoutesBuilder<T, U> collectionPageItemGetter(
+		BiFunction<U, A, T> biFunction, Class<A> aClass);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  decaFunction the function that will be used to calculate the
+	 *         single model.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @param  fClass the class of the seventh parameter of the single model
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the single model
+	 *         function.
+	 * @param  hClass the class of the ninth parameter of the single model
+	 *         function.
+	 * @param  iClass the class of the tenth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T, U>
+		collectionPageItemGetter(
+			DecaFunction<U, A, B, C, D, E, F, G, H, I, T> decaFunction,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
+			Class<I> iClass);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  enneaFunction the function that will be used to calculate the
+	 *         single model.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @param  fClass the class of the seventh parameter of the single model
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the single model
+	 *         function.
+	 * @param  hClass the class of the ninth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
+		collectionPageItemGetter(
+			EnneaFunction<U, A, B, C, D, E, F, G, H, T> enneaFunction,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  function the function that will be used to calculate the single
+	 *         model.
+	 * @return the updated builder.
+	 */
+	public RoutesBuilder<T, U> collectionPageItemGetter(
+		Function<U, T> function);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  heptaFunction the function that will be used to calculate the
+	 *         single model.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @param  fClass the class of the seventh parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F> RoutesBuilder<T, U> collectionPageItemGetter(
+		HeptaFunction<U, A, B, C, D, E, F, T> heptaFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+		Class<F> fClass);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  hexaFunction the function that will be used to calculate the
+	 *         single model.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E> RoutesBuilder<T, U> collectionPageItemGetter(
+		HexaFunction<U, A, B, C, D, E, T> hexaFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  octaFunction the function that will be used to calculate the
+	 *         single model.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @param  eClass the class of the sixth parameter of the single model
+	 *         function.
+	 * @param  fClass the class of the seventh parameter of the single model
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G> RoutesBuilder<T, U> collectionPageItemGetter(
+		OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+		Class<F> fClass, Class<G> gClass);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  pentaFunction the function that will be used to calculate the
+	 *         single model.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @param  dClass the class of the fifth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D> RoutesBuilder<T, U> collectionPageItemGetter(
+		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  tetraFunction the function that will be used to calculate the
+	 *         single model.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @param  cClass the class of the fourth parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C> RoutesBuilder<T, U> collectionPageItemGetter(
+		TetraFunction<U, A, B, C, T> tetraFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass);
+
+	/**
+	 * Adds a route to a single model function.
+	 *
+	 * @param  triFunction the function that will be used to calculate the
+	 *         single model.
+	 * @param  aClass the class of the second parameter of the single model
+	 *         function.
+	 * @param  bClass the class of the third parameter of the single model
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B> RoutesBuilder<T, U> collectionPageItemGetter(
+		TriFunction<U, A, B, T> triFunction, Class<A> aClass, Class<B> bClass);
 
 }

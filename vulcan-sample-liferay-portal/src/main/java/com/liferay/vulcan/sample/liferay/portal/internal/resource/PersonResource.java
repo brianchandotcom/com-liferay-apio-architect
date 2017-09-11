@@ -121,15 +121,16 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 		return "people";
 	}
 
+	@Override
 	public Routes<User> routes(
 		RoutesBuilder<User, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionItem(
-			this::_getUser
-		).collectionPage(
+		return routesBuilder.collectionPageGetter(
 			this::_getPageItems, RootIdentifier.class, Company.class
-		).postCollectionItem(
+		).collectionPageItemCreator(
 			this::_addUser, RootIdentifier.class, Company.class
+		).collectionPageItemGetter(
+			this::_getUser
 		).build();
 	}
 

@@ -81,12 +81,12 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 	public Routes<Group> routes(
 		RoutesBuilder<Group, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionItem(
-			this::_getGroup
-		).collectionPage(
+		return routesBuilder.collectionPageGetter(
 			this::_getPageItems, RootIdentifier.class
-		).postCollectionItem(
+		).collectionPageItemCreator(
 			this::_addGroup, RootIdentifier.class, CurrentUser.class
+		).collectionPageItemGetter(
+			this::_getGroup
 		).build();
 	}
 
