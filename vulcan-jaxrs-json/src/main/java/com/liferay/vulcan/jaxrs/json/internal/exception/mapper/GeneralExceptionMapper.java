@@ -24,7 +24,6 @@ import com.liferay.vulcan.wiring.osgi.manager.ExceptionConverterManager;
 
 import java.util.Optional;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -34,18 +33,16 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * This mapper will be responsible of capturing JAX-RS internal {@link
- * WebApplicationException}, converting them to its corresponding {@link
- * APIError} and writing the error to the response.
+ * This mapper will be responsible of capturing all exceptions, converting them
+ * to its corresponding {@link APIError} and writing the error to the response.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true, property = "liferay.vulcan.exception.mapper=true")
-public class WebApplicationExceptionMapper
-	implements ExceptionMapper<WebApplicationException> {
+public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
 
 	@Override
-	public Response toResponse(WebApplicationException exception) {
+	public Response toResponse(Exception exception) {
 		Optional<APIError> optional = _exceptionConverterManager.convert(
 			exception);
 
