@@ -33,8 +33,8 @@ public interface LongIdentifier extends Identifier {
 	 *
 	 * <p>
 	 * For example with a resource obtained in the URL:
-	 * <code>/p/customer/2012/product/100</code> this method will return
-	 * <code>100</code> as a <code>long</code> value.
+	 * <code>/p/product/100</code> this method will return <code>100</code> as a
+	 * <code>long</code> value.
 	 * </p>
 	 *
 	 * @return the ID of the identifier.
