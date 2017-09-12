@@ -14,12 +14,12 @@
 
 package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
-import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
@@ -35,16 +35,16 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class AggregateRatingResource
-	implements Resource<AggregateRating, ClassNameClassPKIdentifier> {
+	implements Resource<AggregateRating, AggregateRatingIdentifier> {
 
 	@Override
-	public Representor<AggregateRating, ClassNameClassPKIdentifier>
+	public Representor<AggregateRating, AggregateRatingIdentifier>
 		buildRepresentor(
-			RepresentorBuilder<AggregateRating, ClassNameClassPKIdentifier>
+			RepresentorBuilder<AggregateRating, AggregateRatingIdentifier>
 				representorBuilder) {
 
 		return representorBuilder.identifier(
-			AggregateRating::getClassNameClassPKIdentifier
+			AggregateRating::getAggregateRatingIdentifier
 		).addField(
 			"bestRating", aggregateRating -> 1
 		).addField(
@@ -65,7 +65,7 @@ public class AggregateRatingResource
 
 	@Override
 	public Routes<AggregateRating> routes(
-		RoutesBuilder<AggregateRating, ClassNameClassPKIdentifier>
+		RoutesBuilder<AggregateRating, AggregateRatingIdentifier>
 			routesBuilder) {
 
 		return routesBuilder.collectionPageItemGetter(

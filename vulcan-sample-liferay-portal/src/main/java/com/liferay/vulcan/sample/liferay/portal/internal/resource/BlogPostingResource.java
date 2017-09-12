@@ -30,8 +30,6 @@ import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.identifier.LongIdentifier;
-import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
-import com.liferay.vulcan.liferay.portal.identifier.creator.ClassNameClassPKIdentifierCreator;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Representor;
@@ -40,6 +38,7 @@ import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.identifier.CommentableIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
@@ -207,13 +206,12 @@ public class BlogPostingResource
 	private Optional<AggregateRating> _getAggregateRatingOptional(
 		BlogsEntry blogsEntry) {
 
-		ClassNameClassPKIdentifier classNameClassPKIdentifier =
-			_classNameClassPKIdentifierCreator.create(
-				BlogsEntry.class.getName(), blogsEntry.getEntryId());
+		AggregateRatingIdentifier aggregateRatingIdentifier =
+			AggregateRatingIdentifier.create(blogsEntry);
 
 		return Optional.of(
 			_aggregateRatingService.getAggregateRating(
-				classNameClassPKIdentifier));
+				aggregateRatingIdentifier));
 	}
 
 	private BlogsEntry _getBlogsEntry(LongIdentifier blogsEntryLongIdentifier) {
@@ -277,10 +275,6 @@ public class BlogPostingResource
 
 	@Reference
 	private BlogsEntryService _blogsService;
-
-	@Reference
-	private ClassNameClassPKIdentifierCreator
-		_classNameClassPKIdentifierCreator;
 
 	@Reference
 	private GroupLocalService _groupLocalService;
