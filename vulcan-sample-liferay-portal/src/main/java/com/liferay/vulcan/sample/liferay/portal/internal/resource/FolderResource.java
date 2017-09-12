@@ -99,14 +99,14 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 	private DLFolder _addDLFolder(
 		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
 
-		String name = (String)body.get("name");
-		String description = (String)body.get("description");
+		boolean mountPoint = false;
+		int parentFolderId = 0;
 
-		if (Validator.isNull(name) || Validator.isNull(description)) {
+		String name = (String)body.get("name");
+
+		if (Validator.isNull(name)) {
 			throw new BadRequestException("Incorrect body");
 		}
-
-		int parentFolderId = 0;
 
 		Try<DLFolder> dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.getFolder(
@@ -117,7 +117,12 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 				"A folder with that name already exists");
 		}
 
-		boolean mountPoint = false;
+		String description = (String)body.get("description");
+
+		if (Validator.isNull(description)) {
+			throw new BadRequestException("Incorrect body");
+		}
+
 		ServiceContext serviceContext = new ServiceContext();
 
 		dlFolderTry = Try.fromFallible(
