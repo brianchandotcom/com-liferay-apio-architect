@@ -24,7 +24,7 @@ import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.Try;
-import com.liferay.vulcan.typealias.BinaryFunction;
+import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;

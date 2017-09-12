@@ -18,5 +18,5 @@ Export-Package:\
 	com.liferay.vulcan.resource.builder,\
 	com.liferay.vulcan.response.control,\
 	com.liferay.vulcan.result,\
-	com.liferay.vulcan.typealias,\
+	com.liferay.vulcan.alias,\
 	com.liferay.vulcan.uri

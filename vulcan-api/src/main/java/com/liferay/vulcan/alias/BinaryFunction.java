@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.typealias;
+package com.liferay.vulcan.alias;
 
 import java.io.InputStream;
 

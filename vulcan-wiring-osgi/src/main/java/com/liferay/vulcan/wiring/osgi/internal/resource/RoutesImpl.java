@@ -18,7 +18,7 @@ import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
-import com.liferay.vulcan.typealias.BinaryFunction;
+import com.liferay.vulcan.alias.BinaryFunction;
 
 import java.util.Map;
 import java.util.Optional;
