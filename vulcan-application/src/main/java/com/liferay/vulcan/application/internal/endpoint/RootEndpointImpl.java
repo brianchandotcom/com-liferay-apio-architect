@@ -90,8 +90,8 @@ public class RootEndpointImpl implements RootEndpoint {
 		).mapFailMatching(
 			NoSuchElementException.class,
 			() -> new NotAllowedException(
-				"POST method is not allowed for path " + path + "/" + id +
-					"/" + nestedPath)
+				"POST method is not allowed for path " + path + "/" + id + "/" +
+					nestedPath)
 		).map(
 			postSingleModelFunction ->
 				postSingleModelFunction.apply(new IdentifierImpl(path, id))
