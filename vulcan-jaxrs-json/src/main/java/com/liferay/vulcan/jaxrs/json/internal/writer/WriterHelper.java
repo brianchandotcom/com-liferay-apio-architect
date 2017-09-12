@@ -18,6 +18,7 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.OPTION
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
@@ -32,7 +33,6 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.APIError;
-import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;

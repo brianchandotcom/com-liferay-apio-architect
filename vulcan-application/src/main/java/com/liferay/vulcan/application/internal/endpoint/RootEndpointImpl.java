@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.application.internal.endpoint;
 
+import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.application.internal.identifier.IdentifierImpl;
 import com.liferay.vulcan.application.internal.identifier.RootIdentifierImpl;
 import com.liferay.vulcan.endpoint.RootEndpoint;
@@ -23,7 +24,6 @@ import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.result.ThrowableFunction;
 import com.liferay.vulcan.result.Try;
-import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.model.RelatedCollection;
 
