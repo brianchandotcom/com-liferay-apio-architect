@@ -29,11 +29,9 @@ import com.liferay.portal.kernel.service.IdentityServiceContextFunction;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Function;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
-import com.liferay.vulcan.liferay.portal.identifier.ClassNameClassPKIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Representor;
@@ -42,6 +40,7 @@ import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.sample.liferay.portal.identifier.CommentableIdentifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,19 +90,17 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 		RoutesBuilder<Comment, LongIdentifier> routesBuilder) {
 
 		return routesBuilder.collectionPageGetter(
-			this::_getPageItems, ClassNameClassPKIdentifier.class,
-			CurrentUser.class
+			this::_getPageItems, CommentableIdentifier.class, CurrentUser.class
 		).collectionPageItemCreator(
-			this::_addComment, ClassNameClassPKIdentifier.class,
-			CurrentUser.class
+			this::_addComment, CommentableIdentifier.class, CurrentUser.class
 		).collectionPageItemGetter(
 			this::_getComment
 		).build();
 	}
 
 	private Comment _addComment(
-		ClassNameClassPKIdentifier classNameClassPKIdentifier,
-		Map<String, Object> body, CurrentUser currentUser) {
+		CommentableIdentifier commentableIdentifier, Map<String, Object> body,
+		CurrentUser currentUser) {
 
 		User user = currentUser.getUser();
 
@@ -118,9 +115,10 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 
 		Try<Long> longTry = Try.fromFallible(
 			() -> _commentManager.addComment(
-				user.getUserId(), classNameClassPKIdentifier.getClassName(),
-				classNameClassPKIdentifier.getClassPK(), user.getFullName(), 0,
-				StringPool.BLANK, content, createServiceContextFunction));
+				user.getUserId(), commentableIdentifier.getGroupId(),
+				commentableIdentifier.getClassName(),
+				commentableIdentifier.getClassPK(), content,
+				createServiceContextFunction));
 
 		return longTry.map(
 			_commentManager::fetchComment
@@ -166,17 +164,15 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 	}
 
 	private PageItems<Comment> _getPageItems(
-		Pagination pagination,
-		ClassNameClassPKIdentifier classNameClassPKIdentifier,
+		Pagination pagination, CommentableIdentifier commentableIdentifier,
 		CurrentUser currentUser) {
 
 		List<Comment> comments = new ArrayList<>();
 
 		DiscussionCommentIterator discussionCommentIterator =
 			_getDiscussionCommentIterator(
-				classNameClassPKIdentifier.getClassName(),
-				classNameClassPKIdentifier.getClassPK(), pagination,
-				currentUser);
+				commentableIdentifier.getClassName(),
+				commentableIdentifier.getClassPK(), pagination, currentUser);
 
 		int i = pagination.getEndPosition() - pagination.getStartPosition();
 
@@ -190,8 +186,8 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 		}
 
 		int count = _commentManager.getCommentsCount(
-			classNameClassPKIdentifier.getClassName(),
-			classNameClassPKIdentifier.getClassPK());
+			commentableIdentifier.getClassName(),
+			commentableIdentifier.getClassPK());
 
 		return new PageItems<>(comments, count);
 	}

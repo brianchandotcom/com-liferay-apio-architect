@@ -40,6 +40,7 @@ import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.sample.liferay.portal.identifier.CommentableIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
 
@@ -127,9 +128,7 @@ public class BlogPostingResource
 		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
 		).addRelatedCollection(
-			"comment", Comment.class,
-			blogsEntry -> _classNameClassPKIdentifierCreator.create(
-				BlogsEntry.class.getName(), blogsEntry.getEntryId())
+			"comment", Comment.class, CommentableIdentifier::create
 		).addType(
 			"BlogPosting"
 		).build();
