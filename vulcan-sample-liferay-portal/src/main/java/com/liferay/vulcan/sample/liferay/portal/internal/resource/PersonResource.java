@@ -137,25 +137,26 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 		RootIdentifier rootIdentifier, Map<String, Object> body,
 		Company company) {
 
+		String password1 = (String)body.get("password1");
+		String password2 = (String)body.get("password2");
 		String screenName = (String)body.get("alternateName");
 		String emailAddress = (String)body.get("email");
 		String firstName = (String)body.get("givenName");
 		String lastName = (String)body.get("familyName");
-		String jobTitle = (String)body.get("jobTitle");
-		String birthDateString = (String)body.get("birthDate");
-		String password1 = (String)body.get("password1");
-		String password2 = (String)body.get("password2");
 		boolean male = (boolean)body.get("male");
+		String birthDateString = (String)body.get("birthDate");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
 			() -> new BadRequestException("Incorrect body");
 
 		if (Validator.isNull(screenName) || Validator.isNull(emailAddress) ||
 			Validator.isNull(firstName) || Validator.isNull(lastName) ||
-			Validator.isNull(jobTitle) || Validator.isNull(birthDateString)) {
+			Validator.isNull(birthDateString)) {
 
 			throw incorrectBodyExceptionSupplier.get();
 		}
+
+		Calendar calendar = Calendar.getInstance();
 
 		Try<DateFormat> dateFormatTry = Try.success(
 			DateUtil.getISO8601Format());
@@ -166,13 +167,17 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 			ParseException.class, incorrectBodyExceptionSupplier
 		).getUnchecked();
 
-		Calendar calendar = Calendar.getInstance();
-
 		calendar.setTime(birthDate);
 
 		int birthdayMonth = calendar.get(Calendar.MONTH);
 		int birthdayDay = calendar.get(Calendar.DATE);
 		int birthdayYear = calendar.get(Calendar.YEAR);
+
+		String jobTitle = (String)body.get("jobTitle");
+
+		if (Validator.isNull(jobTitle)) {
+			throw incorrectBodyExceptionSupplier.get();
+		}
 
 		Try<User> userTry = Try.fromFallible(
 			() -> _userLocalService.addUser(
