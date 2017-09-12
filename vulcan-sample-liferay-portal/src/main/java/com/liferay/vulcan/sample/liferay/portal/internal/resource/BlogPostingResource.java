@@ -155,12 +155,6 @@ public class BlogPostingResource
 	private BlogsEntry _addBlogsEntry(
 		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
 
-		ServiceContext serviceContext = new ServiceContext();
-
-		serviceContext.setAddGroupPermissions(true);
-		serviceContext.setAddGuestPermissions(true);
-		serviceContext.setScopeGroupId(groupLongIdentifier.getIdAsLong());
-
 		String title = (String)body.get("headline");
 		String subtitle = (String)body.get("alternativeHeadline");
 		String description = (String)body.get("description");
@@ -177,6 +171,8 @@ public class BlogPostingResource
 			throw incorrectBodyExceptionSupplier.get();
 		}
 
+		Calendar calendar = Calendar.getInstance();
+
 		Try<DateFormat> dateFormatTry = Try.success(
 			DateUtil.getISO8601Format());
 
@@ -186,8 +182,6 @@ public class BlogPostingResource
 			ParseException.class, incorrectBodyExceptionSupplier
 		).getUnchecked();
 
-		Calendar calendar = Calendar.getInstance();
-
 		calendar.setTime(displayDate);
 
 		int month = calendar.get(Calendar.MONTH);
@@ -195,6 +189,12 @@ public class BlogPostingResource
 		int year = calendar.get(Calendar.YEAR);
 		int hour = calendar.get(Calendar.HOUR);
 		int minute = calendar.get(Calendar.MINUTE);
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setAddGuestPermissions(true);
+		serviceContext.setScopeGroupId(groupLongIdentifier.getIdAsLong());
 
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.addEntry(
