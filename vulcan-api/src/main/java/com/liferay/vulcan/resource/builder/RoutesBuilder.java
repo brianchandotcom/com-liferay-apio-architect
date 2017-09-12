@@ -631,8 +631,9 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	public <A, B, C, D, E, F, G, H, I, V extends Identifier> RoutesBuilder<T, U>
 		postCollectionItem(
 			UndecaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, H, I, T>
-				undecaFunction, Class<V> identifierClass, Class<A> aClass,
-			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
-			Class<F> fClass, Class<G> gClass, Class<H> hClass, Class<I> iClass);
+				undecaFunction,
+			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+			Class<G> gClass, Class<H> hClass, Class<I> iClass);
 
 }
