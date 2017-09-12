@@ -99,6 +99,8 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 	private DLFolder _addDLFolder(
 		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
 
+		long parentFolderId = 0;
+
 		String name = (String)body.get("name");
 
 		if (Validator.isNull(name)) {
@@ -107,7 +109,7 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 
 		Try<DLFolder> dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.getFolder(
-				groupLongIdentifier.getIdAsLong(), 0, name));
+				groupLongIdentifier.getIdAsLong(), parentFolderId, name));
 
 		if (dlFolderTry.isSuccess()) {
 			throw new BadRequestException(
@@ -123,8 +125,8 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 		dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.addFolder(
 				groupLongIdentifier.getIdAsLong(),
-				groupLongIdentifier.getIdAsLong(), false, 0, name, description,
-				new ServiceContext()));
+				groupLongIdentifier.getIdAsLong(), false, parentFolderId, name,
+				description, new ServiceContext()));
 
 		return dlFolderTry.getUnchecked();
 	}
