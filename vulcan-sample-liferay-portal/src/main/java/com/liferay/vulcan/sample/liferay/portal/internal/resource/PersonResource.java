@@ -157,15 +157,6 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 			throw incorrectBodyExceptionSupplier.get();
 		}
 
-		boolean autoPassword = false;
-		boolean autoScreenName = Validator.isNull(screenName);
-		long facebookId = 0;
-		String openId = StringPool.BLANK;
-		Locale locale = LocaleUtil.getDefault();
-		String middleName = StringPool.BLANK;
-		long prefixId = 0;
-		long suffixId = 0;
-
 		Try<DateFormat> dateFormatTry = Try.success(
 			DateUtil.getISO8601Format());
 
@@ -183,20 +174,14 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 		int birthdayDay = calendar.get(Calendar.DATE);
 		int birthdayYear = calendar.get(Calendar.YEAR);
 
-		long[] groupIds = null;
-		long[] organizationIds = null;
-		long[] roleIds = null;
-		long[] userGroupIds = null;
-		boolean sendMail = false;
-
 		Try<User> userTry = Try.fromFallible(
 			() -> _userLocalService.addUser(
 				UserConstants.USER_ID_DEFAULT, company.getCompanyId(),
-				autoPassword, password1, password2, autoScreenName, screenName,
-				emailAddress, facebookId, openId, locale, firstName, middleName,
-				lastName, prefixId, suffixId, male, birthdayMonth, birthdayDay,
-				birthdayYear, jobTitle, groupIds, organizationIds, roleIds,
-				userGroupIds, sendMail, new ServiceContext()));
+				false, password1, password2, Validator.isNull(screenName), screenName,
+				emailAddress, 0, StringPool.BLANK, LocaleUtil.getDefault(), firstName, StringPool.BLANK,
+				lastName, 0, 0, male, birthdayMonth, birthdayDay,
+				birthdayYear, jobTitle, null, null, null,
+				null, false, new ServiceContext()));
 
 		return userTry.getUnchecked();
 	}
