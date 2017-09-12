@@ -32,7 +32,7 @@ import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
-import com.liferay.vulcan.typealias.BinaryFunction;
+import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.wiring.osgi.internal.pagination.PageImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
 
