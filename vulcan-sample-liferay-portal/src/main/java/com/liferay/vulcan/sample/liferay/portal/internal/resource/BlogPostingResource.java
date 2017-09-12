@@ -190,6 +190,9 @@ public class BlogPostingResource
 		int hour = calendar.get(Calendar.HOUR);
 		int minute = calendar.get(Calendar.MINUTE);
 
+		boolean allowPingbacks = false;
+		boolean allowTrackbacks = false;
+
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setAddGroupPermissions(true);
@@ -199,7 +202,8 @@ public class BlogPostingResource
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.addEntry(
 				title, subtitle, description, content, month, day, year, hour,
-				minute, false, false, null, null, null, null, serviceContext));
+				minute, allowPingbacks, allowTrackbacks, null, null, null, null,
+				serviceContext));
 
 		return blogsEntryTry.getUnchecked();
 	}
