@@ -99,9 +99,6 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 	private DLFolder _addDLFolder(
 		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
 
-		boolean mountPoint = false;
-		int parentFolderId = 0;
-
 		String name = (String)body.get("name");
 
 		if (Validator.isNull(name)) {
@@ -123,13 +120,11 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 			throw new BadRequestException("Incorrect body");
 		}
 
-		ServiceContext serviceContext = new ServiceContext();
-
 		dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.addFolder(
 				groupLongIdentifier.getIdAsLong(),
-				groupLongIdentifier.getIdAsLong(), mountPoint, parentFolderId,
-				name, description, serviceContext));
+				groupLongIdentifier.getIdAsLong(), false, 0,
+				name, description, new ServiceContext()));
 
 		return dlFolderTry.getUnchecked();
 	}

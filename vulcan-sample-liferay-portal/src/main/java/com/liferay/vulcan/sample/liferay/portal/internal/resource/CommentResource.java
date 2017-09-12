@@ -106,9 +106,6 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 
 		User user = currentUser.getUser();
 
-		int parentCommentId = 0;
-		String subject = StringPool.BLANK;
-
 		String content = (String)body.get("text");
 
 		if (Validator.isNull(content)) {
@@ -122,7 +119,7 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 			() -> _commentManager.addComment(
 				user.getUserId(), classNameClassPKIdentifier.getClassName(),
 				classNameClassPKIdentifier.getClassPK(), user.getFullName(),
-				parentCommentId, subject, content,
+				0, StringPool.BLANK, content,
 				createServiceContextFunction));
 
 		return longTry.map(

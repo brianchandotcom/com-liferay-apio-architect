@@ -94,32 +94,19 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 		RootIdentifier rootIdentifier, Map<String, Object> body,
 		CurrentUser currentUser) {
 
-		long userId = currentUser.getUserId();
-		int parentGroupId = 0;
-
 		String name = (String)body.get("name");
 
 		if (Validator.isNull(name)) {
 			throw new BadRequestException("Incorrect body");
 		}
 
-		String className = Group.class.getName();
-		int classPK = 0;
-		int liveGroupId = 0;
-		Map<Locale, String> nameMap = Collections.singletonMap(Locale.US, name);
-		Map<Locale, String> descriptionMap = Collections.emptyMap();
-		boolean manualMembership = false;
-		String friendlyURL = null;
-		boolean site = true;
-		boolean active = true;
-		ServiceContext serviceContext = null;
-
 		Try<Group> groupTry = Try.fromFallible(
 			() -> _groupLocalService.addGroup(
-				userId, parentGroupId, className, classPK, liveGroupId, nameMap,
-				descriptionMap, TYPE_SITE_OPEN, manualMembership,
-				DEFAULT_MEMBERSHIP_RESTRICTION, friendlyURL, site, active,
-				serviceContext));
+				currentUser.getUserId(), 0, Group.class.getName(), 0, 0,
+				Collections.singletonMap(Locale.US, name),
+				Collections.emptyMap(), TYPE_SITE_OPEN, false,
+				DEFAULT_MEMBERSHIP_RESTRICTION, null, true, true,
+				null));
 
 		return groupTry.getUnchecked();
 	}
