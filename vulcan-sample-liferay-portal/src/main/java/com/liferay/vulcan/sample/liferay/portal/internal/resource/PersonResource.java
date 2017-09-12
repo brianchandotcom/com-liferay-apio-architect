@@ -42,7 +42,6 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -181,12 +180,12 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 
 		Try<User> userTry = Try.fromFallible(
 			() -> _userLocalService.addUser(
-				UserConstants.USER_ID_DEFAULT, company.getCompanyId(),
-				false, password1, password2, Validator.isNull(screenName), screenName,
-				emailAddress, 0, StringPool.BLANK, LocaleUtil.getDefault(), firstName, StringPool.BLANK,
-				lastName, 0, 0, male, birthdayMonth, birthdayDay,
-				birthdayYear, jobTitle, null, null, null,
-				null, false, new ServiceContext()));
+				UserConstants.USER_ID_DEFAULT, company.getCompanyId(), false,
+				password1, password2, Validator.isNull(screenName), screenName,
+				emailAddress, 0, StringPool.BLANK, LocaleUtil.getDefault(),
+				firstName, StringPool.BLANK, lastName, 0, 0, male,
+				birthdayMonth, birthdayDay, birthdayYear, jobTitle, null, null,
+				null, null, false, new ServiceContext()));
 
 		return userTry.getUnchecked();
 	}
