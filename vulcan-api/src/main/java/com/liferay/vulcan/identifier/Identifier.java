@@ -15,13 +15,12 @@
 package com.liferay.vulcan.identifier;
 
 /**
- * Represents a resource identifier and its context.
+ * Represents a resource identifier.
  *
  * <p>
- * For example a resource obtained in the URL:
- * <code>/p/customers/2012/products</code> will have an identifier containing
- * <code>2012</code> and <code>"customers"</code> as the ID and type
- * respectively.
+ * For example a resource obtained in the URL: <code>/p/customers/2012</code>
+ * will have an identifier containing <code>2012</code> and
+ * <code>"customers"</code> as the ID and type respectively.
  * </p>
  *
  * @author Alejandro Hernández
@@ -54,8 +53,8 @@ public interface Identifier {
 	 *
 	 * <p>
 	 * For example with a resource obtained in the URL:
-	 * <code>/p/customer/2012/product/100</code> this method will return
-	 * <code>"product"</code>.
+	 * <code>/p/customers/2012</code> this method will return
+	 * <code>"customer"</code>.
 	 * </p>
 	 *
 	 * @return the type of the identifier.
