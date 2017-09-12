@@ -118,9 +118,8 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 		Try<Long> longTry = Try.fromFallible(
 			() -> _commentManager.addComment(
 				user.getUserId(), classNameClassPKIdentifier.getClassName(),
-				classNameClassPKIdentifier.getClassPK(), user.getFullName(),
-				0, StringPool.BLANK, content,
-				createServiceContextFunction));
+				classNameClassPKIdentifier.getClassPK(), user.getFullName(), 0,
+				StringPool.BLANK, content, createServiceContextFunction));
 
 		return longTry.map(
 			_commentManager::fetchComment

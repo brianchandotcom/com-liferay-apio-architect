@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.identifier.RootIdentifier;
@@ -105,8 +104,7 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 				currentUser.getUserId(), 0, Group.class.getName(), 0, 0,
 				Collections.singletonMap(Locale.US, name),
 				Collections.emptyMap(), TYPE_SITE_OPEN, false,
-				DEFAULT_MEMBERSHIP_RESTRICTION, null, true, true,
-				null));
+				DEFAULT_MEMBERSHIP_RESTRICTION, null, true, true, null));
 
 		return groupTry.getUnchecked();
 	}
