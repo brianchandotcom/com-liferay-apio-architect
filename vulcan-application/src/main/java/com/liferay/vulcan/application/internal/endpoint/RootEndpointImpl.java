@@ -15,17 +15,17 @@
 package com.liferay.vulcan.application.internal.endpoint;
 
 import com.liferay.vulcan.alias.BinaryFunction;
-import com.liferay.vulcan.application.internal.identifier.IdentifierImpl;
-import com.liferay.vulcan.application.internal.identifier.RootIdentifierImpl;
 import com.liferay.vulcan.endpoint.RootEndpoint;
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.resource.identifier.Identifier;
+import com.liferay.vulcan.resource.identifier.RootIdentifier;
 import com.liferay.vulcan.result.ThrowableFunction;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
 import java.io.InputStream;
@@ -71,7 +71,7 @@ public class RootEndpointImpl implements RootEndpoint {
 				"POST method is not allowed for path " + path)
 		).map(
 			postSingleModelFunction ->
-				postSingleModelFunction.apply(new RootIdentifierImpl())
+				postSingleModelFunction.apply(new Path())
 		).map(
 			postSingleModelFunction -> postSingleModelFunction.apply(body)
 		);
@@ -94,7 +94,7 @@ public class RootEndpointImpl implements RootEndpoint {
 					nestedPath)
 		).map(
 			postSingleModelFunction ->
-				postSingleModelFunction.apply(new IdentifierImpl(path, id))
+				postSingleModelFunction.apply(new Path(path, id))
 		).map(
 			postSingleModelFunction -> postSingleModelFunction.apply(body)
 		);
@@ -141,8 +141,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			NoSuchElementException.class,
 			_getSupplierNotFoundException(path + "/" + id)
 		).map(
-			singleModelFunction -> singleModelFunction.apply(
-				new IdentifierImpl(path, id))
+			singleModelFunction -> singleModelFunction.apply(new Path(path, id))
 		);
 	}
 
@@ -157,7 +156,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		).mapFailMatching(
 			NoSuchElementException.class, _getSupplierNotFoundException(path)
 		).map(
-			function -> function.apply(new RootIdentifierImpl())
+			function -> function.apply(new RootIdentifier() {})
 		);
 	}
 
@@ -216,8 +215,8 @@ public class RootEndpointImpl implements RootEndpoint {
 				).map(
 					RelatedCollection::getIdentifierFunction
 				).map(
-					identifierFunction -> identifierFunction.apply(
-						parentSingleModel.getModel())
+					identifierFunction ->
+						identifierFunction.apply(parentSingleModel.getModel())
 				)
 			);
 		};
