@@ -38,10 +38,10 @@ import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.result.Try;
-import com.liferay.vulcan.sample.liferay.portal.identifier.AggregateRatingIdentifier;
-import com.liferay.vulcan.sample.liferay.portal.identifier.CommentableIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
+import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
+import com.liferay.vulcan.sample.liferay.portal.resource.identifier.CommentableIdentifier;
 
 import java.text.DateFormat;
 import java.text.ParseException;

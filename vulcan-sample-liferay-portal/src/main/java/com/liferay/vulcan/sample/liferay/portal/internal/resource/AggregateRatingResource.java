@@ -19,9 +19,9 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
-import com.liferay.vulcan.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
+import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
 import org.osgi.service.component.annotations.Component;

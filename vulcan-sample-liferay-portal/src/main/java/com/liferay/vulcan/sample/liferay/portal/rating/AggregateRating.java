@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.sample.liferay.portal.rating;
 
-import com.liferay.vulcan.sample.liferay.portal.identifier.AggregateRatingIdentifier;
+import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
 
 /**
  * An instance of this interface represents an average rating for a Thing based

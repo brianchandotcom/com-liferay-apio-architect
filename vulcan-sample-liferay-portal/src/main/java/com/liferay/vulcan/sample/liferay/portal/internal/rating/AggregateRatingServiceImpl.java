@@ -16,9 +16,9 @@ package com.liferay.vulcan.sample.liferay.portal.internal.rating;
 
 import com.liferay.ratings.kernel.model.RatingsEntry;
 import com.liferay.ratings.kernel.service.RatingsEntryLocalService;
-import com.liferay.vulcan.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
+import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
 
 import java.util.List;
 

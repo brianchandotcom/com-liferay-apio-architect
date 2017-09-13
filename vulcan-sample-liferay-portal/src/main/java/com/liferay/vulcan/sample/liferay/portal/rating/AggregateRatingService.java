@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.sample.liferay.portal.rating;
 
-import com.liferay.vulcan.sample.liferay.portal.identifier.AggregateRatingIdentifier;
+import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
 
 /**
  * Instances of this service can be used to get the related {@link
