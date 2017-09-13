@@ -104,13 +104,13 @@ public class RootEndpointImpl implements RootEndpoint {
 	public Try<InputStream> getCollectionItemInputStreamTry(
 		String path, String id, String binaryId) {
 
-		Class<Object> modelClass = _resourceManager.getModelClass(path);
-
-		Optional<Representor<Object, Identifier>> representorOptional =
-			_resourceManager.getRepresentorOptional(modelClass);
+		Optional<Class<Object>> modelClassOptional =
+			_resourceManager.getModelClassOptional(path);
 
 		Optional<BinaryFunction<Object>> binaryFunctionOptional =
-			representorOptional.map(
+			modelClassOptional.flatMap(
+				_resourceManager::getRepresentorOptional
+			).map(
 				Representor::getBinaryFunctions
 			).map(
 				binaryFunctions -> binaryFunctions.get(binaryId)
@@ -194,14 +194,16 @@ public class RootEndpointImpl implements RootEndpoint {
 
 			String relatedClassName = relatedModelClass.getName();
 
-			Class<Object> modelClass = _resourceManager.getModelClass(
-				nestedPath);
+			Optional<Class<Object>> optional =
+				_resourceManager.getModelClassOptional(nestedPath);
 
-			if (relatedClassName.equals(modelClass.getName())) {
-				return true;
-			}
-
-			return false;
+			return optional.map(
+				Class::getName
+			).map(
+				relatedClassName::equals
+			).orElse(
+				false
+			);
 		};
 	}
 

@@ -24,6 +24,7 @@ import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import java.util.Optional;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -74,8 +75,12 @@ public class AggregateRatingPathIdentifierMapper
 				id + " should be a string with the form 'type:classPK'");
 		}
 
-		Class<Object> modelClass = _resourceManager.getModelClass(
-			components[0]);
+		Optional<Class<Object>> optional =
+			_resourceManager.getModelClassOptional(components[0]);
+
+		Class<Object> modelClass = optional.orElseThrow(
+			() -> new NotFoundException(
+				"No resource found for path " + components[0]));
 
 		Try<Long> longTry = Try.fromFallible(
 			() -> Long.parseLong(components[1]));

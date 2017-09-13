@@ -65,8 +65,11 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  path path of the resource for the class.
 	 * @return the class exposed in the path.
 	 */
-	public <T> Class<T> getModelClass(String path) {
-		return (Class<T>)_classes.get(path);
+	public <T> Optional<Class<T>> getModelClassOptional(String path) {
+		Optional<? extends Class<?>> optional = Optional.ofNullable(
+			_classes.get(path));
+
+		return optional.map(clazz -> (Class<T>)clazz);
 	}
 
 	/**
