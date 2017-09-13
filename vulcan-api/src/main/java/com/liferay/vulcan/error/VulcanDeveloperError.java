@@ -39,19 +39,6 @@ public class VulcanDeveloperError extends Error {
 	}
 
 	/**
-	 * Represents the error the developer should throw when an identifier
-	 * converter is missing.
-	 */
-	public static class MustHaveIdentifierConverter
-		extends VulcanDeveloperError {
-
-		public MustHaveIdentifierConverter(Class<?> identifier) {
-			super("Identifier " + identifier + " does not have a converter");
-		}
-
-	}
-
-	/**
 	 * Represents the error the developer should throw when a message mapper is
 	 * missing.
 	 */
@@ -61,6 +48,18 @@ public class VulcanDeveloperError extends Error {
 			super(
 				"Media type " + mediaType + " and model class " +
 					modelClass.getName() + " does not have a message mapper");
+		}
+
+	}
+
+	/**
+	 * Represents the error the developer should throw when an identifier-path mapper is missing.
+	 */
+	public static class MustHavePathIdentifierMapper
+		extends VulcanDeveloperError {
+
+		public MustHavePathIdentifierMapper(Class<?> identifier) {
+			super("Identifier " + identifier + " does not have a path mapper");
 		}
 
 	}
