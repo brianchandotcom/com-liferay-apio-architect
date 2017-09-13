@@ -122,7 +122,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
-	protected <T> void setServiceReference(
+	protected void setServiceReference(
 		ServiceReference<Resource> serviceReference) {
 
 		Optional<Class<Object>> optional = addService(
