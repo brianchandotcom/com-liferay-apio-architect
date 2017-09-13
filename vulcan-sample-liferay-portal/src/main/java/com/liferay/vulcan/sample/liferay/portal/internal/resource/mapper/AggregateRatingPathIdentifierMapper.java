@@ -12,13 +12,16 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.liferay.portal.internal.identifier.converter;
+package com.liferay.vulcan.sample.liferay.portal.internal.resource.mapper;
 
-import com.liferay.vulcan.identifier.Identifier;
-import com.liferay.vulcan.identifier.converter.IdentifierConverter;
+import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.resource.identifier.mapper.PathIdentifierMapper;
 import com.liferay.vulcan.result.Try;
-import com.liferay.vulcan.sample.liferay.portal.identifier.AggregateRatingIdentifier;
+import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
+import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+
+import java.util.Optional;
 
 import javax.ws.rs.BadRequestException;
 
@@ -26,11 +29,11 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * This converter can be used to convert from a generic identifier to an {@link
- * AggregateRatingIdentifierConverter}
+ * This mapper can be used to convert from a {@link Path} to an {@link
+ * AggregateRatingIdentifier} and vice versa.
  *
  * <p>
- * The class {@link AggregateRatingIdentifierConverter} can then be provided as
+ * The class {@link AggregateRatingPathIdentifierMapper} can then be provided as
  * a parameter in {@link com.liferay.vulcan.resource.builder.RoutesBuilder}
  * methods.
  * </p>
@@ -43,30 +46,51 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class AggregateRatingIdentifierConverter
-	implements IdentifierConverter<AggregateRatingIdentifier> {
+public class AggregateRatingPathIdentifierMapper
+	implements PathIdentifierMapper<AggregateRatingIdentifier> {
 
 	@Override
-	public AggregateRatingIdentifier convert(Identifier identifier) {
-		String id = identifier.getId();
-		String type = identifier.getType();
+	public <U> Path map(
+		AggregateRatingIdentifier aggregateRatingIdentifier,
+		Class<U> modelClass) {
+
+		String type = _getPath(modelClass.getName());
+
+		String ratedType = _getPath(aggregateRatingIdentifier.getClassName());
+
+		String id = ratedType + ":" + aggregateRatingIdentifier.getClassPK();
+
+		return new Path(type, id);
+	}
+
+	@Override
+	public AggregateRatingIdentifier map(Path path) {
+		String id = path.getId();
 
 		String[] components = id.split(":");
 
-		if (components.length == 2) {
+		if (components.length != 2) {
 			throw new BadRequestException(
 				id + " should be a string with the form 'type:classPK'");
 		}
 
-		String className = _resourceManager.getClassName(type);
+		String className = _resourceManager.getClassName(components[0]);
 
-		Try<Long> longTry = Try.fromFallible(() -> Long.parseLong(id));
+		Try<Long> longTry = Try.fromFallible(
+			() -> Long.parseLong(components[1]));
 
 		Long classPK = longTry.orElseThrow(
 			() -> new BadRequestException(
 				"Unable to convert " + id + " to a long class PK"));
 
 		return AggregateRatingIdentifier.create(className, classPK);
+	}
+
+	private String _getPath(String className) {
+		Optional<String> optional = _resourceManager.getPathOptional(className);
+
+		return optional.orElseThrow(
+			() -> new VulcanDeveloperError.UnresolvableURI(className));
 	}
 
 	@Reference
