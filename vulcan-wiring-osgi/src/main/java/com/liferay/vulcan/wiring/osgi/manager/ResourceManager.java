@@ -236,16 +236,18 @@ public class ResourceManager extends BaseManager<Resource> {
 			resource -> {
 				_classes.put(resource.getPath(), modelClass);
 
+				Class<U> identifierClass = _getIdentifierClass(resource);
+
 				RepresentorImpl representor =
 					(RepresentorImpl)resource.buildRepresentor(
 						new RepresentorBuilderImpl<>(
+							identifierClass,
 							_addRelatedCollectionTriConsumer(modelClass)));
 
 				_representors.put(modelClass.getName(), representor);
 
 				Function<HttpServletRequest, Routes<?>> routesFunction =
-					_getRoutesFunction(
-						modelClass, _getIdentifierClass(resource), resource);
+					_getRoutesFunction(modelClass, identifierClass, resource);
 
 				_routesFunctions.put(resource.getPath(), routesFunction);
 			});

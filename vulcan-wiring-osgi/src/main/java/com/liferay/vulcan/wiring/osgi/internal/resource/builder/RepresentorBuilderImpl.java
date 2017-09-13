@@ -38,9 +38,11 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 	implements RepresentorBuilder<T, U> {
 
 	public RepresentorBuilderImpl(
+		Class<U> identifierClass,
 		TriConsumer<String, Class<?>, Function<Object, Identifier>>
 			addRelatedCollectionTriConsumer) {
 
+		_identifierClass = identifierClass;
 		_addRelatedCollectionTriConsumer = addRelatedCollectionTriConsumer;
 	}
 
@@ -73,6 +75,11 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		@Override
 		public U getIdentifier(T model) {
 			return _identifierFunction.apply(model);
+		}
+
+		@Override
+		public Class<U> getIdentifierClass() {
+			return _identifierClass;
 		}
 
 		@Override
@@ -153,6 +160,7 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 
 	private final TriConsumer<String, Class<?>, Function<Object, Identifier>>
 		_addRelatedCollectionTriConsumer;
+	private final Class<U> _identifierClass;
 
 	private class FirstStepImpl implements FirstStep<T, U> {
 

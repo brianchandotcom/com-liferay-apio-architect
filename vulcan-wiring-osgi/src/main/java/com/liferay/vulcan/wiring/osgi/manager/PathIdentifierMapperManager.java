@@ -82,19 +82,19 @@ public class PathIdentifierMapperManager
 	 *         otherwise.
 	 */
 	public <T extends Identifier, U> Optional<Path> map(
-		T identifier, Class<U> modelClass) {
+		T identifier, Class<? extends Identifier> identifierClass,
+		Class<U> modelClass) {
 
-		Class<? extends Identifier> clazz = identifier.getClass();
-
-		if (Identifier.class == clazz) {
+		if (Identifier.class == identifierClass) {
 			return Optional.of(new Path());
 		}
 
-		if (RootIdentifier.class == clazz) {
+		if (RootIdentifier.class == identifierClass) {
 			return Optional.of(new Path());
 		}
 
-		Optional<PathIdentifierMapper> optional = getServiceOptional(clazz);
+		Optional<PathIdentifierMapper> optional = getServiceOptional(
+			identifierClass);
 
 		return optional.map(
 			pathIdentifierMapper ->

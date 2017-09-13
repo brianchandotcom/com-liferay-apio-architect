@@ -66,6 +66,13 @@ public interface Representor<T, U extends Identifier> {
 	public U getIdentifier(T model);
 
 	/**
+	 * Returns the identifier class.
+	 *
+	 * @return the identifier class.
+	 */
+	public Class<U> getIdentifierClass();
+
+	/**
 	 * Returns the linked related models.
 	 *
 	 * @return the linked related models.

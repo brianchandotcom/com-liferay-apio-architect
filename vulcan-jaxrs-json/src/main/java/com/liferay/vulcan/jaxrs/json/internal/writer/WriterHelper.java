@@ -186,11 +186,17 @@ public class WriterHelper {
 		Optional<Representor<T, Identifier>> optional =
 			_resourceManager.getRepresentorOptional(modelClass);
 
-		return optional.map(
-			representor -> representor.getIdentifier(singleModel.getModel())
-		).flatMap(
-			identifier ->
-				_pathIdentifierMapperManager.map(identifier, modelClass)
+		return optional.flatMap(
+			representor -> {
+				Identifier identifier = representor.getIdentifier(
+					singleModel.getModel());
+
+				Class<Identifier> identifierClass =
+					representor.getIdentifierClass();
+
+				return _pathIdentifierMapperManager.map(
+					identifier, identifierClass, modelClass);
+			}
 		).map(
 			Path::asURI
 		).map(
@@ -225,11 +231,17 @@ public class WriterHelper {
 		Optional<Representor<T, Identifier>> optional =
 			_resourceManager.getRepresentorOptional(modelClass);
 
-		optional.map(
-			representor -> representor.getIdentifier(singleModel.getModel())
-		).flatMap(
-			identifier ->
-				_pathIdentifierMapperManager.map(identifier, modelClass)
+		optional.flatMap(
+			representor -> {
+				Identifier identifier = representor.getIdentifier(
+					singleModel.getModel());
+
+				Class<Identifier> identifierClass =
+					representor.getIdentifierClass();
+
+				return _pathIdentifierMapperManager.map(
+					identifier, identifierClass, modelClass);
+			}
 		).map(
 			Path::asURI
 		).map(
