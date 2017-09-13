@@ -156,6 +156,8 @@ public class RootEndpointImpl implements RootEndpoint {
 		).mapFailMatching(
 			NoSuchElementException.class, _getSupplierNotFoundException(path)
 		).map(
+			function -> function.apply(new Path())
+		).map(
 			function -> function.apply(new RootIdentifier() {})
 		);
 	}
@@ -173,6 +175,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			Routes::getPageFunctionOptional
 		).map(
 			Optional::get
+		).map(
+			pathFunction -> pathFunction.apply(new Path(path, id))
 		).flatMap(
 			_getNestedCollectionPageTryFunction(path, id, nestedPath)
 		).map(

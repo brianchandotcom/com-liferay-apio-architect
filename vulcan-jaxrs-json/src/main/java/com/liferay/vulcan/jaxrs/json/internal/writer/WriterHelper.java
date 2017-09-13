@@ -144,22 +144,15 @@ public class WriterHelper {
 	public <T> Optional<String> getCollectionURLOptional(
 		Page<T> page, HttpServletRequest httpServletRequest) {
 
+		Path path = page.getPath();
+
+		String pathURI = "/p" + path.asURI() + "/";
+
 		Optional<String> optional = _resourceManager.getPathOptional(
 			page.getModelClass());
 
-		return optional.flatMap(
-			path -> {
-				Identifier identifier = page.getIdentifier();
-
-				Optional<Path> pathOptional = _pathIdentifierMapperManager.map(
-					identifier, page.getModelClass());
-
-				return pathOptional.map(
-					Path::asURI
-				).map(
-					uri -> "/p" + uri + "/" + path
-				);
-			}
+		return optional.map(
+			pathURI::concat
 		).map(
 			_getTransformURIFunction(
 				(uri, transformer) -> transformer.transformPageURI(uri, page))

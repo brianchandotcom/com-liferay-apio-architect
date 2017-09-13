@@ -73,7 +73,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			_getCollectionIdentifierFunction(identifierClass);
 
 		_routesImpl.setPageFunction(
-			collectionIdentifierFunction.andThen(
+			path -> collectionIdentifierFunction.andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 
@@ -84,7 +84,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
-						identifier);
+						path);
 				}));
 
 		return this;
@@ -103,7 +103,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			_getCollectionIdentifierFunction(identifierClass);
 
 		_routesImpl.setPageFunction(
-			collectionIdentifierFunction.andThen(
+			path -> collectionIdentifierFunction.andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -122,7 +122,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
-						identifier);
+						path);
 				}));
 
 		return this;
@@ -140,7 +140,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			_getCollectionIdentifierFunction(identifierClass);
 
 		_routesImpl.setPageFunction(
-			collectionIdentifierFunction.andThen(
+			path -> collectionIdentifierFunction.andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -158,7 +158,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
-						identifier);
+						path);
 				}));
 
 		return this;
@@ -176,7 +176,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			_getCollectionIdentifierFunction(identifierClass);
 
 		_routesImpl.setPageFunction(
-			collectionIdentifierFunction.andThen(
+			path -> collectionIdentifierFunction.andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -192,7 +192,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
-						identifier);
+						path);
 				}));
 
 		return this;
@@ -209,7 +209,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			_getCollectionIdentifierFunction(identifierClass);
 
 		_routesImpl.setPageFunction(
-			collectionIdentifierFunction.andThen(
+			path -> collectionIdentifierFunction.andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -224,7 +224,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
-						identifier);
+						path);
 				}));
 
 		return this;
@@ -242,7 +242,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			_getCollectionIdentifierFunction(identifierClass);
 
 		_routesImpl.setPageFunction(
-			collectionIdentifierFunction.andThen(
+			path -> collectionIdentifierFunction.andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -259,7 +259,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
-						identifier);
+						path);
 				}));
 
 		return this;
@@ -276,7 +276,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			_getCollectionIdentifierFunction(identifierClass);
 
 		_routesImpl.setPageFunction(
-			collectionIdentifierFunction.andThen(
+			path -> collectionIdentifierFunction.andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -290,7 +290,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
-						identifier);
+						path);
 				}));
 
 		return this;
@@ -306,7 +306,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			_getCollectionIdentifierFunction(identifierClass);
 
 		_routesImpl.setPageFunction(
-			collectionIdentifierFunction.andThen(
+			path -> collectionIdentifierFunction.andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -319,7 +319,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
-						identifier);
+						path);
 				}));
 
 		return this;
@@ -334,7 +334,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			_getCollectionIdentifierFunction(identifierClass);
 
 		_routesImpl.setPageFunction(
-			collectionIdentifierFunction.andThen(
+			path -> collectionIdentifierFunction.andThen(
 				identifier -> {
 					Pagination pagination = _provideClass(Pagination.class);
 					A a = _provideClass(aClass);
@@ -346,7 +346,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 						_modelClass, pageItems.getItems(),
 						pagination.getItemsPerPage(),
 						pagination.getPageNumber(), pageItems.getTotalCount(),
-						identifier);
+						path);
 				}));
 
 		return this;

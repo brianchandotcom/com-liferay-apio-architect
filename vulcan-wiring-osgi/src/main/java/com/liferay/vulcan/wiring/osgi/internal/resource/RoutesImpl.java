@@ -30,7 +30,9 @@ import java.util.function.Function;
 public class RoutesImpl<T> implements Routes<T> {
 
 	@Override
-	public Optional<Function<Identifier, Page<T>>> getPageFunctionOptional() {
+	public Optional<Function<Path, Function<Identifier, Page<T>>>>
+		getPageFunctionOptional() {
+
 		return Optional.ofNullable(_pageFunction);
 	}
 
@@ -48,7 +50,9 @@ public class RoutesImpl<T> implements Routes<T> {
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
-	public void setPageFunction(Function<Identifier, Page<T>> pageFunction) {
+	public void setPageFunction(
+		Function<Path, Function<Identifier, Page<T>>> pageFunction) {
+
 		_pageFunction = pageFunction;
 	}
 
@@ -65,7 +69,7 @@ public class RoutesImpl<T> implements Routes<T> {
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private Function<Identifier, Page<T>> _pageFunction;
+	private Function<Path, Function<Identifier, Page<T>>> _pageFunction;
 	private Function<Path, Function<Map<String, Object>, SingleModel<T>>>
 		_postSingleModelFunction;
 	private Function<Path, SingleModel<T>> _singleModelFunction;

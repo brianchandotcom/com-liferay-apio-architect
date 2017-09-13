@@ -50,7 +50,8 @@ public interface Routes<T> {
 	 * @return the supplier used to create the page, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Function<Identifier, Page<T>>> getPageFunctionOptional();
+	public Optional<Function<Path, Function<Identifier, Page<T>>>>
+		getPageFunctionOptional();
 
 	/**
 	 * Returns the function used to create the single model of a {@link
