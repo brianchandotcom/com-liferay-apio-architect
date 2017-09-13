@@ -20,11 +20,11 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.function.TriConsumer;
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl.RepresentorImpl;
@@ -97,7 +97,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the path in which the class name is exposed.
 	 */
 	public Optional<String> getPathOptional(String className) {
-		Optional<? extends Resource<?, Identifier>> optional =
+		Optional<? extends Resource<?, ? extends Identifier>> optional =
 			getResourceOptional(className);
 
 		return optional.map(Resource::getPath);
@@ -239,7 +239,6 @@ public class ResourceManager extends BaseManager<Resource> {
 				RepresentorImpl representor =
 					(RepresentorImpl)resource.buildRepresentor(
 						new RepresentorBuilderImpl<>(
-							resource.getPath(),
 							_addRelatedCollectionTriConsumer(modelClass)));
 
 				_representors.put(modelClass.getName(), representor);
@@ -262,27 +261,7 @@ public class ResourceManager extends BaseManager<Resource> {
 
 			relatedCollections.add(
 				new RelatedCollection<>(
-					key, relatedModelClass,
-					object -> {
-						Identifier identifier = identifierFunction.apply(
-							object);
-
-						Optional<String> optional = getPathOptional(modelClass);
-
-						return new Identifier() {
-
-							@Override
-							public String getId() {
-								return identifier.getId();
-							}
-
-							@Override
-							public String getType() {
-								return optional.orElse("");
-							}
-
-						};
-					}));
+					key, relatedModelClass, identifierFunction));
 		};
 	}
 
@@ -314,7 +293,7 @@ public class ResourceManager extends BaseManager<Resource> {
 			RoutesBuilderImpl<T, U> routesBuilder = new RoutesBuilderImpl<>(
 				modelClass, identifierClass,
 				_getProvideClassFunction(httpServletRequest),
-				_identifierConverterManager::convert);
+				_pathIdentifierMapperManager::map);
 
 			return resource.routes(routesBuilder);
 		};
@@ -335,7 +314,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	private final Map<String, Class<?>> _classes = new ConcurrentHashMap<>();
 
 	@Reference
-	private IdentifierConverterManager _identifierConverterManager;
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 	@Reference
 	private ProviderManager _providerManager;

@@ -16,11 +16,11 @@ package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.function.TriConsumer;
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.RelatedModel;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
+import com.liferay.vulcan.resource.identifier.Identifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,11 +38,9 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 	implements RepresentorBuilder<T, U> {
 
 	public RepresentorBuilderImpl(
-		String path,
 		TriConsumer<String, Class<?>, Function<Object, Identifier>>
 			addRelatedCollectionTriConsumer) {
 
-		_path = path;
 		_addRelatedCollectionTriConsumer = addRelatedCollectionTriConsumer;
 	}
 
@@ -74,21 +72,7 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 
 		@Override
 		public Identifier getIdentifier(T model) {
-			U identifier = _identifierFunction.apply(model);
-
-			return new Identifier() {
-
-				@Override
-				public String getId() {
-					return identifier.getId();
-				}
-
-				@Override
-				public String getType() {
-					return _path;
-				}
-
-			};
+			return _identifierFunction.apply(model);
 		}
 
 		@Override
@@ -169,7 +153,6 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 
 	private final TriConsumer<String, Class<?>, Function<Object, Identifier>>
 		_addRelatedCollectionTriConsumer;
-	private final String _path;
 
 	private class FirstStepImpl implements FirstStep<T, U> {
 

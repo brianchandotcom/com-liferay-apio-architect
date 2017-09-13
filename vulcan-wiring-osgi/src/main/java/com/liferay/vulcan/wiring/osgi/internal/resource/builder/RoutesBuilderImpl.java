@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
-import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveIdentifierConverter;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHavePathIdentifierMapper;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustUseSameIdentifier;
 import com.liferay.vulcan.function.DecaFunction;
@@ -26,12 +26,13 @@ import com.liferay.vulcan.function.PentaFunction;
 import com.liferay.vulcan.function.TetraFunction;
 import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.function.UndecaFunction;
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.resource.identifier.Identifier;
+import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.wiring.osgi.internal.pagination.PageImpl;
 import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
 
@@ -49,7 +50,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public RoutesBuilderImpl(
 		Class<T> modelClass, Class<U> singleModelIdentifierClass,
 		Function<Class<?>, Optional<?>> provideClassFunction,
-		BiFunction<Class<? extends Identifier>, Identifier,
+		BiFunction<Class<? extends Identifier>, Path,
 			Optional<? extends Identifier>> identifierFunction) {
 
 		_modelClass = modelClass;
@@ -592,10 +593,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public <A> RoutesBuilder<T, U> collectionPageItemGetter(
 		BiFunction<U, A, T> biFunction, Class<A> aClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+		Function<Path, T> modelFunction = identifierFunction.andThen(
 			id -> {
 				A a = _provideClass(aClass);
 
@@ -616,10 +617,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
 			Class<I> iClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+		Function<Path, T> modelFunction = identifierFunction.andThen(
 			id -> {
 				A a = _provideClass(aClass);
 				B b = _provideClass(bClass);
@@ -648,10 +649,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
 			Class<H> hClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+		Function<Path, T> modelFunction = identifierFunction.andThen(
 			id -> {
 				A a = _provideClass(aClass);
 				B b = _provideClass(bClass);
@@ -675,11 +676,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public RoutesBuilder<T, U> collectionPageItemGetter(
 		Function<U, T> function) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
-			function);
+		Function<Path, T> modelFunction = identifierFunction.andThen(function);
 
 		_routesImpl.setSingleModelFunction(
 			modelFunction.andThen(_getCreateSingleModelFunction()));
@@ -693,10 +693,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 		Class<F> fClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+		Function<Path, T> modelFunction = identifierFunction.andThen(
 			id -> {
 				A a = _provideClass(aClass);
 				B b = _provideClass(bClass);
@@ -719,10 +719,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		HexaFunction<U, A, B, C, D, E, T> hexaFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+		Function<Path, T> modelFunction = identifierFunction.andThen(
 			id -> {
 				A a = _provideClass(aClass);
 				B b = _provideClass(bClass);
@@ -745,10 +745,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 		Class<F> fClass, Class<G> gClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+		Function<Path, T> modelFunction = identifierFunction.andThen(
 			id -> {
 				A a = _provideClass(aClass);
 				B b = _provideClass(bClass);
@@ -772,10 +772,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+		Function<Path, T> modelFunction = identifierFunction.andThen(
 			id -> {
 				A a = _provideClass(aClass);
 				B b = _provideClass(bClass);
@@ -796,10 +796,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		TetraFunction<U, A, B, C, T> tetraFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+		Function<Path, T> modelFunction = identifierFunction.andThen(
 			id -> {
 				A a = _provideClass(aClass);
 				B b = _provideClass(bClass);
@@ -818,10 +818,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public <A, B> RoutesBuilder<T, U> collectionPageItemGetter(
 		TriFunction<U, A, B, T> triFunction, Class<A> aClass, Class<B> bClass) {
 
-		Function<Identifier, U> identifierFunction = _convertIdentifier(
+		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Function<Identifier, T> modelFunction = identifierFunction.andThen(
+		Function<Path, T> modelFunction = identifierFunction.andThen(
 			id -> {
 				A a = _provideClass(aClass);
 				B b = _provideClass(bClass);
@@ -835,17 +835,17 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
-	private <V extends Identifier> Function<Identifier, V> _convertIdentifier(
+	private <V extends Identifier> Function<Path, V> _convertIdentifier(
 		Class<V> identifierClass) {
 
-		return identifier -> {
+		return path -> {
 			Optional<? extends Identifier> optional = _identifierFunction.apply(
-				identifierClass, identifier);
+				identifierClass, path);
 
 			return optional.map(
 				convertedIdentifier -> (V)convertedIdentifier
 			).orElseThrow(
-				() -> new MustHaveIdentifierConverter(identifierClass)
+				() -> new MustHavePathIdentifierMapper(identifierClass)
 			);
 		};
 	}
@@ -878,7 +878,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		);
 	}
 
-	private final BiFunction<Class<? extends Identifier>, Identifier,
+	private final BiFunction<Class<? extends Identifier>, Path,
 		Optional<? extends Identifier>> _identifierFunction;
 	private final Class<T> _modelClass;
 	private final Function<Class<?>, Optional<?>> _provideClassFunction;

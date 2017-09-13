@@ -14,8 +14,8 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.pagination;
 
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
+import com.liferay.vulcan.resource.identifier.Identifier;
 
 import java.util.Collection;
 

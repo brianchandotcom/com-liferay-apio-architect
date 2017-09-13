@@ -14,10 +14,11 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource;
 
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.resource.identifier.Identifier;
+import com.liferay.vulcan.uri.Path;
 
 import java.util.Map;
 import java.util.Optional;
@@ -34,14 +35,14 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
-	public Optional<Function<Identifier, Function<Map<String, Object>,
+	public Optional<Function<Path, Function<Map<String, Object>,
 		SingleModel<T>>>> getPostSingleModelFunctionOptional() {
 
 		return Optional.ofNullable(_postSingleModelFunction);
 	}
 
 	@Override
-	public Optional<Function<Identifier, SingleModel<T>>>
+	public Optional<Function<Path, SingleModel<T>>>
 		getSingleModelFunctionOptional() {
 
 		return Optional.ofNullable(_singleModelFunction);
@@ -52,21 +53,21 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	public void setPostSingleModelFunction(
-		Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
+		Function<Path, Function<Map<String, Object>, SingleModel<T>>>
 			postSingleModelFunction) {
 
 		_postSingleModelFunction = postSingleModelFunction;
 	}
 
 	public void setSingleModelFunction(
-		Function<Identifier, SingleModel<T>> singleModelFunction) {
+		Function<Path, SingleModel<T>> singleModelFunction) {
 
 		_singleModelFunction = singleModelFunction;
 	}
 
 	private Function<Identifier, Page<T>> _pageFunction;
-	private Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
+	private Function<Path, Function<Map<String, Object>, SingleModel<T>>>
 		_postSingleModelFunction;
-	private Function<Identifier, SingleModel<T>> _singleModelFunction;
+	private Function<Path, SingleModel<T>> _singleModelFunction;
 
 }
