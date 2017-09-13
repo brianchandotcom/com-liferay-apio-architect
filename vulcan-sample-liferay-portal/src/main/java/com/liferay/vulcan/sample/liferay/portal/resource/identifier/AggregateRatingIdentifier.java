@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.liferay.portal.identifier;
+package com.liferay.vulcan.sample.liferay.portal.resource.identifier;
 
 import com.liferay.portal.kernel.model.ClassedModel;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.vulcan.identifier.Identifier;
+import com.liferay.vulcan.resource.identifier.Identifier;
 
 /**
- * Instances of this identifier represents an identifier for rating entities.
+ * Instances of this identifier represents an identifier for aggregate rating
+ * entities.
  *
  * <p>
  * This identifier should only be used to identify {@link
@@ -52,11 +52,6 @@ public interface AggregateRatingIdentifier extends Identifier {
 			@Override
 			public long getClassPK() {
 				return classPK;
-			}
-
-			@Override
-			public String getId() {
-				return StringPool.BLANK;
 			}
 
 		};

@@ -12,12 +12,11 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.liferay.portal.identifier;
+package com.liferay.vulcan.sample.liferay.portal.resource.identifier;
 
 import com.liferay.portal.kernel.model.ClassedModel;
 import com.liferay.portal.kernel.model.GroupedModel;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.vulcan.identifier.Identifier;
+import com.liferay.vulcan.resource.identifier.Identifier;
 
 /**
  * Instances of this identifier represents an identifier of something
@@ -66,11 +65,6 @@ public interface CommentableIdentifier extends Identifier {
 			@Override
 			public long getGroupId() {
 				return groupId;
-			}
-
-			@Override
-			public String getId() {
-				return StringPool.BLANK;
 			}
 
 		};
