@@ -14,11 +14,11 @@
 
 package com.liferay.vulcan.message.hal.internal;
 
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.resource.Representor;
+import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
 import java.util.List;
