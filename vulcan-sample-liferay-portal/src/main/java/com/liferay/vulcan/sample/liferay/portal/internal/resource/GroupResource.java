@@ -22,8 +22,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.vulcan.identifier.LongIdentifier;
-import com.liferay.vulcan.identifier.RootIdentifier;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -32,6 +30,8 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.resource.identifier.LongIdentifier;
+import com.liferay.vulcan.resource.identifier.RootIdentifier;
 import com.liferay.vulcan.result.Try;
 
 import java.util.Collections;
@@ -112,13 +112,11 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 
 	private Group _getGroup(LongIdentifier groupLongIdentifier) {
 		try {
-			return _groupLocalService.getGroup(
-				groupLongIdentifier.getIdAsLong());
+			return _groupLocalService.getGroup(groupLongIdentifier.getId());
 		}
 		catch (NoSuchGroupException nsge) {
 			throw new NotFoundException(
-				"Unable to get group " + groupLongIdentifier.getIdAsLong(),
-				nsge);
+				"Unable to get group " + groupLongIdentifier.getId(), nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

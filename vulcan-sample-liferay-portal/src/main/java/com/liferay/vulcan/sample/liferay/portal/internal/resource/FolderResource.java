@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Representor;
@@ -32,6 +31,7 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.result.Try;
 
 import java.util.List;
@@ -110,7 +110,7 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 
 		Try<DLFolder> dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.getFolder(
-				groupLongIdentifier.getIdAsLong(), parentFolderId, name));
+				groupLongIdentifier.getId(), parentFolderId, name));
 
 		if (dlFolderTry.isSuccess()) {
 			throw new BadRequestException(
@@ -125,22 +125,19 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 
 		dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.addFolder(
-				groupLongIdentifier.getIdAsLong(),
-				groupLongIdentifier.getIdAsLong(), false, parentFolderId, name,
-				description, new ServiceContext()));
+				groupLongIdentifier.getId(), groupLongIdentifier.getId(), false,
+				parentFolderId, name, description, new ServiceContext()));
 
 		return dlFolderTry.getUnchecked();
 	}
 
 	private DLFolder _getDLFolder(LongIdentifier dlFolderLongIdentifier) {
 		try {
-			return _dlFolderService.getFolder(
-				dlFolderLongIdentifier.getIdAsLong());
+			return _dlFolderService.getFolder(dlFolderLongIdentifier.getId());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get folder " + dlFolderLongIdentifier.getIdAsLong(),
-				e);
+				"Unable to get folder " + dlFolderLongIdentifier.getId(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -165,11 +162,10 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 
 		try {
 			List<DLFolder> dlFolders = _dlFolderService.getFolders(
-				groupLongIdentifier.getIdAsLong(), 0,
-				pagination.getStartPosition(), pagination.getEndPosition(),
-				null);
+				groupLongIdentifier.getId(), 0, pagination.getStartPosition(),
+				pagination.getEndPosition(), null);
 			int count = _dlFolderService.getFoldersCount(
-				groupLongIdentifier.getIdAsLong(), 0);
+				groupLongIdentifier.getId(), 0);
 
 			return new PageItems<>(dlFolders, count);
 		}

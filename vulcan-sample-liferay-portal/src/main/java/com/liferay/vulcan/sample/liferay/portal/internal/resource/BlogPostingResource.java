@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Representor;
@@ -37,6 +36,7 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
@@ -193,7 +193,7 @@ public class BlogPostingResource
 
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
-		serviceContext.setScopeGroupId(groupLongIdentifier.getIdAsLong());
+		serviceContext.setScopeGroupId(groupLongIdentifier.getId());
 
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.addEntry(
@@ -216,13 +216,11 @@ public class BlogPostingResource
 
 	private BlogsEntry _getBlogsEntry(LongIdentifier blogsEntryLongIdentifier) {
 		try {
-			return _blogsService.getEntry(
-				blogsEntryLongIdentifier.getIdAsLong());
+			return _blogsService.getEntry(blogsEntryLongIdentifier.getId());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get blogs entry " +
-					blogsEntryLongIdentifier.getIdAsLong(),
+				"Unable to get blogs entry " + blogsEntryLongIdentifier.getId(),
 				e);
 		}
 		catch (PortalException pe) {
@@ -248,10 +246,10 @@ public class BlogPostingResource
 		Pagination pagination, LongIdentifier groupLongIdentifier) {
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			groupLongIdentifier.getIdAsLong(), 0, pagination.getStartPosition(),
+			groupLongIdentifier.getId(), 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
 		int count = _blogsService.getGroupEntriesCount(
-			groupLongIdentifier.getIdAsLong(), 0);
+			groupLongIdentifier.getId(), 0);
 
 		return new PageItems<>(blogsEntries, count);
 	}

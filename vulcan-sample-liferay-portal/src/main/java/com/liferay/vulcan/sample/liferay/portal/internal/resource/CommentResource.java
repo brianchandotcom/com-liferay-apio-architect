@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Function;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
@@ -39,6 +38,7 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.sample.liferay.portal.resource.identifier.CommentableIdentifier;
 
@@ -126,7 +126,7 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 	}
 
 	private Comment _getComment(LongIdentifier commentIdentifier) {
-		long commentId = commentIdentifier.getIdAsLong();
+		long commentId = commentIdentifier.getId();
 
 		return _commentManager.fetchComment(commentId);
 	}

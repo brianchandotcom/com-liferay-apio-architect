@@ -26,8 +26,6 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.vulcan.identifier.LongIdentifier;
-import com.liferay.vulcan.identifier.RootIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Representor;
@@ -35,6 +33,8 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.resource.identifier.LongIdentifier;
+import com.liferay.vulcan.resource.identifier.RootIdentifier;
 import com.liferay.vulcan.result.Try;
 
 import java.text.DateFormat;
@@ -206,12 +206,11 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 
 	private User _getUser(LongIdentifier userLongIdentifier) {
 		try {
-			return _userLocalService.getUserById(
-				userLongIdentifier.getIdAsLong());
+			return _userLocalService.getUserById(userLongIdentifier.getId());
 		}
 		catch (NoSuchUserException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get user " + userLongIdentifier.getIdAsLong(), e);
+				"Unable to get user " + userLongIdentifier.getId(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);

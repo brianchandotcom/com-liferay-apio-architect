@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.vulcan.identifier.LongIdentifier;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 import com.liferay.vulcan.resource.Representor;
@@ -33,6 +32,7 @@ import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.resource.identifier.LongIdentifier;
 
 import java.io.InputStream;
 
@@ -115,12 +115,11 @@ public class DigitalDocumentResource
 
 		try {
 			return _dlFileEntryService.getFileEntry(
-				dlFileEntryLongIdentifier.getIdAsLong());
+				dlFileEntryLongIdentifier.getId());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get file " + dlFileEntryLongIdentifier.getIdAsLong(),
-				e);
+				"Unable to get file " + dlFileEntryLongIdentifier.getId(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -155,7 +154,7 @@ public class DigitalDocumentResource
 
 		try {
 			DLFolder dlFolder = _dlFolderService.getFolder(
-				dlFolderLongIdentifier.getIdAsLong());
+				dlFolderLongIdentifier.getId());
 
 			List<DLFileEntry> dlFileEntries =
 				_dlFileEntryService.getFileEntries(
