@@ -16,7 +16,7 @@ package com.liferay.vulcan.pagination;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.vulcan.identifier.Identifier;
+import com.liferay.vulcan.resource.identifier.Identifier;
 
 import java.util.Collection;
 

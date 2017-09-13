@@ -15,8 +15,8 @@
 package com.liferay.vulcan.resource.builder;
 
 import com.liferay.vulcan.alias.BinaryFunction;
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.Representor;
+import com.liferay.vulcan.resource.identifier.Identifier;
 
 import java.util.Optional;
 import java.util.function.Function;

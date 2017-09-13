@@ -14,9 +14,9 @@
 
 package com.liferay.vulcan.resource;
 
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
+import com.liferay.vulcan.resource.identifier.Identifier;
 
 /**
  * Maps your domain models to resources that Vulcan can understand.

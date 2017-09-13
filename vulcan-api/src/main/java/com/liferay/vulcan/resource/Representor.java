@@ -15,7 +15,7 @@
 package com.liferay.vulcan.resource;
 
 import com.liferay.vulcan.alias.BinaryFunction;
-import com.liferay.vulcan.identifier.Identifier;
+import com.liferay.vulcan.resource.identifier.Identifier;
 
 import java.util.List;
 import java.util.Map;
