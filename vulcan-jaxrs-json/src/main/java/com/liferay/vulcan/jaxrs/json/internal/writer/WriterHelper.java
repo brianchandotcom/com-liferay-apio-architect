@@ -20,7 +20,6 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.function.TriConsumer;
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.jaxrs.json.internal.StringFunctionalList;
 import com.liferay.vulcan.list.FunctionalList;
@@ -32,10 +31,13 @@ import com.liferay.vulcan.provider.ServerURLProvider;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.RelatedModel;
 import com.liferay.vulcan.resource.Representor;
+import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.APIError;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
+import com.liferay.vulcan.uri.Path;
+import com.liferay.vulcan.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
 import java.net.URI;
@@ -145,11 +147,18 @@ public class WriterHelper {
 		Optional<String> optional = _resourceManager.getPathOptional(
 			page.getModelClass());
 
-		return optional.map(
+		return optional.flatMap(
 			path -> {
 				Identifier identifier = page.getIdentifier();
 
-				return "/p" + identifier.asURI() + "/" + path;
+				Optional<Path> pathOptional = _pathIdentifierMapperManager.map(
+					identifier, page.getModelClass());
+
+				return pathOptional.map(
+					Path::asURI
+				).map(
+					uri -> "/p" + uri + "/" + path
+				);
 			}
 		).map(
 			_getTransformURIFunction(
@@ -172,15 +181,20 @@ public class WriterHelper {
 	public <T> Optional<String> getSingleURLOptional(
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest) {
 
+		Class<T> modelClass = singleModel.getModelClass();
+
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentorOptional(
-				singleModel.getModelClass());
+			_resourceManager.getRepresentorOptional(modelClass);
 
 		return optional.map(
 			representor -> representor.getIdentifier(singleModel.getModel())
+		).flatMap(
+			identifier ->
+				_pathIdentifierMapperManager.map(identifier, modelClass)
 		).map(
-			identifier -> "/p/" + identifier.getType() + "/" +
-				identifier.getId()
+			Path::asURI
+		).map(
+			"/p/"::concat
 		).map(
 			_getTransformURIFunction(
 				(uri, transformer) ->
@@ -206,14 +220,20 @@ public class WriterHelper {
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest,
 		BiConsumer<String, Object> biConsumer) {
 
+		Class<T> modelClass = singleModel.getModelClass();
+
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentorOptional(
-				singleModel.getModelClass());
+			_resourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
 			representor -> representor.getIdentifier(singleModel.getModel())
+		).flatMap(
+			identifier ->
+				_pathIdentifierMapperManager.map(identifier, modelClass)
 		).map(
-			identifier -> "/b/" + identifier.asURI() + "/"
+			Path::asURI
+		).map(
+			"/b/"::concat
 		).ifPresent(
 			resourceURI -> {
 				for (String binaryId : binaryFunctions.keySet()) {
@@ -516,6 +536,9 @@ public class WriterHelper {
 
 	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private CollectionResourceURITransformer _collectionResourceURITransformer;
+
+	@Reference
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 	@Reference
 	private ResourceManager _resourceManager;
