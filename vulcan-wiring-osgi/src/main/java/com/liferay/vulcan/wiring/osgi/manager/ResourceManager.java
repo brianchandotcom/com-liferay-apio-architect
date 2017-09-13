@@ -76,8 +76,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the path in which the class name is exposed.
 	 */
 	public Optional<String> getPathOptional(String className) {
-		Optional<? extends Resource<?, ? extends Identifier>> optional =
-			getResourceOptional(className);
+		Optional<Resource> optional = _getResourceOptional(className);
 
 		return optional.map(Resource::getPath);
 	}
@@ -97,35 +96,6 @@ public class ResourceManager extends BaseManager<Resource> {
 			_representors.get(modelClass.getName()));
 
 		return optional.map(representor -> (Representor<T, U>)representor);
-	}
-
-	/**
-	 * Returns the {@link Resource} of the model class. Returns
-	 * <code>Optional#empty()</code> if the {@link Resource} isn't present.
-	 *
-	 * @param  modelClass the model class.
-	 * @return the {@link Resource}, if present; <code>Optional#empty()</code>
-	 *         otherwise.
-	 */
-	public <T, U extends Identifier> Optional<Resource<T, U>>
-		getResourceOptional(Class<T> modelClass) {
-
-		return getResourceOptional(modelClass.getName());
-	}
-
-	/**
-	 * Returns the {@link Resource} of the model class name. Returns
-	 * <code>Optional#empty()</code> if the {@link Resource} isn't present.
-	 *
-	 * @param  modelClassName the model class name.
-	 * @return the {@link Resource}, if present; <code>Optional#empty()</code>
-	 *         otherwise.
-	 */
-	public <T, U extends Identifier> Optional<Resource<T, U>>
-		getResourceOptional(String modelClassName) {
-
-		return getServiceOptional(modelClassName).map(
-			resource -> (Resource<T, U>)resource);
 	}
 
 	/**
@@ -168,7 +138,7 @@ public class ResourceManager extends BaseManager<Resource> {
 		optional.ifPresent(this::_removeModelClassMaps);
 
 		optional.filter(
-			modelClass -> getResourceOptional(modelClass).isPresent()
+			modelClass -> _getResourceOptional(modelClass.getName()).isPresent()
 		).ifPresent(
 			this::_addModelClassMaps
 		);
@@ -177,9 +147,12 @@ public class ResourceManager extends BaseManager<Resource> {
 	private <T, U extends Identifier> void _addModelClassMaps(
 		Class<T> modelClass) {
 
-		Optional<Resource<T, U>> optional = getResourceOptional(modelClass);
+		Optional<Resource> optional = _getResourceOptional(
+			modelClass.getName());
 
-		optional.ifPresent(
+		optional.map(
+			resource -> (Resource<T, U>)resource
+		).ifPresent(
 			resource -> {
 				_classes.put(resource.getPath(), modelClass);
 
@@ -202,7 +175,8 @@ public class ResourceManager extends BaseManager<Resource> {
 					_getRoutesFunction(modelClass, identifierClass, resource);
 
 				_routesFunctions.put(resource.getPath(), routesFunction);
-			});
+			}
+		);
 	}
 
 	private <T> TriConsumer<String, Class<?>, Function<Object, Identifier>>
@@ -236,6 +210,10 @@ public class ResourceManager extends BaseManager<Resource> {
 		HttpServletRequest httpServletRequest) {
 
 		return clazz -> _providerManager.provide(clazz, httpServletRequest);
+	}
+
+	private Optional<Resource> _getResourceOptional(String modelClassName) {
+		return getServiceOptional(modelClassName);
 	}
 
 	private <T, U extends Identifier> Function<HttpServletRequest, Routes<?>>
