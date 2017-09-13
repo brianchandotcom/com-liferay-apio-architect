@@ -35,13 +35,6 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 	 * Provide a lambda function that can be used to obtain the {@link
 	 * Identifier} used for a model.
 	 *
-	 * <p>
-	 * This identifier will be the same obtained in the {@link
-	 * com.liferay.vulcan.endpoint.RootEndpoint#getCollectionItemSingleModelTry(
-	 * String, String)}} method of a {@link
-	 * com.liferay.vulcan.endpoint.RootEndpoint} instance.
-	 * </p>
-	 *
 	 * @param  identifierFunction function used to obtain a model's identifier.
 	 * @return builder's next step.
 	 */

@@ -8,7 +8,6 @@ Export-Package:\
 	com.liferay.vulcan.error,\
 	com.liferay.vulcan.exception,\
 	com.liferay.vulcan.function,\
-	com.liferay.vulcan.identifier,\
 	com.liferay.vulcan.identifier.converter,\
 	com.liferay.vulcan.list,\
 	com.liferay.vulcan.logger,\
@@ -17,6 +16,7 @@ Export-Package:\
 	com.liferay.vulcan.provider,\
 	com.liferay.vulcan.resource,\
 	com.liferay.vulcan.resource.builder,\
+	com.liferay.vulcan.resource.identifier,\
 	com.liferay.vulcan.response.control,\
 	com.liferay.vulcan.result,\
 	com.liferay.vulcan.uri

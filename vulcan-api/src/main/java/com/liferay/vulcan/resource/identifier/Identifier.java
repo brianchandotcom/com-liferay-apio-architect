@@ -12,30 +12,12 @@
  * details.
  */
 
-package com.liferay.vulcan.identifier;
+package com.liferay.vulcan.resource.identifier;
 
 /**
- * Instances of this interface represents the root identifier of a resource.
- * Resources hanging directly from the root of the application will have this
- * identifier as its only identifier.
+ * Represents a resource identifier.
  *
  * @author Alejandro Hernández
  */
-public interface RootIdentifier extends Identifier {
-
-	@Override
-	public default String asURI() {
-		return "";
-	}
-
-	@Override
-	public default String getId() {
-		return "";
-	}
-
-	@Override
-	public default String getType() {
-		return "";
-	}
-
+public interface Identifier {
 }

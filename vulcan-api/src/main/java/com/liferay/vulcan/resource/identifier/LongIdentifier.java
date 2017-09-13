@@ -12,24 +12,19 @@
  * details.
  */
 
-package com.liferay.vulcan.identifier;
+package com.liferay.vulcan.resource.identifier;
 
 /**
  * Instances of this identifier represents a simple identifier with a
  * <code>long</code> value ID. This value can be retrieved with the {@link
- * #getIdAsLong()} method.
+ * #getId()} method.
  *
  * @author Alejandro Hernández
  */
 public interface LongIdentifier extends Identifier {
 
-	@Override
-	public default String getId() {
-		return String.valueOf(getIdAsLong());
-	}
-
 	/**
-	 * Returns the <code>long</code> ID for this identifier.
+	 * Returns the <code>long</code> ID of this identifier.
 	 *
 	 * <p>
 	 * For example with a resource obtained in the URL:
@@ -39,6 +34,6 @@ public interface LongIdentifier extends Identifier {
 	 *
 	 * @return the ID of the identifier.
 	 */
-	public long getIdAsLong();
+	public long getId();
 
 }

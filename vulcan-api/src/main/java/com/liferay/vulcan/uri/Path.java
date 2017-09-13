@@ -12,55 +12,70 @@
  * details.
  */
 
-package com.liferay.vulcan.identifier;
+package com.liferay.vulcan.uri;
 
 /**
- * Represents a resource identifier.
+ * Represents a resource path.
  *
  * <p>
  * For example a resource obtained in the URL: <code>/p/customers/2012</code>
- * will have an identifier containing <code>2012</code> and
- * <code>"customers"</code> as the ID and type respectively.
+ * will have a path containing <code>2012</code> and <code>"customers"</code> as
+ * the ID and type respectively.
  * </p>
  *
  * @author Alejandro Hernández
  */
-public interface Identifier {
+public class Path {
+
+	public Path() {
+		_type = "";
+		_id = "";
+	}
+
+	public Path(String type, String id) {
+		_type = type;
+		_id = id;
+	}
 
 	/**
-	 * Returns the chain of identifiers as an URI.
+	 * Returns this resource's path as an URI.
 	 *
 	 * @return the chain of identifiers as an URI.
 	 */
-	public default String asURI() {
+	public String asURI() {
 		return "/" + getType() + "/" + getId();
 	}
 
 	/**
-	 * Returns the ID of this identifier.
+	 * Returns the ID part of this {@code Path}.
 	 *
 	 * <p>
-	 * For example with a resource obtained in the URL:
+	 * For example with a resource obtained in the URI:
 	 * <code>/p/customers/2012</code> this method will return <code>2012</code>.
 	 * </p>
 	 *
-	 * @return the ID of the identifier.
+	 * @return the ID part of the {@code Path}.
 	 */
-	public String getId();
+	public String getId() {
+		return _id;
+	}
 
 	/**
-	 * Returns the type of this identifier.
+	 * Returns the type part of this {@code Path}
 	 *
 	 * <p>
-	 * For example with a resource obtained in the URL:
+	 * For example with a resource obtained in the URI:
 	 * <code>/p/customers/2012</code> this method will return
 	 * <code>"customer"</code>.
 	 * </p>
 	 *
-	 * @return the type of the identifier.
+	 * @return the type part of the {@code Path}.
 	 */
-	public default String getType() {
-		return "";
+	public String getType() {
+		return _type;
 	}
+
+	private final String _id;
+	private final String _type;
 
 }

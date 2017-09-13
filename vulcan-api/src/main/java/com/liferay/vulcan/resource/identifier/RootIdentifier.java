@@ -12,12 +12,14 @@
  * details.
  */
 
-package com.liferay.vulcan.application.internal.identifier;
-
-import com.liferay.vulcan.identifier.RootIdentifier;
+package com.liferay.vulcan.resource.identifier;
 
 /**
+ * Instances of this interface represents the root identifier of a resource.
+ * Resources hanging directly from the root of the application will have this
+ * identifier as its only identifier.
+ *
  * @author Alejandro Hernández
  */
-public class RootIdentifierImpl implements RootIdentifier {
+public interface RootIdentifier extends Identifier {
 }
