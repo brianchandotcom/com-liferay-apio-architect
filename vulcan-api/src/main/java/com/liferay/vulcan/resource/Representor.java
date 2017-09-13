@@ -20,6 +20,7 @@ import com.liferay.vulcan.resource.identifier.Identifier;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Instances of this interface will hold information about the metadata
@@ -91,7 +92,7 @@ public interface Representor<T, U extends Identifier> {
 	 *
 	 * @return the related collections.
 	 */
-	public List<RelatedCollection<T, ?>> getRelatedCollections();
+	public Stream<RelatedCollection<T, ?>> getRelatedCollections();
 
 	/**
 	 * Returns the types.

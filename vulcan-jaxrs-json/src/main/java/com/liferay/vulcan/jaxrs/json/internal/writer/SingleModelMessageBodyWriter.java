@@ -186,18 +186,6 @@ public class SingleModelMessageBodyWriter<T>
 					types -> singleModelMessageMapper.mapEmbeddedResourceTypes(
 						jsonObjectBuilder, embeddedPathElements, types));
 
-				Optional<Stream<RelatedCollection<V, ?>>>
-					relatedCollectionsOptional =
-						_resourceManager.getRelatedCollectionsOptional(
-							modelClass);
-
-				relatedCollectionsOptional.ifPresent(
-					stream -> stream.forEach(
-						relatedCollection -> _writeRelatedCollection(
-							singleModelMessageMapper, jsonObjectBuilder,
-							relatedCollection, singleModel,
-							embeddedPathElements, fields)));
-
 				Optional<Representor<V, Identifier>> representorOptional =
 					_resourceManager.getRepresentorOptional(modelClass);
 
@@ -231,6 +219,15 @@ public class SingleModelMessageBodyWriter<T>
 								singleModelMessageMapper, jsonObjectBuilder,
 								linkedRelatedModel, singleModel,
 								embeddedPathElements, fields, embedded));
+
+						Stream<RelatedCollection<V, ?>> stream =
+							representor.getRelatedCollections();
+
+						stream.forEach(
+							relatedCollection -> _writeRelatedCollection(
+								singleModelMessageMapper, jsonObjectBuilder,
+								relatedCollection, singleModel,
+								embeddedPathElements, fields));
 					});
 			},
 			(url, embeddedPathElements, isEmbedded) -> {
@@ -287,15 +284,6 @@ public class SingleModelMessageBodyWriter<T>
 			types -> singleModelMessageMapper.mapTypes(
 				jsonObjectBuilder, types));
 
-		Optional<Stream<RelatedCollection<U, ?>>> relatedCollectionsOptional =
-			_resourceManager.getRelatedCollectionsOptional(modelClass);
-
-		relatedCollectionsOptional.ifPresent(
-			stream -> stream.forEach(
-				relatedCollection -> _writeRelatedCollection(
-					singleModelMessageMapper, jsonObjectBuilder,
-					relatedCollection, singleModel, null, fields)));
-
 		Optional<Representor<U, Identifier>> representorOptional =
 			_resourceManager.getRepresentorOptional(modelClass);
 
@@ -334,6 +322,14 @@ public class SingleModelMessageBodyWriter<T>
 						singleModelMessageMapper, jsonObjectBuilder,
 						linkedRelatedModel, singleModel, null, fields,
 						embedded));
+
+				Stream<RelatedCollection<U, ?>> stream =
+					representor.getRelatedCollections();
+
+				stream.forEach(
+					relatedCollection -> _writeRelatedCollection(
+						singleModelMessageMapper, jsonObjectBuilder,
+						relatedCollection, singleModel, null, fields));
 			});
 
 		singleModelMessageMapper.onFinish(

@@ -220,18 +220,6 @@ public class PageMessageBodyWriter<T>
 						pageJSONObjectBuilder, itemJSONObjectBuilder,
 						embeddedPathElements, types));
 
-				Optional<Stream<RelatedCollection<V, ?>>>
-					relatedCollectionsOptional =
-						_resourceManager.getRelatedCollectionsOptional(
-							modelClass);
-
-				relatedCollectionsOptional.ifPresent(
-					relatedCollections -> relatedCollections.forEach(
-						relatedCollection -> _writeRelatedCollection(
-							pageMessageMapper, pageJSONObjectBuilder,
-							itemJSONObjectBuilder, relatedCollection,
-							singleModel, embeddedPathElements, fields)));
-
 				Optional<Representor<V, Identifier>> representorOptional =
 					_resourceManager.getRepresentorOptional(modelClass);
 
@@ -266,6 +254,15 @@ public class PageMessageBodyWriter<T>
 								itemJSONObjectBuilder, linkedRelatedModel,
 								singleModel, embeddedPathElements, fields,
 								embedded));
+
+						Stream<RelatedCollection<V, ?>> stream =
+							representor.getRelatedCollections();
+
+						stream.forEach(
+							relatedCollection -> _writeRelatedCollection(
+								pageMessageMapper, pageJSONObjectBuilder,
+								itemJSONObjectBuilder, relatedCollection,
+								singleModel, embeddedPathElements, fields));
 					});
 			},
 			(url, embeddedPathElements, isEmbedded) -> {
@@ -327,18 +324,6 @@ public class PageMessageBodyWriter<T>
 					url -> pageMessageMapper.mapItemSelfURL(
 						jsonObjectBuilder, itemJSONObjectBuilder, url));
 
-				Optional<Stream<RelatedCollection<T, ?>>>
-					relatedCollectionOptional =
-						_resourceManager.getRelatedCollectionsOptional(
-							modelClass);
-
-				relatedCollectionOptional.ifPresent(
-					relatedCollections -> relatedCollections.forEach(
-						relatedCollection -> _writeRelatedCollection(
-							pageMessageMapper, jsonObjectBuilder,
-							itemJSONObjectBuilder, relatedCollection,
-							singleModel, null, fields)));
-
 				Optional<Representor<T, Identifier>> representorOptional =
 					_resourceManager.getRepresentorOptional(modelClass);
 
@@ -371,6 +356,15 @@ public class PageMessageBodyWriter<T>
 								pageMessageMapper, jsonObjectBuilder,
 								itemJSONObjectBuilder, linkedRelatedModel,
 								singleModel, null, fields, embedded));
+
+						Stream<RelatedCollection<T, ?>> stream =
+							representor.getRelatedCollections();
+
+						stream.forEach(
+							relatedCollection -> _writeRelatedCollection(
+								pageMessageMapper, jsonObjectBuilder,
+								itemJSONObjectBuilder, relatedCollection,
+								singleModel, null, fields));
 					});
 
 				pageMessageMapper.onFinishItem(

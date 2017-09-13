@@ -208,11 +208,13 @@ public class RootEndpointImpl implements RootEndpoint {
 		_getIdentifierFunction(String nestedPath) {
 
 		return parentSingleModel -> {
-			Optional<Stream<RelatedCollection<T, ?>>> optional =
-				_resourceManager.getRelatedCollectionsOptional(
+			Optional<Representor<T, Identifier>> optional =
+				_resourceManager.getRepresentorOptional(
 					parentSingleModel.getModelClass());
 
-			return optional.flatMap(
+			return optional.map(
+				Representor::getRelatedCollections
+			).flatMap(
 				(Stream<RelatedCollection<T, ?>> stream) -> stream.filter(
 					_getFilterRelatedCollectionPredicate(nestedPath)
 				).findFirst(

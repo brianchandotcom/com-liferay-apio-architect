@@ -23,11 +23,15 @@ import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.identifier.Identifier;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * @author Alejandro Hernández
@@ -40,10 +44,12 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 	public RepresentorBuilderImpl(
 		Class<U> identifierClass,
 		TriConsumer<String, Class<?>, Function<Object, Identifier>>
-			addRelatedCollectionTriConsumer) {
+			addRelatedCollectionTriConsumer,
+		Supplier<List<RelatedCollection<T, ?>>> relatedCollectionsSupplier) {
 
 		_identifierClass = identifierClass;
 		_addRelatedCollectionTriConsumer = addRelatedCollectionTriConsumer;
+		_relatedCollectionsSupplier = relatedCollectionsSupplier;
 	}
 
 	@Override
@@ -93,8 +99,15 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public List<RelatedCollection<T, ?>> getRelatedCollections() {
-			return _relatedCollections;
+		public Stream<RelatedCollection<T, ?>> getRelatedCollections() {
+			Stream<List<RelatedCollection<T, ?>>> stream = Stream.of(
+				_relatedCollections, _relatedCollectionsSupplier.get());
+
+			return stream.filter(
+				Objects::nonNull
+			).flatMap(
+				Collection::stream
+			);
 		}
 
 		@Override
@@ -161,6 +174,8 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 	private final TriConsumer<String, Class<?>, Function<Object, Identifier>>
 		_addRelatedCollectionTriConsumer;
 	private final Class<U> _identifierClass;
+	private final Supplier<List<RelatedCollection<T, ?>>>
+		_relatedCollectionsSupplier;
 
 	private class FirstStepImpl implements FirstStep<T, U> {
 
