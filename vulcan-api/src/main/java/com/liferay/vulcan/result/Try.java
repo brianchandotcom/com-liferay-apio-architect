@@ -43,6 +43,7 @@ import java.util.function.Supplier;
  *
  * @author Alejandro Hernández
  */
+@SuppressWarnings("unused")
 public abstract class Try<T> {
 
 	/**

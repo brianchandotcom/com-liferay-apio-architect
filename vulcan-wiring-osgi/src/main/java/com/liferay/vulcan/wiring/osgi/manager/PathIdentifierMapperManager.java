@@ -112,6 +112,7 @@ public class PathIdentifierMapperManager
 		addService(serviceReference, PathIdentifierMapper.class);
 	}
 
+	@SuppressWarnings("unused")
 	protected void unsetServiceReference(
 		ServiceReference<PathIdentifierMapper> serviceReference) {
 
