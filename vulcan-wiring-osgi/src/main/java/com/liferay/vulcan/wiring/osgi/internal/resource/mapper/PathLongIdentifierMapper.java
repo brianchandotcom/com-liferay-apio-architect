@@ -46,7 +46,7 @@ public class PathLongIdentifierMapper
 	@Override
 	public <U> Path map(LongIdentifier longIdentifier, Class<U> modelClass) {
 		Optional<String> optional = _resourceManager.getPathOptional(
-			modelClass);
+			modelClass.getName());
 
 		String type = optional.orElseThrow(
 			() -> new UnresolvableURI(modelClass));

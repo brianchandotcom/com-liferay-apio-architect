@@ -60,16 +60,6 @@ import org.osgi.service.component.annotations.Reference;
 public class ResourceManager extends BaseManager<Resource> {
 
 	/**
-	 * Returns the model class name, exposed in a certain path.
-	 *
-	 * @param  path path of the resource for the class name.
-	 * @return the class name exposed in the path.
-	 */
-	public String getClassName(String path) {
-		return getModelClass(path).getName();
-	}
-
-	/**
 	 * Returns the model class, exposed in a certain path.
 	 *
 	 * @param  path path of the resource for the class.
@@ -77,16 +67,6 @@ public class ResourceManager extends BaseManager<Resource> {
 	 */
 	public <T> Class<T> getModelClass(String path) {
 		return (Class<T>)_classes.get(path);
-	}
-
-	/**
-	 * Returns the path in which a class is exposed.
-	 *
-	 * @param  modelClass the class of a {@link Resource}
-	 * @return the path in which the class is exposed.
-	 */
-	public Optional<String> getPathOptional(Class<?> modelClass) {
-		return getPathOptional(modelClass.getName());
 	}
 
 	/**

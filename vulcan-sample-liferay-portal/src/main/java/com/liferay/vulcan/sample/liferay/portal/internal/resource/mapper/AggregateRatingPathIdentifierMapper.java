@@ -74,7 +74,8 @@ public class AggregateRatingPathIdentifierMapper
 				id + " should be a string with the form 'type:classPK'");
 		}
 
-		String className = _resourceManager.getClassName(components[0]);
+		Class<Object> modelClass = _resourceManager.getModelClass(
+			components[0]);
 
 		Try<Long> longTry = Try.fromFallible(
 			() -> Long.parseLong(components[1]));
@@ -83,7 +84,7 @@ public class AggregateRatingPathIdentifierMapper
 			() -> new BadRequestException(
 				"Unable to convert " + id + " to a long class PK"));
 
-		return AggregateRatingIdentifier.create(className, classPK);
+		return AggregateRatingIdentifier.create(modelClass.getName(), classPK);
 	}
 
 	private String _getPath(String className) {

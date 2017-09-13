@@ -148,8 +148,10 @@ public class WriterHelper {
 
 		String pathURI = "/p" + path.asURI() + "/";
 
+		Class<T> modelClass = page.getModelClass();
+
 		Optional<String> optional = _resourceManager.getPathOptional(
-			page.getModelClass());
+			modelClass.getName());
 
 		return optional.map(
 			pathURI::concat
@@ -397,7 +399,7 @@ public class WriterHelper {
 		Class<V> modelClass = relatedCollection.getModelClass();
 
 		Optional<String> pathOptional = _resourceManager.getPathOptional(
-			modelClass);
+			modelClass.getName());
 
 		pathOptional.flatMap(
 			path -> singleURLOptional.map(singleURL -> singleURL + "/" + path)

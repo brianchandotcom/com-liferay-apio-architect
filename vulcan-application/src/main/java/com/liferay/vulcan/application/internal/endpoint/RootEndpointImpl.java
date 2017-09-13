@@ -190,13 +190,14 @@ public class RootEndpointImpl implements RootEndpoint {
 		_getFilterRelatedCollectionPredicate(String nestedPath) {
 
 		return relatedCollection -> {
-			Class<?> modelClass = relatedCollection.getModelClass();
+			Class<?> relatedModelClass = relatedCollection.getModelClass();
 
-			String relatedClassName = modelClass.getName();
+			String relatedClassName = relatedModelClass.getName();
 
-			String className = _resourceManager.getClassName(nestedPath);
+			Class<Object> modelClass = _resourceManager.getModelClass(
+				nestedPath);
 
-			if (relatedClassName.equals(className)) {
+			if (relatedClassName.equals(modelClass.getName())) {
 				return true;
 			}
 
