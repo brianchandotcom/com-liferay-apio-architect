@@ -83,7 +83,7 @@ public interface RootEndpoint {
 	 */
 	@GET
 	@Path("/b/{path}/{id}/{binaryId}")
-	public <T> Try<InputStream> getCollectionItemInputStreamTry(
+	public Try<InputStream> getCollectionItemInputStreamTry(
 		@PathParam("path") String path, @PathParam("id") String id,
 		@PathParam("binaryId") String binaryId);
 
