@@ -174,12 +174,12 @@ public class RootEndpointImpl implements RootEndpoint {
 			Routes::getPageFunctionOptional
 		).map(
 			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class, supplierNotFoundException
 		).flatMap(
 			_getNestedCollectionPageTryFunction(path, id, nestedPath)
 		).map(
-			optional -> optional.orElseThrow(supplierNotFoundException)
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class, supplierNotFoundException
 		);
 	}
 
