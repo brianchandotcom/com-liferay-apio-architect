@@ -14,9 +14,10 @@
 
 package com.liferay.vulcan.resource;
 
-import com.liferay.vulcan.identifier.Identifier;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
+import com.liferay.vulcan.resource.identifier.Identifier;
+import com.liferay.vulcan.uri.Path;
 
 import java.util.Map;
 import java.util.Optional;
@@ -60,7 +61,7 @@ public interface Routes<T> {
 	 * @return the function used to create the single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Function<Identifier, Function<Map<String, Object>,
+	public Optional<Function<Path, Function<Map<String, Object>,
 		SingleModel<T>>>> getPostSingleModelFunctionOptional();
 
 	/**
@@ -72,7 +73,7 @@ public interface Routes<T> {
 	 * @return the function used to create the single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Function<Identifier, SingleModel<T>>>
+	public Optional<Function<Path, SingleModel<T>>>
 		getSingleModelFunctionOptional();
 
 }
