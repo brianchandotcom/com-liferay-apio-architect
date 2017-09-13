@@ -63,7 +63,7 @@ public interface Representor<T, U extends Identifier> {
 	 * @param  model the model instance.
 	 * @return the identifier of the model.
 	 */
-	public Identifier getIdentifier(T model);
+	public U getIdentifier(T model);
 
 	/**
 	 * Returns the linked related models.

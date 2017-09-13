@@ -71,7 +71,7 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public Identifier getIdentifier(T model) {
+		public U getIdentifier(T model) {
 			return _identifierFunction.apply(model);
 		}
 
