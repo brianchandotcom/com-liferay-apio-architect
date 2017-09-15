@@ -107,7 +107,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Class<T> modelClass = _resourceManager.getModelClass(path);
 
 		Optional<Representor<T, Identifier>> representorOptional =
-			_resourceManager.getRepresentor(modelClass);
+			_resourceManager.getRepresentorOptional(modelClass);
 
 		Optional<BinaryFunction<T>> binaryFunctionOptional =
 			representorOptional.map(
@@ -206,7 +206,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		return parentSingleModel -> {
 			Optional<Stream<RelatedCollection<T, ?>>> optional =
-				_resourceManager.getRelatedCollections(
+				_resourceManager.getRelatedCollectionsOptional(
 					parentSingleModel.getModelClass());
 
 			return optional.flatMap(
@@ -254,7 +254,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	private <T> Try<Routes<T>> _getRoutesTry(String path) {
 		Try<Optional<Routes<T>>> optionalTry = Try.success(
-			_resourceManager.getRoutes(path, _httpServletRequest));
+			_resourceManager.getRoutesOptional(path, _httpServletRequest));
 
 		return optionalTry.map(
 			Optional::get

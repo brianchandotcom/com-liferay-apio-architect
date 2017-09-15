@@ -142,7 +142,7 @@ public class WriterHelper {
 	public <T> Optional<String> getCollectionURLOptional(
 		Page<T> page, HttpServletRequest httpServletRequest) {
 
-		Optional<String> optional = _resourceManager.getPath(
+		Optional<String> optional = _resourceManager.getPathOptional(
 			page.getModelClass());
 
 		return optional.map(
@@ -173,7 +173,8 @@ public class WriterHelper {
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest) {
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentor(singleModel.getModelClass());
+			_resourceManager.getRepresentorOptional(
+				singleModel.getModelClass());
 
 		return optional.map(
 			representor -> representor.getIdentifier(singleModel.getModel())
@@ -206,7 +207,8 @@ public class WriterHelper {
 		BiConsumer<String, Object> biConsumer) {
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentor(singleModel.getModelClass());
+			_resourceManager.getRepresentorOptional(
+				singleModel.getModelClass());
 
 		optional.map(
 			representor -> representor.getIdentifier(singleModel.getModel())
@@ -252,7 +254,7 @@ public class WriterHelper {
 			modelClass, fields);
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentor(modelClass);
+			_resourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
 			Representor::getFieldFunctions
@@ -321,7 +323,7 @@ public class WriterHelper {
 			modelClass, fields);
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentor(modelClass);
+			_resourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
 			Representor::getLinks
@@ -369,7 +371,8 @@ public class WriterHelper {
 
 		Class<V> modelClass = relatedCollection.getModelClass();
 
-		Optional<String> pathOptional = _resourceManager.getPath(modelClass);
+		Optional<String> pathOptional = _resourceManager.getPathOptional(
+			modelClass);
 
 		pathOptional.flatMap(
 			path -> singleURLOptional.map(singleURL -> singleURL + "/" + path)
@@ -470,7 +473,7 @@ public class WriterHelper {
 		Class<U> modelClass, Consumer<List<String>> consumer) {
 
 		Optional<Representor<U, Identifier>> optional =
-			_resourceManager.getRepresentor(modelClass);
+			_resourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
 			Representor::getTypes
@@ -483,7 +486,7 @@ public class WriterHelper {
 		Class<T> modelClass, Fields fields) {
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentor(modelClass);
+			_resourceManager.getRepresentorOptional(modelClass);
 
 		return optional.map(
 			Representor::getTypes

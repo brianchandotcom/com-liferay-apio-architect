@@ -188,7 +188,8 @@ public class SingleModelMessageBodyWriter<T>
 
 				Optional<Stream<RelatedCollection<V, ?>>>
 					relatedCollectionsOptional =
-						_resourceManager.getRelatedCollections(modelClass);
+						_resourceManager.getRelatedCollectionsOptional(
+							modelClass);
 
 				relatedCollectionsOptional.ifPresent(
 					stream -> stream.forEach(
@@ -198,7 +199,7 @@ public class SingleModelMessageBodyWriter<T>
 							embeddedPathElements, fields)));
 
 				Optional<Representor<V, Identifier>> representorOptional =
-					_resourceManager.getRepresentor(modelClass);
+					_resourceManager.getRepresentorOptional(modelClass);
 
 				representorOptional.ifPresent(
 					representor -> {
@@ -287,7 +288,7 @@ public class SingleModelMessageBodyWriter<T>
 				jsonObjectBuilder, types));
 
 		Optional<Stream<RelatedCollection<U, ?>>> relatedCollectionsOptional =
-			_resourceManager.getRelatedCollections(modelClass);
+			_resourceManager.getRelatedCollectionsOptional(modelClass);
 
 		relatedCollectionsOptional.ifPresent(
 			stream -> stream.forEach(
@@ -296,7 +297,7 @@ public class SingleModelMessageBodyWriter<T>
 					relatedCollection, singleModel, null, fields)));
 
 		Optional<Representor<U, Identifier>> representorOptional =
-			_resourceManager.getRepresentor(modelClass);
+			_resourceManager.getRepresentorOptional(modelClass);
 
 		representorOptional.ifPresent(
 			representor -> {

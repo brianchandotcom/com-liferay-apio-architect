@@ -86,8 +86,8 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  modelClass the class of a {@link Resource}
 	 * @return the path in which the class is exposed.
 	 */
-	public Optional<String> getPath(Class<?> modelClass) {
-		return getPath(modelClass.getName());
+	public Optional<String> getPathOptional(Class<?> modelClass) {
+		return getPathOptional(modelClass.getName());
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  className the class name of a {@link Resource}
 	 * @return the path in which the class name is exposed.
 	 */
-	public Optional<String> getPath(String className) {
+	public Optional<String> getPathOptional(String className) {
 		Optional<? extends Resource<?, Identifier>> optional =
 			getResourceOptional(className);
 
@@ -113,9 +113,10 @@ public class ResourceManager extends BaseManager<Resource> {
 	 *         Optional#empty()} otherwise.
 	 */
 	public <T, U extends Identifier> Optional<Stream<RelatedCollection<T, ?>>>
-		getRelatedCollections(Class<T> modelClass) {
+		getRelatedCollectionsOptional(Class<T> modelClass) {
 
-		Optional<Representor<T, U>> optional = getRepresentor(modelClass);
+		Optional<Representor<T, U>> optional = getRepresentorOptional(
+			modelClass);
 
 		List<RelatedCollection<T, ?>> extraRelatedCollections =
 			(List)_relatedCollections.get(modelClass.getName());
@@ -142,8 +143,8 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @return the representor of the model class, if present; {@code
 	 *         Optional#empty()} otherwise.
 	 */
-	public <T, U extends Identifier> Optional<Representor<T, U>> getRepresentor(
-		Class<T> modelClass) {
+	public <T, U extends Identifier> Optional<Representor<T, U>>
+		getRepresentorOptional(Class<T> modelClass) {
 
 		Optional<RepresentorImpl> optional = Optional.ofNullable(
 			_representors.get(modelClass.getName()));
@@ -187,7 +188,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	 * @param  httpServletRequest the actual request.
 	 * @return the routes of the model class.
 	 */
-	public <T> Optional<Routes<T>> getRoutes(
+	public <T> Optional<Routes<T>> getRoutesOptional(
 		String path, HttpServletRequest httpServletRequest) {
 
 		Optional<Function<HttpServletRequest, Routes<?>>> optional =
@@ -266,7 +267,7 @@ public class ResourceManager extends BaseManager<Resource> {
 						Identifier identifier = identifierFunction.apply(
 							object);
 
-						Optional<String> optional = getPath(modelClass);
+						Optional<String> optional = getPathOptional(modelClass);
 
 						return new Identifier() {
 

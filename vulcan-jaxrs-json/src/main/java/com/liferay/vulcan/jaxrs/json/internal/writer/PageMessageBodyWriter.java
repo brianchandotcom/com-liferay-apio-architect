@@ -222,7 +222,8 @@ public class PageMessageBodyWriter<T>
 
 				Optional<Stream<RelatedCollection<V, ?>>>
 					relatedCollectionsOptional =
-						_resourceManager.getRelatedCollections(modelClass);
+						_resourceManager.getRelatedCollectionsOptional(
+							modelClass);
 
 				relatedCollectionsOptional.ifPresent(
 					relatedCollections -> relatedCollections.forEach(
@@ -232,7 +233,7 @@ public class PageMessageBodyWriter<T>
 							singleModel, embeddedPathElements, fields)));
 
 				Optional<Representor<V, Identifier>> representorOptional =
-					_resourceManager.getRepresentor(modelClass);
+					_resourceManager.getRepresentorOptional(modelClass);
 
 				representorOptional.ifPresent(
 					representor -> {
@@ -328,7 +329,8 @@ public class PageMessageBodyWriter<T>
 
 				Optional<Stream<RelatedCollection<T, ?>>>
 					relatedCollectionOptional =
-						_resourceManager.getRelatedCollections(modelClass);
+						_resourceManager.getRelatedCollectionsOptional(
+							modelClass);
 
 				relatedCollectionOptional.ifPresent(
 					relatedCollections -> relatedCollections.forEach(
@@ -338,7 +340,7 @@ public class PageMessageBodyWriter<T>
 							singleModel, null, fields)));
 
 				Optional<Representor<T, Identifier>> representorOptional =
-					_resourceManager.getRepresentor(modelClass);
+					_resourceManager.getRepresentorOptional(modelClass);
 
 				representorOptional.ifPresent(
 					representor -> {

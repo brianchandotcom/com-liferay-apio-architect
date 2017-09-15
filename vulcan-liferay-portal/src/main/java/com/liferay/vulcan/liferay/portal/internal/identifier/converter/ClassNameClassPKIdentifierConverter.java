@@ -74,7 +74,7 @@ public class ClassNameClassPKIdentifierConverter
 
 	@Override
 	public ClassNameClassPKIdentifier create(String className, long classPK) {
-		Optional<String> optional = _resourceManager.getPath(className);
+		Optional<String> optional = _resourceManager.getPathOptional(className);
 
 		String path = optional.orElseThrow(
 			() -> new NotFoundException(
