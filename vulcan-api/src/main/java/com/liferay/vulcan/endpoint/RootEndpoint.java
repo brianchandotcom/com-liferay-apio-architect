@@ -23,11 +23,13 @@ import java.io.InputStream;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Declares the endpoint from which all of your APIs originate.
@@ -71,6 +73,20 @@ public interface RootEndpoint {
 	public <T> Try<SingleModel<T>> addNestedCollectionItemSingleModel(
 		@PathParam("name") String name, @PathParam("id") String id,
 		@PathParam("nestedName") String nestedName, Map<String, Object> body);
+
+	/**
+	 * Deletes a collection item for a given name or an exception if an error
+	 * occurred.
+	 *
+	 * @param  name the name of the resource to be deleted, extracted from the
+	 *         URL.
+	 * @param  id the ID of the resource.
+	 * @return the response for the operation.
+	 */
+	@DELETE
+	@Path("/p/{name}/{id}")
+	public Response deleteCollectionItem(
+		@PathParam("name") String name, @PathParam("id") String id);
 
 	/**
 	 * Returns the {@link InputStream} for a given resource identifier or an

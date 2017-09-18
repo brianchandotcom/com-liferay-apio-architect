@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -99,6 +100,28 @@ public class RootEndpointImpl implements RootEndpoint {
 				"POST method is not allowed for path " + name + "/" + id + "/" +
 					nestedName)
 		);
+	}
+
+	@Override
+	public Response deleteCollectionItem(String name, String id) {
+		Try<Routes<Object>> routesTry = _getRoutesTry(name);
+
+		routesTry.map(
+			Routes::getDeleteSingleModelFunctionOptional
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class,
+			() -> new NotAllowedException(
+				"DELETE method is not allowed for path " + name + "/" + id)
+		).getUnchecked(
+		).accept(
+			new Path(name, id)
+		);
+
+		Response.ResponseBuilder responseBuilder = Response.noContent();
+
+		return responseBuilder.build();
 	}
 
 	@Override
