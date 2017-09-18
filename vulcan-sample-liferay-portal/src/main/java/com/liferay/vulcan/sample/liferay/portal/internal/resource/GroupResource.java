@@ -73,7 +73,7 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 	}
 
 	@Override
-	public String getPath() {
+	public String getName() {
 		return "groups";
 	}
 

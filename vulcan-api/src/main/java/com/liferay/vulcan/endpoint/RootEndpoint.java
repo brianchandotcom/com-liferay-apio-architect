@@ -44,90 +44,91 @@ public interface RootEndpoint {
 
 	/**
 	 * Adds a new {@link SingleModel} by performing a POST request to the given
-	 * path or an exception if an error occurred.
+	 * name's resource or an exception if an error occurred.
 	 *
-	 * @param  path the path from the URL.
+	 * @param  name the name of the desired resource, extracted from the URL.
 	 * @return the created single model, or an exception if there was an error.
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/p/{path}")
+	@Path("/p/{name}")
 	@POST
 	public <T> Try<SingleModel<T>> addCollectionItemSingleModel(
-		@PathParam("path") String path, Map<String, Object> body);
+		@PathParam("name") String name, Map<String, Object> body);
 
 	/**
 	 * Adds a new {@link SingleModel} by performing a POST request to the given
-	 * path or an exception if an error occurred.
+	 * name's resource or an exception if an error occurred.
 	 *
-	 * @param  path the path from the URL.
+	 * @param  name the name of the parent resource, extracted from the URL.
 	 * @param  id the ID of the resource.
-	 * @param  nestedPath the path of the nested resource.
+	 * @param  nestedName the name of the desired resource, extracted from the
+	 *         URL.
 	 * @return the created single model, or an exception if there was an error.
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/p/{path}/{id}/{nestedPath}")
+	@Path("/p/{name}/{id}/{nestedName}")
 	@POST
 	public <T> Try<SingleModel<T>> addNestedCollectionItemSingleModel(
-		@PathParam("path") String path, @PathParam("id") String id,
-		@PathParam("nestedPath") String nestedPath, Map<String, Object> body);
+		@PathParam("name") String name, @PathParam("id") String id,
+		@PathParam("nestedName") String nestedName, Map<String, Object> body);
 
 	/**
 	 * Returns the {@link InputStream} for a given resource identifier or an
 	 * exception if an error occurred.
 	 *
-	 * @param  path the path from the URL.
+	 * @param  name the name the resource, extracted from the URL.
 	 * @param  id the ID of the resource.
 	 * @param  binaryId the ID to the binary resource.
 	 * @return the input stream of the binary file, or an exception it there was
 	 *         an error.
 	 */
 	@GET
-	@Path("/b/{path}/{id}/{binaryId}")
+	@Path("/b/{name}/{id}/{binaryId}")
 	public Try<InputStream> getCollectionItemInputStreamTry(
-		@PathParam("path") String path, @PathParam("id") String id,
+		@PathParam("name") String name, @PathParam("id") String id,
 		@PathParam("binaryId") String binaryId);
 
 	/**
-	 * Returns the {@link SingleModel} for a given path or an exception if an
+	 * Returns the {@link SingleModel} for a given name or an exception if an
 	 * error occurred.
 	 *
-	 * @param  path the path from the URL.
+	 * @param  name the name of the desired resource, extracted from the URL.
 	 * @param  id the ID of the resource.
-	 * @return the single model at the path, or an exception it there was an
-	 *         error.
+	 * @return the single model of a resource with this name, or an exception it
+	 *         there was an error.
 	 */
 	@GET
-	@Path("/p/{path}/{id}")
+	@Path("/p/{name}/{id}")
 	public <T> Try<SingleModel<T>> getCollectionItemSingleModelTry(
-		@PathParam("path") String path, @PathParam("id") String id);
+		@PathParam("name") String name, @PathParam("id") String id);
 
 	/**
-	 * Returns the collection {@link Page} for a given path or an exception if
-	 * an error occurred.
+	 * Returns the collection {@link Page} for a resource with the provided name
+	 * or an exception if an error occurred.
 	 *
-	 * @param  path the path from the URL.
-	 * @return the collection page at the path, or an exception if there was an
-	 *         error.
+	 * @param  name the name of the desired resource, extracted from the URL.
+	 * @return the collection page of a resource with this name, or an exception
+	 *         if there was an error.
 	 */
 	@GET
-	@Path("/p/{path}")
+	@Path("/p/{name}")
 	public <T> Try<Page<T>> getCollectionPageTry(
-		@PathParam("path") String path);
+		@PathParam("name") String name);
 
 	/**
 	 * Returns a nested collection {@link Page} for a given set of
-	 * path-id-nestedPath or an exception if an error occurred.
+	 * name-id-nestedName or an exception if an error occurred.
 	 *
-	 * @param  path the path from the URL.
+	 * @param  name the name of the parent resource, extracted from the URL.
 	 * @param  id the ID of the resource.
-	 * @param  nestedPath the path of the nested resource.
-	 * @return the collection page at the path, or an exception if there was an
-	 *         error.
+	 * @param  nestedName the name of the nested resource.
+	 * @return the collection page of a resource with this combination of
+	 *         name-id-nestedName, or an exception if there was an error.
 	 */
 	@GET
-	@Path("/p/{path}/{id}/{nestedPath}")
+	@Path("/p/{name}/{id}/{nestedName}")
 	public <T> Try<Page<T>> getNestedCollectionPageTry(
-		@PathParam("path") String path, @PathParam("id") String id,
-		@PathParam("nestedPath") String nestedPath);
+		@PathParam("name") String name, @PathParam("id") String id,
+		@PathParam("nestedName") String nestedName);
 
 }

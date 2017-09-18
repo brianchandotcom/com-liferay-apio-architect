@@ -59,7 +59,7 @@ public class AggregateRatingResource
 	}
 
 	@Override
-	public String getPath() {
+	public String getName() {
 		return "aggregate-ratings";
 	}
 

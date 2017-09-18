@@ -117,7 +117,7 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 	}
 
 	@Override
-	public String getPath() {
+	public String getName() {
 		return "people";
 	}
 

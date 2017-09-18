@@ -22,8 +22,8 @@ import com.liferay.vulcan.resource.identifier.Identifier;
  * Maps your domain models to resources that Vulcan can understand.
  *
  * <p>
- * Resources behave like an independent API so you must add the path for the API
- * via the {@link #getPath()} method.
+ * Resources behave like an API so you must add the name for the API via the
+ * {@link #getName()} method.
  * </p>
  *
  * <p>
@@ -61,11 +61,11 @@ public interface Resource<T, U extends Identifier> {
 		RepresentorBuilder<T, U> representorBuilder);
 
 	/**
-	 * Returns the path for this resource.
+	 * Returns the name for this resource.
 	 *
-	 * @return the path for this resource.
+	 * @return the name for this resource.
 	 */
-	public String getPath();
+	public String getName();
 
 	/**
 	 * Creates the {@link Routes} supported by the Resource.

@@ -150,7 +150,7 @@ public class WriterHelper {
 
 		Class<T> modelClass = page.getModelClass();
 
-		Optional<String> optional = _resourceManager.getPathOptional(
+		Optional<String> optional = _resourceManager.getNameOptional(
 			modelClass.getName());
 
 		return optional.map(
@@ -398,11 +398,11 @@ public class WriterHelper {
 
 		Class<V> modelClass = relatedCollection.getModelClass();
 
-		Optional<String> pathOptional = _resourceManager.getPathOptional(
+		Optional<String> nameOptional = _resourceManager.getNameOptional(
 			modelClass.getName());
 
-		pathOptional.flatMap(
-			path -> singleURLOptional.map(singleURL -> singleURL + "/" + path)
+		nameOptional.flatMap(
+			name -> singleURLOptional.map(singleURL -> singleURL + "/" + name)
 		).ifPresent(
 			url -> {
 				FunctionalList<String> embeddedPathElements =

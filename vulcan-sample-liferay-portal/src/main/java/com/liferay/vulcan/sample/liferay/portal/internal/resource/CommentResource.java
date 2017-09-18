@@ -81,7 +81,7 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 	}
 
 	@Override
-	public String getPath() {
+	public String getName() {
 		return "comments";
 	}
 

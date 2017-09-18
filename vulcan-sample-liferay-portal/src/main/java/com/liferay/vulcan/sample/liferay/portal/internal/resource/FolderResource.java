@@ -80,7 +80,7 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 	}
 
 	@Override
-	public String getPath() {
+	public String getName() {
 		return "folders";
 	}
 

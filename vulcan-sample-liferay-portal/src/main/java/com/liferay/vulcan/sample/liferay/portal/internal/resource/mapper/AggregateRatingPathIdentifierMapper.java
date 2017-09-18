@@ -55,13 +55,13 @@ public class AggregateRatingPathIdentifierMapper
 		AggregateRatingIdentifier aggregateRatingIdentifier,
 		Class<U> modelClass) {
 
-		String type = _getPath(modelClass.getName());
+		String name = _getName(modelClass.getName());
 
-		String ratedType = _getPath(aggregateRatingIdentifier.getClassName());
+		String ratedName = _getName(aggregateRatingIdentifier.getClassName());
 
-		String id = ratedType + ":" + aggregateRatingIdentifier.getClassPK();
+		String id = ratedName + ":" + aggregateRatingIdentifier.getClassPK();
 
-		return new Path(type, id);
+		return new Path(name, id);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class AggregateRatingPathIdentifierMapper
 
 		if (components.length != 2) {
 			throw new BadRequestException(
-				id + " should be a string with the form \"type:classPK\"");
+				id + " should be a string with the form \"name:classPK\"");
 		}
 
 		Optional<Class<Object>> optional =
@@ -92,8 +92,8 @@ public class AggregateRatingPathIdentifierMapper
 		return AggregateRatingIdentifier.create(modelClass.getName(), classPK);
 	}
 
-	private String _getPath(String className) {
-		Optional<String> optional = _resourceManager.getPathOptional(className);
+	private String _getName(String className) {
+		Optional<String> optional = _resourceManager.getNameOptional(className);
 
 		return optional.orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(className));

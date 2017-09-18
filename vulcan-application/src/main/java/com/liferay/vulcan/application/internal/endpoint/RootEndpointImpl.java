@@ -57,9 +57,9 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public <T> Try<SingleModel<T>> addCollectionItemSingleModel(
-		String path, Map<String, Object> body) {
+		String name, Map<String, Object> body) {
 
-		Try<Routes<T>> routesTry = _getRoutesTry(path);
+		Try<Routes<T>> routesTry = _getRoutesTry(name);
 
 		return routesTry.map(
 			Routes::getPostSingleModelFunctionOptional
@@ -68,7 +68,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		).mapFailMatching(
 			NoSuchElementException.class,
 			() -> new NotAllowedException(
-				"POST method is not allowed for path " + path)
+				"POST method is not allowed for path " + name)
 		).map(
 			postSingleModelFunction ->
 				postSingleModelFunction.apply(new Path())
@@ -79,9 +79,9 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public <T> Try<SingleModel<T>> addNestedCollectionItemSingleModel(
-		String path, String id, String nestedPath, Map<String, Object> body) {
+		String name, String id, String nestedName, Map<String, Object> body) {
 
-		Try<Routes<T>> routesTry = _getRoutesTry(nestedPath);
+		Try<Routes<T>> routesTry = _getRoutesTry(nestedName);
 
 		return routesTry.map(
 			Routes::getPostSingleModelFunctionOptional
@@ -90,11 +90,11 @@ public class RootEndpointImpl implements RootEndpoint {
 		).mapFailMatching(
 			NoSuchElementException.class,
 			() -> new NotAllowedException(
-				"POST method is not allowed for path " + path + "/" + id + "/" +
-					nestedPath)
+				"POST method is not allowed for path " + name + "/" + id + "/" +
+					nestedName)
 		).map(
 			postSingleModelFunction ->
-				postSingleModelFunction.apply(new Path(path, id))
+				postSingleModelFunction.apply(new Path(name, id))
 		).map(
 			postSingleModelFunction -> postSingleModelFunction.apply(body)
 		);
@@ -102,10 +102,10 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public Try<InputStream> getCollectionItemInputStreamTry(
-		String path, String id, String binaryId) {
+		String name, String id, String binaryId) {
 
 		Optional<Class<Object>> modelClassOptional =
-			_resourceManager.getModelClassOptional(path);
+			_resourceManager.getModelClassOptional(name);
 
 		Optional<BinaryFunction<Object>> binaryFunctionOptional =
 			modelClassOptional.flatMap(
@@ -121,17 +121,17 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		return binaryFunctionTry.mapFailMatching(
 			NoSuchElementException.class,
-			_getSupplierNotFoundException(path + "/" + id + "/" + binaryId)
+			_getSupplierNotFoundException(name + "/" + id + "/" + binaryId)
 		).flatMap(
-			binaryFunction -> _getInputStreamTry(path, id, binaryFunction)
+			binaryFunction -> _getInputStreamTry(name, id, binaryFunction)
 		);
 	}
 
 	@Override
 	public <T> Try<SingleModel<T>> getCollectionItemSingleModelTry(
-		String path, String id) {
+		String name, String id) {
 
-		Try<Routes<T>> routesTry = _getRoutesTry(path);
+		Try<Routes<T>> routesTry = _getRoutesTry(name);
 
 		return routesTry.map(
 			Routes::getSingleModelFunctionOptional
@@ -139,22 +139,22 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			_getSupplierNotFoundException(path + "/" + id)
+			_getSupplierNotFoundException(name + "/" + id)
 		).map(
-			singleModelFunction -> singleModelFunction.apply(new Path(path, id))
+			singleModelFunction -> singleModelFunction.apply(new Path(name, id))
 		);
 	}
 
 	@Override
-	public <T> Try<Page<T>> getCollectionPageTry(String path) {
-		Try<Routes<T>> routesTry = _getRoutesTry(path);
+	public <T> Try<Page<T>> getCollectionPageTry(String name) {
+		Try<Routes<T>> routesTry = _getRoutesTry(name);
 
 		return routesTry.map(
 			Routes::getPageFunctionOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
-			NoSuchElementException.class, _getSupplierNotFoundException(path)
+			NoSuchElementException.class, _getSupplierNotFoundException(name)
 		).map(
 			function -> function.apply(new Path())
 		).map(
@@ -164,21 +164,21 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public <T> Try<Page<T>> getNestedCollectionPageTry(
-		String path, String id, String nestedPath) {
+		String name, String id, String nestedName) {
 
-		Try<Routes<T>> routesTry = _getRoutesTry(nestedPath);
+		Try<Routes<T>> routesTry = _getRoutesTry(nestedName);
 
 		Supplier<NotFoundException> supplierNotFoundException =
-			_getSupplierNotFoundException(path + "/" + id + "/" + nestedPath);
+			_getSupplierNotFoundException(name + "/" + id + "/" + nestedName);
 
 		return routesTry.map(
 			Routes::getPageFunctionOptional
 		).map(
 			Optional::get
 		).map(
-			pathFunction -> pathFunction.apply(new Path(path, id))
+			pathFunction -> pathFunction.apply(new Path(name, id))
 		).flatMap(
-			_getNestedCollectionPageTryFunction(path, id, nestedPath)
+			_getNestedCollectionPageTryFunction(name, id, nestedName)
 		).map(
 			Optional::get
 		).mapFailMatching(
@@ -187,7 +187,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	private <T> Predicate<RelatedCollection<T, ?>>
-		_getFilterRelatedCollectionPredicate(String nestedPath) {
+		_getFilterRelatedCollectionPredicate(String nestedName) {
 
 		return relatedCollection -> {
 			Class<?> relatedModelClass = relatedCollection.getModelClass();
@@ -195,7 +195,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			String relatedClassName = relatedModelClass.getName();
 
 			Optional<Class<Object>> optional =
-				_resourceManager.getModelClassOptional(nestedPath);
+				_resourceManager.getModelClassOptional(nestedName);
 
 			return optional.map(
 				Class::getName
@@ -208,7 +208,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	private <T> ThrowableFunction<SingleModel<T>, Optional<Identifier>>
-		_getIdentifierFunction(String nestedPath) {
+		_getIdentifierFunction(String nestedName) {
 
 		return parentSingleModel -> {
 			Optional<Representor<T, Identifier>> optional =
@@ -219,7 +219,7 @@ public class RootEndpointImpl implements RootEndpoint {
 				Representor::getRelatedCollections
 			).flatMap(
 				(Stream<RelatedCollection<T, ?>> stream) -> stream.filter(
-					_getFilterRelatedCollectionPredicate(nestedPath)
+					_getFilterRelatedCollectionPredicate(nestedName)
 				).findFirst(
 				).map(
 					RelatedCollection::getIdentifierFunction
@@ -232,10 +232,10 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	private <T> Try<InputStream> _getInputStreamTry(
-		String path, String id, BinaryFunction<T> binaryFunction) {
+		String name, String id, BinaryFunction<T> binaryFunction) {
 
 		Try<SingleModel<T>> singleModelTry = getCollectionItemSingleModelTry(
-			path, id);
+			name, id);
 
 		return singleModelTry.map(
 			SingleModel::getModel
@@ -246,36 +246,36 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	private <T, S> ThrowableFunction<Function<Identifier, Page<S>>,
 		Try<Optional<Page<S>>>> _getNestedCollectionPageTryFunction(
-			String path, String id, String nestedPath) {
+			String name, String id, String nestedName) {
 
 		return pageFunction -> {
 			Try<SingleModel<T>> parentSingleModelTry =
-				getCollectionItemSingleModelTry(path, id);
+				getCollectionItemSingleModelTry(name, id);
 
 			return parentSingleModelTry.map(
-				_getIdentifierFunction(nestedPath)
+				_getIdentifierFunction(nestedName)
 			).map(
 				optional -> optional.map(pageFunction)
 			);
 		};
 	}
 
-	private <T> Try<Routes<T>> _getRoutesTry(String path) {
+	private <T> Try<Routes<T>> _getRoutesTry(String name) {
 		Try<Optional<Routes<T>>> optionalTry = Try.success(
-			_resourceManager.getRoutesOptional(path, _httpServletRequest));
+			_resourceManager.getRoutesOptional(name, _httpServletRequest));
 
 		return optionalTry.map(
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotFoundException("No resource found for path " + path)
+			() -> new NotFoundException("No resource found for path " + name)
 		);
 	}
 
 	private Supplier<NotFoundException> _getSupplierNotFoundException(
-		String path) {
+		String name) {
 
-		return () -> new NotFoundException("No endpoint found at path " + path);
+		return () -> new NotFoundException("No endpoint found at path " + name);
 	}
 
 	@Context

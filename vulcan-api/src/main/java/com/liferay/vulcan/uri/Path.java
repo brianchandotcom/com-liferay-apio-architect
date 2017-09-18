@@ -20,7 +20,7 @@ package com.liferay.vulcan.uri;
  * <p>
  * For example a resource obtained in the URL: <code>/p/customers/2012</code>
  * will have a path containing <code>2012</code> and <code>"customers"</code> as
- * the ID and type respectively.
+ * the ID and name respectively.
  * </p>
  *
  * @author Alejandro Hernández
@@ -28,12 +28,12 @@ package com.liferay.vulcan.uri;
 public class Path {
 
 	public Path() {
-		_type = "";
+		_name = "";
 		_id = "";
 	}
 
-	public Path(String type, String id) {
-		_type = type;
+	public Path(String name, String id) {
+		_name = name;
 		_id = id;
 	}
 
@@ -43,7 +43,7 @@ public class Path {
 	 * @return the chain of identifiers as an URI.
 	 */
 	public String asURI() {
-		return "/" + getType() + "/" + getId();
+		return "/" + getName() + "/" + getId();
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class Path {
 	}
 
 	/**
-	 * Returns the type part of this {@code Path}
+	 * Returns the name part of this {@code Path}
 	 *
 	 * <p>
 	 * For example with a resource obtained in the URI:
@@ -69,13 +69,13 @@ public class Path {
 	 * <code>"customer"</code>.
 	 * </p>
 	 *
-	 * @return the type part of the {@code Path}.
+	 * @return the name part of the {@code Path}.
 	 */
-	public String getType() {
-		return _type;
+	public String getName() {
+		return _name;
 	}
 
 	private final String _id;
-	private final String _type;
+	private final String _name;
 
 }

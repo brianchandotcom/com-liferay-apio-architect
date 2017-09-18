@@ -134,7 +134,7 @@ public class BlogPostingResource
 	}
 
 	@Override
-	public String getPath() {
+	public String getName() {
 		return "blogs";
 	}
 

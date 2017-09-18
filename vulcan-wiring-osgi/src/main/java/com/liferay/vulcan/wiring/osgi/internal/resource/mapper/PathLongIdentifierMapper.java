@@ -45,13 +45,13 @@ public class PathLongIdentifierMapper
 
 	@Override
 	public <U> Path map(LongIdentifier longIdentifier, Class<U> modelClass) {
-		Optional<String> optional = _resourceManager.getPathOptional(
+		Optional<String> optional = _resourceManager.getNameOptional(
 			modelClass.getName());
 
-		String type = optional.orElseThrow(
+		String name = optional.orElseThrow(
 			() -> new UnresolvableURI(modelClass));
 
-		return new Path(type, String.valueOf(longIdentifier.getId()));
+		return new Path(name, String.valueOf(longIdentifier.getId()));
 	}
 
 	@Override

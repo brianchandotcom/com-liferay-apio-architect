@@ -95,7 +95,7 @@ public class DigitalDocumentResource
 	}
 
 	@Override
-	public String getPath() {
+	public String getName() {
 		return "digitalDocuments";
 	}
 

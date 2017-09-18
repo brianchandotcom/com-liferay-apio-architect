@@ -60,28 +60,28 @@ import org.osgi.service.component.annotations.Reference;
 public class ResourceManager extends BaseManager<Resource> {
 
 	/**
-	 * Returns the model class, exposed in a certain path.
+	 * Returns the model class of a resource's name.
 	 *
-	 * @param  path path of the resource for the class.
-	 * @return the class exposed in the path.
+	 * @param  name name of the resource for the class.
+	 * @return the class of a resource's name.
 	 */
-	public <T> Optional<Class<T>> getModelClassOptional(String path) {
+	public <T> Optional<Class<T>> getModelClassOptional(String name) {
 		Optional<? extends Class<?>> optional = Optional.ofNullable(
-			_classes.get(path));
+			_classes.get(name));
 
 		return optional.map(clazz -> (Class<T>)clazz);
 	}
 
 	/**
-	 * Returns the path in which a class name is exposed.
+	 * Returns the name of a class names's resource.
 	 *
 	 * @param  className the class name of a {@link Resource}
-	 * @return the path in which the class name is exposed.
+	 * @return the name of a class name's resource.
 	 */
-	public Optional<String> getPathOptional(String className) {
+	public Optional<String> getNameOptional(String className) {
 		Optional<Resource> optional = _getResourceOptional(className);
 
-		return optional.map(Resource::getPath);
+		return optional.map(Resource::getName);
 	}
 
 	/**
@@ -102,17 +102,17 @@ public class ResourceManager extends BaseManager<Resource> {
 	}
 
 	/**
-	 * Returns the routes of the model class for a certain path.
+	 * Returns the routes of the model class for a certain name.
 	 *
-	 * @param  path the path of a {@link Resource}.
+	 * @param  name the name of a {@link Resource}.
 	 * @param  httpServletRequest the actual request.
 	 * @return the routes of the model class.
 	 */
 	public <T> Optional<Routes<T>> getRoutesOptional(
-		String path, HttpServletRequest httpServletRequest) {
+		String name, HttpServletRequest httpServletRequest) {
 
 		Optional<Function<HttpServletRequest, Routes<?>>> optional =
-			Optional.ofNullable(_routesFunctions.get(path));
+			Optional.ofNullable(_routesFunctions.get(name));
 
 		return optional.map(
 			routesFunction -> routesFunction.apply(httpServletRequest)
@@ -157,7 +157,7 @@ public class ResourceManager extends BaseManager<Resource> {
 			resource -> (Resource<T, U>)resource
 		).ifPresent(
 			resource -> {
-				_classes.put(resource.getPath(), modelClass);
+				_classes.put(resource.getName(), modelClass);
 
 				Class<U> identifierClass = _getIdentifierClass(resource);
 
@@ -177,7 +177,7 @@ public class ResourceManager extends BaseManager<Resource> {
 				Function<HttpServletRequest, Routes<?>> routesFunction =
 					_getRoutesFunction(modelClass, identifierClass, resource);
 
-				_routesFunctions.put(resource.getPath(), routesFunction);
+				_routesFunctions.put(resource.getName(), routesFunction);
 			}
 		);
 	}
