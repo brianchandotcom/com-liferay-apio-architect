@@ -14,13 +14,21 @@
 
 package com.liferay.vulcan.resource.builder;
 
+import com.liferay.vulcan.function.DecaConsumer;
 import com.liferay.vulcan.function.DecaFunction;
+import com.liferay.vulcan.function.EnneaConsumer;
 import com.liferay.vulcan.function.EnneaFunction;
+import com.liferay.vulcan.function.HeptaConsumer;
 import com.liferay.vulcan.function.HeptaFunction;
+import com.liferay.vulcan.function.HexaConsumer;
 import com.liferay.vulcan.function.HexaFunction;
+import com.liferay.vulcan.function.OctaConsumer;
 import com.liferay.vulcan.function.OctaFunction;
+import com.liferay.vulcan.function.PentaConsumer;
 import com.liferay.vulcan.function.PentaFunction;
+import com.liferay.vulcan.function.TetraConsumer;
 import com.liferay.vulcan.function.TetraFunction;
+import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.function.UndecaFunction;
 import com.liferay.vulcan.pagination.PageItems;
@@ -29,7 +37,9 @@ import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.identifier.Identifier;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -642,5 +652,167 @@ public interface RoutesBuilder<T, U extends Identifier> {
 	 */
 	public <A, B> RoutesBuilder<T, U> collectionPageItemGetter(
 		TriFunction<U, A, B, T> triFunction, Class<A> aClass, Class<B> bClass);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  biConsumer the function that will be used to delete the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the remover function.
+	 * @return the updated builder.
+	 */
+	public <A> RoutesBuilder<T, U> collectionPageItemRemover(
+		BiConsumer<U, A> biConsumer, Class<A> aClass);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  consumer the function that will be used to delete the single
+	 *         model.
+	 * @return the updated builder.
+	 */
+	public RoutesBuilder<T, U> collectionPageItemRemover(Consumer<U> consumer);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  decaConsumer the function that will be used to delete the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the remover function.
+	 * @param  bClass the class of the third parameter of the remover function.
+	 * @param  cClass the class of the fourth parameter of the remover function.
+	 * @param  dClass the class of the fifth parameter of the remover function.
+	 * @param  eClass the class of the sixth parameter of the remover function.
+	 * @param  fClass the class of the seventh parameter of the remover
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the remover function.
+	 * @param  hClass the class of the ninth parameter of the remover function.
+	 * @param  iClass the class of the tenth parameter of the remover function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T, U>
+		collectionPageItemRemover(
+			DecaConsumer<U, A, B, C, D, E, F, G, H, I> decaConsumer,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
+			Class<I> iClass);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  enneaConsumer the function that will be used to delete the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the remover function.
+	 * @param  bClass the class of the third parameter of the remover function.
+	 * @param  cClass the class of the fourth parameter of the remover function.
+	 * @param  dClass the class of the fifth parameter of the remover function.
+	 * @param  eClass the class of the sixth parameter of the remover function.
+	 * @param  fClass the class of the seventh parameter of the remover
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the remover function.
+	 * @param  hClass the class of the ninth parameter of the remover function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
+		collectionPageItemRemover(
+			EnneaConsumer<U, A, B, C, D, E, F, G, H> enneaConsumer,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  heptaConsumer the function that will be used to delete the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the remover function.
+	 * @param  bClass the class of the third parameter of the remover function.
+	 * @param  cClass the class of the fourth parameter of the remover function.
+	 * @param  dClass the class of the fifth parameter of the remover function.
+	 * @param  eClass the class of the sixth parameter of the remover function.
+	 * @param  fClass the class of the seventh parameter of the remover
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F> RoutesBuilder<T, U> collectionPageItemRemover(
+		HeptaConsumer<U, A, B, C, D, E, F> heptaConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+		Class<F> fClass);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  hexaConsumer the function that will be used to delete the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the remover function.
+	 * @param  bClass the class of the third parameter of the remover function.
+	 * @param  cClass the class of the fourth parameter of the remover function.
+	 * @param  dClass the class of the fifth parameter of the remover function.
+	 * @param  eClass the class of the sixth parameter of the remover function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E> RoutesBuilder<T, U> collectionPageItemRemover(
+		HexaConsumer<U, A, B, C, D, E> hexaConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  octaConsumer the function that will be used to delete the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the remover function.
+	 * @param  bClass the class of the third parameter of the remover function.
+	 * @param  cClass the class of the fourth parameter of the remover function.
+	 * @param  dClass the class of the fifth parameter of the remover function.
+	 * @param  eClass the class of the sixth parameter of the remover function.
+	 * @param  fClass the class of the seventh parameter of the remover
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the remover function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G> RoutesBuilder<T, U> collectionPageItemRemover(
+		OctaConsumer<U, A, B, C, D, E, F, G> octaConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+		Class<F> fClass, Class<G> gClass);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  pentaConsumer the function that will be used to delete the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the remover function.
+	 * @param  bClass the class of the third parameter of the remover function.
+	 * @param  cClass the class of the fourth parameter of the remover function.
+	 * @param  dClass the class of the fifth parameter of the remover function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D> RoutesBuilder<T, U> collectionPageItemRemover(
+		PentaConsumer<U, A, B, C, D> pentaConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  tetraConsumer the function that will be used to delete the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the remover function.
+	 * @param  bClass the class of the third parameter of the remover function.
+	 * @param  cClass the class of the fourth parameter of the remover function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C> RoutesBuilder<T, U> collectionPageItemRemover(
+		TetraConsumer<U, A, B, C> tetraConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass);
+
+	/**
+	 * Adds a route to a collection item remover function.
+	 *
+	 * @param  triConsumer the function that will be used to delete the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the remover function.
+	 * @param  bClass the class of the third parameter of the remover function.
+	 * @return the updated builder.
+	 */
+	public <A, B> RoutesBuilder<T, U> collectionPageItemRemover(
+		TriConsumer<U, A, B> triConsumer, Class<A> aClass, Class<B> bClass);
 
 }
