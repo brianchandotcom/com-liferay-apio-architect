@@ -17,48 +17,53 @@ package com.liferay.vulcan.function;
 import java.util.Objects;
 
 /**
- * Represents an operation that accepts three input arguments and returns no
- * result. This is the three-arity specialization of {@link
+ * Represents an operation that accepts six input arguments and returns no
+ * result. This is the six-arity specialization of {@link
  * java.util.function.Consumer}. Unlike most other functional interfaces, {@code
  * TriConsumer} is expected to operate via side-effects.
  *
  * <p>This is a <a href="package-summary.html">functional interface</a>
- * whose functional method is {@link #accept(Object, Object, Object)}.
+ * whose functional method is {@link #accept(Object, Object, Object, Object,
+ * Object, Object)}.
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
  */
 @FunctionalInterface
-public interface TriConsumer<A, B, C> {
+public interface HexaConsumer<A, B, C, D, E, F> {
 
 	/**
 	 * Performs this operation on the given arguments.
 	 *
-	 * @param a the first input argument.
-	 * @param b the second input argument.
-	 * @param c the third input argument.
+	 * @param a the first function argument
+	 * @param b the second function argument
+	 * @param c the third function argument
+	 * @param d the fourth function argument
+	 * @param e the fifth function argument
+	 * @param f the sixth function argument
 	 */
-	public void accept(A a, B b, C c);
+	public void accept(A a, B b, C c, D d, E e, F f);
 
 	/**
-	 * Returns a composed {@code TriConsumer} that performs, in sequence, this
+	 * Returns a composed {@code HexaConsumer} that performs, in sequence, this
 	 * operation followed by the {@code after} operation. If performing either
 	 * operation throws an exception, it is relayed to the caller of the
 	 * composed operation. If performing this operation throws an exception, the
 	 * {@code after} operation will not be performed.
 	 *
 	 * @param  after the operation to perform after this operation
-	 * @return a composed {@code TriConsumer} that performs in sequence this
+	 * @return a composed {@code HexaConsumer} that performs in sequence this
 	 *         operation followed by the {@code after} operation
 	 */
-	public default TriConsumer<A, B, C> andThen(
-		TriConsumer<? super A, ? super B, ? super C> after) {
+	public default HexaConsumer<A, B, C, D, E, F> andThen(
+		HexaConsumer<? super A, ? super B, ? super C, ? super D, ? super E,
+			? super F> after) {
 
 		Objects.requireNonNull(after);
 
-		return (a, b, c) -> {
-			accept(a, b, c);
-			after.accept(a, b, c);
+		return (a, b, c, d, e, f) -> {
+			accept(a, b, c, d, e, f);
+			after.accept(a, b, c, d, e, f);
 		};
 	}
 
