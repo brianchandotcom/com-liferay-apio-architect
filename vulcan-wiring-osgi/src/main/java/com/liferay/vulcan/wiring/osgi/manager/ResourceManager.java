@@ -163,7 +163,8 @@ public class ResourceManager extends BaseManager<Resource> {
 
 				Supplier<List<RelatedCollection<T, ?>>>
 					relatedCollectionSupplier =
-						() -> (List)_relatedCollections.get(modelClass);
+						() -> (List)_relatedCollections.get(
+							modelClass.getName());
 
 				RepresentorImpl representor =
 					(RepresentorImpl)resource.buildRepresentor(
