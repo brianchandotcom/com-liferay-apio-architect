@@ -22,12 +22,18 @@ import com.liferay.vulcan.uri.Path;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
  * @author Alejandro Hernández
  */
 public class RoutesImpl<T> implements Routes<T> {
+
+	@Override
+	public Optional<Consumer<Path>> getDeleteSingleModelFunctionOptional() {
+		return Optional.ofNullable(_deleteSingleModelFunction);
+	}
 
 	@Override
 	public Optional<Function<Path, Function<Identifier, Page<T>>>>
@@ -50,6 +56,12 @@ public class RoutesImpl<T> implements Routes<T> {
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
+	public void setDeleteSingleModelFunction(
+		Consumer<Path> deleteSingleModelFunction) {
+
+		_deleteSingleModelFunction = deleteSingleModelFunction;
+	}
+
 	public void setPageFunction(
 		Function<Path, Function<Identifier, Page<T>>> pageFunction) {
 
@@ -69,6 +81,7 @@ public class RoutesImpl<T> implements Routes<T> {
 		_singleModelFunction = singleModelFunction;
 	}
 
+	private Consumer<Path> _deleteSingleModelFunction;
 	private Function<Path, Function<Identifier, Page<T>>> _pageFunction;
 	private Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
 		_postSingleModelFunction;
