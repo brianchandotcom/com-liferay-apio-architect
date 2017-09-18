@@ -17,13 +17,21 @@ package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHavePathIdentifierMapper;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustUseSameIdentifier;
+import com.liferay.vulcan.function.DecaConsumer;
 import com.liferay.vulcan.function.DecaFunction;
+import com.liferay.vulcan.function.EnneaConsumer;
 import com.liferay.vulcan.function.EnneaFunction;
+import com.liferay.vulcan.function.HeptaConsumer;
 import com.liferay.vulcan.function.HeptaFunction;
+import com.liferay.vulcan.function.HexaConsumer;
 import com.liferay.vulcan.function.HexaFunction;
+import com.liferay.vulcan.function.OctaConsumer;
 import com.liferay.vulcan.function.OctaFunction;
+import com.liferay.vulcan.function.PentaConsumer;
 import com.liferay.vulcan.function.PentaFunction;
+import com.liferay.vulcan.function.TetraConsumer;
 import com.liferay.vulcan.function.TetraFunction;
+import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.function.UndecaFunction;
 import com.liferay.vulcan.pagination.PageItems;
@@ -38,7 +46,9 @@ import com.liferay.vulcan.wiring.osgi.internal.resource.RoutesImpl;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -861,6 +871,234 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 		_routesImpl.setSingleModelFunction(
 			modelFunction.andThen(_getCreateSingleModelFunction()));
+
+		return this;
+	}
+
+	public <A> RoutesBuilder<T, U> collectionPageItemRemover(
+		BiConsumer<U, A> biConsumer, Class<A> aClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+			A a = _provideClass(aClass);
+
+			biConsumer.accept(u, a);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+
+		return this;
+	}
+
+	public RoutesBuilder<T, U> collectionPageItemRemover(Consumer<U> consumer) {
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+
+			consumer.accept(u);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+
+		return this;
+	}
+
+	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T, U>
+		collectionPageItemRemover(
+			DecaConsumer<U, A, B, C, D, E, F, G, H, I> decaConsumer,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
+			Class<I> iClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+			A a = _provideClass(aClass);
+			B b = _provideClass(bClass);
+			C c = _provideClass(cClass);
+			D d = _provideClass(dClass);
+			E e = _provideClass(eClass);
+			F f = _provideClass(fClass);
+			G g = _provideClass(gClass);
+			H h = _provideClass(hClass);
+			I i = _provideClass(iClass);
+
+			decaConsumer.accept(u, a, b, c, d, e, f, g, h, i);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+
+		return this;
+	}
+
+	public <A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
+		collectionPageItemRemover(
+			EnneaConsumer<U, A, B, C, D, E, F, G, H> enneaConsumer,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass,
+			Class<H> hClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+			A a = _provideClass(aClass);
+			B b = _provideClass(bClass);
+			C c = _provideClass(cClass);
+			D d = _provideClass(dClass);
+			E e = _provideClass(eClass);
+			F f = _provideClass(fClass);
+			G g = _provideClass(gClass);
+			H h = _provideClass(hClass);
+
+			enneaConsumer.accept(u, a, b, c, d, e, f, g, h);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+
+		return this;
+	}
+
+	public <A, B, C, D, E, F> RoutesBuilder<T, U> collectionPageItemRemover(
+		HeptaConsumer<U, A, B, C, D, E, F> heptaConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+		Class<F> fClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+			A a = _provideClass(aClass);
+			B b = _provideClass(bClass);
+			C c = _provideClass(cClass);
+			D d = _provideClass(dClass);
+			E e = _provideClass(eClass);
+			F f = _provideClass(fClass);
+
+			heptaConsumer.accept(u, a, b, c, d, e, f);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+
+		return this;
+	}
+
+	public <A, B, C, D, E> RoutesBuilder<T, U> collectionPageItemRemover(
+		HexaConsumer<U, A, B, C, D, E> hexaConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+			A a = _provideClass(aClass);
+			B b = _provideClass(bClass);
+			C c = _provideClass(cClass);
+			D d = _provideClass(dClass);
+			E e = _provideClass(eClass);
+
+			hexaConsumer.accept(u, a, b, c, d, e);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+
+		return this;
+	}
+
+	public <A, B, C, D, E, F, G> RoutesBuilder<T, U> collectionPageItemRemover(
+		OctaConsumer<U, A, B, C, D, E, F, G> octaConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+		Class<F> fClass, Class<G> gClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+			A a = _provideClass(aClass);
+			B b = _provideClass(bClass);
+			C c = _provideClass(cClass);
+			D d = _provideClass(dClass);
+			E e = _provideClass(eClass);
+			F f = _provideClass(fClass);
+			G g = _provideClass(gClass);
+
+			octaConsumer.accept(u, a, b, c, d, e, f, g);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+
+		return this;
+	}
+
+	public <A, B, C, D> RoutesBuilder<T, U> collectionPageItemRemover(
+		PentaConsumer<U, A, B, C, D> pentaConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+			A a = _provideClass(aClass);
+			B b = _provideClass(bClass);
+			C c = _provideClass(cClass);
+			D d = _provideClass(dClass);
+
+			pentaConsumer.accept(u, a, b, c, d);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+
+		return this;
+	}
+
+	public <A, B, C> RoutesBuilder<T, U> collectionPageItemRemover(
+		TetraConsumer<U, A, B, C> tetraConsumer, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+			A a = _provideClass(aClass);
+			B b = _provideClass(bClass);
+			C c = _provideClass(cClass);
+
+			tetraConsumer.accept(u, a, b, c);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+
+		return this;
+	}
+
+	public <A, B> RoutesBuilder<T, U> collectionPageItemRemover(
+		TriConsumer<U, A, B> triConsumer, Class<A> aClass, Class<B> bClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		Consumer<Path> deleteFunction = path -> {
+			U u = identifierFunction.apply(path);
+			A a = _provideClass(aClass);
+			B b = _provideClass(bClass);
+
+			triConsumer.accept(u, a, b);
+		};
+
+		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
 
 		return this;
 	}
