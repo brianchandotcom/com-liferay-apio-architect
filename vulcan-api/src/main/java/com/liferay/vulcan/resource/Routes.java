@@ -62,7 +62,7 @@ public interface Routes<T> {
 	 * @return the function used to create the single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Function<Path, Function<Map<String, Object>,
+	public Optional<Function<Identifier, Function<Map<String, Object>,
 		SingleModel<T>>>> getPostSingleModelFunctionOptional();
 
 	/**

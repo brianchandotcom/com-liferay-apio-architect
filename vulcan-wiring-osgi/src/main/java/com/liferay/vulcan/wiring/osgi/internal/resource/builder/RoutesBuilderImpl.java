@@ -357,8 +357,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		BiFunction<V, Map<String, Object>, T> biFunction,
 		Class<V> identifierClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					T t = biFunction.apply(v, body);
 
@@ -376,8 +379,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass, Class<G> gClass, Class<H> hClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					A a = _provideClass(aClass);
 					B b = _provideClass(bClass);
@@ -404,8 +410,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass, Class<G> gClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					A a = _provideClass(aClass);
 					B b = _provideClass(bClass);
@@ -431,8 +440,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					A a = _provideClass(aClass);
 					B b = _provideClass(bClass);
@@ -455,8 +467,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					A a = _provideClass(aClass);
 					B b = _provideClass(bClass);
@@ -479,8 +494,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					A a = _provideClass(aClass);
 					B b = _provideClass(bClass);
@@ -504,8 +522,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					A a = _provideClass(aClass);
 					B b = _provideClass(bClass);
@@ -525,8 +546,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			TetraFunction<V, Map<String, Object>, A, B, T> tetraFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					A a = _provideClass(aClass);
 					B b = _provideClass(bClass);
@@ -545,8 +569,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			TriFunction<V, Map<String, Object>, A, T> triFunction,
 			Class<V> identifierClass, Class<A> aClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					A a = _provideClass(aClass);
 
@@ -567,8 +594,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<F> fClass, Class<G> gClass, Class<H> hClass,
 			Class<I> iClass) {
 
+		Function<Identifier, V> collectionIdentifierFunction =
+			_getCollectionIdentifierFunction(identifierClass);
+
 		_routesImpl.setPostSingleModelFunction(
-			_convertIdentifier(identifierClass).andThen(
+			collectionIdentifierFunction.andThen(
 				v -> body -> {
 					A a = _provideClass(aClass);
 					B b = _provideClass(bClass);

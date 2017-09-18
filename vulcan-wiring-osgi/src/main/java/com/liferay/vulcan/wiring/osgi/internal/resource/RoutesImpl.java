@@ -37,7 +37,7 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
-	public Optional<Function<Path, Function<Map<String, Object>,
+	public Optional<Function<Identifier, Function<Map<String, Object>,
 		SingleModel<T>>>> getPostSingleModelFunctionOptional() {
 
 		return Optional.ofNullable(_postSingleModelFunction);
@@ -57,7 +57,7 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	public void setPostSingleModelFunction(
-		Function<Path, Function<Map<String, Object>, SingleModel<T>>>
+		Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
 			postSingleModelFunction) {
 
 		_postSingleModelFunction = postSingleModelFunction;
@@ -70,7 +70,7 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	private Function<Path, Function<Identifier, Page<T>>> _pageFunction;
-	private Function<Path, Function<Map<String, Object>, SingleModel<T>>>
+	private Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
 		_postSingleModelFunction;
 	private Function<Path, SingleModel<T>> _singleModelFunction;
 

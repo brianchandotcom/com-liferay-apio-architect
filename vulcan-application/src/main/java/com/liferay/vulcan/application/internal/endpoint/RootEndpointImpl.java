@@ -71,7 +71,7 @@ public class RootEndpointImpl implements RootEndpoint {
 				"POST method is not allowed for path " + name)
 		).map(
 			postSingleModelFunction ->
-				postSingleModelFunction.apply(new Path())
+				postSingleModelFunction.apply(new RootIdentifier() {})
 		).map(
 			postSingleModelFunction -> postSingleModelFunction.apply(body)
 		);
@@ -87,16 +87,17 @@ public class RootEndpointImpl implements RootEndpoint {
 			Routes::getPostSingleModelFunctionOptional
 		).map(
 			Optional::get
+		).flatMap(
+			_getAddNestedCollectionItemFunction(name, id, nestedName)
+		).map(
+			Optional::get
+		).map(
+			postSingleModelFunction -> postSingleModelFunction.apply(body)
 		).mapFailMatching(
 			NoSuchElementException.class,
 			() -> new NotAllowedException(
 				"POST method is not allowed for path " + name + "/" + id + "/" +
 					nestedName)
-		).map(
-			postSingleModelFunction ->
-				postSingleModelFunction.apply(new Path(name, id))
-		).map(
-			postSingleModelFunction -> postSingleModelFunction.apply(body)
 		);
 	}
 
@@ -184,6 +185,24 @@ public class RootEndpointImpl implements RootEndpoint {
 		).mapFailMatching(
 			NoSuchElementException.class, supplierNotFoundException
 		);
+	}
+
+	private <T> ThrowableFunction<Function<Identifier,
+		Function<Map<String, Object>, SingleModel<T>>>,
+			Try<Optional<Function<Map<String, Object>, SingleModel<T>>>>>
+				_getAddNestedCollectionItemFunction(
+					String name, String id, String nestedName) {
+
+		return postFunction -> {
+			Try<SingleModel<T>> parentSingleModelTry =
+				getCollectionItemSingleModelTry(name, id);
+
+			return parentSingleModelTry.map(
+				_getIdentifierFunction(nestedName)
+			).map(
+				optional -> optional.map(postFunction)
+			);
+		};
 	}
 
 	private <T> Predicate<RelatedCollection<T, ?>>
