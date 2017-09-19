@@ -72,7 +72,7 @@ public class AggregateRatingPathIdentifierMapper
 
 		if (components.length != 2) {
 			throw new BadRequestException(
-				id + " should be a string with the form 'type:classPK'");
+				id + " should be a string with the form \"type:classPK\"");
 		}
 
 		Optional<Class<Object>> optional =
