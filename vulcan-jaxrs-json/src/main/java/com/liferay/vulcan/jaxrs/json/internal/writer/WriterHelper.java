@@ -146,7 +146,7 @@ public class WriterHelper {
 
 		Path path = page.getPath();
 
-		String pathURI = "/p" + path.asURI() + "/";
+		String pathString = "/p" + path.asURI() + "/";
 
 		Class<T> modelClass = page.getModelClass();
 
@@ -154,7 +154,7 @@ public class WriterHelper {
 			modelClass.getName());
 
 		return optional.map(
-			pathURI::concat
+			pathString::concat
 		).map(
 			_getTransformURIFunction(
 				(uri, transformer) -> transformer.transformPageURI(uri, page))
