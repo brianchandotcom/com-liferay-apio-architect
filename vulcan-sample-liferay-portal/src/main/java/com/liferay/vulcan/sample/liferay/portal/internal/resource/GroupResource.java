@@ -87,6 +87,8 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 			this::_addGroup, RootIdentifier.class, CurrentUser.class
 		).collectionPageItemGetter(
 			this::_getGroup
+		).collectionPageItemRemover(
+			this::_deleteGroup
 		).build();
 	}
 
@@ -108,6 +110,15 @@ public class GroupResource implements Resource<Group, LongIdentifier> {
 				DEFAULT_MEMBERSHIP_RESTRICTION, null, true, true, null));
 
 		return groupTry.getUnchecked();
+	}
+
+	private void _deleteGroup(LongIdentifier groupLongIdentifier) {
+		try {
+			_groupLocalService.deleteGroup(groupLongIdentifier.getId());
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	private Group _getGroup(LongIdentifier groupLongIdentifier) {

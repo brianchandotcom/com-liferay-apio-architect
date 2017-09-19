@@ -94,6 +94,8 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 			this::_addDLFolder, LongIdentifier.class
 		).collectionPageItemGetter(
 			this::_getDLFolder
+		).collectionPageItemRemover(
+			this::_deleteDLFolder
 		).build();
 	}
 
@@ -129,6 +131,15 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 				parentFolderId, name, description, new ServiceContext()));
 
 		return dlFolderTry.getUnchecked();
+	}
+
+	private void _deleteDLFolder(LongIdentifier dlFolderLongerIdentifier) {
+		try {
+			_dlFolderService.deleteFolder(dlFolderLongerIdentifier.getId());
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	private DLFolder _getDLFolder(LongIdentifier dlFolderLongIdentifier) {

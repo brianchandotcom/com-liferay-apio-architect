@@ -107,7 +107,19 @@ public class DigitalDocumentResource
 			this::_getPageItems, LongIdentifier.class
 		).collectionPageItemGetter(
 			this::_getDLFileEntry
+		).collectionPageItemRemover(
+			this::_deleteDLFileEntry
 		).build();
+	}
+
+	private void _deleteDLFileEntry(LongIdentifier dlFileEntryLongIdentifier) {
+		try {
+			_dlFileEntryService.deleteFileEntry(
+				dlFileEntryLongIdentifier.getId());
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	private DLFileEntry _getDLFileEntry(

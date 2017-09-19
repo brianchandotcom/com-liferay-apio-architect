@@ -95,6 +95,8 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 			this::_addComment, CommentableIdentifier.class, CurrentUser.class
 		).collectionPageItemGetter(
 			this::_getComment
+		).collectionPageItemRemover(
+			this::_deleteComment
 		).build();
 	}
 
@@ -123,6 +125,15 @@ public class CommentResource implements Resource<Comment, LongIdentifier> {
 		return longTry.map(
 			_commentManager::fetchComment
 		).getUnchecked();
+	}
+
+	private void _deleteComment(LongIdentifier commentLongIdentifier) {
+		try {
+			_commentManager.deleteComment(commentLongIdentifier.getId());
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	private Comment _getComment(LongIdentifier commentIdentifier) {

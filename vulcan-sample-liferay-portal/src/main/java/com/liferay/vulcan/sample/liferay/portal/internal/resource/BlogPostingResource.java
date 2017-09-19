@@ -148,6 +148,8 @@ public class BlogPostingResource
 			this::_addBlogsEntry, LongIdentifier.class
 		).collectionPageItemGetter(
 			this::_getBlogsEntry
+		).collectionPageItemRemover(
+			this::_deleteBlogsEntry
 		).build();
 	}
 
@@ -201,6 +203,15 @@ public class BlogPostingResource
 				minute, false, false, null, null, null, null, serviceContext));
 
 		return blogsEntryTry.getUnchecked();
+	}
+
+	private void _deleteBlogsEntry(LongIdentifier blogsEntryLongIdentifier) {
+		try {
+			_blogsService.deleteEntry(blogsEntryLongIdentifier.getId());
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	private Optional<AggregateRating> _getAggregateRatingOptional(

@@ -131,6 +131,8 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 			this::_addUser, RootIdentifier.class, Company.class
 		).collectionPageItemGetter(
 			this::_getUser
+		).collectionPageItemRemover(
+			this::_deleteUser
 		).build();
 	}
 
@@ -190,6 +192,15 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 				null, null, false, new ServiceContext()));
 
 		return userTry.getUnchecked();
+	}
+
+	private void _deleteUser(LongIdentifier userLongIdentifier) {
+		try {
+			_userLocalService.deleteUser(userLongIdentifier.getId());
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	private PageItems<User> _getPageItems(
