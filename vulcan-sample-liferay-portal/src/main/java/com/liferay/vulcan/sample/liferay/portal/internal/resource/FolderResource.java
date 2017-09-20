@@ -88,13 +88,13 @@ public class FolderResource implements Resource<DLFolder, LongIdentifier> {
 	public Routes<DLFolder> routes(
 		RoutesBuilder<DLFolder, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionPageGetter(
+		return routesBuilder.addCollectionPageGetter(
 			this::_getPageItems, LongIdentifier.class
-		).collectionPageItemCreator(
+		).addCollectionPageItemCreator(
 			this::_addDLFolder, LongIdentifier.class
-		).collectionPageItemGetter(
+		).addCollectionPageItemGetter(
 			this::_getDLFolder
-		).collectionPageItemRemover(
+		).addCollectionPageItemRemover(
 			this::_deleteDLFolder
 		).build();
 	}

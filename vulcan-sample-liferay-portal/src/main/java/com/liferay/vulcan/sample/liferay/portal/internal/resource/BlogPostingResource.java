@@ -142,13 +142,13 @@ public class BlogPostingResource
 	public Routes<BlogsEntry> routes(
 		RoutesBuilder<BlogsEntry, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionPageGetter(
+		return routesBuilder.addCollectionPageGetter(
 			this::_getPageItems, LongIdentifier.class
-		).collectionPageItemCreator(
+		).addCollectionPageItemCreator(
 			this::_addBlogsEntry, LongIdentifier.class
-		).collectionPageItemGetter(
+		).addCollectionPageItemGetter(
 			this::_getBlogsEntry
-		).collectionPageItemRemover(
+		).addCollectionPageItemRemover(
 			this::_deleteBlogsEntry
 		).build();
 	}

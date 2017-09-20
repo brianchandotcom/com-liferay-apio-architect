@@ -29,7 +29,7 @@ import com.liferay.vulcan.uri.Path;
  * <p>
  * The class of the identifier can then be provided as a parameter in {@link
  * com.liferay.vulcan.resource.builder.RoutesBuilder}{@code
- * #collectionPageItemGetter} methods.
+ * #addCollectionPageItemGetter} methods.
  * </p>
  *
  * @author Alejandro Hernández

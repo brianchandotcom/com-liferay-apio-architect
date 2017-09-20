@@ -103,11 +103,11 @@ public class DigitalDocumentResource
 	public Routes<DLFileEntry> routes(
 		RoutesBuilder<DLFileEntry, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionPageGetter(
+		return routesBuilder.addCollectionPageGetter(
 			this::_getPageItems, LongIdentifier.class
-		).collectionPageItemGetter(
+		).addCollectionPageItemGetter(
 			this::_getDLFileEntry
-		).collectionPageItemRemover(
+		).addCollectionPageItemRemover(
 			this::_deleteDLFileEntry
 		).build();
 	}

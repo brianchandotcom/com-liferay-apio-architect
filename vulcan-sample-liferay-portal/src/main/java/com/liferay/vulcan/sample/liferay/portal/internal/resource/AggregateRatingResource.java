@@ -68,7 +68,7 @@ public class AggregateRatingResource
 		RoutesBuilder<AggregateRating, AggregateRatingIdentifier>
 			routesBuilder) {
 
-		return routesBuilder.collectionPageItemGetter(
+		return routesBuilder.addCollectionPageItemGetter(
 			_aggregateRatingService::getAggregateRating
 		).build();
 	}

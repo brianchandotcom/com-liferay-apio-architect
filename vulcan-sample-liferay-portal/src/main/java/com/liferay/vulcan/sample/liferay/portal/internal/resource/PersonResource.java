@@ -125,13 +125,13 @@ public class PersonResource implements Resource<User, LongIdentifier> {
 	public Routes<User> routes(
 		RoutesBuilder<User, LongIdentifier> routesBuilder) {
 
-		return routesBuilder.collectionPageGetter(
+		return routesBuilder.addCollectionPageGetter(
 			this::_getPageItems, RootIdentifier.class, Company.class
-		).collectionPageItemCreator(
+		).addCollectionPageItemCreator(
 			this::_addUser, RootIdentifier.class, Company.class
-		).collectionPageItemGetter(
+		).addCollectionPageItemGetter(
 			this::_getUser
-		).collectionPageItemRemover(
+		).addCollectionPageItemRemover(
 			this::_deleteUser
 		).build();
 	}

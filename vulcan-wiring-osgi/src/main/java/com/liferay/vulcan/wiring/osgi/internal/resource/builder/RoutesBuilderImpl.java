@@ -70,12 +70,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public Routes<T> build() {
-		return _routesImpl;
-	}
-
-	@Override
-	public <V extends Identifier> RoutesBuilder<T, U> collectionPageGetter(
+	public <V extends Identifier> RoutesBuilder<T, U> addCollectionPageGetter(
 		BiFunction<Pagination, V, PageItems<T>> biFunction,
 		Class<V> identifierClass) {
 
@@ -102,7 +97,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <V extends Identifier, A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
-		collectionPageGetter(
+		addCollectionPageGetter(
 			DecaFunction<Pagination, V, A, B, C, D, E, F, G, H,
 				PageItems<T>> decaFunction, Class<V> identifierClass,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
@@ -140,7 +135,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <V extends Identifier, A, B, C, D, E, F, G> RoutesBuilder<T, U>
-		collectionPageGetter(
+		addCollectionPageGetter(
 			EnneaFunction<Pagination, V, A, B, C, D, E, F, G, PageItems<T>>
 				enneaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -176,7 +171,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <V extends Identifier, A, B, C, D, E> RoutesBuilder<T, U>
-		collectionPageGetter(
+		addCollectionPageGetter(
 			HeptaFunction<Pagination, V, A, B, C, D, E, PageItems<T>>
 				heptaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
@@ -210,7 +205,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <V extends Identifier, A, B, C, D> RoutesBuilder<T, U>
-		collectionPageGetter(
+		addCollectionPageGetter(
 			HexaFunction<Pagination, V, A, B, C, D, PageItems<T>> hexaFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass) {
@@ -242,7 +237,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <V extends Identifier, A, B, C, D, E, F> RoutesBuilder<T, U>
-		collectionPageGetter(
+		addCollectionPageGetter(
 			OctaFunction<Pagination, V, A, B, C, D, E, F, PageItems<T>>
 				octaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -277,7 +272,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <V extends Identifier, A, B, C> RoutesBuilder<T, U>
-		collectionPageGetter(
+		addCollectionPageGetter(
 			PentaFunction<Pagination, V, A, B, C, PageItems<T>> pentaFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass) {
@@ -308,7 +303,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <V extends Identifier, A, B> RoutesBuilder<T, U>
-		collectionPageGetter(
+		addCollectionPageGetter(
 			TetraFunction<Pagination, V, A, B, PageItems<T>> tetraFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass) {
 
@@ -336,9 +331,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public <V extends Identifier, A> RoutesBuilder<T, U> collectionPageGetter(
-		TriFunction<Pagination, V, A, PageItems<T>> triFunction,
-		Class<V> identifierClass, Class<A> aClass) {
+	public <V extends Identifier, A> RoutesBuilder<T, U>
+		addCollectionPageGetter(
+			TriFunction<Pagination, V, A, PageItems<T>> triFunction,
+			Class<V> identifierClass, Class<A> aClass) {
 
 		Function<Identifier, V> collectionIdentifierFunction =
 			_getCollectionIdentifierFunction(identifierClass);
@@ -363,9 +359,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public <V extends Identifier> RoutesBuilder<T, U> collectionPageItemCreator(
-		BiFunction<V, Map<String, Object>, T> biFunction,
-		Class<V> identifierClass) {
+	public <V extends Identifier> RoutesBuilder<T, U>
+		addCollectionPageItemCreator(
+			BiFunction<V, Map<String, Object>, T> biFunction,
+			Class<V> identifierClass) {
 
 		Function<Identifier, V> collectionIdentifierFunction =
 			_getCollectionIdentifierFunction(identifierClass);
@@ -383,7 +380,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, C, D, E, F, G, H, V extends Identifier> RoutesBuilder<T, U>
-		collectionPageItemCreator(
+		addCollectionPageItemCreator(
 			DecaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, H, T>
 				decaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -414,7 +411,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, C, D, E, F, G, V extends Identifier> RoutesBuilder<T, U>
-		collectionPageItemCreator(
+		addCollectionPageItemCreator(
 			EnneaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, T>
 				enneaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -444,7 +441,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, C, D, E, V extends Identifier> RoutesBuilder<T, U>
-		collectionPageItemCreator(
+		addCollectionPageItemCreator(
 			HeptaFunction<V, Map<String, Object>, A, B, C, D, E, T>
 				heptaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
@@ -472,7 +469,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, C, D, V extends Identifier> RoutesBuilder<T, U>
-		collectionPageItemCreator(
+		addCollectionPageItemCreator(
 			HexaFunction<V, Map<String, Object>, A, B, C, D, T> hexaFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass) {
@@ -498,7 +495,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, C, D, E, F, V extends Identifier> RoutesBuilder<T, U>
-		collectionPageItemCreator(
+		addCollectionPageItemCreator(
 			OctaFunction<V, Map<String, Object>, A, B, C, D, E, F, T>
 				octaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -527,7 +524,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, C, V extends Identifier> RoutesBuilder<T, U>
-		collectionPageItemCreator(
+		addCollectionPageItemCreator(
 			PentaFunction<V, Map<String, Object>, A, B, C, T> pentaFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass) {
@@ -552,7 +549,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, V extends Identifier> RoutesBuilder<T, U>
-		collectionPageItemCreator(
+		addCollectionPageItemCreator(
 			TetraFunction<V, Map<String, Object>, A, B, T> tetraFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass) {
 
@@ -575,7 +572,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, V extends Identifier> RoutesBuilder<T, U>
-		collectionPageItemCreator(
+		addCollectionPageItemCreator(
 			TriFunction<V, Map<String, Object>, A, T> triFunction,
 			Class<V> identifierClass, Class<A> aClass) {
 
@@ -597,7 +594,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, C, D, E, F, G, H, I, V extends Identifier> RoutesBuilder<T, U>
-		collectionPageItemCreator(
+		addCollectionPageItemCreator(
 			UndecaFunction<V, Map<String, Object>, A, B, C, D, E, F, G, H, I, T>
 				undecaFunction, Class<V> identifierClass, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
@@ -630,7 +627,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public <A> RoutesBuilder<T, U> collectionPageItemGetter(
+	public <A> RoutesBuilder<T, U> addCollectionPageItemGetter(
 		BiFunction<U, A, T> biFunction, Class<A> aClass) {
 
 		Function<Path, U> identifierFunction = _convertIdentifier(
@@ -651,7 +648,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T, U>
-		collectionPageItemGetter(
+		addCollectionPageItemGetter(
 			DecaFunction<U, A, B, C, D, E, F, G, H, I, T> decaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
@@ -683,7 +680,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	@Override
 	public <A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
-		collectionPageItemGetter(
+		addCollectionPageItemGetter(
 			EnneaFunction<U, A, B, C, D, E, F, G, H, T> enneaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
@@ -713,7 +710,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public RoutesBuilder<T, U> collectionPageItemGetter(
+	public RoutesBuilder<T, U> addCollectionPageItemGetter(
 		Function<U, T> function) {
 
 		Function<Path, U> identifierFunction = _convertIdentifier(
@@ -728,7 +725,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public <A, B, C, D, E, F> RoutesBuilder<T, U> collectionPageItemGetter(
+	public <A, B, C, D, E, F> RoutesBuilder<T, U> addCollectionPageItemGetter(
 		HeptaFunction<U, A, B, C, D, E, F, T> heptaFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 		Class<F> fClass) {
@@ -755,7 +752,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public <A, B, C, D, E> RoutesBuilder<T, U> collectionPageItemGetter(
+	public <A, B, C, D, E> RoutesBuilder<T, U> addCollectionPageItemGetter(
 		HexaFunction<U, A, B, C, D, E, T> hexaFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
@@ -780,10 +777,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public <A, B, C, D, E, F, G> RoutesBuilder<T, U> collectionPageItemGetter(
-		OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction, Class<A> aClass,
-		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
-		Class<F> fClass, Class<G> gClass) {
+	public <A, B, C, D, E, F, G> RoutesBuilder<T, U>
+		addCollectionPageItemGetter(
+			OctaFunction<U, A, B, C, D, E, F, G, T> octaFunction,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Class<E> eClass, Class<F> fClass, Class<G> gClass) {
 
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
@@ -808,7 +806,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public <A, B, C, D> RoutesBuilder<T, U> collectionPageItemGetter(
+	public <A, B, C, D> RoutesBuilder<T, U> addCollectionPageItemGetter(
 		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
@@ -832,7 +830,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public <A, B, C> RoutesBuilder<T, U> collectionPageItemGetter(
+	public <A, B, C> RoutesBuilder<T, U> addCollectionPageItemGetter(
 		TetraFunction<U, A, B, C, T> tetraFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass) {
 
@@ -855,7 +853,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	@Override
-	public <A, B> RoutesBuilder<T, U> collectionPageItemGetter(
+	public <A, B> RoutesBuilder<T, U> addCollectionPageItemGetter(
 		TriFunction<U, A, B, T> triFunction, Class<A> aClass, Class<B> bClass) {
 
 		Function<Path, U> identifierFunction = _convertIdentifier(
@@ -875,7 +873,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
-	public <A> RoutesBuilder<T, U> collectionPageItemRemover(
+	public <A> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		BiConsumer<U, A> biConsumer, Class<A> aClass) {
 
 		Function<Path, U> identifierFunction = _convertIdentifier(
@@ -893,7 +891,9 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
-	public RoutesBuilder<T, U> collectionPageItemRemover(Consumer<U> consumer) {
+	public RoutesBuilder<T, U> addCollectionPageItemRemover(
+		Consumer<U> consumer) {
+
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
@@ -909,7 +909,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T, U>
-		collectionPageItemRemover(
+		addCollectionPageItemRemover(
 			DecaConsumer<U, A, B, C, D, E, F, G, H, I> decaConsumer,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
@@ -939,7 +939,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	}
 
 	public <A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
-		collectionPageItemRemover(
+		addCollectionPageItemRemover(
 			EnneaConsumer<U, A, B, C, D, E, F, G, H> enneaConsumer,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
@@ -967,7 +967,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
-	public <A, B, C, D, E, F> RoutesBuilder<T, U> collectionPageItemRemover(
+	public <A, B, C, D, E, F> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		HeptaConsumer<U, A, B, C, D, E, F> heptaConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 		Class<F> fClass) {
@@ -992,7 +992,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
-	public <A, B, C, D, E> RoutesBuilder<T, U> collectionPageItemRemover(
+	public <A, B, C, D, E> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		HexaConsumer<U, A, B, C, D, E> hexaConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
@@ -1015,10 +1015,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
-	public <A, B, C, D, E, F, G> RoutesBuilder<T, U> collectionPageItemRemover(
-		OctaConsumer<U, A, B, C, D, E, F, G> octaConsumer, Class<A> aClass,
-		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
-		Class<F> fClass, Class<G> gClass) {
+	public <A, B, C, D, E, F, G> RoutesBuilder<T, U>
+		addCollectionPageItemRemover(
+			OctaConsumer<U, A, B, C, D, E, F, G> octaConsumer, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
+			Class<F> fClass, Class<G> gClass) {
 
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
@@ -1041,7 +1042,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
-	public <A, B, C, D> RoutesBuilder<T, U> collectionPageItemRemover(
+	public <A, B, C, D> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		PentaConsumer<U, A, B, C, D> pentaConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
@@ -1063,7 +1064,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
-	public <A, B, C> RoutesBuilder<T, U> collectionPageItemRemover(
+	public <A, B, C> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		TetraConsumer<U, A, B, C> tetraConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass) {
 
@@ -1084,7 +1085,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
-	public <A, B> RoutesBuilder<T, U> collectionPageItemRemover(
+	public <A, B> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		TriConsumer<U, A, B> triConsumer, Class<A> aClass, Class<B> bClass) {
 
 		Function<Path, U> identifierFunction = _convertIdentifier(
@@ -1101,6 +1102,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
 
 		return this;
+	}
+
+	@Override
+	public Routes<T> build() {
+		return _routesImpl;
 	}
 
 	private <V extends Identifier> Function<Path, V> _convertIdentifier(
