@@ -1104,6 +1104,251 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return this;
 	}
 
+	public RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		BiFunction<U, Map<String, Object>, T> biFunction) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					T t = biFunction.apply(id, body);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
+	public <A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
+		addCollectionPageItemUpdater(
+			DecaFunction<U, Map<String, Object>, A, B, C, D, E, F, G, H, T>
+				decaFunction, Class<A> aClass, Class<B> bClass, Class<C> cClass,
+			Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass,
+			Class<H> hClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+					H h = _provideClass(hClass);
+
+					T t = decaFunction.apply(id, body, a, b, c, d, e, f, g, h);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
+	public <A, B, C, D, E, F, G> RoutesBuilder<T, U>
+		addCollectionPageItemUpdater(
+			EnneaFunction<U, Map<String, Object>, A, B, C, D, E, F, G, T>
+				enneaFunction, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+			Class<G> gClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+
+					T t = enneaFunction.apply(id, body, a, b, c, d, e, f, g);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
+	public <A, B, C, D, E> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		HeptaFunction<U, Map<String, Object>, A, B, C, D, E, T> heptaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+		Class<E> eClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+
+					T t = heptaFunction.apply(id, body, a, b, c, d, e);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
+	public <A, B, C, D> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		HexaFunction<U, Map<String, Object>, A, B, C, D, T> hexaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+
+					T t = hexaFunction.apply(id, body, a, b, c, d);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
+	public <A, B, C, D, E, F> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		OctaFunction<U, Map<String, Object>, A, B, C, D, E, F, T> octaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+		Class<E> eClass, Class<F> fClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+
+					T t = octaFunction.apply(id, body, a, b, c, d, e, f);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
+	public <A, B, C> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		PentaFunction<U, Map<String, Object>, A, B, C, T> pentaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+
+					T t = pentaFunction.apply(id, body, a, b, c);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
+	public <A, B> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		TetraFunction<U, Map<String, Object>, A, B, T> tetraFunction,
+		Class<A> aClass, Class<B> bClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+
+					T t = tetraFunction.apply(id, body, a, b);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
+	public <A> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		TriFunction<U, Map<String, Object>, A, T> triFunction,
+		Class<A> aClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					A a = _provideClass(aClass);
+
+					T t = triFunction.apply(id, body, a);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
+	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T, U>
+		addCollectionPageItemUpdater(
+			UndecaFunction<U, Map<String, Object>, A, B, C, D, E, F, G, H, I, T>
+				undecaFunction, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+			Class<G> gClass, Class<H> hClass, Class<I> iClass) {
+
+		Function<Path, U> identifierFunction = _convertIdentifier(
+			_singleModelIdentifierClass);
+
+		_routesImpl.setPutSingleModelFunction(
+			identifierFunction.andThen(
+				id -> body -> {
+					A a = _provideClass(aClass);
+					B b = _provideClass(bClass);
+					C c = _provideClass(cClass);
+					D d = _provideClass(dClass);
+					E e = _provideClass(eClass);
+					F f = _provideClass(fClass);
+					G g = _provideClass(gClass);
+					H h = _provideClass(hClass);
+					I i = _provideClass(iClass);
+
+					T t = undecaFunction.apply(
+						id, body, a, b, c, d, e, f, g, h, i);
+
+					return _getCreateSingleModelFunction().apply(t);
+				}));
+
+		return this;
+	}
+
 	@Override
 	public Routes<T> build() {
 		return _routesImpl;
