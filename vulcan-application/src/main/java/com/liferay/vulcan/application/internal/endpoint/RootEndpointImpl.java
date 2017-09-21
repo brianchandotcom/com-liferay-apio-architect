@@ -71,10 +71,9 @@ public class RootEndpointImpl implements RootEndpoint {
 			() -> new NotAllowedException(
 				"POST method is not allowed for path " + name)
 		).map(
-			postSingleModelFunction ->
-				postSingleModelFunction.apply(new RootIdentifier() {})
+			function -> function.apply(new RootIdentifier() {})
 		).map(
-			postSingleModelFunction -> postSingleModelFunction.apply(body)
+			function -> function.apply(body)
 		);
 	}
 
@@ -93,7 +92,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			Optional::get
 		).map(
-			postSingleModelFunction -> postSingleModelFunction.apply(body)
+			function -> function.apply(body)
 		).mapFailMatching(
 			NoSuchElementException.class,
 			() -> new NotAllowedException(
@@ -165,7 +164,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			NoSuchElementException.class,
 			_getSupplierNotFoundException(name + "/" + id)
 		).map(
-			singleModelFunction -> singleModelFunction.apply(new Path(name, id))
+			function -> function.apply(new Path(name, id))
 		);
 	}
 
@@ -200,7 +199,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			Optional::get
 		).map(
-			pathFunction -> pathFunction.apply(new Path(name, id))
+			function -> function.apply(new Path(name, id))
 		).flatMap(
 			_getNestedCollectionPageTryFunction(name, id, nestedName)
 		).map(
@@ -266,8 +265,7 @@ public class RootEndpointImpl implements RootEndpoint {
 				).map(
 					RelatedCollection::getIdentifierFunction
 				).map(
-					identifierFunction ->
-						identifierFunction.apply(parentSingleModel.getModel())
+					function -> function.apply(parentSingleModel.getModel())
 				)
 			);
 		};
