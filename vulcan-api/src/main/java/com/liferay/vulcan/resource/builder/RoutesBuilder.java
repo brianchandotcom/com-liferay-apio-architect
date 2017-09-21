@@ -813,6 +813,174 @@ public interface RoutesBuilder<T, U extends Identifier> {
 		TriConsumer<U, A, B> triConsumer, Class<A> aClass, Class<B> bClass);
 
 	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  biFunction the function that will be used to update the single
+	 *         model.
+	 * @return the updated builder.
+	 */
+	public RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		BiFunction<U, Map<String, Object>, T> biFunction);
+
+	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  decaFunction the function that will be used to update the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the updater function.
+	 * @param  bClass the class of the third parameter of the updater function.
+	 * @param  cClass the class of the fourth parameter of the updater function.
+	 * @param  dClass the class of the fifth parameter of the updater function.
+	 * @param  eClass the class of the sixth parameter of the updater function.
+	 * @param  fClass the class of the seventh parameter of the updater
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the updater function.
+	 * @param  hClass the class of the ninth parameter of the updater function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G, H> RoutesBuilder<T, U>
+		addCollectionPageItemUpdater(
+			DecaFunction<U, Map<String, Object>, A, B, C, D, E, F, G, H, T>
+				decaFunction, Class<A> aClass, Class<B> bClass, Class<C> cClass,
+			Class<D> dClass, Class<E> eClass, Class<F> fClass, Class<G> gClass,
+			Class<H> hClass);
+
+	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  enneaFunction the function that will be used to update the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the updater function.
+	 * @param  bClass the class of the third parameter of the updater function.
+	 * @param  cClass the class of the fourth parameter of the updater function.
+	 * @param  dClass the class of the fifth parameter of the updater function.
+	 * @param  eClass the class of the sixth parameter of the updater function.
+	 * @param  fClass the class of the seventh parameter of the updater
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the updater function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G> RoutesBuilder<T, U>
+		addCollectionPageItemUpdater(
+			EnneaFunction<U, Map<String, Object>, A, B, C, D, E, F, G, T>
+				enneaFunction, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+			Class<G> gClass);
+
+	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  heptaFunction the function that will be used to update the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the updater function.
+	 * @param  bClass the class of the third parameter of the updater function.
+	 * @param  cClass the class of the fourth parameter of the updater function.
+	 * @param  dClass the class of the fifth parameter of the updater function.
+	 * @param  eClass the class of the sixth parameter of the updater function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		HeptaFunction<U, Map<String, Object>, A, B, C, D, E, T> heptaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+		Class<E> eClass);
+
+	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  hexaFunction the function that will be used to update the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the updater function.
+	 * @param  bClass the class of the third parameter of the updater function.
+	 * @param  cClass the class of the fourth parameter of the updater function.
+	 * @param  dClass the class of the fifth parameter of the updater function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		HexaFunction<U, Map<String, Object>, A, B, C, D, T> hexaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass);
+
+	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  octaFunction the function that will be used to update the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the updater function.
+	 * @param  bClass the class of the third parameter of the updater function.
+	 * @param  cClass the class of the fourth parameter of the updater function.
+	 * @param  dClass the class of the fifth parameter of the updater function.
+	 * @param  eClass the class of the sixth parameter of the updater function.
+	 * @param  fClass the class of the seventh parameter of the updater
+	 *         function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		OctaFunction<U, Map<String, Object>, A, B, C, D, E, F, T> octaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+		Class<E> eClass, Class<F> fClass);
+
+	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  pentaFunction the function that will be used to update the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the updater function.
+	 * @param  bClass the class of the third parameter of the updater function.
+	 * @param  cClass the class of the fourth parameter of the updater function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		PentaFunction<U, Map<String, Object>, A, B, C, T> pentaFunction,
+		Class<A> aClass, Class<B> bClass, Class<C> cClass);
+
+	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  tetraFunction the function that will be used to update the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the updater function.
+	 * @param  bClass the class of the third parameter of the updater function.
+	 * @return the updated builder.
+	 */
+	public <A, B> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		TetraFunction<U, Map<String, Object>, A, B, T> tetraFunction,
+		Class<A> aClass, Class<B> bClass);
+
+	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  triFunction the function that will be used to update the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the updater function.
+	 * @return the updated builder.
+	 */
+	public <A> RoutesBuilder<T, U> addCollectionPageItemUpdater(
+		TriFunction<U, Map<String, Object>, A, T> triFunction, Class<A> aClass);
+
+	/**
+	 * Adds a route to a collection item updater function.
+	 *
+	 * @param  undecaFunction the function that will be used to update the
+	 *         collection item.
+	 * @param  aClass the class of the second parameter of the updater function.
+	 * @param  bClass the class of the third parameter of the updater function.
+	 * @param  cClass the class of the fourth parameter of the updater function.
+	 * @param  dClass the class of the fifth parameter of the updater function.
+	 * @param  eClass the class of the sixth parameter of the updater function.
+	 * @param  fClass the class of the seventh parameter of the updater
+	 *         function.
+	 * @param  gClass the class of the eighth parameter of the updater function.
+	 * @param  hClass the class of the ninth parameter of the updater function.
+	 * @param  iClass the class of the tenth parameter of the updater function.
+	 * @return the updated builder.
+	 */
+	public <A, B, C, D, E, F, G, H, I> RoutesBuilder<T, U>
+		addCollectionPageItemUpdater(
+			UndecaFunction<U, Map<String, Object>, A, B, C, D, E, F, G, H, I, T>
+				undecaFunction, Class<A> aClass, Class<B> bClass,
+			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+			Class<G> gClass, Class<H> hClass, Class<I> iClass);
+
+	/**
 	 * Constructs the <code>Routes</code> instance with the information provided
 	 * to the builder.
 	 *
