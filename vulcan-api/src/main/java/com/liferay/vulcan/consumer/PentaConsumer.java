@@ -12,25 +12,25 @@
  * details.
  */
 
-package com.liferay.vulcan.function;
+package com.liferay.vulcan.consumer;
 
 import java.util.Objects;
 
 /**
- * Represents an operation that accepts seven input arguments and returns no
- * result. This is the seven-arity specialization of {@link
+ * Represents an operation that accepts five input arguments and returns no
+ * result. This is the five-arity specialization of {@link
  * java.util.function.Consumer}. Unlike most other functional interfaces, {@code
  * TriConsumer} is expected to operate via side-effects.
  *
  * <p>This is a <a href="package-summary.html">functional interface</a>
  * whose functional method is {@link #accept(Object, Object, Object, Object,
- * Object, Object, Object)}.
+ * Object)}.
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
  */
 @FunctionalInterface
-public interface HeptaConsumer<A, B, C, D, E, F, G> {
+public interface PentaConsumer<A, B, C, D, E> {
 
 	/**
 	 * Performs this operation on the given arguments.
@@ -40,31 +40,29 @@ public interface HeptaConsumer<A, B, C, D, E, F, G> {
 	 * @param c the third function argument
 	 * @param d the fourth function argument
 	 * @param e the fifth function argument
-	 * @param f the sixth function argument
-	 * @param g the seventh function argument
 	 */
-	public void accept(A a, B b, C c, D d, E e, F f, G g);
+	public void accept(A a, B b, C c, D d, E e);
 
 	/**
-	 * Returns a composed {@code HeptaConsumer} that performs, in sequence, this
+	 * Returns a composed {@code PentaConsumer} that performs, in sequence, this
 	 * operation followed by the {@code after} operation. If performing either
 	 * operation throws an exception, it is relayed to the caller of the
 	 * composed operation. If performing this operation throws an exception, the
 	 * {@code after} operation will not be performed.
 	 *
 	 * @param  after the operation to perform after this operation
-	 * @return a composed {@code HeptaConsumer} that performs in sequence this
+	 * @return a composed {@code PentaConsumer} that performs in sequence this
 	 *         operation followed by the {@code after} operation
 	 */
-	public default HeptaConsumer<A, B, C, D, E, F, G> andThen(
-		HeptaConsumer<? super A, ? super B, ? super C, ? super D, ? super E,
-			? super F, ? super G> after) {
+	public default PentaConsumer<A, B, C, D, E> andThen(
+		PentaConsumer<? super A, ? super B, ? super C, ? super D, ? super E>
+			after) {
 
 		Objects.requireNonNull(after);
 
-		return (a, b, c, d, e, f, g) -> {
-			accept(a, b, c, d, e, f, g);
-			after.accept(a, b, c, d, e, f, g);
+		return (a, b, c, d, e) -> {
+			accept(a, b, c, d, e);
+			after.accept(a, b, c, d, e);
 		};
 	}
 

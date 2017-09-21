@@ -12,25 +12,25 @@
  * details.
  */
 
-package com.liferay.vulcan.function;
+package com.liferay.vulcan.consumer;
 
 import java.util.Objects;
 
 /**
- * Represents an operation that accepts eight input arguments and returns no
- * result. This is the eight-arity specialization of {@link
+ * Represents an operation that accepts seven input arguments and returns no
+ * result. This is the seven-arity specialization of {@link
  * java.util.function.Consumer}. Unlike most other functional interfaces, {@code
  * TriConsumer} is expected to operate via side-effects.
  *
  * <p>This is a <a href="package-summary.html">functional interface</a>
  * whose functional method is {@link #accept(Object, Object, Object, Object,
- * Object, Object, Object, Object)}.
+ * Object, Object, Object)}.
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
  */
 @FunctionalInterface
-public interface OctaConsumer<A, B, C, D, E, F, G, H> {
+public interface HeptaConsumer<A, B, C, D, E, F, G> {
 
 	/**
 	 * Performs this operation on the given arguments.
@@ -42,30 +42,29 @@ public interface OctaConsumer<A, B, C, D, E, F, G, H> {
 	 * @param e the fifth function argument
 	 * @param f the sixth function argument
 	 * @param g the seventh function argument
-	 * @param h the eighth function argument
 	 */
-	public void accept(A a, B b, C c, D d, E e, F f, G g, H h);
+	public void accept(A a, B b, C c, D d, E e, F f, G g);
 
 	/**
-	 * Returns a composed {@code OctaConsumer} that performs, in sequence, this
+	 * Returns a composed {@code HeptaConsumer} that performs, in sequence, this
 	 * operation followed by the {@code after} operation. If performing either
 	 * operation throws an exception, it is relayed to the caller of the
 	 * composed operation. If performing this operation throws an exception, the
 	 * {@code after} operation will not be performed.
 	 *
 	 * @param  after the operation to perform after this operation
-	 * @return a composed {@code OctaConsumer} that performs in sequence this
+	 * @return a composed {@code HeptaConsumer} that performs in sequence this
 	 *         operation followed by the {@code after} operation
 	 */
-	public default OctaConsumer<A, B, C, D, E, F, G, H> andThen(
-		OctaConsumer<? super A, ? super B, ? super C, ? super D, ? super E,
-			? super F, ? super G, ? super H> after) {
+	public default HeptaConsumer<A, B, C, D, E, F, G> andThen(
+		HeptaConsumer<? super A, ? super B, ? super C, ? super D, ? super E,
+			? super F, ? super G> after) {
 
 		Objects.requireNonNull(after);
 
-		return (a, b, c, d, e, f, g, h) -> {
-			accept(a, b, c, d, e, f, g, h);
-			after.accept(a, b, c, d, e, f, g, h);
+		return (a, b, c, d, e, f, g) -> {
+			accept(a, b, c, d, e, f, g);
+			after.accept(a, b, c, d, e, f, g);
 		};
 	}
 

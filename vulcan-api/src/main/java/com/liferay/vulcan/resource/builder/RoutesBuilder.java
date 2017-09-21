@@ -14,21 +14,21 @@
 
 package com.liferay.vulcan.resource.builder;
 
-import com.liferay.vulcan.function.DecaConsumer;
+import com.liferay.vulcan.consumer.DecaConsumer;
+import com.liferay.vulcan.consumer.EnneaConsumer;
+import com.liferay.vulcan.consumer.HeptaConsumer;
+import com.liferay.vulcan.consumer.HexaConsumer;
+import com.liferay.vulcan.consumer.OctaConsumer;
+import com.liferay.vulcan.consumer.PentaConsumer;
+import com.liferay.vulcan.consumer.TetraConsumer;
+import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.function.DecaFunction;
-import com.liferay.vulcan.function.EnneaConsumer;
 import com.liferay.vulcan.function.EnneaFunction;
-import com.liferay.vulcan.function.HeptaConsumer;
 import com.liferay.vulcan.function.HeptaFunction;
-import com.liferay.vulcan.function.HexaConsumer;
 import com.liferay.vulcan.function.HexaFunction;
-import com.liferay.vulcan.function.OctaConsumer;
 import com.liferay.vulcan.function.OctaFunction;
-import com.liferay.vulcan.function.PentaConsumer;
 import com.liferay.vulcan.function.PentaFunction;
-import com.liferay.vulcan.function.TetraConsumer;
 import com.liferay.vulcan.function.TetraFunction;
-import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.function.UndecaFunction;
 import com.liferay.vulcan.pagination.PageItems;

@@ -15,7 +15,7 @@
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
 import com.liferay.vulcan.alias.BinaryFunction;
-import com.liferay.vulcan.function.TriConsumer;
+import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.RelatedModel;
 import com.liferay.vulcan.resource.Representor;

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.function;
+package com.liferay.vulcan.consumer;
 
 import java.util.Objects;
 

@@ -12,24 +12,25 @@
  * details.
  */
 
-package com.liferay.vulcan.function;
+package com.liferay.vulcan.consumer;
 
 import java.util.Objects;
 
 /**
- * Represents an operation that accepts four input arguments and returns no
- * result. This is the four-arity specialization of {@link
+ * Represents an operation that accepts ten input arguments and returns no
+ * result. This is the ten-arity specialization of {@link
  * java.util.function.Consumer}. Unlike most other functional interfaces, {@code
  * TriConsumer} is expected to operate via side-effects.
  *
  * <p>This is a <a href="package-summary.html">functional interface</a>
- * whose functional method is {@link #accept(Object, Object, Object, Object)}.
+ * whose functional method is {@link #accept(Object, Object, Object, Object,
+ * Object, Object, Object, Object, Object, Object)}.
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
  */
 @FunctionalInterface
-public interface TetraConsumer<A, B, C, D> {
+public interface DecaConsumer<A, B, C, D, E, F, G, H, I, J> {
 
 	/**
 	 * Performs this operation on the given arguments.
@@ -38,28 +39,35 @@ public interface TetraConsumer<A, B, C, D> {
 	 * @param b the second function argument
 	 * @param c the third function argument
 	 * @param d the fourth function argument
+	 * @param e the fifth function argument
+	 * @param f the sixth function argument
+	 * @param g the seventh function argument
+	 * @param h the eighth function argument
+	 * @param i the ninth function argument
+	 * @param j the tenth function argument
 	 */
-	public void accept(A a, B b, C c, D d);
+	public void accept(A a, B b, C c, D d, E e, F f, G g, H h, I i, J j);
 
 	/**
-	 * Returns a composed {@code TetraConsumer} that performs, in sequence, this
+	 * Returns a composed {@code DecaConsumer} that performs, in sequence, this
 	 * operation followed by the {@code after} operation. If performing either
 	 * operation throws an exception, it is relayed to the caller of the
 	 * composed operation. If performing this operation throws an exception, the
 	 * {@code after} operation will not be performed.
 	 *
 	 * @param  after the operation to perform after this operation
-	 * @return a composed {@code TetraConsumer} that performs in sequence this
+	 * @return a composed {@code UndecaConsumer} that performs in sequence this
 	 *         operation followed by the {@code after} operation
 	 */
-	public default TetraConsumer<A, B, C, D> andThen(
-		TetraConsumer<? super A, ? super B, ? super C, ? super D> after) {
+	public default DecaConsumer<A, B, C, D, E, F, G, H, I, J> andThen(
+		DecaConsumer<? super A, ? super B, ? super C, ? super D, ? super E,
+			? super F, ? super G, ? super H, ? super I, ? super J> after) {
 
 		Objects.requireNonNull(after);
 
-		return (a, b, c, d) -> {
-			accept(a, b, c, d);
-			after.accept(a, b, c, d);
+		return (a, b, c, d, e, f, g, h, i, j) -> {
+			accept(a, b, c, d, e, f, g, h, i, j);
+			after.accept(a, b, c, d, e, f, g, h, i, j);
 		};
 	}
 

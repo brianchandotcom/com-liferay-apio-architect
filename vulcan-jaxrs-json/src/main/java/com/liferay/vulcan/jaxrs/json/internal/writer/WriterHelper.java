@@ -19,7 +19,7 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.alias.BinaryFunction;
-import com.liferay.vulcan.function.TriConsumer;
+import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.jaxrs.json.internal.StringFunctionalList;
 import com.liferay.vulcan.list.FunctionalList;

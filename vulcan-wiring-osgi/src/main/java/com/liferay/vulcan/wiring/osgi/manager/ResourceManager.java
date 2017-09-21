@@ -18,8 +18,8 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIP
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.error.VulcanDeveloperError;
-import com.liferay.vulcan.function.TriConsumer;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Resource;
