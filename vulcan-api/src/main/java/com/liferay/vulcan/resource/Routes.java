@@ -88,4 +88,15 @@ public interface Routes<T> {
 	public Optional<Function<Path, SingleModel<T>>>
 		getSingleModelFunctionOptional();
 
+	/**
+	 * Returns the function used to update a single model of a {@link Resource}.
+	 * Returns <code>Optional#empty()</code> if the endpoint wasn't added
+	 * through the {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
+	 *
+	 * @return the function used to update a single model, if present;
+	 *         <code>Optional#empty()</code> otherwise.
+	 */
+	public Optional<Function<Path, Function<Map<String, Object>,
+		SingleModel<T>>>> getUpdateSingleModelFunctionOptional();
+
 }
