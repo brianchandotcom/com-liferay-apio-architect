@@ -57,7 +57,7 @@ import org.osgi.service.component.annotations.Reference;
 public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
-	public <T> Try<SingleModel<T>> addCollectionItemSingleModel(
+	public <T> Try<SingleModel<T>> addCollectionItem(
 		String name, Map<String, Object> body) {
 
 		Try<Routes<T>> routesTry = _getRoutesTry(name);
@@ -79,7 +79,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	@Override
-	public <T> Try<SingleModel<T>> addNestedCollectionItemSingleModel(
+	public <T> Try<SingleModel<T>> addNestedCollectionItem(
 		String name, String id, String nestedName, Map<String, Object> body) {
 
 		Try<Routes<T>> routesTry = _getRoutesTry(nestedName);

@@ -55,7 +55,7 @@ public interface RootEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}")
 	@POST
-	public <T> Try<SingleModel<T>> addCollectionItemSingleModel(
+	public <T> Try<SingleModel<T>> addCollectionItem(
 		@PathParam("name") String name, Map<String, Object> body);
 
 	/**
@@ -71,7 +71,7 @@ public interface RootEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}/{id}/{nestedName}")
 	@POST
-	public <T> Try<SingleModel<T>> addNestedCollectionItemSingleModel(
+	public <T> Try<SingleModel<T>> addNestedCollectionItem(
 		@PathParam("name") String name, @PathParam("id") String id,
 		@PathParam("nestedName") String nestedName, Map<String, Object> body);
 
