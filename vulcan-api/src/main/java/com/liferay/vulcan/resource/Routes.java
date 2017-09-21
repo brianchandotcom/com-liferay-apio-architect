@@ -26,11 +26,11 @@ import java.util.function.Function;
 
 /**
  * Instances of this interface will hold information about the routes supported
- * for a certain {@link Resource}.
+ * for a certain {@link CollectionResource}.
  *
  * <p>
  * All of the methods in this interface returns functions to get the different
- * endpoints of the {@link Resource}.
+ * endpoints of the {@link CollectionResource}.
  * </p>
  *
  * <p>
@@ -44,9 +44,10 @@ import java.util.function.Function;
 public interface Routes<T> {
 
 	/**
-	 * Returns the function used to remove a single model of a {@link Resource}.
-	 * Returns <code>Optional#empty()</code> if the endpoint wasn't added
-	 * through the {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
+	 * Returns the function used to remove a single model of a {@link
+	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
+	 * endpoint wasn't added through the {@link
+	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
 	 * @return the function used to remove a single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
@@ -54,9 +55,10 @@ public interface Routes<T> {
 	public Optional<Consumer<Path>> getDeleteSingleModelFunctionOptional();
 
 	/**
-	 * Returns the function used to create the page of a {@link Resource}.
-	 * Returns <code>Optional#empty()</code> if the endpoint wasn't added
-	 * through the {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
+	 * Returns the function used to create the page of a {@link
+	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
+	 * endpoint wasn't added through the {@link
+	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
 	 * @return the supplier used to create the page, if present;
 	 *         <code>Optional#empty()</code> otherwise.
@@ -66,8 +68,8 @@ public interface Routes<T> {
 
 	/**
 	 * Returns the function used to create the single model of a {@link
-	 * Resource}. Returns <code>Optional#empty()</code> if the endpoint wasn't
-	 * added through the {@link
+	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
+	 * endpoint wasn't added through the {@link
 	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
 	 * @return the function used to create the single model, if present;
@@ -78,8 +80,8 @@ public interface Routes<T> {
 
 	/**
 	 * Returns the function used to create the single model of a {@link
-	 * Resource}. Returns <code>Optional#empty()</code> if the endpoint wasn't
-	 * added through the {@link
+	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
+	 * endpoint wasn't added through the {@link
 	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
 	 * @return the function used to create the single model, if present;
@@ -89,9 +91,10 @@ public interface Routes<T> {
 		getSingleModelFunctionOptional();
 
 	/**
-	 * Returns the function used to update a single model of a {@link Resource}.
-	 * Returns <code>Optional#empty()</code> if the endpoint wasn't added
-	 * through the {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
+	 * Returns the function used to update a single model of a {@link
+	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
+	 * endpoint wasn't added through the {@link
+	 * com.liferay.vulcan.resource.builder.RoutesBuilder}.
 	 *
 	 * @return the function used to update a single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.

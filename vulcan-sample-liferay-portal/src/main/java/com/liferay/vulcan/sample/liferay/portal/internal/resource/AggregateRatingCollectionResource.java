@@ -14,15 +14,15 @@
 
 package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
+import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Representor;
-import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
 import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
-import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -34,8 +34,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class AggregateRatingResource
-	implements Resource<AggregateRating, AggregateRatingIdentifier> {
+public class AggregateRatingCollectionResource
+	implements CollectionResource<AggregateRating, AggregateRatingIdentifier> {
 
 	@Override
 	public Representor<AggregateRating, AggregateRatingIdentifier>
@@ -77,6 +77,6 @@ public class AggregateRatingResource
 	private AggregateRatingService _aggregateRatingService;
 
 	@Reference
-	private ResourceManager _resourceManager;
+	private CollectionResourceManager _collectionResourceManager;
 
 }

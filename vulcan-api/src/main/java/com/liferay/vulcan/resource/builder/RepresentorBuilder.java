@@ -45,14 +45,15 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Use this method to provide information of a bidirectional relation of
 		 * a linked model in the actual resource and a related collection of
-		 * items of this Resource in the related resource.
+		 * items of this {@link com.liferay.vulcan.resource.CollectionResource}
+		 * in the related resource.
 		 *
 		 * @param key name of the relation in this resource.
 		 * @param relatedKey name of the relation in the related resource.
 		 * @param modelClass class of the related model.
 		 * @param modelFunction function used to obtain the related model.
-		 * @param identifierFunction function used to obtain the identifier for the
-		 *                       collection.
+		 * @param identifierFunction function used to obtain the identifier for
+		 *                           the collection.
 		 * @return builder's actual step.
 		 */
 		public <S> FirstStep<T, U> addBidirectionalModel(
@@ -120,8 +121,8 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 *
 		 * @param key name of the relation.
 		 * @param modelClass class of the collection's related models.
-		 * @param identifierFunction function used to obtain the identifier for the
-		 *                       collection.
+		 * @param identifierFunction function used to obtain the identifier for
+		 *                           the collection.
 		 * @return builder's actual step.
 		 */
 		public <S> FirstStep<T, U> addRelatedCollection(
@@ -138,8 +139,8 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		public FirstStep<T, U> addType(String type);
 
 		/**
-		 * Constructs the <code>Representor</code> instance with the information provided
-		 * to the builder.
+		 * Constructs the <code>Representor</code> instance with the information
+		 * provided to the builder.
 		 *
 		 * @return the <code>Representor</code> instance.
 		 */

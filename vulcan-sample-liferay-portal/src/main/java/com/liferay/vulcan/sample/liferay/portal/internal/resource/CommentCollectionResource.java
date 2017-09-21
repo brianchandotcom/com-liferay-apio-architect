@@ -33,8 +33,8 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Representor;
-import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
@@ -63,7 +63,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class CommentResource implements Resource<Comment, LongIdentifier> {
+public class CommentCollectionResource
+	implements CollectionResource<Comment, LongIdentifier> {
 
 	@Override
 	public Representor<Comment, LongIdentifier> buildRepresentor(

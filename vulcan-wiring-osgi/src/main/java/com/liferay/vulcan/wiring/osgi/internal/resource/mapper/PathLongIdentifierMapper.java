@@ -19,7 +19,7 @@ import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.resource.identifier.mapper.PathIdentifierMapper;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.uri.Path;
-import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 
 import java.util.Optional;
 
@@ -45,7 +45,7 @@ public class PathLongIdentifierMapper
 
 	@Override
 	public <U> Path map(LongIdentifier longIdentifier, Class<U> modelClass) {
-		Optional<String> optional = _resourceManager.getNameOptional(
+		Optional<String> optional = _collectionResourceManager.getNameOptional(
 			modelClass.getName());
 
 		String name = optional.orElseThrow(
@@ -63,6 +63,6 @@ public class PathLongIdentifierMapper
 	}
 
 	@Reference
-	private ResourceManager _resourceManager;
+	private CollectionResourceManager _collectionResourceManager;
 
 }

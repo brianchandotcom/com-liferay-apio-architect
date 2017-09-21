@@ -26,7 +26,7 @@ import com.liferay.vulcan.resource.identifier.RootIdentifier;
 import com.liferay.vulcan.result.ThrowableFunction;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.uri.Path;
-import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 
 import java.io.InputStream;
 
@@ -128,11 +128,11 @@ public class RootEndpointImpl implements RootEndpoint {
 		String name, String id, String binaryId) {
 
 		Optional<Class<Object>> modelClassOptional =
-			_resourceManager.getModelClassOptional(name);
+			_collectionResourceManager.getModelClassOptional(name);
 
 		Optional<BinaryFunction<Object>> binaryFunctionOptional =
 			modelClassOptional.flatMap(
-				_resourceManager::getRepresentorOptional
+				_collectionResourceManager::getRepresentorOptional
 			).map(
 				Representor::getBinaryFunctions
 			).map(
@@ -257,7 +257,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			String relatedClassName = relatedModelClass.getName();
 
 			Optional<Class<Object>> optional =
-				_resourceManager.getModelClassOptional(nestedName);
+				_collectionResourceManager.getModelClassOptional(nestedName);
 
 			return optional.map(
 				Class::getName
@@ -274,7 +274,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		return parentSingleModel -> {
 			Optional<Representor<T, Identifier>> optional =
-				_resourceManager.getRepresentorOptional(
+				_collectionResourceManager.getRepresentorOptional(
 					parentSingleModel.getModelClass());
 
 			return optional.map(
@@ -323,7 +323,8 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	private <T> Try<Routes<T>> _getRoutesTry(String name) {
 		Try<Optional<Routes<T>>> optionalTry = Try.success(
-			_resourceManager.getRoutesOptional(name, _httpServletRequest));
+			_collectionResourceManager.getRoutesOptional(
+				name, _httpServletRequest));
 
 		return optionalTry.map(
 			Optional::get
@@ -339,10 +340,10 @@ public class RootEndpointImpl implements RootEndpoint {
 		return () -> new NotFoundException("No endpoint found at path " + name);
 	}
 
+	@Reference
+	private CollectionResourceManager _collectionResourceManager;
+
 	@Context
 	private HttpServletRequest _httpServletRequest;
-
-	@Reference
-	private ResourceManager _resourceManager;
 
 }

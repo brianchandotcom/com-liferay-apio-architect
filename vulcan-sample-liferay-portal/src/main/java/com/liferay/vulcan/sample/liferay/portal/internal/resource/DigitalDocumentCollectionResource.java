@@ -27,8 +27,8 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Representor;
-import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
@@ -54,8 +54,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Javier Gamarra
  */
 @Component(immediate = true)
-public class DigitalDocumentResource
-	implements Resource<DLFileEntry, LongIdentifier> {
+public class DigitalDocumentCollectionResource
+	implements CollectionResource<DLFileEntry, LongIdentifier> {
 
 	@Override
 	public Representor<DLFileEntry, LongIdentifier> buildRepresentor(

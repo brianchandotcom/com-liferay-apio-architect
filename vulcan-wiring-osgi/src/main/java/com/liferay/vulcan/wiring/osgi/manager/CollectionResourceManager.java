@@ -20,9 +20,9 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.Representor;
-import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.result.Try;
@@ -48,16 +48,16 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides methods to retrieve information provided by the different {@link
- * Resource} instances, such as field functions, types, identifier functions,
- * and so on.
+ * CollectionResource} instances, such as field functions, types, identifier
+ * functions, and so on.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
- * @see    Resource
+ * @see    CollectionResource
  */
-@Component(immediate = true, service = ResourceManager.class)
-public class ResourceManager extends BaseManager<Resource> {
+@Component(immediate = true, service = CollectionResourceManager.class)
+public class CollectionResourceManager extends BaseManager<CollectionResource> {
 
 	/**
 	 * Returns the model class of a resource's name.
@@ -75,20 +75,21 @@ public class ResourceManager extends BaseManager<Resource> {
 	/**
 	 * Returns the name of a class names's resource.
 	 *
-	 * @param  className the class name of a {@link Resource}
+	 * @param  className the class name of a {@link CollectionResource}
 	 * @return the name of a class name's resource.
 	 */
 	public Optional<String> getNameOptional(String className) {
-		Optional<Resource> optional = _getResourceOptional(className);
+		Optional<CollectionResource> optional = _getCollectionResourceOptional(
+			className);
 
-		return optional.map(Resource::getName);
+		return optional.map(CollectionResource::getName);
 	}
 
 	/**
 	 * Returns the representor of the model class, if present. Returns {@code
 	 * Optional#empty()} if no representor can be found.
 	 *
-	 * @param  modelClass the model class of a {@link Resource}.
+	 * @param  modelClass the model class of a {@link CollectionResource}.
 	 * @return the representor of the model class, if present; {@code
 	 *         Optional#empty()} otherwise.
 	 */
@@ -104,7 +105,7 @@ public class ResourceManager extends BaseManager<Resource> {
 	/**
 	 * Returns the routes of the model class for a certain name.
 	 *
-	 * @param  name the name of a {@link Resource}.
+	 * @param  name the name of a {@link CollectionResource}.
 	 * @param  httpServletRequest the actual request.
 	 * @return the routes of the model class.
 	 */
@@ -123,25 +124,26 @@ public class ResourceManager extends BaseManager<Resource> {
 
 	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
 	protected void setServiceReference(
-		ServiceReference<Resource> serviceReference) {
+		ServiceReference<CollectionResource> serviceReference) {
 
 		Optional<Class<Object>> optional = addService(
-			serviceReference, Resource.class);
+			serviceReference, CollectionResource.class);
 
 		optional.ifPresent(this::_addModelClassMaps);
 	}
 
 	@SuppressWarnings("unused")
 	protected void unsetServiceReference(
-		ServiceReference<Resource> serviceReference) {
+		ServiceReference<CollectionResource> serviceReference) {
 
 		Optional<Class<Object>> optional = removeService(
-			serviceReference, Resource.class);
+			serviceReference, CollectionResource.class);
 
 		optional.ifPresent(this::_removeModelClassMaps);
 
 		optional.filter(
-			modelClass -> _getResourceOptional(modelClass.getName()).isPresent()
+			modelClass -> _getCollectionResourceOptional(
+				modelClass.getName()).isPresent()
 		).ifPresent(
 			this::_addModelClassMaps
 		);
@@ -150,16 +152,17 @@ public class ResourceManager extends BaseManager<Resource> {
 	private <T, U extends Identifier> void _addModelClassMaps(
 		Class<T> modelClass) {
 
-		Optional<Resource> optional = _getResourceOptional(
+		Optional<CollectionResource> optional = _getCollectionResourceOptional(
 			modelClass.getName());
 
 		optional.map(
-			resource -> (Resource<T, U>)resource
+			collectionResource -> (CollectionResource<T, U>)collectionResource
 		).ifPresent(
-			resource -> {
-				_classes.put(resource.getName(), modelClass);
+			collectionResource -> {
+				_classes.put(collectionResource.getName(), modelClass);
 
-				Class<U> identifierClass = _getIdentifierClass(resource);
+				Class<U> identifierClass = _getIdentifierClass(
+					collectionResource);
 
 				Supplier<List<RelatedCollection<T, ?>>>
 					relatedCollectionSupplier =
@@ -167,7 +170,7 @@ public class ResourceManager extends BaseManager<Resource> {
 							modelClass.getName());
 
 				RepresentorImpl representor =
-					(RepresentorImpl)resource.buildRepresentor(
+					(RepresentorImpl)collectionResource.buildRepresentor(
 						new RepresentorBuilderImpl<>(
 							identifierClass,
 							_addRelatedCollectionTriConsumer(modelClass),
@@ -176,9 +179,11 @@ public class ResourceManager extends BaseManager<Resource> {
 				_representors.put(modelClass.getName(), representor);
 
 				Function<HttpServletRequest, Routes<?>> routesFunction =
-					_getRoutesFunction(modelClass, identifierClass, resource);
+					_getRoutesFunction(
+						modelClass, identifierClass, collectionResource);
 
-				_routesFunctions.put(resource.getName(), routesFunction);
+				_routesFunctions.put(
+					collectionResource.getName(), routesFunction);
 			}
 		);
 	}
@@ -197,13 +202,20 @@ public class ResourceManager extends BaseManager<Resource> {
 		};
 	}
 
-	private <T, U extends Identifier> Class<U> _getIdentifierClass(
-		Resource<T, U> resource) {
+	private Optional<CollectionResource> _getCollectionResourceOptional(
+		String modelClassName) {
 
-		Class<? extends Resource> resourceClass = resource.getClass();
+		return getServiceOptional(modelClassName);
+	}
+
+	private <T, U extends Identifier> Class<U> _getIdentifierClass(
+		CollectionResource<T, U> collectionResource) {
+
+		Class<? extends CollectionResource> resourceClass =
+			collectionResource.getClass();
 
 		Try<Class<U>> classTry = GenericUtil.getGenericClassTry(
-			resourceClass, Resource.class, 1);
+			resourceClass, CollectionResource.class, 1);
 
 		return classTry.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveValidGenericType(
@@ -216,14 +228,10 @@ public class ResourceManager extends BaseManager<Resource> {
 		return clazz -> _providerManager.provide(clazz, httpServletRequest);
 	}
 
-	private Optional<Resource> _getResourceOptional(String modelClassName) {
-		return getServiceOptional(modelClassName);
-	}
-
 	private <T, U extends Identifier> Function<HttpServletRequest, Routes<?>>
 		_getRoutesFunction(
 			Class<T> modelClass, Class<U> identifierClass,
-			Resource<T, U> resource) {
+			CollectionResource<T, U> collectionResource) {
 
 		return httpServletRequest -> {
 			RoutesBuilderImpl<T, U> routesBuilder = new RoutesBuilderImpl<>(
@@ -231,7 +239,7 @@ public class ResourceManager extends BaseManager<Resource> {
 				_getProvideClassFunction(httpServletRequest),
 				_pathIdentifierMapperManager::map);
 
-			return resource.routes(routesBuilder);
+			return collectionResource.routes(routesBuilder);
 		};
 	}
 

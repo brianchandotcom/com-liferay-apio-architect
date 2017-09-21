@@ -33,8 +33,8 @@ import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
-import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
@@ -187,7 +187,8 @@ public class SingleModelMessageBodyWriter<T>
 						jsonObjectBuilder, embeddedPathElements, types));
 
 				Optional<Representor<V, Identifier>> representorOptional =
-					_resourceManager.getRepresentorOptional(modelClass);
+					_collectionResourceManager.getRepresentorOptional(
+						modelClass);
 
 				representorOptional.ifPresent(
 					representor -> {
@@ -285,7 +286,7 @@ public class SingleModelMessageBodyWriter<T>
 				jsonObjectBuilder, types));
 
 		Optional<Representor<U, Identifier>> representorOptional =
-			_resourceManager.getRepresentorOptional(modelClass);
+			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		representorOptional.ifPresent(
 			representor -> {
@@ -351,6 +352,9 @@ public class SingleModelMessageBodyWriter<T>
 					jsonObjectBuilder, embeddedPathElements, url));
 	}
 
+	@Reference
+	private CollectionResourceManager _collectionResourceManager;
+
 	@Context
 	private HttpHeaders _httpHeaders;
 
@@ -359,9 +363,6 @@ public class SingleModelMessageBodyWriter<T>
 
 	@Reference
 	private ProviderManager _providerManager;
-
-	@Reference
-	private ResourceManager _resourceManager;
 
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
 	private List<SingleModelMessageMapper<T>> _singleModelMessageMappers;

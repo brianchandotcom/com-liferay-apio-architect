@@ -19,7 +19,7 @@ import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.identifier.Identifier;
-import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 
 import java.util.List;
 import java.util.Optional;
@@ -218,7 +218,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 		HttpHeaders httpHeaders) {
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentorOptional(modelClass);
+			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
 			Representor::getTypes
@@ -233,9 +233,9 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Reference
-	private HALSingleModelMessageMapper _halSingleModelMessageMapper;
+	private CollectionResourceManager _collectionResourceManager;
 
 	@Reference
-	private ResourceManager _resourceManager;
+	private HALSingleModelMessageMapper _halSingleModelMessageMapper;
 
 }

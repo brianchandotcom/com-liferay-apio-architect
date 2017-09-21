@@ -19,7 +19,7 @@ import com.liferay.vulcan.resource.identifier.mapper.PathIdentifierMapper;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
 import com.liferay.vulcan.uri.Path;
-import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
+import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 
 import java.util.Optional;
 
@@ -76,7 +76,7 @@ public class AggregateRatingPathIdentifierMapper
 		}
 
 		Optional<Class<Object>> optional =
-			_resourceManager.getModelClassOptional(components[0]);
+			_collectionResourceManager.getModelClassOptional(components[0]);
 
 		Class<Object> modelClass = optional.orElseThrow(
 			() -> new NotFoundException(
@@ -93,13 +93,14 @@ public class AggregateRatingPathIdentifierMapper
 	}
 
 	private String _getName(String className) {
-		Optional<String> optional = _resourceManager.getNameOptional(className);
+		Optional<String> optional = _collectionResourceManager.getNameOptional(
+			className);
 
 		return optional.orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(className));
 	}
 
 	@Reference
-	private ResourceManager _resourceManager;
+	private CollectionResourceManager _collectionResourceManager;
 
 }

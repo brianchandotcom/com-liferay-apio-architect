@@ -31,8 +31,8 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Representor;
-import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
@@ -73,8 +73,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  */
 @Component(immediate = true)
-public class BlogPostingResource
-	implements Resource<BlogsEntry, LongIdentifier> {
+public class BlogPostingCollectionResource
+	implements CollectionResource<BlogsEntry, LongIdentifier> {
 
 	@Override
 	public Representor<BlogsEntry, LongIdentifier> buildRepresentor(

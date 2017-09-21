@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 /**
  * Instances of this interface will hold information about the metadata
- * supported for a certain {@link Resource}.
+ * supported for a certain {@link CollectionResource}.
  *
  * <p>
  * Instances of this interface should always be created by using a {@link

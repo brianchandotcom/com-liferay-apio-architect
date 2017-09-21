@@ -42,7 +42,7 @@ import com.liferay.vulcan.resource.identifier.Identifier;
  * @see    RepresentorBuilder
  * @see    RoutesBuilder
  */
-public interface Resource<T, U extends Identifier> {
+public interface CollectionResource<T, U extends Identifier> {
 
 	/**
 	 * Creates a representor for a certain domain model from the provided {@link
@@ -68,7 +68,7 @@ public interface Resource<T, U extends Identifier> {
 	public String getName();
 
 	/**
-	 * Creates the {@link Routes} supported by the Resource.
+	 * Creates the {@link Routes} supported by the CollectionResource.
 	 *
 	 * <p>
 	 * To create the instance of {@link Routes} use the provided {@link

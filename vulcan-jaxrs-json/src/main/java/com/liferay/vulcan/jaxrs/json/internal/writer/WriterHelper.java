@@ -37,8 +37,8 @@ import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.APIError;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
 import com.liferay.vulcan.uri.Path;
+import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 import com.liferay.vulcan.wiring.osgi.manager.PathIdentifierMapperManager;
-import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 
 import java.net.URI;
 
@@ -130,16 +130,14 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Returns the page collection URL. If a {@link
-	 * com.liferay.vulcan.resource.Resource} for that model class cannot be
-	 * found, returns <code>Optional#empty()</code>.
+	 * Returns the page collection URL. If a {@link CollectionResource} for that
+	 * model class cannot be found, returns <code>Optional#empty()</code>.
 	 *
-	 * @param  page the page of the {@link com.liferay.vulcan.resource.Resource}
-	 *         collection.
+	 * @param  page the page of the {@link CollectionResource} collection.
 	 * @param  httpServletRequest the actual HTTP servlet request.
-	 * @return the page collection URL if a {@link
-	 *         com.liferay.vulcan.resource.Resource} for the model class can be
-	 *         found; <code>Optional#empty()</code> otherwise.
+	 * @return the page collection URL if a {@link CollectionResource} for the
+	 *         model class can be found; <code>Optional#empty()</code>
+	 *         otherwise.
 	 */
 	public <T> Optional<String> getCollectionURLOptional(
 		Page<T> page, HttpServletRequest httpServletRequest) {
@@ -150,7 +148,7 @@ public class WriterHelper {
 
 		Class<T> modelClass = page.getModelClass();
 
-		Optional<String> optional = _resourceManager.getNameOptional(
+		Optional<String> optional = _collectionResourceManager.getNameOptional(
 			modelClass.getName());
 
 		return optional.map(
@@ -165,13 +163,13 @@ public class WriterHelper {
 
 	/**
 	 * Returns the URL to the resource of a certain model. If a {@link
-	 * com.liferay.vulcan.resource.Resource} for that model class cannot be
-	 * found, returns {@code Optional#empty()}.
+	 * CollectionResource} for that model class cannot be found, returns {@code
+	 * Optional#empty()}.
 	 *
 	 * @param  singleModel a single model.
 	 * @param  httpServletRequest the actual HTTP servlet request.
-	 * @return the single URL for the {@code Resource} if present; {@code
-	 *         Optional#empty()} otherwise.
+	 * @return the single URL for the {@code CollectionResource} if present;
+	 *         {@code Optional#empty()} otherwise.
 	 */
 	public <T> Optional<String> getSingleURLOptional(
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest) {
@@ -179,7 +177,7 @@ public class WriterHelper {
 		Class<T> modelClass = singleModel.getModelClass();
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentorOptional(modelClass);
+			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		return optional.flatMap(
 			representor -> {
@@ -224,7 +222,7 @@ public class WriterHelper {
 		Class<T> modelClass = singleModel.getModelClass();
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentorOptional(modelClass);
+			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		optional.flatMap(
 			representor -> {
@@ -281,7 +279,7 @@ public class WriterHelper {
 			modelClass, fields);
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentorOptional(modelClass);
+			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
 			Representor::getFieldFunctions
@@ -350,7 +348,7 @@ public class WriterHelper {
 			modelClass, fields);
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentorOptional(modelClass);
+			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
 			Representor::getLinks
@@ -398,8 +396,8 @@ public class WriterHelper {
 
 		Class<V> modelClass = relatedCollection.getModelClass();
 
-		Optional<String> nameOptional = _resourceManager.getNameOptional(
-			modelClass.getName());
+		Optional<String> nameOptional =
+			_collectionResourceManager.getNameOptional(modelClass.getName());
 
 		nameOptional.flatMap(
 			name -> singleURLOptional.map(singleURL -> singleURL + "/" + name)
@@ -500,7 +498,7 @@ public class WriterHelper {
 		Class<U> modelClass, Consumer<List<String>> consumer) {
 
 		Optional<Representor<U, Identifier>> optional =
-			_resourceManager.getRepresentorOptional(modelClass);
+			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
 			Representor::getTypes
@@ -513,7 +511,7 @@ public class WriterHelper {
 		Class<T> modelClass, Fields fields) {
 
 		Optional<Representor<T, Identifier>> optional =
-			_resourceManager.getRepresentorOptional(modelClass);
+			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		return optional.map(
 			Representor::getTypes
@@ -541,14 +539,14 @@ public class WriterHelper {
 		};
 	}
 
+	@Reference
+	private CollectionResourceManager _collectionResourceManager;
+
 	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private CollectionResourceURITransformer _collectionResourceURITransformer;
 
 	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;
-
-	@Reference
-	private ResourceManager _resourceManager;
 
 	@Reference
 	private ServerURLProvider _serverURLProvider;

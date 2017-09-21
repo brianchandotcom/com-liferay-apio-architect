@@ -26,8 +26,8 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Representor;
-import com.liferay.vulcan.resource.Resource;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
@@ -53,7 +53,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Javier Gamarra
  */
 @Component(immediate = true)
-public class FolderResource implements Resource<DLFolder, LongIdentifier> {
+public class FolderCollectionResource
+	implements CollectionResource<DLFolder, LongIdentifier> {
 
 	@Override
 	public Representor<DLFolder, LongIdentifier> buildRepresentor(

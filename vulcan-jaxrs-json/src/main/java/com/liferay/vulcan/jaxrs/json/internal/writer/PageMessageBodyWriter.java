@@ -33,8 +33,8 @@ import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
-import com.liferay.vulcan.wiring.osgi.manager.ResourceManager;
 import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
@@ -221,7 +221,8 @@ public class PageMessageBodyWriter<T>
 						embeddedPathElements, types));
 
 				Optional<Representor<V, Identifier>> representorOptional =
-					_resourceManager.getRepresentorOptional(modelClass);
+					_collectionResourceManager.getRepresentorOptional(
+						modelClass);
 
 				representorOptional.ifPresent(
 					representor -> {
@@ -325,7 +326,8 @@ public class PageMessageBodyWriter<T>
 						jsonObjectBuilder, itemJSONObjectBuilder, url));
 
 				Optional<Representor<T, Identifier>> representorOptional =
-					_resourceManager.getRepresentorOptional(modelClass);
+					_collectionResourceManager.getRepresentorOptional(
+						modelClass);
 
 				representorOptional.ifPresent(
 					representor -> {
@@ -455,6 +457,9 @@ public class PageMessageBodyWriter<T>
 					embeddedPathElements, url));
 	}
 
+	@Reference
+	private CollectionResourceManager _collectionResourceManager;
+
 	@Context
 	private HttpHeaders _httpHeaders;
 
@@ -469,9 +474,6 @@ public class PageMessageBodyWriter<T>
 
 	@Context
 	private ResourceInfo _resourceInfo;
-
-	@Reference
-	private ResourceManager _resourceManager;
 
 	@Reference
 	private WriterHelper _writerHelper;
