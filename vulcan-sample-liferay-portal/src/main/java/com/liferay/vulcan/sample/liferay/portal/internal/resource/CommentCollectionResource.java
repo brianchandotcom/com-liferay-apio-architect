@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.service.IdentityServiceContextFunction;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Function;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.pagination.PageItems;
@@ -98,6 +99,8 @@ public class CommentCollectionResource
 			this::_getComment
 		).addCollectionPageItemRemover(
 			this::_deleteComment
+		).addCollectionPageItemUpdater(
+			this::_updateComment
 		).build();
 	}
 
@@ -216,6 +219,31 @@ public class CommentCollectionResource
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
+	}
+
+	private Comment _updateComment(
+		LongIdentifier commentLongIdentifier, Map<String, Object> body) {
+
+		Comment comment = _getComment(commentLongIdentifier);
+
+		String content = (String)body.get("text");
+
+		if (Validator.isNull(content)) {
+			throw new BadRequestException("Incorrect body");
+		}
+
+		Function<String, ServiceContext> createServiceContextFunction =
+			string -> new ServiceContext();
+
+		Try<Long> longTry = Try.fromFallible(
+			() -> _commentManager.updateComment(
+				comment.getUserId(), comment.getClassName(),
+				comment.getClassPK(), commentLongIdentifier.getId(),
+				StringPool.BLANK, content, createServiceContextFunction));
+
+		return longTry.map(
+			_commentManager::fetchComment
+		).getUnchecked();
 	}
 
 	@Reference

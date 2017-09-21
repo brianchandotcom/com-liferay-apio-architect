@@ -90,6 +90,8 @@ public class GroupCollectionResource
 			this::_getGroup
 		).addCollectionPageItemRemover(
 			this::_deleteGroup
+		).addCollectionPageItemUpdater(
+			this::_updateGroup
 		).build();
 	}
 
@@ -143,6 +145,25 @@ public class GroupCollectionResource
 		int groupsCount = _groupLocalService.getGroupsCount();
 
 		return new PageItems<>(groups, groupsCount);
+	}
+
+	private Group _updateGroup(
+		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
+
+		String name = (String)body.get("name");
+
+		if (Validator.isNull(name)) {
+			throw new BadRequestException("Incorrect body");
+		}
+
+		Try<Group> groupTry = Try.fromFallible(
+			() -> _groupLocalService.updateGroup(
+				groupLongIdentifier.getId(), 0,
+				Collections.singletonMap(Locale.US, name),
+				Collections.emptyMap(), TYPE_SITE_OPEN, false,
+				DEFAULT_MEMBERSHIP_RESTRICTION, null, true, true, null));
+
+		return groupTry.getUnchecked();
 	}
 
 	@Reference

@@ -134,6 +134,8 @@ public class PersonCollectionResource
 			this::_getUser
 		).addCollectionPageItemRemover(
 			this::_deleteUser
+		).addCollectionPageItemUpdater(
+			this::_updateUser
 		).build();
 	}
 
@@ -227,6 +229,47 @@ public class PersonCollectionResource
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
+	}
+
+	private User _updateUser(
+		LongIdentifier userLongIdentifier, Map<String, Object> body) {
+
+		User user = _getUser(userLongIdentifier);
+
+		String password = (String)body.get("password");
+		String screenName = (String)body.get("alternateName");
+		String emailAddress = (String)body.get("email");
+		String firstName = (String)body.get("givenName");
+		String lastName = (String)body.get("familyName");
+		String birthDateString = (String)body.get("birthDate");
+
+		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
+			() -> new BadRequestException("Incorrect body");
+
+		if (Validator.isNull(screenName) || Validator.isNull(emailAddress) ||
+			Validator.isNull(firstName) || Validator.isNull(lastName) ||
+			Validator.isNull(birthDateString)) {
+
+			throw incorrectBodyExceptionSupplier.get();
+		}
+
+		String jobTitle = (String)body.get("jobTitle");
+
+		if (Validator.isNull(jobTitle)) {
+			throw incorrectBodyExceptionSupplier.get();
+		}
+
+		user.setPassword(password);
+		user.setScreenName(screenName);
+		user.setEmailAddress(emailAddress);
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setJobTitle(jobTitle);
+
+		Try<User> userTry = Try.fromFallible(
+			() -> _userLocalService.updateUser(user));
+
+		return userTry.getUnchecked();
 	}
 
 	@Reference

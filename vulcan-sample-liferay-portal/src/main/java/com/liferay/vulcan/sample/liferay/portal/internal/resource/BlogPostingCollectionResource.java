@@ -150,6 +150,8 @@ public class BlogPostingCollectionResource
 			this::_getBlogsEntry
 		).addCollectionPageItemRemover(
 			this::_deleteBlogsEntry
+		).addCollectionPageItemUpdater(
+			this::_updateBlogsEntry
 		).build();
 	}
 
@@ -277,6 +279,62 @@ public class BlogPostingCollectionResource
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
+	}
+
+	private BlogsEntry _updateBlogsEntry(
+		LongIdentifier blogsEntryLongIdentifier, Map<String, Object> body) {
+
+		String title = (String)body.get("headline");
+		String subtitle = (String)body.get("alternativeHeadline");
+		String description = (String)body.get("description");
+		String content = (String)body.get("articleBody");
+		String displayDateString = (String)body.get("displayDate");
+
+		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
+			() -> new BadRequestException("Incorrect body");
+
+		if (Validator.isNull(title) || Validator.isNull(subtitle) ||
+			Validator.isNull(description) || Validator.isNull(content) ||
+			Validator.isNull(displayDateString)) {
+
+			throw incorrectBodyExceptionSupplier.get();
+		}
+
+		Calendar calendar = Calendar.getInstance();
+
+		Try<DateFormat> dateFormatTry = Try.success(
+			DateUtil.getISO8601Format());
+
+		Date displayDate = dateFormatTry.map(
+			dateFormat -> dateFormat.parse(displayDateString)
+		).mapFailMatching(
+			ParseException.class, incorrectBodyExceptionSupplier
+		).getUnchecked();
+
+		calendar.setTime(displayDate);
+
+		int month = calendar.get(Calendar.MONTH);
+		int day = calendar.get(Calendar.DATE);
+		int year = calendar.get(Calendar.YEAR);
+		int hour = calendar.get(Calendar.HOUR);
+		int minute = calendar.get(Calendar.MINUTE);
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setAddGuestPermissions(true);
+
+		BlogsEntry blogsEntry = _getBlogsEntry(blogsEntryLongIdentifier);
+
+		serviceContext.setScopeGroupId(blogsEntry.getGroupId());
+
+		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
+			() -> _blogsService.updateEntry(
+				blogsEntryLongIdentifier.getId(), title, subtitle, description,
+				content, month, day, year, hour, minute, false, false, null,
+				null, null, null, serviceContext));
+
+		return blogsEntryTry.getUnchecked();
 	}
 
 	@Reference

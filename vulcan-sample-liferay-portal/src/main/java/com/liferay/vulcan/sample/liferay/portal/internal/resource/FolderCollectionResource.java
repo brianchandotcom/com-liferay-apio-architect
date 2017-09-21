@@ -34,6 +34,7 @@ import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.result.Try;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,6 +98,8 @@ public class FolderCollectionResource
 			this::_getDLFolder
 		).addCollectionPageItemRemover(
 			this::_deleteDLFolder
+		).addCollectionPageItemUpdater(
+			this::_updateFolder
 		).build();
 	}
 
@@ -193,6 +196,33 @@ public class FolderCollectionResource
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
+	}
+
+	private DLFolder _updateFolder(
+		LongIdentifier dlFolderLongIdentifier, Map<String, Object> body) {
+
+		DLFolder dlFolder = _getDLFolder(dlFolderLongIdentifier);
+
+		String name = (String)body.get("name");
+
+		if (Validator.isNull(name)) {
+			throw new BadRequestException("Incorrect body");
+		}
+
+		String description = (String)body.get("description");
+
+		if (Validator.isNull(description)) {
+			throw new BadRequestException("Incorrect body");
+		}
+
+		Try<DLFolder> dlFolderTry = Try.fromFallible(
+			() -> _dlFolderService.updateFolder(
+				dlFolderLongIdentifier.getId(), dlFolder.getParentFolderId(),
+				name, description, dlFolder.getDefaultFileEntryTypeId(),
+				new ArrayList<>(), dlFolder.getRestrictionType(),
+				new ServiceContext()));
+
+		return dlFolderTry.getUnchecked();
 	}
 
 	@Reference
