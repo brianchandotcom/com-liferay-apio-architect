@@ -26,6 +26,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -146,5 +147,21 @@ public interface RootEndpoint {
 	public <T> Try<Page<T>> getNestedCollectionPageTry(
 		@PathParam("name") String name, @PathParam("id") String id,
 		@PathParam("nestedName") String nestedName);
+
+	/**
+	 * Updates a collection item for a given name or an exception if an error
+	 * occurred.
+	 *
+	 * @param  name the name of the resource to be updated, extracted from the
+	 *         URL.
+	 * @param  id the ID of the resource.
+	 * @return the updated single model, or an exception if there was an error.
+	 */
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/p/{name}/{id}")
+	@PUT
+	public <T> Try<SingleModel<T>> updateCollectionItem(
+		@PathParam("name") String name, @PathParam("id") String id,
+		Map<String, Object> body);
 
 }
