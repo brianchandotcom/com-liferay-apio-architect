@@ -209,6 +209,27 @@ public class RootEndpointImpl implements RootEndpoint {
 		);
 	}
 
+	@Override
+	public <T> Try<SingleModel<T>> updateCollectionItem(
+		String name, String id, Map<String, Object> body) {
+
+		Try<Routes<T>> routesTry = _getRoutesTry(name);
+
+		return routesTry.map(
+			Routes::getUpdateSingleModelFunctionOptional
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class,
+			() -> new NotAllowedException(
+				"PUT method is not allowed for path " + name + "/" + id)
+		).map(
+			function -> function.apply(new Path(name, id))
+		).map(
+			function -> function.apply(body)
+		);
+	}
+
 	private <T> ThrowableFunction<Function<Identifier,
 		Function<Map<String, Object>, SingleModel<T>>>,
 			Try<Optional<Function<Map<String, Object>, SingleModel<T>>>>>
