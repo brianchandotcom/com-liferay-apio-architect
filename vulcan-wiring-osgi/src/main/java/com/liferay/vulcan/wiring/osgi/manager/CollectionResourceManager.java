@@ -142,8 +142,12 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 		optional.ifPresent(this::_removeModelClassMaps);
 
 		optional.filter(
-			modelClass -> _getCollectionResourceOptional(
-				modelClass.getName()).isPresent()
+			modelClass -> {
+				Optional<CollectionResource> collectionResourceOptional =
+					_getCollectionResourceOptional(modelClass.getName());
+
+				return collectionResourceOptional.isPresent();
+			}
 		).ifPresent(
 			this::_addModelClassMaps
 		);
