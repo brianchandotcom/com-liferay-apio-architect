@@ -106,7 +106,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<Routes<Object>> routesTry = _getRoutesTry(name);
 
 		routesTry.map(
-			Routes::getDeleteSingleModelFunctionOptional
+			Routes::getDeleteSingleModelConsumerOptional
 		).map(
 			Optional::get
 		).mapFailMatching(

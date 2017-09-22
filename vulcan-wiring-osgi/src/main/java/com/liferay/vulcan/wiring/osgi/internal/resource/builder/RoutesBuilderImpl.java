@@ -879,14 +879,14 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 			A a = _provideClass(aClass);
 
 			biConsumer.accept(u, a);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}
@@ -897,13 +897,13 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 
 			consumer.accept(u);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}
@@ -918,7 +918,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 			A a = _provideClass(aClass);
 			B b = _provideClass(bClass);
@@ -933,7 +933,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			decaConsumer.accept(u, a, b, c, d, e, f, g, h, i);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}
@@ -948,7 +948,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 			A a = _provideClass(aClass);
 			B b = _provideClass(bClass);
@@ -962,7 +962,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			enneaConsumer.accept(u, a, b, c, d, e, f, g, h);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}
@@ -975,7 +975,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 			A a = _provideClass(aClass);
 			B b = _provideClass(bClass);
@@ -987,7 +987,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			heptaConsumer.accept(u, a, b, c, d, e, f);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}
@@ -999,7 +999,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 			A a = _provideClass(aClass);
 			B b = _provideClass(bClass);
@@ -1010,7 +1010,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			hexaConsumer.accept(u, a, b, c, d, e);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}
@@ -1024,7 +1024,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 			A a = _provideClass(aClass);
 			B b = _provideClass(bClass);
@@ -1037,7 +1037,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			octaConsumer.accept(u, a, b, c, d, e, f, g);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}
@@ -1049,7 +1049,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 			A a = _provideClass(aClass);
 			B b = _provideClass(bClass);
@@ -1059,7 +1059,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			pentaConsumer.accept(u, a, b, c, d);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}
@@ -1071,7 +1071,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 			A a = _provideClass(aClass);
 			B b = _provideClass(bClass);
@@ -1080,7 +1080,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			tetraConsumer.accept(u, a, b, c);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}
@@ -1091,7 +1091,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Function<Path, U> identifierFunction = _convertIdentifier(
 			_singleModelIdentifierClass);
 
-		Consumer<Path> deleteFunction = path -> {
+		Consumer<Path> deleteSingleModelConsumer = path -> {
 			U u = identifierFunction.apply(path);
 			A a = _provideClass(aClass);
 			B b = _provideClass(bClass);
@@ -1099,7 +1099,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			triConsumer.accept(u, a, b);
 		};
 
-		_routesImpl.setDeleteSingleModelFunction(deleteFunction);
+		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
 
 		return this;
 	}

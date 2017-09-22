@@ -31,8 +31,8 @@ import java.util.function.Function;
 public class RoutesImpl<T> implements Routes<T> {
 
 	@Override
-	public Optional<Consumer<Path>> getDeleteSingleModelFunctionOptional() {
-		return Optional.ofNullable(_deleteSingleModelFunction);
+	public Optional<Consumer<Path>> getDeleteSingleModelConsumerOptional() {
+		return Optional.ofNullable(_deleteSingleModelConsumer);
 	}
 
 	@Override
@@ -63,10 +63,10 @@ public class RoutesImpl<T> implements Routes<T> {
 		return Optional.ofNullable(_putSingleModelFunction);
 	}
 
-	public void setDeleteSingleModelFunction(
-		Consumer<Path> deleteSingleModelFunction) {
+	public void setDeleteSingleModelConsumer(
+		Consumer<Path> deleteSingleModelConsumer) {
 
-		_deleteSingleModelFunction = deleteSingleModelFunction;
+		_deleteSingleModelConsumer = deleteSingleModelConsumer;
 	}
 
 	public void setPageFunction(
@@ -95,7 +95,7 @@ public class RoutesImpl<T> implements Routes<T> {
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private Consumer<Path> _deleteSingleModelFunction;
+	private Consumer<Path> _deleteSingleModelConsumer;
 	private Function<Path, Function<Identifier, Page<T>>> _pageFunction;
 	private Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
 		_postSingleModelFunction;

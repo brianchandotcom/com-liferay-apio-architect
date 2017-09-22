@@ -52,7 +52,7 @@ public interface Routes<T> {
 	 * @return the function used to remove a single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
 	 */
-	public Optional<Consumer<Path>> getDeleteSingleModelFunctionOptional();
+	public Optional<Consumer<Path>> getDeleteSingleModelConsumerOptional();
 
 	/**
 	 * Returns the function used to create the page of a {@link
