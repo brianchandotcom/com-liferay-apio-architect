@@ -17,7 +17,6 @@ package com.liferay.vulcan.architect.jaxrs.json.internal.writer;
 import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.architect.alias.BinaryFunction;
 import com.liferay.vulcan.architect.consumer.TriConsumer;
 import com.liferay.vulcan.architect.jaxrs.json.internal.JSONObjectBuilderImpl;
@@ -52,6 +51,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.json.JsonObject;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -103,7 +104,7 @@ public class WriterHelper {
 		errorMessageMapper.mapType(jsonObjectBuilder, apiError.getType());
 		errorMessageMapper.onFinish(jsonObjectBuilder, apiError, httpHeaders);
 
-		JSONObject jsonObject = jsonObjectBuilder.build();
+		JsonObject jsonObject = jsonObjectBuilder.build();
 
 		return jsonObject.toString();
 	}
@@ -226,7 +227,7 @@ public class WriterHelper {
 	public <T> void writeBinaries(
 		Map<String, BinaryFunction<T>> binaryFunctions,
 		SingleModel<T> singleModel, HttpServletRequest httpServletRequest,
-		BiConsumer<String, Object> biConsumer) {
+		BiConsumer<String, String> biConsumer) {
 
 		Class<T> modelClass = singleModel.getModelClass();
 
@@ -272,8 +273,9 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Helper method to write a model fields. It uses a consumer so each {@link
-	 * javax.ws.rs.ext.MessageBodyWriter} can write each field differently.
+	 * Helper method to write a model number fields. It uses a consumer so each
+	 * {@link javax.ws.rs.ext.MessageBodyWriter} can write each field
+	 * differently.
 	 *
 	 * @param  model a model.
 	 * @param  modelClass a model class.
@@ -281,9 +283,9 @@ public class WriterHelper {
 	 * @param  biConsumer the consumer that will be called to write each field.
 	 * @review
 	 */
-	public <T> void writeFields(
+	public <T> void writeBooleanFields(
 		T model, Class<T> modelClass, Fields fields,
-		BiConsumer<String, Object> biConsumer) {
+		BiConsumer<String, Boolean> biConsumer) {
 
 		Predicate<String> fieldsPredicate = _getFieldsPredicate(
 			modelClass, fields);
@@ -292,15 +294,15 @@ public class WriterHelper {
 			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
-			Representor::getFieldFunctions
+			Representor::getBooleanFieldFunctions
 		).ifPresent(
 			fieldFunctions -> {
 				for (String field : fieldFunctions.keySet()) {
 					if (fieldsPredicate.test(field)) {
-						Function<T, Object> fieldFunction = fieldFunctions.get(
+						Function<T, Boolean> fieldFunction = fieldFunctions.get(
 							field);
 
-						Object data = fieldFunction.apply(model);
+						Boolean data = fieldFunction.apply(model);
 
 						if (data != null) {
 							biConsumer.accept(field, data);
@@ -369,6 +371,47 @@ public class WriterHelper {
 				for (String key : links.keySet()) {
 					if (fieldsPredicate.test(key)) {
 						biConsumer.accept(key, links.get(key));
+					}
+				}
+			}
+		);
+	}
+
+	/**
+	 * Helper method to write a model number fields. It uses a consumer so each
+	 * {@link javax.ws.rs.ext.MessageBodyWriter} can write each field
+	 * differently.
+	 *
+	 * @param  model a model.
+	 * @param  modelClass a model class.
+	 * @param  fields the requested fields.
+	 * @param  biConsumer the consumer that will be called to write each field.
+	 * @review
+	 */
+	public <T> void writeNumberFields(
+		T model, Class<T> modelClass, Fields fields,
+		BiConsumer<String, Number> biConsumer) {
+
+		Predicate<String> fieldsPredicate = _getFieldsPredicate(
+			modelClass, fields);
+
+		Optional<Representor<T, Identifier>> optional =
+			_collectionResourceManager.getRepresentorOptional(modelClass);
+
+		optional.map(
+			Representor::getNumberFieldFunctions
+		).ifPresent(
+			fieldFunctions -> {
+				for (String field : fieldFunctions.keySet()) {
+					if (fieldsPredicate.test(field)) {
+						Function<T, Number> fieldFunction = fieldFunctions.get(
+							field);
+
+						Number data = fieldFunction.apply(model);
+
+						if (data != null) {
+							biConsumer.accept(field, data);
+						}
 					}
 				}
 			}
@@ -499,6 +542,47 @@ public class WriterHelper {
 					modelBiConsumer.accept(singleModel, embeddedPathElements);
 				}
 			});
+	}
+
+	/**
+	 * Helper method to write a model string fields. It uses a consumer so each
+	 * {@link javax.ws.rs.ext.MessageBodyWriter} can write each field
+	 * differently.
+	 *
+	 * @param  model a model.
+	 * @param  modelClass a model class.
+	 * @param  fields the requested fields.
+	 * @param  biConsumer the consumer that will be called to write each field.
+	 * @review
+	 */
+	public <T> void writeStringFields(
+		T model, Class<T> modelClass, Fields fields,
+		BiConsumer<String, String> biConsumer) {
+
+		Predicate<String> fieldsPredicate = _getFieldsPredicate(
+			modelClass, fields);
+
+		Optional<Representor<T, Identifier>> optional =
+			_collectionResourceManager.getRepresentorOptional(modelClass);
+
+		optional.map(
+			Representor::getStringFieldFunctions
+		).ifPresent(
+			fieldFunctions -> {
+				for (String field : fieldFunctions.keySet()) {
+					if (fieldsPredicate.test(field)) {
+						Function<T, String> fieldFunction = fieldFunctions.get(
+							field);
+
+						String data = fieldFunction.apply(model);
+
+						if (data != null) {
+							biConsumer.accept(field, data);
+						}
+					}
+				}
+			}
+		);
 	}
 
 	/**

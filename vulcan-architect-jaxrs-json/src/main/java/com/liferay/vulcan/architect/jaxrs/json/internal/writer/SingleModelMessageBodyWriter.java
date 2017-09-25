@@ -17,7 +17,6 @@ package com.liferay.vulcan.architect.jaxrs.json.internal.writer;
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.architect.alias.BinaryFunction;
 import com.liferay.vulcan.architect.error.VulcanDeveloperError;
 import com.liferay.vulcan.architect.error.VulcanDeveloperError.MustHaveProvider;
@@ -48,6 +47,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import javax.json.JsonObject;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -148,7 +149,7 @@ public class SingleModelMessageBodyWriter<T>
 			singleModelMessageMapper, jsonObjectBuilder, singleModel, fields,
 			embedded);
 
-		JSONObject jsonObject = jsonObjectBuilder.build();
+		JsonObject jsonObject = jsonObjectBuilder.build();
 
 		printWriter.println(jsonObject.toString());
 
@@ -168,10 +169,25 @@ public class SingleModelMessageBodyWriter<T>
 			(singleModel, embeddedPathElements) -> {
 				Class<V> modelClass = singleModel.getModelClass();
 
-				_writerHelper.writeFields(
+				_writerHelper.writeBooleanFields(
 					singleModel.getModel(), modelClass, fields,
 					(fieldName, value) ->
-						singleModelMessageMapper.mapEmbeddedResourceField(
+						singleModelMessageMapper.
+							mapEmbeddedResourceBooleanField(
+								jsonObjectBuilder, embeddedPathElements,
+								fieldName, value));
+
+				_writerHelper.writeNumberFields(
+					singleModel.getModel(), modelClass, fields,
+					(fieldName, value) ->
+						singleModelMessageMapper.mapEmbeddedResourceNumberField(
+							jsonObjectBuilder, embeddedPathElements, fieldName,
+							value));
+
+				_writerHelper.writeStringFields(
+					singleModel.getModel(), modelClass, fields,
+					(fieldName, value) ->
+						singleModelMessageMapper.mapEmbeddedResourceStringField(
 							jsonObjectBuilder, embeddedPathElements, fieldName,
 							value));
 
@@ -200,7 +216,7 @@ public class SingleModelMessageBodyWriter<T>
 							binaryFunctions, singleModel, _httpServletRequest,
 							(fieldName, value) ->
 								singleModelMessageMapper.
-									mapEmbeddedResourceField(
+									mapEmbeddedResourceStringField(
 										jsonObjectBuilder, embeddedPathElements,
 										fieldName, value));
 
@@ -271,9 +287,19 @@ public class SingleModelMessageBodyWriter<T>
 		singleModelMessageMapper.onStart(
 			jsonObjectBuilder, model, modelClass, _httpHeaders);
 
-		_writerHelper.writeFields(
+		_writerHelper.writeBooleanFields(
 			singleModel.getModel(), singleModel.getModelClass(), fields,
-			(field, value) -> singleModelMessageMapper.mapField(
+			(field, value) -> singleModelMessageMapper.mapBooleanField(
+				jsonObjectBuilder, field, value));
+
+		_writerHelper.writeNumberFields(
+			singleModel.getModel(), singleModel.getModelClass(), fields,
+			(field, value) -> singleModelMessageMapper.mapNumberField(
+				jsonObjectBuilder, field, value));
+
+		_writerHelper.writeStringFields(
+			singleModel.getModel(), singleModel.getModelClass(), fields,
+			(field, value) -> singleModelMessageMapper.mapStringField(
 				jsonObjectBuilder, field, value));
 
 		_writerHelper.writeLinks(
@@ -296,7 +322,7 @@ public class SingleModelMessageBodyWriter<T>
 
 				_writerHelper.writeBinaries(
 					binaryFunctions, singleModel, _httpServletRequest,
-					(field, value) -> singleModelMessageMapper.mapField(
+					(field, value) -> singleModelMessageMapper.mapStringField(
 						jsonObjectBuilder, field, value));
 
 				Optional<String> singleURLOptional =

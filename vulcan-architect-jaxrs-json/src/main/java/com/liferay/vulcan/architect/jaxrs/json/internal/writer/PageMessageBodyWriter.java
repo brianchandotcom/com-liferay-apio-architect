@@ -17,7 +17,6 @@ package com.liferay.vulcan.architect.jaxrs.json.internal.writer;
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.architect.alias.BinaryFunction;
 import com.liferay.vulcan.architect.error.VulcanDeveloperError;
 import com.liferay.vulcan.architect.jaxrs.json.internal.JSONObjectBuilderImpl;
@@ -49,6 +48,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import javax.json.JsonObject;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -156,7 +157,7 @@ public class PageMessageBodyWriter<T>
 
 		pageMessageMapper.onFinish(jsonObjectBuilder, page, _httpHeaders);
 
-		JSONObject jsonObject = jsonObjectBuilder.build();
+		JsonObject jsonObject = jsonObjectBuilder.build();
 
 		printWriter.println(jsonObject.toString());
 
@@ -201,10 +202,24 @@ public class PageMessageBodyWriter<T>
 			(singleModel, embeddedPathElements) -> {
 				Class<V> modelClass = singleModel.getModelClass();
 
-				_writerHelper.writeFields(
+				_writerHelper.writeBooleanFields(
 					singleModel.getModel(), modelClass, fields,
 					(fieldName, value) ->
-						pageMessageMapper.mapItemEmbeddedResourceField(
+						pageMessageMapper.mapItemEmbeddedResourceBooleanField(
+							pageJSONObjectBuilder, itemJSONObjectBuilder,
+							embeddedPathElements, fieldName, value));
+
+				_writerHelper.writeNumberFields(
+					singleModel.getModel(), modelClass, fields,
+					(fieldName, value) ->
+						pageMessageMapper.mapItemEmbeddedResourceNumberField(
+							pageJSONObjectBuilder, itemJSONObjectBuilder,
+							embeddedPathElements, fieldName, value));
+
+				_writerHelper.writeStringFields(
+					singleModel.getModel(), modelClass, fields,
+					(fieldName, value) ->
+						pageMessageMapper.mapItemEmbeddedResourceStringField(
 							pageJSONObjectBuilder, itemJSONObjectBuilder,
 							embeddedPathElements, fieldName, value));
 
@@ -233,7 +248,7 @@ public class PageMessageBodyWriter<T>
 						_writerHelper.writeBinaries(
 							binaryFunctions, singleModel, _httpServletRequest,
 							(fieldName, value) ->
-								pageMessageMapper.mapItemField(
+								pageMessageMapper.mapItemStringField(
 									pageJSONObjectBuilder,
 									itemJSONObjectBuilder, fieldName, value));
 
@@ -299,9 +314,21 @@ public class PageMessageBodyWriter<T>
 					jsonObjectBuilder, itemJSONObjectBuilder, item, modelClass,
 					_httpHeaders);
 
-				_writerHelper.writeFields(
+				_writerHelper.writeBooleanFields(
 					item, modelClass, fields,
-					(field, value) -> pageMessageMapper.mapItemField(
+					(field, value) -> pageMessageMapper.mapItemBooleanField(
+						jsonObjectBuilder, itemJSONObjectBuilder, field,
+						value));
+
+				_writerHelper.writeNumberFields(
+					item, modelClass, fields,
+					(field, value) -> pageMessageMapper.mapItemNumberField(
+						jsonObjectBuilder, itemJSONObjectBuilder, field,
+						value));
+
+				_writerHelper.writeStringFields(
+					item, modelClass, fields,
+					(field, value) -> pageMessageMapper.mapItemStringField(
 						jsonObjectBuilder, itemJSONObjectBuilder, field,
 						value));
 
@@ -338,7 +365,7 @@ public class PageMessageBodyWriter<T>
 						_writerHelper.writeBinaries(
 							binaryFunctions, singleModel, _httpServletRequest,
 							(fieldName, value) ->
-								pageMessageMapper.mapItemField(
+								pageMessageMapper.mapItemStringField(
 									jsonObjectBuilder, itemJSONObjectBuilder,
 									fieldName, value));
 
