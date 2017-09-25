@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.architect.pagination.PageItems;
 import com.liferay.vulcan.architect.pagination.Pagination;
 import com.liferay.vulcan.architect.resource.CollectionResource;
@@ -37,12 +36,8 @@ import com.liferay.vulcan.architect.resource.identifier.LongIdentifier;
 
 import java.io.InputStream;
 
-import java.text.DateFormat;
-
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
@@ -67,16 +62,6 @@ public class DigitalDocumentCollectionResource
 	public Representor<DLFileEntry, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<DLFileEntry, LongIdentifier> representorBuilder) {
 
-		Function<Date, String> formatFunction = date -> {
-			if (date == null) {
-				return null;
-			}
-
-			DateFormat dateFormat = DateUtil.getISO8601Format();
-
-			return dateFormat.format(date);
-		};
-
 		return representorBuilder.identifier(
 			dlFileEntry -> dlFileEntry::getFileEntryId
 		).addBidirectionalModel(
@@ -85,20 +70,16 @@ public class DigitalDocumentCollectionResource
 			dlFolder -> (LongIdentifier)dlFolder::getFolderId
 		).addBinary(
 			"contentStream", this::_getInputStream
+		).addDate(
+			"dateCreated", DLFileEntry::getCreateDate
+		).addDate(
+			"dateModified", DLFileEntry::getModifiedDate
+		).addDate(
+			"datePublished", DLFileEntry::getLastPublishDate
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional
 		).addNumber(
 			"contentSize", DLFileEntry::getSize
-		).addString(
-			"dateCreated",
-			dlFileEntry -> formatFunction.apply(dlFileEntry.getCreateDate())
-		).addString(
-			"dateModified",
-			dlFileEntry -> formatFunction.apply(dlFileEntry.getModifiedDate())
-		).addString(
-			"datePublished",
-			dlFileEntry -> formatFunction.apply(
-				dlFileEntry.getLastPublishDate())
 		).addString(
 			"fileFormat", DLFileEntry::getMimeType
 		).addString(

@@ -51,7 +51,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.ws.rs.BadRequestException;
@@ -81,21 +80,19 @@ public class BlogPostingCollectionResource
 	public Representor<BlogsEntry, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<BlogsEntry, LongIdentifier> representorBuilder) {
 
-		Function<Date, String> formatFunction = date -> {
-			if (date == null) {
-				return null;
-			}
-
-			DateFormat dateFormat = DateUtil.getISO8601Format();
-
-			return dateFormat.format(date);
-		};
-
 		return representorBuilder.identifier(
 			blogsEntry -> blogsEntry::getEntryId
 		).addBidirectionalModel(
 			"group", "blogs", Group.class, this::_getGroupOptional,
 			group -> (LongIdentifier)group::getGroupId
+		).addDate(
+			"createDate", BlogsEntry::getCreateDate
+		).addDate(
+			"displayDate", BlogsEntry::getDisplayDate
+		).addDate(
+			"modifiedDate", BlogsEntry::getModifiedDate
+		).addDate(
+			"publishedDate", BlogsEntry::getLastPublishDate
 		).addEmbeddedModel(
 			"aggregateRating", AggregateRating.class,
 			this::_getAggregateRatingOptional
@@ -112,23 +109,11 @@ public class BlogPostingCollectionResource
 		).addString(
 			"articleBody", BlogsEntry::getContent
 		).addString(
-			"createDate",
-			blogsEntry -> formatFunction.apply(blogsEntry.getCreateDate())
-		).addString(
 			"description", BlogsEntry::getDescription
-		).addString(
-			"displayDate",
-			blogsEntry -> formatFunction.apply(blogsEntry.getDisplayDate())
 		).addString(
 			"fileFormat", blogsEntry -> "text/html"
 		).addString(
 			"headline", BlogsEntry::getTitle
-		).addString(
-			"modifiedDate",
-			blogsEntry -> formatFunction.apply(blogsEntry.getModifiedDate())
-		).addString(
-			"publishedDate",
-			blogsEntry -> formatFunction.apply(blogsEntry.getLastPublishDate())
 		).addType(
 			"BlogPosting"
 		).build();

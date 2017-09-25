@@ -44,7 +44,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.ws.rs.BadRequestException;
@@ -73,40 +72,20 @@ public class PersonCollectionResource
 	public Representor<User, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<User, LongIdentifier> representorBuilder) {
 
-		Function<User, String> birthDateFunction = user -> {
-			Try<DateFormat> dateFormatTry = Try.success(
-				DateUtil.getISO8601Format());
-
-			return dateFormatTry.map(
-				dateFormat -> dateFormat.format(user.getBirthday())
-			).orElseThrow(
-				() -> new ServerErrorException(500)
-			);
-		};
-
 		return representorBuilder.identifier(
 			user -> user::getUserId
+		).addDate(
+			"birthDate", PersonCollectionResource::_getBirthday
 		).addString(
 			"additionalName", User::getMiddleName
 		).addString(
 			"alternateName", User::getScreenName
 		).addString(
-			"birthDate", birthDateFunction
-		).addString(
 			"email", User::getEmailAddress
 		).addString(
 			"familyName", User::getLastName
 		).addString(
-			"gender",
-			user -> {
-				Try<Boolean> booleanTry = Try.fromFallible(user::isMale);
-
-				return booleanTry.map(
-					male -> male ? "male" : "female"
-				).orElse(
-					null
-				);
-			}
+			"gender", PersonCollectionResource::_getGender
 		).addString(
 			"givenName", User::getFirstName
 		).addString(
@@ -138,6 +117,22 @@ public class PersonCollectionResource
 		).addCollectionPageItemUpdater(
 			this::_updateUser
 		).build();
+	}
+
+	private static Date _getBirthday(User user) {
+		Try<Date> dateTry = Try.fromFallible(user::getBirthday);
+
+		return dateTry.orElse(null);
+	}
+
+	private static String _getGender(User user) {
+		Try<Boolean> booleanTry = Try.fromFallible(user::isMale);
+
+		return booleanTry.map(
+			male -> male ? "male" : "female"
+		).orElse(
+			null
+		);
 	}
 
 	private User _addUser(

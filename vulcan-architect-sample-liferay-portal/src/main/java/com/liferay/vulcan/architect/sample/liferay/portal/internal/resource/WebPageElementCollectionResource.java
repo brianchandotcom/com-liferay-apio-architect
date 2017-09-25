@@ -49,7 +49,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.ws.rs.BadRequestException;
@@ -76,16 +75,6 @@ public class WebPageElementCollectionResource
 	public Representor<JournalArticle, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<JournalArticle, LongIdentifier> representorBuilder) {
 
-		Function<Date, String> formatFunction = date -> {
-			if (date == null) {
-				return null;
-			}
-
-			DateFormat dateFormat = DateUtil.getISO8601Format();
-
-			return dateFormat.format(date);
-		};
-
 		return representorBuilder.identifier(
 			journalArticle -> journalArticle::getId
 		).addBidirectionalModel(
@@ -93,26 +82,18 @@ public class WebPageElementCollectionResource
 			group -> (LongIdentifier)group::getGroupId
 		).addEmbeddedModel(
 			"creator", User.class, this::_getUserOptional
+		).addDate(
+			"dateCreated", JournalArticle::getCreateDate
+		).addDate(
+			"dateModified", JournalArticle::getModifiedDate
+		).addDate(
+			"datePublished", JournalArticle::getLastPublishDate
+		).addDate(
+			"lastReviewed", JournalArticle::getReviewDate
 		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
 		).addString(
-			"dateCreated",
-			journalArticle -> formatFunction.apply(
-				journalArticle.getCreateDate())
-		).addString(
-			"dateModified",
-			journalArticle -> formatFunction.apply(
-				journalArticle.getModifiedDate())
-		).addString(
-			"datePublished",
-			journalArticle -> formatFunction.apply(
-				journalArticle.getLastPublishDate())
-		).addString(
 			"description", JournalArticle::getDescription
-		).addString(
-			"lastReviewed",
-			journalArticle -> formatFunction.apply(
-				journalArticle.getReviewDate())
 		).addString(
 			"text", JournalArticle::getContent
 		).addString(
