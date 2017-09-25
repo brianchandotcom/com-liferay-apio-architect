@@ -49,7 +49,7 @@ public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
 	 *
 	 * @param  exception the exception to be converted.
 	 * @return the corresponding error, if a valid {@link ExceptionConverter} is
-	 *         present; <code>Optional#empty()</code> otherwise.
+	 *         present; {@code Optional#empty()} otherwise.
 	 * @review
 	 */
 	public <T extends Exception> Optional<APIError> convert(T exception) {

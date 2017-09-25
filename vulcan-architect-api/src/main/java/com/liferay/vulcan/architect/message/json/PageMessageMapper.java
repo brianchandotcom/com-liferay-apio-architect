@@ -359,8 +359,8 @@ public interface PageMessageMapper<T> {
 	 *
 	 * @param  page the actual page.
 	 * @param  httpHeaders the HTTP headers of the current request.
-	 * @return <code>true</code> if mapper supports mapping this request;
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if mapper supports mapping this request;
+	 *         {@code false} otherwise.
 	 * @review
 	 */
 	public default boolean supports(Page<T> page, HttpHeaders httpHeaders) {

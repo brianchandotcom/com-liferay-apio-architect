@@ -40,8 +40,8 @@ import org.osgi.service.component.annotations.Reference;
  * </p>
  *
  * <p>
- * The <code>className</code>/<code>classPK</code> are extracted from the
- * destructuring of the ID.
+ * The {@code className}/{@code classPK} are extracted from the destructuring of
+ * the ID.
  * </p>
  *
  * @author Alejandro Hernández

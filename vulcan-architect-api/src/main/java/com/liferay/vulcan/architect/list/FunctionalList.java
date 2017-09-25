@@ -22,10 +22,10 @@ import java.util.stream.Stream;
 /**
  * Instances of this class behave like a list in pure functional languages.
  * Instead of splitting the list manually, you can use the provided methods to
- * take different elements from the list, like <code>#head()</code>,
- * <code>#tail()</code>, etc.
+ * take different elements from the list, like {@code #head()}, {@code #tail()},
+ * etc.
  *
- * Instances of <code>FunctionalList</code> should always have at least one
+ * Instances of {@code FunctionalList} should always have at least one
  * element.
  *
  * @author Alejandro Hernández
@@ -54,10 +54,10 @@ public interface FunctionalList<T> {
 
 	/**
 	 * Returns the last element of the list if there is one (tail need to have
-	 * at least one element). Otherwise returns <code>Optional.empty()</code>
+	 * at least one element). Otherwise returns {@code Optional.empty()}
 	 *
-	 * @return the last element if there is one, otherwise
-	 *         <code>Optional.empty()</code>
+	 * @return the last element if there is one, otherwise {@code
+	 *         Optional.empty()}
 	 * @review
 	 */
 	public Optional<T> lastOptional();

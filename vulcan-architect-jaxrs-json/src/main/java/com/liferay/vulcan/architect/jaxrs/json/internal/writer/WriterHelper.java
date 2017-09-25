@@ -133,14 +133,17 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Returns the page collection URL. If a {@link CollectionResource} for that
-	 * model class cannot be found, returns <code>Optional#empty()</code>.
+	 * Returns the page collection URL. If a {@link
+	 * com.liferay.vulcan.architect.resource.CollectionResource} for that model
+	 * class cannot be found, returns {@code Optional#empty()}.
 	 *
-	 * @param  page the page of the {@link CollectionResource} collection.
+	 * @param  page the page of the {@link
+	 *         com.liferay.vulcan.architect.resource.CollectionResource}
+	 *         collection.
 	 * @param  httpServletRequest the actual HTTP servlet request.
-	 * @return the page collection URL if a {@link CollectionResource} for the
-	 *         model class can be found; <code>Optional#empty()</code>
-	 *         otherwise.
+	 * @return the page collection URL if a {@link
+	 *         com.liferay.vulcan.architect.resource.CollectionResource} for the
+	 *         model class can be found; {@code Optional#empty()} otherwise.
 	 * @review
 	 */
 	public <T> Optional<String> getCollectionURLOptional(
@@ -167,8 +170,8 @@ public class WriterHelper {
 
 	/**
 	 * Returns the URL to the resource of a certain model. If a {@link
-	 * CollectionResource} for that model class cannot be found, returns {@code
-	 * Optional#empty()}.
+	 * com.liferay.vulcan.architect.resource.CollectionResource} for that model
+	 * class cannot be found, returns {@code Optional#empty()}.
 	 *
 	 * @param  singleModel a single model.
 	 * @param  httpServletRequest the actual HTTP servlet request.

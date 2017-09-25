@@ -80,10 +80,10 @@ public abstract class BaseManager<T> {
 
 	/**
 	 * Retrieves a service from the inner map based on its generic inner class.
-	 * Returns <code>Optional#empty()</code> if no service is found.
+	 * Returns {@code Optional#empty()} if no service is found.
 	 *
 	 * @param  clazz the class.
-	 * @return the service, if present; <code>Optional#empty()</code> otherwise.
+	 * @return the service, if present; {@code Optional#empty()} otherwise.
 	 * @review
 	 */
 	protected <U> Optional<T> getServiceOptional(Class<U> clazz) {
@@ -92,10 +92,10 @@ public abstract class BaseManager<T> {
 
 	/**
 	 * Retrieves a service from the inner map based on its generic inner class
-	 * name. Returns <code>Optional#empty()</code> if no service is found.
+	 * name. Returns {@code Optional#empty()} if no service is found.
 	 *
 	 * @param  className the class name.
-	 * @return the service, if present; <code>Optional#empty()</code> otherwise.
+	 * @return the service, if present; {@code Optional#empty()} otherwise.
 	 * @review
 	 */
 	protected Optional<T> getServiceOptional(String className) {

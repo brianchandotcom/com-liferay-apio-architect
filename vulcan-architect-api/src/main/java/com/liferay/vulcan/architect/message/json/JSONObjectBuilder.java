@@ -29,8 +29,7 @@ import java.util.function.Function;
  * For example, this code:
  *
  * <p>
- * <code> jsonObjectBuilder.nestedField("object", "inner", "other").value(42);
- * </code>
+ * {@code jsonObjectBuilder.nestedField("object", "inner", "other").value(42);}
  * </p>
  *
  * <p>
@@ -38,7 +37,7 @@ import java.util.function.Function;
  * </p>
  *
  * <p>
- * <code> { "object": { "inner": { "other": 42 } } } </code>
+ * {@code { "object": { "inner": { "other": 42 } } } }
  * </p>
  *
  * This builder is incremental, so, once you have made the first call, you can
@@ -48,8 +47,8 @@ import java.util.function.Function;
  * For example, making this call to the previous builder:
  *
  * <p>
- * <code> jsonObjectBuilder.nestedField("object", "inner",
- * "another").value("Hello World!"); </code>
+ * {@code jsonObjectBuilder.nestedField("object", "inner",
+ * "another").value("Hello World!"); }
  * </p>
  *
  * <p>
@@ -57,8 +56,8 @@ import java.util.function.Function;
  * </p>
  *
  * <p>
- * <code> { "object": { "inner": { "another": "Hello World!", "other": 42 } } }
- * </code>
+ * {@code { "object": { "inner": { "another": "Hello World!", "other": 42 } } }
+ * }
  * </p>
  *
  * @author Alejandro Hernández
@@ -89,15 +88,15 @@ public interface JSONObjectBuilder {
 
 	/**
 	 * Starts the creation of a field inside the JSON object conditionally. If
-	 * the handed condition is met, the {@link FieldStep} created by
-	 * <code>ifFunction</code> is returned, otherwise, the {@link FieldStep}
-	 * created by <code>elseFunction</code> is returned.
+	 * the handed condition is met, the {@link FieldStep} created by {@code
+	 * ifFunction} is returned, otherwise, the {@link FieldStep} created by
+	 * {@code elseFunction} is returned.
 	 *
 	 * @param  condition the condition to check.
 	 * @param  ifFunction the function to be used to create the next step if the
-	 *         condition is <code>true</code>.
+	 *         condition is {@code true}.
 	 * @param  elseFunction the function to be used to create the next step if
-	 *         the condition is <code>false</code>.
+	 *         the condition is {@code false}.
 	 * @return the next step of the builder.
 	 * @review
 	 */
@@ -118,15 +117,15 @@ public interface JSONObjectBuilder {
 	/**
 	 * Starts the creation of a nested field inside the JSON object. This method
 	 * behaves like {@link #nestedField(String, String...)} except it adds a
-	 * <code>prefix</code> before every level. For example:
+	 * {@code prefix} before every level. For example:
 	 *
 	 * <p>
 	 * The following code:
 	 * </p>
 	 *
 	 * <p>
-	 * <code>jsonObjectBuilder.nestedPrefixedField("prefix", "first",
-	 * "second").value(42);</code>
+	 * {@code jsonObjectBuilder.nestedPrefixedField("prefix", "first",
+	 * "second").value(42);}
 	 * </p>
 	 *
 	 * <p>
@@ -134,7 +133,7 @@ public interface JSONObjectBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * <code> { "prefix": { "first": { "prefix": { "second": 42 } } } </code>
+	 * {@code { "prefix": { "first": { "prefix": { "second": 42 } } } }
 	 * </p>
 	 *
 	 * @param  prefix the prefix field to use before every field.
@@ -149,15 +148,15 @@ public interface JSONObjectBuilder {
 	/**
 	 * Starts the creation of a nested field inside the JSON object. This method
 	 * behaves like {@link #nestedField(String, String...)} except it adds a
-	 * <code>suffix</code> after every level. For example:
+	 * {@code suffix} after every level. For example:
 	 *
 	 * <p>
 	 * The following code:
 	 * </p>
 	 *
 	 * <p>
-	 * <code>jsonObjectBuilder.nestedSuffixedField("suffix", "first",
-	 * "second").value(42);</code>
+	 * {@code jsonObjectBuilder.nestedSuffixedField("suffix", "first",
+	 * "second").value(42);}
 	 * </p>
 	 *
 	 * <p>
@@ -165,7 +164,7 @@ public interface JSONObjectBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * <code> { "first": { "suffix": { "second": { "suffix": 42 } } } </code>
+	 * {@code { "first": { "suffix": { "second": { "suffix": 42 } } } }
 	 * </p>
 	 *
 	 * @param  suffix the suffix field to use after every field.
@@ -197,8 +196,8 @@ public interface JSONObjectBuilder {
 		 * Adds the jsonObject created by the provided {@link
 		 * JSONObjectBuilder}.
 		 *
-		 * @param  jsonObjectBuilder <code>JSONObjectBuilder</code> whose JSON
-		 *         object is going to be added
+		 * @param  jsonObjectBuilder {@code JSONObjectBuilder} whose JSON object
+		 *         is going to be added
 		 * @review
 		 */
 		public void add(JSONObjectBuilder jsonObjectBuilder);
@@ -254,12 +253,12 @@ public interface JSONObjectBuilder {
 		/**
 		 * Starts the creation of a new JSON object field inside the actual
 		 * field conditionally. If the handed condition is met, the {@link
-		 * FieldStep} created by <code>ifFunction</code> is returned, otherwise,
-		 * no operation is performed.
+		 * FieldStep} created by {@code ifFunction} is returned, otherwise, no
+		 * operation is performed.
 		 *
 		 * @param  condition the condition to check.
 		 * @param  ifFunction the function to be used to create the next step if
-		 *         the condition is <code>true</code>.
+		 *         the condition is {@code true}.
 		 * @return the next step of the builder.
 		 * @review
 		 */
@@ -268,16 +267,15 @@ public interface JSONObjectBuilder {
 
 		/**
 		 * Starts the creation of a new JSON object field inside the actual
-		 * field conditionally. If the handed condition is met, the {@link
-		 * FieldStep} created by <code>ifFunction</code> is returned, otherwise,
-		 * the {@link FieldStep} created by <code>elseFunction</code> is
-		 * returned.
+		 * field conditionally. If the handed condition is met, the {@code
+		 * FieldStep} created by {@code ifFunction} is returned, otherwise, the
+		 * {@code FieldStep} created by {@code elseFunction} is returned.
 		 *
 		 * @param  condition the condition to check.
 		 * @param  ifFunction the function to be used to create the next step if
-		 *         the condition is <code>true</code>.
+		 *         the condition is {@code true}.
 		 * @param  elseFunction the function to be used to create the next step
-		 *         if the condition is <code>false</code>.
+		 *         if the condition is {@code false}.
 		 * @return the next step of the builder.
 		 * @review
 		 */

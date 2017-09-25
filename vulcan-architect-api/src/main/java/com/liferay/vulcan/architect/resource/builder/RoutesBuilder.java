@@ -1031,10 +1031,10 @@ public interface RoutesBuilder<T, U extends Identifier> {
 			Class<G> gClass, Class<H> hClass, Class<I> iClass);
 
 	/**
-	 * Constructs the <code>Routes</code> instance with the information provided
-	 * to the builder.
+	 * Constructs the {@code Routes} instance with the information provided to
+	 * the builder.
 	 *
-	 * @return the <code>Routes</code> instance.
+	 * @return the {@code Routes} instance.
 	 * @review
 	 */
 	public Routes<T> build();

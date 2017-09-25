@@ -18,9 +18,9 @@ package com.liferay.vulcan.architect.uri;
  * Represents a resource path.
  *
  * <p>
- * For example a resource obtained in the URL: <code>/p/customers/2012</code>
- * will have a path containing <code>2012</code> and <code>"customers"</code> as
- * the ID and name respectively.
+ * For example a resource obtained in the URL: {@code /p/customers/2012} will
+ * have a path containing {@code 2012} and {@code "customers"} as the ID and
+ * name respectively.
  * </p>
  *
  * @author Alejandro Hernández
@@ -52,8 +52,8 @@ public class Path {
 	 * Returns the ID part of this {@code Path}.
 	 *
 	 * <p>
-	 * For example with a resource obtained in the URI:
-	 * <code>/p/customers/2012</code> this method will return <code>2012</code>.
+	 * For example with a resource obtained in the URI: {@code
+	 * /p/customers/2012} this method will return {@code 2012}.
 	 * </p>
 	 *
 	 * @return the ID part of the {@code Path}.
@@ -67,9 +67,8 @@ public class Path {
 	 * Returns the name part of this {@code Path}
 	 *
 	 * <p>
-	 * For example with a resource obtained in the URI:
-	 * <code>/p/customers/2012</code> this method will return
-	 * <code>"customer"</code>.
+	 * For example with a resource obtained in the URI: {@code
+	 * /p/customers/2012} this method will return {@code "customer"}.
 	 * </p>
 	 *
 	 * @return the name part of the {@code Path}.

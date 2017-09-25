@@ -46,24 +46,24 @@ public interface Routes<T> {
 
 	/**
 	 * Returns the function used to remove a single model of a {@link
-	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
-	 * endpoint wasn't added through the {@link
+	 * CollectionResource}. Returns {@code Optional#empty()} if the endpoint
+	 * wasn't added through the {@link
 	 * com.liferay.vulcan.architect.resource.builder.RoutesBuilder}.
 	 *
-	 * @return the function used to remove a single model, if present;
-	 *         <code>Optional#empty()</code> otherwise.
+	 * @return the function used to remove a single model, if present; {@code
+	 *         Optional#empty()} otherwise.
 	 * @review
 	 */
 	public Optional<Consumer<Path>> getDeleteSingleModelConsumerOptional();
 
 	/**
 	 * Returns the function used to create the page of a {@link
-	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
-	 * endpoint wasn't added through the {@link
+	 * CollectionResource}. Returns {@code Optional#empty()} if the endpoint
+	 * wasn't added through the {@link
 	 * com.liferay.vulcan.architect.resource.builder.RoutesBuilder}.
 	 *
-	 * @return the supplier used to create the page, if present;
-	 *         <code>Optional#empty()</code> otherwise.
+	 * @return the supplier used to create the page, if present; {@code
+	 *         Optional#empty()} otherwise.
 	 * @review
 	 */
 	public Optional<Function<Path, Function<Identifier, Page<T>>>>
@@ -71,12 +71,12 @@ public interface Routes<T> {
 
 	/**
 	 * Returns the function used to create the single model of a {@link
-	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
-	 * endpoint wasn't added through the {@link
+	 * CollectionResource}. Returns {@code Optional#empty()} if the endpoint
+	 * wasn't added through the {@link
 	 * com.liferay.vulcan.architect.resource.builder.RoutesBuilder}.
 	 *
-	 * @return the function used to create the single model, if present;
-	 *         <code>Optional#empty()</code> otherwise.
+	 * @return the function used to create the single model, if present; {@code
+	 *         Optional#empty()} otherwise.
 	 * @review
 	 */
 	public Optional<Function<Identifier, Function<Map<String, Object>,
@@ -84,12 +84,12 @@ public interface Routes<T> {
 
 	/**
 	 * Returns the function used to create the single model of a {@link
-	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
-	 * endpoint wasn't added through the {@link
+	 * CollectionResource}. Returns {@code Optional#empty()} if the endpoint
+	 * wasn't added through the {@link
 	 * com.liferay.vulcan.architect.resource.builder.RoutesBuilder}.
 	 *
-	 * @return the function used to create the single model, if present;
-	 *         <code>Optional#empty()</code> otherwise.
+	 * @return the function used to create the single model, if present; {@code
+	 *         Optional#empty()} otherwise.
 	 * @review
 	 */
 	public Optional<Function<Path, SingleModel<T>>>
@@ -97,12 +97,12 @@ public interface Routes<T> {
 
 	/**
 	 * Returns the function used to update a single model of a {@link
-	 * CollectionResource}. Returns <code>Optional#empty()</code> if the
-	 * endpoint wasn't added through the {@link
+	 * CollectionResource}. Returns {@code Optional#empty()} if the endpoint
+	 * wasn't added through the {@link
 	 * com.liferay.vulcan.architect.resource.builder.RoutesBuilder}.
 	 *
-	 * @return the function used to update a single model, if present;
-	 *         <code>Optional#empty()</code> otherwise.
+	 * @return the function used to update a single model, if present; {@code
+	 *         Optional#empty()} otherwise.
 	 * @review
 	 */
 	public Optional<Function<Path, Function<Map<String, Object>,

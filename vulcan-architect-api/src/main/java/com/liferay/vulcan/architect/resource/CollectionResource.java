@@ -50,9 +50,9 @@ public interface CollectionResource<T, U extends Identifier> {
 	 * RepresentorBuilder}.
 	 *
 	 * <p>
-	 * Note that this builder doesn't construct a <code>Representor</code>
-	 * object (such objects don't actually exist). You need to call the builder
-	 * methods providing as much information as possible.
+	 * Note that this builder doesn't construct a {@code Representor} object
+	 * (such objects don't actually exist). You need to call the builder methods
+	 * providing as much information as possible.
 	 * </p>
 	 *
 	 * @param  representorBuilder the builder used to create the representor.
