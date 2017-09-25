@@ -99,7 +99,7 @@ public class FolderCollectionResource
 		).addCollectionPageItemRemover(
 			this::_deleteDLFolder
 		).addCollectionPageItemUpdater(
-			this::_updateFolder
+			this::_updateDLFolder
 		).build();
 	}
 
@@ -198,7 +198,7 @@ public class FolderCollectionResource
 		}
 	}
 
-	private DLFolder _updateFolder(
+	private DLFolder _updateDLFolder(
 		LongIdentifier dlFolderLongIdentifier, Map<String, Object> body) {
 
 		DLFolder dlFolder = _getDLFolder(dlFolderLongIdentifier);
