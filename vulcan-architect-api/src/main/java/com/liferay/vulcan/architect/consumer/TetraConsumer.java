@@ -29,6 +29,7 @@ import java.util.Objects;
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
+ * @review
  */
 @FunctionalInterface
 public interface TetraConsumer<A, B, C, D> {
@@ -36,10 +37,11 @@ public interface TetraConsumer<A, B, C, D> {
 	/**
 	 * Performs this operation on the given arguments.
 	 *
-	 * @param a the first function argument
-	 * @param b the second function argument
-	 * @param c the third function argument
-	 * @param d the fourth function argument
+	 * @param  a the first function argument
+	 * @param  b the second function argument
+	 * @param  c the third function argument
+	 * @param  d the fourth function argument
+	 * @review
 	 */
 	public void accept(A a, B b, C c, D d);
 
@@ -53,6 +55,7 @@ public interface TetraConsumer<A, B, C, D> {
 	 * @param  after the operation to perform after this operation
 	 * @return a composed {@code TetraConsumer} that performs in sequence this
 	 *         operation followed by the {@code after} operation
+	 * @review
 	 */
 	public default TetraConsumer<A, B, C, D> andThen(
 		TetraConsumer<? super A, ? super B, ? super C, ? super D> after) {

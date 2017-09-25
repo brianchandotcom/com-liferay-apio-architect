@@ -26,6 +26,7 @@ import org.osgi.service.component.annotations.Component;
  * @see    <a
  *         href="https://tools.ietf.org/html/draft-nottingham-http-problem-06">Problem
  *         + JSON</a>
+ * @review
  */
 @Component(immediate = true)
 public class ProblemJSONErrorMessageMapper implements ErrorMessageMapper {

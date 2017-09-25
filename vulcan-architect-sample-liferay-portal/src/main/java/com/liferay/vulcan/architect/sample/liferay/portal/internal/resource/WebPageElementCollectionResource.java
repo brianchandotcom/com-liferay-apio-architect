@@ -66,6 +66,7 @@ import org.osgi.service.component.annotations.Reference;
  * JournalArticle} model.
  *
  * @author Javier Gamarra
+ * @review
  */
 @Component(immediate = true)
 public class WebPageElementCollectionResource

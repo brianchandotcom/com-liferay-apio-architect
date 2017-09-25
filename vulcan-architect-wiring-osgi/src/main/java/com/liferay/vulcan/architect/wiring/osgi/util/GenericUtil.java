@@ -25,6 +25,7 @@ import java.lang.reflect.Type;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 public class GenericUtil {
 

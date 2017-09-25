@@ -25,6 +25,7 @@ import java.util.function.Predicate;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 public interface Fields {
 
@@ -34,6 +35,7 @@ public interface Fields {
 	 *
 	 * @param  types list of types of the resource.
 	 * @return the predicate to test if a field should be added.
+	 * @review
 	 */
 	public Predicate<String> getFieldsPredicate(List<String> types);
 

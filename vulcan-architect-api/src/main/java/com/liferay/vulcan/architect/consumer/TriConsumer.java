@@ -29,6 +29,7 @@ import java.util.Objects;
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
+ * @review
  */
 @FunctionalInterface
 public interface TriConsumer<A, B, C> {
@@ -36,9 +37,10 @@ public interface TriConsumer<A, B, C> {
 	/**
 	 * Performs this operation on the given arguments.
 	 *
-	 * @param a the first input argument.
-	 * @param b the second input argument.
-	 * @param c the third input argument.
+	 * @param  a the first input argument.
+	 * @param  b the second input argument.
+	 * @param  c the third input argument.
+	 * @review
 	 */
 	public void accept(A a, B b, C c);
 
@@ -52,6 +54,7 @@ public interface TriConsumer<A, B, C> {
 	 * @param  after the operation to perform after this operation
 	 * @return a composed {@code TriConsumer} that performs in sequence this
 	 *         operation followed by the {@code after} operation
+	 * @review
 	 */
 	public default TriConsumer<A, B, C> andThen(
 		TriConsumer<? super A, ? super B, ? super C> after) {

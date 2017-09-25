@@ -20,6 +20,7 @@ package com.liferay.vulcan.architect.resource.identifier;
  * #getId()} method.
  *
  * @author Alejandro Hernández
+ * @review
  */
 public interface LongIdentifier extends Identifier {
 
@@ -33,6 +34,7 @@ public interface LongIdentifier extends Identifier {
 	 * </p>
 	 *
 	 * @return the ID of the identifier.
+	 * @review
 	 */
 	public long getId();
 

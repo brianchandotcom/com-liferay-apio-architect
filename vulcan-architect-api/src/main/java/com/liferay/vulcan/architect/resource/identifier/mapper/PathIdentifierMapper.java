@@ -33,6 +33,7 @@ import com.liferay.vulcan.architect.uri.Path;
  * </p>
  *
  * @author Alejandro Hernández
+ * @review
  */
 public interface PathIdentifierMapper<T extends Identifier> {
 
@@ -41,6 +42,7 @@ public interface PathIdentifierMapper<T extends Identifier> {
 	 *
 	 * @param  path the path of the resource.
 	 * @return the correspondent {@code Identifier}.
+	 * @review
 	 */
 	public T map(Path path);
 
@@ -50,6 +52,7 @@ public interface PathIdentifierMapper<T extends Identifier> {
 	 * @param  t the identifier.
 	 * @param  modelClass the class of the model identified by the identifier.
 	 * @return the correspondent {@code Path}.
+	 * @review
 	 */
 	public <U> Path map(T t, Class<U> modelClass);
 

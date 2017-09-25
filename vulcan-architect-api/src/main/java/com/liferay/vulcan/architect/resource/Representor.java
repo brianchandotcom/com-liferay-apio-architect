@@ -33,6 +33,7 @@ import java.util.stream.Stream;
  *
  * @author Alejandro Hernández
  * @see    com.liferay.vulcan.architect.resource.builder.RepresentorBuilder
+ * @review
  */
 public interface Representor<T, U extends Identifier> {
 
@@ -40,6 +41,7 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the binary resources linked to a model.
 	 *
 	 * @return the binary resources.
+	 * @review
 	 */
 	public Map<String, BinaryFunction<T>> getBinaryFunctions();
 
@@ -47,6 +49,7 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the embedded related models.
 	 *
 	 * @return the embedded related models.
+	 * @review
 	 */
 	public List<RelatedModel<T, ?>> getEmbeddedRelatedModels();
 
@@ -55,6 +58,7 @@ public interface Representor<T, U extends Identifier> {
 	 * fields.
 	 *
 	 * @return the field names and field functions.
+	 * @review
 	 */
 	public Map<String, Function<T, Object>> getFieldFunctions();
 
@@ -63,6 +67,7 @@ public interface Representor<T, U extends Identifier> {
 	 *
 	 * @param  model the model instance.
 	 * @return the identifier of the model.
+	 * @review
 	 */
 	public U getIdentifier(T model);
 
@@ -70,6 +75,7 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the identifier class.
 	 *
 	 * @return the identifier class.
+	 * @review
 	 */
 	public Class<U> getIdentifierClass();
 
@@ -77,6 +83,7 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the linked related models.
 	 *
 	 * @return the linked related models.
+	 * @review
 	 */
 	public List<RelatedModel<T, ?>> getLinkedRelatedModels();
 
@@ -84,6 +91,7 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the links.
 	 *
 	 * @return the links.
+	 * @review
 	 */
 	public Map<String, String> getLinks();
 
@@ -91,6 +99,7 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the related collections.
 	 *
 	 * @return the related collections.
+	 * @review
 	 */
 	public Stream<RelatedCollection<T, ?>> getRelatedCollections();
 
@@ -98,6 +107,7 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the types.
 	 *
 	 * @return the types.
+	 * @review
 	 */
 	public List<String> getTypes();
 

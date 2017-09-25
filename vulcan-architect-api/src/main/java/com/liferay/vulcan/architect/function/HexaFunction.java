@@ -30,6 +30,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @author Jorge Ferrer
  * @see    Function
+ * @review
  */
 @FunctionalInterface
 public interface HexaFunction<A, B, C, D, E, F, R> {
@@ -44,6 +45,7 @@ public interface HexaFunction<A, B, C, D, E, F, R> {
 	 *         applied
 	 * @return a composed function that first applies this function and then
 	 *         applies the {@code after} function
+	 * @review
 	 */
 	public default <V> HexaFunction<A, B, C, D, E, F, V> andThen(
 		Function<? super R, ? extends V> afterFunction) {
@@ -64,6 +66,7 @@ public interface HexaFunction<A, B, C, D, E, F, R> {
 	 * @param  e the fifth function argument
 	 * @param  f the sixth function argument
 	 * @return the function result
+	 * @review
 	 */
 	public R apply(A a, B b, C c, D d, E e, F f);
 

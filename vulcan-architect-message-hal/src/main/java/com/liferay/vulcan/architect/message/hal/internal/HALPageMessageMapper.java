@@ -36,6 +36,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  * @see    <a href="http://stateless.co/hal_specification.html">HAL</a>
+ * @review
  */
 @Component(immediate = true)
 public class HALPageMessageMapper<T> implements PageMessageMapper<T> {

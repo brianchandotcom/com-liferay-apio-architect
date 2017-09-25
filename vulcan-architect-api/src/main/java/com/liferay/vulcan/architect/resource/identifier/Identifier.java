@@ -18,6 +18,7 @@ package com.liferay.vulcan.architect.resource.identifier;
  * Represents a resource identifier.
  *
  * @author Alejandro Hernández
+ * @review
  */
 public interface Identifier {
 }

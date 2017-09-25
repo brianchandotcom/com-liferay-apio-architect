@@ -24,6 +24,7 @@ import java.util.function.Predicate;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 public interface Embedded {
 
@@ -32,6 +33,7 @@ public interface Embedded {
 	 * embedded.
 	 *
 	 * @return the predicate to test if a relation should be embedded.
+	 * @review
 	 */
 	public Predicate<String> getEmbeddedPredicate();
 

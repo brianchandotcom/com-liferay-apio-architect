@@ -27,6 +27,7 @@ import org.osgi.service.component.annotations.Component;
  * header to account for proxies
  *
  * @author Javier Gamarra
+ * @review
  */
 @Component(immediate = true, service = ServerURLProvider.class)
 public class ServerURLProviderImpl implements ServerURLProvider {
@@ -37,7 +38,9 @@ public class ServerURLProviderImpl implements ServerURLProvider {
 	 * @param  httpServletRequest the HTTP request
 	 * @return an URL built based on the forwarded host header if exist or the
 	 *         serverName
+	 * @review
 	 */
+	@Override
 	public String getServerURL(HttpServletRequest httpServletRequest) {
 		StringBuilder sb = new StringBuilder(httpServletRequest.getScheme());
 

@@ -28,6 +28,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 public interface RepresentorBuilder<T, U extends Identifier> {
 
@@ -37,6 +38,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 	 *
 	 * @param  identifierFunction function used to obtain a model's identifier.
 	 * @return builder's next step.
+	 * @review
 	 */
 	public FirstStep<T, U> identifier(Function<T, U> identifierFunction);
 
@@ -56,6 +58,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param  identifierFunction function used to obtain the identifier for
 		 *         the collection.
 		 * @return builder's actual step.
+		 * @review
 		 */
 		public <S> FirstStep<T, U> addBidirectionalModel(
 			String key, String relatedKey, Class<S> modelClass,
@@ -66,6 +69,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param  key name of the binary resource
 		 * @param  binaryFunction function used to obtain the binaries.
 		 * @return builder's actual step.
+		 * @review
 		 */
 		public FirstStep<T, U> addBinary(
 			String key, BinaryFunction<T> binaryFunction);
@@ -78,6 +82,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param  modelClass class of the related model.
 		 * @param  modelFunction function used to obtain the related model.
 		 * @return builder's actual step.
+		 * @review
 		 */
 		public <S> FirstStep<T, U> addEmbeddedModel(
 			String key, Class<S> modelClass,
@@ -89,6 +94,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param  key name of the field.
 		 * @param  fieldFunction function used to obtain the field value.
 		 * @return builder's actual step.
+		 * @review
 		 */
 		public FirstStep<T, U> addField(
 			String key, Function<T, Object> fieldFunction);
@@ -99,6 +105,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param  key name of the field.
 		 * @param  url url link's url.
 		 * @return builder's actual step.
+		 * @review
 		 */
 		public FirstStep<T, U> addLink(String key, String url);
 
@@ -110,6 +117,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param  modelClass class of the related model.
 		 * @param  modelFunction function used to obtain the related model.
 		 * @return builder's actual step.
+		 * @review
 		 */
 		public <S> FirstStep<T, U> addLinkedModel(
 			String key, Class<S> modelClass,
@@ -123,6 +131,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param  identifierFunction function used to obtain the identifier for
 		 *         the collection.
 		 * @return builder's actual step.
+		 * @review
 		 */
 		public <S> FirstStep<T, U> addRelatedCollection(
 			String key, Class<S> modelClass,
@@ -134,6 +143,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 *
 		 * @param  type type name.
 		 * @return builder's actual step.
+		 * @review
 		 */
 		public FirstStep<T, U> addType(String type);
 
@@ -142,6 +152,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * provided to the builder.
 		 *
 		 * @return the <code>Representor</code> instance.
+		 * @review
 		 */
 		public Representor<T, U> build();
 

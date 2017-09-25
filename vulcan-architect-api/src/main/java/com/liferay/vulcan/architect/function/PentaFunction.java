@@ -29,6 +29,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @author Jorge Ferrer
  * @see    Function
+ * @review
  */
 @FunctionalInterface
 public interface PentaFunction<A, B, C, D, E, R> {
@@ -43,6 +44,7 @@ public interface PentaFunction<A, B, C, D, E, R> {
 	 *         applied
 	 * @return a composed function that first applies this function and then
 	 *         applies the {@code after} function
+	 * @review
 	 */
 	public default <V> PentaFunction<A, B, C, D, E, V> andThen(
 		Function<? super R, ? extends V> afterFunction) {
@@ -62,6 +64,7 @@ public interface PentaFunction<A, B, C, D, E, R> {
 	 * @param  d the fourth function argument
 	 * @param  e the fifth function argument
 	 * @return the function result
+	 * @review
 	 */
 	public R apply(A a, B b, C c, D d, E e);
 

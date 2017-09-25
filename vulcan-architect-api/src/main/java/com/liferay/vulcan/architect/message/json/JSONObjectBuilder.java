@@ -64,6 +64,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 @ProviderType
 @SuppressWarnings("unused")
@@ -73,6 +74,7 @@ public interface JSONObjectBuilder {
 	 * Returns the {@link JSONObject} constructed by this builder.
 	 *
 	 * @return the constructed JSON object.
+	 * @review
 	 */
 	public JSONObject build();
 
@@ -81,6 +83,7 @@ public interface JSONObjectBuilder {
 	 *
 	 * @param  name the name of the field
 	 * @return the next step of the builder.
+	 * @review
 	 */
 	public FieldStep field(String name);
 
@@ -96,6 +99,7 @@ public interface JSONObjectBuilder {
 	 * @param  elseFunction the function to be used to create the next step if
 	 *         the condition is <code>false</code>.
 	 * @return the next step of the builder.
+	 * @review
 	 */
 	public FieldStep ifElseCondition(
 		boolean condition, Function<JSONObjectBuilder, FieldStep> ifFunction,
@@ -107,6 +111,7 @@ public interface JSONObjectBuilder {
 	 * @param  parentName the name of the first field.
 	 * @param  nestedNames the list of names of the subsequent field.
 	 * @return the next step of the builder.
+	 * @review
 	 */
 	public FieldStep nestedField(String parentName, String... nestedNames);
 
@@ -136,6 +141,7 @@ public interface JSONObjectBuilder {
 	 * @param  parentName the name of the first field.
 	 * @param  nestedNames the list of names of the subsequent field.
 	 * @return the next step of the builder.
+	 * @review
 	 */
 	public FieldStep nestedPrefixedField(
 		String prefix, String parentName, String... nestedNames);
@@ -166,12 +172,15 @@ public interface JSONObjectBuilder {
 	 * @param  parentName the name of the first field.
 	 * @param  nestedNames the list of names of the subsequent field.
 	 * @return the next step of the builder.
+	 * @review
 	 */
 	public FieldStep nestedSuffixedField(
 		String suffix, String parentName, String... nestedNames);
 
 	/**
 	 * Step to add the value of a field as a JSON array.
+	 *
+	 * @review
 	 */
 	public interface ArrayValueStep {
 
@@ -179,7 +188,8 @@ public interface JSONObjectBuilder {
 		 * Adds a new jsonObject to the JSON array, created by the provided
 		 * consumer.
 		 *
-		 * @param consumer consumer used to create the new JSON object.
+		 * @param  consumer consumer used to create the new JSON object.
+		 * @review
 		 */
 		public void add(Consumer<JSONObjectBuilder> consumer);
 
@@ -187,8 +197,9 @@ public interface JSONObjectBuilder {
 		 * Adds the jsonObject created by the provided {@link
 		 * JSONObjectBuilder}.
 		 *
-		 * @param jsonObjectBuilder <code>JSONObjectBuilder</code> whose JSON
-		 *        object is going to be added
+		 * @param  jsonObjectBuilder <code>JSONObjectBuilder</code> whose JSON
+		 *         object is going to be added
+		 * @review
 		 */
 		public void add(JSONObjectBuilder jsonObjectBuilder);
 
@@ -196,7 +207,8 @@ public interface JSONObjectBuilder {
 		 * Adds a new primitive value to the JSON array. It must be a {@link
 		 * String}, {@link Number} or {@link Boolean} value.
 		 *
-		 * @param value value to be added.
+		 * @param  value value to be added.
+		 * @review
 		 */
 		public void add(Object value);
 
@@ -205,7 +217,8 @@ public interface JSONObjectBuilder {
 		 * The collection must have elements of one of the following types:
 		 * {@link String}, {@link Number} or {@link Boolean} value.
 		 *
-		 * @param collection the collection to be added.
+		 * @param  collection the collection to be added.
+		 * @review
 		 */
 		public <T> void addAll(Collection<T> collection);
 
@@ -215,6 +228,8 @@ public interface JSONObjectBuilder {
 	 * Step to add the value of a field. It can be another JSONObject (field
 	 * methods), an JSON array ({@link #arrayValue()} method) or a primitive
 	 * value ({@link #value(Object)} method).
+	 *
+	 * @review
 	 */
 	public interface FieldStep {
 
@@ -222,6 +237,7 @@ public interface JSONObjectBuilder {
 		 * Starts the creation of a JSON array inside the actual field.
 		 *
 		 * @return the next step of the builder.
+		 * @review
 		 */
 		public ArrayValueStep arrayValue();
 
@@ -231,6 +247,7 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param  name the name of the field
 		 * @return the next step of the builder.
+		 * @review
 		 */
 		public FieldStep field(String name);
 
@@ -244,6 +261,7 @@ public interface JSONObjectBuilder {
 		 * @param  ifFunction the function to be used to create the next step if
 		 *         the condition is <code>true</code>.
 		 * @return the next step of the builder.
+		 * @review
 		 */
 		public FieldStep ifCondition(
 			boolean condition, Function<FieldStep, FieldStep> ifFunction);
@@ -261,6 +279,7 @@ public interface JSONObjectBuilder {
 		 * @param  elseFunction the function to be used to create the next step
 		 *         if the condition is <code>false</code>.
 		 * @return the next step of the builder.
+		 * @review
 		 */
 		public FieldStep ifElseCondition(
 			boolean condition, Function<FieldStep, FieldStep> ifFunction,
@@ -273,6 +292,7 @@ public interface JSONObjectBuilder {
 		 * @param  parentName the name of the first field.
 		 * @param  nestedNames the list of names of the subsequent field.
 		 * @return the next step of the builder.
+		 * @review
 		 */
 		public FieldStep nestedField(String parentName, String... nestedNames);
 
@@ -285,6 +305,7 @@ public interface JSONObjectBuilder {
 		 * @param  parentName the name of the first field.
 		 * @param  nestedNames the list of names of the subsequent field.
 		 * @return the next step of the builder.
+		 * @review
 		 */
 		public FieldStep nestedPrefixedField(
 			String prefix, String parentName, String... nestedNames);
@@ -298,6 +319,7 @@ public interface JSONObjectBuilder {
 		 * @param  parentName the name of the first field.
 		 * @param  nestedNames the list of names of the subsequent field.
 		 * @return the next step of the builder.
+		 * @review
 		 */
 		public FieldStep nestedSuffixedField(
 			String suffix, String parentName, String... nestedNames);
@@ -306,7 +328,8 @@ public interface JSONObjectBuilder {
 		 * Adds a primitive value to the actual field. It must be a {@link
 		 * String}, {@link Number} or {@link Boolean} value.
 		 *
-		 * @param value the value to be added to the field.
+		 * @param  value the value to be added to the field.
+		 * @review
 		 */
 		public void value(Object value);
 

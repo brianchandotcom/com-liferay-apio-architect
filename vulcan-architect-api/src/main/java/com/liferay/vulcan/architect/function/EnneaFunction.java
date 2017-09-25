@@ -31,6 +31,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @author Jorge Ferrer
  * @see    Function
+ * @review
  */
 @FunctionalInterface
 public interface EnneaFunction<A, B, C, D, E, F, G, H, I, R> {
@@ -45,6 +46,7 @@ public interface EnneaFunction<A, B, C, D, E, F, G, H, I, R> {
 	 *         applied
 	 * @return a composed function that first applies this function and then
 	 *         applies the {@code after} function
+	 * @review
 	 */
 	public default <V> EnneaFunction<A, B, C, D, E, F, G, H, I, V> andThen(
 		Function<? super R, ? extends V> afterFunction) {
@@ -68,6 +70,7 @@ public interface EnneaFunction<A, B, C, D, E, F, G, H, I, R> {
 	 * @param  h the eighth function argument
 	 * @param  i the ninth function argument
 	 * @return the function result
+	 * @review
 	 */
 	public R apply(A a, B b, C c, D d, E e, F f, G g, H h, I i);
 

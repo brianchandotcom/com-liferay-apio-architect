@@ -32,6 +32,7 @@ import org.osgi.service.component.annotations.Reference;
  * representations.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @Component(immediate = true, service = ExceptionConverterManager.class)
 public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
@@ -49,6 +50,7 @@ public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
 	 * @param  exception the exception to be converted.
 	 * @return the corresponding error, if a valid {@link ExceptionConverter} is
 	 *         present; <code>Optional#empty()</code> otherwise.
+	 * @review
 	 */
 	public <T extends Exception> Optional<APIError> convert(T exception) {
 		return _convert(exception, (Class<T>)exception.getClass());

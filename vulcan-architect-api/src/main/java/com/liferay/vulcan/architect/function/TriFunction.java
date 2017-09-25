@@ -29,6 +29,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @author Jorge Ferrer
  * @see    Function
+ * @review
  */
 @FunctionalInterface
 public interface TriFunction<A, B, C, R> {
@@ -43,6 +44,7 @@ public interface TriFunction<A, B, C, R> {
 	 *         applied
 	 * @return a composed function that first applies this function and then
 	 *         applies the {@code after} function
+	 * @review
 	 */
 	public default <V> TriFunction<A, B, C, V> andThen(
 		Function<? super R, ? extends V> afterFunction) {
@@ -59,6 +61,7 @@ public interface TriFunction<A, B, C, R> {
 	 * @param  b the second function argument
 	 * @param  c the third function argument
 	 * @return the function result
+	 * @review
 	 */
 	public R apply(A a, B b, C c);
 

@@ -21,6 +21,7 @@ import com.liferay.vulcan.architect.sample.liferay.portal.resource.identifier.Ag
  * AggregateRating} for a certain combination of className/classPK.
  *
  * @author Alejandro Hernández
+ * @review
  */
 public interface AggregateRatingService {
 
@@ -29,6 +30,7 @@ public interface AggregateRatingService {
 	 *
 	 * @param  aggregateRatingIdentifier the rating identifier.
 	 * @return the aggregate rating.
+	 * @review
 	 */
 	public AggregateRating getAggregateRating(
 		AggregateRatingIdentifier aggregateRatingIdentifier);

@@ -30,6 +30,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @author Jorge Ferrer
  * @see    Function
+ * @review
  */
 @FunctionalInterface
 public interface OctaFunction<A, B, C, D, E, F, G, H, R> {
@@ -44,6 +45,7 @@ public interface OctaFunction<A, B, C, D, E, F, G, H, R> {
 	 *         applied
 	 * @return a composed function that first applies this function and then
 	 *         applies the {@code after} function
+	 * @review
 	 */
 	public default <V> OctaFunction<A, B, C, D, E, F, G, H, V> andThen(
 		Function<? super R, ? extends V> afterFunction) {
@@ -66,6 +68,7 @@ public interface OctaFunction<A, B, C, D, E, F, G, H, R> {
 	 * @param  g the seventh function argument
 	 * @param  h the eighth function argument
 	 * @return the function result
+	 * @review
 	 */
 	public R apply(A a, B b, C c, D d, E e, F f, G g, H h);
 

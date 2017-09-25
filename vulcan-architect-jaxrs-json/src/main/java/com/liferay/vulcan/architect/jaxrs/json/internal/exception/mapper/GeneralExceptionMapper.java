@@ -37,6 +37,7 @@ import org.osgi.service.component.annotations.Reference;
  * to its corresponding {@link APIError} and writing the error to the response.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @Component(immediate = true, property = "liferay.vulcan.exception.mapper=true")
 public class GeneralExceptionMapper implements ExceptionMapper<Exception> {

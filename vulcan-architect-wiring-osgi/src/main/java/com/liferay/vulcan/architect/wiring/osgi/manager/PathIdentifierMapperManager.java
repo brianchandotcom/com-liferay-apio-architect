@@ -34,6 +34,7 @@ import org.osgi.service.component.annotations.Reference;
  * versa.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @Component(immediate = true, service = PathIdentifierMapperManager.class)
 public class PathIdentifierMapperManager
@@ -49,6 +50,7 @@ public class PathIdentifierMapperManager
 	 * @return the correspondent {@code Identifier}, if a valid {@link
 	 *         PathIdentifierMapper} is present; <code>Optional#empty()</code>
 	 *         otherwise.
+	 * @review
 	 */
 	public <T extends Identifier> Optional<T> map(Class<T> clazz, Path path) {
 		if (Identifier.class == clazz) {
@@ -80,6 +82,7 @@ public class PathIdentifierMapperManager
 	 * @return the correspondent {@code Path}, if a valid {@link
 	 *         PathIdentifierMapper} is present; <code>Optional#empty()</code>
 	 *         otherwise.
+	 * @review
 	 */
 	public <T extends Identifier, U> Optional<Path> map(
 		T identifier, Class<? extends Identifier> identifierClass,

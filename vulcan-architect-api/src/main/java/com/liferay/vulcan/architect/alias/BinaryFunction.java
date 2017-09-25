@@ -24,6 +24,7 @@ import java.util.function.Function;
  * InputStream}.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @FunctionalInterface
 public interface BinaryFunction<T> extends Function<T, InputStream> {

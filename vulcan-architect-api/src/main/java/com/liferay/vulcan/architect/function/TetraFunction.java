@@ -29,6 +29,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @author Jorge Ferrer
  * @see    Function
+ * @review
  */
 @FunctionalInterface
 public interface TetraFunction<A, B, C, D, R> {
@@ -43,6 +44,7 @@ public interface TetraFunction<A, B, C, D, R> {
 	 *         applied
 	 * @return a composed function that first applies this function and then
 	 *         applies the {@code after} function
+	 * @review
 	 */
 	public default <V> TetraFunction<A, B, C, D, V> andThen(
 		Function<? super R, ? extends V> afterFunction) {
@@ -60,6 +62,7 @@ public interface TetraFunction<A, B, C, D, R> {
 	 * @param  c the third function argument
 	 * @param  d the fourth function argument
 	 * @return the function result
+	 * @review
 	 */
 	public R apply(A a, B b, C c, D d);
 

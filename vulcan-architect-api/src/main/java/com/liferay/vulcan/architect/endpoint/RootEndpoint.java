@@ -42,6 +42,7 @@ import javax.ws.rs.core.Response;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 public interface RootEndpoint {
 
@@ -51,6 +52,7 @@ public interface RootEndpoint {
 	 *
 	 * @param  name the name of the desired resource, extracted from the URL.
 	 * @return the created single model, or an exception if there was an error.
+	 * @review
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}")
@@ -67,6 +69,7 @@ public interface RootEndpoint {
 	 * @param  nestedName the name of the desired resource, extracted from the
 	 *         URL.
 	 * @return the created single model, or an exception if there was an error.
+	 * @review
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}/{id}/{nestedName}")
@@ -83,6 +86,7 @@ public interface RootEndpoint {
 	 *         URL.
 	 * @param  id the ID of the resource.
 	 * @return the response for the operation.
+	 * @review
 	 */
 	@DELETE
 	@Path("/p/{name}/{id}")
@@ -98,6 +102,7 @@ public interface RootEndpoint {
 	 * @param  binaryId the ID to the binary resource.
 	 * @return the input stream of the binary file, or an exception it there was
 	 *         an error.
+	 * @review
 	 */
 	@GET
 	@Path("/b/{name}/{id}/{binaryId}")
@@ -113,6 +118,7 @@ public interface RootEndpoint {
 	 * @param  id the ID of the resource.
 	 * @return the single model of a resource with this name, or an exception it
 	 *         there was an error.
+	 * @review
 	 */
 	@GET
 	@Path("/p/{name}/{id}")
@@ -126,6 +132,7 @@ public interface RootEndpoint {
 	 * @param  name the name of the desired resource, extracted from the URL.
 	 * @return the collection page of a resource with this name, or an exception
 	 *         if there was an error.
+	 * @review
 	 */
 	@GET
 	@Path("/p/{name}")
@@ -141,6 +148,7 @@ public interface RootEndpoint {
 	 * @param  nestedName the name of the nested resource.
 	 * @return the collection page of a resource with this combination of
 	 *         name-id-nestedName, or an exception if there was an error.
+	 * @review
 	 */
 	@GET
 	@Path("/p/{name}/{id}/{nestedName}")
@@ -156,6 +164,7 @@ public interface RootEndpoint {
 	 *         URL.
 	 * @param  id the ID of the resource.
 	 * @return the updated single model, or an exception if there was an error.
+	 * @review
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}/{id}")

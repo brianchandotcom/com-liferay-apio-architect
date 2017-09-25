@@ -35,6 +35,7 @@ import com.liferay.vulcan.architect.resource.identifier.Identifier;
  * </p>
  *
  * @author Alejandro Hernández
+ * @review
  */
 public interface CommentableIdentifier extends Identifier {
 
@@ -46,6 +47,7 @@ public interface CommentableIdentifier extends Identifier {
 	 * @param  classPK the classPK of the identifier.
 	 * @param  groupId the groupId of the identifier.
 	 * @return the {@code CommentableIdentifier}.
+	 * @review
 	 */
 	public static CommentableIdentifier create(
 		String className, long classPK, long groupId) {
@@ -76,6 +78,7 @@ public interface CommentableIdentifier extends Identifier {
 	 *
 	 * @param  t a {@link GroupedModel} & {@link ClassedModel} model.
 	 * @return the {@code CommentableIdentifier}.
+	 * @review
 	 */
 	public static <T extends GroupedModel & ClassedModel> CommentableIdentifier
 		create(T t) {
@@ -88,6 +91,7 @@ public interface CommentableIdentifier extends Identifier {
 	 * Returns the class name.
 	 *
 	 * @return the class name.
+	 * @review
 	 */
 	public String getClassName();
 
@@ -95,6 +99,7 @@ public interface CommentableIdentifier extends Identifier {
 	 * Returns the class PK.
 	 *
 	 * @return the class PK.
+	 * @review
 	 */
 	public long getClassPK();
 
@@ -102,6 +107,7 @@ public interface CommentableIdentifier extends Identifier {
 	 * Returns the group ID.
 	 *
 	 * @return the group ID.
+	 * @review
 	 */
 	public long getGroupId();
 

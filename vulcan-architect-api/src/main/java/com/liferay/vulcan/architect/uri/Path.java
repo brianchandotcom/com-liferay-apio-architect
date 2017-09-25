@@ -24,6 +24,7 @@ package com.liferay.vulcan.architect.uri;
  * </p>
  *
  * @author Alejandro Hernández
+ * @review
  */
 public class Path {
 
@@ -41,6 +42,7 @@ public class Path {
 	 * Returns this resource's path as an URI.
 	 *
 	 * @return the chain of identifiers as an URI.
+	 * @review
 	 */
 	public String asURI() {
 		return "/" + getName() + "/" + getId();
@@ -55,6 +57,7 @@ public class Path {
 	 * </p>
 	 *
 	 * @return the ID part of the {@code Path}.
+	 * @review
 	 */
 	public String getId() {
 		return _id;
@@ -70,6 +73,7 @@ public class Path {
 	 * </p>
 	 *
 	 * @return the name part of the {@code Path}.
+	 * @review
 	 */
 	public String getName() {
 		return _name;

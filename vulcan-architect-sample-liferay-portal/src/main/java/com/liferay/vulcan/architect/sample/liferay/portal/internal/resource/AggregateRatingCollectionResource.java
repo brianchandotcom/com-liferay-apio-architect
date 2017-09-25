@@ -32,6 +32,7 @@ import org.osgi.service.component.annotations.Reference;
  * resources through a web API.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @Component(immediate = true)
 public class AggregateRatingCollectionResource

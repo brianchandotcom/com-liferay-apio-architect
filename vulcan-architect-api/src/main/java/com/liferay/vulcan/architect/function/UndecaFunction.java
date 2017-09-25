@@ -30,6 +30,7 @@ import java.util.function.Function;
  *
  * @author Alejandro Hernández
  * @see    Function
+ * @review
  */
 @FunctionalInterface
 public interface UndecaFunction<A, B, C, D, E, F, G, H, I, J, K, R> {
@@ -44,6 +45,7 @@ public interface UndecaFunction<A, B, C, D, E, F, G, H, I, J, K, R> {
 	 *         applied
 	 * @return a composed function that first applies this function and then
 	 *         applies the {@code after} function
+	 * @review
 	 */
 	public default <V> UndecaFunction<A, B, C, D, E, F, G, H, I, J, K, V>
 		andThen(Function<? super R, ? extends V> afterFunction) {
@@ -69,6 +71,7 @@ public interface UndecaFunction<A, B, C, D, E, F, G, H, I, J, K, R> {
 	 * @param  j the tenth function argument
 	 * @param  k the eleventh function argument
 	 * @return the function result
+	 * @review
 	 */
 	public R apply(A a, B b, C c, D d, E e, F f, G g, H h, I i, J j, K k);
 

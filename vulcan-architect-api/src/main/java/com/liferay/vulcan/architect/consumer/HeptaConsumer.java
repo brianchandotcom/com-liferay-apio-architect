@@ -30,6 +30,7 @@ import java.util.Objects;
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
+ * @review
  */
 @FunctionalInterface
 public interface HeptaConsumer<A, B, C, D, E, F, G> {
@@ -37,13 +38,14 @@ public interface HeptaConsumer<A, B, C, D, E, F, G> {
 	/**
 	 * Performs this operation on the given arguments.
 	 *
-	 * @param a the first function argument
-	 * @param b the second function argument
-	 * @param c the third function argument
-	 * @param d the fourth function argument
-	 * @param e the fifth function argument
-	 * @param f the sixth function argument
-	 * @param g the seventh function argument
+	 * @param  a the first function argument
+	 * @param  b the second function argument
+	 * @param  c the third function argument
+	 * @param  d the fourth function argument
+	 * @param  e the fifth function argument
+	 * @param  f the sixth function argument
+	 * @param  g the seventh function argument
+	 * @review
 	 */
 	public void accept(A a, B b, C c, D d, E e, F f, G g);
 
@@ -57,6 +59,7 @@ public interface HeptaConsumer<A, B, C, D, E, F, G> {
 	 * @param  after the operation to perform after this operation
 	 * @return a composed {@code HeptaConsumer} that performs in sequence this
 	 *         operation followed by the {@code after} operation
+	 * @review
 	 */
 	public default HeptaConsumer<A, B, C, D, E, F, G> andThen(
 		HeptaConsumer<? super A, ? super B, ? super C, ? super D, ? super E,

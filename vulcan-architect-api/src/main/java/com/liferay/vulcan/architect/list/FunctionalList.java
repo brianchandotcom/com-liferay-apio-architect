@@ -31,6 +31,7 @@ import java.util.stream.Stream;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 @ProviderType
 public interface FunctionalList<T> {
@@ -39,6 +40,7 @@ public interface FunctionalList<T> {
 	 * Returns the first element of the list.
 	 *
 	 * @return the first element.
+	 * @review
 	 */
 	public T head();
 
@@ -46,6 +48,7 @@ public interface FunctionalList<T> {
 	 * Returns all elements of the list except the last one in a Java stream.
 	 *
 	 * @return a stream with all elements except the last one.
+	 * @review
 	 */
 	public Stream<T> initStream();
 
@@ -55,6 +58,7 @@ public interface FunctionalList<T> {
 	 *
 	 * @return the last element if there is one, otherwise
 	 *         <code>Optional.empty()</code>
+	 * @review
 	 */
 	public Optional<T> lastOptional();
 
@@ -63,6 +67,7 @@ public interface FunctionalList<T> {
 	 * stream.
 	 *
 	 * @return a stream with all elements except the first and last.
+	 * @review
 	 */
 	public Stream<T> middleStream();
 
@@ -70,6 +75,7 @@ public interface FunctionalList<T> {
 	 * Returns all elements of the list except the first one in a Java stream.
 	 *
 	 * @return a stream with all elements except the first one.
+	 * @review
 	 */
 	public Stream<T> tailStream();
 

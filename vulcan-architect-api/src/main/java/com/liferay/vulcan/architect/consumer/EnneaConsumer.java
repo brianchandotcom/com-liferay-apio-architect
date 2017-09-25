@@ -30,6 +30,7 @@ import java.util.Objects;
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
+ * @review
  */
 @FunctionalInterface
 public interface EnneaConsumer<A, B, C, D, E, F, G, H, I> {
@@ -37,15 +38,16 @@ public interface EnneaConsumer<A, B, C, D, E, F, G, H, I> {
 	/**
 	 * Performs this operation on the given arguments.
 	 *
-	 * @param a the first function argument
-	 * @param b the second function argument
-	 * @param c the third function argument
-	 * @param d the fourth function argument
-	 * @param e the fifth function argument
-	 * @param f the sixth function argument
-	 * @param g the seventh function argument
-	 * @param h the eighth function argument
-	 * @param i the ninth function argument
+	 * @param  a the first function argument
+	 * @param  b the second function argument
+	 * @param  c the third function argument
+	 * @param  d the fourth function argument
+	 * @param  e the fifth function argument
+	 * @param  f the sixth function argument
+	 * @param  g the seventh function argument
+	 * @param  h the eighth function argument
+	 * @param  i the ninth function argument
+	 * @review
 	 */
 	public void accept(A a, B b, C c, D d, E e, F f, G g, H h, I i);
 
@@ -59,6 +61,7 @@ public interface EnneaConsumer<A, B, C, D, E, F, G, H, I> {
 	 * @param  after the operation to perform after this operation
 	 * @return a composed {@code EnneaConsumer} that performs in sequence this
 	 *         operation followed by the {@code after} operation
+	 * @review
 	 */
 	public default EnneaConsumer<A, B, C, D, E, F, G, H, I> andThen(
 		EnneaConsumer<? super A, ? super B, ? super C, ? super D, ? super E,

@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
  * configuration, SSO...
  *
  * @author Javier Gamarra
+ * @review
  */
 public interface ServerURLProvider {
 
@@ -30,6 +31,7 @@ public interface ServerURLProvider {
 	 *
 	 * @param  httpServletRequest the HTTP request
 	 * @return an string URL built based on the HTTP servlet request
+	 * @review
 	 */
 	public String getServerURL(HttpServletRequest httpServletRequest);
 

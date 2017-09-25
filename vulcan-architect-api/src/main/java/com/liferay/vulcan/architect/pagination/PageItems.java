@@ -22,6 +22,7 @@ import java.util.Collection;
  * {@link Page}.
  *
  * @author Alejandro Hernández
+ * @review
  */
 public class PageItems<T> {
 
@@ -34,6 +35,7 @@ public class PageItems<T> {
 	 * Returns the items of the page.
 	 *
 	 * @return the items of the page.
+	 * @review
 	 */
 	public Collection<T> getItems() {
 		return _items;
@@ -43,6 +45,7 @@ public class PageItems<T> {
 	 * Returns the total number of elements in the collection.
 	 *
 	 * @return the total number of elements in the collection.
+	 * @review
 	 */
 	public int getTotalCount() {
 		return _totalCount;

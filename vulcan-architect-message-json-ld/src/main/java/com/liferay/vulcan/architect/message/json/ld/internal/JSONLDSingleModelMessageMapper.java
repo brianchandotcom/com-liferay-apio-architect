@@ -34,6 +34,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Jorge Ferrer
  * @see    <a href="https://json-ld.org/">JSON-LD</a>
  * @see    <a href="https://www.hydra-cg.com/">Hydra</a>
+ * @review
  */
 @Component(
 	immediate = true,

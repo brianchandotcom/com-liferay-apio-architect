@@ -16,6 +16,7 @@ package com.liferay.vulcan.architect.exception;
 
 /**
  * @author Alejandro Hernández
+ * @review
  */
 public class FalsePredicateException extends Exception {
 

@@ -62,6 +62,7 @@ import org.osgi.service.component.annotations.Reference;
  * The resources are mapped from the internal {@link Comment} model.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @Component(immediate = true)
 public class CommentCollectionResource

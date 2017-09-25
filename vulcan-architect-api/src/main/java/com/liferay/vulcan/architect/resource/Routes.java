@@ -40,6 +40,7 @@ import java.util.function.Function;
  *
  * @author Alejandro Hernández
  * @see    com.liferay.vulcan.architect.resource.builder.RoutesBuilder
+ * @review
  */
 public interface Routes<T> {
 
@@ -51,6 +52,7 @@ public interface Routes<T> {
 	 *
 	 * @return the function used to remove a single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
+	 * @review
 	 */
 	public Optional<Consumer<Path>> getDeleteSingleModelConsumerOptional();
 
@@ -62,6 +64,7 @@ public interface Routes<T> {
 	 *
 	 * @return the supplier used to create the page, if present;
 	 *         <code>Optional#empty()</code> otherwise.
+	 * @review
 	 */
 	public Optional<Function<Path, Function<Identifier, Page<T>>>>
 		getPageFunctionOptional();
@@ -74,6 +77,7 @@ public interface Routes<T> {
 	 *
 	 * @return the function used to create the single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
+	 * @review
 	 */
 	public Optional<Function<Identifier, Function<Map<String, Object>,
 		SingleModel<T>>>> getPostSingleModelFunctionOptional();
@@ -86,6 +90,7 @@ public interface Routes<T> {
 	 *
 	 * @return the function used to create the single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
+	 * @review
 	 */
 	public Optional<Function<Path, SingleModel<T>>>
 		getSingleModelFunctionOptional();
@@ -98,6 +103,7 @@ public interface Routes<T> {
 	 *
 	 * @return the function used to update a single model, if present;
 	 *         <code>Optional#empty()</code> otherwise.
+	 * @review
 	 */
 	public Optional<Function<Path, Function<Map<String, Object>,
 		SingleModel<T>>>> getUpdateSingleModelFunctionOptional();

@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  * com.liferay.vulcan.architect.resource.builder.RoutesBuilder} methods.
  *
  * @author Alejandro Hernández
+ * @review
  */
 public interface Provider<T> {
 
@@ -32,6 +33,7 @@ public interface Provider<T> {
 	 *
 	 * @param  httpServletRequest current request.
 	 * @return the instance of the provided class.
+	 * @review
 	 */
 	public T createContext(HttpServletRequest httpServletRequest);
 

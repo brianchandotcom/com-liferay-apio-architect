@@ -63,6 +63,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 @Component(immediate = true)
 public class PersonCollectionResource

@@ -36,6 +36,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  * @see    <a href="https://json-ld.org/">JSON-LD</a>
  * @see    <a href="https://www.hydra-cg.com/">Hydra</a>
+ * @review
  */
 @Component(immediate = true)
 public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {

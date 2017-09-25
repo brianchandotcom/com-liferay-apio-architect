@@ -55,6 +55,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  * @see    CollectionResource
+ * @review
  */
 @Component(immediate = true, service = CollectionResourceManager.class)
 public class CollectionResourceManager extends BaseManager<CollectionResource> {
@@ -64,6 +65,7 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	 *
 	 * @param  name name of the resource for the class.
 	 * @return the class of a resource's name.
+	 * @review
 	 */
 	public <T> Optional<Class<T>> getModelClassOptional(String name) {
 		Optional<? extends Class<?>> optional = Optional.ofNullable(
@@ -77,6 +79,7 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	 *
 	 * @param  className the class name of a {@link CollectionResource}
 	 * @return the name of a class name's resource.
+	 * @review
 	 */
 	public Optional<String> getNameOptional(String className) {
 		Optional<CollectionResource> optional = _getCollectionResourceOptional(
@@ -92,6 +95,7 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	 * @param  modelClass the model class of a {@link CollectionResource}.
 	 * @return the representor of the model class, if present; {@code
 	 *         Optional#empty()} otherwise.
+	 * @review
 	 */
 	public <T, U extends Identifier> Optional<Representor<T, U>>
 		getRepresentorOptional(Class<T> modelClass) {
@@ -108,6 +112,7 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	 * @param  name the name of a {@link CollectionResource}.
 	 * @param  httpServletRequest the actual request.
 	 * @return the routes of the model class.
+	 * @review
 	 */
 	public <T> Optional<Routes<T>> getRoutesOptional(
 		String name, HttpServletRequest httpServletRequest) {

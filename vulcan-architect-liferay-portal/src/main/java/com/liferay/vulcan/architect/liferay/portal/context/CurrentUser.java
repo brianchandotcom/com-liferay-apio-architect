@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.model.User;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 public interface CurrentUser {
 
@@ -34,6 +35,7 @@ public interface CurrentUser {
 	 * Returns the current {@link User}.
 	 *
 	 * @return current user.
+	 * @review
 	 */
 	public User getUser();
 
@@ -41,6 +43,7 @@ public interface CurrentUser {
 	 * Returns the current user's ID.
 	 *
 	 * @return current user's ID.
+	 * @review
 	 */
 	public default long getUserId() {
 		User user = getUser();

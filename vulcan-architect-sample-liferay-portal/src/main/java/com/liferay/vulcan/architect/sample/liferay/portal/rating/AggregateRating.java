@@ -26,6 +26,7 @@ import com.liferay.vulcan.architect.sample.liferay.portal.resource.identifier.Ag
  * </p>
  *
  * @author Alejandro Hernández
+ * @review
  */
 public interface AggregateRating {
 
@@ -33,6 +34,7 @@ public interface AggregateRating {
 	 * Returns the identifier.
 	 *
 	 * @return the identifier.
+	 * @review
 	 */
 	public AggregateRatingIdentifier getAggregateRatingIdentifier();
 
@@ -40,6 +42,7 @@ public interface AggregateRating {
 	 * Returns the count of total number of ratings.
 	 *
 	 * @return the total number of ratings.
+	 * @review
 	 */
 	public Integer getRatingCount();
 
@@ -47,6 +50,7 @@ public interface AggregateRating {
 	 * Returns the rating value for the content.
 	 *
 	 * @return rating value.
+	 * @review
 	 */
 	public Double getRatingValue();
 

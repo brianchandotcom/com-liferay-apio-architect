@@ -41,6 +41,7 @@ import com.liferay.vulcan.architect.resource.identifier.Identifier;
  * @author Jorge Ferrer
  * @see    RepresentorBuilder
  * @see    RoutesBuilder
+ * @review
  */
 public interface CollectionResource<T, U extends Identifier> {
 
@@ -54,8 +55,9 @@ public interface CollectionResource<T, U extends Identifier> {
 	 * methods providing as much information as possible.
 	 * </p>
 	 *
-	 * @param representorBuilder the builder used to create the representor.
-	 * @see   RepresentorBuilder
+	 * @param  representorBuilder the builder used to create the representor.
+	 * @see    RepresentorBuilder
+	 * @review
 	 */
 	public Representor<T, U> buildRepresentor(
 		RepresentorBuilder<T, U> representorBuilder);
@@ -64,6 +66,7 @@ public interface CollectionResource<T, U extends Identifier> {
 	 * Returns the name for this resource.
 	 *
 	 * @return the name for this resource.
+	 * @review
 	 */
 	public String getName();
 
@@ -75,8 +78,9 @@ public interface CollectionResource<T, U extends Identifier> {
 	 * RoutesBuilder}.
 	 * </p>
 	 *
-	 * @param routesBuilder the builder used to create the routes.
-	 * @see   RoutesBuilder
+	 * @param  routesBuilder the builder used to create the routes.
+	 * @see    RoutesBuilder
+	 * @review
 	 */
 	public Routes<T> routes(RoutesBuilder<T, U> routesBuilder);
 

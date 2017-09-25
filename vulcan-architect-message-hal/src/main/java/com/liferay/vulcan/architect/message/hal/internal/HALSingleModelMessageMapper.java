@@ -32,6 +32,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  * @see    <a href="http://stateless.co/hal_specification.html">HAL</a>
+ * @review
  */
 @Component(
 	immediate = true,

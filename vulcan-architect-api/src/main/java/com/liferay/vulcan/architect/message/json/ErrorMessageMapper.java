@@ -34,6 +34,7 @@ import javax.ws.rs.core.HttpHeaders;
  * the writer starts and finishes the error).
  *
  * @author Alejandro Hernández
+ * @review
  */
 @SuppressWarnings("unused")
 public interface ErrorMessageMapper {
@@ -42,14 +43,16 @@ public interface ErrorMessageMapper {
 	 * Returns the media type that this mapper represents.
 	 *
 	 * @return the media type for this mapper.
+	 * @review
 	 */
 	public String getMediaType();
 
 	/**
 	 * Maps an error description to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the json object builder for the actual error.
-	 * @param description the description of the error.
+	 * @param  jsonObjectBuilder the json object builder for the actual error.
+	 * @param  description the description of the error.
+	 * @review
 	 */
 	public default void mapDescription(
 		JSONObjectBuilder jsonObjectBuilder, String description) {
@@ -58,8 +61,9 @@ public interface ErrorMessageMapper {
 	/**
 	 * Maps an error status code to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the json object builder for the actual error.
-	 * @param statusCode the status code of the error.
+	 * @param  jsonObjectBuilder the json object builder for the actual error.
+	 * @param  statusCode the status code of the error.
+	 * @review
 	 */
 	public default void mapStatusCode(
 		JSONObjectBuilder jsonObjectBuilder, Integer statusCode) {
@@ -68,8 +72,9 @@ public interface ErrorMessageMapper {
 	/**
 	 * Maps an error title to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the json object builder for the actual error.
-	 * @param title the title of the error.
+	 * @param  jsonObjectBuilder the json object builder for the actual error.
+	 * @param  title the title of the error.
+	 * @review
 	 */
 	public default void mapTitle(
 		JSONObjectBuilder jsonObjectBuilder, String title) {
@@ -78,8 +83,9 @@ public interface ErrorMessageMapper {
 	/**
 	 * Maps an error type to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the json object builder for the actual error.
-	 * @param type the type of the error.
+	 * @param  jsonObjectBuilder the json object builder for the actual error.
+	 * @param  type the type of the error.
+	 * @review
 	 */
 	public default void mapType(
 		JSONObjectBuilder jsonObjectBuilder, String type) {
@@ -88,9 +94,10 @@ public interface ErrorMessageMapper {
 	/**
 	 * This method is called when the writer is finishing the apiError.
 	 *
-	 * @param jsonObjectBuilder the json object builder for the apiError.
-	 * @param apiError the actual apiError.
-	 * @param httpHeaders the HTTP headers of the current request.
+	 * @param  jsonObjectBuilder the json object builder for the apiError.
+	 * @param  apiError the actual apiError.
+	 * @param  httpHeaders the HTTP headers of the current request.
+	 * @review
 	 */
 	public default void onFinish(
 		JSONObjectBuilder jsonObjectBuilder, APIError apiError,
@@ -100,9 +107,10 @@ public interface ErrorMessageMapper {
 	/**
 	 * This method is called when the writer is starting the apiError.
 	 *
-	 * @param jsonObjectBuilder the json object builder for the apiError.
-	 * @param apiError the actual apiError.
-	 * @param httpHeaders the HTTP headers of the current request.
+	 * @param  jsonObjectBuilder the json object builder for the apiError.
+	 * @param  apiError the actual apiError.
+	 * @param  httpHeaders the HTTP headers of the current request.
+	 * @review
 	 */
 	public default void onStart(
 		JSONObjectBuilder jsonObjectBuilder, APIError apiError,
@@ -117,6 +125,7 @@ public interface ErrorMessageMapper {
 	 * @param  httpHeaders the HTTP headers of the current request.
 	 * @return <code>true</code> if mapper supports mapping this request;
 	 *         <code>false</code> otherwise.
+	 * @review
 	 */
 	public default boolean supports(
 		APIError apiError, HttpHeaders httpHeaders) {

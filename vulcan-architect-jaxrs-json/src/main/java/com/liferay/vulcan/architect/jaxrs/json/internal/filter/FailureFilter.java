@@ -43,6 +43,7 @@ import org.osgi.service.component.annotations.Reference;
  * to the response.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @Component(
 	immediate = true, property = "liferay.vulcan.container.response.filter=true"

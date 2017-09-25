@@ -30,6 +30,7 @@ import java.util.Objects;
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
+ * @review
  */
 @FunctionalInterface
 public interface PentaConsumer<A, B, C, D, E> {
@@ -37,11 +38,12 @@ public interface PentaConsumer<A, B, C, D, E> {
 	/**
 	 * Performs this operation on the given arguments.
 	 *
-	 * @param a the first function argument
-	 * @param b the second function argument
-	 * @param c the third function argument
-	 * @param d the fourth function argument
-	 * @param e the fifth function argument
+	 * @param  a the first function argument
+	 * @param  b the second function argument
+	 * @param  c the third function argument
+	 * @param  d the fourth function argument
+	 * @param  e the fifth function argument
+	 * @review
 	 */
 	public void accept(A a, B b, C c, D d, E e);
 
@@ -55,6 +57,7 @@ public interface PentaConsumer<A, B, C, D, E> {
 	 * @param  after the operation to perform after this operation
 	 * @return a composed {@code PentaConsumer} that performs in sequence this
 	 *         operation followed by the {@code after} operation
+	 * @review
 	 */
 	public default PentaConsumer<A, B, C, D, E> andThen(
 		PentaConsumer<? super A, ? super B, ? super C, ? super D, ? super E>
