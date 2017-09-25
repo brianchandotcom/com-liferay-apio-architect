@@ -16,11 +16,11 @@ package com.liferay.vulcan.architect.message.json;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.portal.kernel.json.JSONObject;
-
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import javax.json.JsonObject;
 
 /**
  * Use instances of this builder to create JSON objects.
@@ -70,12 +70,12 @@ import java.util.function.Function;
 public interface JSONObjectBuilder {
 
 	/**
-	 * Returns the {@link JSONObject} constructed by this builder.
+	 * Returns the {@link JsonObject} constructed by this builder.
 	 *
 	 * @return the constructed JSON object.
 	 * @review
 	 */
-	public JSONObject build();
+	public JsonObject build();
 
 	/**
 	 * Start the creation of a field inside the JSON object.
@@ -203,31 +203,73 @@ public interface JSONObjectBuilder {
 		public void add(JSONObjectBuilder jsonObjectBuilder);
 
 		/**
-		 * Adds a new primitive value to the JSON array. It must be a {@link
-		 * String}, {@link Number} or {@link Boolean} value.
-		 *
-		 * @param  value value to be added.
-		 * @review
-		 */
-		public void add(Object value);
-
-		/**
-		 * Adds all elements in a collection as elements of this JSON object.
-		 * The collection must have elements of one of the following types:
-		 * {@link String}, {@link Number} or {@link Boolean} value.
+		 * Adds all elements in a boolean collection as elements of this JSON
+		 * array.
 		 *
 		 * @param  collection the collection to be added.
 		 * @review
 		 */
-		public <T> void addAll(Collection<T> collection);
+		public void addAllBooleans(Collection<Boolean> collection);
+
+		/**
+		 * Adds all elements in a JSON object collection as elements of this
+		 * JSON array.
+		 *
+		 * @param  collection the collection to be added.
+		 * @review
+		 */
+		public void addAllJsonObjects(Collection<JsonObject> collection);
+
+		/**
+		 * Adds all elements in a number collection as elements of this JSON
+		 * array.
+		 *
+		 * @param  collection the collection to be added.
+		 * @review
+		 */
+		public void addAllNumbers(Collection<Number> collection);
+
+		/**
+		 * Adds all elements in a string collection as elements of this JSON
+		 * array.
+		 *
+		 * @param  collection the collection to be added.
+		 * @review
+		 */
+		public void addAllStrings(Collection<String> collection);
+
+		/**
+		 * Adds a new boolean value to the JSON array.
+		 *
+		 * @param  value value to be added.
+		 * @review
+		 */
+		public void addBoolean(Boolean value);
+
+		/**
+		 * Adds a new number value to the JSON array.
+		 *
+		 * @param  value value to be added.
+		 * @review
+		 */
+		public void addNumber(Number value);
+
+		/**
+		 * Adds a new string value to the JSON array.
+		 *
+		 * @param  value value to be added.
+		 * @review
+		 */
+		public void addString(String value);
 
 	}
 
 	/**
 	 * Step to add the value of a field. It can be another JSONObject (field
 	 * methods), an JSON array ({@link #arrayValue()} method) or a primitive
-	 * value ({@link #value(Object)} method).
-	 *
+	 * value ({@link #stringValue(String)}, {@link #numberValue(Number)} and
+	 * {@link #booleanValue(Boolean)} method).
+ *
 	 * @review
 	 */
 	public interface FieldStep {
@@ -239,6 +281,14 @@ public interface JSONObjectBuilder {
 		 * @review
 		 */
 		public ArrayValueStep arrayValue();
+
+		/**
+		 * Adds a new boolean value to the JSON array.
+		 *
+		 * @param  value value to be added.
+		 * @review
+		 */
+		public void booleanValue(Boolean value);
 
 		/**
 		 * Start the creation of a new JSON object field inside the actual
@@ -323,13 +373,20 @@ public interface JSONObjectBuilder {
 			String suffix, String parentName, String... nestedNames);
 
 		/**
-		 * Adds a primitive value to the actual field. It must be a {@link
-		 * String}, {@link Number} or {@link Boolean} value.
+		 * Adds a new number value to the JSON array.
 		 *
-		 * @param  value the value to be added to the field.
+		 * @param  value value to be added.
 		 * @review
 		 */
-		public void value(Object value);
+		public void numberValue(Number value);
+
+		/**
+		 * Adds a new string value to the JSON array.
+		 *
+		 * @param  value value to be added.
+		 * @review
+		 */
+		public void stringValue(String value);
 
 	}
 

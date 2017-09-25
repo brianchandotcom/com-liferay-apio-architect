@@ -56,7 +56,20 @@ public interface SingleModelMessageMapper<T> {
 	public String getMediaType();
 
 	/**
-	 * Maps an embedded resource field to its JSON object representation.
+	 * Maps a resource boolean field to its JSON object representation.
+	 *
+	 * @param  jsonObjectBuilder the json object builder for the actual item.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapBooleanField(
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, Boolean value) {
+	}
+
+	/**
+	 * Maps an embedded resource boolean field to its JSON object
+	 * representation.
 	 *
 	 * @param  jsonObjectBuilder the json object builder for the actual item.
 	 * @param  embeddedPathElements the embedded path elements of the current
@@ -65,10 +78,10 @@ public interface SingleModelMessageMapper<T> {
 	 * @param  value the value of the field.
 	 * @review
 	 */
-	public default void mapEmbeddedResourceField(
+	public default void mapEmbeddedResourceBooleanField(
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String fieldName,
-		Object value) {
+		Boolean value) {
 	}
 
 	/**
@@ -85,6 +98,38 @@ public interface SingleModelMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
+	}
+
+	/**
+	 * Maps an embedded resource number field to its JSON object representation.
+	 *
+	 * @param  jsonObjectBuilder the json object builder for the actual item.
+	 * @param  embeddedPathElements the embedded path elements of the current
+	 *         resource.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapEmbeddedResourceNumberField(
+		JSONObjectBuilder jsonObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		Number value) {
+	}
+
+	/**
+	 * Maps an embedded resource string field to its JSON object representation.
+	 *
+	 * @param  jsonObjectBuilder the json object builder for the actual item.
+	 * @param  embeddedPathElements the embedded path elements of the current
+	 *         resource.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapEmbeddedResourceStringField(
+		JSONObjectBuilder jsonObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		String value) {
 	}
 
 	/**
@@ -116,18 +161,6 @@ public interface SingleModelMessageMapper<T> {
 	}
 
 	/**
-	 * Maps a resource field to its JSON object representation.
-	 *
-	 * @param  jsonObjectBuilder the json object builder for the actual item.
-	 * @param  fieldName the field name.
-	 * @param  value the value of the field.
-	 * @review
-	 */
-	public default void mapField(
-		JSONObjectBuilder jsonObjectBuilder, String fieldName, Object value) {
-	}
-
-	/**
 	 * Maps a resource link to its JSON object representation.
 	 *
 	 * @param  jsonObjectBuilder the json object builder for the actual item.
@@ -154,6 +187,18 @@ public interface SingleModelMessageMapper<T> {
 	}
 
 	/**
+	 * Maps a resource number field to its JSON object representation.
+	 *
+	 * @param  jsonObjectBuilder the json object builder for the actual item.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapNumberField(
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, Number value) {
+	}
+
+	/**
 	 * Maps a resource URL to its JSON object representation.
 	 *
 	 * @param  jsonObjectBuilder the json object builder for the actual item.
@@ -162,6 +207,18 @@ public interface SingleModelMessageMapper<T> {
 	 */
 	public default void mapSelfURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
+	}
+
+	/**
+	 * Maps a resource string field to its JSON object representation.
+	 *
+	 * @param  jsonObjectBuilder the json object builder for the actual item.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapStringField(
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, String value) {
 	}
 
 	/**

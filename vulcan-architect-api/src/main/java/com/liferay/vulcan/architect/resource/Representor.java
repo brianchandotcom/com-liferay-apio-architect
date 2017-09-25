@@ -49,21 +49,21 @@ public interface Representor<T, U extends Identifier> {
 	public Map<String, BinaryFunction<T>> getBinaryFunctions();
 
 	/**
+	 * Returns a map containing the boolean field names and the functions to get
+	 * those fields.
+	 *
+	 * @return the field names and field functions.
+	 * @review
+	 */
+	public Map<String, Function<T, Boolean>> getBooleanFieldFunctions();
+
+	/**
 	 * Returns the embedded related models.
 	 *
 	 * @return the embedded related models.
 	 * @review
 	 */
 	public List<RelatedModel<T, ?>> getEmbeddedRelatedModels();
-
-	/**
-	 * Returns a map containing the field names and the functions to get those
-	 * fields.
-	 *
-	 * @return the field names and field functions.
-	 * @review
-	 */
-	public Map<String, Function<T, Object>> getFieldFunctions();
 
 	/**
 	 * Returns the identifier of the model.
@@ -99,12 +99,30 @@ public interface Representor<T, U extends Identifier> {
 	public Map<String, String> getLinks();
 
 	/**
+	 * Returns a map containing the number field names and the functions to get
+	 * those fields.
+	 *
+	 * @return the field names and field functions.
+	 * @review
+	 */
+	public Map<String, Function<T, Number>> getNumberFieldFunctions();
+
+	/**
 	 * Returns the related collections.
 	 *
 	 * @return the related collections.
 	 * @review
 	 */
 	public Stream<RelatedCollection<T, ?>> getRelatedCollections();
+
+	/**
+	 * Returns a map containing the string field names and the functions to get
+	 * those fields.
+	 *
+	 * @return the field names and field functions.
+	 * @review
+	 */
+	public Map<String, Function<T, String>> getStringFieldFunctions();
 
 	/**
 	 * Returns the types.

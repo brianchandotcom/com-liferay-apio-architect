@@ -78,6 +78,17 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 			String key, BinaryFunction<T> binaryFunction);
 
 		/**
+		 * Use this method to provide information of a resource boolean field.
+		 *
+		 * @param  key name of the field.
+		 * @param  fieldFunction function used to obtain the field value.
+		 * @return builder's actual step.
+		 * @review
+		 */
+		public FirstStep<T, U> addBooleanField(
+			String key, Function<T, Boolean> fieldFunction);
+
+		/**
 		 * Use this method to provide information of an embeddable related
 		 * model.
 		 *
@@ -90,17 +101,6 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		public <S> FirstStep<T, U> addEmbeddedModel(
 			String key, Class<S> modelClass,
 			Function<T, Optional<S>> modelFunction);
-
-		/**
-		 * Use this method to provide information of a resource field.
-		 *
-		 * @param  key name of the field.
-		 * @param  fieldFunction function used to obtain the field value.
-		 * @return builder's actual step.
-		 * @review
-		 */
-		public FirstStep<T, U> addField(
-			String key, Function<T, Object> fieldFunction);
 
 		/**
 		 * Use this method to provide information of a resource link.
@@ -127,6 +127,17 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 			Function<T, Optional<S>> modelFunction);
 
 		/**
+		 * Use this method to provide information of a resource number field.
+		 *
+		 * @param  key name of the field.
+		 * @param  fieldFunction function used to obtain the field value.
+		 * @return builder's actual step.
+		 * @review
+		 */
+		public FirstStep<T, U> addNumberField(
+			String key, Function<T, Number> fieldFunction);
+
+		/**
 		 * Use this method to provide information of a related collection.
 		 *
 		 * @param  key name of the relation.
@@ -139,6 +150,17 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		public <S> FirstStep<T, U> addRelatedCollection(
 			String key, Class<S> modelClass,
 			Function<T, Identifier> identifierFunction);
+
+		/**
+		 * Use this method to provide information of a resource string field.
+		 *
+		 * @param  key name of the field.
+		 * @param  fieldFunction function used to obtain the field value.
+		 * @return builder's actual step.
+		 * @review
+		 */
+		public FirstStep<T, U> addStringField(
+			String key, Function<T, String> fieldFunction);
 
 		/**
 		 * Use this method to provide a type for this model. Multiple types are

@@ -93,7 +93,24 @@ public interface PageMessageMapper<T> {
 	}
 
 	/**
-	 * Maps an embedded resource field to its JSON object representation.
+	 * Maps a resource boolean field to its JSON object representation.
+	 *
+	 * @param  pageJSONObjectBuilder the json object builder for the whole page.
+	 * @param  itemJSONObjectBuilder the json object builder for the actual
+	 *         item.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapItemBooleanField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		Boolean value) {
+	}
+
+	/**
+	 * Maps an embedded resource boolean field to its JSON object
+	 * representation.
 	 *
 	 * @param  pageJSONObjectBuilder the json object builder for the whole page.
 	 * @param  itemJSONObjectBuilder the json object builder for the actual
@@ -104,11 +121,11 @@ public interface PageMessageMapper<T> {
 	 * @param  value the value of the field.
 	 * @review
 	 */
-	public default void mapItemEmbeddedResourceField(
+	public default void mapItemEmbeddedResourceBooleanField(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String fieldName,
-		Object value) {
+		Boolean value) {
 	}
 
 	/**
@@ -128,6 +145,44 @@ public interface PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
+	}
+
+	/**
+	 * Maps an embedded resource number field to its JSON object representation.
+	 *
+	 * @param  pageJSONObjectBuilder the json object builder for the whole page.
+	 * @param  itemJSONObjectBuilder the json object builder for the actual
+	 *         item.
+	 * @param  embeddedPathElements the embedded path elements of the current
+	 *         resource.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapItemEmbeddedResourceNumberField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		Number value) {
+	}
+
+	/**
+	 * Maps an embedded resource string field to its JSON object representation.
+	 *
+	 * @param  pageJSONObjectBuilder the json object builder for the whole page.
+	 * @param  itemJSONObjectBuilder the json object builder for the actual
+	 *         item.
+	 * @param  embeddedPathElements the embedded path elements of the current
+	 *         resource.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapItemEmbeddedResourceStringField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		String value) {
 	}
 
 	/**
@@ -165,22 +220,6 @@ public interface PageMessageMapper<T> {
 	}
 
 	/**
-	 * Maps a resource field to its JSON object representation.
-	 *
-	 * @param  pageJSONObjectBuilder the json object builder for the whole page.
-	 * @param  itemJSONObjectBuilder the json object builder for the actual
-	 *         item.
-	 * @param  fieldName the field name.
-	 * @param  value the value of the field.
-	 * @review
-	 */
-	public default void mapItemField(
-		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
-		Object value) {
-	}
-
-	/**
 	 * Maps a resource link to its JSON object representation.
 	 *
 	 * @param  pageJSONObjectBuilder the json object builder for the whole page.
@@ -213,6 +252,22 @@ public interface PageMessageMapper<T> {
 	}
 
 	/**
+	 * Maps a resource number field to its JSON object representation.
+	 *
+	 * @param  pageJSONObjectBuilder the json object builder for the whole page.
+	 * @param  itemJSONObjectBuilder the json object builder for the actual
+	 *         item.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapItemNumberField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		Number value) {
+	}
+
+	/**
 	 * Maps a resource URL to its JSON object representation.
 	 *
 	 * @param  pageJSONObjectBuilder the json object builder for the whole page.
@@ -224,6 +279,22 @@ public interface PageMessageMapper<T> {
 	public default void mapItemSelfURL(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String url) {
+	}
+
+	/**
+	 * Maps a resource string field to its JSON object representation.
+	 *
+	 * @param  pageJSONObjectBuilder the json object builder for the whole page.
+	 * @param  itemJSONObjectBuilder the json object builder for the actual
+	 *         item.
+	 * @param  fieldName the field name.
+	 * @param  value the value of the field.
+	 * @review
+	 */
+	public default void mapItemStringField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		String value) {
 	}
 
 	/**
