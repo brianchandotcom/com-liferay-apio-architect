@@ -204,14 +204,9 @@ public class FolderCollectionResource
 		DLFolder dlFolder = _getDLFolder(dlFolderLongIdentifier);
 
 		String name = (String)body.get("name");
-
-		if (Validator.isNull(name)) {
-			throw new BadRequestException("Invalid body");
-		}
-
 		String description = (String)body.get("description");
 
-		if (Validator.isNull(description)) {
+		if (Validator.isNull(name) || Validator.isNull(description)) {
 			throw new BadRequestException("Invalid body");
 		}
 
