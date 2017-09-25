@@ -14,14 +14,22 @@
 
 package com.liferay.vulcan.architect.jaxrs.json.internal;
 
-import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.vulcan.architect.message.json.JSONObjectBuilder;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonNumber;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 
 /**
  * @author Alejandro Hernández
@@ -31,13 +39,13 @@ import java.util.function.Function;
 public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 
 	@Override
-	public JSONObject build() {
-		return _jsonObject;
+	public JsonObject build() {
+		return _jsonObjectBuilder.build();
 	}
 
 	@Override
 	public FieldStep field(String name) {
-		return new FieldStepImpl(name, _jsonObject);
+		return new FieldStepImpl(name, _jsonObjectBuilder);
 	}
 
 	@Override
@@ -92,8 +100,8 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 
 	public static class ArrayValueStepImpl implements ArrayValueStep {
 
-		public ArrayValueStepImpl(JSONArray jsonArray) {
-			_jsonArray = jsonArray;
+		public ArrayValueStepImpl(JsonArrayBuilder jsonArrayBuilder) {
+			_jsonArrayBuilder = jsonArrayBuilder;
 		}
 
 		@Override
@@ -107,61 +115,171 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 
 		@Override
 		public void add(JSONObjectBuilder jsonObjectBuilder) {
-			_jsonArray.put(jsonObjectBuilder.build());
+			_jsonArrayBuilder.add(jsonObjectBuilder.build());
 		}
 
 		@Override
-		public void add(Object value) {
+		public void addAllBooleans(Collection<Boolean> collection) {
+			Stream<Boolean> stream = collection.stream();
+
+			stream.map(
+				bool -> {
+					if (bool) {
+						return JsonValue.TRUE;
+					}
+
+					return JsonValue.FALSE;
+				}
+			).forEach(
+				_jsonArrayBuilder::add
+			);
+		}
+
+		@Override
+		public void addAllJsonObjects(Collection<JsonObject> collection) {
+			collection.forEach(_jsonArrayBuilder::add);
+		}
+
+		@Override
+		public void addAllNumbers(Collection<Number> collection) {
+			Stream<Number> stream = collection.stream();
+
+			stream.map(
+				JSONObjectBuilderImpl::_getJsonNumberOptional
+			).forEach(
+				optional -> optional.ifPresent(_jsonArrayBuilder::add)
+			);
+		}
+
+		@Override
+		public void addAllStrings(Collection<String> collection) {
+			Stream<String> stream = collection.stream();
+
+			stream.map(
+				Json::createValue
+			).forEach(
+				_jsonArrayBuilder::add
+			);
+		}
+
+		@Override
+		public void addBoolean(Boolean value) {
 			if (value != null) {
-				_jsonArray.put(value);
+				if (value) {
+					_jsonArrayBuilder.add(JsonValue.TRUE);
+				}
+				else {
+					_jsonArrayBuilder.add(JsonValue.FALSE);
+				}
 			}
 		}
 
 		@Override
-		public <T> void addAll(Collection<T> collection) {
-			collection.forEach(_jsonArray::put);
+		public void addNumber(Number value) {
+			if (value != null) {
+				Optional<JsonNumber> optional = _getJsonNumberOptional(value);
+
+				optional.ifPresent(_jsonArrayBuilder::add);
+			}
 		}
 
-		private final JSONArray _jsonArray;
+		@Override
+		public void addString(String value) {
+			if (value != null) {
+				JsonString jsonString = Json.createValue(value);
+
+				_jsonArrayBuilder.add(jsonString);
+			}
+		}
+
+		private final JsonArrayBuilder _jsonArrayBuilder;
 
 	}
 
-	private final JSONObject _jsonObject = JSONFactoryUtil.createJSONObject();
+	private static Optional<JsonNumber> _getJsonNumberOptional(Number number) {
+		if (number instanceof Integer) {
+			return Optional.of(Json.createValue(number.intValue()));
+		}
+		else if (number instanceof Long) {
+			return Optional.of(Json.createValue(number.longValue()));
+		}
+		else if (number instanceof Short) {
+			return Optional.of(Json.createValue(number.shortValue()));
+		}
+		else if (number instanceof Double) {
+			return Optional.of(Json.createValue(number.doubleValue()));
+		}
+		else if (number instanceof Float) {
+			return Optional.of(Json.createValue(number.floatValue()));
+		}
+		else if (number instanceof Byte) {
+			return Optional.of(Json.createValue(number.byteValue()));
+		}
+
+		return Optional.empty();
+	}
+
+	private final JsonObjectBuilder _jsonObjectBuilder =
+		Json.createObjectBuilder();
 
 	private static class FieldStepImpl implements FieldStep {
 
-		public FieldStepImpl(String name, JSONObject jsonObject) {
+		public FieldStepImpl(String name, JsonObjectBuilder jsonObjectBuilder) {
 			_name = name;
-			_stepJSONObject = jsonObject;
+			_jsonObjectBuilder = jsonObjectBuilder;
 		}
 
 		@Override
 		public ArrayValueStep arrayValue() {
-			JSONArray jsonArray = _stepJSONObject.getJSONArray(_name);
+			JsonArrayBuilder jsonArrayBuilder = null;
 
-			if (jsonArray == null) {
-				jsonArray = JSONFactoryUtil.createJSONArray();
+			try {
+				JsonObject jsonObject = _jsonObjectBuilder.build();
 
-				_stepJSONObject.put(_name, jsonArray);
+				JsonArray jsonArray = jsonObject.getJsonArray(_name);
+
+				jsonArrayBuilder = Json.createArrayBuilder(jsonArray);
+			}
+			catch (ClassCastException cce) {
+				jsonArrayBuilder = Json.createArrayBuilder();
 			}
 
-			return new ArrayValueStepImpl(jsonArray);
+			_jsonObjectBuilder.add(_name, jsonArrayBuilder);
+
+			return new ArrayValueStepImpl(jsonArrayBuilder);
+		}
+
+		@Override
+		public void booleanValue(Boolean value) {
+			if (value != null) {
+				if (value) {
+					_jsonObjectBuilder.add(_name, JsonValue.TRUE);
+				}
+				else {
+					_jsonObjectBuilder.add(_name, JsonValue.FALSE);
+				}
+			}
 		}
 
 		@Override
 		public FieldStep field(String name) {
-			JSONObject previousJSONObject = _stepJSONObject.getJSONObject(
-				_name);
+			JsonObjectBuilder jsonObjectBuilder = null;
 
-			if (previousJSONObject == null) {
-				JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			try {
+				JsonObject jsonObject = _jsonObjectBuilder.build();
 
-				_stepJSONObject.put(_name, jsonObject);
+				JsonObject previousJSONObject = jsonObject.getJsonObject(_name);
 
-				return new FieldStepImpl(name, jsonObject);
+				jsonObjectBuilder = Json.createObjectBuilder(
+					previousJSONObject);
+			}
+			catch (ClassCastException cce) {
+				jsonObjectBuilder = Json.createObjectBuilder();
 			}
 
-			return new FieldStepImpl(name, previousJSONObject);
+			_jsonObjectBuilder.add(_name, jsonObjectBuilder);
+
+			return new FieldStepImpl(name, jsonObjectBuilder);
 		}
 
 		@Override
@@ -227,14 +345,26 @@ public class JSONObjectBuilderImpl implements JSONObjectBuilder {
 		}
 
 		@Override
-		public void value(Object value) {
+		public void numberValue(Number value) {
 			if (value != null) {
-				_stepJSONObject.put(_name, value);
+				Optional<JsonNumber> optional = _getJsonNumberOptional(value);
+
+				optional.ifPresent(
+					jsonNumber -> _jsonObjectBuilder.add(_name, jsonNumber));
 			}
 		}
 
+		@Override
+		public void stringValue(String value) {
+			if (value != null) {
+				JsonString jsonString = Json.createValue(value);
+
+				_jsonObjectBuilder.add(_name, jsonString);
+			}
+		}
+
+		private final JsonObjectBuilder _jsonObjectBuilder;
 		private final String _name;
-		private final JSONObject _stepJSONObject;
 
 	}
 
