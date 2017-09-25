@@ -20,6 +20,7 @@ import com.liferay.vulcan.architect.message.json.SingleModelMessageMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,34 +49,25 @@ public class HALSingleModelMessageMapper<T>
 	}
 
 	@Override
-	public void mapEmbeddedResourceField(
-		JSONObjectBuilder jsonObjectBuilder,
-		FunctionalList<String> embeddedPathElements, String fieldName,
-		Object value) {
-
-		Optional<String> optional = embeddedPathElements.lastOptional();
-
-		String head = embeddedPathElements.head();
-
-		Stream<String> middleStream = embeddedPathElements.middleStream();
-
-		String[] middle = middleStream.toArray(String[]::new);
+	public void mapBooleanField(
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, Boolean value) {
 
 		jsonObjectBuilder.field(
-			"_embedded"
-		).ifElseCondition(
-			optional.isPresent(),
-			fieldStep -> fieldStep.nestedSuffixedField(
-				"_embedded", head, middle
-			).field(
-				optional.get()
-			),
-			fieldStep -> fieldStep.field(head)
-		).field(
 			fieldName
-		).value(
+		).booleanValue(
 			value
 		);
+	}
+
+	@Override
+	public void mapEmbeddedResourceBooleanField(
+		JSONObjectBuilder jsonObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		Boolean value) {
+
+		_mapEmbeddedResourceField(
+			jsonObjectBuilder, embeddedPathElements, fieldName,
+			fieldStep -> fieldStep.booleanValue(value));
 	}
 
 	@Override
@@ -104,9 +96,31 @@ public class HALSingleModelMessageMapper<T>
 			fieldStep -> fieldStep.field(head)
 		).nestedField(
 			"_links", fieldName, "href"
-		).value(
+		).stringValue(
 			url
 		);
+	}
+
+	@Override
+	public void mapEmbeddedResourceNumberField(
+		JSONObjectBuilder jsonObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		Number value) {
+
+		_mapEmbeddedResourceField(
+			jsonObjectBuilder, embeddedPathElements, fieldName,
+			fieldStep -> fieldStep.numberValue(value));
+	}
+
+	@Override
+	public void mapEmbeddedResourceStringField(
+		JSONObjectBuilder jsonObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		String value) {
+
+		_mapEmbeddedResourceField(
+			jsonObjectBuilder, embeddedPathElements, fieldName,
+			fieldStep -> fieldStep.stringValue(value));
 	}
 
 	@Override
@@ -119,23 +133,12 @@ public class HALSingleModelMessageMapper<T>
 	}
 
 	@Override
-	public void mapField(
-		JSONObjectBuilder jsonObjectBuilder, String fieldName, Object value) {
-
-		jsonObjectBuilder.field(
-			fieldName
-		).value(
-			value
-		);
-	}
-
-	@Override
 	public void mapLink(
 		JSONObjectBuilder jsonObjectBuilder, String fieldName, String url) {
 
 		jsonObjectBuilder.nestedField(
 			"_links", fieldName, "href"
-		).value(
+		).stringValue(
 			url
 		);
 	}
@@ -152,7 +155,7 @@ public class HALSingleModelMessageMapper<T>
 		if (!optional.isPresent()) {
 			jsonObjectBuilder.nestedField(
 				"_links", head, "href"
-			).value(
+			).stringValue(
 				url
 			);
 		}
@@ -171,15 +174,67 @@ public class HALSingleModelMessageMapper<T>
 				"_embedded", head, middle
 			).nestedField(
 				prelast, "_links", optional.get(), "href"
-			).value(
+			).stringValue(
 				url
 			);
 		}
 	}
 
 	@Override
+	public void mapNumberField(
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, Number value) {
+
+		jsonObjectBuilder.field(
+			fieldName
+		).numberValue(
+			value
+		);
+	}
+
+	@Override
 	public void mapSelfURL(JSONObjectBuilder jsonObjectBuilder, String url) {
 		mapLink(jsonObjectBuilder, "self", url);
+	}
+
+	@Override
+	public void mapStringField(
+		JSONObjectBuilder jsonObjectBuilder, String fieldName, String value) {
+
+		jsonObjectBuilder.field(
+			fieldName
+		).stringValue(
+			value
+		);
+	}
+
+	private void _mapEmbeddedResourceField(
+		JSONObjectBuilder jsonObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		Consumer<JSONObjectBuilder.FieldStep> consumer) {
+
+		Optional<String> optional = embeddedPathElements.lastOptional();
+
+		String head = embeddedPathElements.head();
+
+		Stream<String> middleStream = embeddedPathElements.middleStream();
+
+		String[] middle = middleStream.toArray(String[]::new);
+
+		JSONObjectBuilder.FieldStep builderStep = jsonObjectBuilder.field(
+			"_embedded"
+		).ifElseCondition(
+			optional.isPresent(),
+			fieldStep -> fieldStep.nestedSuffixedField(
+				"_embedded", head, middle
+			).field(
+				optional.get()
+			),
+			fieldStep -> fieldStep.field(head)
+		).field(
+			fieldName
+		);
+
+		consumer.accept(builderStep);
 	}
 
 }

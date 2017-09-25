@@ -42,7 +42,7 @@ public class ProblemJSONErrorMessageMapper implements ErrorMessageMapper {
 
 		jsonObjectBuilder.field(
 			"detail"
-		).value(
+		).stringValue(
 			description
 		);
 	}
@@ -53,7 +53,7 @@ public class ProblemJSONErrorMessageMapper implements ErrorMessageMapper {
 
 		jsonObjectBuilder.field(
 			"status"
-		).value(
+		).numberValue(
 			statusCode
 		);
 	}
@@ -62,7 +62,7 @@ public class ProblemJSONErrorMessageMapper implements ErrorMessageMapper {
 	public void mapTitle(JSONObjectBuilder jsonObjectBuilder, String title) {
 		jsonObjectBuilder.field(
 			"title"
-		).value(
+		).stringValue(
 			title
 		);
 	}
@@ -71,7 +71,7 @@ public class ProblemJSONErrorMessageMapper implements ErrorMessageMapper {
 	public void mapType(JSONObjectBuilder jsonObjectBuilder, String type) {
 		jsonObjectBuilder.field(
 			"type"
-		).value(
+		).stringValue(
 			type
 		);
 	}

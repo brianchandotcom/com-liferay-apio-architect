@@ -52,7 +52,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"_links", "collection", "href"
-		).value(
+		).stringValue(
 			url
 		);
 	}
@@ -63,7 +63,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"_links", "self", "href"
-		).value(
+		).stringValue(
 			url
 		);
 	}
@@ -74,19 +74,32 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"_links", "first", "href"
-		).value(
+		).stringValue(
 			url
 		);
 	}
 
 	@Override
-	public void mapItemEmbeddedResourceField(
+	public void mapItemBooleanField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		Boolean value) {
+
+		itemJSONObjectBuilder.field(
+			fieldName
+		).booleanValue(
+			value
+		);
+	}
+
+	@Override
+	public void mapItemEmbeddedResourceBooleanField(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String fieldName,
-		Object value) {
+		Boolean value) {
 
-		_halSingleModelMessageMapper.mapEmbeddedResourceField(
+		_halSingleModelMessageMapper.mapEmbeddedResourceBooleanField(
 			itemJSONObjectBuilder, embeddedPathElements, fieldName, value);
 	}
 
@@ -102,6 +115,28 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
+	public void mapItemEmbeddedResourceNumberField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		Number value) {
+
+		_halSingleModelMessageMapper.mapEmbeddedResourceNumberField(
+			itemJSONObjectBuilder, embeddedPathElements, fieldName, value);
+	}
+
+	@Override
+	public void mapItemEmbeddedResourceStringField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		String value) {
+
+		_halSingleModelMessageMapper.mapEmbeddedResourceStringField(
+			itemJSONObjectBuilder, embeddedPathElements, fieldName, value);
+	}
+
+	@Override
 	public void mapItemEmbeddedResourceURL(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder,
@@ -109,19 +144,6 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		_halSingleModelMessageMapper.mapEmbeddedResourceURL(
 			itemJSONObjectBuilder, embeddedPathElements, url);
-	}
-
-	@Override
-	public void mapItemField(
-		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
-		Object value) {
-
-		itemJSONObjectBuilder.field(
-			fieldName
-		).value(
-			value
-		);
 	}
 
 	@Override
@@ -144,6 +166,19 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
+	public void mapItemNumberField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		Number value) {
+
+		itemJSONObjectBuilder.field(
+			fieldName
+		).numberValue(
+			value
+		);
+	}
+
+	@Override
 	public void mapItemSelfURL(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String url) {
@@ -152,12 +187,25 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
+	public void mapItemStringField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		String value) {
+
+		itemJSONObjectBuilder.field(
+			fieldName
+		).stringValue(
+			value
+		);
+	}
+
+	@Override
 	public void mapItemTotalCount(
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
 
 		jsonObjectBuilder.field(
 			"total"
-		).value(
+		).numberValue(
 			totalCount
 		);
 	}
@@ -176,7 +224,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"_links", "last", "href"
-		).value(
+		).stringValue(
 			url
 		);
 	}
@@ -187,7 +235,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"_links", "next", "href"
-		).value(
+		).stringValue(
 			url
 		);
 	}
@@ -196,7 +244,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 	public void mapPageCount(JSONObjectBuilder jsonObjectBuilder, int count) {
 		jsonObjectBuilder.field(
 			"count"
-		).value(
+		).numberValue(
 			count
 		);
 	}
@@ -207,7 +255,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"_links", "prev", "href"
-		).value(
+		).stringValue(
 			url
 		);
 	}
