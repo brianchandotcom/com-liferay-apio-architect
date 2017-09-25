@@ -20,6 +20,7 @@ import com.liferay.vulcan.architect.alias.BinaryFunction;
 import com.liferay.vulcan.architect.resource.Representor;
 import com.liferay.vulcan.architect.resource.identifier.Identifier;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -87,6 +88,17 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 */
 		public FirstStep<T, U> addBoolean(
 			String key, Function<T, Boolean> booleanFunction);
+
+		/**
+		 * Use this method to provide information of a resource date field.
+		 *
+		 * @param  key name of the field.
+		 * @param  dateFunction function used to obtain the date value.
+		 * @return builder's actual step.
+		 * @review
+		 */
+		public FirstStep<T, U> addDate(
+			String key, Function<T, Date> dateFunction);
 
 		/**
 		 * Use this method to provide information of an embeddable related

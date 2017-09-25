@@ -22,13 +22,18 @@ import com.liferay.vulcan.architect.resource.Representor;
 import com.liferay.vulcan.architect.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.architect.resource.identifier.Identifier;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TimeZone;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -236,6 +241,30 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 			String key, Function<T, Boolean> booleanFunction) {
 
 			_representor._addBoolean(key, booleanFunction);
+
+			return this;
+		}
+
+		@Override
+		public FirstStep<T, U> addDate(
+			String key, Function<T, Date> dateFunction) {
+
+			Function<Date, String> formatFunction = date -> {
+				if (date == null) {
+					return null;
+				}
+
+				TimeZone timeZone = TimeZone.getTimeZone("UTC");
+
+				DateFormat dateFormat = new SimpleDateFormat(
+					"yyyy-MM-dd'T'HH:mm'Z'");
+
+				dateFormat.setTimeZone(timeZone);
+
+				return dateFormat.format(date);
+			};
+
+			_representor._addString(key, dateFunction.andThen(formatFunction));
 
 			return this;
 		}
