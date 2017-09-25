@@ -17,6 +17,8 @@ package com.liferay.vulcan.architect.jaxrs.json.internal.writer;
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.google.gson.JsonObject;
+
 import com.liferay.vulcan.architect.alias.BinaryFunction;
 import com.liferay.vulcan.architect.error.VulcanDeveloperError;
 import com.liferay.vulcan.architect.error.VulcanDeveloperError.MustHaveProvider;
@@ -47,8 +49,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import javax.json.JsonObject;
 
 import javax.servlet.http.HttpServletRequest;
 

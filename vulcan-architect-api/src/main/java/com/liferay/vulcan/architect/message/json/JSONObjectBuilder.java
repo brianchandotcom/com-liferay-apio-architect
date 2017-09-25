@@ -16,11 +16,11 @@ package com.liferay.vulcan.architect.message.json;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.google.gson.JsonObject;
+
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import javax.json.JsonObject;
 
 /**
  * Use instances of this builder to create JSON objects.

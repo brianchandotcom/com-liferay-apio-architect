@@ -2,6 +2,8 @@ Bundle-Name: Liferay Vulcan Architect API
 Bundle-SymbolicName: com.liferay.vulcan.architect.api
 Bundle-Version: 1.0.0
 Export-Package:\
+	com.google.gson.*,\
+	\
 	com.liferay.vulcan.architect.alias,\
 	com.liferay.vulcan.architect.consumer,\
 	com.liferay.vulcan.architect.converter,\

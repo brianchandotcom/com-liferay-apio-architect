@@ -17,6 +17,8 @@ package com.liferay.vulcan.architect.jaxrs.json.internal.writer;
 import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.google.gson.JsonObject;
+
 import com.liferay.vulcan.architect.alias.BinaryFunction;
 import com.liferay.vulcan.architect.consumer.TriConsumer;
 import com.liferay.vulcan.architect.jaxrs.json.internal.JSONObjectBuilderImpl;
@@ -51,8 +53,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.json.JsonObject;
 
 import javax.servlet.http.HttpServletRequest;
 
