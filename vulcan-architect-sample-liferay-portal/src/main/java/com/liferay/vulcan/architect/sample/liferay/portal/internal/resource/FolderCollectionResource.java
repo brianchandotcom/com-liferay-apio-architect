@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.architect.pagination.PageItems;
 import com.liferay.vulcan.architect.pagination.Pagination;
@@ -34,10 +35,14 @@ import com.liferay.vulcan.architect.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.architect.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.architect.result.Try;
 
+import java.text.DateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -62,20 +67,33 @@ public class FolderCollectionResource
 	public Representor<DLFolder, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<DLFolder, LongIdentifier> representorBuilder) {
 
+		Function<Date, String> formatFunction = date -> {
+			if (date == null) {
+				return null;
+			}
+
+			DateFormat dateFormat = DateUtil.getISO8601Format();
+
+			return dateFormat.format(date);
+		};
+
 		return representorBuilder.identifier(
 			dlFolder -> dlFolder::getFolderId
 		).addBidirectionalModel(
 			"group", "folders", Group.class, this::_getGroupOptional,
 			group -> (LongIdentifier)group::getGroupId
-		).addField(
-			"dateCreated", DLFolder::getCreateDate
-		).addField(
-			"dateModified", DLFolder::getModifiedDate
-		).addField(
-			"datePublished", DLFolder::getLastPublishDate
-		).addField(
+		).addStringField(
+			"dateCreated",
+			dlFolder -> formatFunction.apply(dlFolder.getCreateDate())
+		).addStringField(
+			"dateModified",
+			dlFolder -> formatFunction.apply(dlFolder.getCreateDate())
+		).addStringField(
+			"datePublished",
+			dlFolder -> formatFunction.apply(dlFolder.getCreateDate())
+		).addStringField(
 			"name", DLFolder::getName
-		).addField(
+		).addStringField(
 			"path", this::_getPath
 		).addType(
 			"Folder"

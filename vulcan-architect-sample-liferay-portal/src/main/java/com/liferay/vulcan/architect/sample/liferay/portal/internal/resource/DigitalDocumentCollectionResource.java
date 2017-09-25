@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.vulcan.architect.pagination.PageItems;
 import com.liferay.vulcan.architect.pagination.Pagination;
 import com.liferay.vulcan.architect.resource.CollectionResource;
@@ -36,8 +37,12 @@ import com.liferay.vulcan.architect.resource.identifier.LongIdentifier;
 
 import java.io.InputStream;
 
+import java.text.DateFormat;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
@@ -62,6 +67,16 @@ public class DigitalDocumentCollectionResource
 	public Representor<DLFileEntry, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<DLFileEntry, LongIdentifier> representorBuilder) {
 
+		Function<Date, String> formatFunction = date -> {
+			if (date == null) {
+				return null;
+			}
+
+			DateFormat dateFormat = DateUtil.getISO8601Format();
+
+			return dateFormat.format(date);
+		};
+
 		return representorBuilder.identifier(
 			dlFileEntry -> dlFileEntry::getFileEntryId
 		).addBidirectionalModel(
@@ -72,23 +87,25 @@ public class DigitalDocumentCollectionResource
 			"contentStream", this::_getInputStream
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional
-		).addField(
+		).addNumberField(
 			"contentSize", DLFileEntry::getSize
-		).addField(
-			"dateCreated", DLFileEntry::getCreateDate
-		).addField(
-			"dateModified", DLFileEntry::getModifiedDate
-		).addField(
-			"datePublished", DLFileEntry::getLastPublishDate
-		).addField(
+		).addStringField(
+			"dateCreated",
+			dlFileEntry -> formatFunction.apply(dlFileEntry.getCreateDate())
+		).addStringField(
+			"dateModified",
+			dlFileEntry -> formatFunction.apply(dlFileEntry.getModifiedDate())
+		).addStringField(
+			"datePublished",
+			dlFileEntry -> formatFunction.apply(
+				dlFileEntry.getLastPublishDate())
+		).addStringField(
 			"fileFormat", DLFileEntry::getMimeType
-		).addField(
-			"folderId", DLFileEntry::getFolderId
-		).addField(
+		).addStringField(
 			"headline", DLFileEntry::getTitle
-		).addField(
+		).addStringField(
 			"name", DLFileEntry::getName
-		).addField(
+		).addStringField(
 			"text", DLFileEntry::getDescription
 		).addType(
 			"MediaObject"

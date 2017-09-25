@@ -73,7 +73,7 @@ public class PersonCollectionResource
 	public Representor<User, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<User, LongIdentifier> representorBuilder) {
 
-		Function<User, Object> birthDateFunction = user -> {
+		Function<User, String> birthDateFunction = user -> {
 			Try<DateFormat> dateFormatTry = Try.success(
 				DateUtil.getISO8601Format());
 
@@ -86,17 +86,17 @@ public class PersonCollectionResource
 
 		return representorBuilder.identifier(
 			user -> user::getUserId
-		).addField(
+		).addStringField(
 			"additionalName", User::getMiddleName
-		).addField(
+		).addStringField(
 			"alternateName", User::getScreenName
-		).addField(
+		).addStringField(
 			"birthDate", birthDateFunction
-		).addField(
+		).addStringField(
 			"email", User::getEmailAddress
-		).addField(
+		).addStringField(
 			"familyName", User::getLastName
-		).addField(
+		).addStringField(
 			"gender",
 			user -> {
 				Try<Boolean> booleanTry = Try.fromFallible(user::isMale);
@@ -107,11 +107,11 @@ public class PersonCollectionResource
 					null
 				);
 			}
-		).addField(
+		).addStringField(
 			"givenName", User::getFirstName
-		).addField(
+		).addStringField(
 			"jobTitle", User::getJobTitle
-		).addField(
+		).addStringField(
 			"name", User::getFullName
 		).addType(
 			"Person"

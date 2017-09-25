@@ -76,7 +76,7 @@ public class WebPageElementCollectionResource
 	public Representor<JournalArticle, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<JournalArticle, LongIdentifier> representorBuilder) {
 
-		Function<Date, Object> formatFunction = date -> {
+		Function<Date, String> formatFunction = date -> {
 			if (date == null) {
 				return null;
 			}
@@ -93,30 +93,30 @@ public class WebPageElementCollectionResource
 			group -> (LongIdentifier)group::getGroupId
 		).addEmbeddedModel(
 			"creator", User.class, this::_getUserOptional
-		).addField(
+		).addLinkedModel(
+			"author", User.class, this::_getUserOptional
+		).addStringField(
 			"dateCreated",
 			journalArticle -> formatFunction.apply(
 				journalArticle.getCreateDate())
-		).addField(
+		).addStringField(
 			"dateModified",
 			journalArticle -> formatFunction.apply(
 				journalArticle.getModifiedDate())
-		).addField(
+		).addStringField(
 			"datePublished",
 			journalArticle -> formatFunction.apply(
 				journalArticle.getLastPublishDate())
-		).addField(
+		).addStringField(
 			"description", JournalArticle::getDescription
-		).addField(
+		).addStringField(
 			"lastReviewed",
 			journalArticle -> formatFunction.apply(
 				journalArticle.getReviewDate())
-		).addField(
+		).addStringField(
 			"text", JournalArticle::getContent
-		).addField(
+		).addStringField(
 			"title", JournalArticle::getTitle
-		).addLinkedModel(
-			"author", User.class, this::_getUserOptional
 		).addType(
 			"WebPageElement"
 		).build();

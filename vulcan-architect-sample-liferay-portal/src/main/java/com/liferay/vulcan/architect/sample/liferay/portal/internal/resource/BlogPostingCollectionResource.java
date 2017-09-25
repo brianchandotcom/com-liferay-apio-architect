@@ -81,7 +81,7 @@ public class BlogPostingCollectionResource
 	public Representor<BlogsEntry, LongIdentifier> buildRepresentor(
 		RepresentorBuilder<BlogsEntry, LongIdentifier> representorBuilder) {
 
-		Function<Date, Object> formatFunction = date -> {
+		Function<Date, String> formatFunction = date -> {
 			if (date == null) {
 				return null;
 			}
@@ -101,34 +101,34 @@ public class BlogPostingCollectionResource
 			this::_getAggregateRatingOptional
 		).addEmbeddedModel(
 			"creator", User.class, this::_getUserOptional
-		).addField(
-			"alternativeHeadline", BlogsEntry::getSubtitle
-		).addField(
-			"articleBody", BlogsEntry::getContent
-		).addField(
-			"createDate",
-			blogsEntry -> formatFunction.apply(blogsEntry.getCreateDate())
-		).addField(
-			"description", BlogsEntry::getDescription
-		).addField(
-			"displayDate",
-			blogsEntry -> formatFunction.apply(blogsEntry.getDisplayDate())
-		).addField(
-			"fileFormat", blogsEntry -> "text/html"
-		).addField(
-			"headline", BlogsEntry::getTitle
-		).addField(
-			"modifiedDate",
-			blogsEntry -> formatFunction.apply(blogsEntry.getModifiedDate())
-		).addField(
-			"publishedDate",
-			blogsEntry -> formatFunction.apply(blogsEntry.getLastPublishDate())
 		).addLink(
 			"license", "https://creativecommons.org/licenses/by/4.0"
 		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
 		).addRelatedCollection(
 			"comment", Comment.class, CommentableIdentifier::create
+		).addStringField(
+			"alternativeHeadline", BlogsEntry::getSubtitle
+		).addStringField(
+			"articleBody", BlogsEntry::getContent
+		).addStringField(
+			"createDate",
+			blogsEntry -> formatFunction.apply(blogsEntry.getCreateDate())
+		).addStringField(
+			"description", BlogsEntry::getDescription
+		).addStringField(
+			"displayDate",
+			blogsEntry -> formatFunction.apply(blogsEntry.getDisplayDate())
+		).addStringField(
+			"fileFormat", blogsEntry -> "text/html"
+		).addStringField(
+			"headline", BlogsEntry::getTitle
+		).addStringField(
+			"modifiedDate",
+			blogsEntry -> formatFunction.apply(blogsEntry.getModifiedDate())
+		).addStringField(
+			"publishedDate",
+			blogsEntry -> formatFunction.apply(blogsEntry.getLastPublishDate())
 		).addType(
 			"BlogPosting"
 		).build();

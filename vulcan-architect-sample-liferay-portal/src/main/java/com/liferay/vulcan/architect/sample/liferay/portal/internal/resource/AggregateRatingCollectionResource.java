@@ -46,13 +46,13 @@ public class AggregateRatingCollectionResource
 
 		return representorBuilder.identifier(
 			AggregateRating::getAggregateRatingIdentifier
-		).addField(
+		).addNumberField(
 			"bestRating", aggregateRating -> 1
-		).addField(
+		).addNumberField(
 			"ratingCount", AggregateRating::getRatingCount
-		).addField(
+		).addNumberField(
 			"ratingValue", AggregateRating::getRatingValue
-		).addField(
+		).addNumberField(
 			"worstRating", aggregateRating -> 0
 		).addType(
 			"AggregateRating"
