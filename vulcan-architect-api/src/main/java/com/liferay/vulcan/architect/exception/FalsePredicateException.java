@@ -15,6 +15,11 @@
 package com.liferay.vulcan.architect.exception;
 
 /**
+ * This exception will be returned inside a {@link
+ * com.liferay.vulcan.architect.result.Try} when {@link
+ * com.liferay.vulcan.architect.result.Try#filter(Predicate)} predicate returns
+ * {@code false}.
+ *
  * @author Alejandro Hernández
  * @review
  */
