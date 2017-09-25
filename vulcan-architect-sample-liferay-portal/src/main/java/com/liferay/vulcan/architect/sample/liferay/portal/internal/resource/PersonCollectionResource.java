@@ -242,14 +242,12 @@ public class PersonCollectionResource
 		String emailAddress = (String)body.get("email");
 		String firstName = (String)body.get("givenName");
 		String lastName = (String)body.get("familyName");
-		String birthDateString = (String)body.get("birthDate");
 
 		Supplier<BadRequestException> invalidBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(screenName) || Validator.isNull(emailAddress) ||
-			Validator.isNull(firstName) || Validator.isNull(lastName) ||
-			Validator.isNull(birthDateString)) {
+			Validator.isNull(firstName) || Validator.isNull(lastName)) {
 
 			throw invalidBodyExceptionSupplier.get();
 		}
