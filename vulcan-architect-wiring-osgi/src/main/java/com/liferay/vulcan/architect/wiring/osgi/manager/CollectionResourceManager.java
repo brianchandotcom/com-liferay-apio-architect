@@ -223,7 +223,7 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 		Class<? extends CollectionResource> resourceClass =
 			collectionResource.getClass();
 
-		Try<Class<U>> classTry = GenericUtil.getGenericClassTry(
+		Try<Class<U>> classTry = GenericUtil.getGenericTypeArgumentTry(
 			resourceClass, CollectionResource.class, 1);
 
 		return classTry.orElseThrow(

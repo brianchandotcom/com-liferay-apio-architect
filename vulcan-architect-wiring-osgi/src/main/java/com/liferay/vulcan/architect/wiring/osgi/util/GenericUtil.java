@@ -29,13 +29,52 @@ import java.lang.reflect.Type;
  */
 public class GenericUtil {
 
-	public static <T, S> Try<Class<S>> getGenericClassTry(
+	/**
+	 * Returns the {@code Class} of the {@code TypeArgument} located in the
+	 * first position of a {@code Class}.
+	 *
+	 * @param  clazz the class from which we want to extract the {@code
+	 *         TypeArgument}.
+	 * @return the {@code Class} of the {@code TypeArgument} located in the
+	 *         first position of a {@code Class}.
+	 * @review
+	 */
+	public static <T, S> Try<Class<S>> getFirstGenericTypeArgumentTry(
 		Class<?> clazz, Class<T> interfaceClass) {
 
-		return getGenericClassTry(clazz, interfaceClass, 0);
+		return getGenericTypeArgumentTry(clazz, interfaceClass, 0);
 	}
 
-	public static <T, S> Try<Class<S>> getGenericClassTry(
+	/**
+	 * Returns the {@code Class} of the {@code TypeArgument} located in the
+	 * first position of a {@code Type}.
+	 *
+	 * @param  type the type from which we want to extract the {@code
+	 *         TypeArgument}.
+	 * @param  clazz the generic class of the {@code Type}.
+	 * @return the {@code Class} of the {@code TypeArgument} located in the
+	 *         first position of a {@code Type}.
+	 * @review
+	 */
+	public static <T, S> Try<Class<S>> getFirstGenericTypeArgumentTry(
+		Type type, Class<T> clazz) {
+
+		return getGenericTypeArgumentTry(type, clazz, 0);
+	}
+
+	/**
+	 * Returns the {@code Class} of the {@code TypeArgument} located in the nth
+	 * position of a {@code Class}.
+	 *
+	 * @param  clazz the class from which we want to extract the {@code
+	 *         TypeArgument}.
+	 * @param  position the {@code TypeArgument} position that we want to
+	 *         obtain.
+	 * @return the {@code Class} of the {@code TypeArgument} located in the nth
+	 *         position of a {@code Class}.
+	 * @review
+	 */
+	public static <T, S> Try<Class<S>> getGenericTypeArgumentTry(
 		Class<?> clazz, Class<T> interfaceClass, int position) {
 
 		Type[] genericInterfaces = clazz.getGenericInterfaces();
@@ -46,22 +85,29 @@ public class GenericUtil {
 
 		for (Type genericInterface : genericInterfaces) {
 			classTry = classTry.recoverWith(
-				throwable -> getGenericClassTry(
+				throwable -> getGenericTypeArgumentTry(
 					genericInterface, interfaceClass, position));
 		}
 
 		return classTry.recoverWith(
-			throwable -> getGenericClassTry(
+			throwable -> getGenericTypeArgumentTry(
 				clazz.getSuperclass(), interfaceClass, position));
 	}
 
-	public static <T, S> Try<Class<S>> getGenericClassTry(
-		Type type, Class<T> clazz) {
-
-		return getGenericClassTry(type, clazz, 0);
-	}
-
-	public static <T, S> Try<Class<S>> getGenericClassTry(
+	/**
+	 * Returns the {@code Class} of the {@code TypeArgument} located in the nth
+	 * position of a {@code Type}.
+	 *
+	 * @param  type the type from which we want to extract the {@code
+	 *         TypeArgument}.
+	 * @param  clazz the generic class of the {@code Type}.
+	 * @param  position the {@code TypeArgument} position that we want to
+	 *         obtain.
+	 * @return the {@code Class} of the {@code TypeArgument} located in the nth
+	 *         position of a {@code Type}.
+	 * @review
+	 */
+	public static <T, S> Try<Class<S>> getGenericTypeArgumentTry(
 		Type type, Class<T> clazz, int position) {
 
 		Try<Type> typeTry = Try.success(type);

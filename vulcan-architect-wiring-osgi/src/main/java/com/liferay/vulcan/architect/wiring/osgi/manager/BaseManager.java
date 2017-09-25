@@ -179,7 +179,7 @@ public abstract class BaseManager<T> {
 	private <U> Class<U> _getGenericClass(T service, Class<T> interfaceClass) {
 		Class<?> serviceClass = service.getClass();
 
-		Try<Class<U>> classTry = GenericUtil.getGenericClassTry(
+		Try<Class<U>> classTry = GenericUtil.getFirstGenericTypeArgumentTry(
 			serviceClass, interfaceClass);
 
 		return classTry.orElseThrow(

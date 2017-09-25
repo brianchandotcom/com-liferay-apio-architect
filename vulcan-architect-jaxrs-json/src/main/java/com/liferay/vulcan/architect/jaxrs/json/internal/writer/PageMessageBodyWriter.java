@@ -93,8 +93,8 @@ public class PageMessageBodyWriter<T>
 		Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
-		Try<Class<Object>> classTry = GenericUtil.getGenericClassTry(
-			genericType, Try.class);
+		Try<Class<Object>> classTry =
+			GenericUtil.getFirstGenericTypeArgumentTry(genericType, Try.class);
 
 		return classTry.filter(
 			Page.class::equals
