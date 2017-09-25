@@ -113,7 +113,7 @@ public class CommentCollectionResource
 		String content = (String)body.get("text");
 
 		if (Validator.isNull(content)) {
-			throw new BadRequestException("Incorrect body");
+			throw new BadRequestException("Invalid body");
 		}
 
 		Function<String, ServiceContext> createServiceContextFunction =
@@ -229,7 +229,7 @@ public class CommentCollectionResource
 		String content = (String)body.get("text");
 
 		if (Validator.isNull(content)) {
-			throw new BadRequestException("Incorrect body");
+			throw new BadRequestException("Invalid body");
 		}
 
 		Function<String, ServiceContext> createServiceContextFunction =
