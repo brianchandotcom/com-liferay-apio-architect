@@ -137,9 +137,9 @@ public class FolderCollectionResource
 		return dlFolderTry.getUnchecked();
 	}
 
-	private void _deleteDLFolder(LongIdentifier dlFolderLongerIdentifier) {
+	private void _deleteDLFolder(LongIdentifier dlFolderLongIdentifier) {
 		try {
-			_dlFolderService.deleteFolder(dlFolderLongerIdentifier.getId());
+			_dlFolderService.deleteFolder(dlFolderLongIdentifier.getId());
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
