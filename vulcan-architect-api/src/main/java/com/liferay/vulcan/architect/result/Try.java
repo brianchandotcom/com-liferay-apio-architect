@@ -163,6 +163,7 @@ public abstract class Try<T> {
 	 * Returns the value T on success or throws the cause of the failure.
 	 *
 	 * @return T if success case, throws {@code Exception} otherwise.
+	 * @throws Exception if this is a {@code Failure}.
 	 * @review
 	 */
 	public abstract T get() throws Exception;
