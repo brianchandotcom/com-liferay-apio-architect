@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.architect.jaxrs.json.internal;
+package com.liferay.vulcan.architect.liferay.portal.internal.provider;
 
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.StringPool;
@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Javier Gamarra
  * @review
  */
-@Component(immediate = true, service = ServerURLProvider.class)
+@Component(immediate = true)
 public class ServerURLProviderImpl implements ServerURLProvider {
 
 	/**
