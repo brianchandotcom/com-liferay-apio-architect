@@ -69,13 +69,13 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public List<RelatedModel<T, ?>> getEmbeddedRelatedModels() {
-			return _embeddedRelatedModels;
+		public Map<String, Function<T, Boolean>> getBooleanFieldFunctions() {
+			return _booleanFieldFunctions;
 		}
 
 		@Override
-		public Map<String, Function<T, Object>> getFieldFunctions() {
-			return _fieldFunctions;
+		public List<RelatedModel<T, ?>> getEmbeddedRelatedModels() {
+			return _embeddedRelatedModels;
 		}
 
 		@Override
@@ -99,6 +99,11 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
+		public Map<String, Function<T, Number>> getNumberFieldFunctions() {
+			return _numberFieldFunctions;
+		}
+
+		@Override
 		public Stream<RelatedCollection<T, ?>> getRelatedCollections() {
 			Stream<List<RelatedCollection<T, ?>>> stream = Stream.of(
 				_relatedCollections, _relatedCollectionsSupplier.get());
@@ -111,6 +116,11 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
+		public Map<String, Function<T, String>> getStringFieldFunctions() {
+			return _stringFieldFunctions;
+		}
+
+		@Override
 		public List<String> getTypes() {
 			return _types;
 		}
@@ -119,16 +129,18 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 			_binaryFunctions.put(key, binaryFunction);
 		}
 
+		private void _addBooleanField(
+			String key, Function<T, Boolean> fieldFunction) {
+
+			_booleanFieldFunctions.put(key, fieldFunction);
+		}
+
 		private <S> void _addEmbeddedModel(
 			String key, Class<S> modelClass,
 			Function<T, Optional<S>> modelFunction) {
 
 			_embeddedRelatedModels.add(
 				new RelatedModel<>(key, modelClass, modelFunction));
-		}
-
-		private void _addField(String key, Function<T, Object> fieldFunction) {
-			_fieldFunctions.put(key, fieldFunction);
 		}
 
 		private void _addLink(String key, String url) {
@@ -143,6 +155,12 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 				new RelatedModel<>(key, modelClass, modelFunction));
 		}
 
+		private void _addNumberField(
+			String key, Function<T, Number> fieldFunction) {
+
+			_numberFieldFunctions.put(key, fieldFunction);
+		}
+
 		private <S> void _addRelatedCollection(
 			String key, Class<S> modelClass,
 			Function<T, Identifier> identifierFunction) {
@@ -151,22 +169,32 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 				new RelatedCollection<>(key, modelClass, identifierFunction));
 		}
 
+		private void _addStringField(
+			String key, Function<T, String> fieldFunction) {
+
+			_stringFieldFunctions.put(key, fieldFunction);
+		}
+
 		private void _addType(String type) {
 			_types.add(type);
 		}
 
 		private Map<String, BinaryFunction<T>> _binaryFunctions =
 			new HashMap<>();
+		private Map<String, Function<T, Boolean>> _booleanFieldFunctions =
+			new HashMap<>();
 		private List<RelatedModel<T, ?>> _embeddedRelatedModels =
 			new ArrayList<>();
-		private Map<String, Function<T, Object>> _fieldFunctions =
-			new HashMap<>();
 		private final Function<T, U> _identifierFunction;
 		private List<RelatedModel<T, ?>> _linkedRelatedModels =
 			new ArrayList<>();
 		private Map<String, String> _links = new HashMap<>();
+		private Map<String, Function<T, Number>> _numberFieldFunctions =
+			new HashMap<>();
 		private List<RelatedCollection<T, ?>> _relatedCollections =
 			new ArrayList<>();
+		private Map<String, Function<T, String>> _stringFieldFunctions =
+			new HashMap<>();
 		private List<String> _types = new ArrayList<>();
 
 	}
@@ -208,20 +236,20 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public <S> FirstStep<T, U> addEmbeddedModel(
-			String key, Class<S> modelClass,
-			Function<T, Optional<S>> modelFunction) {
+		public FirstStep<T, U> addBooleanField(
+			String key, Function<T, Boolean> fieldFunction) {
 
-			_representor._addEmbeddedModel(key, modelClass, modelFunction);
+			_representor._addBooleanField(key, fieldFunction);
 
 			return this;
 		}
 
 		@Override
-		public FirstStep<T, U> addField(
-			String key, Function<T, Object> fieldFunction) {
+		public <S> FirstStep<T, U> addEmbeddedModel(
+			String key, Class<S> modelClass,
+			Function<T, Optional<S>> modelFunction) {
 
-			_representor._addField(key, fieldFunction);
+			_representor._addEmbeddedModel(key, modelClass, modelFunction);
 
 			return this;
 		}
@@ -244,12 +272,30 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
+		public FirstStep<T, U> addNumberField(
+			String key, Function<T, Number> fieldFunction) {
+
+			_representor._addNumberField(key, fieldFunction);
+
+			return this;
+		}
+
+		@Override
 		public <S> FirstStep<T, U> addRelatedCollection(
 			String key, Class<S> modelClass,
 			Function<T, Identifier> identifierFunction) {
 
 			_representor._addRelatedCollection(
 				key, modelClass, identifierFunction);
+
+			return this;
+		}
+
+		@Override
+		public FirstStep<T, U> addStringField(
+			String key, Function<T, String> fieldFunction) {
+
+			_representor._addStringField(key, fieldFunction);
 
 			return this;
 		}
