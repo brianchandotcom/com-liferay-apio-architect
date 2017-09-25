@@ -69,8 +69,8 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public Map<String, Function<T, Boolean>> getBooleanFieldFunctions() {
-			return _booleanFieldFunctions;
+		public Map<String, Function<T, Boolean>> getBooleanFunctions() {
+			return _booleanFunctions;
 		}
 
 		@Override
@@ -99,8 +99,8 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public Map<String, Function<T, Number>> getNumberFieldFunctions() {
-			return _numberFieldFunctions;
+		public Map<String, Function<T, Number>> getNumberFunctions() {
+			return _numberFunctions;
 		}
 
 		@Override
@@ -116,8 +116,8 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public Map<String, Function<T, String>> getStringFieldFunctions() {
-			return _stringFieldFunctions;
+		public Map<String, Function<T, String>> getStringFunctions() {
+			return _stringFunctions;
 		}
 
 		@Override
@@ -129,10 +129,10 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 			_binaryFunctions.put(key, binaryFunction);
 		}
 
-		private void _addBooleanField(
+		private void _addBoolean(
 			String key, Function<T, Boolean> fieldFunction) {
 
-			_booleanFieldFunctions.put(key, fieldFunction);
+			_booleanFunctions.put(key, fieldFunction);
 		}
 
 		private <S> void _addEmbeddedModel(
@@ -155,10 +155,8 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 				new RelatedModel<>(key, modelClass, modelFunction));
 		}
 
-		private void _addNumberField(
-			String key, Function<T, Number> fieldFunction) {
-
-			_numberFieldFunctions.put(key, fieldFunction);
+		private void _addNumber(String key, Function<T, Number> fieldFunction) {
+			_numberFunctions.put(key, fieldFunction);
 		}
 
 		private <S> void _addRelatedCollection(
@@ -169,10 +167,8 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 				new RelatedCollection<>(key, modelClass, identifierFunction));
 		}
 
-		private void _addStringField(
-			String key, Function<T, String> fieldFunction) {
-
-			_stringFieldFunctions.put(key, fieldFunction);
+		private void _addString(String key, Function<T, String> fieldFunction) {
+			_stringFunctions.put(key, fieldFunction);
 		}
 
 		private void _addType(String type) {
@@ -181,7 +177,7 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 
 		private Map<String, BinaryFunction<T>> _binaryFunctions =
 			new HashMap<>();
-		private Map<String, Function<T, Boolean>> _booleanFieldFunctions =
+		private Map<String, Function<T, Boolean>> _booleanFunctions =
 			new HashMap<>();
 		private List<RelatedModel<T, ?>> _embeddedRelatedModels =
 			new ArrayList<>();
@@ -189,11 +185,11 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		private List<RelatedModel<T, ?>> _linkedRelatedModels =
 			new ArrayList<>();
 		private Map<String, String> _links = new HashMap<>();
-		private Map<String, Function<T, Number>> _numberFieldFunctions =
+		private Map<String, Function<T, Number>> _numberFunctions =
 			new HashMap<>();
 		private List<RelatedCollection<T, ?>> _relatedCollections =
 			new ArrayList<>();
-		private Map<String, Function<T, String>> _stringFieldFunctions =
+		private Map<String, Function<T, String>> _stringFunctions =
 			new HashMap<>();
 		private List<String> _types = new ArrayList<>();
 
@@ -236,10 +232,10 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public FirstStep<T, U> addBooleanField(
-			String key, Function<T, Boolean> fieldFunction) {
+		public FirstStep<T, U> addBoolean(
+			String key, Function<T, Boolean> booleanFunction) {
 
-			_representor._addBooleanField(key, fieldFunction);
+			_representor._addBoolean(key, booleanFunction);
 
 			return this;
 		}
@@ -272,10 +268,10 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public FirstStep<T, U> addNumberField(
-			String key, Function<T, Number> fieldFunction) {
+		public FirstStep<T, U> addNumber(
+			String key, Function<T, Number> numberFunction) {
 
-			_representor._addNumberField(key, fieldFunction);
+			_representor._addNumber(key, numberFunction);
 
 			return this;
 		}
@@ -292,10 +288,10 @@ public class RepresentorBuilderImpl<T, U extends Identifier>
 		}
 
 		@Override
-		public FirstStep<T, U> addStringField(
-			String key, Function<T, String> fieldFunction) {
+		public FirstStep<T, U> addString(
+			String key, Function<T, String> stringFunction) {
 
-			_representor._addStringField(key, fieldFunction);
+			_representor._addString(key, stringFunction);
 
 			return this;
 		}

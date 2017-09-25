@@ -81,12 +81,12 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * Use this method to provide information of a resource boolean field.
 		 *
 		 * @param  key name of the field.
-		 * @param  fieldFunction function used to obtain the field value.
+		 * @param  booleanFunction function used to obtain the boolean value.
 		 * @return builder's actual step.
 		 * @review
 		 */
-		public FirstStep<T, U> addBooleanField(
-			String key, Function<T, Boolean> fieldFunction);
+		public FirstStep<T, U> addBoolean(
+			String key, Function<T, Boolean> booleanFunction);
 
 		/**
 		 * Use this method to provide information of an embeddable related
@@ -130,12 +130,12 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * Use this method to provide information of a resource number field.
 		 *
 		 * @param  key name of the field.
-		 * @param  fieldFunction function used to obtain the field value.
+		 * @param  numberFunction function used to obtain the number value.
 		 * @return builder's actual step.
 		 * @review
 		 */
-		public FirstStep<T, U> addNumberField(
-			String key, Function<T, Number> fieldFunction);
+		public FirstStep<T, U> addNumber(
+			String key, Function<T, Number> numberFunction);
 
 		/**
 		 * Use this method to provide information of a related collection.
@@ -155,12 +155,12 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * Use this method to provide information of a resource string field.
 		 *
 		 * @param  key name of the field.
-		 * @param  fieldFunction function used to obtain the field value.
+		 * @param  stringFunction function used to obtain the string value.
 		 * @return builder's actual step.
 		 * @review
 		 */
-		public FirstStep<T, U> addStringField(
-			String key, Function<T, String> fieldFunction);
+		public FirstStep<T, U> addString(
+			String key, Function<T, String> stringFunction);
 
 		/**
 		 * Use this method to provide a type for this model. Multiple types are

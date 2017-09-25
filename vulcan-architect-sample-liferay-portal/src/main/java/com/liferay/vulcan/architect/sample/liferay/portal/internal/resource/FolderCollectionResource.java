@@ -82,18 +82,18 @@ public class FolderCollectionResource
 		).addBidirectionalModel(
 			"group", "folders", Group.class, this::_getGroupOptional,
 			group -> (LongIdentifier)group::getGroupId
-		).addStringField(
+		).addString(
 			"dateCreated",
 			dlFolder -> formatFunction.apply(dlFolder.getCreateDate())
-		).addStringField(
+		).addString(
 			"dateModified",
 			dlFolder -> formatFunction.apply(dlFolder.getCreateDate())
-		).addStringField(
+		).addString(
 			"datePublished",
 			dlFolder -> formatFunction.apply(dlFolder.getCreateDate())
-		).addStringField(
+		).addString(
 			"name", DLFolder::getName
-		).addStringField(
+		).addString(
 			"path", this::_getPath
 		).addType(
 			"Folder"

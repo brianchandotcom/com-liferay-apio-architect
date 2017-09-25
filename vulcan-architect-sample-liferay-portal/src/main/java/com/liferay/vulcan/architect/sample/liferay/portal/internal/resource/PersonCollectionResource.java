@@ -86,17 +86,17 @@ public class PersonCollectionResource
 
 		return representorBuilder.identifier(
 			user -> user::getUserId
-		).addStringField(
+		).addString(
 			"additionalName", User::getMiddleName
-		).addStringField(
+		).addString(
 			"alternateName", User::getScreenName
-		).addStringField(
+		).addString(
 			"birthDate", birthDateFunction
-		).addStringField(
+		).addString(
 			"email", User::getEmailAddress
-		).addStringField(
+		).addString(
 			"familyName", User::getLastName
-		).addStringField(
+		).addString(
 			"gender",
 			user -> {
 				Try<Boolean> booleanTry = Try.fromFallible(user::isMale);
@@ -107,11 +107,11 @@ public class PersonCollectionResource
 					null
 				);
 			}
-		).addStringField(
+		).addString(
 			"givenName", User::getFirstName
-		).addStringField(
+		).addString(
 			"jobTitle", User::getJobTitle
-		).addStringField(
+		).addString(
 			"name", User::getFullName
 		).addType(
 			"Person"

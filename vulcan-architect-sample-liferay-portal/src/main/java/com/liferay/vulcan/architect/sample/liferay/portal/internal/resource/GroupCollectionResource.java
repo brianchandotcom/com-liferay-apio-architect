@@ -65,9 +65,9 @@ public class GroupCollectionResource
 
 		return representorBuilder.identifier(
 			group -> group::getGroupId
-		).addStringField(
+		).addString(
 			"name", group -> group.getName(Locale.US)
-		).addStringField(
+		).addString(
 			"groupType", Group::getTypeLabel
 		).addType(
 			"Group"

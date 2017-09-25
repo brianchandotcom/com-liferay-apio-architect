@@ -107,26 +107,26 @@ public class BlogPostingCollectionResource
 			"author", User.class, this::_getUserOptional
 		).addRelatedCollection(
 			"comment", Comment.class, CommentableIdentifier::create
-		).addStringField(
+		).addString(
 			"alternativeHeadline", BlogsEntry::getSubtitle
-		).addStringField(
+		).addString(
 			"articleBody", BlogsEntry::getContent
-		).addStringField(
+		).addString(
 			"createDate",
 			blogsEntry -> formatFunction.apply(blogsEntry.getCreateDate())
-		).addStringField(
+		).addString(
 			"description", BlogsEntry::getDescription
-		).addStringField(
+		).addString(
 			"displayDate",
 			blogsEntry -> formatFunction.apply(blogsEntry.getDisplayDate())
-		).addStringField(
+		).addString(
 			"fileFormat", blogsEntry -> "text/html"
-		).addStringField(
+		).addString(
 			"headline", BlogsEntry::getTitle
-		).addStringField(
+		).addString(
 			"modifiedDate",
 			blogsEntry -> formatFunction.apply(blogsEntry.getModifiedDate())
-		).addStringField(
+		).addString(
 			"publishedDate",
 			blogsEntry -> formatFunction.apply(blogsEntry.getLastPublishDate())
 		).addType(

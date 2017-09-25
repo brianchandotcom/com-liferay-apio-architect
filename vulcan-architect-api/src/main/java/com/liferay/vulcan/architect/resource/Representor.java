@@ -55,7 +55,7 @@ public interface Representor<T, U extends Identifier> {
 	 * @return the field names and field functions.
 	 * @review
 	 */
-	public Map<String, Function<T, Boolean>> getBooleanFieldFunctions();
+	public Map<String, Function<T, Boolean>> getBooleanFunctions();
 
 	/**
 	 * Returns the embedded related models.
@@ -105,7 +105,7 @@ public interface Representor<T, U extends Identifier> {
 	 * @return the field names and field functions.
 	 * @review
 	 */
-	public Map<String, Function<T, Number>> getNumberFieldFunctions();
+	public Map<String, Function<T, Number>> getNumberFunctions();
 
 	/**
 	 * Returns the related collections.
@@ -122,7 +122,7 @@ public interface Representor<T, U extends Identifier> {
 	 * @return the field names and field functions.
 	 * @review
 	 */
-	public Map<String, Function<T, String>> getStringFieldFunctions();
+	public Map<String, Function<T, String>> getStringFunctions();
 
 	/**
 	 * Returns the types.

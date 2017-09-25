@@ -87,25 +87,25 @@ public class DigitalDocumentCollectionResource
 			"contentStream", this::_getInputStream
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional
-		).addNumberField(
+		).addNumber(
 			"contentSize", DLFileEntry::getSize
-		).addStringField(
+		).addString(
 			"dateCreated",
 			dlFileEntry -> formatFunction.apply(dlFileEntry.getCreateDate())
-		).addStringField(
+		).addString(
 			"dateModified",
 			dlFileEntry -> formatFunction.apply(dlFileEntry.getModifiedDate())
-		).addStringField(
+		).addString(
 			"datePublished",
 			dlFileEntry -> formatFunction.apply(
 				dlFileEntry.getLastPublishDate())
-		).addStringField(
+		).addString(
 			"fileFormat", DLFileEntry::getMimeType
-		).addStringField(
+		).addString(
 			"headline", DLFileEntry::getTitle
-		).addStringField(
+		).addString(
 			"name", DLFileEntry::getName
-		).addStringField(
+		).addString(
 			"text", DLFileEntry::getDescription
 		).addType(
 			"MediaObject"

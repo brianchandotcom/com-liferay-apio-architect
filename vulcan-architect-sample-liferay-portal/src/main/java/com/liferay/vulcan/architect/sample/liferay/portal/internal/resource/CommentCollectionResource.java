@@ -76,7 +76,7 @@ public class CommentCollectionResource
 			comment -> comment::getCommentId
 		).addEmbeddedModel(
 			"author", User.class, this::_getUserOptional
-		).addStringField(
+		).addString(
 			"text", Comment::getBody
 		).addType(
 			"Comment"

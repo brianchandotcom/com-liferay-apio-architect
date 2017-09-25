@@ -95,27 +95,27 @@ public class WebPageElementCollectionResource
 			"creator", User.class, this::_getUserOptional
 		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
-		).addStringField(
+		).addString(
 			"dateCreated",
 			journalArticle -> formatFunction.apply(
 				journalArticle.getCreateDate())
-		).addStringField(
+		).addString(
 			"dateModified",
 			journalArticle -> formatFunction.apply(
 				journalArticle.getModifiedDate())
-		).addStringField(
+		).addString(
 			"datePublished",
 			journalArticle -> formatFunction.apply(
 				journalArticle.getLastPublishDate())
-		).addStringField(
+		).addString(
 			"description", JournalArticle::getDescription
-		).addStringField(
+		).addString(
 			"lastReviewed",
 			journalArticle -> formatFunction.apply(
 				journalArticle.getReviewDate())
-		).addStringField(
+		).addString(
 			"text", JournalArticle::getContent
-		).addStringField(
+		).addString(
 			"title", JournalArticle::getTitle
 		).addType(
 			"WebPageElement"

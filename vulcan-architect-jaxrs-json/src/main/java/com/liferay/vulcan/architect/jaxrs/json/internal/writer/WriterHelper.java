@@ -294,7 +294,7 @@ public class WriterHelper {
 			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
-			Representor::getBooleanFieldFunctions
+			Representor::getBooleanFunctions
 		).ifPresent(
 			fieldFunctions -> {
 				for (String field : fieldFunctions.keySet()) {
@@ -399,7 +399,7 @@ public class WriterHelper {
 			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
-			Representor::getNumberFieldFunctions
+			Representor::getNumberFunctions
 		).ifPresent(
 			fieldFunctions -> {
 				for (String field : fieldFunctions.keySet()) {
@@ -566,7 +566,7 @@ public class WriterHelper {
 			_collectionResourceManager.getRepresentorOptional(modelClass);
 
 		optional.map(
-			Representor::getStringFieldFunctions
+			Representor::getStringFunctions
 		).ifPresent(
 			fieldFunctions -> {
 				for (String field : fieldFunctions.keySet()) {
