@@ -153,7 +153,7 @@ public class PersonCollectionResource
 		String birthDateString = (String)body.get("birthDate");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
-			() -> new BadRequestException("Incorrect body");
+			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(screenName) || Validator.isNull(emailAddress) ||
 			Validator.isNull(firstName) || Validator.isNull(lastName) ||
@@ -244,7 +244,7 @@ public class PersonCollectionResource
 		String birthDateString = (String)body.get("birthDate");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
-			() -> new BadRequestException("Incorrect body");
+			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(screenName) || Validator.isNull(emailAddress) ||
 			Validator.isNull(firstName) || Validator.isNull(lastName) ||

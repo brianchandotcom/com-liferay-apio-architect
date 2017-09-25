@@ -111,7 +111,7 @@ public class FolderCollectionResource
 		String name = (String)body.get("name");
 
 		if (Validator.isNull(name)) {
-			throw new BadRequestException("Incorrect body");
+			throw new BadRequestException("Invalid body");
 		}
 
 		Try<DLFolder> dlFolderTry = Try.fromFallible(
@@ -126,7 +126,7 @@ public class FolderCollectionResource
 		String description = (String)body.get("description");
 
 		if (Validator.isNull(description)) {
-			throw new BadRequestException("Incorrect body");
+			throw new BadRequestException("Invalid body");
 		}
 
 		dlFolderTry = Try.fromFallible(
@@ -206,13 +206,13 @@ public class FolderCollectionResource
 		String name = (String)body.get("name");
 
 		if (Validator.isNull(name)) {
-			throw new BadRequestException("Incorrect body");
+			throw new BadRequestException("Invalid body");
 		}
 
 		String description = (String)body.get("description");
 
 		if (Validator.isNull(description)) {
-			throw new BadRequestException("Incorrect body");
+			throw new BadRequestException("Invalid body");
 		}
 
 		Try<DLFolder> dlFolderTry = Try.fromFallible(

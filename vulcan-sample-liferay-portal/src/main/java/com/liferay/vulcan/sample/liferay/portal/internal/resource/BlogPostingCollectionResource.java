@@ -165,7 +165,7 @@ public class BlogPostingCollectionResource
 		String displayDateString = (String)body.get("displayDate");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
-			() -> new BadRequestException("Incorrect body");
+			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(title) || Validator.isNull(subtitle) ||
 			Validator.isNull(description) || Validator.isNull(content) ||
@@ -291,7 +291,7 @@ public class BlogPostingCollectionResource
 		String displayDateString = (String)body.get("displayDate");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
-			() -> new BadRequestException("Incorrect body");
+			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(title) || Validator.isNull(subtitle) ||
 			Validator.isNull(description) || Validator.isNull(content) ||

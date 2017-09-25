@@ -102,7 +102,7 @@ public class GroupCollectionResource
 		String name = (String)body.get("name");
 
 		if (Validator.isNull(name)) {
-			throw new BadRequestException("Incorrect body");
+			throw new BadRequestException("Invalid body");
 		}
 
 		Try<Group> groupTry = Try.fromFallible(
@@ -153,7 +153,7 @@ public class GroupCollectionResource
 		String name = (String)body.get("name");
 
 		if (Validator.isNull(name)) {
-			throw new BadRequestException("Incorrect body");
+			throw new BadRequestException("Invalid body");
 		}
 
 		Try<Group> groupTry = Try.fromFallible(
