@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.model.User;
  * @author Jorge Ferrer
  * @review
  */
+@FunctionalInterface
 public interface CurrentUser {
 
 	/**

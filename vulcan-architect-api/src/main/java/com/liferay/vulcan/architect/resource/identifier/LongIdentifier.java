@@ -21,6 +21,7 @@ package com.liferay.vulcan.architect.resource.identifier;
  * @author Alejandro Hernández
  * @review
  */
+@FunctionalInterface
 public interface LongIdentifier extends Identifier {
 
 	/**
