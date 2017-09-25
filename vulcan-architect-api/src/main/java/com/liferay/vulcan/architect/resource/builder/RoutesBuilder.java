@@ -44,7 +44,7 @@ import java.util.function.Function;
 
 /**
  * Use instances of this builder to create {@link Routes} of a {@link
- * CollectionResource}.
+ * com.liferay.vulcan.architect.resource.CollectionResource}.
  *
  * @author Alejandro Hernández
  */

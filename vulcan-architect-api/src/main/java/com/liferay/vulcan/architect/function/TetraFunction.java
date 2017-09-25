@@ -21,7 +21,9 @@ import java.util.function.Function;
  * Represents a function that accepts four arguments and produces a result. This
  * is the four-arity specialization of {@link Function}.
  *
- * <p>This is a <a href="package-summary.html">functional interface</a> whose
+ * <p>This is a <a
+ * href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html">functional
+ * interface</a> whose
  * functional method is {@link #apply(Object, Object, Object, Object)}.
  *
  * @author Alejandro Hernández

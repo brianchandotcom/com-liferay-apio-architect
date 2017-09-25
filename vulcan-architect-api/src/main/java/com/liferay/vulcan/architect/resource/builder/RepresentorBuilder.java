@@ -66,7 +66,6 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * @param  key name of the binary resource
 		 * @param  binaryFunction function used to obtain the binaries.
 		 * @return builder's actual step.
-		 * @review
 		 */
 		public FirstStep<T, U> addBinary(
 			String key, BinaryFunction<T> binaryFunction);

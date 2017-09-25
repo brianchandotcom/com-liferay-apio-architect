@@ -22,7 +22,9 @@ import java.util.Objects;
  * java.util.function.Consumer}. Unlike most other functional interfaces, {@code
  * TriConsumer} is expected to operate via side-effects.
  *
- * <p>This is a <a href="package-summary.html">functional interface</a>
+ * <p>This is a <a
+ * href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html">functional
+ * interface</a>
  * whose functional method is {@link #accept(Object, Object, Object, Object,
  * Object)}.
  *
