@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.message.json;
 
+import aQute.bnd.annotation.ConsumerType;
+
 import com.liferay.vulcan.architect.list.FunctionalList;
 import com.liferay.vulcan.architect.pagination.Page;
 
@@ -45,6 +47,7 @@ import javax.ws.rs.core.HttpHeaders;
  * @author Jorge Ferrer
  * @review
  */
+@ConsumerType
 @SuppressWarnings("unused")
 public interface PageMessageMapper<T> {
 

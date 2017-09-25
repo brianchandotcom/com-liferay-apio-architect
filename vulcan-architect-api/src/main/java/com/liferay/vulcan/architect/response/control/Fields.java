@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.response.control;
 
+import aQute.bnd.annotation.ProviderType;
+
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -27,6 +29,7 @@ import java.util.function.Predicate;
  * @author Jorge Ferrer
  * @review
  */
+@ProviderType
 public interface Fields {
 
 	/**

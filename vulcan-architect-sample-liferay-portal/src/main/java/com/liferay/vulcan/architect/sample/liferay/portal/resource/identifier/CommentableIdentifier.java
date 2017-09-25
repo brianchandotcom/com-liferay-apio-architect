@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.sample.liferay.portal.resource.identifier;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.model.ClassedModel;
 import com.liferay.portal.kernel.model.GroupedModel;
 import com.liferay.vulcan.architect.resource.identifier.Identifier;
@@ -37,6 +39,7 @@ import com.liferay.vulcan.architect.resource.identifier.Identifier;
  * @author Alejandro Hernández
  * @review
  */
+@ProviderType
 public interface CommentableIdentifier extends Identifier {
 
 	/**

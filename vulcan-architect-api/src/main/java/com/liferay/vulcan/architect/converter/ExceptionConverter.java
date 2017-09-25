@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.converter;
 
+import aQute.bnd.annotation.ConsumerType;
+
 import com.liferay.vulcan.architect.result.APIError;
 
 /**
@@ -24,6 +26,7 @@ import com.liferay.vulcan.architect.result.APIError;
  * @author Alejandro Hernández
  * @review
  */
+@ConsumerType
 public interface ExceptionConverter<T extends Exception> {
 
 	/**

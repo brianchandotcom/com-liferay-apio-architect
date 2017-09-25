@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.resource.identifier.mapper;
 
+import aQute.bnd.annotation.ConsumerType;
+
 import com.liferay.vulcan.architect.resource.identifier.Identifier;
 import com.liferay.vulcan.architect.uri.Path;
 
@@ -35,6 +37,7 @@ import com.liferay.vulcan.architect.uri.Path;
  * @author Alejandro Hernández
  * @review
  */
+@ConsumerType
 public interface PathIdentifierMapper<T extends Identifier> {
 
 	/**

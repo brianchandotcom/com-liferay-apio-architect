@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.resource.builder;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.vulcan.architect.consumer.DecaConsumer;
 import com.liferay.vulcan.architect.consumer.EnneaConsumer;
 import com.liferay.vulcan.architect.consumer.HeptaConsumer;
@@ -49,6 +51,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @review
  */
+@ProviderType
 @SuppressWarnings("unused")
 public interface RoutesBuilder<T, U extends Identifier> {
 

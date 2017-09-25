@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.endpoint;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.vulcan.architect.pagination.Page;
 import com.liferay.vulcan.architect.pagination.SingleModel;
 import com.liferay.vulcan.architect.result.Try;
@@ -44,6 +46,7 @@ import javax.ws.rs.core.Response;
  * @author Jorge Ferrer
  * @review
  */
+@ProviderType
 public interface RootEndpoint {
 
 	/**

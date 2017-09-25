@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.resource.builder;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.vulcan.architect.alias.BinaryFunction;
 import com.liferay.vulcan.architect.resource.Representor;
 import com.liferay.vulcan.architect.resource.identifier.Identifier;
@@ -30,6 +32,7 @@ import java.util.function.Function;
  * @author Jorge Ferrer
  * @review
  */
+@ProviderType
 public interface RepresentorBuilder<T, U extends Identifier> {
 
 	/**

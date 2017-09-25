@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.provider;
 
+import aQute.bnd.annotation.ConsumerType;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Javier Gamarra
  * @review
  */
+@ConsumerType
 public interface ServerURLProvider {
 
 	/**

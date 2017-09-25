@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.resource;
 
+import aQute.bnd.annotation.ConsumerType;
+
 import com.liferay.vulcan.architect.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.architect.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.architect.resource.identifier.Identifier;
@@ -43,6 +45,7 @@ import com.liferay.vulcan.architect.resource.identifier.Identifier;
  * @see    RoutesBuilder
  * @review
  */
+@ConsumerType
 public interface CollectionResource<T, U extends Identifier> {
 
 	/**

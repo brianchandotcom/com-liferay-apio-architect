@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.resource;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.vulcan.architect.pagination.Page;
 import com.liferay.vulcan.architect.pagination.SingleModel;
 import com.liferay.vulcan.architect.resource.identifier.Identifier;
@@ -42,6 +44,7 @@ import java.util.function.Function;
  * @see    com.liferay.vulcan.architect.resource.builder.RoutesBuilder
  * @review
  */
+@ProviderType
 public interface Routes<T> {
 
 	/**

@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.uri;
 
+import aQute.bnd.annotation.ConsumerType;
+
 import com.liferay.vulcan.architect.pagination.Page;
 import com.liferay.vulcan.architect.pagination.SingleModel;
 
@@ -31,6 +33,7 @@ import com.liferay.vulcan.architect.pagination.SingleModel;
  * @author Jorge Ferrer
  * @review
  */
+@ConsumerType
 public interface CollectionResourceURITransformer {
 
 	/**

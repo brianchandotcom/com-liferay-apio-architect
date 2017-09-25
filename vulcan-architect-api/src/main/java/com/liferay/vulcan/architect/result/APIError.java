@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.result;
 
+import aQute.bnd.annotation.ProviderType;
+
 import java.util.Optional;
 
 /**
@@ -25,6 +27,7 @@ import java.util.Optional;
  * @author Alejandro Hernández
  * @review
  */
+@ProviderType
 public interface APIError {
 
 	/**

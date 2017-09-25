@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.architect.sample.liferay.portal.rating;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.vulcan.architect.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
 
 /**
@@ -23,6 +25,7 @@ import com.liferay.vulcan.architect.sample.liferay.portal.resource.identifier.Ag
  * @author Alejandro Hernández
  * @review
  */
+@ProviderType
 public interface AggregateRatingService {
 
 	/**
