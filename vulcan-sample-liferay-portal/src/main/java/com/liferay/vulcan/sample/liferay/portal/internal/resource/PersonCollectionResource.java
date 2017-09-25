@@ -152,14 +152,14 @@ public class PersonCollectionResource
 		boolean male = (boolean)body.get("male");
 		String birthDateString = (String)body.get("birthDate");
 
-		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
+		Supplier<BadRequestException> invalidBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(screenName) || Validator.isNull(emailAddress) ||
 			Validator.isNull(firstName) || Validator.isNull(lastName) ||
 			Validator.isNull(birthDateString)) {
 
-			throw incorrectBodyExceptionSupplier.get();
+			throw invalidBodyExceptionSupplier.get();
 		}
 
 		Calendar calendar = Calendar.getInstance();
@@ -170,7 +170,7 @@ public class PersonCollectionResource
 		Date birthDate = dateFormatTry.map(
 			dateFormat -> dateFormat.parse(birthDateString)
 		).mapFailMatching(
-			ParseException.class, incorrectBodyExceptionSupplier
+			ParseException.class, invalidBodyExceptionSupplier
 		).getUnchecked();
 
 		calendar.setTime(birthDate);
@@ -182,7 +182,7 @@ public class PersonCollectionResource
 		String jobTitle = (String)body.get("jobTitle");
 
 		if (Validator.isNull(jobTitle)) {
-			throw incorrectBodyExceptionSupplier.get();
+			throw invalidBodyExceptionSupplier.get();
 		}
 
 		Try<User> userTry = Try.fromFallible(
@@ -243,20 +243,20 @@ public class PersonCollectionResource
 		String lastName = (String)body.get("familyName");
 		String birthDateString = (String)body.get("birthDate");
 
-		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
+		Supplier<BadRequestException> invalidBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(screenName) || Validator.isNull(emailAddress) ||
 			Validator.isNull(firstName) || Validator.isNull(lastName) ||
 			Validator.isNull(birthDateString)) {
 
-			throw incorrectBodyExceptionSupplier.get();
+			throw invalidBodyExceptionSupplier.get();
 		}
 
 		String jobTitle = (String)body.get("jobTitle");
 
 		if (Validator.isNull(jobTitle)) {
-			throw incorrectBodyExceptionSupplier.get();
+			throw invalidBodyExceptionSupplier.get();
 		}
 
 		user.setPassword(password);

@@ -164,14 +164,14 @@ public class BlogPostingCollectionResource
 		String content = (String)body.get("articleBody");
 		String displayDateString = (String)body.get("displayDate");
 
-		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
+		Supplier<BadRequestException> invalidBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(title) || Validator.isNull(subtitle) ||
 			Validator.isNull(description) || Validator.isNull(content) ||
 			Validator.isNull(displayDateString)) {
 
-			throw incorrectBodyExceptionSupplier.get();
+			throw invalidBodyExceptionSupplier.get();
 		}
 
 		Calendar calendar = Calendar.getInstance();
@@ -182,7 +182,7 @@ public class BlogPostingCollectionResource
 		Date displayDate = dateFormatTry.map(
 			dateFormat -> dateFormat.parse(displayDateString)
 		).mapFailMatching(
-			ParseException.class, incorrectBodyExceptionSupplier
+			ParseException.class, invalidBodyExceptionSupplier
 		).getUnchecked();
 
 		calendar.setTime(displayDate);
@@ -290,14 +290,14 @@ public class BlogPostingCollectionResource
 		String content = (String)body.get("articleBody");
 		String displayDateString = (String)body.get("displayDate");
 
-		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
+		Supplier<BadRequestException> invalidBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(title) || Validator.isNull(subtitle) ||
 			Validator.isNull(description) || Validator.isNull(content) ||
 			Validator.isNull(displayDateString)) {
 
-			throw incorrectBodyExceptionSupplier.get();
+			throw invalidBodyExceptionSupplier.get();
 		}
 
 		Calendar calendar = Calendar.getInstance();
@@ -308,7 +308,7 @@ public class BlogPostingCollectionResource
 		Date displayDate = dateFormatTry.map(
 			dateFormat -> dateFormat.parse(displayDateString)
 		).mapFailMatching(
-			ParseException.class, incorrectBodyExceptionSupplier
+			ParseException.class, invalidBodyExceptionSupplier
 		).getUnchecked();
 
 		calendar.setTime(displayDate);
