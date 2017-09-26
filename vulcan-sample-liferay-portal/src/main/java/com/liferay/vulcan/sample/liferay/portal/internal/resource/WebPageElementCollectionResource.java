@@ -189,9 +189,9 @@ public class WebPageElementCollectionResource
 		serviceContext.setAddGuestPermissions(true);
 		serviceContext.setScopeGroupId(groupIdLongIdentifier.getId());
 
-		Try<Long> longTry = Try.fromFallible(() -> Long.valueOf(folderString));
+		Try<Long> folderIdLongTry = Try.fromFallible(() -> Long.valueOf(folderString));
 
-		long folderId = longTry.orElse(0L);
+		long folderId = folderIdLongTry.orElse(0L);
 
 		Map<Locale, String> titleMap = new HashMap<>();
 

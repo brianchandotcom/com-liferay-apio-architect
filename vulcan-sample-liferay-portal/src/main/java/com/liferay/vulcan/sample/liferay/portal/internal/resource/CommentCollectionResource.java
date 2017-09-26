@@ -119,14 +119,14 @@ public class CommentCollectionResource
 		Function<String, ServiceContext> createServiceContextFunction =
 			string -> new ServiceContext();
 
-		Try<Long> longTry = Try.fromFallible(
+		Try<Long> commentIdLongTry = Try.fromFallible(
 			() -> _commentManager.addComment(
 				user.getUserId(), commentableIdentifier.getGroupId(),
 				commentableIdentifier.getClassName(),
 				commentableIdentifier.getClassPK(), content,
 				createServiceContextFunction));
 
-		return longTry.map(
+		return commentIdLongTry.map(
 			_commentManager::fetchComment
 		).getUnchecked();
 	}
@@ -235,13 +235,13 @@ public class CommentCollectionResource
 		Function<String, ServiceContext> createServiceContextFunction =
 			string -> new ServiceContext();
 
-		Try<Long> longTry = Try.fromFallible(
+		Try<Long> commentIdLongTry = Try.fromFallible(
 			() -> _commentManager.updateComment(
 				comment.getUserId(), comment.getClassName(),
 				comment.getClassPK(), commentLongIdentifier.getId(),
 				StringPool.BLANK, content, createServiceContextFunction));
 
-		return longTry.map(
+		return commentIdLongTry.map(
 			_commentManager::fetchComment
 		).getUnchecked();
 	}
