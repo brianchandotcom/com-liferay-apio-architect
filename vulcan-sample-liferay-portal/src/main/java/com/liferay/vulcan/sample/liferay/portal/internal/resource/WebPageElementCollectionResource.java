@@ -232,12 +232,9 @@ public class WebPageElementCollectionResource
 	}
 
 	private long _getDefaultFolderId(String folderString) {
-		if (folderString == null) {
-			return 0;
-		}
-		else {
-			return Long.valueOf(folderString);
-		}
+		Try<Long> longTry = Try.fromFallible(() -> Long.valueOf(folderString));
+
+		return longTry.orElse(0L);
 	}
 
 	private Optional<Group> _getGroupOptional(JournalArticle journalArticle) {
