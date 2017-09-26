@@ -109,8 +109,6 @@ public class WebPageElementCollectionResource
 		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
 		).addField(
-			"title", JournalArticle::getGroupId
-		).addField(
 			"text", JournalArticle::getContent
 		).addBidirectionalModel(
 			"group", "blogs", Group.class, this::_getGroupOptional,
