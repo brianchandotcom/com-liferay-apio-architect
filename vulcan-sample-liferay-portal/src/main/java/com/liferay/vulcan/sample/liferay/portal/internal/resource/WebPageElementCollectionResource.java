@@ -212,10 +212,12 @@ public class WebPageElementCollectionResource
 		return journalArticleTry.getUnchecked();
 	}
 
-	private void _deleteJournalArticle(LongIdentifier longIdentifier) {
+	private void _deleteJournalArticle(
+		LongIdentifier journalArticleLongIdentifier) {
+
 		try {
 			JournalArticle article = _journalArticleService.getArticle(
-				longIdentifier.getId());
+				journalArticleLongIdentifier.getId());
 
 			_journalArticleService.deleteArticle(
 				article.getGroupId(), article.getArticleId(),
@@ -290,7 +292,7 @@ public class WebPageElementCollectionResource
 	}
 
 	private JournalArticle _updateJournalArticle(
-		LongIdentifier articleIdLongIdentifier, Map<String, Object> body) {
+		LongIdentifier journalArticleLongIdentifier, Map<String, Object> body) {
 
 		String content = (String)body.get("articleBody");
 		String title = (String)body.get("title");
@@ -331,7 +333,7 @@ public class WebPageElementCollectionResource
 
 		long userIdLong = userId.longValue();
 
-		long id = articleIdLongIdentifier.getId();
+		long id = journalArticleLongIdentifier.getId();
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.updateArticle(
