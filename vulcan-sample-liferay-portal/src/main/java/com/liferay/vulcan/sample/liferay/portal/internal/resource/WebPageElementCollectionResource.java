@@ -67,7 +67,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Javier Gamarra
  */
 @Component(immediate = true)
-public class WebPageResource
+public class WebPageElementCollectionResource
 	implements CollectionResource<JournalArticle, LongIdentifier> {
 
 	@Override
