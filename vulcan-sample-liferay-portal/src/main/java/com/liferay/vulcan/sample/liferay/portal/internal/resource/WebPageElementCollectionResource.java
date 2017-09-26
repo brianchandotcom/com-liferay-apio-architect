@@ -146,23 +146,36 @@ public class WebPageElementCollectionResource
 	private JournalArticle _addJournalArticle(
 		LongIdentifier groupIdLongIdentifier, Map<String, Object> body) {
 
+		String folderString = (String)body.get("folder");
+		String title = (String)body.get("title");
+		String description = (String)body.get("description");
 		String content = (String)body.get("text");
 		String ddmStructureKey = (String)body.get("structure");
 		String ddmTemplateKey = (String)body.get("template");
-		String description = (String)body.get("description");
 		String displayDateString = (String)body.get("dateDisplayed");
-		String folderString = (String)body.get("folder");
-		String title = (String)body.get("title");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
 
-		if (Validator.isNull(content) || Validator.isNull(ddmStructureKey) ||
-			Validator.isNull(ddmTemplateKey) || Validator.isNull(description) ||
-			Validator.isNull(displayDateString) || Validator.isNull(title)) {
+		if (Validator.isNull(title) || Validator.isNull(description) ||
+			Validator.isNull(content) || Validator.isNull(ddmStructureKey) ||
+			Validator.isNull(ddmTemplateKey) ||
+			Validator.isNull(displayDateString)) {
 
 			throw incorrectBodyExceptionSupplier.get();
 		}
+
+		Try<Long> folderIdLongTry = Try.fromFallible(() -> Long.valueOf(folderString));
+
+		long folderId = folderIdLongTry.orElse(0L);
+
+		Map<Locale, String> titleMap = new HashMap<>();
+
+		titleMap.put(Locale.getDefault(), title);
+
+		Map<Locale, String> descriptionMap = new HashMap<>();
+
+		descriptionMap.put(Locale.getDefault(), description);
 
 		Calendar calendar = Calendar.getInstance();
 
@@ -188,18 +201,6 @@ public class WebPageElementCollectionResource
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
 		serviceContext.setScopeGroupId(groupIdLongIdentifier.getId());
-
-		Try<Long> folderIdLongTry = Try.fromFallible(() -> Long.valueOf(folderString));
-
-		long folderId = folderIdLongTry.orElse(0L);
-
-		Map<Locale, String> titleMap = new HashMap<>();
-
-		titleMap.put(Locale.getDefault(), title);
-
-		Map<Locale, String> descriptionMap = new HashMap<>();
-
-		descriptionMap.put(Locale.getDefault(), description);
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.addArticle(
@@ -290,36 +291,23 @@ public class WebPageElementCollectionResource
 	private JournalArticle _updateJournalArticle(
 		LongIdentifier journalArticleIdLongIdentifier, Map<String, Object> body) {
 
-		String content = (String)body.get("text");
+		Double userId = (Double)body.get("user");
+		Double group = (Double)body.get("group");
+		String folderString = (String)body.get("folder");
+		Double version = (Double)body.get("version");
 		String title = (String)body.get("title");
 		String description = (String)body.get("description");
-		String folderString = (String)body.get("folder");
-		Double group = (Double)body.get("group");
-		Double userId = (Double)body.get("user");
-		Double version = (Double)body.get("version");
+		String content = (String)body.get("text");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
 
-		if (Validator.isNull(content) || Validator.isNull(title) ||
-			Validator.isNull(description) || Validator.isNull(group) ||
-			Validator.isNull(userId) || Validator.isNull(version)) {
+		if (Validator.isNull(userId) || Validator.isNull(group) ||
+			Validator.isNull(version) || Validator.isNull(title) ||
+			Validator.isNull(description) || Validator.isNull(content)) {
 
 			throw incorrectBodyExceptionSupplier.get();
 		}
-
-		ServiceContext serviceContext = new ServiceContext();
-
-		serviceContext.setAddGroupPermissions(true);
-		serviceContext.setAddGuestPermissions(true);
-
-		Try<Long> groupIdLongTry = Try.fromFallible(
-			() -> Long.valueOf(folderString));
-
-		long groupId = groupIdLongTry.orElseThrow(
-			incorrectBodyExceptionSupplier);
-
-		serviceContext.setScopeGroupId(groupId);
 
 		Map<Locale, String> titleMap = new HashMap<>();
 
@@ -333,6 +321,19 @@ public class WebPageElementCollectionResource
 			() -> Long.valueOf(folderString));
 
 		long folderId = folderIdLongTry.orElse(0L);
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setAddGuestPermissions(true);
+
+		Try<Long> groupIdLongTry = Try.fromFallible(
+			() -> Long.valueOf(folderString));
+
+		long groupId = groupIdLongTry.orElseThrow(
+			incorrectBodyExceptionSupplier);
+
+		serviceContext.setScopeGroupId(groupId);
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.updateArticle(
