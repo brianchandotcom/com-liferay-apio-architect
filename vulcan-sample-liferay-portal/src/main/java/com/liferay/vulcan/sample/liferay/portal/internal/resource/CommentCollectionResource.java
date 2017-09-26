@@ -131,17 +131,17 @@ public class CommentCollectionResource
 		).getUnchecked();
 	}
 
-	private void _deleteComment(LongIdentifier commentLongIdentifier) {
+	private void _deleteComment(LongIdentifier commentIdLongIdentifier) {
 		try {
-			_commentManager.deleteComment(commentLongIdentifier.getId());
+			_commentManager.deleteComment(commentIdLongIdentifier.getId());
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
 	}
 
-	private Comment _getComment(LongIdentifier commentIdentifier) {
-		long commentId = commentIdentifier.getId();
+	private Comment _getComment(LongIdentifier commentIdLongIdentifier) {
+		long commentId = commentIdLongIdentifier.getId();
 
 		return _commentManager.fetchComment(commentId);
 	}
@@ -222,9 +222,9 @@ public class CommentCollectionResource
 	}
 
 	private Comment _updateComment(
-		LongIdentifier commentLongIdentifier, Map<String, Object> body) {
+		LongIdentifier commentIdLongIdentifier, Map<String, Object> body) {
 
-		Comment comment = _getComment(commentLongIdentifier);
+		Comment comment = _getComment(commentIdLongIdentifier);
 
 		String content = (String)body.get("text");
 
@@ -238,7 +238,7 @@ public class CommentCollectionResource
 		Try<Long> commentIdLongTry = Try.fromFallible(
 			() -> _commentManager.updateComment(
 				comment.getUserId(), comment.getClassName(),
-				comment.getClassPK(), commentLongIdentifier.getId(),
+				comment.getClassPK(), commentIdLongIdentifier.getId(),
 				StringPool.BLANK, content, createServiceContextFunction));
 
 		return commentIdLongTry.map(
