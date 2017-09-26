@@ -104,7 +104,7 @@ public class FolderCollectionResource
 	}
 
 	private DLFolder _addDLFolder(
-		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
+		LongIdentifier groupIdLongIdentifier, Map<String, Object> body) {
 
 		long parentFolderId = 0;
 
@@ -116,7 +116,7 @@ public class FolderCollectionResource
 
 		Try<DLFolder> dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.getFolder(
-				groupLongIdentifier.getId(), parentFolderId, name));
+				groupIdLongIdentifier.getId(), parentFolderId, name));
 
 		if (dlFolderTry.isSuccess()) {
 			throw new BadRequestException(
@@ -131,28 +131,28 @@ public class FolderCollectionResource
 
 		dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.addFolder(
-				groupLongIdentifier.getId(), groupLongIdentifier.getId(), false,
+				groupIdLongIdentifier.getId(), groupIdLongIdentifier.getId(), false,
 				parentFolderId, name, description, new ServiceContext()));
 
 		return dlFolderTry.getUnchecked();
 	}
 
-	private void _deleteDLFolder(LongIdentifier dlFolderLongIdentifier) {
+	private void _deleteDLFolder(LongIdentifier dlFolderIdLongIdentifier) {
 		try {
-			_dlFolderService.deleteFolder(dlFolderLongIdentifier.getId());
+			_dlFolderService.deleteFolder(dlFolderIdLongIdentifier.getId());
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
 	}
 
-	private DLFolder _getDLFolder(LongIdentifier dlFolderLongIdentifier) {
+	private DLFolder _getDLFolder(LongIdentifier dlFolderIdLongIdentifier) {
 		try {
-			return _dlFolderService.getFolder(dlFolderLongIdentifier.getId());
+			return _dlFolderService.getFolder(dlFolderIdLongIdentifier.getId());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get folder " + dlFolderLongIdentifier.getId(), e);
+				"Unable to get folder " + dlFolderIdLongIdentifier.getId(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -173,14 +173,14 @@ public class FolderCollectionResource
 	}
 
 	private PageItems<DLFolder> _getPageItems(
-		Pagination pagination, LongIdentifier groupLongIdentifier) {
+		Pagination pagination, LongIdentifier groupIdLongIdentifier) {
 
 		try {
 			List<DLFolder> dlFolders = _dlFolderService.getFolders(
-				groupLongIdentifier.getId(), 0, pagination.getStartPosition(),
+				groupIdLongIdentifier.getId(), 0, pagination.getStartPosition(),
 				pagination.getEndPosition(), null);
 			int count = _dlFolderService.getFoldersCount(
-				groupLongIdentifier.getId(), 0);
+				groupIdLongIdentifier.getId(), 0);
 
 			return new PageItems<>(dlFolders, count);
 		}
@@ -199,9 +199,9 @@ public class FolderCollectionResource
 	}
 
 	private DLFolder _updateDLFolder(
-		LongIdentifier dlFolderLongIdentifier, Map<String, Object> body) {
+		LongIdentifier dlFolderIdLongIdentifier, Map<String, Object> body) {
 
-		DLFolder dlFolder = _getDLFolder(dlFolderLongIdentifier);
+		DLFolder dlFolder = _getDLFolder(dlFolderIdLongIdentifier);
 
 		String name = (String)body.get("name");
 		String description = (String)body.get("description");
@@ -212,7 +212,7 @@ public class FolderCollectionResource
 
 		Try<DLFolder> dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.updateFolder(
-				dlFolderLongIdentifier.getId(), dlFolder.getParentFolderId(),
+				dlFolderIdLongIdentifier.getId(), dlFolder.getParentFolderId(),
 				name, description, dlFolder.getDefaultFileEntryTypeId(),
 				new ArrayList<>(), dlFolder.getRestrictionType(),
 				new ServiceContext()));

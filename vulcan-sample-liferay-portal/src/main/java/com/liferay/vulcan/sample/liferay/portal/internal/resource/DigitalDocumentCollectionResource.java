@@ -112,10 +112,10 @@ public class DigitalDocumentCollectionResource
 		).build();
 	}
 
-	private void _deleteDLFileEntry(LongIdentifier dlFileEntryLongIdentifier) {
+	private void _deleteDLFileEntry(LongIdentifier dlFileEntryIdLongIdentifier) {
 		try {
 			_dlFileEntryService.deleteFileEntry(
-				dlFileEntryLongIdentifier.getId());
+				dlFileEntryIdLongIdentifier.getId());
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -123,15 +123,15 @@ public class DigitalDocumentCollectionResource
 	}
 
 	private DLFileEntry _getDLFileEntry(
-		LongIdentifier dlFileEntryLongIdentifier) {
+		LongIdentifier dlFileEntryIdLongIdentifier) {
 
 		try {
 			return _dlFileEntryService.getFileEntry(
-				dlFileEntryLongIdentifier.getId());
+				dlFileEntryIdLongIdentifier.getId());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get file " + dlFileEntryLongIdentifier.getId(), e);
+				"Unable to get file " + dlFileEntryIdLongIdentifier.getId(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -162,11 +162,11 @@ public class DigitalDocumentCollectionResource
 	}
 
 	private PageItems<DLFileEntry> _getPageItems(
-		Pagination pagination, LongIdentifier dlFolderLongIdentifier) {
+		Pagination pagination, LongIdentifier dlFolderIdLongIdentifier) {
 
 		try {
 			DLFolder dlFolder = _dlFolderService.getFolder(
-				dlFolderLongIdentifier.getId());
+				dlFolderIdLongIdentifier.getId());
 
 			List<DLFileEntry> dlFileEntries =
 				_dlFileEntryService.getFileEntries(

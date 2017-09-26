@@ -115,22 +115,22 @@ public class GroupCollectionResource
 		return groupTry.getUnchecked();
 	}
 
-	private void _deleteGroup(LongIdentifier groupLongIdentifier) {
+	private void _deleteGroup(LongIdentifier groupIdLongIdentifier) {
 		try {
-			_groupLocalService.deleteGroup(groupLongIdentifier.getId());
+			_groupLocalService.deleteGroup(groupIdLongIdentifier.getId());
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
 	}
 
-	private Group _getGroup(LongIdentifier groupLongIdentifier) {
+	private Group _getGroup(LongIdentifier groupIdLongIdentifier) {
 		try {
-			return _groupLocalService.getGroup(groupLongIdentifier.getId());
+			return _groupLocalService.getGroup(groupIdLongIdentifier.getId());
 		}
 		catch (NoSuchGroupException nsge) {
 			throw new NotFoundException(
-				"Unable to get group " + groupLongIdentifier.getId(), nsge);
+				"Unable to get group " + groupIdLongIdentifier.getId(), nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -148,7 +148,7 @@ public class GroupCollectionResource
 	}
 
 	private Group _updateGroup(
-		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
+		LongIdentifier groupIdLongIdentifier, Map<String, Object> body) {
 
 		String name = (String)body.get("name");
 
@@ -158,7 +158,7 @@ public class GroupCollectionResource
 
 		Try<Group> groupTry = Try.fromFallible(
 			() -> _groupLocalService.updateGroup(
-				groupLongIdentifier.getId(), 0,
+				groupIdLongIdentifier.getId(), 0,
 				Collections.singletonMap(Locale.US, name),
 				Collections.emptyMap(), TYPE_SITE_OPEN, false,
 				DEFAULT_MEMBERSHIP_RESTRICTION, null, true, true, null));

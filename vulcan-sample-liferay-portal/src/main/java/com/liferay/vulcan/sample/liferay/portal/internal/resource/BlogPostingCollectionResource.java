@@ -156,7 +156,7 @@ public class BlogPostingCollectionResource
 	}
 
 	private BlogsEntry _addBlogsEntry(
-		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
+		LongIdentifier groupIdLongIdentifier, Map<String, Object> body) {
 
 		String title = (String)body.get("headline");
 		String subtitle = (String)body.get("alternativeHeadline");
@@ -197,7 +197,7 @@ public class BlogPostingCollectionResource
 
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
-		serviceContext.setScopeGroupId(groupLongIdentifier.getId());
+		serviceContext.setScopeGroupId(groupIdLongIdentifier.getId());
 
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.addEntry(
@@ -256,13 +256,13 @@ public class BlogPostingCollectionResource
 	}
 
 	private PageItems<BlogsEntry> _getPageItems(
-		Pagination pagination, LongIdentifier groupLongIdentifier) {
+		Pagination pagination, LongIdentifier groupIdLongIdentifier) {
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			groupLongIdentifier.getId(), 0, pagination.getStartPosition(),
+			groupIdLongIdentifier.getId(), 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
 		int count = _blogsService.getGroupEntriesCount(
-			groupLongIdentifier.getId(), 0);
+			groupIdLongIdentifier.getId(), 0);
 
 		return new PageItems<>(blogsEntries, count);
 	}
