@@ -91,7 +91,9 @@ public class WebPageElementCollectionResource
 		).addField(
 			"description", JournalArticle::getDescription
 		).addField(
-			"lastReviewed", JournalArticle::getReviewDate
+			"lastReviewed",
+			journalArticle -> formatFunction.apply(
+				journalArticle.getReviewDate())
 		).addEmbeddedModel(
 			"creator", User.class, this::_getUserOptional
 		).addField(
