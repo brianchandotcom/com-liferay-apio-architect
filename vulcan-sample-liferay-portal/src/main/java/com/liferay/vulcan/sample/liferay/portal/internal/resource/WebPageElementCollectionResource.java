@@ -258,6 +258,11 @@ public class WebPageElementCollectionResource
 			return _journalArticleService.getArticle(
 				journalArticleLongIdentifier.getId());
 		}
+		catch (NoSuchArticleException nsae) {
+			throw new NotFoundException(
+				"Unable to get article " + journalArticleLongIdentifier.getId(),
+				nsae);
+		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
