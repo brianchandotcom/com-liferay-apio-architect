@@ -15,6 +15,7 @@
 package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
 import com.liferay.document.library.kernel.service.DLFolderService;
+import com.liferay.journal.exception.NoSuchArticleException;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleService;
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
@@ -222,6 +223,8 @@ public class WebPageElementCollectionResource
 			_journalArticleService.deleteArticle(
 				article.getGroupId(), article.getArticleId(),
 				article.getArticleResourceUuid(), new ServiceContext());
+		}
+		catch (NoSuchArticleException nsae) {
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
