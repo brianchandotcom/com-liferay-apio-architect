@@ -309,6 +309,11 @@ public class WebPageElementCollectionResource
 			throw incorrectBodyExceptionSupplier.get();
 		}
 
+		Try<Long> folderIdLongTry = Try.fromFallible(
+			() -> Long.valueOf(folderIdString));
+
+		long folderId = folderIdLongTry.orElse(0L);
+
 		Map<Locale, String> titleMap = new HashMap<>();
 
 		titleMap.put(Locale.getDefault(), title);
@@ -316,11 +321,6 @@ public class WebPageElementCollectionResource
 		Map<Locale, String> descriptionMap = new HashMap<>();
 
 		descriptionMap.put(Locale.getDefault(), description);
-
-		Try<Long> folderIdLongTry = Try.fromFallible(
-			() -> Long.valueOf(folderIdString));
-
-		long folderId = folderIdLongTry.orElse(0L);
 
 		ServiceContext serviceContext = new ServiceContext();
 
