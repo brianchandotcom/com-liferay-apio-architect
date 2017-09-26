@@ -336,13 +336,9 @@ public class WebPageElementCollectionResource
 
 		long folderId = folderIdLongTry.orElse(0L);
 
-		long userIdLong = userId.longValue();
-
-		long id = journalArticleLongIdentifier.getId();
-
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.updateArticle(
-				userIdLong, groupId, folderId, String.valueOf(id), version,
+				userId.longValue(), groupId, folderId, String.valueOf(journalArticleLongIdentifier.getId()), version,
 				titleMap, descriptionMap, content, null, serviceContext));
 
 		return journalArticleTry.getUnchecked();
