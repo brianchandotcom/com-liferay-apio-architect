@@ -86,14 +86,9 @@ public class WebPageElementCollectionResource
 
 		return representorBuilder.identifier(
 			journalArticle -> journalArticle::getId
-		).addField(
-			"title", JournalArticle::getTitle
-		).addField(
-			"description", JournalArticle::getDescription
-		).addField(
-			"lastReviewed",
-			journalArticle -> formatFunction.apply(
-				journalArticle.getReviewDate())
+		).addBidirectionalModel(
+			"group", "blogs", Group.class, this::_getGroupOptional,
+			group -> (LongIdentifier)group::getGroupId
 		).addEmbeddedModel(
 			"creator", User.class, this::_getUserOptional
 		).addField(
@@ -108,13 +103,18 @@ public class WebPageElementCollectionResource
 			"datePublished",
 			journalArticle -> formatFunction.apply(
 				journalArticle.getLastPublishDate())
-		).addLinkedModel(
-			"author", User.class, this::_getUserOptional
+		).addField(
+			"description", JournalArticle::getDescription
+		).addField(
+			"lastReviewed",
+			journalArticle -> formatFunction.apply(
+				journalArticle.getReviewDate())
 		).addField(
 			"text", JournalArticle::getContent
-		).addBidirectionalModel(
-			"group", "blogs", Group.class, this::_getGroupOptional,
-			group -> (LongIdentifier)group::getGroupId
+		).addField(
+			"title", JournalArticle::getTitle
+		).addLinkedModel(
+			"author", User.class, this::_getUserOptional
 		).addType(
 			"WebPageElement"
 		).build();
