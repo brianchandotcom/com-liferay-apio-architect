@@ -264,13 +264,11 @@ public class WebPageElementCollectionResource
 	private PageItems<JournalArticle> _getPageItems(
 		Pagination pagination, LongIdentifier groupIdLongIdentifier) {
 
-		long groupId = groupIdLongIdentifier.getId();
-
 		List<JournalArticle> journalArticles =
 			_journalArticleService.getArticles(
-				groupId, 0, pagination.getStartPosition(),
+				groupIdLongIdentifier.getId(), 0, pagination.getStartPosition(),
 				pagination.getEndPosition(), null);
-		int count = _journalArticleService.getArticlesCount(groupId, 0);
+		int count = _journalArticleService.getArticlesCount(groupIdLongIdentifier.getId(), 0);
 
 		return new PageItems<>(journalArticles, count);
 	}
