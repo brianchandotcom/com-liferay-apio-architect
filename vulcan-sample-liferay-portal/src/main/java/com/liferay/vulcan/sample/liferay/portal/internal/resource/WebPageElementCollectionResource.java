@@ -60,9 +60,9 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides all the necessary information to expose <a
- * href="http://schema.org/WebPage">WebPage</a> resources through a web API.
- * <p>
- * The resources are mapped from the internal {@link JournalArticle} model.
+ * href="http://schema.org/WebPageElement">WebPageElement</a> resources through
+ * a web API. <p> The resources are mapped from the internal {@link
+ * JournalArticle} model.
  *
  * @author Javier Gamarra
  */
@@ -118,13 +118,13 @@ public class WebPageElementCollectionResource
 		).addField(
 			"lastReviewed", JournalArticle::getLastPublishDate
 		).addType(
-			"WebPage"
+			"WebPageElement"
 		).build();
 	}
 
 	@Override
 	public String getName() {
-		return "web-page";
+		return "web-page-elements";
 	}
 
 	@Override
