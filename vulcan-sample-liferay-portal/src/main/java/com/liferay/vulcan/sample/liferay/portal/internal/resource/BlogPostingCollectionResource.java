@@ -227,13 +227,16 @@ public class BlogPostingCollectionResource
 				aggregateRatingIdentifier));
 	}
 
-	private BlogsEntry _getBlogsEntry(LongIdentifier blogsEntryIdLongIdentifier) {
+	private BlogsEntry _getBlogsEntry(
+		LongIdentifier blogsEntryIdLongIdentifier) {
+
 		try {
 			return _blogsService.getEntry(blogsEntryIdLongIdentifier.getId());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get blogs entry " + blogsEntryIdLongIdentifier.getId(),
+				"Unable to get blogs entry " +
+					blogsEntryIdLongIdentifier.getId(),
 				e);
 		}
 		catch (PortalException pe) {
@@ -330,9 +333,9 @@ public class BlogPostingCollectionResource
 
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.updateEntry(
-				blogsEntryIdLongIdentifier.getId(), title, subtitle, description,
-				content, month, day, year, hour, minute, false, false, null,
-				null, null, null, serviceContext));
+				blogsEntryIdLongIdentifier.getId(), title, subtitle,
+				description, content, month, day, year, hour, minute, false,
+				false, null, null, null, null, serviceContext));
 
 		return blogsEntryTry.getUnchecked();
 	}

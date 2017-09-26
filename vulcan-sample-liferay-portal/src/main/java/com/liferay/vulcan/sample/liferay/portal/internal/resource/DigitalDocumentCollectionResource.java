@@ -112,7 +112,9 @@ public class DigitalDocumentCollectionResource
 		).build();
 	}
 
-	private void _deleteDLFileEntry(LongIdentifier dlFileEntryIdLongIdentifier) {
+	private void _deleteDLFileEntry(
+		LongIdentifier dlFileEntryIdLongIdentifier) {
+
 		try {
 			_dlFileEntryService.deleteFileEntry(
 				dlFileEntryIdLongIdentifier.getId());

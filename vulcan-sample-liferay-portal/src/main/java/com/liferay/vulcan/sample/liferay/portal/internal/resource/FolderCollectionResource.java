@@ -131,8 +131,9 @@ public class FolderCollectionResource
 
 		dlFolderTry = Try.fromFallible(
 			() -> _dlFolderService.addFolder(
-				groupIdLongIdentifier.getId(), groupIdLongIdentifier.getId(), false,
-				parentFolderId, name, description, new ServiceContext()));
+				groupIdLongIdentifier.getId(), groupIdLongIdentifier.getId(),
+				false, parentFolderId, name, description,
+				new ServiceContext()));
 
 		return dlFolderTry.getUnchecked();
 	}

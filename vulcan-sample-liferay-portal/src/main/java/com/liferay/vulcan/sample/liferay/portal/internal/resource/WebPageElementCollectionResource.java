@@ -157,15 +157,17 @@ public class WebPageElementCollectionResource
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
 
-		if (Validator.isNull(folderIdString) || Validator.isNull(title) || Validator.isNull(description) ||
-			Validator.isNull(content) || Validator.isNull(ddmStructureKey) ||
+		if (Validator.isNull(folderIdString) || Validator.isNull(title) ||
+			Validator.isNull(description) || Validator.isNull(content) ||
+			Validator.isNull(ddmStructureKey) ||
 			Validator.isNull(ddmTemplateKey) ||
 			Validator.isNull(displayDateString)) {
 
 			throw incorrectBodyExceptionSupplier.get();
 		}
 
-		Try<Long> folderIdLongTry = Try.fromFallible(() -> Long.valueOf(folderIdString));
+		Try<Long> folderIdLongTry = Try.fromFallible(
+			() -> Long.valueOf(folderIdString));
 
 		long folderId = folderIdLongTry.orElse(0L);
 
@@ -204,11 +206,11 @@ public class WebPageElementCollectionResource
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.addArticle(
-				groupIdLongIdentifier.getId(), folderId, 0, 0, null, true, titleMap, descriptionMap,
-				content, ddmStructureKey, ddmTemplateKey, null,
-				displayDateMonth, displayDateDay, displayDateYear,
-				displayDateHour, displayDateMinute, 0, 0, 0, 0, 0, true, 0, 0,
-				0, 0, 0, true, true, null, serviceContext));
+				groupIdLongIdentifier.getId(), folderId, 0, 0, null, true,
+				titleMap, descriptionMap, content, ddmStructureKey,
+				ddmTemplateKey, null, displayDateMonth, displayDateDay,
+				displayDateYear, displayDateHour, displayDateMinute, 0, 0, 0, 0,
+				0, true, 0, 0, 0, 0, 0, true, true, null, serviceContext));
 
 		return journalArticleTry.getUnchecked();
 	}
@@ -254,7 +256,8 @@ public class WebPageElementCollectionResource
 		}
 		catch (NoSuchArticleException nsae) {
 			throw new NotFoundException(
-				"Unable to get article " + journalArticleIdLongIdentifier.getId(),
+				"Unable to get article " +
+					journalArticleIdLongIdentifier.getId(),
 				nsae);
 		}
 		catch (PortalException pe) {
@@ -269,7 +272,8 @@ public class WebPageElementCollectionResource
 			_journalArticleService.getArticles(
 				groupIdLongIdentifier.getId(), 0, pagination.getStartPosition(),
 				pagination.getEndPosition(), null);
-		int count = _journalArticleService.getArticlesCount(groupIdLongIdentifier.getId(), 0);
+		int count = _journalArticleService.getArticlesCount(
+			groupIdLongIdentifier.getId(), 0);
 
 		return new PageItems<>(journalArticles, count);
 	}
@@ -289,7 +293,8 @@ public class WebPageElementCollectionResource
 	}
 
 	private JournalArticle _updateJournalArticle(
-		LongIdentifier journalArticleIdLongIdentifier, Map<String, Object> body) {
+		LongIdentifier journalArticleIdLongIdentifier,
+		Map<String, Object> body) {
 
 		Double userId = (Double)body.get("user");
 		Double groupId = (Double)body.get("group");
@@ -303,8 +308,9 @@ public class WebPageElementCollectionResource
 			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(userId) || Validator.isNull(groupId) ||
-			Validator.isNull(folderIdString) || Validator.isNull(version) || Validator.isNull(title) ||
-			Validator.isNull(description) || Validator.isNull(content)) {
+			Validator.isNull(folderIdString) || Validator.isNull(version) ||
+			Validator.isNull(title) || Validator.isNull(description) ||
+			Validator.isNull(content)) {
 
 			throw incorrectBodyExceptionSupplier.get();
 		}
@@ -330,7 +336,8 @@ public class WebPageElementCollectionResource
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.updateArticle(
-				userId.longValue(), groupId.longValue(), folderId, String.valueOf(journalArticleIdLongIdentifier.getId()), version,
+				userId.longValue(), groupId.longValue(), folderId,
+				String.valueOf(journalArticleIdLongIdentifier.getId()), version,
 				titleMap, descriptionMap, content, null, serviceContext));
 
 		return journalArticleTry.getUnchecked();
