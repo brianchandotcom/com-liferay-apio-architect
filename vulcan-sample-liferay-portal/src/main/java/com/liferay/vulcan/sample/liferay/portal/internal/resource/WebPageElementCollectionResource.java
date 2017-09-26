@@ -187,9 +187,9 @@ public class WebPageElementCollectionResource
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
 
-		long id = groupIdLongIdentifier.getId();
+		long groupId = groupIdLongIdentifier.getId();
 
-		serviceContext.setScopeGroupId(id);
+		serviceContext.setScopeGroupId(groupId);
 
 		long folderId = _getDefaultFolderId(folderString);
 
@@ -203,7 +203,7 @@ public class WebPageElementCollectionResource
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.addArticle(
-				id, folderId, 0, 0, null, true, titleMap, descriptionMap,
+				groupId, folderId, 0, 0, null, true, titleMap, descriptionMap,
 				content, ddmStructureKey, ddmTemplateKey, null,
 				displayDateMonth, displayDateDay, displayDateYear,
 				displayDateHour, displayDateMinute, 0, 0, 0, 0, 0, true, 0, 0,
