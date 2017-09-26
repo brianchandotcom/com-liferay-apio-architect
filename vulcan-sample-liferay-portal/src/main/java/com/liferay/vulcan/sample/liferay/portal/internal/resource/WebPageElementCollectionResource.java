@@ -146,7 +146,7 @@ public class WebPageElementCollectionResource
 	private JournalArticle _addJournalArticle(
 		LongIdentifier groupIdLongIdentifier, Map<String, Object> body) {
 
-		String folderString = (String)body.get("folder");
+		String folderIdString = (String)body.get("folder");
 		String title = (String)body.get("title");
 		String description = (String)body.get("description");
 		String content = (String)body.get("text");
@@ -165,7 +165,7 @@ public class WebPageElementCollectionResource
 			throw incorrectBodyExceptionSupplier.get();
 		}
 
-		Try<Long> folderIdLongTry = Try.fromFallible(() -> Long.valueOf(folderString));
+		Try<Long> folderIdLongTry = Try.fromFallible(() -> Long.valueOf(folderIdString));
 
 		long folderId = folderIdLongTry.orElse(0L);
 
@@ -293,7 +293,7 @@ public class WebPageElementCollectionResource
 
 		Double userId = (Double)body.get("user");
 		Double group = (Double)body.get("group");
-		String folderString = (String)body.get("folder");
+		String folderIdString = (String)body.get("folder");
 		Double version = (Double)body.get("version");
 		String title = (String)body.get("title");
 		String description = (String)body.get("description");
@@ -318,7 +318,7 @@ public class WebPageElementCollectionResource
 		descriptionMap.put(Locale.getDefault(), description);
 
 		Try<Long> folderIdLongTry = Try.fromFallible(
-			() -> Long.valueOf(folderString));
+			() -> Long.valueOf(folderIdString));
 
 		long folderId = folderIdLongTry.orElse(0L);
 
@@ -328,7 +328,7 @@ public class WebPageElementCollectionResource
 		serviceContext.setAddGuestPermissions(true);
 
 		Try<Long> groupIdLongTry = Try.fromFallible(
-			() -> Long.valueOf(folderString));
+			() -> Long.valueOf(folderIdString));
 
 		long groupId = groupIdLongTry.orElseThrow(
 			incorrectBodyExceptionSupplier);
