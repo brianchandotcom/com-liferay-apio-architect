@@ -145,16 +145,16 @@ public class WebPageElementCollectionResource
 	private JournalArticle _addJournalArticle(
 		LongIdentifier groupIdLongIdentifier, Map<String, Object> body) {
 
-		String content = (String)body.get("articleBody");
-		String ddmStructureKey = (String)body.get("ddmStructureKey");
-		String ddmTemplateKey = (String)body.get("ddmTemplateKey");
+		String content = (String)body.get("text");
+		String ddmStructureKey = (String)body.get("structure");
+		String ddmTemplateKey = (String)body.get("template");
 		String description = (String)body.get("description");
-		String displayDateString = (String)body.get("displayDateString");
-		String folderString = (String)body.get("folderString");
+		String displayDateString = (String)body.get("dateDisplayed");
+		String folderString = (String)body.get("folder");
 		String title = (String)body.get("title");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
-			() -> new BadRequestException("Incorrect body");
+			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(content) || Validator.isNull(ddmStructureKey) ||
 			Validator.isNull(ddmTemplateKey) || Validator.isNull(description) ||
@@ -294,16 +294,16 @@ public class WebPageElementCollectionResource
 	private JournalArticle _updateJournalArticle(
 		LongIdentifier journalArticleLongIdentifier, Map<String, Object> body) {
 
-		String content = (String)body.get("articleBody");
+		String content = (String)body.get("text");
 		String title = (String)body.get("title");
 		String description = (String)body.get("description");
-		String folderString = (String)body.get("folderString");
-		Double groupId = (Double)body.get("groupId");
-		Double userId = (Double)body.get("userId");
+		String folderString = (String)body.get("folder");
+		Double groupId = (Double)body.get("group");
+		Double userId = (Double)body.get("user");
 		Double version = (Double)body.get("version");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
-			() -> new BadRequestException("Incorrect body");
+			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(content) || Validator.isNull(title) ||
 			Validator.isNull(description) || Validator.isNull(groupId) ||
