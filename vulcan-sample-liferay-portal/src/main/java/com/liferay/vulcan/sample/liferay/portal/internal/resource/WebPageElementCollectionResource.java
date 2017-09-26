@@ -113,8 +113,6 @@ public class WebPageElementCollectionResource
 		).addBidirectionalModel(
 			"group", "blogs", Group.class, this::_getGroupOptional,
 			group -> (LongIdentifier)group::getGroupId
-		).addField(
-			"lastReviewed", JournalArticle::getLastPublishDate
 		).addType(
 			"WebPageElement"
 		).build();
