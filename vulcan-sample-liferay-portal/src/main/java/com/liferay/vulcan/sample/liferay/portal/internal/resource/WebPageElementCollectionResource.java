@@ -157,7 +157,7 @@ public class WebPageElementCollectionResource
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
 
-		if (Validator.isNull(title) || Validator.isNull(description) ||
+		if (Validator.isNull(folderIdString) || Validator.isNull(title) || Validator.isNull(description) ||
 			Validator.isNull(content) || Validator.isNull(ddmStructureKey) ||
 			Validator.isNull(ddmTemplateKey) ||
 			Validator.isNull(displayDateString)) {
@@ -303,7 +303,7 @@ public class WebPageElementCollectionResource
 			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(userId) || Validator.isNull(groupId) ||
-			Validator.isNull(version) || Validator.isNull(title) ||
+			Validator.isNull(folderIdString) || Validator.isNull(version) || Validator.isNull(title) ||
 			Validator.isNull(description) || Validator.isNull(content)) {
 
 			throw incorrectBodyExceptionSupplier.get();
