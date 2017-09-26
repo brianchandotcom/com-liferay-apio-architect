@@ -213,11 +213,11 @@ public class WebPageElementCollectionResource
 	}
 
 	private void _deleteJournalArticle(
-		LongIdentifier journalArticleLongIdentifier) {
+		LongIdentifier journalArticleIdLongIdentifier) {
 
 		try {
 			JournalArticle article = _journalArticleService.getArticle(
-				journalArticleLongIdentifier.getId());
+				journalArticleIdLongIdentifier.getId());
 
 			_journalArticleService.deleteArticle(
 				article.getGroupId(), article.getArticleId(),
@@ -245,15 +245,15 @@ public class WebPageElementCollectionResource
 	}
 
 	private JournalArticle _getJournalArticle(
-		LongIdentifier journalArticleLongIdentifier) {
+		LongIdentifier journalArticleIdLongIdentifier) {
 
 		try {
 			return _journalArticleService.getArticle(
-				journalArticleLongIdentifier.getId());
+				journalArticleIdLongIdentifier.getId());
 		}
 		catch (NoSuchArticleException nsae) {
 			throw new NotFoundException(
-				"Unable to get article " + journalArticleLongIdentifier.getId(),
+				"Unable to get article " + journalArticleIdLongIdentifier.getId(),
 				nsae);
 		}
 		catch (PortalException pe) {
@@ -288,7 +288,7 @@ public class WebPageElementCollectionResource
 	}
 
 	private JournalArticle _updateJournalArticle(
-		LongIdentifier journalArticleLongIdentifier, Map<String, Object> body) {
+		LongIdentifier journalArticleIdLongIdentifier, Map<String, Object> body) {
 
 		String content = (String)body.get("text");
 		String title = (String)body.get("title");
@@ -336,7 +336,7 @@ public class WebPageElementCollectionResource
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.updateArticle(
-				userId.longValue(), groupId, folderId, String.valueOf(journalArticleLongIdentifier.getId()), version,
+				userId.longValue(), groupId, folderId, String.valueOf(journalArticleIdLongIdentifier.getId()), version,
 				titleMap, descriptionMap, content, null, serviceContext));
 
 		return journalArticleTry.getUnchecked();

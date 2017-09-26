@@ -207,9 +207,9 @@ public class BlogPostingCollectionResource
 		return blogsEntryTry.getUnchecked();
 	}
 
-	private void _deleteBlogsEntry(LongIdentifier blogsEntryLongIdentifier) {
+	private void _deleteBlogsEntry(LongIdentifier blogsEntryIdLongIdentifier) {
 		try {
-			_blogsService.deleteEntry(blogsEntryLongIdentifier.getId());
+			_blogsService.deleteEntry(blogsEntryIdLongIdentifier.getId());
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -227,13 +227,13 @@ public class BlogPostingCollectionResource
 				aggregateRatingIdentifier));
 	}
 
-	private BlogsEntry _getBlogsEntry(LongIdentifier blogsEntryLongIdentifier) {
+	private BlogsEntry _getBlogsEntry(LongIdentifier blogsEntryIdLongIdentifier) {
 		try {
-			return _blogsService.getEntry(blogsEntryLongIdentifier.getId());
+			return _blogsService.getEntry(blogsEntryIdLongIdentifier.getId());
 		}
 		catch (NoSuchEntryException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get blogs entry " + blogsEntryLongIdentifier.getId(),
+				"Unable to get blogs entry " + blogsEntryIdLongIdentifier.getId(),
 				e);
 		}
 		catch (PortalException pe) {
@@ -282,7 +282,7 @@ public class BlogPostingCollectionResource
 	}
 
 	private BlogsEntry _updateBlogsEntry(
-		LongIdentifier blogsEntryLongIdentifier, Map<String, Object> body) {
+		LongIdentifier blogsEntryIdLongIdentifier, Map<String, Object> body) {
 
 		String title = (String)body.get("headline");
 		String subtitle = (String)body.get("alternativeHeadline");
@@ -324,13 +324,13 @@ public class BlogPostingCollectionResource
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
 
-		BlogsEntry blogsEntry = _getBlogsEntry(blogsEntryLongIdentifier);
+		BlogsEntry blogsEntry = _getBlogsEntry(blogsEntryIdLongIdentifier);
 
 		serviceContext.setScopeGroupId(blogsEntry.getGroupId());
 
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.updateEntry(
-				blogsEntryLongIdentifier.getId(), title, subtitle, description,
+				blogsEntryIdLongIdentifier.getId(), title, subtitle, description,
 				content, month, day, year, hour, minute, false, false, null,
 				null, null, null, serviceContext));
 
