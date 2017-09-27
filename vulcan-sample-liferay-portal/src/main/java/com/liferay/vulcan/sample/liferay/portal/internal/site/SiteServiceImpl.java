@@ -38,7 +38,7 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	public PageItems<Site> getPageItems(Pagination pagination, long companyId) {
 		List<Group> groups = _groupLocalService.getGroups(companyId, 0, true);
-		int groupsCount = _groupLocalService.getGroupsCount(companyId, 0, true);
+		int count = _groupLocalService.getGroupsCount(companyId, 0, true);
 
 		List<Group> pageGroups = ListUtil.subList(
 			groups, pagination.getStartPosition(), pagination.getEndPosition());
@@ -51,7 +51,7 @@ public class SiteServiceImpl implements SiteService {
 			Collectors.toList()
 		);
 
-		return new PageItems<>(sites, groupsCount);
+		return new PageItems<>(sites, count);
 	}
 
 	@Reference
