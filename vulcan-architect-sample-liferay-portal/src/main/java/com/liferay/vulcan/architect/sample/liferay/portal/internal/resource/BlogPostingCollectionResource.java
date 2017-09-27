@@ -142,7 +142,7 @@ public class BlogPostingCollectionResource
 	}
 
 	private BlogsEntry _addBlogsEntry(
-		LongIdentifier groupIdLongIdentifier, Map<String, Object> body) {
+		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
 
 		String title = (String)body.get("headline");
 		String subtitle = (String)body.get("alternativeHeadline");
@@ -183,7 +183,7 @@ public class BlogPostingCollectionResource
 
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
-		serviceContext.setScopeGroupId(groupIdLongIdentifier.getId());
+		serviceContext.setScopeGroupId(groupLongIdentifier.getId());
 
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.addEntry(

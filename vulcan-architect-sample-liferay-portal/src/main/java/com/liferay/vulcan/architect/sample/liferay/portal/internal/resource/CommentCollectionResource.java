@@ -132,17 +132,17 @@ public class CommentCollectionResource
 		).getUnchecked();
 	}
 
-	private void _deleteComment(LongIdentifier commentIdLongIdentifier) {
+	private void _deleteComment(LongIdentifier commentLongIdentifier) {
 		try {
-			_commentManager.deleteComment(commentIdLongIdentifier.getId());
+			_commentManager.deleteComment(commentLongIdentifier.getId());
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
 	}
 
-	private Comment _getComment(LongIdentifier commentIdLongIdentifier) {
-		long commentId = commentIdLongIdentifier.getId();
+	private Comment _getComment(LongIdentifier commentLongIdentifier) {
+		long commentId = commentLongIdentifier.getId();
 
 		return _commentManager.fetchComment(commentId);
 	}
@@ -180,15 +180,15 @@ public class CommentCollectionResource
 	}
 
 	private PageItems<Comment> _getPageItems(
-		Pagination pagination, CommentableIdentifier commentableIdentifier,
+		Pagination pagination, CommentableIdentifier commentLongIdentifier,
 		CurrentUser currentUser) {
 
 		List<Comment> comments = new ArrayList<>();
 
 		DiscussionCommentIterator discussionCommentIterator =
 			_getDiscussionCommentIterator(
-				commentableIdentifier.getClassName(),
-				commentableIdentifier.getClassPK(), pagination, currentUser);
+				commentLongIdentifier.getClassName(),
+				commentLongIdentifier.getClassPK(), pagination, currentUser);
 
 		int i = pagination.getEndPosition() - pagination.getStartPosition();
 
@@ -202,8 +202,8 @@ public class CommentCollectionResource
 		}
 
 		int count = _commentManager.getCommentsCount(
-			commentableIdentifier.getClassName(),
-			commentableIdentifier.getClassPK());
+			commentLongIdentifier.getClassName(),
+			commentLongIdentifier.getClassPK());
 
 		return new PageItems<>(comments, count);
 	}
@@ -223,9 +223,9 @@ public class CommentCollectionResource
 	}
 
 	private Comment _updateComment(
-		LongIdentifier commentIdLongIdentifier, Map<String, Object> body) {
+		LongIdentifier commentLongIdentifier, Map<String, Object> body) {
 
-		Comment comment = _getComment(commentIdLongIdentifier);
+		Comment comment = _getComment(commentLongIdentifier);
 
 		String content = (String)body.get("text");
 
@@ -239,7 +239,7 @@ public class CommentCollectionResource
 		Try<Long> commentIdLongTry = Try.fromFallible(
 			() -> _commentManager.updateComment(
 				comment.getUserId(), comment.getClassName(),
-				comment.getClassPK(), commentIdLongIdentifier.getId(),
+				comment.getClassPK(), commentLongIdentifier.getId(),
 				StringPool.BLANK, content, createServiceContextFunction));
 
 		return commentIdLongTry.map(

@@ -126,7 +126,7 @@ public class WebPageElementCollectionResource
 	}
 
 	private JournalArticle _addJournalArticle(
-		LongIdentifier groupIdLongIdentifier, Map<String, Object> body) {
+		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
 
 		String folderIdString = (String)body.get("folder");
 		String title = (String)body.get("title");
@@ -184,11 +184,11 @@ public class WebPageElementCollectionResource
 
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
-		serviceContext.setScopeGroupId(groupIdLongIdentifier.getId());
+		serviceContext.setScopeGroupId(groupLongIdentifier.getId());
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.addArticle(
-				groupIdLongIdentifier.getId(), folderId, 0, 0, null, true,
+				groupLongIdentifier.getId(), folderId, 0, 0, null, true,
 				titleMap, descriptionMap, content, ddmStructureKey,
 				ddmTemplateKey, null, displayDateMonth, displayDateDay,
 				displayDateYear, displayDateHour, displayDateMinute, 0, 0, 0, 0,
@@ -198,11 +198,11 @@ public class WebPageElementCollectionResource
 	}
 
 	private void _deleteJournalArticle(
-		LongIdentifier journalArticleIdLongIdentifier) {
+		LongIdentifier journalArticleLongIdentifier) {
 
 		try {
 			JournalArticle article = _journalArticleService.getArticle(
-				journalArticleIdLongIdentifier.getId());
+				journalArticleLongIdentifier.getId());
 
 			_journalArticleService.deleteArticle(
 				article.getGroupId(), article.getArticleId(),
@@ -230,16 +230,16 @@ public class WebPageElementCollectionResource
 	}
 
 	private JournalArticle _getJournalArticle(
-		LongIdentifier journalArticleIdLongIdentifier) {
+		LongIdentifier journalArticleLongIdentifier) {
 
 		try {
 			return _journalArticleService.getArticle(
-				journalArticleIdLongIdentifier.getId());
+				journalArticleLongIdentifier.getId());
 		}
 		catch (NoSuchArticleException nsae) {
 			throw new NotFoundException(
 				"Unable to get article " +
-					journalArticleIdLongIdentifier.getId(),
+					journalArticleLongIdentifier.getId(),
 				nsae);
 		}
 		catch (PortalException pe) {
@@ -248,14 +248,14 @@ public class WebPageElementCollectionResource
 	}
 
 	private PageItems<JournalArticle> _getPageItems(
-		Pagination pagination, LongIdentifier groupIdLongIdentifier) {
+		Pagination pagination, LongIdentifier groupLongIdentifier) {
 
 		List<JournalArticle> journalArticles =
 			_journalArticleService.getArticles(
-				groupIdLongIdentifier.getId(), 0, pagination.getStartPosition(),
+				groupLongIdentifier.getId(), 0, pagination.getStartPosition(),
 				pagination.getEndPosition(), null);
 		int count = _journalArticleService.getArticlesCount(
-			groupIdLongIdentifier.getId(), 0);
+			groupLongIdentifier.getId(), 0);
 
 		return new PageItems<>(journalArticles, count);
 	}
@@ -275,8 +275,7 @@ public class WebPageElementCollectionResource
 	}
 
 	private JournalArticle _updateJournalArticle(
-		LongIdentifier journalArticleIdLongIdentifier,
-		Map<String, Object> body) {
+		LongIdentifier journalArticleLongIdentifier, Map<String, Object> body) {
 
 		Double userId = (Double)body.get("user");
 		Double groupId = (Double)body.get("group");
@@ -319,7 +318,7 @@ public class WebPageElementCollectionResource
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.updateArticle(
 				userId.longValue(), groupId.longValue(), folderId,
-				String.valueOf(journalArticleIdLongIdentifier.getId()), version,
+				String.valueOf(journalArticleLongIdentifier.getId()), version,
 				titleMap, descriptionMap, content, null, serviceContext));
 
 		return journalArticleTry.getUnchecked();

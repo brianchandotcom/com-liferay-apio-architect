@@ -193,9 +193,9 @@ public class PersonCollectionResource
 		return userTry.getUnchecked();
 	}
 
-	private void _deleteUser(LongIdentifier userIdLongIdentifier) {
+	private void _deleteUser(LongIdentifier userLongIdentifier) {
 		try {
-			_userLocalService.deleteUser(userIdLongIdentifier.getId());
+			_userLocalService.deleteUser(userLongIdentifier.getId());
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -214,13 +214,13 @@ public class PersonCollectionResource
 		return new PageItems<>(users, count);
 	}
 
-	private User _getUser(LongIdentifier userIdLongIdentifier) {
+	private User _getUser(LongIdentifier userLongIdentifier) {
 		try {
-			return _userLocalService.getUserById(userIdLongIdentifier.getId());
+			return _userLocalService.getUserById(userLongIdentifier.getId());
 		}
 		catch (NoSuchUserException | PrincipalException e) {
 			throw new NotFoundException(
-				"Unable to get user " + userIdLongIdentifier.getId(), e);
+				"Unable to get user " + userLongIdentifier.getId(), e);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -228,9 +228,9 @@ public class PersonCollectionResource
 	}
 
 	private User _updateUser(
-		LongIdentifier userIdLongIdentifier, Map<String, Object> body) {
+		LongIdentifier userLongIdentifier, Map<String, Object> body) {
 
-		User user = _getUser(userIdLongIdentifier);
+		User user = _getUser(userLongIdentifier);
 
 		String password = (String)body.get("password");
 		String screenName = (String)body.get("alternateName");
