@@ -1,6 +1,0 @@
-Bundle-Name: Liferay Vulcan Architect Sample Liferay Portal
-Bundle-SymbolicName: com.liferay.vulcan.architect.sample.liferay.portal
-Bundle-Version: 1.0.0
-Export-Package:\
-	com.liferay.vulcan.architect.sample.liferay.portal.rating,\
-	com.liferay.vulcan.architect.sample.liferay.portal.resource.identifier

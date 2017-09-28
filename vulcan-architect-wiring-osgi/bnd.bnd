@@ -1,6 +1,0 @@
-Bundle-Name: Liferay Vulcan Architect Wiring OSGi
-Bundle-SymbolicName: com.liferay.vulcan.architect.wiring.osgi
-Bundle-Version: 1.0.0
-Export-Package:\
-	com.liferay.vulcan.architect.wiring.osgi.manager,\
-	com.liferay.vulcan.architect.wiring.osgi.util
