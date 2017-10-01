@@ -17,16 +17,10 @@ package com.liferay.vulcan.consumer;
 import java.util.Objects;
 
 /**
- * Represents an operation that accepts eight input arguments and returns no
- * result. This is the eight-arity specialization of {@link
- * java.util.function.Consumer}. Unlike most other functional interfaces, {@code
- * TriConsumer} is expected to operate via side-effects.
+ * Consumer {@link java.util.function.Consumer} with eight input parameters.
+ * As all the consumer interfaces, it receives several arguments and doesn't return anything.
  *
- * <p>This is a <a
- * href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html">functional
- * interface</a>
- * whose functional method is {@link #accept(Object, Object, Object, Object,
- * Object, Object, Object, Object)}.
+ * Being a functional interface, it can be implemented with a lambda function
  *
  * @author Alejandro Hernández
  * @see    java.util.function.Consumer
@@ -36,7 +30,8 @@ import java.util.Objects;
 public interface OctaConsumer<A, B, C, D, E, F, G, H> {
 
 	/**
-	 * Performs this operation on the given arguments.
+	 * The function to implement (explicitly or with a lambda), that operates
+	 * with eight parameters and returns void
 	 *
 	 * @param  a the first function argument
 	 * @param  b the second function argument
@@ -51,15 +46,13 @@ public interface OctaConsumer<A, B, C, D, E, F, G, H> {
 	public void accept(A a, B b, C c, D d, E e, F f, G g, H h);
 
 	/**
-	 * Returns a composed {@code OctaConsumer} that performs, in sequence, this
-	 * operation followed by the {@code after} operation. If performing either
-	 * operation throws an exception, it is relayed to the caller of the
-	 * composed operation. If performing this operation throws an exception, the
-	 * {@code after} operation will not be performed.
+	 * Method that creates a lambda function (also a {@code OctaConsumer}) that
+	 * executes the {@code accept} method of this instance and then the
+	 * {@code accept} method of the {@code after} input parameter when invoked.
 	 *
-	 * @param  after the operation to perform after this operation
-	 * @return a composed {@code OctaConsumer} that performs in sequence this
-	 *         operation followed by the {@code after} operation
+	 * @param  after the {@code OctaConsumer} to execute after this instance
+	 * @return another {@code OctaConsumer} that executes both inputs
+	 * (this own instance plus the input parameter) in order
 	 * @review
 	 */
 	public default OctaConsumer<A, B, C, D, E, F, G, H> andThen(

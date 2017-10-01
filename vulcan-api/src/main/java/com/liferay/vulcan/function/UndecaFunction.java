@@ -18,33 +18,26 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Represents a function that accepts eleven arguments and produces a result.
- * This is the eleven-arity specialization of {@link Function}.
+ * Function {@link java.util.function.Function} with eleven input parameters.
+ * As all the function interfaces, it receives several arguments and returns one value
+ * (of type R)
  *
- * <p>This is a <a
- * href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html">functional
- * interface</a> whose
- * functional method is {@link
- * #apply(Object, Object, Object, Object, Object,Object, Object, Object, Object,
- * Object, Object)}.
+ * Being a functional interface, it can be implemented with a lambda function
  *
  * @author Alejandro Hernández
- * @see    Function
+ * @see    java.util.function.Function
  * @review
  */
 @FunctionalInterface
 public interface UndecaFunction<A, B, C, D, E, F, G, H, I, J, K, R> {
 
 	/**
-	 * Returns a composed function that first applies this function to its
-	 * input, and then applies the {@code afterFunction} function to the result.
-	 * If evaluation of either function throws an exception, it is relayed to
-	 * the caller of the composed function.
+	 * Method that creates a lambda function (also a {@code UndecaFunction}) that
+	 * executes the {@code apply} method of this instance and uses the result as the input for the {@code apply} method of the {@code afterFunction} input parameter when invoked.
 	 *
-	 * @param  afterFunction the function to apply after this function is
-	 *         applied
-	 * @return a composed function that first applies this function and then
-	 *         applies the {@code after} function
+	 * @param  afterFunction the {@code UndecaFunction} to execute after this instance
+	 * @return another {@code UndecaFunction} that executes both inputs
+	 * (this own instance plus the input parameter) in order using the return value of the first one as the input for the second
 	 * @review
 	 */
 	public default <V> UndecaFunction<A, B, C, D, E, F, G, H, I, J, K, V>
@@ -57,7 +50,8 @@ public interface UndecaFunction<A, B, C, D, E, F, G, H, I, J, K, R> {
 	}
 
 	/**
-	 * Applies this function to the given arguments.
+	 * The function to implement (explicitly or with a lambda), that operates
+	 * with eleven parameters and returns void
 	 *
 	 * @param  a the first function argument
 	 * @param  b the second function argument
