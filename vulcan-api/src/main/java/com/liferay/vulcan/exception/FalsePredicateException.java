@@ -15,13 +15,11 @@
 package com.liferay.vulcan.exception;
 
 /**
- * This exception will be returned inside a {@link
- * com.liferay.vulcan.result.Try} when {@link
- * com.liferay.vulcan.result.Try#filter(Predicate)} predicate returns
+ * Defines the exception returned inside {@link com.liferay.vulcan.result.Try}
+ * when {@link com.liferay.vulcan.result.Try#filter(Predicate)} returns
  * {@code false}.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class FalsePredicateException extends Exception {
 

@@ -23,21 +23,21 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Use instances of this builder to create JSON objects.
- *
- * This builder should be used to write a complete path in each call.
- * For example, this code:
+ * Creates JSON objects. Instances of JSON object builder should be used to
+ * write a complete path in each call.
  *
  * <p>
- * {@code jsonObjectBuilder.nestedField("object", "inner", "other").value(42);}
+ * For example, this <code>nestedField</code> call produces the JSON object that
+ * follows it:
  * </p>
  *
  * <p>
- * Results in the following JSON object:
- * </p>
- *
- * <p>
- * {@code { "object": { "inner": { "other": 42 } } } }
+ * <pre>
+ * <code>
+ * jsonObjectBuilder.nestedField("object", "inner", "other").value(42);
+ * { "object": { "inner": { "other": 42 } } }
+ * </code>
+ * </pre>
  * </p>
  *
  * This builder is incremental, so, once you have made the first call, you can
