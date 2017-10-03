@@ -21,7 +21,7 @@ import java.util.function.Function;
 /**
  * Defines a type alias for a function that receives a model of type
  * <code>T</code>, and returns a binary representation of that model in an
- * {@link InputStream}.
+ * <code>InputStream</code>.
  *
  * @author Alejandro Hernández
  */

@@ -21,11 +21,12 @@ import com.liferay.vulcan.result.APIError;
 import javax.ws.rs.core.HttpHeaders;
 
 /**
- * Represents errors in a different format. Instances of this interface work 
+ * Represents errors in a different format. Instances of this interface work
  * like events. The {@link com.liferay.vulcan.result.APIError} writer calls each 
- * of the mapper's methods. In each method, developers should only map the 
- * provided part of the error to its representation in a JSON object. To enable 
- * this, each method receives a {@link JSONObjectBuilder}.
+ * of the <code>ErrorMessageMapper</code> methods. In each method, developers 
+ * should only map the provided part of the error to its representation in a 
+ * JSON object. To enable this, each method receives a {@link 
+ * JSONObjectBuilder}.
  *
  * Besides {@link #onStart(JSONObjectBuilder, APIError, HttpHeaders)} and
  * {@link #onFinish(JSONObjectBuilder, APIError, HttpHeaders)}, which are
@@ -110,7 +111,8 @@ public interface ErrorMessageMapper {
 	}
 
 	/**
-	 * Checks if the mapper can map all things related to the current request.
+	 * Returns <code>true</code> if the mapper can map all things related to the
+	 * current request.
 	 *
 	 * @param  apiError the API error.
 	 * @param  httpHeaders the current request's HTTP headers.

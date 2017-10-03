@@ -15,26 +15,22 @@
 package com.liferay.vulcan.resource.identifier;
 
 /**
- * Instances of this identifier represents a simple identifier with a {@code
- * long} value ID. This value can be retrieved with the {@link #getId()} method.
+ * Represents a simple identifier with a <code>long</code> ID.
  *
  * @author Alejandro Hernández
- * @review
  */
 @FunctionalInterface
 public interface LongIdentifier extends Identifier {
 
 	/**
-	 * Returns the {@code long} ID of this identifier.
+	 * Returns the identifier's ID as a <code>long</code>.
 	 *
 	 * <p>
-	 * <p> For example with a resource obtained in the URL: {@code
-	 * /p/product/100} this method will return {@code 100} as a {@code long}
-	 * value.
+	 * For example, for a resource in the URL <code>/p/product/100</code>, this
+	 * method returns <code>100</code> as a <code>long</code>.
 	 * </p>
 	 *
-	 * @return the ID of the identifier.
-	 * @review
+	 * @return the identifier's <code>long</code> ID.
 	 */
 	public long getId();
 

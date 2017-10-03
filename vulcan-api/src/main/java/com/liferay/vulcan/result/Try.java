@@ -24,53 +24,45 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Implementation of the monadic "Try" type.
+ * Implements the monadic <code>Try</code> type. Instances of this class
+ * represent the result of an operation that either succeeds with type
+ * <code>T</code>, or fails with an exception. Only two descendants of this
+ * class are allowed: {@link Success} for the success case, and {@link Failure}
+ * for the failure case.
  *
- * Represents the result of an operation that could have succeeded (with a type
- * T) or failed (with an {@link Exception}).
- *
- * Only two descendants of this class are allowed: {@link Success} for the
- * success case and {@link Failure} for the failure one.
- *
- * Never instantiate this class directly. To create an instance of this class,
- * use {@link
- * #fromFallible(ThrowableSupplier)}
- * if you don't know if the operation is going to fail or not. {@link
- * #fail(Exception)}
- * to directly create a {@link Failure} from an {@link Exception}. Or {@link
- * #success(Object)}
- * to directly create a {@link Success} from a T.
+ * Never instantiate this class directly. If you're unsure whether the operation
+ * will succeed, use {@link #fromFallible(ThrowableSupplier)} to create an
+ * instance of this class. To create a <code>Failure</code> instance directly
+ * from an exception, use {@link #fail(Exception)}. To create a
+ * <code>Success</code> instance directly from <code>T</code>, use
+ * {@link #success(Object)}.
  *
  * @author Alejandro Hernández
- * @review
  */
 @SuppressWarnings("unused")
 public abstract class Try<T> {
 
 	/**
-	 * Creates a new {@code Try} instance from an {@link Exception}. The
-	 * instance will be created as a {@link Failure}.
+	 * Creates a new <code>Try</code> instance from an exception. This method
+	 * creates the instance as a <code>Failure</code> object.
 	 *
-	 * @param  exception the exception to include in the {@link Failure}
-	 * @return the {@code Try} instance for the exception.
-	 * @review
+	 * @param  exception the exception to create the <code>Failure</code> from
+	 * @return the <code>Try</code> instance created from the exception
 	 */
 	public static <U> Try<U> fail(Exception exception) {
 		return new Failure<>(exception);
 	}
 
 	/**
-	 * Creates a new {@code Try} instance by executing a fallible lambda. If
-	 * executing the lambda throws an exception a {@link Failure} instance will
-	 * be created; otherwise, a {@link Success} instance with the lambda result
-	 * will be created.
+	 * Creates a new <code>Try</code> instance by executing a fallible lambda in
+	 * a {@link ThrowableSupplier}. If this throws an exception, a
+	 * <code>Failure</code> instance is created. Otherwise, a
+	 * <code>Success</code> instance with the lambda's result is created.
 	 *
-	 * @param  throwableSupplier the supplier to be executed in order to obtain
-	 *         the value.
-	 * @return a {@code Try} instance with the value obtained by the supplier:
-	 *         {@link Failure} if the supplier throws an exception; {@link
-	 *         Success} otherwise.
-	 * @review
+	 * @param  throwableSupplier the throwable supplier that contains the
+	 *         fallible lambda
+	 * @return <code>Failure</code> if the throwable supplier throws an
+	 *         exception; <code>Success</code> otherwise
 	 */
 	public static <U> Try<U> fromFallible(
 		ThrowableSupplier<U> throwableSupplier) {
@@ -86,15 +78,14 @@ public abstract class Try<T> {
 	}
 
 	/**
-	 * Creates a new {@code Try} instance by executing a fallible lambda with
-	 * resources. If executing the lambda throws an exception a {@link Failure}
-	 * instance will be created; otherwise, a {@link Success} instance with the
-	 * lambda result will be created.
+	 * Creates a new <code>Try</code> instance by executing a fallible lambda
+	 * with resources in a <code>ThrowableSupplier</code>. If this throws an
+	 * exception, a <code>Failure</code> instance is created. Otherwise, a
+	 * <code>Success</code> instance with the lambda's result is created.
 	 *
-	 * @param  closeableSupplier the supplier to be executed in order to obtain
-	 *         the closeable value.
-	 * @param  throwableFunction the function to be executed in order to obtain
-	 *         the value.
+	 * @param  closeableSupplier the throwable supplier that contains the
+	 *         fallible lambda with resources
+	 * @param  throwableFunction the lambda function to execute
 	 * @return a {@code Try} instance with the value obtained by the supplier:
 	 *         {@link Failure} if the supplier throws an exception; {@link
 	 *         Success} otherwise.
@@ -116,12 +107,11 @@ public abstract class Try<T> {
 	}
 
 	/**
-	 * Creates a new {@code Try} instance from a valid object. The instance will
-	 * be created as a {@link Success}.
+	 * Creates a new <code>Try</code> instance from an object. This method
+	 * creates the instance as a <code>Success</code> object.
 	 *
-	 * @param  u object to include as value of the {@link Success}.
-	 * @return the {@code Try} instance for the value.
-	 * @review
+	 * @param  u the object to create the <code>Success</code> object from
+	 * @return the <code>Success</code> object.
 	 */
 	public static <U> Try<U> success(U u) {
 		return new Success<>(u);

@@ -27,17 +27,16 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * Instances of this interface will hold information about the metadata
- * supported for a certain {@link CollectionResource}.
+ * Holds information about the metadata supported for a {@link 
+ * CollectionResource}.
  *
  * <p>
- * Instances of this interface should always be created by using a {@link
+ * Instances of this interface should always be created by using a {@link 
  * com.liferay.vulcan.resource.builder.RepresentorBuilder}.
  * </p>
  *
  * @author Alejandro Hernández
  * @see    com.liferay.vulcan.resource.builder.RepresentorBuilder
- * @review
  */
 @ProviderType
 public interface Representor<T, U extends Identifier> {
@@ -45,17 +44,15 @@ public interface Representor<T, U extends Identifier> {
 	/**
 	 * Returns the binary resources linked to a model.
 	 *
-	 * @return the binary resources.
-	 * @review
+	 * @return the binary resources linked to a model.
 	 */
 	public Map<String, BinaryFunction<T>> getBinaryFunctions();
 
 	/**
-	 * Returns a map containing the boolean field names and the functions to get
-	 * those fields.
+	 * Returns the map containing the boolean field names and the functions to
+	 * get those fields.
 	 *
-	 * @return the field names and field functions.
-	 * @review
+	 * @return the map containing the boolean field names and functions.
 	 */
 	public Map<String, Function<T, Boolean>> getBooleanFunctions();
 
@@ -63,16 +60,14 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the embedded related models.
 	 *
 	 * @return the embedded related models.
-	 * @review
 	 */
 	public List<RelatedModel<T, ?>> getEmbeddedRelatedModels();
 
 	/**
-	 * Returns the identifier of the model.
+	 * Returns the model's identifier.
 	 *
 	 * @param  model the model instance.
-	 * @return the identifier of the model.
-	 * @review
+	 * @return the model's identifier.
 	 */
 	public U getIdentifier(T model);
 
@@ -80,7 +75,6 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the identifier class.
 	 *
 	 * @return the identifier class.
-	 * @review
 	 */
 	public Class<U> getIdentifierClass();
 
@@ -88,7 +82,6 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the linked related models.
 	 *
 	 * @return the linked related models.
-	 * @review
 	 */
 	public List<RelatedModel<T, ?>> getLinkedRelatedModels();
 
@@ -96,7 +89,6 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the links.
 	 *
 	 * @return the links.
-	 * @review
 	 */
 	public Map<String, String> getLinks();
 
@@ -111,11 +103,10 @@ public interface Representor<T, U extends Identifier> {
 		getLocalizedStringFunctions();
 
 	/**
-	 * Returns a map containing the number field names and the functions to get
-	 * those fields.
+	 * Returns the map containing the number field names and the functions to
+	 * get those fields.
 	 *
-	 * @return the field names and field functions.
-	 * @review
+	 * @return the map containing the number field names and functions.
 	 */
 	public Map<String, Function<T, Number>> getNumberFunctions();
 
@@ -123,16 +114,14 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the related collections.
 	 *
 	 * @return the related collections.
-	 * @review
 	 */
 	public Stream<RelatedCollection<T, ?>> getRelatedCollections();
 
 	/**
-	 * Returns a map containing the string field names and the functions to get
-	 * those fields.
+	 * Returns the map containing the string field names and the functions to
+	 * get those fields.
 	 *
-	 * @return the field names and field functions.
-	 * @review
+	 * @return the map containing the string field names and functions.
 	 */
 	public Map<String, Function<T, String>> getStringFunctions();
 
@@ -140,7 +129,6 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the types.
 	 *
 	 * @return the types.
-	 * @review
 	 */
 	public List<String> getTypes();
 
