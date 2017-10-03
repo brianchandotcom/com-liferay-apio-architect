@@ -89,20 +89,21 @@ public interface Page<T> {
 	public int getTotalCount();
 
 	/**
-	 * Returns {@code true} if another page follows this page in the collection.
+	 * Returns {@code <code>true</code>} if another page follows this page in
+	 * the collection.
 	 *
-	 * @return {@code true} if another page follows this page in the collection;
-	 *         {@code false} otherwise.
+	 * @return {@code <code>true</code>} if another page follows this page in
+	 *         the collection; {@code <code>false</code>} otherwise.
 	 * @review
 	 */
 	public boolean hasNext();
 
 	/**
-	 * Returns {@code true} if another page precedes this page in the
-	 * collection.
+	 * Returns {@code <code>true</code>} if another page precedes this page in
+	 * the collection.
 	 *
-	 * @return {@code true} if another page precedes this page in the
-	 *         collection; {@code false} otherwise.
+	 * @return {@code <code>true</code>} if another page precedes this page in
+	 *         the collection; {@code <code>false</code>} otherwise.
 	 * @review
 	 */
 	public boolean hasPrevious();

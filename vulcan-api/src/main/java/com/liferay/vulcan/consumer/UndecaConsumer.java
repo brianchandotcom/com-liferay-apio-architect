@@ -17,8 +17,9 @@ package com.liferay.vulcan.consumer;
 import java.util.Objects;
 
 /**
- * Consumer {@link java.util.function.Consumer} with eleven input parameters.
- * As all the consumer interfaces, it receives several arguments and doesn't return anything.
+ * Consumer {@link java.util.function.Consumer} with eleven input parameters. As
+ * all the consumer interfaces, it receives several arguments and doesn't return
+ * anything.
  *
  * Being a functional interface, it can be implemented with a lambda function
  *
@@ -49,13 +50,13 @@ public interface UndecaConsumer<A, B, C, D, E, F, G, H, I, J, K> {
 	public void accept(A a, B b, C c, D d, E e, F f, G g, H h, I i, J j, K k);
 
 	/**
-	 * Method that creates a lambda function (also a {@code UndecaConsumer}) that
-	 * executes the {@code accept} method of this instance and then the
+	 * Method that creates a lambda function (also a {@code UndecaConsumer})
+	 * that executes the {@code accept} method of this instance and then the
 	 * {@code accept} method of the {@code after} input parameter when invoked.
 	 *
 	 * @param  after the {@code UndecaConsumer} to execute after this instance
-	 * @return another {@code UndecaConsumer} that executes both inputs
-	 * (this own instance plus the input parameter) in order
+	 * @return another {@code UndecaConsumer} that executes both inputs (this
+	 *         own instance plus the input parameter) in order
 	 * @review
 	 */
 	public default UndecaConsumer<A, B, C, D, E, F, G, H, I, J, K> andThen(

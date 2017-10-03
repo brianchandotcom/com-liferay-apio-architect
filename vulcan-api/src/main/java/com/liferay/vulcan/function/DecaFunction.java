@@ -18,15 +18,14 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Function {@link java.util.function.Function} with ten input parameters.
- * As all the function interfaces, it receives several arguments and returns one value
- * (of type R)
+ * Function {@link Function} with ten input parameters. As all the function
+ * interfaces, it receives several arguments and returns one value (of type R)
  *
  * Being a functional interface, it can be implemented with a lambda function
  *
  * @author Alejandro Hernández
  * @author Jorge Ferrer
- * @see    java.util.function.Function
+ * @see    Function
  * @review
  */
 @FunctionalInterface
@@ -34,11 +33,15 @@ public interface DecaFunction<A, B, C, D, E, F, G, H, I, J, R> {
 
 	/**
 	 * Method that creates a lambda function (also a {@code DecaFunction}) that
-	 * executes the {@code apply} method of this instance and uses the result as the input for the {@code apply} method of the {@code afterFunction} input parameter when invoked.
+	 * executes the {@code apply} method of this instance and uses the result as
+	 * the input for the {@code apply} method of the {@code afterFunction} input
+	 * parameter when invoked.
 	 *
-	 * @param  afterFunction the {@code DecaFunction} to execute after this instance
-	 * @return another {@code DecaFunction} that executes both inputs
-	 * (this own instance plus the input parameter) in order using the return value of the first one as the input for the second
+	 * @param  afterFunction the {@code DecaFunction} to execute after this
+	 *         instance
+	 * @return another {@code DecaFunction} that executes both inputs (this own
+	 *         instance plus the input parameter) in order using the return
+	 *         value of the first one as the input for the second
 	 * @review
 	 */
 	public default <V> DecaFunction<A, B, C, D, E, F, G, H, I, J, V> andThen(

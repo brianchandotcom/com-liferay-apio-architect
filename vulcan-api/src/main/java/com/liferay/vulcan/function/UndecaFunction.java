@@ -18,26 +18,29 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Function {@link java.util.function.Function} with eleven input parameters.
- * As all the function interfaces, it receives several arguments and returns one value
- * (of type R)
+ * Function {@link Function} with eleven input parameters. As all the function
+ * interfaces, it receives several arguments and returns one value (of type R)
  *
  * Being a functional interface, it can be implemented with a lambda function
  *
  * @author Alejandro Hernández
- * @see    java.util.function.Function
+ * @see    Function
  * @review
  */
 @FunctionalInterface
 public interface UndecaFunction<A, B, C, D, E, F, G, H, I, J, K, R> {
 
 	/**
-	 * Method that creates a lambda function (also a {@code UndecaFunction}) that
-	 * executes the {@code apply} method of this instance and uses the result as the input for the {@code apply} method of the {@code afterFunction} input parameter when invoked.
+	 * Method that creates a lambda function (also a {@code UndecaFunction})
+	 * that executes the {@code apply} method of this instance and uses the
+	 * result as the input for the {@code apply} method of the {@code
+	 * afterFunction} input parameter when invoked.
 	 *
-	 * @param  afterFunction the {@code UndecaFunction} to execute after this instance
-	 * @return another {@code UndecaFunction} that executes both inputs
-	 * (this own instance plus the input parameter) in order using the return value of the first one as the input for the second
+	 * @param  afterFunction the {@code UndecaFunction} to execute after this
+	 *         instance
+	 * @return another {@code UndecaFunction} that executes both inputs (this
+	 *         own instance plus the input parameter) in order using the return
+	 *         value of the first one as the input for the second
 	 * @review
 	 */
 	public default <V> UndecaFunction<A, B, C, D, E, F, G, H, I, J, K, V>

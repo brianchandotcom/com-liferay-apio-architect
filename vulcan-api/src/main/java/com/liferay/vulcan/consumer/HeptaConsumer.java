@@ -17,8 +17,9 @@ package com.liferay.vulcan.consumer;
 import java.util.Objects;
 
 /**
- * Consumer {@link java.util.function.Consumer} with seven input parameters.
- * As all the consumer interfaces, it receives several arguments and doesn't return anything.
+ * Consumer {@link java.util.function.Consumer} with seven input parameters. As
+ * all the consumer interfaces, it receives several arguments and doesn't return
+ * anything.
  *
  * Being a functional interface, it can be implemented with a lambda function
  *
@@ -46,12 +47,12 @@ public interface HeptaConsumer<A, B, C, D, E, F, G> {
 
 	/**
 	 * Method that creates a lambda function (also a {@code HeptaConsumer}) that
-	 * executes the {@code accept} method of this instance and then the
-	 * {@code accept} method of the {@code after} input parameter when invoked.
+	 * executes the {@code accept} method of this instance and then the {@code
+	 * accept} method of the {@code after} input parameter when invoked.
 	 *
 	 * @param  after the {@code HeptaConsumer} to execute after this instance
-	 * @return another {@code HeptaConsumer} that executes both inputs
-	 * (this own instance plus the input parameter) in order
+	 * @return another {@code HeptaConsumer} that executes both inputs (this own
+	 *         instance plus the input parameter) in order
 	 * @review
 	 */
 	public default HeptaConsumer<A, B, C, D, E, F, G> andThen(

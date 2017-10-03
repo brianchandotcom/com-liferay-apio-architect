@@ -17,8 +17,9 @@ package com.liferay.vulcan.consumer;
 import java.util.Objects;
 
 /**
- * Consumer {@link java.util.function.Consumer} with nine input parameters.
- * As all the consumer interfaces, it receives several arguments and doesn't return anything.
+ * Consumer {@link java.util.function.Consumer} with nine input parameters. As
+ * all the consumer interfaces, it receives several arguments and doesn't return
+ * anything.
  *
  * Being a functional interface, it can be implemented with a lambda function
  *
@@ -48,12 +49,12 @@ public interface EnneaConsumer<A, B, C, D, E, F, G, H, I> {
 
 	/**
 	 * Method that creates a lambda function (also a {@code EnneaConsumer}) that
-	 * executes the {@code accept} method of this instance and then the
-	 * {@code accept} method of the {@code after} input parameter when invoked.
+	 * executes the {@code accept} method of this instance and then the {@code
+	 * accept} method of the {@code after} input parameter when invoked.
 	 *
 	 * @param  after the {@code EnneaConsumer} to execute after this instance
-	 * @return another {@code EnneaConsumer} that executes both inputs
-	 * (this own instance plus the input parameter) in order
+	 * @return another {@code EnneaConsumer} that executes both inputs (this own
+	 *         instance plus the input parameter) in order
 	 * @review
 	 */
 	public default EnneaConsumer<A, B, C, D, E, F, G, H, I> andThen(

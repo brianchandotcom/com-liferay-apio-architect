@@ -17,8 +17,9 @@ package com.liferay.vulcan.consumer;
 import java.util.Objects;
 
 /**
- * Consumer {@link java.util.function.Consumer} with eight input parameters.
- * As all the consumer interfaces, it receives several arguments and doesn't return anything.
+ * Consumer {@link java.util.function.Consumer} with eight input parameters. As
+ * all the consumer interfaces, it receives several arguments and doesn't return
+ * anything.
  *
  * Being a functional interface, it can be implemented with a lambda function
  *
@@ -47,12 +48,12 @@ public interface OctaConsumer<A, B, C, D, E, F, G, H> {
 
 	/**
 	 * Method that creates a lambda function (also a {@code OctaConsumer}) that
-	 * executes the {@code accept} method of this instance and then the
-	 * {@code accept} method of the {@code after} input parameter when invoked.
+	 * executes the {@code accept} method of this instance and then the {@code
+	 * accept} method of the {@code after} input parameter when invoked.
 	 *
 	 * @param  after the {@code OctaConsumer} to execute after this instance
-	 * @return another {@code OctaConsumer} that executes both inputs
-	 * (this own instance plus the input parameter) in order
+	 * @return another {@code OctaConsumer} that executes both inputs (this own
+	 *         instance plus the input parameter) in order
 	 * @review
 	 */
 	public default OctaConsumer<A, B, C, D, E, F, G, H> andThen(
