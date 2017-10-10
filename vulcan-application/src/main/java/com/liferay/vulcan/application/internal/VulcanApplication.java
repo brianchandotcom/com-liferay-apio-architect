@@ -45,7 +45,10 @@ import org.osgi.service.component.annotations.Reference;
  * @review
  */
 @ApplicationPath("/")
-@Component(immediate = true, service = Application.class)
+@Component(
+	immediate = true, property = "liferay.vulcan.application=true",
+	service = Application.class
+)
 public class VulcanApplication extends Application {
 
 	@Override
