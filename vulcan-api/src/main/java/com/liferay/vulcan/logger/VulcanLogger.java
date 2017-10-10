@@ -34,7 +34,6 @@ public interface VulcanLogger {
 	 * @param  apiError the error.
 	 * @review
 	 */
-	public default void error(APIError apiError) {
-	}
+	public void error(APIError apiError);
 
 }
