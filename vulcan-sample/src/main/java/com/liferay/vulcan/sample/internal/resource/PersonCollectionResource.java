@@ -68,6 +68,8 @@ public class PersonCollectionResource
 		).addString(
 			"givenName", User::getFirstName
 		).addString(
+			"name", User::getFullName
+		).addString(
 			"jobTitle", User::getJobTitle
 		).addType(
 			"Person"

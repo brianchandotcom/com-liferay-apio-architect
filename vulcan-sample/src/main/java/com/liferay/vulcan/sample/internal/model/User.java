@@ -195,6 +195,15 @@ public class User {
 	}
 
 	/**
+	 * Returns the full name of this {@code User}.
+	 *
+	 * @return the last name of the user.
+	 */
+	public String getFullName() {
+		return _firstName + " " + _lastName;
+	}
+
+	/**
 	 * The ID of this {@code User}.
 	 *
 	 * @return the ID of the user.
