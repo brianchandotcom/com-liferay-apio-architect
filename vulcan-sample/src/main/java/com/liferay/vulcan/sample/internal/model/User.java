@@ -16,6 +16,7 @@ package com.liferay.vulcan.sample.internal.model;
 
 import com.github.javafaker.DateAndTime;
 import com.github.javafaker.Faker;
+import com.github.javafaker.Internet;
 import com.github.javafaker.Name;
 
 import java.util.Collection;
@@ -44,19 +45,20 @@ public class User {
 	 *
 	 * @param  firstName the first name of the user.
 	 * @param  lastName the last name of the user.
+	 * @param  email the email of the user.
 	 * @param  address the address of the user.
 	 * @param  jobTitle the job title of the user.
 	 * @param  birthDate the birth date of the user.
 	 * @return the added {@code User}.
 	 */
 	public static User addUser(
-		String firstName, String lastName, String address, String jobTitle,
-		Date birthDate) {
+		String firstName, String lastName, String email, String address,
+		String jobTitle, Date birthDate) {
 
 		long id = _count.incrementAndGet();
 
 		User user = new User(
-			id, firstName, lastName, address, jobTitle, birthDate);
+			id, firstName, lastName, email, address, jobTitle, birthDate);
 
 		_users.put(id, user);
 
@@ -119,14 +121,15 @@ public class User {
 	 * @param  id the ID of the user to update.
 	 * @param  firstName the first name of the user.
 	 * @param  lastName the last name of the user.
+	 * @param  email the email of the user.
 	 * @param  address the address of the user.
 	 * @param  jobTitle the job title of the user.
 	 * @param  birthDate the birth date of the user.
 	 * @return the updated {@code User}.
 	 */
 	public static Optional<User> updateUser(
-		long id, String firstName, String lastName, String address,
-		String jobTitle, Date birthDate) {
+		long id, String firstName, String lastName, String email,
+		String address, String jobTitle, Date birthDate) {
 
 		User user = _users.get(id);
 
@@ -134,7 +137,8 @@ public class User {
 			return Optional.empty();
 		}
 
-		user = new User(id, firstName, lastName, address, jobTitle, birthDate);
+		user = new User(
+			id, firstName, lastName, email, address, jobTitle, birthDate);
 
 		_users.put(id, user);
 
@@ -157,6 +161,15 @@ public class User {
 	 */
 	public Date getBirthDate() {
 		return _birthDate;
+	}
+
+	/**
+	 * Returns the email of this {@code User}.
+	 *
+	 * @return the email of the user.
+	 */
+	public String getEmail() {
+		return _email;
 	}
 
 	/**
@@ -196,12 +209,13 @@ public class User {
 	}
 
 	private User(
-		long id, String firstName, String lastName, String address,
-		String jobTitle, Date birthDate) {
+		long id, String firstName, String lastName, String email,
+		String address, String jobTitle, Date birthDate) {
 
 		_id = id;
 		_firstName = firstName;
 		_lastName = lastName;
+		_email = email;
 		_address = address;
 		_jobTitle = jobTitle;
 		_birthDate = birthDate;
@@ -218,17 +232,20 @@ public class User {
 
 			Name name = faker.name();
 
+			Internet internet = faker.internet();
+
 			DateAndTime dateAndTime = faker.date();
 
 			String firstName = name.firstName();
 			String lastName = name.lastName();
+			String email = internet.safeEmailAddress();
 			String address = faker.address().fullAddress();
 			String jobTitle = name.title();
 
 			Date birthDate = dateAndTime.past(400, TimeUnit.DAYS);
 
 			User user = new User(
-				i, firstName, lastName, address, jobTitle, birthDate);
+				i, firstName, lastName, email, address, jobTitle, birthDate);
 
 			_users.put(i, user);
 		}
@@ -236,6 +253,7 @@ public class User {
 
 	private final String _address;
 	private final Date _birthDate;
+	private final String _email;
 	private final String _firstName;
 	private final long _id;
 	private final String _jobTitle;

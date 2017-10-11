@@ -60,6 +60,8 @@ public class PersonCollectionResource
 		).addString(
 			"address", User::getAddress
 		).addString(
+			"email", User::getEmail
+		).addString(
 			"familyName", User::getLastName
 		).addString(
 			"givenName", User::getFirstName
@@ -97,13 +99,15 @@ public class PersonCollectionResource
 
 		String firstName = (String)body.get("givenName");
 		String lastName = (String)body.get("familyName");
+		String email = (String)body.get("email");
 		String address = (String)body.get("address");
 		String jobTitle = (String)body.get("jobTitle");
 		String birthDateString = (String)body.get("birthDate");
 
 		Date birthDate = Date.from(Instant.parse(birthDateString));
 
-		return User.addUser(firstName, lastName, address, jobTitle, birthDate);
+		return User.addUser(
+			firstName, lastName, email, address, jobTitle, birthDate);
 	}
 
 	private void _deleteUser(LongIdentifier personLongIdentifier) {
@@ -134,6 +138,7 @@ public class PersonCollectionResource
 
 		String firstName = (String)body.get("givenName");
 		String lastName = (String)body.get("familyName");
+		String email = (String)body.get("email");
 		String address = (String)body.get("address");
 		String jobTitle = (String)body.get("jobTitle");
 		String birthDateString = (String)body.get("birthDate");
@@ -141,7 +146,7 @@ public class PersonCollectionResource
 		Date birthDate = Date.from(Instant.parse(birthDateString));
 
 		Optional<User> optional = User.updateUser(
-			personLongIdentifier.getId(), firstName, lastName, address,
+			personLongIdentifier.getId(), firstName, lastName, email, address,
 			jobTitle, birthDate);
 
 		return optional.orElseThrow(
