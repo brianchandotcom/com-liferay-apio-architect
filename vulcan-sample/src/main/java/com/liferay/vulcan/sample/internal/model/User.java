@@ -19,6 +19,7 @@ import com.github.javafaker.Faker;
 import com.github.javafaker.Internet;
 import com.github.javafaker.Name;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -250,6 +251,12 @@ public class User {
 	static {
 		_users = new HashMap<>();
 
+		Calendar calendar = Calendar.getInstance();
+
+		calendar.add(Calendar.YEAR, -21);
+
+		Date adultDate = calendar.getTime();
+
 		for (long i = 0; i < 10; i++) {
 			Faker faker = new Faker();
 
@@ -265,7 +272,7 @@ public class User {
 			String address = faker.address().fullAddress();
 			String jobTitle = name.title();
 
-			Date birthDate = dateAndTime.past(400, TimeUnit.DAYS);
+			Date birthDate = dateAndTime.past(10000, TimeUnit.DAYS, adultDate);
 
 			String avatar = internet.avatar();
 
