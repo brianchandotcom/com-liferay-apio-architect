@@ -78,27 +78,29 @@ public abstract class Try<T> {
 	}
 
 	/**
-	 * Creates a new <code>Try</code> instance by executing a fallible lambda
-	 * with resources in a <code>ThrowableSupplier</code>. If this throws an
-	 * exception, a <code>Failure</code> instance is created. Otherwise, a
-	 * <code>Success</code> instance with the lambda's result is created.
+	 * Creates a new <code>Try</code> instance by composing two functions:
+	 * <code>throwableSupplier</code> and <code>throwableFunction</code>. The
+	 * result of <code>throwableSupplier</code> is passed as the only parameter
+	 * to <code>throwableFunction</code>. If either function fails, a 
+	 * <code>Failure</code> instance is returned. Otherwise, a
+	 * <code>Success</code> instance with the results of
+	 * <code>throwableFunction</code> is returned.
 	 *
-	 * @param  closeableSupplier the throwable supplier that contains the
-	 *         fallible lambda with resources
-	 * @param  throwableFunction the lambda function to execute
-	 * @return a {@code Try} instance with the value obtained by the supplier:
-	 *         {@link Failure} if the supplier throws an exception; {@link
-	 *         Success} otherwise.
-	 * @review
+	 * @param  throwableSupplier the throwable supplier that contains the
+	 *         function with resources
+	 * @param  throwableFunction the function to execute with the results of
+	 *         <code>throwableSupplier</code>
+	 * @return a <code>Success</code> instance if the functions succeed; a 
+	 *         <code>Failure</code> instance otherwise.
 	 */
 	public static <U, V extends Closeable> Try<U> fromFallibleWithResources(
-		ThrowableSupplier<V> closeableSupplier,
+		ThrowableSupplier<V> throwableSupplier,
 		ThrowableFunction<V, U> throwableFunction) {
 
 		Objects.requireNonNull(throwableFunction);
-		Objects.requireNonNull(closeableSupplier);
+		Objects.requireNonNull(throwableSupplier);
 
-		try (V v = closeableSupplier.get()) {
+		try (V v = throwableSupplier.get()) {
 			return success(throwableFunction.apply(v));
 		}
 		catch (Exception exception) {
@@ -111,91 +113,103 @@ public abstract class Try<T> {
 	 * creates the instance as a <code>Success</code> object.
 	 *
 	 * @param  u the object to create the <code>Success</code> object from
-	 * @return the <code>Success</code> object.
+	 * @return the <code>Success</code> object
 	 */
 	public static <U> Try<U> success(U u) {
 		return new Success<>(u);
 	}
 
 	/**
-	 * If a value is present, and the value matches the given predicate, return
-	 * a {@code Try} with the value, otherwise return a {@code Try} with an
-	 * exception indicating the {@code false} predicate.
+	 * Returns a <code>Try</code> instance with a value, if that value matches
+	 * the predicate. Otherwise, this method returns a <code>Try</code> instance
+	 * with an exception that indicates the <code>false</code> predicate.
 	 *
-	 * @param  predicate a predicate to apply to the value, if present
-	 * @return a {@code Try} with the value of this {@code Try} if a value is
-	 *         present and the value matches the given predicate, otherwise a
-	 *         {@code Try} with and exception for a {@code false} predicate.
-	 * @review
+	 * @param  predicate the predicate to apply to a value
+	 * @return a <code>Try</code> instance with a value, if that value matches
+	 *         the predicate; otherwise a <code>Try</code> instance with an
+	 *         exception for a {@code <code>false</code>} predicate
 	 */
 	public abstract Try<T> filter(Predicate<T> predicate);
 
 	/**
-	 * If success case, apply the provided {@code Try}-bearing mapping function
-	 * to it, return that result; otherwise propagate the failure.
+	 * Returns the result of applying the mapping function to the
+	 * <code>Success</code> instance's value, if the current <code>Try</code>
+	 * instance is a <code>Success</code>; otherwise returns the
+	 * <code>Failure</code> instance.
 	 *
 	 * <p>
 	 * This method is similar to {@link #map(ThrowableFunction)}, but the
-	 * provided mapper is one whose result is already a {@code Try}, and if
-	 * invoked, {@code flatMap} does not wrap it with an additional {@code Try}.
+	 * mapping function's result is already a <code>Try</code>, and if invoked,
+	 * <code>flatMap</code> doesn't wrap it in an additional <code>Try</code>.
 	 * </p>
 	 *
-	 * @param  function a mapping function to apply to the value, if success.
-	 * @return the result of applying a {@code Try}-bearing mapping function to
-	 *         the value of this {@code Try}, if a success, otherwise propagates
-	 *         the failure.
-	 * @review
+	 * @param  function the mapping function
+	 * @return the result of the mapping function if applied to the
+	 *         <code>Success</code> instance's value; the <code>Failure</code>
+	 *         instance otherwise
 	 */
 	public abstract <U> Try<U> flatMap(
 		ThrowableFunction<? super T, Try<U>> function);
 
 	/**
-	 * Returns the value T on success or throws the cause of the failure.
-	 *
-	 * @return T if success case, throws {@code Exception} otherwise.
-	 * @throws Exception if this is a {@code Failure}.
-	 * @review
+	 * Returns a <code>Success</code> instance's value, or a
+	 * <code>Failure</code> instance's exception. What this method returns
+	 * therefore depends on whether the current <code>Try</code> instance is a
+	 * <code>Success</code> or <code>Failure</code>.
+	 * 
+	 * @return a <code>Success</code> instance's value; otherwise the
+	 *         <code>Failure</code> instance's exception
+	 * @throws Exception if the operation failed
 	 */
 	public abstract T get() throws Exception;
 
 	/**
-	 * Returns the value T on success or throws a {@link RuntimeException} with
-	 * the cause of the failure.
+	 * Returns a <code>Success</code> instance's value, or a
+	 * <code>Failure</code> instance's exception wrapped in a
+	 * <code>RuntimeException</code>. What this method returns therefore depends
+	 * on whether the current <code>Try</code> instance is a
+	 * <code>Success</code> or <code>Failure</code>.
 	 *
-	 * @return T if success case, throws {@code RuntimeException} otherwise.
-	 * @review
+	 * @return a <code>Success</code> instance's value; otherwise the
+	 *         <code>Failure</code> instance's exception wrapped in a 
+	 *         <code>RuntimeException</code>
 	 */
 	public abstract T getUnchecked();
 
 	/**
-	 * Returns {@code true} if this {@code Try} instance is a failure. Returns
-	 * {@code false} otherwise.
+	 * Returns <code>true</code> if the current <code>Try</code> instance is a
+	 * <code>Failure</code>; otherwise returns <code>false</code>.
 	 *
-	 * @return {@code true} if instance is a failure; {@code false} otherwise.
-	 * @review
+	 * @return <code>true</code> if the current <code>Try</code> instance is a
+	 *         <code>Failure</code>; <code>false</code>} otherwise
 	 */
 	public abstract boolean isFailure();
 
 	/**
-	 * Returns {@code true} if this {@code Try} instance is a success. Returns
-	 * {@code false} otherwise.
+	 * Returns <code>true</code> if the current <code>Try</code> instance is a
+	 * <code>Success</code>; otherwise returns <code>false</code>.
 	 *
-	 * @return {@code true} if instance is a success; {@code false} otherwise.
-	 * @review
+	 * @return <code>true</code> if the current <code>Try</code> instance is a
+	 *         <code>Success</code>; <code>false</code>} otherwise
 	 */
 	public abstract boolean isSuccess();
 
 	/**
-	 * If success, apply the provided mapping function to it, and if the
-	 * function doesn't throw an exception, return it inside a {@code Try}.
-	 * Otherwise return a {@code Failure}.
-	 *
-	 * @param  throwableFunction a mapping function to apply to the value, if
-	 *         success.
-	 * @return a {@code Try} with the result of applying a mapping function to
-	 *         the value inside this {@code Try}, if success case; a {@code
-	 *         Failure} describing the exception otherwise.
-	 * @review
+	 * Returns the result of applying the mapping function to the
+	 * <code>Success</code> instance's value, if the current <code>Try</code>
+	 * instance is a <code>Success</code>; otherwise returns the
+	 * <code>Failure</code> instance.
+	 * 
+	 * <p>
+	 * This function is similar to {@link #flatMap(ThrowableFunction)}, but the
+	 * mapping function's result isn't a <code>Try</code>, and if invoked,
+	 * <code>map</code> wraps it in <code>Try</code>.
+	 * </p>
+	 * 
+	 * @param  throwableFunction the mapping function
+	 * @return the result of the mapping function if applied to the
+	 *         <code>Success</code> instance's value; the <code>Failure</code>
+	 *         instance otherwise
 	 */
 	public abstract <U> Try<U> map(
 		ThrowableFunction<? super T, ? extends U> throwableFunction);
