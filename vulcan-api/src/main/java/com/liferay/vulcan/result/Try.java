@@ -130,13 +130,12 @@ public abstract class Try<T> {
 	/**
 	 * If a value is present, and the value matches the given predicate, return
 	 * a {@code Try} with the value, otherwise return a {@code Try} with an
-	 * exception indicating the {@code <code>false</code>} predicate.
+	 * exception indicating the {@code false} predicate.
 	 *
 	 * @param  predicate a predicate to apply to the value, if present
 	 * @return a {@code Try} with the value of this {@code Try} if a value is
 	 *         present and the value matches the given predicate, otherwise a
-	 *         {@code Try} with and exception for a {@code <code>false</code>}
-	 *         predicate.
+	 *         {@code Try} with and exception for a {@code false} predicate.
 	 * @review
 	 */
 	public abstract Try<T> filter(Predicate<T> predicate);
@@ -179,21 +178,19 @@ public abstract class Try<T> {
 	public abstract T getUnchecked();
 
 	/**
-	 * Returns {@code <code>true</code>} if this {@code Try} instance is a
-	 * failure. Returns {@code <code>false</code>} otherwise.
+	 * Returns {@code true} if this {@code Try} instance is a failure. Returns
+	 * {@code false} otherwise.
 	 *
-	 * @return {@code <code>true</code>} if instance is a failure; {@code
-	 *         <code>false</code>} otherwise.
+	 * @return {@code true} if instance is a failure; {@code false} otherwise.
 	 * @review
 	 */
 	public abstract boolean isFailure();
 
 	/**
-	 * Returns {@code <code>true</code>} if this {@code Try} instance is a
-	 * success. Returns {@code <code>false</code>} otherwise.
+	 * Returns {@code true} if this {@code Try} instance is a success. Returns
+	 * {@code false} otherwise.
 	 *
-	 * @return {@code <code>true</code>} if instance is a success; {@code
-	 *         <code>false</code>} otherwise.
+	 * @return {@code true} if instance is a success; {@code false} otherwise.
 	 * @review
 	 */
 	public abstract boolean isSuccess();
@@ -317,7 +314,7 @@ public abstract class Try<T> {
 	 * know if the operation is going to fail or not. Or
 	 * {@link #fail(Exception)} to directly create a {@link Failure} from an
 	 * {@code Exception}.
- *
+	 *
 	 * @review
 	 */
 	public static class Failure<T> extends Try<T> {
@@ -456,7 +453,7 @@ public abstract class Try<T> {
 	 * this class, use {@link #fromFallible(ThrowableSupplier)} if you don't
 	 * know if the operation is going to fail or not. Or
 	 * {@link #success(Object)} to directly create a {@link Success} from a T.
- *
+	 *
 	 * @review
 	 */
 	public static class Success<T> extends Try<T> {

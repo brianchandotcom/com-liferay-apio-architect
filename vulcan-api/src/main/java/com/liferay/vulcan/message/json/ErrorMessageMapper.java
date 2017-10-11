@@ -126,8 +126,8 @@ public interface ErrorMessageMapper {
 	 *
 	 * @param  apiError the actual apiError.
 	 * @param  httpHeaders the HTTP headers of the current request.
-	 * @return {@code <code>true</code>} if mapper supports mapping this
-	 *         request; {@code <code>false</code>} otherwise.
+	 * @return {@code true} if mapper supports mapping this request;
+	 *         {@code false} otherwise.
 	 * @review
 	 */
 	public default boolean supports(

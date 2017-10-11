@@ -94,9 +94,9 @@ public interface JSONObjectBuilder {
 	 *
 	 * @param  condition the condition to check.
 	 * @param  ifFunction the function to be used to create the next step if the
-	 *         condition is {@code <code>true</code>}.
+	 *         condition is {@code true}.
 	 * @param  elseFunction the function to be used to create the next step if
-	 *         the condition is {@code <code>false</code>}.
+	 *         the condition is {@code false}.
 	 * @return the next step of the builder.
 	 * @review
 	 */
@@ -178,7 +178,7 @@ public interface JSONObjectBuilder {
 
 	/**
 	 * Step to add the value of a field as a JSON array.
- *
+	 *
 	 * @review
 	 */
 	public interface ArrayValueStep {
@@ -308,7 +308,7 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param  condition the condition to check.
 		 * @param  ifFunction the function to be used to create the next step if
-		 *         the condition is {@code <code>true</code>}.
+		 *         the condition is {@code true}.
 		 * @return the next step of the builder.
 		 * @review
 		 */
@@ -323,9 +323,9 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param  condition the condition to check.
 		 * @param  ifFunction the function to be used to create the next step if
-		 *         the condition is {@code <code>true</code>}.
+		 *         the condition is {@code true}.
 		 * @param  elseFunction the function to be used to create the next step
-		 *         if the condition is {@code <code>false</code>}.
+		 *         if the condition is {@code false}.
 		 * @return the next step of the builder.
 		 * @review
 		 */
