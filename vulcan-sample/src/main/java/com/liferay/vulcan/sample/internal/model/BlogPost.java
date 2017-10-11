@@ -18,6 +18,7 @@ import com.github.javafaker.Book;
 import com.github.javafaker.DateAndTime;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Lorem;
+import com.github.javafaker.service.RandomService;
 
 import java.util.Collection;
 import java.util.Date;
@@ -47,16 +48,19 @@ public class BlogPost {
 	 * @param  subtitle the subtitle of the blog post.
 	 * @param  content the content of the blog post.
 	 * @param  displayDate the display date of the blog post.
+	 * @param  creatorId the ID of the creator of this blog post.
 	 * @return the added {@code BlogPost}.
 	 * @review
 	 */
 	public static BlogPost addBlogPost(
-		String title, String subtitle, String content, Date displayDate) {
+		String title, String subtitle, String content, Date displayDate,
+		long creatorId) {
 
 		long id = _count.incrementAndGet();
 
 		BlogPost blogPost = new BlogPost(
-			id, title, subtitle, content, new Date(), new Date(), displayDate);
+			id, title, subtitle, content, displayDate, creatorId, new Date(),
+			new Date());
 
 		_blogPosts.put(id, blogPost);
 
@@ -125,12 +129,13 @@ public class BlogPost {
 	 * @param  subtitle the new subtitle for the blog post.
 	 * @param  content the new content for the blog post.
 	 * @param  displayDate the new display date for the blog post.
+	 * @param  creatorId the ID of the new creator for the blog post.
 	 * @return the updated {@code BlogPost}.
 	 * @review
 	 */
 	public static Optional<BlogPost> updateBlogPost(
 		long id, String title, String subtitle, String content,
-		Date displayDate) {
+		Date displayDate, long creatorId) {
 
 		BlogPost blogPost = _blogPosts.get(id);
 
@@ -141,7 +146,8 @@ public class BlogPost {
 		Date createDate = blogPost.getCreateDate();
 
 		blogPost = new BlogPost(
-			id, title, subtitle, content, createDate, new Date(), displayDate);
+			id, title, subtitle, content, displayDate, creatorId, createDate,
+			new Date());
 
 		_blogPosts.put(id, blogPost);
 
@@ -166,6 +172,16 @@ public class BlogPost {
 	 */
 	public Date getCreateDate() {
 		return _createDate;
+	}
+
+	/**
+	 * Returns the ID of the creator of this {@code BlogPost}.
+	 *
+	 * @return the ID of the creator the blog post.
+	 * @review
+	 */
+	public long getCreatorId() {
+		return _creatorId;
 	}
 
 	/**
@@ -219,16 +235,17 @@ public class BlogPost {
 	}
 
 	private BlogPost(
-		long id, String title, String subtitle, String content, Date createDate,
-		Date modifiedDate, Date displayDate) {
+		long id, String title, String subtitle, String content,
+		Date displayDate, long creatorId, Date createDate, Date modifiedDate) {
 
 		_id = id;
 		_title = title;
 		_subtitle = subtitle;
 		_content = content;
+		_displayDate = displayDate;
+		_creatorId = creatorId;
 		_createDate = createDate;
 		_modifiedDate = modifiedDate;
-		_displayDate = displayDate;
 	}
 
 	private static Map<Long, BlogPost> _blogPosts;
@@ -260,9 +277,13 @@ public class BlogPost {
 				Collectors.joining()
 			);
 
+			RandomService random = faker.random();
+
+			int creatorId = random.nextInt(User.getUsersCount());
+
 			BlogPost blogPost = new BlogPost(
-				i, title, subtitle, content, new Date(), new Date(),
-				displayDate);
+				i, title, subtitle, content, displayDate, creatorId, new Date(),
+				new Date());
 
 			_blogPosts.put(i, blogPost);
 		}
@@ -270,6 +291,7 @@ public class BlogPost {
 
 	private final String _content;
 	private final Date _createDate;
+	private final long _creatorId;
 	private final Date _displayDate;
 	private final long _id;
 	private final Date _modifiedDate;

@@ -24,6 +24,7 @@ import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.resource.identifier.RootIdentifier;
 import com.liferay.vulcan.sample.internal.model.BlogPost;
+import com.liferay.vulcan.sample.internal.model.User;
 
 import java.time.Instant;
 
@@ -62,6 +63,9 @@ public class BlogPostingCollectionResource
 			"displayDate", BlogPost::getDisplayDate
 		).addDate(
 			"modifiedDate", BlogPost::getModifiedDate
+		).addEmbeddedModel(
+			"creator", User.class,
+			blogPosting -> User.getUser(blogPosting.getCreatorId())
 		).addString(
 			"alternativeHeadline", BlogPost::getSubtitle
 		).addString(
@@ -104,10 +108,12 @@ public class BlogPostingCollectionResource
 		String subtitle = (String)body.get("alternativeHeadline");
 		String content = (String)body.get("articleBody");
 		String displayDateString = (String)body.get("displayDate");
+		Long creatorId = (Long)body.get("creator");
 
 		Date displayDate = Date.from(Instant.parse(displayDateString));
 
-		return BlogPost.addBlogPost(title, subtitle, content, displayDate);
+		return BlogPost.addBlogPost(
+			title, subtitle, content, displayDate, creatorId);
 	}
 
 	private void _deleteBlogPost(LongIdentifier blogPostingLongIdentifier) {
@@ -142,12 +148,13 @@ public class BlogPostingCollectionResource
 		String subtitle = (String)body.get("alternativeHeadline");
 		String content = (String)body.get("articleBody");
 		String displayDateString = (String)body.get("displayDate");
+		Long creatorId = (Long)body.get("creator");
 
 		Date displayDate = Date.from(Instant.parse(displayDateString));
 
 		Optional<BlogPost> optional = BlogPost.updateBlogPost(
 			blogPostingLongIdentifier.getId(), title, subtitle, content,
-			displayDate);
+			displayDate, creatorId);
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
