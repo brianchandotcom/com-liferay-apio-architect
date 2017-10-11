@@ -58,6 +58,8 @@ public class PersonCollectionResource
 		).addDate(
 			"birthDate", User::getBirthDate
 		).addString(
+			"image", User::getAvatar
+		).addString(
 			"address", User::getAddress
 		).addString(
 			"email", User::getEmail
@@ -103,11 +105,12 @@ public class PersonCollectionResource
 		String address = (String)body.get("address");
 		String jobTitle = (String)body.get("jobTitle");
 		String birthDateString = (String)body.get("birthDate");
+		String avatar = (String)body.get("image");
 
 		Date birthDate = Date.from(Instant.parse(birthDateString));
 
 		return User.addUser(
-			firstName, lastName, email, address, jobTitle, birthDate);
+			firstName, lastName, email, address, jobTitle, birthDate, avatar);
 	}
 
 	private void _deleteUser(LongIdentifier personLongIdentifier) {
@@ -142,12 +145,13 @@ public class PersonCollectionResource
 		String address = (String)body.get("address");
 		String jobTitle = (String)body.get("jobTitle");
 		String birthDateString = (String)body.get("birthDate");
+		String avatar = (String)body.get("image");
 
 		Date birthDate = Date.from(Instant.parse(birthDateString));
 
 		Optional<User> optional = User.updateUser(
 			personLongIdentifier.getId(), firstName, lastName, email, address,
-			jobTitle, birthDate);
+			jobTitle, birthDate, avatar);
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(

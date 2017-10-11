@@ -49,16 +49,18 @@ public class User {
 	 * @param  address the address of the user.
 	 * @param  jobTitle the job title of the user.
 	 * @param  birthDate the birth date of the user.
+	 * @param  avatar the avatar of the user.
 	 * @return the added {@code User}.
 	 */
 	public static User addUser(
 		String firstName, String lastName, String email, String address,
-		String jobTitle, Date birthDate) {
+		String jobTitle, Date birthDate, String avatar) {
 
 		long id = _count.incrementAndGet();
 
 		User user = new User(
-			id, firstName, lastName, email, address, jobTitle, birthDate);
+			id, firstName, lastName, email, address, jobTitle, birthDate,
+			avatar);
 
 		_users.put(id, user);
 
@@ -125,11 +127,12 @@ public class User {
 	 * @param  address the address of the user.
 	 * @param  jobTitle the job title of the user.
 	 * @param  birthDate the birth date of the user.
+	 * @param  avatar the avatar of the user.
 	 * @return the updated {@code User}.
 	 */
 	public static Optional<User> updateUser(
 		long id, String firstName, String lastName, String email,
-		String address, String jobTitle, Date birthDate) {
+		String address, String jobTitle, Date birthDate, String avatar) {
 
 		User user = _users.get(id);
 
@@ -138,7 +141,8 @@ public class User {
 		}
 
 		user = new User(
-			id, firstName, lastName, email, address, jobTitle, birthDate);
+			id, firstName, lastName, email, address, jobTitle, birthDate,
+			avatar);
 
 		_users.put(id, user);
 
@@ -152,6 +156,15 @@ public class User {
 	 */
 	public String getAddress() {
 		return _address;
+	}
+
+	/**
+	 * Returns the avatar of this {@code User}.
+	 *
+	 * @return the avatar of the user.
+	 */
+	public String getAvatar() {
+		return _avatar;
 	}
 
 	/**
@@ -210,7 +223,7 @@ public class User {
 
 	private User(
 		long id, String firstName, String lastName, String email,
-		String address, String jobTitle, Date birthDate) {
+		String address, String jobTitle, Date birthDate, String avatar) {
 
 		_id = id;
 		_firstName = firstName;
@@ -219,6 +232,7 @@ public class User {
 		_address = address;
 		_jobTitle = jobTitle;
 		_birthDate = birthDate;
+		_avatar = avatar;
 	}
 
 	private static final AtomicLong _count = new AtomicLong(10);
@@ -244,14 +258,18 @@ public class User {
 
 			Date birthDate = dateAndTime.past(400, TimeUnit.DAYS);
 
+			String avatar = internet.avatar();
+
 			User user = new User(
-				i, firstName, lastName, email, address, jobTitle, birthDate);
+				i, firstName, lastName, email, address, jobTitle, birthDate,
+				avatar);
 
 			_users.put(i, user);
 		}
 	}
 
 	private final String _address;
+	private final String _avatar;
 	private final Date _birthDate;
 	private final String _email;
 	private final String _firstName;
