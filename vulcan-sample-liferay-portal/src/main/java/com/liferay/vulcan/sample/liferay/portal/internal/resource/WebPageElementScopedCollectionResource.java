@@ -18,13 +18,10 @@ import com.liferay.document.library.kernel.service.DLFolderService;
 import com.liferay.journal.exception.NoSuchArticleException;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleService;
-import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
-import com.liferay.portal.kernel.service.GroupService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
@@ -38,6 +35,8 @@ import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.sample.liferay.portal.site.Site;
+import com.liferay.vulcan.sample.liferay.portal.site.SiteService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -78,8 +77,8 @@ public class WebPageElementScopedCollectionResource
 		return representorBuilder.identifier(
 			journalArticle -> journalArticle::getId
 		).addBidirectionalModel(
-			"group", "blogs", Group.class, this::_getGroupOptional,
-			group -> (LongIdentifier)group::getGroupId
+			"webSite", "webPageElements", Site.class, this::_getSiteOptional,
+			Site::getSiteLongIdentifier
 		).addEmbeddedModel(
 			"creator", User.class, this::_getUserOptional
 		).addDate(
@@ -215,20 +214,6 @@ public class WebPageElementScopedCollectionResource
 		}
 	}
 
-	private Optional<Group> _getGroupOptional(JournalArticle journalArticle) {
-		try {
-			return Optional.of(
-				_groupService.getGroup(journalArticle.getGroupId()));
-		}
-		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException(
-				"Unable to get group " + journalArticle.getGroupId(), nsge);
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
-	}
-
 	private JournalArticle _getJournalArticle(
 		LongIdentifier journalArticleLongIdentifier) {
 
@@ -258,6 +243,10 @@ public class WebPageElementScopedCollectionResource
 			groupLongIdentifier.getId(), 0);
 
 		return new PageItems<>(journalArticles, count);
+	}
+
+	private Optional<Site> _getSiteOptional(JournalArticle journalArticle) {
+		return _siteService.getSite(journalArticle.getGroupId());
 	}
 
 	private Optional<User> _getUserOptional(JournalArticle journalArticle) {
@@ -345,10 +334,10 @@ public class WebPageElementScopedCollectionResource
 	private DLFolderService _dlFolderService;
 
 	@Reference
-	private GroupService _groupService;
+	private JournalArticleService _journalArticleService;
 
 	@Reference
-	private JournalArticleService _journalArticleService;
+	private SiteService _siteService;
 
 	@Reference
 	private UserService _userService;

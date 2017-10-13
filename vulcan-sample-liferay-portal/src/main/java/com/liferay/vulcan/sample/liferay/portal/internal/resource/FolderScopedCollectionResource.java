@@ -17,11 +17,8 @@ package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.service.DLFolderService;
-import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
-import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.pagination.PageItems;
@@ -33,6 +30,8 @@ import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.sample.liferay.portal.site.Site;
+import com.liferay.vulcan.sample.liferay.portal.site.SiteService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +64,8 @@ public class FolderScopedCollectionResource
 		return representorBuilder.identifier(
 			dlFolder -> dlFolder::getFolderId
 		).addBidirectionalModel(
-			"group", "folders", Group.class, this::_getGroupOptional,
-			group -> (LongIdentifier)group::getGroupId
+			"webSite", "folders", Site.class, this::_getSiteOptional,
+			Site::getSiteLongIdentifier
 		).addDate(
 			"dateCreated", DLFolder::getCreateDate
 		).addDate(
@@ -160,19 +159,6 @@ public class FolderScopedCollectionResource
 		}
 	}
 
-	private Optional<Group> _getGroupOptional(DLFolder dlFolder) {
-		try {
-			return Optional.of(
-				_groupLocalService.getGroup(dlFolder.getGroupId()));
-		}
-		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException(nsge);
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
-	}
-
 	private PageItems<DLFolder> _getPageItems(
 		Pagination pagination, LongIdentifier groupLongIdentifier) {
 
@@ -197,6 +183,10 @@ public class FolderScopedCollectionResource
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
+	}
+
+	private Optional<Site> _getSiteOptional(DLFolder dlFolder) {
+		return _siteService.getSite(dlFolder.getGroupId());
 	}
 
 	private DLFolder _updateDLFolder(
@@ -225,6 +215,6 @@ public class FolderScopedCollectionResource
 	private DLFolderService _dlFolderService;
 
 	@Reference
-	private GroupLocalService _groupLocalService;
+	private SiteService _siteService;
 
 }

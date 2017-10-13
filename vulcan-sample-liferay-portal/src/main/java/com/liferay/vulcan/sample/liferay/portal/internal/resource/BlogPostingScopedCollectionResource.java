@@ -18,13 +18,10 @@ import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.service.BlogsEntryService;
 import com.liferay.portal.kernel.comment.Comment;
-import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
-import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.DateUtil;
@@ -42,6 +39,8 @@ import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
 import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.resource.identifier.CommentableIdentifier;
+import com.liferay.vulcan.sample.liferay.portal.site.Site;
+import com.liferay.vulcan.sample.liferay.portal.site.SiteService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -83,8 +82,8 @@ public class BlogPostingScopedCollectionResource
 		return representorBuilder.identifier(
 			blogsEntry -> blogsEntry::getEntryId
 		).addBidirectionalModel(
-			"group", "blogs", Group.class, this::_getGroupOptional,
-			group -> (LongIdentifier)group::getGroupId
+			"webSite", "blogs", Site.class, this::_getSiteOptional,
+			Site::getSiteLongIdentifier
 		).addDate(
 			"createDate", BlogsEntry::getCreateDate
 		).addDate(
@@ -230,20 +229,6 @@ public class BlogPostingScopedCollectionResource
 		}
 	}
 
-	private Optional<Group> _getGroupOptional(BlogsEntry blogsEntry) {
-		try {
-			return Optional.of(
-				_groupLocalService.getGroup(blogsEntry.getGroupId()));
-		}
-		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException(
-				"Unable to get group " + blogsEntry.getGroupId(), nsge);
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
-	}
-
 	private PageItems<BlogsEntry> _getPageItems(
 		Pagination pagination, LongIdentifier groupIdLongIdentifier) {
 
@@ -254,6 +239,10 @@ public class BlogPostingScopedCollectionResource
 			groupIdLongIdentifier.getId(), 0);
 
 		return new PageItems<>(blogsEntries, count);
+	}
+
+	private Optional<Site> _getSiteOptional(BlogsEntry blogsEntry) {
+		return _siteService.getSite(blogsEntry.getGroupId());
 	}
 
 	private Optional<User> _getUserOptional(BlogsEntry blogsEntry) {
@@ -333,7 +322,7 @@ public class BlogPostingScopedCollectionResource
 	private BlogsEntryService _blogsService;
 
 	@Reference
-	private GroupLocalService _groupLocalService;
+	private SiteService _siteService;
 
 	@Reference
 	private UserService _userService;
