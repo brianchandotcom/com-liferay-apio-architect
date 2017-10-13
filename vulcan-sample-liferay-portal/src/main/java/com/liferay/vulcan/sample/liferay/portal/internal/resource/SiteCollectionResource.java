@@ -27,6 +27,10 @@ import com.liferay.vulcan.resource.identifier.RootIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.site.Site;
 import com.liferay.vulcan.sample.liferay.portal.site.SiteService;
 
+import java.util.Optional;
+
+import javax.ws.rs.NotFoundException;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -63,6 +67,8 @@ public class SiteCollectionResource
 
 		return routesBuilder.addCollectionPageGetter(
 			this::_getPageItems, RootIdentifier.class, Company.class
+		).addCollectionPageItemGetter(
+			this::_getSite
 		).build();
 	}
 
@@ -70,6 +76,14 @@ public class SiteCollectionResource
 		Pagination pagination, RootIdentifier rootIdentifier, Company company) {
 
 		return _siteService.getPageItems(pagination, company.getCompanyId());
+	}
+
+	private Site _getSite(LongIdentifier longIdentifier) {
+		Optional<Site> optional = _siteService.getSite(longIdentifier.getId());
+
+		return optional.orElseThrow(
+			() -> new NotFoundException(
+				"Unable to get site " + longIdentifier.getId()));
 	}
 
 	@Reference

@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.sample.liferay.portal.internal.site;
 
+import com.liferay.portal.kernel.exception.NoSuchGroupException;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -23,8 +25,11 @@ import com.liferay.vulcan.sample.liferay.portal.site.Site;
 import com.liferay.vulcan.sample.liferay.portal.site.SiteService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.ws.rs.ServerErrorException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -52,6 +57,21 @@ public class SiteServiceImpl implements SiteService {
 		);
 
 		return new PageItems<>(sites, count);
+	}
+
+	@Override
+	public Optional<Site> getSite(long siteId) {
+		try {
+			Group group = _groupLocalService.getGroup(siteId);
+
+			return Optional.ofNullable(new SiteImpl(group));
+		}
+		catch (NoSuchGroupException nsge) {
+			return Optional.empty();
+		}
+		catch (PortalException pe) {
+			throw new ServerErrorException(500, pe);
+		}
 	}
 
 	@Reference

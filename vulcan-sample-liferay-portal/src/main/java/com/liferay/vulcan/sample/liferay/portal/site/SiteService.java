@@ -17,11 +17,15 @@ package com.liferay.vulcan.sample.liferay.portal.site;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 
+import java.util.Optional;
+
 /**
  * @author Victor Oliveira
  */
 public interface SiteService {
 
 	public PageItems<Site> getPageItems(Pagination pagination, long companyId);
+
+	public Optional<Site> getSite(long siteId);
 
 }
