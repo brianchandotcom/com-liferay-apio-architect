@@ -43,9 +43,9 @@ public class SiteCollectionResource
 
 		return representorBuilder.identifier(
 			Site::getSiteLongIdentifier
-		).addField(
+		).addString(
 			"name", Site::getName
-		).addField(
+		).addString(
 			"description", Site::getDescription
 		).addType(
 			"WebSite"
