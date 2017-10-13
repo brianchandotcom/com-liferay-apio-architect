@@ -34,9 +34,9 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.liferay.portal.context.CurrentUser;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
-import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Routes;
+import com.liferay.vulcan.resource.ScopedCollectionResource;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
@@ -65,8 +65,8 @@ import org.osgi.service.component.annotations.Reference;
  * @review
  */
 @Component(immediate = true)
-public class CommentCollectionResource
-	implements CollectionResource<Comment, LongIdentifier> {
+public class CommentScopedCollectionResource
+	implements ScopedCollectionResource<Comment, LongIdentifier> {
 
 	@Override
 	public Representor<Comment, LongIdentifier> buildRepresentor(
