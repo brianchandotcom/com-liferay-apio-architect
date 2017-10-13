@@ -23,6 +23,7 @@ import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.jaxrs.json.internal.StringFunctionalList;
+import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.ErrorMessageMapper;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -377,6 +378,48 @@ public class WriterHelper {
 	}
 
 	/**
+	 * Helper method to write a model localized string fields. It uses a
+	 * consumer so each {@link javax.ws.rs.ext.MessageBodyWriter} can write each
+	 * field differently.
+	 *
+	 * @param  model a model.
+	 * @param  modelClass a model class.
+	 * @param  fields the requested fields.
+	 * @param  language the language requested by the user.
+	 * @param  biConsumer the consumer that will be called to write each field.
+	 * @review
+	 */
+	public <T> void writeLocalizedStringFields(
+		T model, Class<T> modelClass, Fields fields, Language language,
+		BiConsumer<String, String> biConsumer) {
+
+		Predicate<String> fieldsPredicate = _getFieldsPredicate(
+			modelClass, fields);
+
+		Optional<Representor<T, Identifier>> optional =
+			_collectionResourceManager.getRepresentorOptional(modelClass);
+
+		optional.map(
+			Representor::getLocalizedStringFunctions
+		).ifPresent(
+			fieldFunctions -> {
+				for (String field : fieldFunctions.keySet()) {
+					if (fieldsPredicate.test(field)) {
+						BiFunction<T, Language, String> fieldFunction =
+							fieldFunctions.get(field);
+
+						String data = fieldFunction.apply(model, language);
+
+						if ((data != null) && !data.isEmpty()) {
+							biConsumer.accept(field, data);
+						}
+					}
+				}
+			}
+		);
+	}
+
+	/**
 	 * Helper method to write a model number fields. It uses a consumer so each
 	 * {@link javax.ws.rs.ext.MessageBodyWriter} can write each field
 	 * differently.
@@ -575,7 +618,7 @@ public class WriterHelper {
 
 						String data = fieldFunction.apply(model);
 
-						if (data != null) {
+						if ((data != null) && !data.isEmpty()) {
 							biConsumer.accept(field, data);
 						}
 					}
