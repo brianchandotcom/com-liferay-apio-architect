@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
+import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.ScopedCollectionResource;
@@ -66,7 +67,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Javier Gamarra
  * @review
  */
-@Component(immediate = true)
+@Component(immediate = true, service = CollectionResource.class)
 public class WebPageElementScopedCollectionResource
 	implements ScopedCollectionResource<JournalArticle, LongIdentifier> {
 

@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
+import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.ScopedCollectionResource;
@@ -34,7 +35,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  * @review
  */
-@Component(immediate = true)
+@Component(immediate = true, service = CollectionResource.class)
 public class AggregateRatingScopedCollectionResource
 	implements
 		ScopedCollectionResource<AggregateRating, AggregateRatingIdentifier> {
