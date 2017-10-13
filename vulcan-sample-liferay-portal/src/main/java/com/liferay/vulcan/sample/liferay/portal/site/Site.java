@@ -16,6 +16,7 @@ package com.liferay.vulcan.sample.liferay.portal.site;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 
 /**
@@ -44,10 +45,11 @@ public interface Site {
 	/**
 	 * Returns the name of the {@code Site}.
 	 *
+	 * @param  language the requested language.
 	 * @return the name of the {@code Site}.
 	 * @review
 	 */
-	public String getName();
+	public String getName(Language language);
 
 	/**
 	 * Returns the identifier of the {@code Site}.

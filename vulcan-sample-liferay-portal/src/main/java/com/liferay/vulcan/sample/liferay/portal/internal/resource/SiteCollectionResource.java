@@ -54,7 +54,7 @@ public class SiteCollectionResource
 
 		return representorBuilder.identifier(
 			Site::getSiteLongIdentifier
-		).addString(
+		).addLocalizedString(
 			"name", Site::getName
 		).addString(
 			"description", Site::getDescription

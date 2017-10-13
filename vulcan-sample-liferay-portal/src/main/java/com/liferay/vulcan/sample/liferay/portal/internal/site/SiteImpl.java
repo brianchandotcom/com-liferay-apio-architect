@@ -15,6 +15,7 @@
 package com.liferay.vulcan.sample.liferay.portal.internal.site;
 
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.sample.liferay.portal.site.Site;
 
@@ -33,8 +34,8 @@ public class SiteImpl implements Site {
 	}
 
 	@Override
-	public String getName() {
-		return _group.getName();
+	public String getName(Language language) {
+		return _group.getName(language.getPreferredLocale(), true);
 	}
 
 	@Override
