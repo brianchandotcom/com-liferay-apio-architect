@@ -14,17 +14,47 @@
 
 package com.liferay.vulcan.sample.liferay.portal.site;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 
 /**
+ * An instance of this interface represents a website.
+ *
+ * <p>
+ * Conforms with the <a href="http://schema.org/WebSite">Web Site</a> type from
+ * schema.org
+ * </p>
+ *
  * @author Victor Oliveira
+ * @author Alejandro Hernández
+ * @review
  */
+@ProviderType
 public interface Site {
 
+	/**
+	 * Returns the description of the {@code Site}.
+	 *
+	 * @return the description of the {@code Site}.
+	 * @review
+	 */
 	public String getDescription();
 
+	/**
+	 * Returns the name of the {@code Site}.
+	 *
+	 * @return the name of the {@code Site}.
+	 * @review
+	 */
 	public String getName();
 
+	/**
+	 * Returns the identifier of the {@code Site}.
+	 *
+	 * @return the identifier of the {@code Site}.
+	 * @review
+	 */
 	public LongIdentifier getSiteLongIdentifier();
 
 }

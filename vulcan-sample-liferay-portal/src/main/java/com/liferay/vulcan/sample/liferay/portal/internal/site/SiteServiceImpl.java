@@ -36,6 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Victor Oliveira
+ * @author Alejandro Hernández
  */
 @Component(immediate = true)
 public class SiteServiceImpl implements SiteService {
