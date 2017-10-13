@@ -17,11 +17,13 @@ package com.liferay.vulcan.resource.builder;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.vulcan.alias.BinaryFunction;
+import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.identifier.Identifier;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -136,6 +138,18 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		public <S> FirstStep<T, U> addLinkedModel(
 			String key, Class<S> modelClass,
 			Function<T, Optional<S>> modelFunction);
+
+		/**
+		 * Use this method to provide information of a resource localized string
+		 * field.
+		 *
+		 * @param  key name of the field.
+		 * @param  stringFunction function used to obtain the string value.
+		 * @return builder's actual step.
+		 * @review
+		 */
+		public FirstStep<T, U> addLocalizedString(
+			String key, BiFunction<T, Language, String> stringFunction);
 
 		/**
 		 * Use this method to provide information of a resource number field.

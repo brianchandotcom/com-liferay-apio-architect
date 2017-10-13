@@ -17,10 +17,12 @@ package com.liferay.vulcan.resource;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.vulcan.alias.BinaryFunction;
+import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.resource.identifier.Identifier;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -97,6 +99,16 @@ public interface Representor<T, U extends Identifier> {
 	 * @review
 	 */
 	public Map<String, String> getLinks();
+
+	/**
+	 * Returns a map containing the localized string field names and the
+	 * functions to get those fields.
+	 *
+	 * @return the field names and field functions.
+	 * @review
+	 */
+	public Map<String, BiFunction<T, Language, String>>
+		getLocalizedStringFunctions();
 
 	/**
 	 * Returns a map containing the number field names and the functions to get
