@@ -121,7 +121,7 @@ public class BlogPostingScopedCollectionResource
 
 	@Override
 	public String getName() {
-		return "blogs";
+		return "blog-postings";
 	}
 
 	@Override
