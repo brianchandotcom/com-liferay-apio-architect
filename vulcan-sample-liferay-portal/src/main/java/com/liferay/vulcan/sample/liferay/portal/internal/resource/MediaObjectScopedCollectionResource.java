@@ -48,15 +48,15 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides all the necessary information to expose <a
- * href="http://schema.org/DigitalDocument">DigitalDocument</a> resource through
- * a web API. <p> The resources are mapped from the internal {@link DLFileEntry}
+ * href="http://schema.org/MediaObject">MediaObject</a> resource through a web
+ * API. <p> The resources are mapped from the internal {@link DLFileEntry}
  * model.
  *
  * @author Javier Gamarra
  * @review
  */
 @Component(immediate = true, service = CollectionResource.class)
-public class DigitalDocumentScopedCollectionResource
+public class MediaObjectScopedCollectionResource
 	implements ScopedCollectionResource<DLFileEntry, LongIdentifier> {
 
 	@Override
@@ -66,7 +66,7 @@ public class DigitalDocumentScopedCollectionResource
 		return representorBuilder.identifier(
 			dlFileEntry -> dlFileEntry::getFileEntryId
 		).addBidirectionalModel(
-			"folder", "digitalDocuments", DLFolder.class,
+			"folder", "mediaObjects", DLFolder.class,
 			this::_getDLFolderOptional,
 			dlFolder -> (LongIdentifier)dlFolder::getFolderId
 		).addBinary(
@@ -96,7 +96,7 @@ public class DigitalDocumentScopedCollectionResource
 
 	@Override
 	public String getName() {
-		return "digitalDocuments";
+		return "media-objects";
 	}
 
 	@Override

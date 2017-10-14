@@ -45,7 +45,7 @@ import org.osgi.service.component.annotations.Reference;
  * @review
  */
 @Component(immediate = true)
-public class SiteCollectionResource
+public class WebSiteCollectionResource
 	implements CollectionResource<Site, LongIdentifier> {
 
 	@Override
@@ -65,7 +65,7 @@ public class SiteCollectionResource
 
 	@Override
 	public String getName() {
-		return "sites";
+		return "web-sites";
 	}
 
 	@Override
