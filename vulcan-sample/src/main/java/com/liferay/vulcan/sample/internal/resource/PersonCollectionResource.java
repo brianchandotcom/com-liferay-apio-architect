@@ -157,7 +157,7 @@ public class PersonCollectionResource
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
-				"Unable to get User " + personLongIdentifier.getId()));
+				"Unable to get user " + personLongIdentifier.getId()));
 	}
 
 }
