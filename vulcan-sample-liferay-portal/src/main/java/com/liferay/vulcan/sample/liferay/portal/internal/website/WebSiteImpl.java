@@ -12,19 +12,19 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.liferay.portal.internal.site;
+package com.liferay.vulcan.sample.liferay.portal.internal.website;
 
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
-import com.liferay.vulcan.sample.liferay.portal.site.Site;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSite;
 
 /**
  * @author Victor Oliveira
  */
-public class SiteImpl implements Site {
+public class WebSiteImpl implements WebSite {
 
-	public SiteImpl(Group group) {
+	public WebSiteImpl(Group group) {
 		_group = group;
 	}
 
@@ -39,7 +39,7 @@ public class SiteImpl implements Site {
 	}
 
 	@Override
-	public LongIdentifier getSiteLongIdentifier() {
+	public LongIdentifier getWebSiteLongIdentifier() {
 		return _group::getGroupId;
 	}
 

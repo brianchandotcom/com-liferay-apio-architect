@@ -24,8 +24,8 @@ import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.resource.identifier.RootIdentifier;
-import com.liferay.vulcan.sample.liferay.portal.site.Site;
-import com.liferay.vulcan.sample.liferay.portal.site.SiteService;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSite;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSiteService;
 
 import java.util.Optional;
 
@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides all the necessary information to expose <a
- * href="http://schema.org/WebSite">Web Site</a> resources through a web API.
+ * href="http://schema.org/WebSite">WebSite</a> resources through a web API.
  *
  * The resources are mapped from the internal {@link Site} model.
  *
@@ -46,18 +46,18 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class WebSiteCollectionResource
-	implements CollectionResource<Site, LongIdentifier> {
+	implements CollectionResource<WebSite, LongIdentifier> {
 
 	@Override
-	public Representor<Site, LongIdentifier> buildRepresentor(
-		RepresentorBuilder<Site, LongIdentifier> representorBuilder) {
+	public Representor<WebSite, LongIdentifier> buildRepresentor(
+		RepresentorBuilder<WebSite, LongIdentifier> representorBuilder) {
 
 		return representorBuilder.identifier(
-			Site::getSiteLongIdentifier
+			WebSite::getWebSiteLongIdentifier
 		).addLocalizedString(
-			"name", Site::getName
+			"name", WebSite::getName
 		).addString(
-			"description", Site::getDescription
+			"description", WebSite::getDescription
 		).addType(
 			"WebSite"
 		).build();
@@ -69,32 +69,32 @@ public class WebSiteCollectionResource
 	}
 
 	@Override
-	public Routes<Site> routes(
-		RoutesBuilder<Site, LongIdentifier> routesBuilder) {
+	public Routes<WebSite> routes(
+		RoutesBuilder<WebSite, LongIdentifier> routesBuilder) {
 
 		return routesBuilder.addCollectionPageGetter(
 			this::_getPageItems, RootIdentifier.class, Company.class
 		).addCollectionPageItemGetter(
-			this::_getSite
+			this::_getWebSite
 		).build();
 	}
 
-	private PageItems<Site> _getPageItems(
+	private PageItems<WebSite> _getPageItems(
 		Pagination pagination, RootIdentifier rootIdentifier, Company company) {
 
-		return _siteService.getPageItems(pagination, company.getCompanyId());
+		return _webSiteService.getPageItems(pagination, company.getCompanyId());
 	}
 
-	private Site _getSite(LongIdentifier siteLongIdentifier) {
-		Optional<Site> optional = _siteService.getSite(
-			siteLongIdentifier.getId());
+	private WebSite _getWebSite(LongIdentifier webSiteLongIdentifier) {
+		Optional<WebSite> optional = _webSiteService.getWebSite(
+			webSiteLongIdentifier.getId());
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
-				"Unable to get site " + siteLongIdentifier.getId()));
+				"Unable to get website " + webSiteLongIdentifier.getId()));
 	}
 
 	@Reference
-	private SiteService _siteService;
+	private WebSiteService _webSiteService;
 
 }

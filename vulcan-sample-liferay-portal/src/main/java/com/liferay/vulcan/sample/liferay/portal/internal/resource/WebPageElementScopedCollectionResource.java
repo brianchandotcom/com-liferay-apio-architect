@@ -36,8 +36,8 @@ import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.result.Try;
-import com.liferay.vulcan.sample.liferay.portal.site.Site;
-import com.liferay.vulcan.sample.liferay.portal.site.SiteService;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSite;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSiteService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -78,8 +78,8 @@ public class WebPageElementScopedCollectionResource
 		return representorBuilder.identifier(
 			journalArticle -> journalArticle::getId
 		).addBidirectionalModel(
-			"webSite", "webPageElements", Site.class, this::_getSiteOptional,
-			Site::getSiteLongIdentifier
+			"webSite", "webPageElements", WebSite.class,
+			this::_getWebSiteOptional, WebSite::getWebSiteLongIdentifier
 		).addEmbeddedModel(
 			"creator", User.class, this::_getUserOptional
 		).addDate(
@@ -246,10 +246,6 @@ public class WebPageElementScopedCollectionResource
 		return new PageItems<>(journalArticles, count);
 	}
 
-	private Optional<Site> _getSiteOptional(JournalArticle journalArticle) {
-		return _siteService.getSite(journalArticle.getGroupId());
-	}
-
 	private Optional<User> _getUserOptional(JournalArticle journalArticle) {
 		try {
 			return Optional.ofNullable(
@@ -262,6 +258,12 @@ public class WebPageElementScopedCollectionResource
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
 		}
+	}
+
+	private Optional<WebSite> _getWebSiteOptional(
+		JournalArticle journalArticle) {
+
+		return _webSiteService.getWebSite(journalArticle.getGroupId());
 	}
 
 	private JournalArticle _updateJournalArticle(
@@ -338,9 +340,9 @@ public class WebPageElementScopedCollectionResource
 	private JournalArticleService _journalArticleService;
 
 	@Reference
-	private SiteService _siteService;
+	private UserService _userService;
 
 	@Reference
-	private UserService _userService;
+	private WebSiteService _webSiteService;
 
 }

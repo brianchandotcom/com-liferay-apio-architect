@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.liferay.portal.internal.site;
+package com.liferay.vulcan.sample.liferay.portal.internal.website;
 
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -21,8 +21,8 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
-import com.liferay.vulcan.sample.liferay.portal.site.Site;
-import com.liferay.vulcan.sample.liferay.portal.site.SiteService;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSite;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSiteService;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,10 +39,12 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class SiteServiceImpl implements SiteService {
+public class WebSiteServiceImpl implements WebSiteService {
 
 	@Override
-	public PageItems<Site> getPageItems(Pagination pagination, long companyId) {
+	public PageItems<WebSite> getPageItems(
+		Pagination pagination, long companyId) {
+
 		List<Group> groups = _groupLocalService.getGroups(companyId, 0, true);
 
 		List<Group> pageGroups = ListUtil.subList(
@@ -50,23 +52,23 @@ public class SiteServiceImpl implements SiteService {
 
 		Stream<Group> stream = pageGroups.stream();
 
-		List<Site> sites = stream.map(
-			SiteImpl::new
+		List<WebSite> webSites = stream.map(
+			WebSiteImpl::new
 		).collect(
 			Collectors.toList()
 		);
 
 		int count = _groupLocalService.getGroupsCount(companyId, 0, true);
 
-		return new PageItems<>(sites, count);
+		return new PageItems<>(webSites, count);
 	}
 
 	@Override
-	public Optional<Site> getSite(long siteId) {
+	public Optional<WebSite> getWebSite(long groupId) {
 		try {
-			Group group = _groupLocalService.getGroup(siteId);
+			Group group = _groupLocalService.getGroup(groupId);
 
-			return Optional.ofNullable(new SiteImpl(group));
+			return Optional.ofNullable(new WebSiteImpl(group));
 		}
 		catch (NoSuchGroupException nsge) {
 			return Optional.empty();

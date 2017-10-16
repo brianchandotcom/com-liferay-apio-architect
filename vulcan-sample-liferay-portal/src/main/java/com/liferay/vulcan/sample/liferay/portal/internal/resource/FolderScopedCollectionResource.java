@@ -31,8 +31,8 @@ import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.resource.identifier.LongIdentifier;
 import com.liferay.vulcan.result.Try;
-import com.liferay.vulcan.sample.liferay.portal.site.Site;
-import com.liferay.vulcan.sample.liferay.portal.site.SiteService;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSite;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSiteService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +65,8 @@ public class FolderScopedCollectionResource
 		return representorBuilder.identifier(
 			dlFolder -> dlFolder::getFolderId
 		).addBidirectionalModel(
-			"webSite", "folders", Site.class, this::_getSiteOptional,
-			Site::getSiteLongIdentifier
+			"webSite", "folders", WebSite.class, this::_getWebSiteOptional,
+			WebSite::getWebSiteLongIdentifier
 		).addDate(
 			"dateCreated", DLFolder::getCreateDate
 		).addDate(
@@ -186,8 +186,8 @@ public class FolderScopedCollectionResource
 		}
 	}
 
-	private Optional<Site> _getSiteOptional(DLFolder dlFolder) {
-		return _siteService.getSite(dlFolder.getGroupId());
+	private Optional<WebSite> _getWebSiteOptional(DLFolder dlFolder) {
+		return _webSiteService.getWebSite(dlFolder.getGroupId());
 	}
 
 	private DLFolder _updateDLFolder(
@@ -216,6 +216,6 @@ public class FolderScopedCollectionResource
 	private DLFolderService _dlFolderService;
 
 	@Reference
-	private SiteService _siteService;
+	private WebSiteService _webSiteService;
 
 }

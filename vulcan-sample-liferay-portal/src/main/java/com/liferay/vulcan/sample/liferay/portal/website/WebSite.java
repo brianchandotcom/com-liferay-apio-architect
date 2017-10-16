@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.liferay.portal.site;
+package com.liferay.vulcan.sample.liferay.portal.website;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -23,7 +23,7 @@ import com.liferay.vulcan.resource.identifier.LongIdentifier;
  * An instance of this interface represents a website.
  *
  * <p>
- * Conforms with the <a href="http://schema.org/WebSite">Web Site</a> type from
+ * Conforms with the <a href="http://schema.org/WebSite">WebSite</a> type from
  * schema.org
  * </p>
  *
@@ -32,31 +32,31 @@ import com.liferay.vulcan.resource.identifier.LongIdentifier;
  * @review
  */
 @ProviderType
-public interface Site {
+public interface WebSite {
 
 	/**
-	 * Returns the description of the {@code Site}.
+	 * Returns the description of the {@code WebSite}.
 	 *
-	 * @return the description of the {@code Site}.
+	 * @return the description of the {@code WebSite}.
 	 * @review
 	 */
 	public String getDescription();
 
 	/**
-	 * Returns the name of the {@code Site}.
+	 * Returns the name of the {@code WebSite}.
 	 *
 	 * @param  language the requested language.
-	 * @return the name of the {@code Site}.
+	 * @return the name of the {@code WebSite}.
 	 * @review
 	 */
 	public String getName(Language language);
 
 	/**
-	 * Returns the identifier of the {@code Site}.
+	 * Returns the identifier of the {@code WebSite}.
 	 *
-	 * @return the identifier of the {@code Site}.
+	 * @return the identifier of the {@code WebSite}.
 	 * @review
 	 */
-	public LongIdentifier getSiteLongIdentifier();
+	public LongIdentifier getWebSiteLongIdentifier();
 
 }
