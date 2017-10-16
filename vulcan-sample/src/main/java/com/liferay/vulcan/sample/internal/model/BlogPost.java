@@ -264,9 +264,9 @@ public class BlogPost {
 				Collectors.joining()
 			);
 
-			RandomService random = faker.random();
+			RandomService randomService = faker.random();
 
-			int creatorId = random.nextInt(User.getUsersCount());
+			int creatorId = randomService.nextInt(User.getUsersCount());
 
 			DateAndTime dateAndTime = faker.date();
 
