@@ -47,10 +47,10 @@ public class WebSiteServiceImpl implements WebSiteService {
 
 		List<Group> groups = _groupLocalService.getGroups(companyId, 0, true);
 
-		List<Group> pageGroups = ListUtil.subList(
+		List<Group> paginationGroups = ListUtil.subList(
 			groups, pagination.getStartPosition(), pagination.getEndPosition());
 
-		Stream<Group> stream = pageGroups.stream();
+		Stream<Group> stream = paginationGroups.stream();
 
 		List<WebSite> webSites = stream.map(
 			WebSiteImpl::new
