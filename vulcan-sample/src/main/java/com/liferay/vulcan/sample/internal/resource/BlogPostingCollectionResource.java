@@ -121,19 +121,18 @@ public class BlogPostingCollectionResource
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
-				"Unable to get Blog Posting " +
+				"Unable to get blog posting " +
 					blogPostingLongIdentifier.getId()));
 	}
 
 	private PageItems<BlogPost> _getPageItems(
 		Pagination pagination, RootIdentifier rootIdentifier) {
 
-		List<BlogPost> blogsEntries = BlogPost.getBlogPosts(
+		List<BlogPost> blogPosts = BlogPost.getBlogPosts(
 			pagination.getStartPosition(), pagination.getEndPosition());
-
 		int count = BlogPost.getBlogPostsCount();
 
-		return new PageItems<>(blogsEntries, count);
+		return new PageItems<>(blogPosts, count);
 	}
 
 	private BlogPost _updateBlogPost(
@@ -150,7 +149,7 @@ public class BlogPostingCollectionResource
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
-				"Unable to get Blog Posting " +
+				"Unable to get blog posting " +
 					blogPostingLongIdentifier.getId()));
 	}
 
