@@ -111,18 +111,18 @@ public class BlogPostingCollectionResource
 		return BlogPost.addBlogPost(title, subtitle, content, creatorId);
 	}
 
-	private void _deleteBlogPost(LongIdentifier blogPostingLongIdentifier) {
-		BlogPost.deleteBlogPost(blogPostingLongIdentifier.getId());
+	private void _deleteBlogPost(LongIdentifier blogPostLongIdentifier) {
+		BlogPost.deleteBlogPost(blogPostLongIdentifier.getId());
 	}
 
-	private BlogPost _getBlogPost(LongIdentifier blogPostingLongIdentifier) {
+	private BlogPost _getBlogPost(LongIdentifier blogPostLongIdentifier) {
 		Optional<BlogPost> optional = BlogPost.getBlogPost(
-			blogPostingLongIdentifier.getId());
+			blogPostLongIdentifier.getId());
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
 				"Unable to get blog posting " +
-					blogPostingLongIdentifier.getId()));
+					blogPostLongIdentifier.getId()));
 	}
 
 	private PageItems<BlogPost> _getPageItems(
@@ -136,7 +136,7 @@ public class BlogPostingCollectionResource
 	}
 
 	private BlogPost _updateBlogPost(
-		LongIdentifier blogPostingLongIdentifier, Map<String, Object> body) {
+		LongIdentifier blogPostLongIdentifier, Map<String, Object> body) {
 
 		String title = (String)body.get("headline");
 		String subtitle = (String)body.get("alternativeHeadline");
@@ -144,13 +144,13 @@ public class BlogPostingCollectionResource
 		Long creatorId = (Long)body.get("creator");
 
 		Optional<BlogPost> optional = BlogPost.updateBlogPost(
-			blogPostingLongIdentifier.getId(), title, subtitle, content,
+			blogPostLongIdentifier.getId(), title, subtitle, content,
 			creatorId);
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
 				"Unable to get blog posting " +
-					blogPostingLongIdentifier.getId()));
+					blogPostLongIdentifier.getId()));
 	}
 
 }
