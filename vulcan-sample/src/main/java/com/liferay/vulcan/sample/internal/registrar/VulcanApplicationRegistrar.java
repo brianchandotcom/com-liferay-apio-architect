@@ -51,15 +51,16 @@ public class VulcanApplicationRegistrar {
 		properties.put("osgi.jaxrs.application.base", "/");
 		properties.put("osgi.jaxrs.name", ".default");
 
-		Application service = bundleContext.getService(_serviceReference);
+		Application application = bundleContext.getService(_serviceReference);
 
 		_serviceRegistration = bundleContext.registerService(
-			Application.class, service, properties);
+			Application.class, application, properties);
 	}
 
 	@Deactivate
 	public void deactivate(BundleContext bundleContext) {
 		bundleContext.ungetService(_serviceReference);
+
 		_serviceRegistration.unregister();
 	}
 
