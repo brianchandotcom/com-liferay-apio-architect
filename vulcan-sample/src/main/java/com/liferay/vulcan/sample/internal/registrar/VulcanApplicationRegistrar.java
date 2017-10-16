@@ -48,8 +48,8 @@ public class VulcanApplicationRegistrar {
 			properties.put(key, value);
 		}
 
-		properties.put("osgi.jaxrs.name", ".default");
 		properties.put("osgi.jaxrs.application.base", "/");
+		properties.put("osgi.jaxrs.name", ".default");
 
 		Application service = bundleContext.getService(_serviceReference);
 
