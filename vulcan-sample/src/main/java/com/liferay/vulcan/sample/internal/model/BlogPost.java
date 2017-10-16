@@ -246,16 +246,14 @@ public class BlogPost {
 		for (long i = 0; i < 42; i++) {
 			Faker faker = new Faker();
 
-			DateAndTime dateAndTime = faker.date();
-
 			Book book = faker.book();
 
 			String title = book.title();
 
 			Lorem lorem = faker.lorem();
 
-			Date date = dateAndTime.past(400, TimeUnit.DAYS);
 			String subtitle = lorem.sentence();
+
 			List<String> paragraphs = lorem.paragraphs(5);
 
 			Stream<String> stream = paragraphs.stream();
@@ -269,6 +267,10 @@ public class BlogPost {
 			RandomService random = faker.random();
 
 			int creatorId = random.nextInt(User.getUsersCount());
+
+			DateAndTime dateAndTime = faker.date();
+
+			Date date = dateAndTime.past(400, TimeUnit.DAYS);
 
 			BlogPost blogPost = new BlogPost(
 				i, title, subtitle, content, creatorId, date, date);
