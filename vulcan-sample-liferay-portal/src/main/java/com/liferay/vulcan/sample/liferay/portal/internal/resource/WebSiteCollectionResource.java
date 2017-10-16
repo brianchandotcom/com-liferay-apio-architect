@@ -85,12 +85,13 @@ public class WebSiteCollectionResource
 		return _siteService.getPageItems(pagination, company.getCompanyId());
 	}
 
-	private Site _getSite(LongIdentifier longIdentifier) {
-		Optional<Site> optional = _siteService.getSite(longIdentifier.getId());
+	private Site _getSite(LongIdentifier siteLongIdentifier) {
+		Optional<Site> optional = _siteService.getSite(
+			siteLongIdentifier.getId());
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
-				"Unable to get site " + longIdentifier.getId()));
+				"Unable to get site " + siteLongIdentifier.getId()));
 	}
 
 	@Reference
