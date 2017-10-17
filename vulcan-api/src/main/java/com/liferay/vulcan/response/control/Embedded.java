@@ -35,7 +35,7 @@ public interface Embedded {
 	 * embedded.
 	 *
 	 * @return the predicate that can be used to test if a relation must be
-	 *         embedded.
+	 *         embedded
 	 */
 	public Predicate<String> getEmbeddedPredicate();
 

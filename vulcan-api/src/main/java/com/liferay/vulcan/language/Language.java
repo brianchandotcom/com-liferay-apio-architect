@@ -18,20 +18,19 @@ import java.util.Enumeration;
 import java.util.Locale;
 
 /**
- * Instances of this interface represent the information about the requested
- * language/es.
+ * Represents information about the requested languages.
  *
  * @author Alejandro Hernández
- * @review
  */
 public interface Language {
 
 	/**
-	 * Returns an {@code Enumeration} of {@code Locale} in decreasing order.
+	 * Returns the {@code Enumeration} of the request's preferred {@code Locale},
+	 * in decreasing order.
 	 *
 	 * <p>
 	 * The enumeration starts with the first locale added on the {@code
-	 * Accept-Language} header and continue with the rest of the header.
+	 * Accept-Language} header and continues with the rest of the header.
 	 * </p>
 	 *
 	 * <p>
@@ -40,27 +39,21 @@ public interface Language {
 	 * the server.
 	 * </p>
 	 *
-	 * @return an {@code Enumeration} of the preferred {@code Locale} of the
-	 *         request, if the {@code Accept-Language} header is present; an
-	 *         {@code Enumeration} containing the default locale for the server
-	 *         otherwise.
-	 * @review
+	 * @return the {@code Enumeration} of the request's preferred {@code Locale},
+	 *         if the {@code Accept-Language} header is present; otherwise
+	 *         returns the {@code Enumeration} containing the server's default
+	 *         locale
 	 */
 	public Enumeration<Locale> getLocales();
 
 	/**
 	 * Returns the first {@code Locale} added on the {@code Accept-Language}
-	 * header.
+	 * header. If the request doesn't have an {@code Accept-Language} header,
+	 * this method returns the server's default locale.
 	 *
-	 * <p>
-	 * If the request doesn't have an {@code Accept-Language} header, this
-	 * method returns the default locale for the server.
-	 * </p>
-	 *
-	 * @return the first {@code Locale} of the request, if the {@code
-	 *         Accept-Language} header is present; an {@code Enumeration}
-	 *         containing the default locale for the server otherwise.
-	 * @review
+	 * @return the request's first {@code Locale}, if the
+	 *         {@code Accept-Language} header is present; otherwise returns the
+	 *         {@code Enumeration} containing the default locale for the server
 	 */
 	public Locale getPreferredLocale();
 

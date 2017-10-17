@@ -38,7 +38,7 @@ public class RelatedModel<T, S> {
 	/**
 	 * Returns the relation's key.
 	 *
-	 * @return the relation's key.
+	 * @return the relation's key
 	 */
 	public String getKey() {
 		return _key;
@@ -47,7 +47,7 @@ public class RelatedModel<T, S> {
 	/**
 	 * Returns the related model's class.
 	 *
-	 * @return the related model's class.
+	 * @return the related model's class
 	 */
 	public Class<S> getModelClass() {
 		return _modelClass;
@@ -57,7 +57,7 @@ public class RelatedModel<T, S> {
 	 * Returns the function you can use to retrieve the related model. This
 	 * method needs a valid instance of the model.
 	 *
-	 * @return the function that calculates the related model.
+	 * @return the function that calculates the related model
 	 */
 	public Function<T, Optional<S>> getModelFunction() {
 		return _modelFunction;

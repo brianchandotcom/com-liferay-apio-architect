@@ -34,49 +34,49 @@ public interface Page<T> {
 	/**
 	 * Returns the page's items.
 	 *
-	 * @return the page's items.
+	 * @return the page's items
 	 */
 	public Collection<T> getItems();
 
 	/**
 	 * Returns the number of items the user selected on the page.
 	 *
-	 * @return the number of items the user selected on the page.
+	 * @return the number of items the user selected on the page
 	 */
 	public int getItemsPerPage();
 
 	/**
 	 * Returns the number of the collection's last page.
 	 *
-	 * @return the number of the collection's last page.
+	 * @return the number of the collection's last page
 	 */
 	public int getLastPageNumber();
 
 	/**
 	 * Returns the page's model class.
 	 *
-	 * @return the page's model class.
+	 * @return the page's model class
 	 */
 	public Class<T> getModelClass();
 
 	/**
 	 * Returns the page number in the collection.
 	 *
-	 * @return the page number in the collection.
+	 * @return the page number in the collection
 	 */
 	public int getPageNumber();
 
 	/**
 	 * Returns the identifier.
 	 *
-	 * @return the identifier.
+	 * @return the identifier
 	 */
 	public Path getPath();
 
 	/**
 	 * Returns the total number of elements in the collection.
 	 *
-	 * @return the total number of elements in the collection.
+	 * @return the total number of elements in the collection
 	 */
 	public int getTotalCount();
 
@@ -85,7 +85,7 @@ public interface Page<T> {
 	 * collection.
 	 *
 	 * @return {@code true} if another page follows this page in the
-	 *         collection; {@code false} otherwise.
+	 *         collection; {@code false} otherwise
 	 */
 	public boolean hasNext();
 
@@ -94,7 +94,7 @@ public interface Page<T> {
 	 * collection.
 	 *
 	 * @return {@code true} if another page precedes this page in the
-	 *         collection; {@code false} otherwise.
+	 *         collection; {@code false} otherwise
 	 */
 	public boolean hasPrevious();
 

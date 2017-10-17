@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  * </p>
  *
  * @author Alejandro Hernández
- * @see    com.liferay.vulcan.resource.builder.RepresentorBuilder
+ * @see com.liferay.vulcan.resource.builder.RepresentorBuilder
  */
 @ProviderType
 public interface Representor<T, U extends Identifier> {
@@ -44,7 +44,7 @@ public interface Representor<T, U extends Identifier> {
 	/**
 	 * Returns the binary resources linked to a model.
 	 *
-	 * @return the binary resources linked to a model.
+	 * @return the binary resources linked to a model
 	 */
 	public Map<String, BinaryFunction<T>> getBinaryFunctions();
 
@@ -52,43 +52,43 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the map containing the boolean field names and the functions to
 	 * get those fields.
 	 *
-	 * @return the map containing the boolean field names and functions.
+	 * @return the map containing the boolean field names and functions
 	 */
 	public Map<String, Function<T, Boolean>> getBooleanFunctions();
 
 	/**
 	 * Returns the embedded related models.
 	 *
-	 * @return the embedded related models.
+	 * @return the embedded related models
 	 */
 	public List<RelatedModel<T, ?>> getEmbeddedRelatedModels();
 
 	/**
 	 * Returns the model's identifier.
 	 *
-	 * @param  model the model instance.
-	 * @return the model's identifier.
+	 * @param  model the model instance
+	 * @return the model's identifier
 	 */
 	public U getIdentifier(T model);
 
 	/**
 	 * Returns the identifier class.
 	 *
-	 * @return the identifier class.
+	 * @return the identifier class
 	 */
 	public Class<U> getIdentifierClass();
 
 	/**
 	 * Returns the linked related models.
 	 *
-	 * @return the linked related models.
+	 * @return the linked related models
 	 */
 	public List<RelatedModel<T, ?>> getLinkedRelatedModels();
 
 	/**
 	 * Returns the links.
 	 *
-	 * @return the links.
+	 * @return the links
 	 */
 	public Map<String, String> getLinks();
 
@@ -106,14 +106,14 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the map containing the number field names and the functions to
 	 * get those fields.
 	 *
-	 * @return the map containing the number field names and functions.
+	 * @return the map containing the number field names and functions
 	 */
 	public Map<String, Function<T, Number>> getNumberFunctions();
 
 	/**
 	 * Returns the related collections.
 	 *
-	 * @return the related collections.
+	 * @return the related collections
 	 */
 	public Stream<RelatedCollection<T, ?>> getRelatedCollections();
 
@@ -121,14 +121,14 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns the map containing the string field names and the functions to
 	 * get those fields.
 	 *
-	 * @return the map containing the string field names and functions.
+	 * @return the map containing the string field names and functions
 	 */
 	public Map<String, Function<T, String>> getStringFunctions();
 
 	/**
 	 * Returns the types.
 	 *
-	 * @return the types.
+	 * @return the types
 	 */
 	public List<String> getTypes();
 

@@ -51,15 +51,15 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Returns the media type the mapper represents.
 	 *
-	 * @return the media type the mapper represents.
+	 * @return the media type the mapper represents
 	 */
 	public String getMediaType();
 
 	/**
 	 * Maps a collection URL to its JSON object representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  url the collection's URL.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  url the collection's URL
 	 */
 	public default void mapCollectionURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
@@ -68,8 +68,8 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps the current page's URL to its JSON object representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  url the current page's URL.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  url the current page's URL
 	 */
 	public default void mapCurrentPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
@@ -78,8 +78,8 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps the first page's URL to its JSON object representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  url the first page's URL.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  url the first page's URL
 	 */
 	public default void mapFirstPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
@@ -88,10 +88,10 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps a resource's boolean field to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
-	 * @param  fieldName the field's name.
-	 * @param  value the field's value.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  fieldName the field's name
+	 * @param  value the field's value
 	 */
 	public default void mapItemBooleanField(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -103,12 +103,12 @@ public interface PageMessageMapper<T> {
 	 * Maps an embedded resource's boolean field to its JSON object
 	 * representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
 	 * @param  embeddedPathElements the current resource's embedded path 
-	 *         elements.
-	 * @param  fieldName the field's name.
-	 * @param  value the field's value.
+	 *         elements
+	 * @param  fieldName the field's name
+	 * @param  value the field's value
 	 */
 	public default void mapItemEmbeddedResourceBooleanField(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -120,12 +120,12 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps an embedded resource link to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
 	 * @param  embeddedPathElements the current resource's embedded path
-	 *         elements.
-	 * @param  fieldName the field's name.
-	 * @param  url the link's URL.
+	 *         elements
+	 * @param  fieldName the field's name
+	 * @param  url the link's URL
 	 */
 	public default void mapItemEmbeddedResourceLink(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -137,12 +137,12 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps an embedded resource number field to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
 	 * @param  embeddedPathElements the current resource's embedded path
-	 *         elements.
-	 * @param  fieldName the field's name.
-	 * @param  value the field's value.
+	 *         elements
+	 * @param  fieldName the field's name
+	 * @param  value the field's value
 	 */
 	public default void mapItemEmbeddedResourceNumberField(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -154,12 +154,12 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps an embedded resource string field to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the json object builder for the page.
-	 * @param  itemJSONObjectBuilder the json object builder for the item.
+	 * @param  pageJSONObjectBuilder the json object builder for the page
+	 * @param  itemJSONObjectBuilder the json object builder for the item
 	 * @param  embeddedPathElements the current resource's embedded path
-	 *         elements.
-	 * @param  fieldName the field's name.
-	 * @param  value the field's value.
+	 *         elements
+	 * @param  fieldName the field's name
+	 * @param  value the field's value
 	 */
 	public default void mapItemEmbeddedResourceStringField(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -171,11 +171,11 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps embedded resource types to their JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
 	 * @param  embeddedPathElements the current resource's embedded path
-	 *         elements.
-	 * @param  types the resource types.
+	 *         elements
+	 * @param  types the resource types
 	 */
 	public default void mapItemEmbeddedResourceTypes(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -186,11 +186,11 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps an embedded resource URL to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
 	 * @param  embeddedPathElements the current resource's embedded path
-	 *         elements.
-	 * @param  url the resource's URL.
+	 *         elements
+	 * @param  url the resource's URL
 	 */
 	public default void mapItemEmbeddedResourceURL(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -201,10 +201,10 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps a resource link to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
-	 * @param  fieldName the field's name.
-	 * @param  url the link's URL.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  fieldName the field's name
+	 * @param  url the link's URL
 	 */
 	public default void mapItemLink(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -214,11 +214,11 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps a linked resource URL to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
 	 * @param  embeddedPathElements the current resource's embedded path
-	 *         elements.
-	 * @param  url the resource's URL.
+	 *         elements
+	 * @param  url the resource's URL
 	 */
 	public default void mapItemLinkedResourceURL(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -229,10 +229,10 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps a resource number field to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
-	 * @param  fieldName the field's name.
-	 * @param  value the field's value.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  fieldName the field's name
+	 * @param  value the field's value
 	 */
 	public default void mapItemNumberField(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -243,9 +243,9 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps a resource URL to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
-	 * @param  url the resource's URL.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  url the resource's URL
 	 */
 	public default void mapItemSelfURL(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -255,10 +255,10 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps a resource string field to its JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
-	 * @param  fieldName the field's name.
-	 * @param  value the field's value.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  fieldName the field's name
+	 * @param  value the field's value
 	 */
 	public default void mapItemStringField(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -270,8 +270,8 @@ public interface PageMessageMapper<T> {
 	 * Maps the total number of elements in the collection to its JSON object
 	 * representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  totalCount the total number of elements in the collection.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  totalCount the total number of elements in the collection
 	 */
 	public default void mapItemTotalCount(
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
@@ -280,9 +280,9 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps resource types to their JSON object representation.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
-	 * @param  types the resource types.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  types the resource types
 	 */
 	public default void mapItemTypes(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -292,8 +292,8 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps the last page's URL to its JSON object representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  url the last page's URL.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  url the last page's URL
 	 */
 	public default void mapLastPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
@@ -302,8 +302,8 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps the next page's URL to its JSON object representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  url the next page's URL.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  url the next page's URL
 	 */
 	public default void mapNextPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
@@ -312,8 +312,8 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps the page count to its JSON object representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  count the number of elements in the page.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  count the number of elements in the page
 	 */
 	public default void mapPageCount(
 		JSONObjectBuilder jsonObjectBuilder, int count) {
@@ -322,8 +322,8 @@ public interface PageMessageMapper<T> {
 	/**
 	 * Maps the previous page's URL to its JSON object representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  url the previous page's URL.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  url the previous page's URL
 	 */
 	public default void mapPreviousPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
@@ -333,9 +333,9 @@ public interface PageMessageMapper<T> {
 	 * Finishes the page. This is the final page message mapper method the
 	 * writer calls.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  page the page.
-	 * @param  httpHeaders the current request's HTTP headers.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  page the page
+	 * @param  httpHeaders the current request's HTTP headers
 	 */
 	public default void onFinish(
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
@@ -346,11 +346,11 @@ public interface PageMessageMapper<T> {
 	 * Finishes the item. This is the final page message mapper method the
 	 * writer calls for the item.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
-	 * @param  item the item.
-	 * @param  modelClass the item's model class.
-	 * @param  httpHeaders the current request's HTTP headers.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  item the item
+	 * @param  modelClass the item's model class
+	 * @param  httpHeaders the current request's HTTP headers
 	 */
 	public default void onFinishItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -362,9 +362,9 @@ public interface PageMessageMapper<T> {
 	 * Starts the page. This is the first page message mapper method the writer
 	 * calls for the page.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the page.
-	 * @param  page the page.
-	 * @param  httpHeaders the current request's HTTP headers.
+	 * @param  jsonObjectBuilder the JSON object builder for the page
+	 * @param  page the page
+	 * @param  httpHeaders the current request's HTTP headers
 	 */
 	public default void onStart(
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
@@ -375,11 +375,11 @@ public interface PageMessageMapper<T> {
 	 * Starts the item. This is the first page message mapper method the writer
 	 * calls for the item.
 	 *
-	 * @param  pageJSONObjectBuilder the JSON object builder for the page.
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item.
-	 * @param  item the item.
-	 * @param  modelClass the item's model class.
-	 * @param  httpHeaders the current request's HTTP headers.
+	 * @param  pageJSONObjectBuilder the JSON object builder for the page
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  item the item
+	 * @param  modelClass the item's model class
+	 * @param  httpHeaders the current request's HTTP headers
 	 */
 	public default void onStartItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
@@ -391,10 +391,10 @@ public interface PageMessageMapper<T> {
 	 * Returns <code>true</code> if the mapper can map all things related to the
 	 * current request.
 	 *
-	 * @param  page the page.
-	 * @param  httpHeaders the current request's HTTP headers.
+	 * @param  page the page
+	 * @param  httpHeaders the current request's HTTP headers
 	 * @return <code>true</code> if the mapper can map the request;
-	 *         <code>false</code> otherwise.
+	 *         <code>false</code> otherwise
 	 */
 	public default boolean supports(Page<T> page, HttpHeaders httpHeaders) {
 		return true;

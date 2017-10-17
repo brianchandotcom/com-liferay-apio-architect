@@ -31,8 +31,8 @@ public interface Provider<T> {
 	/**
 	 * Creates an instance of <code>T</code> for the current request.
 	 *
-	 * @param  httpServletRequest the current request.
-	 * @return the instance of <code>T</code>.
+	 * @param  httpServletRequest the current request
+	 * @return the instance of <code>T</code>
 	 */
 	public T createContext(HttpServletRequest httpServletRequest);
 

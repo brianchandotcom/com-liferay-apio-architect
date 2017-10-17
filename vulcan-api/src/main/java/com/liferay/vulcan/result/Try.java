@@ -91,7 +91,7 @@ public abstract class Try<T> {
 	 * @param  throwableFunction the function to execute with the results of
 	 *         <code>throwableSupplier</code>
 	 * @return a <code>Success</code> instance if the functions succeed; a 
-	 *         <code>Failure</code> instance otherwise.
+	 *         <code>Failure</code> instance otherwise
 	 */
 	public static <U, V extends Closeable> Try<U> fromFallibleWithResources(
 		ThrowableSupplier<V> throwableSupplier,
@@ -293,7 +293,7 @@ public abstract class Try<T> {
 	 *
 	 * @param  function the function
 	 * @return the function's result when applied to the <code>Failure</code>;
-	 *         the <code>Success</code> object's value otherwise.
+	 *         the <code>Success</code> object's value otherwise
 	 */
 	public abstract T recover(Function<? super Exception, T> function);
 
@@ -306,7 +306,7 @@ public abstract class Try<T> {
 	 * @param  throwableFunction the function
 	 * @return the new <code>Try</code> instance, if the current <code>Try</code>
 	 *         instance is a <code>Failure</code> object; the current
-	 *         <code>Success</code> object otherwise.
+	 *         <code>Success</code> object otherwise
 	 */
 	public abstract Try<T> recoverWith(
 		ThrowableFunction<? super Exception, Try<T>> throwableFunction);

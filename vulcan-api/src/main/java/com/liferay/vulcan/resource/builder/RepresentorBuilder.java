@@ -42,8 +42,8 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 	 * {@link com.liferay.vulcan.resource.identifier.Identifier}.
 	 *
 	 * @param  identifierFunction lambda function used to obtain a model's
-	 *         identifier.
-	 * @return the builder's next step.
+	 *         identifier
+	 * @return the builder's next step
 	 */
 	public FirstStep<T, U> identifier(Function<T, U> identifierFunction);
 
@@ -55,13 +55,13 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * {@link com.liferay.vulcan.resource.CollectionResource} items in the
 		 * related resource.
 		 *
-		 * @param  key the relation's name in the resource.
-		 * @param  relatedKey the relation's name in the related resource.
-		 * @param  modelClass the related model's class.
-		 * @param  modelFunction the function used to get the related model.
+		 * @param  key the relation's name in the resource
+		 * @param  relatedKey the relation's name in the related resource
+		 * @param  modelClass the related model's class
+		 * @param  modelFunction the function used to get the related model
 		 * @param  identifierFunction the function used to get the collection's
-		 *         identifier.
-		 * @return the builder's step.
+		 *         identifier
+		 * @return the builder's step
 		 */
 		public <S> FirstStep<T, U> addBidirectionalModel(
 			String key, String relatedKey, Class<S> modelClass,
@@ -71,9 +71,9 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Adds binary files to a resource.
 		 *
-		 * @param  key the binary resource's name.
-		 * @param  binaryFunction the function used to get the binaries.
-		 * @return the builder's step.
+		 * @param  key the binary resource's name
+		 * @param  binaryFunction the function used to get the binaries
+		 * @return the builder's step
 		 */
 		public FirstStep<T, U> addBinary(
 			String key, BinaryFunction<T> binaryFunction);
@@ -81,9 +81,9 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Adds information about a resource's boolean field.
 		 *
-		 * @param  key the field's name.
-		 * @param  booleanFunction the function used to get the boolean value.
-		 * @return the builder's step.
+		 * @param  key the field's name
+		 * @param  booleanFunction the function used to get the boolean value
+		 * @return the builder's step
 		 */
 		public FirstStep<T, U> addBoolean(
 			String key, Function<T, Boolean> booleanFunction);
@@ -91,9 +91,9 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Adds information about a resource's date field.
 		 *
-		 * @param  key the field's name.
-		 * @param  dateFunction the function used to get the date value.
-		 * @return the builder's step.
+		 * @param  key the field's name
+		 * @param  dateFunction the function used to get the date value
+		 * @return the builder's step
 		 */
 		public FirstStep<T, U> addDate(
 			String key, Function<T, Date> dateFunction);
@@ -101,10 +101,10 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Adds information about an embeddable related model.
 		 *
-		 * @param  key the relation's name.
-		 * @param  modelClass the related model's class.
-		 * @param  modelFunction the function used to get the related model.
-		 * @return the builder's step.
+		 * @param  key the relation's name
+		 * @param  modelClass the related model's class
+		 * @param  modelFunction the function used to get the related model
+		 * @return the builder's step
 		 */
 		public <S> FirstStep<T, U> addEmbeddedModel(
 			String key, Class<S> modelClass,
@@ -113,19 +113,19 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Adds information about a resource link.
 		 *
-		 * @param  key the field's name.
-		 * @param  url the link's URL.
-		 * @return the builder's step.
+		 * @param  key the field's name
+		 * @param  url the link's URL
+		 * @return the builder's step
 		 */
 		public FirstStep<T, U> addLink(String key, String url);
 
 		/**
 		 * Adds information about a non-embeddable related model.
 		 *
-		 * @param  key the relation's name.
-		 * @param  modelClass the related model's class.
-		 * @param  modelFunction the function used to get the related model.
-		 * @return the builder's step.
+		 * @param  key the relation's name
+		 * @param  modelClass the related model's class
+		 * @param  modelFunction the function used to get the related model
+		 * @return the builder's step
 		 */
 		public <S> FirstStep<T, U> addLinkedModel(
 			String key, Class<S> modelClass,
@@ -146,9 +146,9 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Adds information about a resource's number field.
 		 *
-		 * @param  key the field's name.
-		 * @param  numberFunction the function used to get the number's value.
-		 * @return the builder's step.
+		 * @param  key the field's name
+		 * @param  numberFunction the function used to get the number's value
+		 * @return the builder's step
 		 */
 		public FirstStep<T, U> addNumber(
 			String key, Function<T, Number> numberFunction);
@@ -156,11 +156,11 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Adds information about a related collection.
 		 *
-		 * @param  key the relation's name.
-		 * @param  modelClass the class of the collection's related models.
+		 * @param  key the relation's name
+		 * @param  modelClass the class of the collection's related models
 		 * @param  identifierFunction the function used to get the collection's
-		 *         identifier.
-		 * @return the builder's step.
+		 *         identifier
+		 * @return the builder's step
 		 */
 		public <S> FirstStep<T, U> addRelatedCollection(
 			String key, Class<S> modelClass,
@@ -169,9 +169,9 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Adds information about a resource's string field.
 		 *
-		 * @param  key the field's name.
-		 * @param  stringFunction the function used to get the string's value.
-		 * @return the builder's step.
+		 * @param  key the field's name
+		 * @param  stringFunction the function used to get the string's value
+		 * @return the builder's step
 		 */
 		public FirstStep<T, U> addString(
 			String key, Function<T, String> stringFunction);
@@ -179,8 +179,8 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		/**
 		 * Adds a type for the model. Multiple types are allowed.
 		 *
-		 * @param  type the type name.
-		 * @return the builder's step.
+		 * @param  type the type name
+		 * @return the builder's step
 		 */
 		public FirstStep<T, U> addType(String type);
 
@@ -189,7 +189,7 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		 * {@link com.liferay.vulcan.resource.Representor} instance with the
 		 * information provided to the builder.
 		 *
-		 * @return the <code>Representor</code> instance.
+		 * @return the <code>Representor</code> instance
 		 */
 		public Representor<T, U> build();
 

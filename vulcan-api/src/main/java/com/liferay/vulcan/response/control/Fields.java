@@ -35,8 +35,8 @@ public interface Fields {
 	 * Returns the predicate for the list of types to test if a certain field
 	 * should be added to the representation.
 	 *
-	 * @param  types the resource's list of types.
-	 * @return the predicate for the list of types.
+	 * @param  types the resource's list of types
+	 * @return the predicate for the list of types
 	 */
 	public Predicate<String> getFieldsPredicate(List<String> types);
 

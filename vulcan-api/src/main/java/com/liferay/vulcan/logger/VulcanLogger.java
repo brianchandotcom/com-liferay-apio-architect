@@ -30,7 +30,7 @@ public interface VulcanLogger {
 	 * Logs a message in the form of an
 	 * {@link com.liferay.vulcan.result.APIError}.
 	 *
-	 * @param  apiError the error.
+	 * @param  apiError the error
 	 */
 	public void error(APIError apiError);
 

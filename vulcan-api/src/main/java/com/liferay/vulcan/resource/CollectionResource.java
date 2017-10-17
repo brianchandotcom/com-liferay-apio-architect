@@ -42,8 +42,8 @@ import com.liferay.vulcan.resource.identifier.Identifier;
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
- * @see    com.liferay.vulcan.resource.builder.RepresentorBuilder
- * @see    com.liferay.vulcan.resource.builder.RoutesBuilder
+ * @see com.liferay.vulcan.resource.builder.RepresentorBuilder
+ * @see com.liferay.vulcan.resource.builder.RoutesBuilder
  */
 @ConsumerType
 public interface CollectionResource<T, U extends Identifier> {
@@ -61,7 +61,7 @@ public interface CollectionResource<T, U extends Identifier> {
 	 * </p>
 	 *
 	 * @param  representorBuilder the representor builder used to create the
-	 *         representor.
+	 *         representor
 	 * @see    com.liferay.vulcan.resource.builder.RepresentorBuilder
 	 */
 	public Representor<T, U> buildRepresentor(
@@ -70,7 +70,7 @@ public interface CollectionResource<T, U extends Identifier> {
 	/**
 	 * Returns the resource's name.
 	 *
-	 * @return the resource's name.
+	 * @return the resource's name
 	 */
 	public String getName();
 
@@ -80,7 +80,7 @@ public interface CollectionResource<T, U extends Identifier> {
 	 * create the <code>Routes</code> instance.
 	 *
 	 * @param  routesBuilder the routes builder to use to create the
-	 *         <code>Routes</code> instance.
+	 *         <code>Routes</code> instance
 	 * @see    com.liferay.vulcan.resource.builder.RoutesBuilder
 	 */
 	public Routes<T> routes(RoutesBuilder<T, U> routesBuilder);

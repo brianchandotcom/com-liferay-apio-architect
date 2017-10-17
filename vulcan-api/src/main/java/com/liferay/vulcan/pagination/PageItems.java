@@ -32,7 +32,7 @@ public class PageItems<T> {
 	/**
 	 * Returns the page's items.
 	 *
-	 * @return the page's items.
+	 * @return the page's items
 	 */
 	public Collection<T> getItems() {
 		return _items;
@@ -41,7 +41,7 @@ public class PageItems<T> {
 	/**
 	 * Returns the total number of elements in the collection.
 	 *
-	 * @return the total number of elements in the collection.
+	 * @return the total number of elements in the collection
 	 */
 	public int getTotalCount() {
 		return _totalCount;

@@ -50,9 +50,9 @@ public interface RootEndpoint {
 	 * resource specified by <code>name</code>. This occurs via a POST request 
 	 * to the resource. 
 	 *
-	 * @param  name the resource's name, extracted from the URL.
+	 * @param  name the resource's name, extracted from the URL
 	 * @return the new {@link com.liferay.vulcan.pagination.SingleModel}, or an 
-	 *         exception if an error occurred.
+	 *         exception if an error occurred
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}")
@@ -65,11 +65,11 @@ public interface RootEndpoint {
 	 * specified nested resource. This occurs via a POST request to the nested
 	 * resource.
 	 *
-	 * @param  name the parent resource's name, extracted from the URL.
-	 * @param  id the parent resource's ID.
+	 * @param  name the parent resource's name, extracted from the URL
+	 * @param  id the parent resource's ID
 	 * @param  nestedName the nested resource's name, extracted from the URL.
 	 * @return the new {@link com.liferay.vulcan.pagination.SingleModel}, or an 
-	 *         exception if an error occurred.
+	 *         exception if an error occurred
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}/{id}/{nestedName}")
@@ -81,10 +81,10 @@ public interface RootEndpoint {
 	/**
 	 * Deletes the collection item specified by <code>name</code>.
 	 *
-	 * @param  name the name of the resource to delete, extracted from the URL.
-	 * @param  id the ID of the resource to delete.
+	 * @param  name the name of the resource to delete, extracted from the URL
+	 * @param  id the ID of the resource to delete
 	 * @return the operation's <code>javax.ws.rs.core.Response</code>, or an
-	 *         exception if an error occurred.
+	 *         exception if an error occurred
 	 */
 	@DELETE
 	@Path("/p/{name}/{id}")
@@ -94,11 +94,11 @@ public interface RootEndpoint {
 	/**
 	 * Returns the <code>java.io.InputStream</code> for the specified resource.
 	 *
-	 * @param  name the resource's name, extracted from the URL.
-	 * @param  id the resource's ID.
-	 * @param  binaryId the binary resource's ID.
+	 * @param  name the resource's name, extracted from the URL
+	 * @param  id the resource's ID
+	 * @param  binaryId the binary resource's ID
 	 * @return the binary file's <code>java.io.InputStream</code>, or an
-	 *         exception if an error occurred.
+	 *         exception if an error occurred
 	 */
 	@GET
 	@Path("/b/{name}/{id}/{binaryId}")
@@ -110,10 +110,10 @@ public interface RootEndpoint {
 	 * Returns the {@link com.liferay.vulcan.pagination.SingleModel} for the
 	 * specified resource.
 	 *
-	 * @param  name the resource's name, extracted from the URL.
-	 * @param  id the resource's ID.
+	 * @param  name the resource's name, extracted from the URL
+	 * @param  id the resource's ID
 	 * @return the {@link com.liferay.vulcan.pagination.SingleModel} for the
-	 *         specified resource, or an exception if an error occurred.
+	 *         specified resource, or an exception if an error occurred
 	 */
 	@GET
 	@Path("/p/{name}/{id}")
@@ -124,9 +124,9 @@ public interface RootEndpoint {
 	 * Returns the collection {@link com.liferay.vulcan.pagination.Page} for the
 	 * specified resource.
 	 *
-	 * @param  name the resource's name, extracted from the URL.
+	 * @param  name the resource's name, extracted from the URL
 	 * @return the collection {@link com.liferay.vulcan.pagination.Page} for the
-	 *         specified resource, or an exception if an error occurred.
+	 *         specified resource, or an exception if an error occurred
 	 */
 	@GET
 	@Path("/p/{name}")
@@ -147,11 +147,11 @@ public interface RootEndpoint {
 	 * Returns the nested collection {@link com.liferay.vulcan.pagination.Page}
 	 * for the specified resource.
 	 *
-	 * @param  name the parent resource's name, extracted from the URL.
-	 * @param  id the parent resource's ID.
-	 * @param  nestedName the nested resource's name.
+	 * @param  name the parent resource's name, extracted from the URL
+	 * @param  id the parent resource's ID
+	 * @param  nestedName the nested resource's name
 	 * @return the nested collection {@link com.liferay.vulcan.pagination.Page}
-	 *         for the specified resource, or an exception if an error occurred.
+	 *         for the specified resource, or an exception if an error occurred
 	 */
 	@GET
 	@Path("/p/{name}/{id}/{nestedName}")
@@ -162,10 +162,10 @@ public interface RootEndpoint {
 	/**
 	 * Updates the specified collection item.
 	 *
-	 * @param  name the resource's name, extracted from the URL.
-	 * @param  id the resource's ID.
+	 * @param  name the resource's name, extracted from the URL
+	 * @param  id the resource's ID
 	 * @return the updated {@link com.liferay.vulcan.pagination.SingleModel}, or
-               an exception if there was an error.
+               an exception if there was an error
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}/{id}")

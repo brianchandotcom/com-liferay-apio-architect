@@ -32,9 +32,9 @@ public interface ExceptionConverter<T extends Exception> {
 	 * Converts an exception to its {@link com.liferay.vulcan.result.APIError}
 	 * representation.
 	 *
-	 * @param  exception the exception to convert.
+	 * @param  exception the exception to convert
 	 * @return the exception's {@link com.liferay.vulcan.result.APIError}
-	 *         representation.
+	 *         representation
 	 */
 	public APIError convert(T exception);
 

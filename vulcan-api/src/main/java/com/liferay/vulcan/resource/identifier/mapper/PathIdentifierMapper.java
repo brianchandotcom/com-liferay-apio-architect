@@ -39,17 +39,17 @@ public interface PathIdentifierMapper<T extends Identifier> {
 	/**
 	 * Converts a path to its corresponding identifier.
 	 *
-	 * @param  path the resource's path.
-	 * @return the corresponding identifier.
+	 * @param  path the resource's path
+	 * @return the corresponding identifier
 	 */
 	public T map(Path path);
 
 	/**
 	 * Converts an identifier to its corresponding path.
 	 *
-	 * @param  t the identifier.
-	 * @param  modelClass the class of the model identified by the identifier.
-	 * @return the corresponding path.
+	 * @param  t the identifier
+	 * @param  modelClass the class of the model identified by the identifier
+	 * @return the corresponding path
 	 */
 	public <U> Path map(T t, Class<U> modelClass);
 

@@ -66,15 +66,15 @@ public interface JSONObjectBuilder {
 	/**
 	 * Returns the JSON object constructed by the JSON object builder.
 	 *
-	 * @return the JSON object.
+	 * @return the JSON object
 	 */
 	public JsonObject build();
 
 	/**
 	 * Begins creating a field inside the JSON object.
 	 *
-	 * @param  name the field's name.
-	 * @return the builder's next step.
+	 * @param  name the field's name
+	 * @return the builder's next step
 	 */
 	public FieldStep field(String name);
 
@@ -84,12 +84,12 @@ public interface JSONObjectBuilder {
 	 * {@code ifFunction} creates. Otherwise, this method returns the field
 	 * step that {@code elseFunction} creates.
 	 *
-	 * @param  condition the condition to check.
+	 * @param  condition the condition to check
 	 * @param  ifFunction the function that creates the field step if the
-	 *         condition is {@code true}.
+	 *         condition is {@code true}
 	 * @param  elseFunction the function that creates the field step if the
-	 *         condition is {@code false}.
-	 * @return the builder's field step.
+	 *         condition is {@code false}
+	 * @return the builder's field step
 	 */
 	public FieldStep ifElseCondition(
 		boolean condition, Function<JSONObjectBuilder, FieldStep> ifFunction,
@@ -98,9 +98,9 @@ public interface JSONObjectBuilder {
 	/**
 	 * Begins creating a nested field inside the JSON object.
 	 *
-	 * @param  parentName the parent field's name.
-	 * @param  nestedNames the nested field's list of names.
-	 * @return the builder's field step.
+	 * @param  parentName the parent field's name
+	 * @param  nestedNames the nested field's list of names
+	 * @return the builder's field step
 	 */
 	public FieldStep nestedField(String parentName, String... nestedNames);
 
@@ -122,10 +122,10 @@ public interface JSONObjectBuilder {
 	 * </pre>
 	 * </p>
 	 *
-	 * @param  prefix each field's prefix.
-	 * @param  parentName the parent field's name.
-	 * @param  nestedNames the list of the nested field names.
-	 * @return the builder's field step.
+	 * @param  prefix each field's prefix
+	 * @param  parentName the parent field's name
+	 * @param  nestedNames the list of the nested field names
+	 * @return the builder's field step
 	 */
 	public FieldStep nestedPrefixedField(
 		String prefix, String parentName, String... nestedNames);
@@ -147,10 +147,10 @@ public interface JSONObjectBuilder {
 	 * </pre>
 	 * </p>
 	 *
-	 * @param  suffix each field's suffix.
-	 * @param  parentName the parent field's name.
-	 * @param  nestedNames the list of the nested field names.
-	 * @return the builder's field step.
+	 * @param  suffix each field's suffix
+	 * @param  parentName the parent field's name
+	 * @param  nestedNames the list of the nested field names
+	 * @return the builder's field step
 	 */
 	public FieldStep nestedSuffixedField(
 		String suffix, String parentName, String... nestedNames);
@@ -165,7 +165,7 @@ public interface JSONObjectBuilder {
 		 * Adds a new JSON object, created by the provided consumer, to the JSON 
 		 * array.
 		 *
-		 * @param  consumer the consumer that creates the new JSON object.
+		 * @param  consumer the consumer that creates the new JSON object
 		 */
 		public void add(Consumer<JSONObjectBuilder> consumer);
 
@@ -174,7 +174,7 @@ public interface JSONObjectBuilder {
 		 * the JSON array.
 		 *
 		 * @param  jsonObjectBuilder the JSON object builder containing the JSON
-		 *         object to add to the JSON array.
+		 *         object to add to the JSON array
 		 */
 		public void add(JSONObjectBuilder jsonObjectBuilder);
 
@@ -182,7 +182,7 @@ public interface JSONObjectBuilder {
 		 * Adds all elements of a boolean collection as elements of the JSON
 		 * array.
 		 *
-		 * @param  collection the boolean collection to add to the JSON array.
+		 * @param  collection the boolean collection to add to the JSON array
 		 */
 		public void addAllBooleans(Collection<Boolean> collection);
 
@@ -191,7 +191,7 @@ public interface JSONObjectBuilder {
 		 * array.
 		 *
 		 * @param  collection the JSON object collection to add to the JSON
-		 *         array.
+		 *         array
 		 */
 		public void addAllJsonObjects(Collection<JsonObject> collection);
 
@@ -199,7 +199,7 @@ public interface JSONObjectBuilder {
 		 * Adds all elements of a number collection as elements of the JSON
 		 * array.
 		 *
-		 * @param  collection the number collection to add to the JSON array.
+		 * @param  collection the number collection to add to the JSON array
 		 */
 		public void addAllNumbers(Collection<Number> collection);
 
@@ -207,28 +207,28 @@ public interface JSONObjectBuilder {
 		 * Adds all elements of a string collection as elements of the JSON
 		 * array.
 		 *
-		 * @param  collection the string collection to add to the JSON array.
+		 * @param  collection the string collection to add to the JSON array
 		 */
 		public void addAllStrings(Collection<String> collection);
 
 		/**
 		 * Adds a new boolean value to the JSON array.
 		 *
-		 * @param  value the boolean value to add to the JSON array.
+		 * @param  value the boolean value to add to the JSON array
 		 */
 		public void addBoolean(Boolean value);
 
 		/**
 		 * Adds a new number to the JSON array.
 		 *
-		 * @param  value the number to add to the JSON array.
+		 * @param  value the number to add to the JSON array
 		 */
 		public void addNumber(Number value);
 
 		/**
 		 * Adds a new string to the JSON array.
 		 *
-		 * @param  value the string to add to the JSON array.
+		 * @param  value the string to add to the JSON array
 		 */
 		public void addString(String value);
 
@@ -246,22 +246,22 @@ public interface JSONObjectBuilder {
 		/**
 		 * Begins creating a JSON array inside the field.
 		 *
-		 * @return the builder's array value step.
+		 * @return the builder's array value step
 		 */
 		public ArrayValueStep arrayValue();
 
 		/**
 		 * Adds a new boolean value to the JSON array.
 		 *
-		 * @param  value the boolean value to add to the JSON array.
+		 * @param  value the boolean value to add to the JSON array
 		 */
 		public void booleanValue(Boolean value);
 
 		/**
 		 * Begins creating a new JSON object field.
 		 *
-		 * @param  name the new field's name.
-		 * @return the builder's field step.
+		 * @param  name the new field's name
+		 * @return the builder's field step
 		 */
 		public FieldStep field(String name);
 
@@ -270,10 +270,10 @@ public interface JSONObjectBuilder {
 		 * If the condition is met, this method returns the field step created
 		 * by {@code ifFunction}. Otherwise, no operation is performed.
 		 *
-		 * @param  condition the condition to check.
+		 * @param  condition the condition to check
 		 * @param  ifFunction the function that creates the field step if the
-    	 *         condition is {@code true}.
-		 * @return the builder's field step.
+		 *         condition is {@code true}
+		 * @return the builder's field step
 		 */
 		public FieldStep ifCondition(
 			boolean condition, Function<FieldStep, FieldStep> ifFunction);
@@ -284,12 +284,12 @@ public interface JSONObjectBuilder {
 		 * field step created by {@code ifFunction}. Otherwise, this method
 		 * returns the field step created by {@code elseFunction}.
 		 *
-		 * @param  condition the condition to check.
+		 * @param  condition the condition to check
 		 * @param  ifFunction the function that creates the field step if the
-    	 *         condition is {@code true}.
+		 *         condition is {@code true}
 		 * @param  elseFunction the function that creates the field step if the
-    	 *         condition is {@code false}.
-		 * @return the builder's field step.
+		 *         condition is {@code false}
+		 * @return the builder's field step
 		 */
 		public FieldStep ifElseCondition(
 			boolean condition, Function<FieldStep, FieldStep> ifFunction,
@@ -298,9 +298,9 @@ public interface JSONObjectBuilder {
 		/**
 		 * Begins creating a new nested JSON object field.
 		 *
-		 * @param  parentName the parent field's name.
-		 * @param  nestedNames the list of the nested field names.
-		 * @return the builder's field step.
+		 * @param  parentName the parent field's name
+		 * @param  nestedNames the list of the nested field names
+		 * @return the builder's field step
 		 */
 		public FieldStep nestedField(String parentName, String... nestedNames);
 
@@ -309,10 +309,10 @@ public interface JSONObjectBuilder {
 		 * each field. This method behaves like
 		 * {@link JSONObjectBuilder#nestedPrefixedField(String, String, String...)}.
 		 *
-		 * @param  prefix each field's prefix.
-		 * @param  parentName the parent field's name.
-		 * @param  nestedNames the list of the nested field names.
-		 * @return the builder's field step.
+		 * @param  prefix each field's prefix
+		 * @param  parentName the parent field's name
+		 * @param  nestedNames the list of the nested field names
+		 * @return the builder's field step
 		 */
 		public FieldStep nestedPrefixedField(
 			String prefix, String parentName, String... nestedNames);
@@ -322,10 +322,10 @@ public interface JSONObjectBuilder {
 		 * each field. This method behaves like
 		 * {@link JSONObjectBuilder#nestedSuffixedField(String, String, String...)}.
 		 *
-		 * @param  suffix each field's suffix.
-		 * @param  parentName the parent field's name.
-		 * @param  nestedNames the list of the nested field names.
-		 * @return the builder's field step.
+		 * @param  suffix each field's suffix
+		 * @param  parentName the parent field's name
+		 * @param  nestedNames the list of the nested field names
+		 * @return the builder's field step
 		 */
 		public FieldStep nestedSuffixedField(
 			String suffix, String parentName, String... nestedNames);
@@ -333,14 +333,14 @@ public interface JSONObjectBuilder {
 		/**
 		 * Adds a new number to the JSON array.
 		 *
-		 * @param  value the number to add to the JSON array.
+		 * @param  value the number to add to the JSON array
 		 */
 		public void numberValue(Number value);
 
 		/**
 		 * Adds a new string to the JSON array.
 		 *
-		 * @param  value the string to add to the JSON array.
+		 * @param  value the string to add to the JSON array
 		 */
 		public void stringValue(String value);
 

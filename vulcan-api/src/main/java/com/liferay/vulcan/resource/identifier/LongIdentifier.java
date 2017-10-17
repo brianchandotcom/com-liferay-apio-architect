@@ -30,7 +30,7 @@ public interface LongIdentifier extends Identifier {
 	 * method returns <code>100</code> as a <code>long</code>.
 	 * </p>
 	 *
-	 * @return the identifier's <code>long</code> ID.
+	 * @return the identifier's <code>long</code> ID
 	 */
 	public long getId();
 

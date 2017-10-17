@@ -38,7 +38,7 @@ import java.util.function.Function;
  * </p>
  *
  * @author Alejandro Hernández
- * @see    com.liferay.vulcan.resource.builder.RoutesBuilder
+ * @see com.liferay.vulcan.resource.builder.RoutesBuilder
  */
 @ProviderType
 public interface Routes<T> {
@@ -50,7 +50,7 @@ public interface Routes<T> {
 	 * therefore exists. Returns <code>Optional#empty()</code> otherwise.
 	 *
 	 * @return the function used to remove a single model, if the function
-	 *         exists; <code>Optional#empty()</code> otherwise.
+	 *         exists; <code>Optional#empty()</code> otherwise
 	 */
 	public Optional<Consumer<Path>> getDeleteSingleModelConsumerOptional();
 
@@ -61,7 +61,7 @@ public interface Routes<T> {
 	 * therefore exists. Returns <code>Optional#empty()</code> otherwise.
 	 *
 	 * @return the function used to create the page, if the function exists;
-	 *         <code>Optional#empty()</code> otherwise.
+	 *         <code>Optional#empty()</code> otherwise
 	 */
 	public Optional<Function<Path, Function<Identifier, Page<T>>>>
 		getPageFunctionOptional();
@@ -74,7 +74,7 @@ public interface Routes<T> {
 	 * otherwise.
 	 *
 	 * @return the function that uses a POST request to create the single model,
-	 *         if the function exists; <code>Optional#empty()</code> otherwise.
+	 *         if the function exists; <code>Optional#empty()</code> otherwise
 	 */
 	public Optional<Function<Identifier, Function<Map<String, Object>,
 		SingleModel<T>>>> getPostSingleModelFunctionOptional();
@@ -88,7 +88,7 @@ public interface Routes<T> {
 	 *
 	 * @return the function that uses a GET request to retrieve the single
 	 *         model, if the function exists; <code>Optional#empty()</code>
-	 *         otherwise.
+	 *         otherwise
 	 */
 	public Optional<Function<Path, SingleModel<T>>>
 		getSingleModelFunctionOptional();
@@ -100,7 +100,7 @@ public interface Routes<T> {
 	 * therefore exists. Returns <code>Optional#empty()</code> otherwise.
 	 *
 	 * @return the function used to update the single model, if the function
-	 *         exists; <code>Optional#empty()</code> otherwise.
+	 *         exists; <code>Optional#empty()</code> otherwise
 	 */
 	public Optional<Function<Path, Function<Map<String, Object>,
 		SingleModel<T>>>> getUpdateSingleModelFunctionOptional();

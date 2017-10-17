@@ -31,28 +31,28 @@ public interface Pagination {
 	/**
 	 * Returns the position of the requested page's last element.
 	 *
-	 * @return the position of the requested page's last element.
+	 * @return the position of the requested page's last element
 	 */
 	public int getEndPosition();
 
 	/**
 	 * Returns the selected number of items per page.
 	 *
-	 * @return the selected number of items per page.
+	 * @return the selected number of items per page
 	 */
 	public int getItemsPerPage();
 
 	/**
 	 * Returns the requested page's number.
 	 *
-	 * @return the requested page's number.
+	 * @return the requested page's number
 	 */
 	public int getPageNumber();
 
 	/**
 	 * Returns the position of the requested page's first element.
 	 *
-	 * @return the position of the requested page's first element.
+	 * @return the position of the requested page's first element
 	 */
 	public int getStartPosition();
 
