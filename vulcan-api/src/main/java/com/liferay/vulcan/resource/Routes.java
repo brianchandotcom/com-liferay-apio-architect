@@ -27,25 +27,25 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Holds information about the routes supported for a {@link 
+ * Holds information about the routes supported for a {@link
  * CollectionResource}.
  *
  * <p>
  * This interface's methods return functions to get the different endpoints of
- * the collection resource. You should always use a {@link 
+ * the collection resource. You should always use a {@link
  * com.liferay.vulcan.resource.builder.RoutesBuilder} to create instances of
  * this interface.
  * </p>
  *
  * @author Alejandro Hernández
- * @see com.liferay.vulcan.resource.builder.RoutesBuilder
+ * @see    com.liferay.vulcan.resource.builder.RoutesBuilder
  */
 @ProviderType
 public interface Routes<T> {
 
 	/**
-	 * Returns the function used to remove a single model of a {@link 
-	 * CollectionResource}, if the endpoint was added through the {@link 
+	 * Returns the function used to remove a single model of a {@link
+	 * CollectionResource}, if the endpoint was added through the {@link
 	 * com.liferay.vulcan.resource.builder.RoutesBuilder} and the function
 	 * therefore exists. Returns <code>Optional#empty()</code> otherwise.
 	 *
@@ -56,7 +56,7 @@ public interface Routes<T> {
 
 	/**
 	 * Returns the function used to create the page of a {@link
-	 * CollectionResource}, if the endpoint was added through the {@link 
+	 * CollectionResource}, if the endpoint was added through the {@link
 	 * com.liferay.vulcan.resource.builder.RoutesBuilder} and the function
 	 * therefore exists. Returns <code>Optional#empty()</code> otherwise.
 	 *
@@ -94,8 +94,8 @@ public interface Routes<T> {
 		getSingleModelFunctionOptional();
 
 	/**
-	 * Returns the function used to update the single model of a {@link 
-	 * CollectionResource}, if the endpoint was added through the {@link 
+	 * Returns the function used to update the single model of a {@link
+	 * CollectionResource}, if the endpoint was added through the {@link
 	 * com.liferay.vulcan.resource.builder.RoutesBuilder} and the function
 	 * therefore exists. Returns <code>Optional#empty()</code> otherwise.
 	 *

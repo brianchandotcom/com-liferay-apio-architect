@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Defines a {@code java.util.function.Function} that takes four input
+ * Defines a {@code Function} that takes four input
  * parameters. This interface, like all function interfaces, receives several
  * arguments and returns one value of type {@code R}.
  *
@@ -33,15 +33,14 @@ import java.util.function.Function;
 public interface TetraFunction<A, B, C, D, R> {
 
 	/**
-	 * Returns the {@code TetraFunction} that first executes the current
-	 * {@code TetraFunction} instance's {@code apply} method, then uses the
-	 * result as input for the {@code afterFunction} parameter's {@code apply}
-	 * method.
+	 * Returns the {@code TetraFunction} that first executes the current {@code
+	 * TetraFunction} instance's {@code apply} method, then uses the result as
+	 * input for the {@code afterFunction} parameter's {@code apply} method.
 	 *
 	 * @param  afterFunction the {@code TetraFunction} to execute after the
 	 *         current instance
 	 * @return the {@code TetraFunction} that executes the current instance's
- 	 *         {@code apply} method, then uses the result as input for the
+	 *         {@code apply} method, then uses the result as input for the
 	 *         {@code afterFunction} parameter's {@code apply} method
 	 */
 	public default <V> TetraFunction<A, B, C, D, V> andThen(

@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * Defines a {@code java.util.function.Consumer} that takes four input
  * parameters. This consumer, like all consumers, doesn't return a result.
- * 
+ *
  * <p>
  * This interface can be implemented with a lambda function.
  * </p>
@@ -30,13 +30,13 @@ import java.util.Objects;
 public interface TetraConsumer<A, B, C, D> {
 
 	/**
-	 * Operates with four parameters and returns {@code void}. This function
-	 * can be implemented explicitly or with a lambda.
+	 * Operates with four parameters and returns {@code void}. This function can
+	 * be implemented explicitly or with a lambda.
 	 *
-	 * @param  a the first function argument
-	 * @param  b the second function argument
-	 * @param  c the third function argument
-	 * @param  d the fourth function argument
+	 * @param a the first function argument
+	 * @param b the second function argument
+	 * @param c the third function argument
+	 * @param d the fourth function argument
 	 */
 	public void accept(A a, B b, C c, D d);
 

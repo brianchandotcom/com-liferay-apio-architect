@@ -34,7 +34,7 @@ public interface APIError {
 	 * <code>Optional#empty()</code> otherwise.
 	 *
 	 * @return the API error's description, if present;
-               <code>Optional#empty()</code> otherwise
+	 *         <code>Optional#empty()</code> otherwise
 	 */
 	public Optional<String> getDescription();
 

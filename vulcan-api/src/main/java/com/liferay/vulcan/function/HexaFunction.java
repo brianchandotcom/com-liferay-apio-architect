@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Defines a {@code java.util.function.Function} that takes six input
+ * Defines a {@code Function} that takes six input
  * parameters. This interface, like all function interfaces, receives several
  * arguments and returns one value of type {@code R}.
  *
@@ -33,15 +33,14 @@ import java.util.function.Function;
 public interface HexaFunction<A, B, C, D, E, F, R> {
 
 	/**
-	 * Returns the {@code HexaFunction} that first executes the current
-	 * {@code HexaFunction} instance's {@code apply} method, then uses the
-	 * result as input for the {@code afterFunction} parameter's {@code apply}
-	 * method.
+	 * Returns the {@code HexaFunction} that first executes the current {@code
+	 * HexaFunction} instance's {@code apply} method, then uses the result as
+	 * input for the {@code afterFunction} parameter's {@code apply} method.
 	 *
 	 * @param  afterFunction the {@code HexaFunction} to execute after the
 	 *         current instance
 	 * @return the {@code HexaFunction} that executes the current instance's
- 	 *         {@code apply} method, then uses the result as input for the
+	 *         {@code apply} method, then uses the result as input for the
 	 *         {@code afterFunction} parameter's {@code apply} method
 	 */
 	public default <V> HexaFunction<A, B, C, D, E, F, V> andThen(

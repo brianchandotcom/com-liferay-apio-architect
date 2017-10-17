@@ -28,26 +28,24 @@ import com.liferay.vulcan.resource.identifier.Identifier;
  * </p>
  *
  * <p>
- * Resources behave like an API so you must add the API's name via the
- * {@link #getName()} method.
+ * Resources behave like an API so you must add the API's name via the {@link
+ * #getName()} method.
  * </p>
  *
  * <p>
- * Representors created by the method
- * {@link com.liferay.vulcan.resource.CollectionResource#buildRepresentor(RepresentorBuilder)}
- * hold all the information needed to write your domain models' hypermedia
- * representations.
+ * Representors created by the method {@link
+ * CollectionResource#buildRepresentor(RepresentorBuilder)} hold all the
+ * information needed to write your domain models' hypermedia representations.
  * </p>
  *
  * <p>
  * Finally, you can add the different supported routes for the resource via the
- * method
- * {@link com.liferay.vulcan.resource.CollectionResource#routes(RoutesBuilder)}.
+ * method {@link CollectionResource#routes(RoutesBuilder)}.
  * </p>
  *
  * @author Alejandro Hernández
- * @see com.liferay.vulcan.resource.builder.RepresentorBuilder
- * @see com.liferay.vulcan.resource.builder.RoutesBuilder
+ * @see    com.liferay.vulcan.resource.builder.RepresentorBuilder
+ * @see    com.liferay.vulcan.resource.builder.RoutesBuilder
  */
 @ConsumerType
 public interface ScopedCollectionResource<T, U extends Identifier>

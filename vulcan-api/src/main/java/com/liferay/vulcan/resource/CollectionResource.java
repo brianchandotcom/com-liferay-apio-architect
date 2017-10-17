@@ -24,8 +24,8 @@ import com.liferay.vulcan.resource.identifier.Identifier;
  * Maps your domain models to resources that Vulcan can understand.
  *
  * <p>
- * Resources behave like an API so you must add the API's name via the
- * {@link #getName()} method.
+ * Resources behave like an API so you must add the API's name via the {@link
+ * #getName()} method.
  * </p>
  *
  * <p>
@@ -35,34 +35,33 @@ import com.liferay.vulcan.resource.identifier.Identifier;
  * </p>
  *
  * <p>
- * You can add the different supported routes for the resource via the
- * {@link #routes(RoutesBuilder)} method.
+ * You can add the different supported routes for the resource via the {@link
+ * #routes(RoutesBuilder)} method.
  * </p>
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
- * @see com.liferay.vulcan.resource.builder.RepresentorBuilder
- * @see com.liferay.vulcan.resource.builder.RoutesBuilder
+ * @see    RepresentorBuilder
+ * @see    RoutesBuilder
  */
 @ConsumerType
 public interface CollectionResource<T, U extends Identifier> {
 
 	/**
 	 * Creates a {@link Representor} for a certain domain model from the
-	 * provided {@link com.liferay.vulcan.resource.builder.RepresentorBuilder}.
+	 * provided {@link RepresentorBuilder}.
 	 *
 	 * <p>
-	 * To construct a representor, you must call
-	 * {@link com.liferay.vulcan.resource.builder.RepresentorBuilder#build()}.
-	 * Before calling this method, you must call the other representor builder
-	 * methods to populate the builder with data. This ensures that the
-	 * resulting representor contains the data.
+	 * To construct a representor, you must call {@link
+	 * RepresentorBuilder#build()}. Before calling this method, you must call
+	 * the other representor builder methods to populate the builder with data.
+	 * This ensures that the resulting representor contains the data.
 	 * </p>
 	 *
-	 * @param  representorBuilder the representor builder used to create the
-	 *         representor
-	 * @see    com.liferay.vulcan.resource.builder.RepresentorBuilder
+	 * @param representorBuilder the representor builder used to create the
+	 *        representor
+	 * @see   RepresentorBuilder
 	 */
 	public Representor<T, U> buildRepresentor(
 		RepresentorBuilder<T, U> representorBuilder);
@@ -79,9 +78,9 @@ public interface CollectionResource<T, U extends Identifier> {
 	 * <code>CollectionResource</code>. Use the provided routes builder to
 	 * create the <code>Routes</code> instance.
 	 *
-	 * @param  routesBuilder the routes builder to use to create the
-	 *         <code>Routes</code> instance
-	 * @see    com.liferay.vulcan.resource.builder.RoutesBuilder
+	 * @param routesBuilder the routes builder to use to create the
+	 *        <code>Routes</code> instance
+	 * @see   RoutesBuilder
 	 */
 	public Routes<T> routes(RoutesBuilder<T, U> routesBuilder);
 

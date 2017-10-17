@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Defines a {@code java.util.function.Function} that takes ten input
+ * Defines a {@code Function} that takes ten input
  * parameters. This interface, like all function interfaces, receives several
  * arguments and returns one value of type {@code R}.
  *
@@ -33,15 +33,14 @@ import java.util.function.Function;
 public interface DecaFunction<A, B, C, D, E, F, G, H, I, J, R> {
 
 	/**
-	 * Returns the {@code DecaFunction} that first executes the current
-	 * {@code DecaFunction} instance's {@code apply} method, then uses the
-	 * result as input for the {@code afterFunction} parameter's {@code apply}
-	 * method.
+	 * Returns the {@code DecaFunction} that first executes the current {@code
+	 * DecaFunction} instance's {@code apply} method, then uses the result as
+	 * input for the {@code afterFunction} parameter's {@code apply} method.
 	 *
 	 * @param  afterFunction the {@code DecaFunction} to execute after the
 	 *         current instance
 	 * @return the {@code DecaFunction} that executes the current instance's
- 	 *         {@code apply} method, then uses the result as input for the
+	 *         {@code apply} method, then uses the result as input for the
 	 *         {@code afterFunction} parameter's {@code apply} method
 	 */
 	public default <V> DecaFunction<A, B, C, D, E, F, G, H, I, J, V> andThen(

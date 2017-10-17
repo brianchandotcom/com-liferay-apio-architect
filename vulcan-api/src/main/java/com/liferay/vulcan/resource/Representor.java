@@ -27,16 +27,16 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * Holds information about the metadata supported for a {@link 
+ * Holds information about the metadata supported for a {@link
  * CollectionResource}.
  *
  * <p>
- * Instances of this interface should always be created by using a {@link 
+ * Instances of this interface should always be created by using a {@link
  * com.liferay.vulcan.resource.builder.RepresentorBuilder}.
  * </p>
  *
  * @author Alejandro Hernández
- * @see com.liferay.vulcan.resource.builder.RepresentorBuilder
+ * @see    com.liferay.vulcan.resource.builder.RepresentorBuilder
  */
 @ProviderType
 public interface Representor<T, U extends Identifier> {
@@ -96,8 +96,7 @@ public interface Representor<T, U extends Identifier> {
 	 * Returns a map containing the localized string field names and the
 	 * functions to get those fields.
 	 *
-	 * @return the field names and field functions.
-	 * @review
+	 * @return the map containing the localized string field names and functions
 	 */
 	public Map<String, BiFunction<T, Language, String>>
 		getLocalizedStringFunctions();

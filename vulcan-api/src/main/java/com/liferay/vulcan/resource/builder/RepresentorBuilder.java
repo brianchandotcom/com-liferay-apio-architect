@@ -38,8 +38,8 @@ import java.util.function.Function;
 public interface RepresentorBuilder<T, U extends Identifier> {
 
 	/**
-	 * Provides a lambda function that can be used to obtain a model's
-	 * {@link com.liferay.vulcan.resource.identifier.Identifier}.
+	 * Provides a lambda function that can be used to obtain a model's {@link
+	 * Identifier}.
 	 *
 	 * @param  identifierFunction lambda function used to obtain a model's
 	 *         identifier
@@ -51,9 +51,9 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 
 		/**
 		 * Adds information about the bidirectional relation of a linked model
-		 * in the resource and a collection of
-		 * {@link com.liferay.vulcan.resource.CollectionResource} items in the
-		 * related resource.
+		 * in the resource and a collection of {@link
+		 * com.liferay.vulcan.resource.CollectionResource} items in the related
+		 * resource.
 		 *
 		 * @param  key the relation's name in the resource
 		 * @param  relatedKey the relation's name in the related resource
@@ -185,8 +185,8 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		public FirstStep<T, U> addType(String type);
 
 		/**
-		 * Constructs and returns a
-		 * {@link com.liferay.vulcan.resource.Representor} instance with the
+		 * Constructs and returns a {@link
+		 * Representor} instance with the
 		 * information provided to the builder.
 		 *
 		 * @return the <code>Representor</code> instance

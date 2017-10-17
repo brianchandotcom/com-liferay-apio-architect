@@ -45,11 +45,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Creates {@link com.liferay.vulcan.resource.Routes} of a {@link
+ * Creates {@link Routes} of a {@link
  * com.liferay.vulcan.resource.CollectionResource}.
  *
  * @author Alejandro Hernández
- * @see com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl
+ * @see    com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl
  */
 @ProviderType
 @SuppressWarnings("unused")
@@ -868,7 +868,8 @@ public interface RoutesBuilder<T, U extends Identifier> {
 		TriFunction<U, Map<String, Object>, A, T> triFunction, Class<A> aClass);
 
 	/**
-	 * Adds a route to a collection item updater function with eleven parameters.
+	 * Adds a route to a collection item updater function with eleven
+	 * parameters.
 	 *
 	 * @param  undecaFunction the function that updates the collection item
 	 * @param  aClass the class of the updater function's third parameter
@@ -891,7 +892,7 @@ public interface RoutesBuilder<T, U extends Identifier> {
 			Class<I> iClass);
 
 	/**
-	 * Constructs the {@link com.liferay.vulcan.resource.Routes} instance with
+	 * Constructs the {@link Routes} instance with
 	 * the information provided to the builder.
 	 *
 	 * @return the <code>Routes</code> instance

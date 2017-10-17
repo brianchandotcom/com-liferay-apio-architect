@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * Defines a {@code java.util.function.Consumer} that takes nine input
  * parameters. This consumer, like all consumers, doesn't return a result.
- * 
+ *
  * <p>
  * This interface can be implemented with a lambda function.
  * </p>
@@ -33,15 +33,15 @@ public interface EnneaConsumer<A, B, C, D, E, F, G, H, I> {
 	 * Operates with nine parameters and returns {@code void}. This function can
 	 * be implemented explicitly or with a lambda.
 	 *
-	 * @param  a the first function argument
-	 * @param  b the second function argument
-	 * @param  c the third function argument
-	 * @param  d the fourth function argument
-	 * @param  e the fifth function argument
-	 * @param  f the sixth function argument
-	 * @param  g the seventh function argument
-	 * @param  h the eighth function argument
-	 * @param  i the ninth function argument
+	 * @param a the first function argument
+	 * @param b the second function argument
+	 * @param c the third function argument
+	 * @param d the fourth function argument
+	 * @param e the fifth function argument
+	 * @param f the sixth function argument
+	 * @param g the seventh function argument
+	 * @param h the eighth function argument
+	 * @param i the ninth function argument
 	 */
 	public void accept(A a, B b, C c, D d, E e, F f, G g, H h, I i);
 

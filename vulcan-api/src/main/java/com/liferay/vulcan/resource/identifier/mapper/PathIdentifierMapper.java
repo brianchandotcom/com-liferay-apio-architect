@@ -20,14 +20,14 @@ import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.uri.Path;
 
 /**
- * Converts a {@link com.liferay.vulcan.uri.Path} to its corresponding
- * {@link com.liferay.vulcan.resource.identifier.Identifier}, and vice versa.
+ * Converts a {@link Path} to its corresponding {@link
+ * Identifier}, and vice versa.
  *
  * <p>
  * Instances of <code>PathIdentifierMapper</code> should only be created for
  * identifiers used as a single model's identifier. The identifier's class can
  * then be provided as a parameter in the
- * <code>addCollectionPageItemGetter</code> methods of {@link 
+ * <code>addCollectionPageItemGetter</code> methods of {@link
  * com.liferay.vulcan.resource.builder.RoutesBuilder}.
  * </p>
  *

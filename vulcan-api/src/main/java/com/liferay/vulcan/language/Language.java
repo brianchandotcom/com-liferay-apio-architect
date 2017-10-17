@@ -25,8 +25,8 @@ import java.util.Locale;
 public interface Language {
 
 	/**
-	 * Returns the {@code Enumeration} of the request's preferred {@code Locale},
-	 * in decreasing order.
+	 * Returns the {@code Enumeration} of the request's preferred {@code
+	 * Locale}, in decreasing order.
 	 *
 	 * <p>
 	 * The enumeration starts with the first locale added on the {@code
@@ -39,10 +39,10 @@ public interface Language {
 	 * the server.
 	 * </p>
 	 *
-	 * @return the {@code Enumeration} of the request's preferred {@code Locale},
-	 *         if the {@code Accept-Language} header is present; otherwise
-	 *         returns the {@code Enumeration} containing the server's default
-	 *         locale
+	 * @return the {@code Enumeration} of the request's preferred {@code
+	 *         Locale}, if the {@code Accept-Language} header is present;
+	 *         otherwise returns the {@code Enumeration} containing the server's
+	 *         default locale
 	 */
 	public Enumeration<Locale> getLocales();
 
@@ -51,9 +51,9 @@ public interface Language {
 	 * header. If the request doesn't have an {@code Accept-Language} header,
 	 * this method returns the server's default locale.
 	 *
-	 * @return the request's first {@code Locale}, if the
-	 *         {@code Accept-Language} header is present; otherwise returns the
-	 *         {@code Enumeration} containing the default locale for the server
+	 * @return the request's first {@code Locale}, if the {@code
+	 *         Accept-Language} header is present; otherwise returns the {@code
+	 *         Enumeration} containing the default locale for the server
 	 */
 	public Locale getPreferredLocale();
 

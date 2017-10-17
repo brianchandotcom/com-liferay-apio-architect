@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * Defines a {@code java.util.function.Consumer} that takes six input
  * parameters. This consumer, like all consumers, doesn't return a result.
- * 
+ *
  * <p>
  * This interface can be implemented with a lambda function.
  * </p>
@@ -33,19 +33,19 @@ public interface HexaConsumer<A, B, C, D, E, F> {
 	 * Operates with six parameters and returns {@code void}. This function can
 	 * be implemented explicitly or with a lambda.
 	 *
-	 * @param  a the first function argument
-	 * @param  b the second function argument
-	 * @param  c the third function argument
-	 * @param  d the fourth function argument
-	 * @param  e the fifth function argument
-	 * @param  f the sixth function argument
+	 * @param a the first function argument
+	 * @param b the second function argument
+	 * @param c the third function argument
+	 * @param d the fourth function argument
+	 * @param e the fifth function argument
+	 * @param f the sixth function argument
 	 */
 	public void accept(A a, B b, C c, D d, E e, F f);
 
 	/**
-	 * Returns the {@code HexaConsumer} function that first executes the
-	 * current {@code HexaConsumer} instance's {@code accept} method, then
-	 * executes the {@code after} parameter's {@code accept} method.
+	 * Returns the {@code HexaConsumer} function that first executes the current
+	 * {@code HexaConsumer} instance's {@code accept} method, then executes the
+	 * {@code after} parameter's {@code accept} method.
 	 *
 	 * @param  after the {@code HexaConsumer} instance to execute after the
 	 *         current instance

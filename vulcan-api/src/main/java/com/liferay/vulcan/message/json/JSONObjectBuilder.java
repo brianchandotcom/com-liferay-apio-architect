@@ -157,15 +157,14 @@ public interface JSONObjectBuilder {
 
 	/**
 	 * Defines the step that adds the value of a field as a JSON array.
-	 *
 	 */
 	public interface ArrayValueStep {
 
 		/**
-		 * Adds a new JSON object, created by the provided consumer, to the JSON 
+		 * Adds a new JSON object, created by the provided consumer, to the JSON
 		 * array.
 		 *
-		 * @param  consumer the consumer that creates the new JSON object
+		 * @param consumer the consumer that creates the new JSON object
 		 */
 		public void add(Consumer<JSONObjectBuilder> consumer);
 
@@ -173,8 +172,8 @@ public interface JSONObjectBuilder {
 		 * Adds the JSON object, created by the provided JSON object builder, to
 		 * the JSON array.
 		 *
-		 * @param  jsonObjectBuilder the JSON object builder containing the JSON
-		 *         object to add to the JSON array
+		 * @param jsonObjectBuilder the JSON object builder containing the JSON
+		 *        object to add to the JSON array
 		 */
 		public void add(JSONObjectBuilder jsonObjectBuilder);
 
@@ -182,7 +181,7 @@ public interface JSONObjectBuilder {
 		 * Adds all elements of a boolean collection as elements of the JSON
 		 * array.
 		 *
-		 * @param  collection the boolean collection to add to the JSON array
+		 * @param collection the boolean collection to add to the JSON array
 		 */
 		public void addAllBooleans(Collection<Boolean> collection);
 
@@ -190,8 +189,7 @@ public interface JSONObjectBuilder {
 		 * Adds all elements of a JSON object collection as elements of the JSON
 		 * array.
 		 *
-		 * @param  collection the JSON object collection to add to the JSON
-		 *         array
+		 * @param collection the JSON object collection to add to the JSON array
 		 */
 		public void addAllJsonObjects(Collection<JsonObject> collection);
 
@@ -199,7 +197,7 @@ public interface JSONObjectBuilder {
 		 * Adds all elements of a number collection as elements of the JSON
 		 * array.
 		 *
-		 * @param  collection the number collection to add to the JSON array
+		 * @param collection the number collection to add to the JSON array
 		 */
 		public void addAllNumbers(Collection<Number> collection);
 
@@ -207,28 +205,28 @@ public interface JSONObjectBuilder {
 		 * Adds all elements of a string collection as elements of the JSON
 		 * array.
 		 *
-		 * @param  collection the string collection to add to the JSON array
+		 * @param collection the string collection to add to the JSON array
 		 */
 		public void addAllStrings(Collection<String> collection);
 
 		/**
 		 * Adds a new boolean value to the JSON array.
 		 *
-		 * @param  value the boolean value to add to the JSON array
+		 * @param value the boolean value to add to the JSON array
 		 */
 		public void addBoolean(Boolean value);
 
 		/**
 		 * Adds a new number to the JSON array.
 		 *
-		 * @param  value the number to add to the JSON array
+		 * @param value the number to add to the JSON array
 		 */
 		public void addNumber(Number value);
 
 		/**
 		 * Adds a new string to the JSON array.
 		 *
-		 * @param  value the string to add to the JSON array
+		 * @param value the string to add to the JSON array
 		 */
 		public void addString(String value);
 
@@ -237,9 +235,8 @@ public interface JSONObjectBuilder {
 	/**
 	 * Defines the step to add the value of a field. The step can be another
 	 * JSON object (field methods), a JSON array ({@link #arrayValue()}), or a
-	 * primitive value ({@link #stringValue(String)},
-	 * {@link #numberValue(Number)}, or {@link #booleanValue(Boolean)}).
-	 *
+	 * primitive value ({@link #stringValue(String)}, {@link
+	 * #numberValue(Number)}, or {@link #booleanValue(Boolean)}).
 	 */
 	public interface FieldStep {
 
@@ -253,7 +250,7 @@ public interface JSONObjectBuilder {
 		/**
 		 * Adds a new boolean value to the JSON array.
 		 *
-		 * @param  value the boolean value to add to the JSON array
+		 * @param value the boolean value to add to the JSON array
 		 */
 		public void booleanValue(Boolean value);
 
@@ -306,8 +303,8 @@ public interface JSONObjectBuilder {
 
 		/**
 		 * Begins creating a new nested JSON object field, adding a prefix to
-		 * each field. This method behaves like
-		 * {@link JSONObjectBuilder#nestedPrefixedField(String, String, String...)}.
+		 * each field. This method behaves like {@link
+		 * JSONObjectBuilder#nestedPrefixedField(String, String, String...)}.
 		 *
 		 * @param  prefix each field's prefix
 		 * @param  parentName the parent field's name
@@ -319,8 +316,8 @@ public interface JSONObjectBuilder {
 
 		/**
 		 * Begins creating a new nested JSON object field, adding a suffix to
-		 * each field. This method behaves like
-		 * {@link JSONObjectBuilder#nestedSuffixedField(String, String, String...)}.
+		 * each field. This method behaves like {@link
+		 * JSONObjectBuilder#nestedSuffixedField(String, String, String...)}.
 		 *
 		 * @param  suffix each field's suffix
 		 * @param  parentName the parent field's name
@@ -333,14 +330,14 @@ public interface JSONObjectBuilder {
 		/**
 		 * Adds a new number to the JSON array.
 		 *
-		 * @param  value the number to add to the JSON array
+		 * @param value the number to add to the JSON array
 		 */
 		public void numberValue(Number value);
 
 		/**
 		 * Adds a new string to the JSON array.
 		 *
-		 * @param  value the string to add to the JSON array
+		 * @param value the string to add to the JSON array
 		 */
 		public void stringValue(String value);
 
