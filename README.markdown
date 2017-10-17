@@ -2,7 +2,7 @@
 
 ## The Vulcan project
 
-The Vulcan project consists of three things: Guidelines, Architect and Consumers.
+The Vulcan project consists of three things: Guidelines, Architect, and Consumers.
 
 ### [Vulcan Guidelines](https://vulcan.wedeploy.io/guidelines/)
 
@@ -12,7 +12,7 @@ The two key secrets that make this possible are:
 
 **Hypermedia**: yeah, the good old links and forms that we all use through a browser every day can also be applied to APIs to get the same great decoupling and flexibility.
 
-**Shared Vocabularies**: instead of returning a JSON/XML with attributes tied to the names of the internal models, use standard vocabularies that are well thought out by standardisation bodies (such as [schema.org](https://schema.org) or [IANA](https://www.iana.org/assignments/link-relations/link-relations.xhtml)). Even if you have to create your own types (because a standard doesn’t exist), define it explicitly to be decoupled from any changes that you can make to the internal model.
+**Shared Vocabularies**: instead of returning a JSON/XML with attributes tied to the names of the internal models, use standard vocabularies that are well thought out by standardization bodies (such as [schema.org](https://schema.org) or [IANA](https://www.iana.org/assignments/link-relations/link-relations.xhtml)). Even if you have to create your own types (because a standard doesn’t exist), define it explicitly to be decoupled from any changes that you can make to the internal model.
 
 And there are other additional goodies such as:
 
@@ -53,12 +53,12 @@ Start creating your first API with Architect is very simple. All you need is an 
 If you just want to try all this quickly, you can use our [docker image](https://hub.docker.com/r/ahdezma/vulcan-whiteboard/). Simply run this on your terminal (specifying the folder where to do module hot-deploying):
 
 ```
-docker run -p 8080:8080 -v "/Users/youruser/deploy:/deploy" -d ahdezma/vulcan-whiteboard
+docker run -p 8080:8080 -v "/Users/YOUR_USER/deploy:/deploy" -d ahdezma/vulcan-whiteboard
 ```
 
 As simple as that, you will have a JAX-RS application with Vulcan Architect running in an OSGi container, which you can consult by making a request to `http://localhost:8080`.
 
-Now just add these lines to your `pom. xml`:
+Now just add these lines to your `pom.xml`:
 
 ```xml
 <dependency>
@@ -111,5 +111,3 @@ to order JSON-LD or:
 to order HAL.
 
 And start surfing the Hypermedia world!
-
-
