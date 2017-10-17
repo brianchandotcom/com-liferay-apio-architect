@@ -2,7 +2,7 @@
 
 ## The Vulcan project
 
-The Vulcan project consists of three things: Guidelines, Architect, and Consumers.
+The Vulcan project provides a set of Guidelines and Software to build APIs and consumers designed to evolve.
 
 ### [Vulcan Guidelines](https://vulcan.wedeploy.io/guidelines/)
 
