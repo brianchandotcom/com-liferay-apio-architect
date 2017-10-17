@@ -1,0 +1,14 @@
+dependencies {
+	testCompile group: "javax.ws.rs", name: "javax.ws.rs-api", version: "2.0.1"
+	testCompile project(":apps:foundation:vulcan:vulcan-api")
+	testCompile project(":apps:foundation:vulcan:vulcan-jaxrs-json")
+	testCompile project(":apps:foundation:vulcan:vulcan-liferay-portal")
+	testCompile project(":apps:foundation:vulcan:vulcan-message-hal")
+	testCompile project(":apps:foundation:vulcan:vulcan-message-json-ld")
+	testCompile project(":apps:foundation:vulcan:vulcan-message-json-plain")
+	testCompile project(":apps:foundation:vulcan:vulcan-sample-liferay-portal")
+	testCompile project(":apps:foundation:vulcan:vulcan-wiring-osgi")
+
+	testIntegrationCompile group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge", version: "1.0.8"
+	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.0.0"
+}
