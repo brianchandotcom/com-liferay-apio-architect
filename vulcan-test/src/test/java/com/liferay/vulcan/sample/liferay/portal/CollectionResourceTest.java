@@ -19,7 +19,10 @@ import static org.mockito.Matchers.any;
 import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.resource.builder.RepresentorBuilder;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RepresentorBuilderImpl;
+import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.junit.Before;
@@ -46,13 +49,53 @@ public class CollectionResourceTest {
 		).thenReturn(
 			_identifierSpy
 		);
+
+		routesBuilderMock = Mockito.mock(RoutesBuilderImpl.class);
+
+		Mockito.when(
+			routesBuilderMock.addCollectionPageGetter(
+				any(BiFunction.class), any(Class.class))
+		).thenReturn(
+			routesBuilderMock
+		);
+
+		Mockito.when(
+			routesBuilderMock.addCollectionPageItemCreator(
+				any(BiFunction.class), any(Class.class))
+		).thenReturn(
+			routesBuilderMock
+		);
+
+		Mockito.when(
+			routesBuilderMock.addCollectionPageItemGetter(any(Function.class))
+		).thenReturn(
+			routesBuilderMock
+		);
+
+		Mockito.when(
+			routesBuilderMock.addCollectionPageItemRemover(any(Consumer.class))
+		).thenReturn(
+			routesBuilderMock
+		);
+
+		Mockito.when(
+			routesBuilderMock.addCollectionPageItemUpdater(
+				any(BiFunction.class))
+		).thenReturn(
+			routesBuilderMock
+		);
 	}
 
 	protected RepresentorBuilder.FirstStep verifyIdentifier() {
 		return Mockito.verify(_identifierSpy);
 	}
 
+	protected RoutesBuilderImpl verifyRoute() {
+		return Mockito.verify(routesBuilderMock);
+	}
+
 	protected RepresentorBuilderImpl representorBuilderSpy;
+	protected RoutesBuilderImpl routesBuilderMock;
 
 	private RepresentorBuilder.FirstStep _identifierSpy;
 

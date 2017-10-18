@@ -12,12 +12,14 @@
  * details.
  */
 
-package com.liferay.vulcan.sample.liferay.portal;
+package com.liferay.vulcan.sample.liferay.portal.internal.resource;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 
-import com.liferay.vulcan.sample.liferay.portal.internal.resource.AggregateRatingScopedCollectionResource;
+import com.liferay.vulcan.sample.liferay.portal.CollectionResourceTest;
+import com.liferay.vulcan.sample.liferay.portal.rating.AggregateRatingService;
+import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 
 import java.util.function.Function;
 
@@ -51,6 +53,33 @@ public class AggregateRatingScopedCollectionCollectionResourceTest
 		verifyIdentifier().addNumber(eq("ratingValue"), any(Function.class));
 		verifyIdentifier().addNumber(eq("worstRating"), any(Function.class));
 		verifyIdentifier().addType(eq("AggregateRating"));
+	}
+
+	@Test
+	public void testRoutes() {
+		RoutesBuilderImpl routesBuilderMock = Mockito.mock(
+			RoutesBuilderImpl.class);
+
+		Mockito.when(
+			routesBuilderMock.addCollectionPageItemGetter(any(Function.class))
+		).thenReturn(
+			routesBuilderMock
+		);
+
+		AggregateRatingScopedCollectionResource
+			aggregateRatingScopedCollectionResource =
+				new AggregateRatingScopedCollectionResource();
+
+		aggregateRatingScopedCollectionResource._aggregateRatingService =
+			Mockito.mock(AggregateRatingService.class);
+
+		aggregateRatingScopedCollectionResource.routes(routesBuilderMock);
+
+		Mockito.verify(
+			routesBuilderMock
+		).addCollectionPageItemGetter(
+			any(Function.class)
+		);
 	}
 
 }
