@@ -34,13 +34,16 @@ import com.liferay.vulcan.resource.identifier.Identifier;
  *
  * <p>
  * Representors created by the method {@link
- * CollectionResource#buildRepresentor(RepresentorBuilder)} hold all the
+ * CollectionResource#buildRepresentor(
+ * com.liferay.vulcan.resource.builder.RepresentorBuilder)} hold all the
  * information needed to write your domain models' hypermedia representations.
  * </p>
  *
  * <p>
  * Finally, you can add the different supported routes for the resource via the
- * method {@link CollectionResource#routes(RoutesBuilder)}.
+ * method {@link
+ * CollectionResource#routes(
+ * com.liferay.vulcan.resource.builder.RoutesBuilder)}.
  * </p>
  *
  * @author Alejandro Hernández

@@ -49,7 +49,6 @@ import java.util.function.Function;
  * com.liferay.vulcan.resource.CollectionResource}.
  *
  * @author Alejandro Hernández
- * @see    com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl
  */
 @ProviderType
 @SuppressWarnings("unused")
