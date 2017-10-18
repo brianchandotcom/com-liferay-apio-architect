@@ -50,7 +50,9 @@ public interface RootEndpoint {
 	 * This occurs via a POST request to the resource.
 	 *
 	 * @param  name the resource's name, extracted from the URL
+	 * @param  body the body of the request.
 	 * @return the new {@link SingleModel}, or an exception if an error occurred
+	 * @review
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}")
@@ -65,7 +67,9 @@ public interface RootEndpoint {
 	 * @param  name the parent resource's name, extracted from the URL
 	 * @param  id the parent resource's ID
 	 * @param  nestedName the nested resource's name, extracted from the URL.
+	 * @param  body the body of the request.
 	 * @return the new {@link SingleModel}, or an exception if an error occurred
+	 * @review
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}/{id}/{nestedName}")
@@ -157,8 +161,10 @@ public interface RootEndpoint {
 	 *
 	 * @param  name the resource's name, extracted from the URL
 	 * @param  id the resource's ID
+	 * @param  body the body of the request.
 	 * @return the updated {@link SingleModel}, or an exception if there was an
 	 *         error
+	 * @review
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/p/{name}/{id}")
