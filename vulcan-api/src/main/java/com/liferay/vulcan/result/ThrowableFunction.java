@@ -27,8 +27,8 @@ public interface ThrowableFunction<T, R> {
 
 	/**
 	 * Returns a composed function that first applies the current {@code
-	 * ThrowableFunction} instance to its input, and then applies the
-	 * {@code throwableFunction} to the result.
+	 * ThrowableFunction} instance to its input, and then applies the {@code
+	 * throwableFunction} to the result.
 	 *
 	 * @param  throwableFunction the function to apply after applying the
 	 *         current {@code ThrowableFunction} instance
