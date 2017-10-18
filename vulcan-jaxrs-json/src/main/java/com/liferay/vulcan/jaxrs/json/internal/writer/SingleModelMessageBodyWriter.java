@@ -41,11 +41,13 @@ import com.liferay.vulcan.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -109,7 +111,10 @@ public class SingleModelMessageBodyWriter<T>
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
-		PrintWriter printWriter = new PrintWriter(entityStream, true);
+		OutputStreamWriter outputStreamWriter =
+			new OutputStreamWriter(entityStream, StandardCharsets.UTF_8);
+
+		PrintWriter printWriter = new PrintWriter(outputStreamWriter, true);
 
 		Stream<SingleModelMessageMapper<T>> stream =
 			_singleModelMessageMappers.stream();

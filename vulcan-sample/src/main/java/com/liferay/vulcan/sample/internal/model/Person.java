@@ -189,7 +189,7 @@ public class Person {
 	 * @review
 	 */
 	public Date getBirthDate() {
-		return _birthDate;
+		return new Date(_birthDate.getTime());
 	}
 
 	/**

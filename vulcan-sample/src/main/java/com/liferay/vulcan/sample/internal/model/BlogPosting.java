@@ -184,7 +184,7 @@ public class BlogPosting {
 	 * @review
 	 */
 	public Date getCreateDate() {
-		return _createDate;
+		return new Date(_createDate.getTime());
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class BlogPosting {
 	 * @review
 	 */
 	public Date getModifiedDate() {
-		return _modifiedDate;
+		return new Date(_modifiedDate.getTime());
 	}
 
 	/**
