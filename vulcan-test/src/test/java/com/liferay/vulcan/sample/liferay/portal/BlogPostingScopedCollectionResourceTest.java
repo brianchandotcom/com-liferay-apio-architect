@@ -20,6 +20,8 @@ import static org.mockito.Matchers.eq;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.vulcan.sample.liferay.portal.internal.resource.BlogPostingScopedCollectionResource;
 
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.junit.Test;
@@ -72,6 +74,23 @@ public class BlogPostingScopedCollectionResourceTest
 		verifyIdentifier().addString(eq("fileFormat"), any(Function.class));
 		verifyIdentifier().addString(eq("headline"), any(Function.class));
 		verifyIdentifier().addType(eq("BlogPosting"));
+	}
+
+	@Test
+	public void testRoutes() {
+		BlogPostingScopedCollectionResource
+			blogPostingScopedCollectionResource =
+				new BlogPostingScopedCollectionResource();
+
+		blogPostingScopedCollectionResource.routes(routesBuilderMock);
+
+		verifyRoute().addCollectionPageGetter(
+			any(BiFunction.class), any(Class.class));
+		verifyRoute().addCollectionPageItemCreator(
+			any(BiFunction.class), any(Class.class));
+		verifyRoute().addCollectionPageItemGetter(any(Function.class));
+		verifyRoute().addCollectionPageItemRemover(any(Consumer.class));
+		verifyRoute().addCollectionPageItemUpdater(any(BiFunction.class));
 	}
 
 }
