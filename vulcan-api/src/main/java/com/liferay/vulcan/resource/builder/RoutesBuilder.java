@@ -892,10 +892,10 @@ public interface RoutesBuilder<T, U extends Identifier> {
 			Class<I> iClass);
 
 	/**
-	 * Constructs the {@link Routes} instance with
-	 * the information provided to the builder.
+	 * Constructs the {@link Routes} instance with the information provided to
+	 * the builder.
 	 *
-	 * @return the <code>Routes</code> instance
+	 * @return the {@code Routes} instance
 	 */
 	public Routes<T> build();
 

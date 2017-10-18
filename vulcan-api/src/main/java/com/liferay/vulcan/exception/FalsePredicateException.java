@@ -16,8 +16,8 @@ package com.liferay.vulcan.exception;
 
 /**
  * Defines the exception returned inside {@link com.liferay.vulcan.result.Try}
- * when {@link com.liferay.vulcan.result.Try#filter(Predicate)} returns
- * {@code false}.
+ * when {@link com.liferay.vulcan.result.Try#filter(Predicate)} returns {@code
+ * <code>false</code>}.
  *
  * @author Alejandro Hernández
  */

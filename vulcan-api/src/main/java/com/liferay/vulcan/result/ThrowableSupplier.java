@@ -15,8 +15,7 @@
 package com.liferay.vulcan.result;
 
 /**
- * Defines a <code>java.util.function.Supplier</code> that can throw an
- * exception.
+ * Defines a {@code java.util.function.Supplier} that can throw an exception.
  *
  * @author Alejandro Hernández
  */
@@ -24,10 +23,10 @@ package com.liferay.vulcan.result;
 public interface ThrowableSupplier<T> {
 
 	/**
-	 * Returns a result of type <code>T</code> if the operation succeeds;
-	 * otherwise throws an exception.
+	 * Returns a result of type {@code T} if the operation succeeds; otherwise
+	 * throws an exception.
 	 *
-	 * @return a result of type <code>T</code> if the operation succeeds; an
+	 * @return a result of type {@code T} if the operation succeeds; an
 	 *         exception otherwise
 	 */
 	public T get() throws Exception;

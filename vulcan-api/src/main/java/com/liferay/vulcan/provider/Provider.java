@@ -19,9 +19,9 @@ import aQute.bnd.annotation.ConsumerType;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Provides instances of <code>T</code> that are dependent on the current
- * request. These instances can then be provided as a parameter in the methods
- * of {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
+ * Provides instances of {@code T} that are dependent on the current request.
+ * These instances can then be provided as a parameter in the methods of {@link
+ * com.liferay.vulcan.resource.builder.RoutesBuilder}.
  *
  * @author Alejandro Hernández
  */
@@ -29,10 +29,10 @@ import javax.servlet.http.HttpServletRequest;
 public interface Provider<T> {
 
 	/**
-	 * Creates an instance of <code>T</code> for the current request.
+	 * Creates an instance of {@code T} for the current request.
 	 *
 	 * @param  httpServletRequest the current request
-	 * @return the instance of <code>T</code>
+	 * @return the instance of {@code T}
 	 */
 	public T createContext(HttpServletRequest httpServletRequest);
 

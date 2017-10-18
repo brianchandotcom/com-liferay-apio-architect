@@ -17,8 +17,7 @@ package com.liferay.vulcan.result;
 import java.util.Objects;
 
 /**
- * Defines a <code>java.util.function.Function</code> that can throw an
- * exception.
+ * Defines a {@code java.util.function.Function} that can throw an exception.
  *
  * @author Alejandro Hernández
  */
@@ -27,12 +26,12 @@ import java.util.Objects;
 public interface ThrowableFunction<T, R> {
 
 	/**
-	 * Returns a composed function that first applies the current
-	 * <code>ThrowableFunction<code> instance to its input, and then applies the
-	 * <code>throwableFunction</code> to the result.
+	 * Returns a composed function that first applies the current {@code
+	 * ThrowableFunction{@code instance to its input, and then applies the
+	 * {@code throwableFunction} to the result.
 	 *
 	 * @param  throwableFunction the function to apply after applying the
-	 *         current <code>ThrowableFunction<code> instance
+	 *         current {@code ThrowableFunction} instance
 	 * @return the composed function
 	 * @see    #compose(ThrowableFunction)
 	 */
@@ -45,22 +44,22 @@ public interface ThrowableFunction<T, R> {
 	}
 
 	/**
-	 * Returns the result of applying the current <code>ThrowableFunction<code>
+	 * Returns the result of applying the current {@code ThrowableFunction{@code
 	 * instance to the argument.
 	 *
 	 * @param  t the argument
-	 * @return the result of applying the current <code>ThrowableFunction<code>
+	 * @return the result of applying the current {@code ThrowableFunction{@code
 	 *         instance to the argument
 	 */
 	public R apply(T t) throws Exception;
 
 	/**
-	 * Returns a composed function that first applies the
-	 * <code>throwableFunction</code> to its input, and then applies the current
-	 * <code>ThrowableFunction<code> instance to the result.
+	 * Returns a composed function that first applies the {@code
+	 * throwableFunction} to its input, and then applies the current {@code
+	 * ThrowableFunction{@code instance to the result.
 	 *
 	 * @param  throwableFunction the function to apply before applying the
-	 *         current <code>ThrowableFunction<code> instance
+	 *         current {@code ThrowableFunction{@code  instance
 	 * @return the composed function
 	 * @see    #andThen(ThrowableFunction)
 	 */

@@ -30,8 +30,8 @@ import java.util.Optional;
 public interface WebSiteService {
 
 	/**
-	 * Return the {@code WebSite} {@code PageItems} for a combination of pagination
-	 * and {@link com.liferay.portal.kernel.model.Company} ID.
+	 * Return the {@code WebSite} {@code PageItems} for a combination of
+	 * pagination and {@link com.liferay.portal.kernel.model.Company} ID.
 	 *
 	 * @param  pagination the pagination information.
 	 * @param  companyId the ID of the company.

@@ -185,11 +185,10 @@ public interface RepresentorBuilder<T, U extends Identifier> {
 		public FirstStep<T, U> addType(String type);
 
 		/**
-		 * Constructs and returns a {@link
-		 * Representor} instance with the
+		 * Constructs and returns a {@link Representor} instance with the
 		 * information provided to the builder.
 		 *
-		 * @return the <code>Representor</code> instance
+		 * @return the {@code Representor} instance
 		 */
 		public Representor<T, U> build();
 

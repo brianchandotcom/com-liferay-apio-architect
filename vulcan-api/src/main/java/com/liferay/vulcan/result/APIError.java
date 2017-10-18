@@ -19,10 +19,10 @@ import aQute.bnd.annotation.ProviderType;
 import java.util.Optional;
 
 /**
- * Describes an API error. Instances of
- * <code>javax.ws.rs.WebApplicationException</code> and its descendants are
- * converted to <code>APIError<code>. All other exceptions are converted to a
- * <code>500</code> error with a standard message.
+ * Describes an API error. Instances of {@code
+ * javax.ws.rs.WebApplicationException} and its descendants are converted to
+ * {@code APIError{@code . All other exceptions are converted to a {@code 500}
+ * error with a standard message.
  *
  * @author Alejandro Hernández
  */
@@ -30,11 +30,11 @@ import java.util.Optional;
 public interface APIError {
 
 	/**
-	 * Returns the API error's description, if present;
-	 * <code>Optional#empty()</code> otherwise.
+	 * Returns the API error's description, if present; {@code Optional#empty()}
+	 * otherwise.
 	 *
-	 * @return the API error's description, if present;
-	 *         <code>Optional#empty()</code> otherwise
+	 * @return the API error's description, if present; {@code Optional#empty()}
+	 *         otherwise
 	 */
 	public Optional<String> getDescription();
 
@@ -62,9 +62,9 @@ public interface APIError {
 
 	/**
 	 * Returns the API error's type. Note that this is different from the API
-	 * error's exception. For example, if the API error's exception is
-	 * <code>NotAuthorizedException</code>, an implementation of this method
-	 * could return <code>"not-authorized"</code>.
+	 * error's exception. For example, if the API error's exception is {@code
+	 * NotAuthorizedException}, an implementation of this method could return
+	 * {@code "not-authorized"}.
 	 *
 	 * @return the API error's type
 	 */

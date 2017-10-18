@@ -20,8 +20,8 @@ import java.util.function.Predicate;
 
 /**
  * Defines the embedded context selected by clients. An instance of this
- * interface is handed to <code>javax.ws.rs.ext.MessageBodyWriter</code> to
- * decide which resources to embed.
+ * interface is handed to {@code javax.ws.rs.ext.MessageBodyWriter} to decide
+ * which resources to embed.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

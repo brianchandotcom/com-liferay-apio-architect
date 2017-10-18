@@ -27,8 +27,7 @@ import com.liferay.vulcan.result.APIError;
 public interface VulcanLogger {
 
 	/**
-	 * Logs a message in the form of an {@link
-	 * APIError}.
+	 * Logs a message in the form of an {@link APIError}.
 	 *
 	 * @param apiError the error
 	 */

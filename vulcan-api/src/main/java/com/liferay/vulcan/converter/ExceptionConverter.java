@@ -20,8 +20,8 @@ import com.liferay.vulcan.result.APIError;
 
 /**
  * Defines an interface whose instances are used to convert between a Java
- * exception and its {@link APIError} representation.
- * Use the exception message to provide meaningful information about the error.
+ * exception and its {@link APIError} representation. Use the exception message
+ * to provide meaningful information about the error.
  *
  * @author Alejandro Hernández
  */
@@ -29,8 +29,7 @@ import com.liferay.vulcan.result.APIError;
 public interface ExceptionConverter<T extends Exception> {
 
 	/**
-	 * Converts an exception to its {@link APIError}
-	 * representation.
+	 * Converts an exception to its {@link APIError} representation.
 	 *
 	 * @param  exception the exception to convert
 	 * @return the exception's {@link com.liferay.vulcan.result.APIError}

@@ -18,9 +18,9 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Defines a {@code Function} that takes four input
- * parameters. This interface, like all function interfaces, receives several
- * arguments and returns one value of type {@code R}.
+ * Defines a {@code Function} that takes four input parameters. This interface,
+ * like all function interfaces, receives several arguments and returns one
+ * value of type {@code R}.
  *
  * <p>
  * This interface can be implemented with a lambda function.

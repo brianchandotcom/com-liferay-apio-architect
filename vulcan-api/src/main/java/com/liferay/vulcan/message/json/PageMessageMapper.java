@@ -24,12 +24,12 @@ import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 
 /**
- * Maps {@link Page} data to its representation in
- * a JSON object. Instances of this interface work like events. The
- * <code>javax.ws.rs.ext.MessageBodyWriter</code> of the <code>Page</code> calls
- * the <code>PageMessageMapper</code> methods. In each method, developers should
- * only map the provided part of the resource to its representation in a JSON
- * object. To enable this, each method receives a {@link JSONObjectBuilder}.
+ * Maps {@link Page} data to its representation in a JSON object. Instances of
+ * this interface work like events. The {@code
+ * javax.ws.rs.ext.MessageBodyWriter} of the {@code Page} calls the {@code
+ * PageMessageMapper} methods. In each method, developers should only map the
+ * provided part of the resource to its representation in a JSON object. To
+ * enable this, each method receives a {@link JSONObjectBuilder}.
  *
  * The methods {@link #onStart(JSONObjectBuilder, Page, HttpHeaders)} and
  * {@link #onFinish(JSONObjectBuilder, Page, HttpHeaders)} are called when the
@@ -383,13 +383,13 @@ public interface PageMessageMapper<T> {
 	}
 
 	/**
-	 * Returns <code>true</code> if the mapper can map all things related to the
-	 * current request.
+	 * Returns {@code <code>true</code>} if the mapper can map all things
+	 * related to the current request.
 	 *
 	 * @param  page the page
 	 * @param  httpHeaders the current request's HTTP headers
-	 * @return <code>true</code> if the mapper can map the request;
-	 *         <code>false</code> otherwise
+	 * @return {@code <code>true</code>} if the mapper can map the request;
+	 *         {@code <code>false</code>} otherwise
 	 */
 	public default boolean supports(Page<T> page, HttpHeaders httpHeaders) {
 		return true;

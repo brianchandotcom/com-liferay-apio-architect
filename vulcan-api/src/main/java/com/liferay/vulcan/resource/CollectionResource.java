@@ -74,12 +74,11 @@ public interface CollectionResource<T, U extends Identifier> {
 	public String getName();
 
 	/**
-	 * Creates the {@link Routes} supported by the
-	 * <code>CollectionResource</code>. Use the provided routes builder to
-	 * create the <code>Routes</code> instance.
+	 * Creates the {@link Routes} supported by the {@code CollectionResource}.
+	 * Use the provided routes builder to create the {@code Routes} instance.
 	 *
-	 * @param routesBuilder the routes builder to use to create the
-	 *        <code>Routes</code> instance
+	 * @param routesBuilder the routes builder to use to create the {@code
+	 *        Routes} instance
 	 * @see   RoutesBuilder
 	 */
 	public Routes<T> routes(RoutesBuilder<T, U> routesBuilder);

@@ -23,8 +23,7 @@ import java.util.stream.Stream;
  * Defines an interface whose implementing classes behave like a list in pure
  * functional languages. Instead of splitting the list manually, you can use the
  * methods this interface defines to take different elements from the list.
- * Instances of <code>FunctionalList</code> should always have at least one
- * element.
+ * Instances of {@code FunctionalList} should always have at least one element.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
@@ -43,32 +42,30 @@ public interface FunctionalList<T> {
 	/**
 	 * Returns all but the last element of the list.
 	 *
-	 * @return a <code>Stream</code> that contains all but the
-	 *         last element of the list
+	 * @return a {@code Stream} that contains all but the last element of the
+	 *         list
 	 */
 	public Stream<T> initStream();
 
 	/**
 	 * Returns the last element of the list, if it exists.
 	 *
-	 * @return the last element of the list; <code>Optional.empty()</code>
-	 *         otherwise
+	 * @return the last element of the list; {@code Optional.empty()} otherwise
 	 */
 	public Optional<T> lastOptional();
 
 	/**
 	 * Returns all elements of the list except the first and last.
 	 *
-	 * @return a <code>Stream</code> that contains all list
-	 *         elements except the first and last
+	 * @return a {@code Stream} that contains all list elements except the first
+	 *         and last
 	 */
 	public Stream<T> middleStream();
 
 	/**
 	 * Returns all elements of the list except the first.
 	 *
-	 * @return a <code>Stream</code> that contains all list
-	 *         elements except the first
+	 * @return a {@code Stream} that contains all list elements except the first
 	 */
 	public Stream<T> tailStream();
 

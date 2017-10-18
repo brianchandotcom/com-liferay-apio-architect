@@ -41,9 +41,9 @@ import java.util.function.Function;
  * </p>
  *
  * <p>
- * {@code JSONObjectBuilder} is incremental, so additional calls add paths
- * to previous calls, respecting the previous state. For example, this
- * {@code nestedField} call adds to the preceding one:
+ * {@code JSONObjectBuilder} is incremental, so additional calls add paths to
+ * previous calls, respecting the previous state. For example, this {@code
+ * nestedField} call adds to the preceding one:
  * </p>
  *
  * <p>
@@ -80,15 +80,15 @@ public interface JSONObjectBuilder {
 
 	/**
 	 * Conditionally begins creating a field inside the JSON object. If the
-	 * condition is met, this method returns the field step that
-	 * {@code ifFunction} creates. Otherwise, this method returns the field
-	 * step that {@code elseFunction} creates.
+	 * condition is met, this method returns the field step that {@code
+	 * ifFunction} creates. Otherwise, this method returns the field step that
+	 * {@code elseFunction} creates.
 	 *
 	 * @param  condition the condition to check
 	 * @param  ifFunction the function that creates the field step if the
-	 *         condition is {@code true}
+	 *         condition is {@code <code>true</code>}
 	 * @param  elseFunction the function that creates the field step if the
-	 *         condition is {@code false}
+	 *         condition is {@code <code>false</code>}
 	 * @return the builder's field step
 	 */
 	public FieldStep ifElseCondition(
@@ -109,8 +109,8 @@ public interface JSONObjectBuilder {
 	 * each level.
 	 *
 	 * <p>
-	 * For example, the following {@code nestedPrefixedField} call produces
-	 * the JSON object that follows it:
+	 * For example, the following {@code nestedPrefixedField} call produces the
+	 * JSON object that follows it:
 	 * </p>
 	 *
 	 * <p>
@@ -135,8 +135,8 @@ public interface JSONObjectBuilder {
 	 * each level.
 	 *
 	 * <p>
-	 * For example, the following {@code nestedSuffixedField} call produces
-	 * the JSON object that follows it:
+	 * For example, the following {@code nestedSuffixedField} call produces the
+	 * JSON object that follows it:
 	 * </p>
 	 *
 	 * <p>
@@ -269,7 +269,7 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param  condition the condition to check
 		 * @param  ifFunction the function that creates the field step if the
-		 *         condition is {@code true}
+		 *         condition is {@code <code>true</code>}
 		 * @return the builder's field step
 		 */
 		public FieldStep ifCondition(
@@ -283,9 +283,9 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param  condition the condition to check
 		 * @param  ifFunction the function that creates the field step if the
-		 *         condition is {@code true}
+		 *         condition is {@code <code>true</code>}
 		 * @param  elseFunction the function that creates the field step if the
-		 *         condition is {@code false}
+		 *         condition is {@code <code>false</code>}
 		 * @return the builder's field step
 		 */
 		public FieldStep ifElseCondition(

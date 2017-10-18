@@ -15,7 +15,7 @@
 package com.liferay.vulcan.resource.identifier;
 
 /**
- * Represents a simple identifier with a <code>long</code> ID.
+ * Represents a simple identifier with a {@code long} ID.
  *
  * @author Alejandro Hernández
  */
@@ -23,14 +23,14 @@ package com.liferay.vulcan.resource.identifier;
 public interface LongIdentifier extends Identifier {
 
 	/**
-	 * Returns the identifier's ID as a <code>long</code>.
+	 * Returns the identifier's ID as a {@code long}.
 	 *
 	 * <p>
-	 * For example, for a resource in the URL <code>/p/product/100</code>, this
-	 * method returns <code>100</code> as a <code>long</code>.
+	 * For example, for a resource in the URL {@code /p/product/100}, this
+	 * method returns {@code 100} as a {@code long}.
 	 * </p>
 	 *
-	 * @return the identifier's <code>long</code> ID
+	 * @return the identifier's {@code long} ID
 	 */
 	public long getId();
 

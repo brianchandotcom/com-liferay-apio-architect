@@ -16,8 +16,8 @@ package com.liferay.vulcan.uri;
 
 /**
  * Represents a resource path. For example, the ID and name of a resource
- * obtained from the URL <code>/p/customers/2012</code> is <code>2012</code> and
- * <code>"customers"</code>, respectively.
+ * obtained from the URL {@code /p/customers/2012} is {@code 2012} and {@code
+ * "customers"}, respectively.
  *
  * @author Alejandro Hernández
  */

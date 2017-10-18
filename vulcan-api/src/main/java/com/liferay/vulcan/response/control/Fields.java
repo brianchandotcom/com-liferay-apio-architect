@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 
 /**
  * Defines the fields context selected by clients. An instance of this interface
- * is handed to <code>javax.ws.rs.ext.MessageBodyWriter</code> to decide which
+ * is handed to {@code javax.ws.rs.ext.MessageBodyWriter} to decide which
  * resource fields to write.
  *
  * @author Alejandro Hernández
