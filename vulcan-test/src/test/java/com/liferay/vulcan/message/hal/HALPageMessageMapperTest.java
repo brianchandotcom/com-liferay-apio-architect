@@ -74,8 +74,6 @@ public class HALPageMessageMapperTest {
 
 	@Test
 	public void testMapItemBooleanField() {
-		JSONObjectBuilderImpl jsonObjectBuilder = new JSONObjectBuilderImpl();
-
 		_halPageMessageMapper.mapItemBooleanField(
 			null, _jsonObjectBuilder, "fieldName", true);
 
