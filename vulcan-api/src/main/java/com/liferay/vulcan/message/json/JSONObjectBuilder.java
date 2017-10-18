@@ -34,9 +34,20 @@ import java.util.function.Function;
  * <p>
  * <pre>
  * {@code
- * jsonObjectBuilder.nestedField("object", "inner", "other").value(42);
- * { "object": { "inner": { "other": 42 } } }
+ * jsonObjectBuilder
+ * 	.nestedField("object", "inner", "other")
+ * 	.value(42);
  * }
+ * </pre>
+ *
+ * <pre>
+ * {@code {
+ * 	"object": {
+ * 	    "inner": {
+ * 		"other": 42
+ * 	    }
+ * 	}
+ *   }}
  * </pre>
  * </p>
  *
@@ -49,15 +60,28 @@ import java.util.function.Function;
  * <p>
  * <pre>
  * {@code
- * jsonObjectBuilder.nestedField("object", "inner","another").value("Hello World!");
- * { "object": { "inner": { "another": "Hello World!", "other": 42 } } }
+ * jsonObjectBuilder
+ * 	.nestedField("object", "inner","another")
+ * 	.value("Hello World!");
  * }
+ * </pre>
+ *
+ * <pre>
+ * {@code {
+ * 	"object": {
+ * 	    "inner": {
+ * 		"another": "Hello World!",
+ * 		"other": 42
+ * 	    }
+ * 	}
+ *   }}
  * </pre>
  * </p>
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
+ * @review
  */
 @ProviderType
 @SuppressWarnings("unused")
@@ -115,10 +139,22 @@ public interface JSONObjectBuilder {
 	 *
 	 * <p>
 	 * <pre>
-	 * {@code
-	 * jsonObjectBuilder.nestedPrefixedField("prefix", "first", "second").value(42);
-	 * {"prefix": { "first": { "prefix": { "second": 42 } } } }
+	 * {@code jsonObjectBuilder
+	 * 	.nestedPrefixedField("prefix", "first", "second")
+	 * 	.value(42);
 	 * }
+	 * </pre>
+	 *
+	 * <pre>
+	 * {@code {
+	 * 	"prefix": {
+	 * 	    "first": {
+	 * 		"prefix": {
+	 * 		    "second": 42
+	 * 	        }
+	 * 	    }
+	 *       }
+	 *   }}
 	 * </pre>
 	 * </p>
 	 *
@@ -126,6 +162,7 @@ public interface JSONObjectBuilder {
 	 * @param  parentName the parent field's name
 	 * @param  nestedNames the list of the nested field names
 	 * @return the builder's field step
+	 * @review
 	 */
 	public FieldStep nestedPrefixedField(
 		String prefix, String parentName, String... nestedNames);
@@ -141,9 +178,22 @@ public interface JSONObjectBuilder {
 	 *
 	 * <p>
 	 * <pre>
-	 * {@code jsonObjectBuilder.nestedSuffixedField("suffix", "first", "second").value(42);}
-	 * { "first": { "suffix": { "second": { "suffix": 42 } } } }
+	 * {@code jsonObjectBuilder
+	 * 	.nestedSuffixedField("suffix", "first", "second")
+	 * 	.value(42);
 	 * }
+	 * </pre>
+	 *
+	 * <pre>
+	 * {@code {
+	 * 	"first": {
+	 * 	    "suffix": {
+	 * 		"second": {
+	 * 		    "suffix": 42
+	 * 	        }
+	 * 	    }
+	 *       }
+	 *   }}
 	 * </pre>
 	 * </p>
 	 *
@@ -151,6 +201,7 @@ public interface JSONObjectBuilder {
 	 * @param  parentName the parent field's name
 	 * @param  nestedNames the list of the nested field names
 	 * @return the builder's field step
+	 * @review
 	 */
 	public FieldStep nestedSuffixedField(
 		String suffix, String parentName, String... nestedNames);
