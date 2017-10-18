@@ -42,11 +42,11 @@ import java.util.function.Function;
  *
  * <pre>
  * {@code {
- * 	"object": {
- * 	    "inner": {
- * 		"other": 42
- * 	    }
- * 	}
+ *      "object": {
+ *          "inner": {
+ *              "other": 42
+ *          }
+ *      }
  *   }}
  * </pre>
  * </p>
@@ -61,19 +61,19 @@ import java.util.function.Function;
  * <pre>
  * {@code
  * jsonObjectBuilder
- * 	.nestedField("object", "inner","another")
- * 	.value("Hello World!");
+ *      .nestedField("object", "inner","another")
+ *      .value("Hello World!");
  * }
  * </pre>
  *
  * <pre>
  * {@code {
- * 	"object": {
- * 	    "inner": {
- * 		"another": "Hello World!",
- * 		"other": 42
- * 	    }
- * 	}
+ *      "object": {
+ *          "inner": {
+ *              "another": "Hello World!",
+ *              "other": 42
+ *          }
+ *      }
  *   }}
  * </pre>
  * </p>
