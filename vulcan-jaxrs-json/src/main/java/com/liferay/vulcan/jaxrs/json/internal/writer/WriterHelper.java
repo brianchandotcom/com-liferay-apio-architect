@@ -164,8 +164,8 @@ public class WriterHelper {
 			pathString::concat
 		).map(
 			_getTransformURIFunction(
-					(uri, transformer) ->
-						transformer.transformPageURI(uri, page))
+				(uri, transformer) ->
+					transformer.transformPageURI(uri, page))
 		).map(
 			uri -> getAbsoluteURL(httpServletRequest, uri)
 		);
