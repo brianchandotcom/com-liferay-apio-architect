@@ -1,4 +1,18 @@
+<div align="center">
+    <a href="https://travis-ci.org/liferay/com-liferay-vulcan">
+        <img src="https://travis-ci.org/liferay/com-liferay-vulcan.svg?branch=master" alt="Travis CI" />
+    </a>
+    <a href='https://coveralls.io/github/liferay/com-liferay-vulcan?branch=master'>
+        <img src='https://coveralls.io/repos/github/liferay/com-liferay-vulcan/badge.svg?branch=master' alt='Coverage Status' />
+    </a>
+    <a href='https://www.gnu.org/licenses/lgpl-3.0'>
+        <img src='https://img.shields.io/badge/License-LGPL%20v3-blue.svg' alt='License: LGPL v3' />
+    </a>
+</div>
+
 # Vulcan Architect
+
+# Vulcan, may your APIs live long and prosper
 
 Vulcan Architect is part of the [Vulcan project](#the-vulcan-project), which aims to promote the creation of APIs designed to evolve over time. The project also provides a set of guidelines for API providers and consumers that can be implemented in any technology and Vulcan Consumer, a library to facilitate the creation of consumers of any hypermedia API.
 
