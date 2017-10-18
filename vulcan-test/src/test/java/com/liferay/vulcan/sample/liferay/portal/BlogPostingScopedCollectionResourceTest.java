@@ -29,7 +29,7 @@ import org.mockito.Mockito;
 /**
  * @author Javier Gamarra
  */
-public class BlogPostingScopedCollectionCollectionResourceTest
+public class BlogPostingScopedCollectionResourceTest
 	extends CollectionResourceTest {
 
 	@Test
@@ -65,7 +65,8 @@ public class BlogPostingScopedCollectionCollectionResourceTest
 			eq("author"), eq(User.class), any(Function.class));
 		verifyIdentifier().addRelatedCollection(
 			eq("comment"), any(Class.class), any(Function.class));
-		verifyIdentifier().addString(eq("alternativeHeadline"), any(Function.class));
+		verifyIdentifier().addString(
+			eq("alternativeHeadline"), any(Function.class));
 		verifyIdentifier().addString(eq("articleBody"), any(Function.class));
 		verifyIdentifier().addString(eq("description"), any(Function.class));
 		verifyIdentifier().addString(eq("fileFormat"), any(Function.class));
