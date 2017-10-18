@@ -128,13 +128,13 @@ public class WebPageElementScopedCollectionResource
 	private JournalArticle _addJournalArticle(
 		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
 
-		String folderIdString = (String)body.get("folder");
-		String title = (String)body.get("title");
-		String description = (String)body.get("description");
 		String content = (String)body.get("text");
 		String ddmStructureKey = (String)body.get("structure");
 		String ddmTemplateKey = (String)body.get("template");
+		String description = (String)body.get("description");
 		String displayDateString = (String)body.get("dateDisplayed");
+		String folderIdString = (String)body.get("folder");
+		String title = (String)body.get("title");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
@@ -269,13 +269,13 @@ public class WebPageElementScopedCollectionResource
 	private JournalArticle _updateJournalArticle(
 		LongIdentifier journalArticleLongIdentifier, Map<String, Object> body) {
 
-		String userIdString = (String)body.get("user");
-		String groupIdString = (String)body.get("group");
-		String folderIdString = (String)body.get("folder");
-		String versionString = (String)body.get("version");
-		String title = (String)body.get("title");
-		String description = (String)body.get("description");
 		String content = (String)body.get("text");
+		String description = (String)body.get("description");
+		String folderIdString = (String)body.get("folder");
+		String groupIdString = (String)body.get("group");
+		String title = (String)body.get("title");
+		String userIdString = (String)body.get("user");
+		String versionString = (String)body.get("version");
 
 		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
