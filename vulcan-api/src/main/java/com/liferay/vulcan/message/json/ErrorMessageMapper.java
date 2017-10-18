@@ -110,13 +110,13 @@ public interface ErrorMessageMapper {
 	}
 
 	/**
-	 * Returns {@code <code>true</code>} if the mapper can map all things
-	 * related to the current request.
+	 * Returns {@code true} if the mapper can map all
+	 * things related to the current request.
 	 *
 	 * @param  apiError the API error.
 	 * @param  httpHeaders the current request's HTTP headers.
-	 * @return {@code <code>true</code>} if the mapper can map the request;
-	 *         {@code <code>false</code>}> otherwise.
+	 * @return {@code true} if the mapper can map the
+	 *         request; {@code false}> otherwise.
 	 */
 	public default boolean supports(
 		APIError apiError, HttpHeaders httpHeaders) {

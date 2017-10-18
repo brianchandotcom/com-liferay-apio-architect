@@ -118,12 +118,13 @@ public abstract class Try<T> {
 	/**
 	 * Returns a {@code Try} instance with a value, if that value matches the
 	 * predicate. Otherwise, this method returns a {@code Try} instance with an
-	 * exception that indicates the {@code <code>false</code>} predicate.
+	 * exception that indicates the {@code false}
+	 * predicate.
 	 *
 	 * @param  predicate the predicate to apply to a value
 	 * @return a {@code Try} instance with a value, if that value matches the
 	 *         predicate; otherwise a {@code Try} instance with an exception for
-	 *         a {@code {@code <code>false</code>}} predicate
+	 *         a {@code {@code false}} predicate
 	 */
 	public abstract Try<T> filter(Predicate<T> predicate);
 
@@ -169,20 +170,20 @@ public abstract class Try<T> {
 	public abstract T getUnchecked();
 
 	/**
-	 * Returns {@code <code>true</code>} if the current {@code Try} instance is
-	 * a {@code Failure}; otherwise returns {@code <code>false</code>}.
+	 * Returns {@code true} if the current {@code Try}
+	 * instance is a {@code Failure}; otherwise returns {@code false}.
 	 *
-	 * @return {@code <code>true</code>} if the current {@code Try} instance is
-	 *         a {@code Failure}; {@code <code>false</code>}} otherwise
+	 * @return {@code true} if the current {@code Try}
+	 *         instance is a {@code Failure}; {@code false} otherwise.
 	 */
 	public abstract boolean isFailure();
 
 	/**
-	 * Returns {@code <code>true</code>} if the current {@code Try} instance is
-	 * a {@code Success}; otherwise returns {@code <code>false</code>}.
+	 * Returns {@code true} if the current {@code Try}
+	 * instance is a {@code Success}; otherwise returns {@code false}.
 	 *
-	 * @return {@code <code>true</code>} if the current {@code Try} instance is
-	 *         a {@code Success}; {@code <code>false</code>}} otherwise
+	 * @return {@code true} if the current {@code Try}
+	 *         instance is a {@code Success}; {@code false} otherwise.
 	 */
 	public abstract boolean isSuccess();
 
