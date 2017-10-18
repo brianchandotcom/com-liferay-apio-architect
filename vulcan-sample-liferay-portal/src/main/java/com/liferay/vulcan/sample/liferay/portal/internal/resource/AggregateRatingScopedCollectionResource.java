@@ -77,7 +77,7 @@ public class AggregateRatingScopedCollectionResource
 	}
 
 	@Reference
-	private AggregateRatingService _aggregateRatingService;
+	protected AggregateRatingService _aggregateRatingService;
 
 	@Reference
 	private CollectionResourceManager _collectionResourceManager;
