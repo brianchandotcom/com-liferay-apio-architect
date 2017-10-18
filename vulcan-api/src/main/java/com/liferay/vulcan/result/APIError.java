@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  * Describes an API error. Instances of {@code
  * javax.ws.rs.WebApplicationException} and its descendants are converted to
- * {@code APIError{@code . All other exceptions are converted to a {@code 500}
+ * {@code APIError} . All other exceptions are converted to a {@code 500}
  * error with a standard message.
  *
  * @author Alejandro Hernández

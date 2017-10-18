@@ -27,7 +27,7 @@ public interface ThrowableFunction<T, R> {
 
 	/**
 	 * Returns a composed function that first applies the current {@code
-	 * ThrowableFunction{@code instance to its input, and then applies the
+	 * ThrowableFunction} instance to its input, and then applies the
 	 * {@code throwableFunction} to the result.
 	 *
 	 * @param  throwableFunction the function to apply after applying the
@@ -44,11 +44,11 @@ public interface ThrowableFunction<T, R> {
 	}
 
 	/**
-	 * Returns the result of applying the current {@code ThrowableFunction{@code
+	 * Returns the result of applying the current {@code ThrowableFunction}
 	 * instance to the argument.
 	 *
 	 * @param  t the argument
-	 * @return the result of applying the current {@code ThrowableFunction{@code
+	 * @return the result of applying the current {@code ThrowableFunction}
 	 *         instance to the argument
 	 */
 	public R apply(T t) throws Exception;
@@ -56,10 +56,10 @@ public interface ThrowableFunction<T, R> {
 	/**
 	 * Returns a composed function that first applies the {@code
 	 * throwableFunction} to its input, and then applies the current {@code
-	 * ThrowableFunction{@code instance to the result.
+	 * ThrowableFunction} instance to the result.
 	 *
 	 * @param  throwableFunction the function to apply before applying the
-	 *         current {@code ThrowableFunction{@code  instance
+	 *         current {@code ThrowableFunction}  instance
 	 * @return the composed function
 	 * @see    #andThen(ThrowableFunction)
 	 */
