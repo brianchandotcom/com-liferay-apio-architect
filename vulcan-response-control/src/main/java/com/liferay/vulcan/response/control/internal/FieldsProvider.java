@@ -71,8 +71,8 @@ public class FieldsProvider implements Provider<Fields> {
 			entry -> !entry.getValue()[0].isEmpty()
 		).collect(
 			Collectors.toMap(
-				entry -> _getTypeFunction.apply(entry.getKey()),
-				entry -> Arrays.asList(entry.getValue()[0].split(",")))
+					entry -> _getTypeFunction.apply(entry.getKey()),
+					entry -> Arrays.asList(entry.getValue()[0].split(",")))
 		);
 
 		return new FieldsImpl(fieldsMap);
