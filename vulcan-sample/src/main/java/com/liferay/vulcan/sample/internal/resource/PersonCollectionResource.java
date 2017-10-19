@@ -103,13 +103,15 @@ public class PersonCollectionResource
 
 		String address = (String)body.get("address");
 		String avatar = (String)body.get("image");
+
 		String birthDateString = (String)body.get("birthDate");
+
+		Date birthDate = Date.from(Instant.parse(birthDateString));
+
 		String email = (String)body.get("email");
 		String firstName = (String)body.get("givenName");
 		String jobTitle = (String)body.get("jobTitle");
 		String lastName = (String)body.get("familyName");
-
-		Date birthDate = Date.from(Instant.parse(birthDateString));
 
 		return Person.addPerson(
 			address, avatar, birthDate, email, firstName, jobTitle, lastName);
