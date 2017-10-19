@@ -270,12 +270,6 @@ public class Person {
 	private static Map<Long, Person> _persons = new HashMap<>();
 
 	static {
-		Calendar calendar = Calendar.getInstance();
-
-		calendar.add(Calendar.YEAR, -21);
-
-		Date adultDate = calendar.getTime();
-
 		for (long personId = 0; personId < 10; personId++) {
 			Faker faker = new Faker();
 
@@ -285,7 +279,12 @@ public class Person {
 
 			DateAndTime dateAndTime = faker.date();
 
-			Date birthDate = dateAndTime.past(10000, TimeUnit.DAYS, adultDate);
+			Calendar calendar = Calendar.getInstance();
+
+			calendar.add(Calendar.YEAR, -21);
+
+			Date birthDate = dateAndTime.past(
+				10000, TimeUnit.DAYS, calendar.getTime());
 
 			Name name = faker.name();
 

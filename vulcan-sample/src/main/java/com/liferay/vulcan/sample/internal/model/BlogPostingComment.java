@@ -280,13 +280,12 @@ public class BlogPostingComment {
 	private static final AtomicLong _count = new AtomicLong(0);
 
 	static {
-		Random random = new Random();
-
 		for (long blogPostingId = 0;
 			 blogPostingId < BlogPosting.getBlogPostingCount();
 			 blogPostingId++) {
 
 			Map<Long, BlogPostingComment> blogPostingComments = new HashMap<>();
+			Random random = new Random();
 
 			for (int i = 0; i < random.nextInt(70); i++) {
 				long authorId = random.nextInt(Person.getPeopleCount());
