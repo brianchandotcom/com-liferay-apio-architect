@@ -1,38 +1,18 @@
-# Vulcan, may your APIs live long and prosper
+# Vulcan Architect, may your APIs live long and prosper
 
-## The Vulcan project
+# [Vulcan Architect](https://github.com/liferay/com-liferay-vulcan)
 
-The Vulcan project provides a set of Guidelines and Software to build APIs and consumers designed to evolve.
+Vulcan Architect is part of the Vulcan project. Here is a short description of what the project is about:
 
-### [Vulcan Guidelines](https://vulcan.wedeploy.io/guidelines/)
+A server-side library to facilitate the creation of Vulcan REST APIs. Vulcan Architect is opinionated to reduce the amount of code API developers has to write. This is achieved as well by implementing out of the box well known patterns in REST APIs such as the Collection Pattern.
 
-An opinionated way to do RESTful APIs for evolvability and discoverability. Evolvability means that it’s easy to evolve the API without breaking consumers. Discoverability is even more exciting. In Vulcan APIs, the provider controls the navigation, forms, state changes… which simplifies the consumers and allows them to "learn" certain new functionalities that didn’t exist when they were developed. Sounds like magic and it’s indeed pretty cool.
-
-The two key secrets that make this possible are:
+The two key techniques that make this possible are:
 
 **Hypermedia**: yeah, the good old links and forms that we all use through a browser every day can also be applied to APIs to get the same great decoupling and flexibility.
 
 **Shared Vocabularies**: instead of returning a JSON/XML with attributes tied to the names of the internal models, use standard vocabularies that are well thought out by standardization bodies (such as [schema.org](https://schema.org) or [IANA](https://www.iana.org/assignments/link-relations/link-relations.xhtml)). Even if you have to create your own types (because a standard doesn’t exist), define it explicitly to be decoupled from any changes that you can make to the internal model.
 
-And there are other additional goodies such as:
-
-The consumer can control what the response will include: which fields, embedded resources, ...
-
-The consumer can decide which hypermedia format fits its needs best (HAL, JSON-LD, etc.),
-
-### [Vulcan Architect](https://github.com/liferay/com-liferay-vulcan)
-
-A server-side library to facilitate the creation of Vulcan REST APIs. Vulcan Architect is opinionated to reduce the amount of code API developers has to write. This is achieved as well by implementing out of the box well known patterns in REST APIs such as the Collection Pattern.
-
-With Vulcan Architect you can create APIs that follow all the principles of Vulcan Guidelines without much effort.
-
-### Vulcan Consumers
-
-A client-side library to facilitate developing consumers that consume Vulcan REST APIs (or any Hypermedia API, really). It also has some smart capabilities such as automatic creation of a local graph to facilitate building offline support.
-
-- [Vulcan Consumer for Android](https://github.com/liferay-mobile/vulcan-consumer-android)
-- Vulcan Consumer for iOS (coming...)
-- Vulcan Consumer for JS (coming...)
+With Vulcan Architect you can create APIs that follow all the REST principles and the Vulcan Guidelines without much effort.
 
 ## Why should I use it?
 
@@ -45,6 +25,24 @@ So you can focus on creating beautiful APIs that will live longer and prosper.
 Architect provides JAX-RS writers for the most important Hypermedia formats, such as HAL or JSON-LD (with more coming). It also provides an easy way of representing your resources, in a really generic way, so every representation can understand it, but following common Hypermedia patterns, such as the Representor.
 
 Also provides a really simple way of creating the different endpoints for your resources, which has many similarities with the JAX-RS approach. So migrating your API from a REST JAX-RS implementation to Architect will be easy as pie.
+
+## What if I just want to try these "Vulcan APIs"?
+
+However, if you don't want to create your own API for now, but just want to try all this Hypermedia, Shared Vocabularies, Vulcan APIs, etc., you can use our test server for that.
+
+As simply as use your favorite REST-request client to make a GET request to:
+
+`http://vulcan-vulcansample.wedeploy.io`
+
+To be able to use Vulcan Architect APIs you must specify an `accept` HTTP header. If you want to try a Hypermedia representation format, you can start with:
+
+`accept: application/ld+json`
+
+to order JSON-LD or:
+
+`accept: application/hal+json`
+
+to order HAL.
 
 ## How do I start using it?
 
@@ -92,22 +90,26 @@ And that's it! Build the `jar` of your module and deploy it in the folder you de
 
 If you make a request to `http://localhost:8080` again, you should see a new declared endpoint corresponding to the new resource you have just created.
 
-## What if I just want to try this "Vulcan APIs"?
-
-However, if you don't want to create your own API for now, but just want to try all this Hypermedia, Shared Vocabularies, Vulcan APIs, etc., you can use our test server for that.
-
-As simply as use your favorite REST-request client to make a GET request to:
-
-`http://vulcan-vulcansample.wedeploy.io`
-
-To be able to use Vulcan Architect APIs you must specify an `accept` HTTP header. If you want to try a Hypermedia representation format, you can start with:
-
-`accept: application/ld+json`
-
-to order JSON-LD or:
-
-`accept: application/hal+json`
-
-to order HAL.
-
 And start surfing the Hypermedia world!
+
+## The Vulcan project
+
+The Vulcan project provides a set of Guidelines and Software to build APIs and consumers designed to evolve.
+
+### [Vulcan Guidelines](https://vulcan.wedeploy.io/guidelines/)
+
+An opinionated way to do RESTful APIs for evolvability and discoverability. 
+
+Evolvability means that it’s easy to evolve the API without breaking consumers. 
+
+Discoverability is even more exciting. In Vulcan APIs, the provider controls the navigation, forms, state changes... which simplifies the consumers and allows them to "learn" certain new functionalities that didn’t exist when they were developed. Sounds like magic and it’s indeed pretty cool.
+
+### Vulcan Consumers
+
+A client-side library to facilitate developing consumers that consume Vulcan REST APIs (or any Hypermedia API, really). It also has some smart capabilities such as automatic creation of a local graph to facilitate building offline support.
+
+The consumer can control what the response will include: which fields, embedded resources... and decide which hypermedia format fits its needs best (HAL, JSON-LD, etc.).
+
+- [Vulcan Consumer for Android](https://github.com/liferay-mobile/vulcan-consumer-android)
+- Vulcan Consumer for iOS (coming...)
+- Vulcan Consumer for JS (coming...)
