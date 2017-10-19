@@ -48,6 +48,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import java.nio.charset.StandardCharsets;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -113,8 +114,8 @@ public class PageMessageBodyWriter<T>
 			OutputStream entityStream)
 		throws IOException, WebApplicationException {
 
-		OutputStreamWriter outputStreamWriter =
-			new OutputStreamWriter(entityStream, StandardCharsets.UTF_8);
+		OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+			entityStream, StandardCharsets.UTF_8);
 
 		PrintWriter printWriter = new PrintWriter(outputStreamWriter, true);
 

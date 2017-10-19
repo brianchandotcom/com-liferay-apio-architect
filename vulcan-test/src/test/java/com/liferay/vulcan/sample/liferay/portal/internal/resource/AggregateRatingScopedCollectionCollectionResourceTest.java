@@ -70,7 +70,7 @@ public class AggregateRatingScopedCollectionCollectionResourceTest
 			aggregateRatingScopedCollectionResource =
 				new AggregateRatingScopedCollectionResource();
 
-		aggregateRatingScopedCollectionResource._aggregateRatingService =
+		aggregateRatingScopedCollectionResource.aggregateRatingService =
 			Mockito.mock(AggregateRatingService.class);
 
 		aggregateRatingScopedCollectionResource.routes(routesBuilderMock);

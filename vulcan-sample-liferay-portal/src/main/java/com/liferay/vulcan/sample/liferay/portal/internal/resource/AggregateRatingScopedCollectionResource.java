@@ -72,12 +72,12 @@ public class AggregateRatingScopedCollectionResource
 			routesBuilder) {
 
 		return routesBuilder.addCollectionPageItemGetter(
-			_aggregateRatingService::getAggregateRating
+			aggregateRatingService::getAggregateRating
 		).build();
 	}
 
 	@Reference
-	protected AggregateRatingService _aggregateRatingService;
+	protected AggregateRatingService aggregateRatingService;
 
 	@Reference
 	private CollectionResourceManager _collectionResourceManager;
