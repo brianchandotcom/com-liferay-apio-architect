@@ -18,7 +18,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 
 import com.liferay.vulcan.sample.liferay.portal.internal.resource.FolderScopedCollectionResource;
-import com.liferay.vulcan.sample.liferay.portal.site.Site;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSite;
 
 import java.util.function.Function;
 
@@ -37,8 +37,8 @@ public class FolderScopedCollectionResourceTest extends CollectionResourceTest {
 		folderScopedCollectionResource.buildRepresentor(representorBuilderSpy);
 
 		verifyIdentifier().addBidirectionalModel(
-			eq("webSite"), eq("folders"), eq(Site.class), any(Function.class),
-			any(Function.class));
+			eq("webSite"), eq("folders"), eq(WebSite.class),
+			any(Function.class), any(Function.class));
 		verifyIdentifier().addDate(eq("dateCreated"), any(Function.class));
 		verifyIdentifier().addDate(eq("dateModified"), any(Function.class));
 		verifyIdentifier().addDate(eq("datePublished"), any(Function.class));

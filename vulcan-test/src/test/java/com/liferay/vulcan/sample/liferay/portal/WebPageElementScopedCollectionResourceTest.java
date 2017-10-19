@@ -19,7 +19,7 @@ import static org.mockito.Matchers.eq;
 
 import com.liferay.portal.kernel.model.User;
 import com.liferay.vulcan.sample.liferay.portal.internal.resource.WebPageElementScopedCollectionResource;
-import com.liferay.vulcan.sample.liferay.portal.site.Site;
+import com.liferay.vulcan.sample.liferay.portal.website.WebSite;
 
 import java.util.function.Function;
 
@@ -41,7 +41,7 @@ public class WebPageElementScopedCollectionResourceTest
 			representorBuilderSpy);
 
 		verifyIdentifier().addBidirectionalModel(
-			eq("webSite"), eq("webPageElements"), eq(Site.class),
+			eq("webSite"), eq("webPageElements"), eq(WebSite.class),
 			any(Function.class), any(Function.class));
 		verifyIdentifier().addEmbeddedModel(
 			eq("creator"), eq(User.class), any(Function.class));
