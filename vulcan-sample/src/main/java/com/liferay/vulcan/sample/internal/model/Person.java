@@ -276,7 +276,7 @@ public class Person {
 
 		Date adultDate = calendar.getTime();
 
-		for (long i = 0; i < 10; i++) {
+		for (long personId = 0; personId < 10; personId++) {
 			Faker faker = new Faker();
 
 			Address address = faker.address();
@@ -292,9 +292,9 @@ public class Person {
 			Person person = new Person(
 				address.fullAddress(), internet.avatar(), birthDate,
 				internet.safeEmailAddress(), name.firstName(), name.title(),
-				name.lastName(), i);
+				name.lastName(), personId);
 
-			_persons.put(i, person);
+			_persons.put(personId, person);
 		}
 	}
 
