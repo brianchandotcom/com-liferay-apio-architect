@@ -5,6 +5,9 @@
     <a href='https://coveralls.io/github/liferay/com-liferay-vulcan?branch=master'>
         <img src='https://coveralls.io/repos/github/liferay/com-liferay-vulcan/badge.svg?branch=master' alt='Coverage Status' />
     </a>
+    <a href="https://codebeat.co/projects/github-com-liferay-com-liferay-vulcan-master">
+        <img alt="codebeat badge" src="https://codebeat.co/badges/bb871bcd-dd93-49f2-a8bc-6166169b0e44" />
+    </a>
     <a href='https://www.gnu.org/licenses/lgpl-3.0'>
         <img src='https://img.shields.io/badge/License-LGPL%20v3-blue.svg' alt='License: LGPL v3' />
     </a>
