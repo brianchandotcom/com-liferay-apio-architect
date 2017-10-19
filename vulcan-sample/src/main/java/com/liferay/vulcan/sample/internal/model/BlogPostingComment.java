@@ -293,10 +293,9 @@ public class BlogPostingComment {
 			 blogPostingId < BlogPosting.getBlogPostingCount();
 			 blogPostingId++) {
 
-			HashMap<Long, BlogPostingComment> blogPostingComments =
-				new HashMap<>();
+			Map<Long, BlogPostingComment> blogPostingComments = new HashMap<>();
 
-			for (int j = 0; j < random.nextInt(70); j++) {
+			for (int i = 0; i < random.nextInt(70); i++) {
 				long blogPostingCommentId = _count.getAndIncrement();
 
 				Faker faker = new Faker();
