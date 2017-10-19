@@ -88,7 +88,7 @@ public class BlogPostingComment {
 	 *         {@code Optional#empty()} otherwise.
 	 * @review
 	 */
-	public static Optional<BlogPostingComment> getBlogPostingComment(
+	public static Optional<BlogPostingComment> getBlogPostingCommentOptional(
 		long blogPostingCommentId) {
 
 		Collection<Map<Long, BlogPostingComment>> blogPostingComments =
@@ -174,11 +174,11 @@ public class BlogPostingComment {
 	public static Optional<BlogPostingComment> updateBlogPostingComment(
 		long blogPostingCommentId, String content) {
 
-		Optional<BlogPostingComment> oldBlogPostingComment =
-			getBlogPostingComment(blogPostingCommentId);
+		Optional<BlogPostingComment> oldBlogPostingCommentOptional =
+			getBlogPostingCommentOptional(blogPostingCommentId);
 
-		Optional<BlogPostingComment> newBlogPostingComment =
-			oldBlogPostingComment.map(
+		Optional<BlogPostingComment> newBlogPostingCommentOptional =
+			oldBlogPostingCommentOptional.map(
 				blogPostingComment -> {
 					Date createDate = blogPostingComment.getCreateDate();
 
@@ -191,7 +191,7 @@ public class BlogPostingComment {
 						createDate, new Date());
 				});
 
-		newBlogPostingComment.ifPresent(
+		newBlogPostingCommentOptional.ifPresent(
 			blogPostingComment -> {
 				long blogPostingId = blogPostingComment.getBlogPostId();
 
@@ -203,7 +203,7 @@ public class BlogPostingComment {
 					blogPostingCommentId, blogPostingComment);
 			});
 
-		return newBlogPostingComment;
+		return newBlogPostingCommentOptional;
 	}
 
 	/**
