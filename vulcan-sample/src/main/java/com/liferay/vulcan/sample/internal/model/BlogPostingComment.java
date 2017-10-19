@@ -180,15 +180,10 @@ public class BlogPostingComment {
 		Optional<BlogPostingComment> newBlogPostingCommentOptional =
 			oldBlogPostingCommentOptional.map(
 				blogPostingComment -> {
-					Date createDate = blogPostingComment.getCreateDate();
-
-					long authorId = blogPostingComment.getAuthorId();
-
-					long blogPostingId = blogPostingComment.getBlogPostingId();
-
 					return new BlogPostingComment(
-						authorId, blogPostingCommentId, blogPostingId, content,
-						createDate, new Date());
+						blogPostingComment.getAuthorId(), blogPostingCommentId,
+						blogPostingComment.getBlogPostingId(), content,
+						blogPostingComment.getCreateDate(), new Date());
 				});
 
 		newBlogPostingCommentOptional.ifPresent(
@@ -304,15 +299,13 @@ public class BlogPostingComment {
 
 				Shakespeare shakespeare = faker.shakespeare();
 
-				String content = shakespeare.hamletQuote();
-
 				DateAndTime dateAndTime = faker.date();
 
-				Date createDate = dateAndTime.past(400, TimeUnit.DAYS);
+				Date date = dateAndTime.past(400, TimeUnit.DAYS);
 
 				BlogPostingComment blogPostingComment = new BlogPostingComment(
-					authorId, blogPostingCommentId, blogPostingId, content,
-					createDate, createDate);
+					authorId, blogPostingCommentId, blogPostingId,
+					shakespeare.hamletQuote(), date, date);
 
 				blogPostingComments.put(
 					blogPostingCommentId, blogPostingComment);
