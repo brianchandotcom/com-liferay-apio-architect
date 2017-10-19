@@ -276,12 +276,10 @@ public class BlogPostingComment {
 	}
 
 	private static Map<Long, Map<Long, BlogPostingComment>>
-		_blogPostingComments;
+		_blogPostingComments = _blogPostingComments = new HashMap<>();
 	private static final AtomicLong _count = new AtomicLong(0);
 
 	static {
-		_blogPostingComments = new HashMap<>();
-
 		Random random = new Random();
 
 		for (long blogPostingId = 0;
