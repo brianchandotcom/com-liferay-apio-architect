@@ -289,7 +289,10 @@ public class BlogPostingComment {
 
 		Random random = new Random();
 
-		for (long i = 0; i < BlogPosting.getBlogPostingCount(); i++) {
+		for (long blogPostingId = 0;
+			 blogPostingId < BlogPosting.getBlogPostingCount();
+			 blogPostingId++) {
+
 			HashMap<Long, BlogPostingComment> blogPostingComments =
 				new HashMap<>();
 
@@ -309,14 +312,14 @@ public class BlogPostingComment {
 				Date createDate = dateAndTime.past(400, TimeUnit.DAYS);
 
 				BlogPostingComment blogPostingComment = new BlogPostingComment(
-					authorId, blogPostingCommentId, i, content, createDate,
-					createDate);
+					authorId, blogPostingCommentId, blogPostingId, content,
+					createDate, createDate);
 
 				blogPostingComments.put(
 					blogPostingCommentId, blogPostingComment);
 			}
 
-			_blogPostingCommentsMap.put(i, blogPostingComments);
+			_blogPostingCommentsMap.put(blogPostingId, blogPostingComments);
 		}
 	}
 

@@ -246,7 +246,7 @@ public class BlogPosting {
 	static {
 		_blogPostings = new HashMap<>();
 
-		for (long i = 0; i < 42; i++) {
+		for (long blogPostingId = 0; blogPostingId < 42; blogPostingId++) {
 			Faker faker = new Faker();
 
 			Book book = faker.book();
@@ -272,10 +272,10 @@ public class BlogPosting {
 			Date date = dateAndTime.past(400, TimeUnit.DAYS);
 
 			BlogPosting blogPosting = new BlogPosting(
-				i, content, date, creatorId, date, lorem.sentence(),
+				blogPostingId, content, date, creatorId, date, lorem.sentence(),
 				book.title());
 
-			_blogPostings.put(i, blogPosting);
+			_blogPostings.put(blogPostingId, blogPosting);
 		}
 	}
 
