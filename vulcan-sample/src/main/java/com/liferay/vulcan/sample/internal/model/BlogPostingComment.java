@@ -59,11 +59,11 @@ public class BlogPostingComment {
 			blogPostingCommentId, blogPostingId, authorId, content, new Date(),
 			new Date());
 
-		Map<Long, BlogPostingComment> blogPostComments =
-			_blogPostCommentsMap.computeIfAbsent(
+		Map<Long, BlogPostingComment> blogPostingComments =
+			_blogPostingCommentsMap.computeIfAbsent(
 				blogPostingId, __ -> new HashMap<>());
 
-		blogPostComments.put(blogPostingCommentId, blogPostingComment);
+		blogPostingComments.put(blogPostingCommentId, blogPostingComment);
 
 		return blogPostingComment;
 	}
@@ -76,7 +76,7 @@ public class BlogPostingComment {
 	 * @review
 	 */
 	public static void deleteBlogPostingComment(long blogPostingCommentId) {
-		_blogPostCommentsMap.remove(blogPostingCommentId);
+		_blogPostingCommentsMap.remove(blogPostingCommentId);
 	}
 
 	/**
@@ -91,13 +91,13 @@ public class BlogPostingComment {
 	public static Optional<BlogPostingComment> getBlogPostingComment(
 		long blogPostingCommentId) {
 
-		Collection<Map<Long, BlogPostingComment>> blogPostComments =
-			_blogPostCommentsMap.values();
+		Collection<Map<Long, BlogPostingComment>> blogPostingComments =
+			_blogPostingCommentsMap.values();
 
-		Stream<Map<Long, BlogPostingComment>> blogPostCommentsStream =
-			blogPostComments.stream();
+		Stream<Map<Long, BlogPostingComment>> blogPostingCommentsStream =
+			blogPostingComments.stream();
 
-		return blogPostCommentsStream.map(
+		return blogPostingCommentsStream.map(
 			Map::values
 		).map(
 			Collection::stream
@@ -124,11 +124,11 @@ public class BlogPostingComment {
 	public static List<BlogPostingComment> getBlogPostingComments(
 		long blogPostingId, int start, int end) {
 
-		Map<Long, BlogPostingComment> blogPostComments =
-			_blogPostCommentsMap.get(blogPostingId);
+		Map<Long, BlogPostingComment> blogPostingComments =
+			_blogPostingCommentsMap.get(blogPostingId);
 
 		Collection<BlogPostingComment> blogPostingCommentsValues =
-			blogPostComments.values();
+			blogPostingComments.values();
 
 		Stream<BlogPostingComment> stream = blogPostingCommentsValues.stream();
 
@@ -151,11 +151,11 @@ public class BlogPostingComment {
 	 * @review
 	 */
 	public static int getBlogPostingCommentsCount(long blogPostingId) {
-		if (_blogPostCommentsMap.containsKey(blogPostingId)) {
-			Map<Long, BlogPostingComment> blogPostComments =
-				_blogPostCommentsMap.get(blogPostingId);
+		if (_blogPostingCommentsMap.containsKey(blogPostingId)) {
+			Map<Long, BlogPostingComment> blogPostingComments =
+				_blogPostingCommentsMap.get(blogPostingId);
 
-			return blogPostComments.size();
+			return blogPostingComments.size();
 		}
 
 		return 0;
@@ -195,11 +195,11 @@ public class BlogPostingComment {
 			blogPostingComment -> {
 				long blogPostingId = blogPostingComment.getBlogPostId();
 
-				Map<Long, BlogPostingComment> blogPostComments =
-					_blogPostCommentsMap.computeIfAbsent(
+				Map<Long, BlogPostingComment> blogPostingComments =
+					_blogPostingCommentsMap.computeIfAbsent(
 						blogPostingId, __ -> new HashMap<>());
 
-				blogPostComments.put(blogPostingCommentId, blogPostingComment);
+				blogPostingComments.put(blogPostingCommentId, blogPostingComment);
 			});
 
 		return newBlogPostingComment;
@@ -280,16 +280,16 @@ public class BlogPostingComment {
 	}
 
 	private static Map<Long, Map<Long, BlogPostingComment>>
-		_blogPostCommentsMap;
+		_blogPostingCommentsMap;
 	private static final AtomicLong _count = new AtomicLong(0);
 
 	static {
-		_blogPostCommentsMap = new HashMap<>();
+		_blogPostingCommentsMap = new HashMap<>();
 
 		Random random = new Random();
 
 		for (long i = 0; i < BlogPosting.getBlogPostingCount(); i++) {
-			HashMap<Long, BlogPostingComment> blogPostComments =
+			HashMap<Long, BlogPostingComment> blogPostingComments =
 				new HashMap<>();
 
 			for (int j = 0; j < random.nextInt(70); j++) {
@@ -311,10 +311,10 @@ public class BlogPostingComment {
 					blogPostingCommentId, i, creatorId, content, createDate,
 					createDate);
 
-				blogPostComments.put(blogPostingCommentId, blogPostingComment);
+				blogPostingComments.put(blogPostingCommentId, blogPostingComment);
 			}
 
-			_blogPostCommentsMap.put(i, blogPostComments);
+			_blogPostingCommentsMap.put(i, blogPostingComments);
 		}
 	}
 
