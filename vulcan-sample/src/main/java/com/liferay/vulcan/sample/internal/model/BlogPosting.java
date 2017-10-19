@@ -240,12 +240,11 @@ public class BlogPosting {
 		_title = title;
 	}
 
-	private static Map<Long, BlogPosting> _blogPostings;
+	private static Map<Long, BlogPosting> _blogPostings =
+		_blogPostings = new HashMap<>();
 	private static final AtomicLong _count = new AtomicLong(30);
 
 	static {
-		_blogPostings = new HashMap<>();
-
 		for (long blogPostingId = 0; blogPostingId < 42; blogPostingId++) {
 			Faker faker = new Faker();
 

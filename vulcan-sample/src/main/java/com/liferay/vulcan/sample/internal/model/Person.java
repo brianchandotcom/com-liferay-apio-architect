@@ -266,11 +266,9 @@ public class Person {
 	}
 
 	private static final AtomicLong _count = new AtomicLong(10);
-	private static Map<Long, Person> _people;
+	private static Map<Long, Person> _people = new HashMap<>();
 
 	static {
-		_people = new HashMap<>();
-
 		Calendar calendar = Calendar.getInstance();
 
 		calendar.add(Calendar.YEAR, -21);
