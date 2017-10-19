@@ -51,7 +51,7 @@ public class BlogPostingComment {
 	 * @review
 	 */
 	public static BlogPostingComment addBlogPostingComment(
-		Long authorId, Long blogPostingId, String content) {
+		long authorId, long blogPostingId, String content) {
 
 		long blogPostingCommentId = _count.incrementAndGet();
 
@@ -211,7 +211,7 @@ public class BlogPostingComment {
 	 * @return the ID of the author of the {@link BlogPosting} comment.
 	 * @review
 	 */
-	public Long getAuthorId() {
+	public long getAuthorId() {
 		return _authorId;
 	}
 
@@ -223,7 +223,7 @@ public class BlogPostingComment {
 	 *         comment.
 	 * @review
 	 */
-	public Long getBlogPostId() {
+	public long getBlogPostId() {
 		return _blogPostingId;
 	}
 
@@ -268,7 +268,7 @@ public class BlogPostingComment {
 	}
 
 	private BlogPostingComment(
-		long blogPostingCommentId, Long blogPostingId, Long authorId,
+		long blogPostingCommentId, long blogPostingId, long authorId,
 		String content, Date createDate, Date modifiedDate) {
 
 		_blogPostingCommentId = blogPostingCommentId;
@@ -318,9 +318,9 @@ public class BlogPostingComment {
 		}
 	}
 
-	private final Long _authorId;
+	private final long _authorId;
 	private final long _blogPostingCommentId;
-	private final Long _blogPostingId;
+	private final long _blogPostingId;
 	private final String _content;
 	private final Date _createDate;
 	private final Date _modifiedDate;
