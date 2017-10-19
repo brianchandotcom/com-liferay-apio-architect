@@ -56,7 +56,7 @@ public class BlogPostingComment {
 		long blogPostingCommentId = _count.incrementAndGet();
 
 		BlogPostingComment blogPostingComment = new BlogPostingComment(
-			blogPostingCommentId, blogPostingId, authorId, content, new Date(),
+			authorId, blogPostingCommentId, blogPostingId, content, new Date(),
 			new Date());
 
 		Map<Long, BlogPostingComment> blogPostingComments =
@@ -187,7 +187,7 @@ public class BlogPostingComment {
 					long blogPostingId = blogPostingComment.getBlogPostId();
 
 					return new BlogPostingComment(
-						blogPostingCommentId, blogPostingId, authorId, content,
+						authorId, blogPostingCommentId, blogPostingId, content,
 						createDate, new Date());
 				});
 
@@ -199,7 +199,8 @@ public class BlogPostingComment {
 					_blogPostingCommentsMap.computeIfAbsent(
 						blogPostingId, __ -> new HashMap<>());
 
-				blogPostingComments.put(blogPostingCommentId, blogPostingComment);
+				blogPostingComments.put(
+					blogPostingCommentId, blogPostingComment);
 			});
 
 		return newBlogPostingComment;
@@ -268,12 +269,12 @@ public class BlogPostingComment {
 	}
 
 	private BlogPostingComment(
-		long blogPostingCommentId, long blogPostingId, long authorId,
+		long authorId, long blogPostingCommentId, long blogPostingId,
 		String content, Date createDate, Date modifiedDate) {
 
+		_authorId = authorId;
 		_blogPostingCommentId = blogPostingCommentId;
 		_blogPostingId = blogPostingId;
-		_authorId = authorId;
 		_content = content;
 		_createDate = createDate;
 		_modifiedDate = modifiedDate;
@@ -308,10 +309,11 @@ public class BlogPostingComment {
 				Date createDate = dateAndTime.past(400, TimeUnit.DAYS);
 
 				BlogPostingComment blogPostingComment = new BlogPostingComment(
-					blogPostingCommentId, i, creatorId, content, createDate,
+					creatorId, blogPostingCommentId, i, content, createDate,
 					createDate);
 
-				blogPostingComments.put(blogPostingCommentId, blogPostingComment);
+				blogPostingComments.put(
+					blogPostingCommentId, blogPostingComment);
 			}
 
 			_blogPostingCommentsMap.put(i, blogPostingComments);
