@@ -217,6 +217,16 @@ public class BlogPostingComment {
 	}
 
 	/**
+	 * The ID of this {@code BlogPostingComment}.
+	 *
+	 * @return the ID of the {@link BlogPosting} comment.
+	 * @review
+	 */
+	public long getBlogPostingCommentId() {
+		return _blogPostingCommentId;
+	}
+
+	/**
 	 * Returns the ID of the {@link BlogPosting} of this {@code
 	 * BlogPostingComment}.
 	 *
@@ -226,16 +236,6 @@ public class BlogPostingComment {
 	 */
 	public long getBlogPostingId() {
 		return _blogPostingId;
-	}
-
-	/**
-	 * The ID of this {@code BlogPostingComment}.
-	 *
-	 * @return the ID of the {@link BlogPosting} comment.
-	 * @review
-	 */
-	public long getBlogPostingCommentId() {
-		return _blogPostingCommentId;
 	}
 
 	/**

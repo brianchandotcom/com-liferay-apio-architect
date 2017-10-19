@@ -112,7 +112,7 @@ public class BlogPostingCommentScopedCollectionResource
 		LongIdentifier blogPostingCommentLongIdentifier) {
 
 		Optional<BlogPostingComment> optional =
-			BlogPostingComment.getBlogPostingComment(
+			BlogPostingComment.getBlogPostingCommentOptional(
 				blogPostingCommentLongIdentifier.getId());
 
 		return optional.orElseThrow(
