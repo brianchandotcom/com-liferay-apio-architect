@@ -156,8 +156,8 @@ public class PersonCollectionResource
 		String lastName = (String)body.get("familyName");
 
 		Optional<Person> optional = Person.updatePerson(
-			personLongIdentifier.getId(), address, avatar, birthDate, email,
-			firstName, jobTitle, lastName);
+			address, avatar, birthDate, email, firstName, jobTitle, lastName,
+			personLongIdentifier.getId());
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(

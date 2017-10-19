@@ -61,8 +61,8 @@ public class Person {
 		long personId = _count.incrementAndGet();
 
 		Person person = new Person(
-			personId, firstName, lastName, email, address, jobTitle, birthDate,
-			avatar);
+			address, avatar, birthDate, email, firstName, jobTitle, lastName,
+			personId);
 
 		_persons.put(personId, person);
 
@@ -143,8 +143,8 @@ public class Person {
 	 * @review
 	 */
 	public static Optional<Person> updatePerson(
-		long personId, String address, String avatar, Date birthDate,
-		String email, String firstName, String jobTitle, String lastName) {
+		String address, String avatar, Date birthDate, String email,
+		String firstName, String jobTitle, String lastName, long personId) {
 
 		Person person = _persons.get(personId);
 
@@ -153,8 +153,8 @@ public class Person {
 		}
 
 		person = new Person(
-			personId, firstName, lastName, email, address, jobTitle, birthDate,
-			avatar);
+			avatar, address, birthDate, email, firstName, jobTitle, lastName,
+			personId);
 
 		_persons.put(personId, person);
 
@@ -252,17 +252,17 @@ public class Person {
 	}
 
 	private Person(
-		long personId, String firstName, String lastName, String email,
-		String address, String jobTitle, Date birthDate, String avatar) {
+		String address, String avatar, Date birthDate, String email,
+		String firstName, String jobTitle, String lastName, long personId) {
 
-		_personId = personId;
-		_firstName = firstName;
-		_lastName = lastName;
-		_email = email;
 		_address = address;
-		_jobTitle = jobTitle;
-		_birthDate = birthDate;
 		_avatar = avatar;
+		_birthDate = birthDate;
+		_email = email;
+		_firstName = firstName;
+		_jobTitle = jobTitle;
+		_lastName = lastName;
+		_personId = personId;
 	}
 
 	private static final AtomicLong _count = new AtomicLong(10);
@@ -295,8 +295,8 @@ public class Person {
 			String avatar = internet.avatar();
 
 			Person person = new Person(
-				i, firstName, lastName, email, address, jobTitle, birthDate,
-				avatar);
+				address, avatar, birthDate, email, firstName, jobTitle,
+				lastName, i);
 
 			_persons.put(i, person);
 		}
