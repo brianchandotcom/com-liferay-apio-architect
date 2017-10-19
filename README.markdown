@@ -1,8 +1,6 @@
-# Vulcan Architect, may your APIs live long and prosper
+# Vulcan Architect
 
-# [Vulcan Architect](https://github.com/liferay/com-liferay-vulcan)
-
-Vulcan Architect is part of the Vulcan project. Here is a short description of what the project is about:
+Vulcan Architect is part of the [Vulcan project](#the-vulcan-project), which aims to promote the creation of APIs designed to evolve over time. The project also provides a set of guidelines for API providers and consumers that can be implemented in any technology and Vulcan Consumer, a library to facilitate the creation of consumers of any hypermedia API.
 
 A server-side library to facilitate the creation of Vulcan REST APIs. Vulcan Architect is opinionated to reduce the amount of code API developers have to write. This is also achieved by implementing right out of the box well known patterns in REST APIs such as the Collection Pattern.
 
@@ -26,7 +24,7 @@ Architect provides JAX-RS writers for the most important Hypermedia formats, suc
 
 It also provides a really simple way of creating the different endpoints for your resources, which has many similarities with the JAX-RS approach. So migrating your API from a REST JAX-RS implementation to Architect will be easy as pie.
 
-## What if I just want to try these "Vulcan APIs"?
+## Can I try a sample Vulcan API online?
 
 However, if you don't want to create your own API for now, but just want to try all this Hypermedia, Shared Vocabularies, Vulcan APIs, etc., you can use our test server for that.
 
