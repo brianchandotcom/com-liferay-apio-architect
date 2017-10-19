@@ -243,9 +243,13 @@ public class PersonCollectionResource
 			() -> new BadRequestException("Invalid body");
 
 		if (Validator.isNull(screenName) || Validator.isNull(emailAddress) ||
-			Validator.isNull(firstName) || Validator.isNull(lastName) ||
-			Validator.isNull(jobTitle)) {
+			Validator.isNull(firstName) || Validator.isNull(lastName)) {
 
+			throw invalidBodyExceptionSupplier.get();
+		}
+
+
+		if (Validator.isNull(jobTitle)) {
 			throw invalidBodyExceptionSupplier.get();
 		}
 
