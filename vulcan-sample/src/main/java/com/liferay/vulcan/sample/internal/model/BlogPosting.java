@@ -57,7 +57,8 @@ public class BlogPosting {
 		long blogPostingId = _count.incrementAndGet();
 
 		BlogPosting blogPosting = new BlogPosting(
-			blogPostingId, content, new Date(), creatorId, new Date(), subtitle, title);
+			blogPostingId, content, new Date(), creatorId, new Date(), subtitle,
+			title);
 
 		_blogPostings.put(blogPostingId, blogPosting);
 
@@ -148,11 +149,22 @@ public class BlogPosting {
 		Date createDate = blogPosting.getCreateDate();
 
 		blogPosting = new BlogPosting(
-			blogPostingId, content, createDate, creatorId, new Date(), subtitle, title);
+			blogPostingId, content, createDate, creatorId, new Date(), subtitle,
+			title);
 
 		_blogPostings.put(blogPostingId, blogPosting);
 
 		return Optional.of(blogPosting);
+	}
+
+	/**
+	 * Returns the ID of this {@code BlogPosting}.
+	 *
+	 * @return the ID of the blog posting.
+	 * @review
+	 */
+	public long getBlogPostingId() {
+		return _blogPostingId;
 	}
 
 	/**
@@ -186,16 +198,6 @@ public class BlogPosting {
 	}
 
 	/**
-	 * Returns the ID of this {@code BlogPosting}.
-	 *
-	 * @return the ID of the blog posting.
-	 * @review
-	 */
-	public long getBlogPostingId() {
-		return _blogPostingId;
-	}
-
-	/**
 	 * Returns the modified date of this {@code BlogPosting}.
 	 *
 	 * @return the modified date of the blog posting.
@@ -226,15 +228,16 @@ public class BlogPosting {
 	}
 
 	private BlogPosting(
-		long blogPostingId, String content, Date createDate, long creatorId, Date modifiedDate, String subtitle, String title) {
+		long blogPostingId, String content, Date createDate, long creatorId,
+		Date modifiedDate, String subtitle, String title) {
 
 		_blogPostingId = blogPostingId;
 		_content = content;
-		_title = title;
-		_subtitle = subtitle;
-		_creatorId = creatorId;
 		_createDate = createDate;
+		_creatorId = creatorId;
 		_modifiedDate = modifiedDate;
+		_subtitle = subtitle;
+		_title = title;
 	}
 
 	private static Map<Long, BlogPosting> _blogPostings;
@@ -279,10 +282,10 @@ public class BlogPosting {
 		}
 	}
 
+	private final long _blogPostingId;
 	private final String _content;
 	private final Date _createDate;
 	private final long _creatorId;
-	private final long _blogPostingId;
 	private final Date _modifiedDate;
 	private final String _subtitle;
 	private final String _title;

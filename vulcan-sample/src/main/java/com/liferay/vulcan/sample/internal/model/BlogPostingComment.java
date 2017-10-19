@@ -56,7 +56,8 @@ public class BlogPostingComment {
 		long blogPostingCommentId = _count.incrementAndGet();
 
 		BlogPostingComment blogPostingComment = new BlogPostingComment(
-			blogPostingCommentId, blogPostingId, authorId, content, new Date(), new Date());
+			blogPostingCommentId, blogPostingId, authorId, content, new Date(),
+			new Date());
 
 		Map<Long, BlogPostingComment> blogPostComments =
 			_blogPostCommentsMap.computeIfAbsent(
@@ -87,7 +88,9 @@ public class BlogPostingComment {
 	 *         {@code Optional#empty()} otherwise.
 	 * @review
 	 */
-	public static Optional<BlogPostingComment> getBlogPostingComment(long blogPostingCommentId) {
+	public static Optional<BlogPostingComment> getBlogPostingComment(
+		long blogPostingCommentId) {
+
 		Collection<Map<Long, BlogPostingComment>> blogPostComments =
 			_blogPostCommentsMap.values();
 
@@ -101,7 +104,9 @@ public class BlogPostingComment {
 		).flatMap(
 			stream -> stream
 		).filter(
-			blogPostingComment -> blogPostingComment.getBlogPostingCommentId() == blogPostingCommentId
+			blogPostingComment ->
+				blogPostingComment.getBlogPostingCommentId() ==
+					blogPostingCommentId
 		).findFirst();
 	}
 
@@ -182,8 +187,8 @@ public class BlogPostingComment {
 					long blogPostingId = blogPostingComment.getBlogPostId();
 
 					return new BlogPostingComment(
-						blogPostingCommentId, blogPostingId, authorId, content, createDate,
-						new Date());
+						blogPostingCommentId, blogPostingId, authorId, content,
+						createDate, new Date());
 				});
 
 		newBlogPostingComment.ifPresent(
@@ -223,6 +228,16 @@ public class BlogPostingComment {
 	}
 
 	/**
+	 * The ID of this {@code BlogPostingComment}.
+	 *
+	 * @return the ID of the {@link BlogPosting} comment.
+	 * @review
+	 */
+	public long getBlogPostingCommentId() {
+		return _blogPostingCommentId;
+	}
+
+	/**
 	 * Returns the content of this {@code BlogPostingComment}.
 	 *
 	 * @return the content of the {@link BlogPosting} comment.
@@ -243,16 +258,6 @@ public class BlogPostingComment {
 	}
 
 	/**
-	 * The ID of this {@code BlogPostingComment}.
-	 *
-	 * @return the ID of the {@link BlogPosting} comment.
-	 * @review
-	 */
-	public long getBlogPostingCommentId() {
-		return _blogPostingCommentId;
-	}
-
-	/**
 	 * Returns the modified date of this {@code BlogPostingComment}.
 	 *
 	 * @return the modified date of the {@link BlogPosting} comment.
@@ -263,8 +268,8 @@ public class BlogPostingComment {
 	}
 
 	private BlogPostingComment(
-		long blogPostingCommentId, Long blogPostingId, Long authorId, String content,
-		Date createDate, Date modifiedDate) {
+		long blogPostingCommentId, Long blogPostingId, Long authorId,
+		String content, Date createDate, Date modifiedDate) {
 
 		_blogPostingCommentId = blogPostingCommentId;
 		_blogPostingId = blogPostingId;
@@ -303,7 +308,8 @@ public class BlogPostingComment {
 				Date createDate = dateAndTime.past(400, TimeUnit.DAYS);
 
 				BlogPostingComment blogPostingComment = new BlogPostingComment(
-					blogPostingCommentId, i, creatorId, content, createDate, createDate);
+					blogPostingCommentId, i, creatorId, content, createDate,
+					createDate);
 
 				blogPostComments.put(blogPostingCommentId, blogPostingComment);
 			}
@@ -313,10 +319,10 @@ public class BlogPostingComment {
 	}
 
 	private final Long _authorId;
+	private final long _blogPostingCommentId;
 	private final Long _blogPostingId;
 	private final String _content;
 	private final Date _createDate;
-	private final long _blogPostingCommentId;
 	private final Date _modifiedDate;
 
 }

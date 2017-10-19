@@ -143,8 +143,8 @@ public class Person {
 	 * @review
 	 */
 	public static Optional<Person> updatePerson(
-		long personId, String address, String avatar, Date birthDate, String email,
-		String firstName, String jobTitle, String lastName) {
+		long personId, String address, String avatar, Date birthDate,
+		String email, String firstName, String jobTitle, String lastName) {
 
 		Person person = _people.get(personId);
 
@@ -222,16 +222,6 @@ public class Person {
 	}
 
 	/**
-	 * The ID of this {@code Person}.
-	 *
-	 * @return the ID of the person.
-	 * @review
-	 */
-	public long getPersonId() {
-		return _personId;
-	}
-
-	/**
 	 * The job title of this {@code Person}.
 	 *
 	 * @return the job title of the person.
@@ -249,6 +239,16 @@ public class Person {
 	 */
 	public String getLastName() {
 		return _lastName;
+	}
+
+	/**
+	 * The ID of this {@code Person}.
+	 *
+	 * @return the ID of the person.
+	 * @review
+	 */
+	public long getPersonId() {
+		return _personId;
 	}
 
 	private Person(
@@ -309,8 +309,8 @@ public class Person {
 	private final Date _birthDate;
 	private final String _email;
 	private final String _firstName;
-	private final long _personId;
 	private final String _jobTitle;
 	private final String _lastName;
+	private final long _personId;
 
 }
