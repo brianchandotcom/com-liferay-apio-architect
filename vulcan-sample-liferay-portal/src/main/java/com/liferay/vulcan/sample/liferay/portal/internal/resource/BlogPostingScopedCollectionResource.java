@@ -144,11 +144,11 @@ public class BlogPostingScopedCollectionResource
 	private BlogsEntry _addBlogsEntry(
 		LongIdentifier groupLongIdentifier, Map<String, Object> body) {
 
-		String content = (String)body.get("articleBody");
-		String description = (String)body.get("description");
-		String displayDateString = (String)body.get("displayDate");
-		String subtitle = (String)body.get("alternativeHeadline");
 		String title = (String)body.get("headline");
+		String subtitle = (String)body.get("alternativeHeadline");
+		String description = (String)body.get("description");
+		String content = (String)body.get("articleBody");
+		String displayDateString = (String)body.get("displayDate");
 
 		Supplier<BadRequestException> invalidBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
@@ -263,11 +263,11 @@ public class BlogPostingScopedCollectionResource
 	private BlogsEntry _updateBlogsEntry(
 		LongIdentifier blogsEntryIdLongIdentifier, Map<String, Object> body) {
 
-		String content = (String)body.get("articleBody");
-		String description = (String)body.get("description");
-		String displayDateString = (String)body.get("displayDate");
-		String subtitle = (String)body.get("alternativeHeadline");
 		String title = (String)body.get("headline");
+		String subtitle = (String)body.get("alternativeHeadline");
+		String description = (String)body.get("description");
+		String content = (String)body.get("articleBody");
+		String displayDateString = (String)body.get("displayDate");
 
 		Supplier<BadRequestException> invalidBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
