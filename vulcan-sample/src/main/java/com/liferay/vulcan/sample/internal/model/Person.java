@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 
 /**
  * Instances of this class represents a person. This is a mock class for sample
- * purposes. It contains methods for retrieving/updating/deleting people and a
+ * purposes. It contains methods for retrieving/updating/deleting persons and a
  * in-memory database with fake data.
  *
  * @author Alejandro Hernández
@@ -64,7 +64,7 @@ public class Person {
 			personId, firstName, lastName, email, address, jobTitle, birthDate,
 			avatar);
 
-		_people.put(personId, person);
+		_persons.put(personId, person);
 
 		return person;
 	}
@@ -76,7 +76,7 @@ public class Person {
 	 * @review
 	 */
 	public static void deletePerson(long personId) {
-		_people.remove(personId);
+		_persons.remove(personId);
 	}
 
 	/**
@@ -84,13 +84,13 @@ public class Person {
 	 *
 	 * @param  start the start position.
 	 * @param  end the end position.
-	 * @return the list of people between {@code start} and {@code end}.
+	 * @return the list of persons between {@code start} and {@code end}.
 	 * @review
 	 */
 	public static List<Person> getPeople(int start, int end) {
-		Collection<Person> people = _people.values();
+		Collection<Person> persons = _persons.values();
 
-		Stream<Person> stream = people.stream();
+		Stream<Person> stream = persons.stream();
 
 		return stream.skip(
 			start
@@ -102,13 +102,13 @@ public class Person {
 	}
 
 	/**
-	 * Return the total number of people in the database.
+	 * Return the total number of persons in the database.
 	 *
-	 * @return the total number of people in the database.
+	 * @return the total number of persons in the database.
 	 * @review
 	 */
 	public static int getPeopleCount() {
-		return _people.size();
+		return _persons.size();
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class Person {
 	 * @review
 	 */
 	public static Optional<Person> getPerson(long personId) {
-		Person person = _people.get(personId);
+		Person person = _persons.get(personId);
 
 		return Optional.ofNullable(person);
 	}
@@ -146,7 +146,7 @@ public class Person {
 		long personId, String address, String avatar, Date birthDate,
 		String email, String firstName, String jobTitle, String lastName) {
 
-		Person person = _people.get(personId);
+		Person person = _persons.get(personId);
 
 		if (person == null) {
 			return Optional.empty();
@@ -156,7 +156,7 @@ public class Person {
 			personId, firstName, lastName, email, address, jobTitle, birthDate,
 			avatar);
 
-		_people.put(personId, person);
+		_persons.put(personId, person);
 
 		return Optional.of(person);
 	}
@@ -266,7 +266,7 @@ public class Person {
 	}
 
 	private static final AtomicLong _count = new AtomicLong(10);
-	private static Map<Long, Person> _people = new HashMap<>();
+	private static Map<Long, Person> _persons = new HashMap<>();
 
 	static {
 		Calendar calendar = Calendar.getInstance();
@@ -298,7 +298,7 @@ public class Person {
 				i, firstName, lastName, email, address, jobTitle, birthDate,
 				avatar);
 
-			_people.put(i, person);
+			_persons.put(i, person);
 		}
 	}
 
