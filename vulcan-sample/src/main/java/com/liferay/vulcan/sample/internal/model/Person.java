@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.sample.internal.model;
 
+import com.github.javafaker.Address;
 import com.github.javafaker.DateAndTime;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Internet;
@@ -278,25 +279,20 @@ public class Person {
 		for (long i = 0; i < 10; i++) {
 			Faker faker = new Faker();
 
-			Name name = faker.name();
+			Address address = faker.address();
 
 			Internet internet = faker.internet();
 
 			DateAndTime dateAndTime = faker.date();
 
-			String firstName = name.firstName();
-			String lastName = name.lastName();
-			String email = internet.safeEmailAddress();
-			String address = faker.address().fullAddress();
-			String jobTitle = name.title();
-
 			Date birthDate = dateAndTime.past(10000, TimeUnit.DAYS, adultDate);
 
-			String avatar = internet.avatar();
+			Name name = faker.name();
 
 			Person person = new Person(
-				address, avatar, birthDate, email, firstName, jobTitle,
-				lastName, i);
+				address.fullAddress(), internet.avatar(), birthDate,
+				internet.safeEmailAddress(), name.firstName(), name.title(),
+				name.lastName(), i);
 
 			_persons.put(i, person);
 		}
