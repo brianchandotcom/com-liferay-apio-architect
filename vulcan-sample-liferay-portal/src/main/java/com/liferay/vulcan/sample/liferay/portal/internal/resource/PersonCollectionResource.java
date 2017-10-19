@@ -139,14 +139,14 @@ public class PersonCollectionResource
 		RootIdentifier rootIdentifier, Map<String, Object> body,
 		Company company) {
 
-		String birthDateString = (String)body.get("birthDate");
+		String password1 = (String)body.get("password1");
+		String password2 = (String)body.get("password2");
+		String screenName = (String)body.get("alternateName");
 		String emailAddress = (String)body.get("email");
 		String firstName = (String)body.get("givenName");
 		String lastName = (String)body.get("familyName");
 		boolean male = (boolean)body.get("male");
-		String password1 = (String)body.get("password1");
-		String password2 = (String)body.get("password2");
-		String screenName = (String)body.get("alternateName");
+		String birthDateString = (String)body.get("birthDate");
 
 		Supplier<BadRequestException> invalidBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
@@ -232,12 +232,11 @@ public class PersonCollectionResource
 
 		User user = _getUser(userLongIdentifier);
 
+		String password = (String)body.get("password");
+		String screenName = (String)body.get("alternateName");
 		String emailAddress = (String)body.get("email");
 		String firstName = (String)body.get("givenName");
 		String lastName = (String)body.get("familyName");
-		String jobTitle = (String)body.get("jobTitle");
-		String password = (String)body.get("password");
-		String screenName = (String)body.get("alternateName");
 
 		Supplier<BadRequestException> invalidBodyExceptionSupplier =
 			() -> new BadRequestException("Invalid body");
@@ -248,16 +247,17 @@ public class PersonCollectionResource
 			throw invalidBodyExceptionSupplier.get();
 		}
 
+		String jobTitle = (String)body.get("jobTitle");
 
 		if (Validator.isNull(jobTitle)) {
 			throw invalidBodyExceptionSupplier.get();
 		}
 
+		user.setPassword(password);
+		user.setScreenName(screenName);
 		user.setEmailAddress(emailAddress);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setPassword(password);
-		user.setScreenName(screenName);
 		user.setJobTitle(jobTitle);
 
 		Try<User> userTry = Try.fromFallible(
