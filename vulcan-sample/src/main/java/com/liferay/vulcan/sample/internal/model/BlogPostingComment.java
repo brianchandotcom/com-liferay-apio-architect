@@ -45,22 +45,22 @@ public class BlogPostingComment {
 	 * Adds a new {@code BlogPostingComment} to the database.
 	 *
 	 * @param  authorId the ID of the author of the {@link BlogPosting} comment.
-	 * @param  blogPostId the ID of the {@link BlogPosting} comment.
+	 * @param  blogPostingId the ID of the {@link BlogPosting} comment.
 	 * @param  content the content of the {@link BlogPosting} comment.
 	 * @return the added {@code BlogPostingComment}.
 	 * @review
 	 */
 	public static BlogPostingComment addBlogPostingComment(
-		Long authorId, Long blogPostId, String content) {
+		Long authorId, Long blogPostingId, String content) {
 
 		long id = _count.incrementAndGet();
 
 		BlogPostingComment blogPostingComment = new BlogPostingComment(
-			id, blogPostId, authorId, content, new Date(), new Date());
+			id, blogPostingId, authorId, content, new Date(), new Date());
 
 		Map<Long, BlogPostingComment> blogPostComments =
 			_blogPostCommentsMap.computeIfAbsent(
-				blogPostId, __ -> new HashMap<>());
+				blogPostingId, __ -> new HashMap<>());
 
 		blogPostComments.put(id, blogPostingComment);
 
@@ -109,7 +109,7 @@ public class BlogPostingComment {
 	 * Returns a page of {@code BlogPostingComment} of {@link BlogPosting} from
 	 * the database.
 	 *
-	 * @param  blogPostId the ID of the {@link BlogPosting}.
+	 * @param  blogPostingId the ID of the {@link BlogPosting}.
 	 * @param  start the start position.
 	 * @param  end the end position.
 	 * @return the list of blog post comments between {@code start} and {@code
@@ -117,10 +117,10 @@ public class BlogPostingComment {
 	 * @review
 	 */
 	public static List<BlogPostingComment> getBlogPostingComments(
-		long blogPostId, int start, int end) {
+		long blogPostingId, int start, int end) {
 
 		Map<Long, BlogPostingComment> blogPostComments =
-			_blogPostCommentsMap.get(blogPostId);
+			_blogPostCommentsMap.get(blogPostingId);
 
 		Collection<BlogPostingComment> blogPostingCommentsValues =
 			blogPostComments.values();
@@ -140,15 +140,15 @@ public class BlogPostingComment {
 	 * Return the total number of comments for a {@link BlogPosting} in the
 	 * database.
 	 *
-	 * @param  blogPostId the ID of the {@link BlogPosting}.
+	 * @param  blogPostingId the ID of the {@link BlogPosting}.
 	 * @return the total number of comments for a {@link BlogPosting} in the
 	 *         database.
 	 * @review
 	 */
-	public static int getBlogPostingCommentsCount(long blogPostId) {
-		if (_blogPostCommentsMap.containsKey(blogPostId)) {
+	public static int getBlogPostingCommentsCount(long blogPostingId) {
+		if (_blogPostCommentsMap.containsKey(blogPostingId)) {
 			Map<Long, BlogPostingComment> blogPostComments =
-				_blogPostCommentsMap.get(blogPostId);
+				_blogPostCommentsMap.get(blogPostingId);
 
 			return blogPostComments.size();
 		}
@@ -179,20 +179,20 @@ public class BlogPostingComment {
 
 					long authorId = blogPostingComment.getAuthorId();
 
-					long blogPostId = blogPostingComment.getBlogPostId();
+					long blogPostingId = blogPostingComment.getBlogPostId();
 
 					return new BlogPostingComment(
-						id, blogPostId, authorId, content, createDate,
+						id, blogPostingId, authorId, content, createDate,
 						new Date());
 				});
 
 		newBlogPostingComment.ifPresent(
 			blogPostingComment -> {
-				long blogPostId = blogPostingComment.getBlogPostId();
+				long blogPostingId = blogPostingComment.getBlogPostId();
 
 				Map<Long, BlogPostingComment> blogPostComments =
 					_blogPostCommentsMap.computeIfAbsent(
-						blogPostId, __ -> new HashMap<>());
+						blogPostingId, __ -> new HashMap<>());
 
 				blogPostComments.put(id, blogPostingComment);
 			});
@@ -219,7 +219,7 @@ public class BlogPostingComment {
 	 * @review
 	 */
 	public Long getBlogPostId() {
-		return _blogPostId;
+		return _blogPostingId;
 	}
 
 	/**
@@ -263,11 +263,11 @@ public class BlogPostingComment {
 	}
 
 	private BlogPostingComment(
-		long id, Long blogPostId, Long authorId, String content,
+		long id, Long blogPostingId, Long authorId, String content,
 		Date createDate, Date modifiedDate) {
 
 		_id = id;
-		_blogPostId = blogPostId;
+		_blogPostingId = blogPostingId;
 		_authorId = authorId;
 		_content = content;
 		_createDate = createDate;
@@ -313,7 +313,7 @@ public class BlogPostingComment {
 	}
 
 	private final Long _authorId;
-	private final Long _blogPostId;
+	private final Long _blogPostingId;
 	private final String _content;
 	private final Date _createDate;
 	private final long _id;
