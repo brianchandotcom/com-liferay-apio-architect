@@ -57,7 +57,7 @@ public class BlogPosting {
 		long blogPostingId = _count.incrementAndGet();
 
 		BlogPosting blogPosting = new BlogPosting(
-			blogPostingId, title, subtitle, content, creatorId, new Date(), new Date());
+			blogPostingId, content, new Date(), creatorId, new Date(), subtitle, title);
 
 		_blogPostings.put(blogPostingId, blogPosting);
 
@@ -148,7 +148,7 @@ public class BlogPosting {
 		Date createDate = blogPosting.getCreateDate();
 
 		blogPosting = new BlogPosting(
-			blogPostingId, title, subtitle, content, creatorId, createDate, new Date());
+			blogPostingId, content, createDate, creatorId, new Date(), subtitle, title);
 
 		_blogPostings.put(blogPostingId, blogPosting);
 
@@ -226,8 +226,7 @@ public class BlogPosting {
 	}
 
 	private BlogPosting(
-		long blogPostingId, String content, String title, String subtitle, long creatorId,
-		Date createDate, Date modifiedDate) {
+		long blogPostingId, String content, Date createDate, long creatorId, Date modifiedDate, String subtitle, String title) {
 
 		_blogPostingId = blogPostingId;
 		_content = content;
@@ -274,7 +273,7 @@ public class BlogPosting {
 			Date date = dateAndTime.past(400, TimeUnit.DAYS);
 
 			BlogPosting blogPosting = new BlogPosting(
-				i, title, subtitle, content, creatorId, date, date);
+				i, content, date, creatorId, date, subtitle, title);
 
 			_blogPostings.put(i, blogPosting);
 		}
