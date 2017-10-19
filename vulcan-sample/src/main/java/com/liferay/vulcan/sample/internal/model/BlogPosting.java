@@ -251,11 +251,7 @@ public class BlogPosting {
 
 			Book book = faker.book();
 
-			String title = book.title();
-
 			Lorem lorem = faker.lorem();
-
-			String subtitle = lorem.sentence();
 
 			List<String> paragraphs = lorem.paragraphs(5);
 
@@ -276,7 +272,8 @@ public class BlogPosting {
 			Date date = dateAndTime.past(400, TimeUnit.DAYS);
 
 			BlogPosting blogPosting = new BlogPosting(
-				i, content, date, creatorId, date, subtitle, title);
+				i, content, date, creatorId, date, lorem.sentence(),
+				book.title());
 
 			_blogPostings.put(i, blogPosting);
 		}
