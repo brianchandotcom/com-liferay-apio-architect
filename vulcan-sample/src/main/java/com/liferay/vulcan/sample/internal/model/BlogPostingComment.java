@@ -161,14 +161,13 @@ public class BlogPostingComment {
 	 * database if present.
 	 *
 	 * @param  id the ID of the {@link BlogPosting} comment to update.
-	 * @param  authorId the ID of the author of the {@link BlogPosting} comment.
 	 * @param  content the content of the {@link BlogPosting} comment.
 	 * @return the updated {@code BlogPostingComment} if present; {@code
 	 *         Optional#empty()} otherwise.
 	 * @review
 	 */
 	public static Optional<BlogPostingComment> updateBlogPostingComment(
-		long id, Long authorId, String content) {
+		long id, String content) {
 
 		Optional<BlogPostingComment> oldBlogPostingComment =
 			getBlogPostingComment(id);
@@ -178,7 +177,9 @@ public class BlogPostingComment {
 				blogPostingComment -> {
 					Date createDate = blogPostingComment.getCreateDate();
 
-					Long blogPostId = blogPostingComment.getBlogPostId();
+					long authorId = blogPostingComment.getAuthorId();
+
+					long blogPostId = blogPostingComment.getBlogPostId();
 
 					return new BlogPostingComment(
 						id, blogPostId, authorId, content, createDate,
@@ -187,7 +188,7 @@ public class BlogPostingComment {
 
 		newBlogPostingComment.ifPresent(
 			blogPostingComment -> {
-				Long blogPostId = blogPostingComment.getBlogPostId();
+				long blogPostId = blogPostingComment.getBlogPostId();
 
 				Map<Long, BlogPostingComment> blogPostComments =
 					_blogPostCommentsMap.computeIfAbsent(

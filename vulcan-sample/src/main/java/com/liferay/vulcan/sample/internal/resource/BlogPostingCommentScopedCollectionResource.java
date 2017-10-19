@@ -138,12 +138,11 @@ public class BlogPostingCommentScopedCollectionResource
 		LongIdentifier blogPostingCommentLongIdentifier,
 		Map<String, Object> body) {
 
-		Long authorId = (Long)body.get("author");
 		String content = (String)body.get("text");
 
 		Optional<BlogPostingComment> optional =
 			BlogPostingComment.updateBlogPostingComment(
-				blogPostingCommentLongIdentifier.getId(), authorId, content);
+				blogPostingCommentLongIdentifier.getId(), content);
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
