@@ -58,13 +58,13 @@ public class Person {
 		String address, String avatar, Date birthDate, String email,
 		String firstName, String jobTitle, String lastName) {
 
-		long id = _count.incrementAndGet();
+		long personId = _count.incrementAndGet();
 
 		Person person = new Person(
-			id, firstName, lastName, email, address, jobTitle, birthDate,
+			personId, firstName, lastName, email, address, jobTitle, birthDate,
 			avatar);
 
-		_people.put(id, person);
+		_people.put(personId, person);
 
 		return person;
 	}
@@ -72,11 +72,11 @@ public class Person {
 	/**
 	 * Deletes a {@code Person} with a certain {@code ID} from the database.
 	 *
-	 * @param  id the ID of the person to delete.
+	 * @param  personId the ID of the person to delete.
 	 * @review
 	 */
-	public static void deletePerson(long id) {
-		_people.remove(id);
+	public static void deletePerson(long personId) {
+		_people.remove(personId);
 	}
 
 	/**
@@ -115,13 +115,13 @@ public class Person {
 	 * Returns a {@code Person} with a certain {@code ID} from the database if
 	 * present. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @param  id the ID of the person to retrieve.
+	 * @param  personId the ID of the person to retrieve.
 	 * @return the {@code Person} for the requested ID if present; {@code
 	 *         Optional#empty()} otherwise.
 	 * @review
 	 */
-	public static Optional<Person> getPerson(long id) {
-		Person person = _people.get(id);
+	public static Optional<Person> getPerson(long personId) {
+		Person person = _people.get(personId);
 
 		return Optional.ofNullable(person);
 	}
@@ -130,7 +130,7 @@ public class Person {
 	 * Updates a {@code Person} with a certain {@code ID} in the database if
 	 * present.
 	 *
-	 * @param  id the ID of the person to update.
+	 * @param  personId the ID of the person to update.
 	 * @param  address the address of the person.
 	 * @param  avatar the avatar of the person.
 	 * @param  birthDate the birth date of the person.
@@ -143,20 +143,20 @@ public class Person {
 	 * @review
 	 */
 	public static Optional<Person> updatePerson(
-		long id, String address, String avatar, Date birthDate, String email,
+		long personId, String address, String avatar, Date birthDate, String email,
 		String firstName, String jobTitle, String lastName) {
 
-		Person person = _people.get(id);
+		Person person = _people.get(personId);
 
 		if (person == null) {
 			return Optional.empty();
 		}
 
 		person = new Person(
-			id, firstName, lastName, email, address, jobTitle, birthDate,
+			personId, firstName, lastName, email, address, jobTitle, birthDate,
 			avatar);
 
-		_people.put(id, person);
+		_people.put(personId, person);
 
 		return Optional.of(person);
 	}
@@ -227,8 +227,8 @@ public class Person {
 	 * @return the ID of the person.
 	 * @review
 	 */
-	public long getId() {
-		return _id;
+	public long getPersonId() {
+		return _personId;
 	}
 
 	/**
@@ -252,10 +252,10 @@ public class Person {
 	}
 
 	private Person(
-		long id, String firstName, String lastName, String email,
+		long personId, String firstName, String lastName, String email,
 		String address, String jobTitle, Date birthDate, String avatar) {
 
-		_id = id;
+		_personId = personId;
 		_firstName = firstName;
 		_lastName = lastName;
 		_email = email;
@@ -309,7 +309,7 @@ public class Person {
 	private final Date _birthDate;
 	private final String _email;
 	private final String _firstName;
-	private final long _id;
+	private final long _personId;
 	private final String _jobTitle;
 	private final String _lastName;
 
