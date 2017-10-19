@@ -4,7 +4,7 @@
 
 Vulcan Architect is part of the Vulcan project. Here is a short description of what the project is about:
 
-A server-side library to facilitate the creation of Vulcan REST APIs. Vulcan Architect is opinionated to reduce the amount of code API developers has to write. This is achieved as well by implementing out of the box well known patterns in REST APIs such as the Collection Pattern.
+A server-side library to facilitate the creation of Vulcan REST APIs. Vulcan Architect is opinionated to reduce the amount of code API developers have to write. This is also achieved by implementing right out of the box well known patterns in REST APIs such as the Collection Pattern.
 
 The two key techniques that make this possible are:
 
@@ -16,15 +16,15 @@ With Vulcan Architect you can create APIs that follow all the REST principles an
 
 ## Why should I use it?
 
-When creating a Hypermedia API there are many things you need to consider like representation format, relations between resources, vocabularies, etc. Because of this, Architect was built as a library that facilitates developing a Hypermedia API that follows all the principles while worrying only about your internal logic.
+When creating a Hypermedia API there are many things you need to consider like representation formats, relations between resources, vocabularies, etc. Because of this, Architect was built as a library that facilitates developing a Hypermedia API that follows all the principles while having to worry only about your internal logic.
 
-So you can focus on creating beautiful APIs that will live longer and prosper.
+That way you can focus on creating beautiful APIs that will live longer and prosper.
 
 ## How will it help me?
 
 Architect provides JAX-RS writers for the most important Hypermedia formats, such as HAL or JSON-LD (with more coming). It also provides an easy way of representing your resources, in a really generic way, so every representation can understand it, but following common Hypermedia patterns, such as the Representor.
 
-Also provides a really simple way of creating the different endpoints for your resources, which has many similarities with the JAX-RS approach. So migrating your API from a REST JAX-RS implementation to Architect will be easy as pie.
+It also provides a really simple way of creating the different endpoints for your resources, which has many similarities with the JAX-RS approach. So migrating your API from a REST JAX-RS implementation to Architect will be easy as pie.
 
 ## What if I just want to try these "Vulcan APIs"?
 
@@ -76,7 +76,7 @@ dependencies {
 
 And you're ready to create your first Vulcan Architect resource!
 
-Create a new Java class and annotate it with `@Component` to expose it as an OSGi component. Then have it implement the [`CollectionResource`](https://github.com/liferay/com-liferay-vulcan/blob/master/vulcan-api/src/main/java/com/liferay/vulcan/resource/CollectionResource.java) class of `vulcan-api`. You will have to provide two type arguments: the type of the model you want to expose, and the type of identifier that uses that model, for example [`LongIdentifier`](https://github.com/liferay/com-liferay-vulcan/blob/master/vulcan-api/src/main/java/com/liferay/vulcan/resource/identifier/LongIdentifier.java) (if your type uses a long number internally as an identifier).
+Create a new Java class and annotate it with `@Component` to expose it as an OSGi component. Then have it implement the [`CollectionResource`](https://github.com/liferay/com-liferay-vulcan/blob/master/vulcan-api/src/main/java/com/liferay/vulcan/resource/CollectionResource.java) class of `vulcan-api`. You will have to provide two type arguments: the type of the model you want to expose, and the type of identifier that uses that model, for example, [`LongIdentifier`](https://github.com/liferay/com-liferay-vulcan/blob/master/vulcan-api/src/main/java/com/liferay/vulcan/resource/identifier/LongIdentifier.java) (if your type uses a long number internally as an identifier).
 
 Now you will simply have to implement three methods:
 
