@@ -124,11 +124,11 @@ public class PersonCollectionResource
 	private PageItems<Person> _getPageItems(
 		Pagination pagination, RootIdentifier rootIdentifier) {
 
-		List<Person> people = Person.getPeople(
+		List<Person> persons = Person.getPeople(
 			pagination.getStartPosition(), pagination.getEndPosition());
 		int count = Person.getPeopleCount();
 
-		return new PageItems<>(people, count);
+		return new PageItems<>(persons, count);
 	}
 
 	private Person _getPerson(LongIdentifier personLongIdentifier) {
