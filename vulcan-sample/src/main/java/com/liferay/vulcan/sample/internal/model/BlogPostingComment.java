@@ -53,16 +53,16 @@ public class BlogPostingComment {
 	public static BlogPostingComment addBlogPostingComment(
 		Long authorId, Long blogPostingId, String content) {
 
-		long id = _count.incrementAndGet();
+		long blogPostingCommentId = _count.incrementAndGet();
 
 		BlogPostingComment blogPostingComment = new BlogPostingComment(
-			id, blogPostingId, authorId, content, new Date(), new Date());
+			blogPostingCommentId, blogPostingId, authorId, content, new Date(), new Date());
 
 		Map<Long, BlogPostingComment> blogPostComments =
 			_blogPostCommentsMap.computeIfAbsent(
 				blogPostingId, __ -> new HashMap<>());
 
-		blogPostComments.put(id, blogPostingComment);
+		blogPostComments.put(blogPostingCommentId, blogPostingComment);
 
 		return blogPostingComment;
 	}
@@ -71,23 +71,23 @@ public class BlogPostingComment {
 	 * Deletes a {@code BlogPostingComment} with a certain {@code ID} from the
 	 * database.
 	 *
-	 * @param  id the ID of the {@link BlogPosting} comment to delete.
+	 * @param  blogPostingCommentId the ID of the {@link BlogPosting} comment to delete.
 	 * @review
 	 */
-	public static void deleteBlogPostingComment(long id) {
-		_blogPostCommentsMap.remove(id);
+	public static void deleteBlogPostingComment(long blogPostingCommentId) {
+		_blogPostCommentsMap.remove(blogPostingCommentId);
 	}
 
 	/**
 	 * Returns a {@code BlogPostingComment} with a certain {@code ID} from the
 	 * database if present. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @param  id the ID of the blog post comment to retrieve.
+	 * @param  blogPostingCommentId the ID of the blog post comment to retrieve.
 	 * @return the {@code BlogPostingComment} for the requested ID if present;
 	 *         {@code Optional#empty()} otherwise.
 	 * @review
 	 */
-	public static Optional<BlogPostingComment> getBlogPostingComment(long id) {
+	public static Optional<BlogPostingComment> getBlogPostingComment(long blogPostingCommentId) {
 		Collection<Map<Long, BlogPostingComment>> blogPostComments =
 			_blogPostCommentsMap.values();
 
@@ -101,7 +101,7 @@ public class BlogPostingComment {
 		).flatMap(
 			stream -> stream
 		).filter(
-			blogPostingComment -> blogPostingComment.getId() == id
+			blogPostingComment -> blogPostingComment.getBlogPostingCommentId() == blogPostingCommentId
 		).findFirst();
 	}
 
@@ -160,17 +160,17 @@ public class BlogPostingComment {
 	 * Updates a {@code BlogPostingComment} with a certain {@code ID} in the
 	 * database if present.
 	 *
-	 * @param  id the ID of the {@link BlogPosting} comment to update.
+	 * @param  blogPostingCommentId the ID of the {@link BlogPosting} comment to update.
 	 * @param  content the content of the {@link BlogPosting} comment.
 	 * @return the updated {@code BlogPostingComment} if present; {@code
 	 *         Optional#empty()} otherwise.
 	 * @review
 	 */
 	public static Optional<BlogPostingComment> updateBlogPostingComment(
-		long id, String content) {
+		long blogPostingCommentId, String content) {
 
 		Optional<BlogPostingComment> oldBlogPostingComment =
-			getBlogPostingComment(id);
+			getBlogPostingComment(blogPostingCommentId);
 
 		Optional<BlogPostingComment> newBlogPostingComment =
 			oldBlogPostingComment.map(
@@ -182,7 +182,7 @@ public class BlogPostingComment {
 					long blogPostingId = blogPostingComment.getBlogPostId();
 
 					return new BlogPostingComment(
-						id, blogPostingId, authorId, content, createDate,
+						blogPostingCommentId, blogPostingId, authorId, content, createDate,
 						new Date());
 				});
 
@@ -194,7 +194,7 @@ public class BlogPostingComment {
 					_blogPostCommentsMap.computeIfAbsent(
 						blogPostingId, __ -> new HashMap<>());
 
-				blogPostComments.put(id, blogPostingComment);
+				blogPostComments.put(blogPostingCommentId, blogPostingComment);
 			});
 
 		return newBlogPostingComment;
@@ -248,8 +248,8 @@ public class BlogPostingComment {
 	 * @return the ID of the {@link BlogPosting} comment.
 	 * @review
 	 */
-	public long getId() {
-		return _id;
+	public long getBlogPostingCommentId() {
+		return _blogPostingCommentId;
 	}
 
 	/**
@@ -263,10 +263,10 @@ public class BlogPostingComment {
 	}
 
 	private BlogPostingComment(
-		long id, Long blogPostingId, Long authorId, String content,
+		long blogPostingCommentId, Long blogPostingId, Long authorId, String content,
 		Date createDate, Date modifiedDate) {
 
-		_id = id;
+		_blogPostingCommentId = blogPostingCommentId;
 		_blogPostingId = blogPostingId;
 		_authorId = authorId;
 		_content = content;
@@ -288,7 +288,7 @@ public class BlogPostingComment {
 				new HashMap<>();
 
 			for (int j = 0; j < random.nextInt(70); j++) {
-				long id = _count.getAndIncrement();
+				long blogPostingCommentId = _count.getAndIncrement();
 
 				Faker faker = new Faker();
 
@@ -303,9 +303,9 @@ public class BlogPostingComment {
 				Date createDate = dateAndTime.past(400, TimeUnit.DAYS);
 
 				BlogPostingComment blogPostingComment = new BlogPostingComment(
-					id, i, creatorId, content, createDate, createDate);
+					blogPostingCommentId, i, creatorId, content, createDate, createDate);
 
-				blogPostComments.put(id, blogPostingComment);
+				blogPostComments.put(blogPostingCommentId, blogPostingComment);
 			}
 
 			_blogPostCommentsMap.put(i, blogPostComments);
@@ -316,7 +316,7 @@ public class BlogPostingComment {
 	private final Long _blogPostingId;
 	private final String _content;
 	private final Date _createDate;
-	private final long _id;
+	private final long _blogPostingCommentId;
 	private final Date _modifiedDate;
 
 }

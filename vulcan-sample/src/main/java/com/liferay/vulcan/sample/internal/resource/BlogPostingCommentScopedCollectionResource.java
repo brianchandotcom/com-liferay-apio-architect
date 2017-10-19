@@ -53,7 +53,7 @@ public class BlogPostingCommentScopedCollectionResource
 			representorBuilder) {
 
 		return representorBuilder.identifier(
-			blogPostingComment -> blogPostingComment::getId
+			blogPostingComment -> blogPostingComment::getBlogPostingCommentId
 		).addDate(
 			"dateCreated", BlogPostingComment::getCreateDate
 		).addDate(
