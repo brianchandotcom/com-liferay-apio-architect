@@ -54,7 +54,7 @@ public class PersonCollectionResource
 		RepresentorBuilder<Person, LongIdentifier> representorBuilder) {
 
 		return representorBuilder.identifier(
-			blogPosting -> blogPosting::getId
+			person -> person::getPersonId
 		).addDate(
 			"birthDate", Person::getBirthDate
 		).addString(

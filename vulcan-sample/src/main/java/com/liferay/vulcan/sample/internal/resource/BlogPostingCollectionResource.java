@@ -54,7 +54,7 @@ public class BlogPostingCollectionResource
 		RepresentorBuilder<BlogPosting, LongIdentifier> representorBuilder) {
 
 		return representorBuilder.identifier(
-			blogPosting -> blogPosting::getId
+			blogPosting -> blogPosting::getBlogPostingId
 		).addDate(
 			"dateCreated", BlogPosting::getCreateDate
 		).addDate(
@@ -64,7 +64,7 @@ public class BlogPostingCollectionResource
 			blogPosting -> Person.getPerson(blogPosting.getCreatorId())
 		).addRelatedCollection(
 			"comments", BlogPostingComment.class,
-			blogPosting -> (LongIdentifier)blogPosting::getId
+			blogPosting -> (LongIdentifier)blogPosting::getBlogPostingId
 		).addString(
 			"alternativeHeadline", BlogPosting::getSubtitle
 		).addString(

@@ -54,12 +54,12 @@ public class BlogPosting {
 	public static BlogPosting addBlogPosting(
 		String content, long creatorId, String subtitle, String title) {
 
-		long id = _count.incrementAndGet();
+		long blogPostingId = _count.incrementAndGet();
 
 		BlogPosting blogPosting = new BlogPosting(
-			id, title, subtitle, content, creatorId, new Date(), new Date());
+			blogPostingId, title, subtitle, content, creatorId, new Date(), new Date());
 
-		_blogPostings.put(id, blogPosting);
+		_blogPostings.put(blogPostingId, blogPosting);
 
 		return blogPosting;
 	}
@@ -68,24 +68,24 @@ public class BlogPosting {
 	 * Deletes a {@code BlogPosting} with a certain {@code ID} from the
 	 * database.
 	 *
-	 * @param  id the ID of the blog posting to delete.
+	 * @param  blogPostingId the ID of the blog posting to delete.
 	 * @review
 	 */
-	public static void deleteBlogPosting(long id) {
-		_blogPostings.remove(id);
+	public static void deleteBlogPosting(long blogPostingId) {
+		_blogPostings.remove(blogPostingId);
 	}
 
 	/**
 	 * Returns a {@code BlogPosting} with a certain {@code ID} from the database
 	 * if present. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @param  id the ID of the blog posting to retrieve.
+	 * @param  blogPostingId the ID of the blog posting to retrieve.
 	 * @return the {@code BlogPosting} for the requested ID if present; {@code
 	 *         Optional#empty()} otherwise.
 	 * @review
 	 */
-	public static Optional<BlogPosting> getBlogPosting(long id) {
-		BlogPosting blogPosting = _blogPostings.get(id);
+	public static Optional<BlogPosting> getBlogPosting(long blogPostingId) {
+		BlogPosting blogPosting = _blogPostings.get(blogPostingId);
 
 		return Optional.ofNullable(blogPosting);
 	}
@@ -126,7 +126,7 @@ public class BlogPosting {
 	 * Updates a {@code BlogPosting} with a certain {@code ID} in the database,
 	 * if present.
 	 *
-	 * @param  id the ID of the blog posting to update.
+	 * @param  blogPostingId the ID of the blog posting to update.
 	 * @param  content the new content for the blog posting.
 	 * @param  creatorId the ID of the new creator for the blog posting.
 	 * @param  subtitle the new subtitle for the blog posting.
@@ -136,10 +136,10 @@ public class BlogPosting {
 	 * @review
 	 */
 	public static Optional<BlogPosting> updateBlogPosting(
-		long id, String content, long creatorId, String subtitle,
+		long blogPostingId, String content, long creatorId, String subtitle,
 		String title) {
 
-		BlogPosting blogPosting = _blogPostings.get(id);
+		BlogPosting blogPosting = _blogPostings.get(blogPostingId);
 
 		if (blogPosting == null) {
 			return Optional.empty();
@@ -148,9 +148,9 @@ public class BlogPosting {
 		Date createDate = blogPosting.getCreateDate();
 
 		blogPosting = new BlogPosting(
-			id, title, subtitle, content, creatorId, createDate, new Date());
+			blogPostingId, title, subtitle, content, creatorId, createDate, new Date());
 
-		_blogPostings.put(id, blogPosting);
+		_blogPostings.put(blogPostingId, blogPosting);
 
 		return Optional.of(blogPosting);
 	}
@@ -191,8 +191,8 @@ public class BlogPosting {
 	 * @return the ID of the blog posting.
 	 * @review
 	 */
-	public long getId() {
-		return _id;
+	public long getBlogPostingId() {
+		return _blogPostingId;
 	}
 
 	/**
@@ -226,10 +226,10 @@ public class BlogPosting {
 	}
 
 	private BlogPosting(
-		long id, String content, String title, String subtitle, long creatorId,
+		long blogPostingId, String content, String title, String subtitle, long creatorId,
 		Date createDate, Date modifiedDate) {
 
-		_id = id;
+		_blogPostingId = blogPostingId;
 		_content = content;
 		_title = title;
 		_subtitle = subtitle;
@@ -283,7 +283,7 @@ public class BlogPosting {
 	private final String _content;
 	private final Date _createDate;
 	private final long _creatorId;
-	private final long _id;
+	private final long _blogPostingId;
 	private final Date _modifiedDate;
 	private final String _subtitle;
 	private final String _title;
