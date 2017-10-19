@@ -289,11 +289,11 @@ public class BlogPostingComment {
 			Map<Long, BlogPostingComment> blogPostingComments = new HashMap<>();
 
 			for (int i = 0; i < random.nextInt(70); i++) {
+				long authorId = random.nextInt(Person.getPeopleCount());
+
 				long blogPostingCommentId = _count.getAndIncrement();
 
 				Faker faker = new Faker();
-
-				long authorId = random.nextInt(Person.getPeopleCount());
 
 				Shakespeare shakespeare = faker.shakespeare();
 
