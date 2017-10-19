@@ -298,7 +298,7 @@ public class BlogPostingComment {
 
 				Faker faker = new Faker();
 
-				long creatorId = random.nextInt(Person.getPeopleCount());
+				long authorId = random.nextInt(Person.getPeopleCount());
 
 				Shakespeare shakespeare = faker.shakespeare();
 
@@ -309,7 +309,7 @@ public class BlogPostingComment {
 				Date createDate = dateAndTime.past(400, TimeUnit.DAYS);
 
 				BlogPostingComment blogPostingComment = new BlogPostingComment(
-					creatorId, blogPostingCommentId, i, content, createDate,
+					authorId, blogPostingCommentId, i, content, createDate,
 					createDate);
 
 				blogPostingComments.put(
