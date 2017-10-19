@@ -58,8 +58,6 @@ public class PersonCollectionResource
 		).addDate(
 			"birthDate", Person::getBirthDate
 		).addString(
-			"image", Person::getAvatar
-		).addString(
 			"address", Person::getAddress
 		).addString(
 			"email", Person::getEmail
@@ -68,9 +66,11 @@ public class PersonCollectionResource
 		).addString(
 			"givenName", Person::getFirstName
 		).addString(
-			"name", Person::getFullName
+			"image", Person::getAvatar
 		).addString(
 			"jobTitle", Person::getJobTitle
+		).addString(
+			"name", Person::getFullName
 		).addType(
 			"Person"
 		).build();
