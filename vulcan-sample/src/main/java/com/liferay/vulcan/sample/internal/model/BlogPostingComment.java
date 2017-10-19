@@ -184,7 +184,7 @@ public class BlogPostingComment {
 
 					long authorId = blogPostingComment.getAuthorId();
 
-					long blogPostingId = blogPostingComment.getBlogPostId();
+					long blogPostingId = blogPostingComment.getBlogPostingId();
 
 					return new BlogPostingComment(
 						authorId, blogPostingCommentId, blogPostingId, content,
@@ -193,7 +193,7 @@ public class BlogPostingComment {
 
 		newBlogPostingCommentOptional.ifPresent(
 			blogPostingComment -> {
-				long blogPostingId = blogPostingComment.getBlogPostId();
+				long blogPostingId = blogPostingComment.getBlogPostingId();
 
 				Map<Long, BlogPostingComment> blogPostingComments =
 					_blogPostingCommentsMap.computeIfAbsent(
@@ -224,7 +224,7 @@ public class BlogPostingComment {
 	 *         comment.
 	 * @review
 	 */
-	public long getBlogPostId() {
+	public long getBlogPostingId() {
 		return _blogPostingId;
 	}
 
