@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.error.VulcanDeveloperError.UnresolvableURI;
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.list.FunctionalList;
@@ -182,9 +183,10 @@ public class PageMessageBodyWriter<T>
 		Optional<String> optional = _writerHelper.getCollectionURLOptional(
 			page, _httpServletRequest);
 
+		Class<T> modelClass = page.getModelClass();
+
 		return optional.orElseThrow(
-			() -> new VulcanDeveloperError.UnresolvableURI(
-				page.getModelClass()));
+			() -> new UnresolvableURI(modelClass.getName()));
 	}
 
 	private String _getPageURL(Page<T> page, int pageNumber, int itemsPerPage) {

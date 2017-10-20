@@ -130,12 +130,6 @@ public class VulcanDeveloperError extends Error {
 	 */
 	public static class UnresolvableURI extends VulcanDeveloperError {
 
-		public UnresolvableURI(Class<?> modelClass) {
-			super(
-				"Unable to resolve URI for model class " +
-					modelClass.getName());
-		}
-
 		public UnresolvableURI(String className) {
 			super("Unable to resolve URI for model class " + className);
 		}
