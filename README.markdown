@@ -96,9 +96,9 @@ The Vulcan project provides a set of Guidelines and Software to build APIs and c
 
 ### [Vulcan Guidelines](https://vulcan.wedeploy.io/guidelines/)
 
-An opinionated way to do RESTful APIs for evolvability and discoverability. 
+An opinionated way to do RESTful APIs for evolvability and discoverability.
 
-Evolvability means that it’s easy to evolve the API without breaking consumers. 
+Evolvability means that it’s easy to evolve the API without breaking consumers.
 
 Discoverability is even more exciting. In Vulcan APIs, the provider controls the navigation, forms, state changes... which simplifies the consumers and allows them to "learn" certain new functionalities that didn’t exist when they were developed. Sounds like magic and it’s indeed pretty cool.
 
