@@ -164,8 +164,7 @@ public class WriterHelper {
 			pathString::concat
 		).map(
 			_getTransformURIFunction(
-					(uri, transformer) ->
-						transformer.transformPageURI(uri, page))
+				(uri, transformer) -> transformer.transformPageURI(uri, page))
 		).map(
 			uri -> getAbsoluteURL(httpServletRequest, uri)
 		);
@@ -207,9 +206,9 @@ public class WriterHelper {
 			"/p/"::concat
 		).map(
 			_getTransformURIFunction(
-					(uri, transformer) ->
-						transformer.transformCollectionItemSingleResourceURI(
-							uri, singleModel))
+				(uri, transformer) ->
+					transformer.transformCollectionItemSingleResourceURI(
+						uri, singleModel))
 		).map(
 			uri -> getAbsoluteURL(httpServletRequest, uri)
 		);
