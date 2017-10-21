@@ -15,8 +15,6 @@
 
 # Vulcan Architect
 
-# Vulcan, may your APIs live long and prosper
-
 Vulcan Architect is part of the [Vulcan project](#the-vulcan-project), which aims to promote the creation of APIs designed to evolve over time. The project also provides a set of guidelines for API providers and consumers that can be implemented in any technology and Vulcan Consumer, a library to facilitate the creation of consumers of any hypermedia API.
 
 A server-side library to facilitate the creation of Vulcan REST APIs. Vulcan Architect is opinionated to reduce the amount of code API developers have to write. This is also achieved by implementing right out of the box well known patterns in REST APIs such as the Collection Pattern.
