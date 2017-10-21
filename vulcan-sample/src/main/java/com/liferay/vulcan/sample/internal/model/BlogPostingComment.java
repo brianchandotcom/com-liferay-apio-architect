@@ -72,7 +72,8 @@ public class BlogPostingComment {
 	 * Deletes a {@code BlogPostingComment} with a certain {@code ID} from the
 	 * database.
 	 *
-	 * @param  blogPostingCommentId the ID of the {@link BlogPosting} comment to delete.
+	 * @param  blogPostingCommentId the ID of the {@link BlogPosting} comment to
+	 *         delete.
 	 * @review
 	 */
 	public static void deleteBlogPostingComment(long blogPostingCommentId) {
@@ -165,7 +166,8 @@ public class BlogPostingComment {
 	 * Updates a {@code BlogPostingComment} with a certain {@code ID} in the
 	 * database if present.
 	 *
-	 * @param  blogPostingCommentId the ID of the {@link BlogPosting} comment to update.
+	 * @param  blogPostingCommentId the ID of the {@link BlogPosting} comment to
+	 *         update.
 	 * @param  content the content of the {@link BlogPosting} comment.
 	 * @return the updated {@code BlogPostingComment} if present; {@code
 	 *         Optional#empty()} otherwise.

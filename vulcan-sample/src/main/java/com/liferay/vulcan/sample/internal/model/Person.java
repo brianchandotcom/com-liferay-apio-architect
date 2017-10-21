@@ -131,7 +131,6 @@ public class Person {
 	 * Updates a {@code Person} with a certain {@code ID} in the database if
 	 * present.
 	 *
-	 * @param  personId the ID of the person to update.
 	 * @param  address the address of the person.
 	 * @param  avatar the avatar of the person.
 	 * @param  birthDate the birth date of the person.
@@ -139,6 +138,7 @@ public class Person {
 	 * @param  firstName the first name of the person.
 	 * @param  jobTitle the job title of the person.
 	 * @param  lastName the last name of the person.
+	 * @param  personId the ID of the person to update.
 	 * @return the updated {@code Person} if present; {@code Optional#empty()}
 	 *         otherwise.
 	 * @review
