@@ -35,7 +35,7 @@ That way you can focus on creating beautiful APIs that will live longer and pros
 
 ## How will it help me?
 
-Architect provides JAX-RS writers for the most important Hypermedia formats, such as HAL or JSON-LD (with more coming). It also provides an easy way of representing your resources, in a really generic way, so every representation can understand it, but following common Hypermedia patterns, such as the Representor.
+Architect provides JAX-RS writers for the most important Hypermedia formats, such as HAL or JSON-LD (with more coming). It also provides an easy way of representing your resources, in a really generic way, so every representation can understand it, but following common Hypermedia patterns, such as the *Representor*.
 
 It also provides a really simple way of creating the different endpoints for your resources, which has many similarities with the JAX-RS approach. So migrating your API from a REST JAX-RS implementation to Architect will be easy as pie.
 
@@ -51,15 +51,15 @@ To be able to use Vulcan Architect APIs you must specify an `accept` HTTP header
 
 `accept: application/ld+json`
 
-to order JSON-LD or:
+to request JSON-LD or:
 
 `accept: application/hal+json`
 
-to order HAL.
+to request HAL.
 
-## How do I start using it?
+## How do I start developing APIs with it?
 
-Start creating your first API with Architect is very simple. All you need is an OSGi container with JAX-RS.
+Creating your first API with Architect is very simple. All you need is an OSGi container with JAX-RS.
 
 If you just want to try all this quickly, you can use our [docker image](https://hub.docker.com/r/ahdezma/vulcan-whiteboard/). Simply run this on your terminal (specifying the folder where to do module hot-deploying):
 
@@ -76,6 +76,7 @@ Now just add these lines to your `pom.xml`:
   <groupId>com.liferay</groupId>
   <artifactId>com.liferay.vulcan.api</artifactId>
   <version>LATEST</version>
+  <scope>provided</scope>
 </dependency>
 ```
 
@@ -83,7 +84,7 @@ or `build.gradle`:
 
 ```groovy
 dependencies {
-	provided group: "com.liferay", name: "com.liferay.vulcan.api", version: "LATEST"
+	provided 'com.liferay:com.liferay.vulcan.api:+'
 }
 ```
 
@@ -133,7 +134,7 @@ Liferay welcomes any and all contributions! Please read the [CONTRIBUTING guide]
 Pull requests with contributions should be sent to the GitHub user *liferay*. Those pull requests will be discussed and reviewed by the Engineering team before including them in the product.
 
 ## Bug Reporting and Feature Requests
-Did you find a bug? Please file an issue for it at [https://issues.liferay.com](https://issues.liferay.com) following [Liferay's JIRA Guidelines](http://www.liferay.com/community/wiki/-/wiki/Main/JIRA) and select *Vulan Architect* as the component.
+Did you find a bug? Please file an issue for it at [https://issues.liferay.com](https://issues.liferay.com) following [Liferay's JIRA Guidelines](http://www.liferay.com/community/wiki/-/wiki/Main/JIRA) and select *Vulcan Architect* as the component.
 
 If you'd like to suggest a new feature for Liferay, visit the [Ideas Dashboard](https://dev.liferay.com/participate/ideas) to submit and track the progress of your idea!
 
