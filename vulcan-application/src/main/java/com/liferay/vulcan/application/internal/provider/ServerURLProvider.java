@@ -14,7 +14,8 @@
 
 package com.liferay.vulcan.application.internal.provider;
 
-import com.liferay.vulcan.provider.ServerURLProvider;
+import com.liferay.vulcan.provider.Provider;
+import com.liferay.vulcan.url.ServerURL;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,28 +28,32 @@ import org.osgi.service.component.annotations.Component;
  * @author Javier Gamarra
  */
 @Component(immediate = true)
-public class ServerURLProviderImpl implements ServerURLProvider {
+public class ServerURLProvider implements Provider<ServerURL> {
 
 	@Override
-	public String getServerURL(HttpServletRequest httpServletRequest) {
-		StringBuilder sb = new StringBuilder(httpServletRequest.getScheme());
+	public ServerURL createContext(HttpServletRequest httpServletRequest) {
+		return () -> {
+			StringBuilder sb = new StringBuilder(
+				httpServletRequest.getScheme());
 
-		sb.append("://");
+			sb.append("://");
 
-		String forwardedHost = httpServletRequest.getHeader("X-Forwarded-Host");
+			String forwardedHost = httpServletRequest.getHeader(
+				"X-Forwarded-Host");
 
-		if (forwardedHost == null) {
-			sb.append(httpServletRequest.getServerName());
-			sb.append(":");
-			sb.append(httpServletRequest.getServerPort());
-		}
-		else {
-			sb.append(forwardedHost);
-		}
+			if (forwardedHost == null) {
+				sb.append(httpServletRequest.getServerName());
+				sb.append(":");
+				sb.append(httpServletRequest.getServerPort());
+			}
+			else {
+				sb.append(forwardedHost);
+			}
 
-		sb.append(httpServletRequest.getContextPath());
+			sb.append(httpServletRequest.getContextPath());
 
-		return sb.toString();
+			return sb.toString();
+		};
 	}
 
 }

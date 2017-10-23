@@ -12,27 +12,23 @@
  * details.
  */
 
-package com.liferay.vulcan.provider;
-
-import aQute.bnd.annotation.ConsumerType;
-
-import javax.servlet.http.HttpServletRequest;
+package com.liferay.vulcan.url;
 
 /**
  * Provides the final URL based on the HTTP servlet request. The implementation
  * depends on any proxy configuration, SSO, and so on.
  *
  * @author Javier Gamarra
+ * @review
  */
-@ConsumerType
-public interface ServerURLProvider {
+public interface ServerURL {
 
 	/**
 	 * Returns the HTTP servlet request's original URL.
 	 *
-	 * @param  httpServletRequest the HTTP servlet request
 	 * @return a string URL constructed from the HTTP servlet request
+	 * @review
 	 */
-	public String getServerURL(HttpServletRequest httpServletRequest);
+	public String getServerURL();
 
 }
