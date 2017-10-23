@@ -17,14 +17,10 @@ package com.liferay.vulcan.jaxrs.json.internal.writer;
 import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
-import com.google.gson.JsonObject;
-
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.message.json.ErrorMessageMapper;
-import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.RelatedCollection;
@@ -33,7 +29,6 @@ import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
-import com.liferay.vulcan.result.APIError;
 import com.liferay.vulcan.uri.CollectionResourceURITransformer;
 import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.url.ServerURL;
@@ -52,8 +47,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.ws.rs.core.HttpHeaders;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -67,40 +60,6 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true, service = WriterHelper.class)
 public class WriterHelper {
-
-	/**
-	 * Writes an {@link APIError} to a JSON object.
-	 *
-	 * @param  errorMessageMapper the {@link ErrorMessageMapper} that matches
-	 *         the {@code apiError} and {@code httpHeaders} parameters
-	 * @param  apiError the API error
-	 * @param  httpHeaders the current request's HTTP headers
-	 * @return the API error, as a JSON string
-	 */
-	public static String writeError(
-		ErrorMessageMapper errorMessageMapper, APIError apiError,
-		HttpHeaders httpHeaders) {
-
-		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
-
-		errorMessageMapper.onStart(jsonObjectBuilder, apiError, httpHeaders);
-
-		Optional<String> optional = apiError.getDescription();
-
-		optional.ifPresent(
-			description -> errorMessageMapper.mapDescription(
-				jsonObjectBuilder, description));
-
-		errorMessageMapper.mapStatusCode(
-			jsonObjectBuilder, apiError.getStatusCode());
-		errorMessageMapper.mapTitle(jsonObjectBuilder, apiError.getTitle());
-		errorMessageMapper.mapType(jsonObjectBuilder, apiError.getType());
-		errorMessageMapper.onFinish(jsonObjectBuilder, apiError, httpHeaders);
-
-		JsonObject jsonObject = jsonObjectBuilder.build();
-
-		return jsonObject.toString();
-	}
 
 	/**
 	 * Returns the absolute URL from a relative URI.
