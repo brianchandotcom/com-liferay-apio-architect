@@ -124,18 +124,14 @@ public class SingleModelMessageBodyWriter<T>
 
 		SingleModel<T> singleModel = success.getValue();
 
-		T model = singleModel.getModel();
-
-		Class<T> modelClass = singleModel.getModelClass();
-
 		SingleModelMessageMapper<T> singleModelMessageMapper = stream.filter(
 			messageMapper ->
 				mediaTypeString.equals(messageMapper.getMediaType()) &&
-				messageMapper.supports(model, modelClass, _httpHeaders)
+				messageMapper.supports(singleModel, _httpHeaders)
 		).findFirst(
 		).orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveMessageMapper(
-				mediaTypeString, modelClass)
+				mediaTypeString, singleModel.getModelClass())
 		);
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
