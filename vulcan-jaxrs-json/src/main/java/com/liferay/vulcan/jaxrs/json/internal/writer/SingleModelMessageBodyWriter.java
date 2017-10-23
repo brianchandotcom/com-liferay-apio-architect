@@ -138,26 +138,27 @@ public class SingleModelMessageBodyWriter<T>
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		Optional<Fields> fieldsOptional = _providerManager.provide(
+		Optional<Fields> fieldsOptional = _providerManager.provideOptional(
 			Fields.class, _httpServletRequest);
 
 		Fields fields = fieldsOptional.orElseThrow(
 			() -> new MustHaveProvider(Fields.class));
 
-		Optional<Embedded> embeddedOptional = _providerManager.provide(
+		Optional<Embedded> embeddedOptional = _providerManager.provideOptional(
 			Embedded.class, _httpServletRequest);
 
 		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new MustHaveProvider(Embedded.class));
 
-		Optional<Language> languageOptional = _providerManager.provide(
+		Optional<Language> languageOptional = _providerManager.provideOptional(
 			Language.class, _httpServletRequest);
 
 		Language language = languageOptional.orElseThrow(
 			() -> new MustHaveProvider(Language.class));
 
-		Optional<ServerURL> serverURLOptional = _providerManager.provide(
-			ServerURL.class, _httpServletRequest);
+		Optional<ServerURL> serverURLOptional =
+			_providerManager.provideOptional(
+				ServerURL.class, _httpServletRequest);
 
 		ServerURL serverURL = serverURLOptional.orElseThrow(
 			() -> new MustHaveProvider(ServerURL.class));

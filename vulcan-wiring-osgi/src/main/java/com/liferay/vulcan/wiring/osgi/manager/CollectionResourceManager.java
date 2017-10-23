@@ -243,7 +243,8 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	private Function<Class<?>, Optional<?>> _getProvideClassFunction(
 		HttpServletRequest httpServletRequest) {
 
-		return clazz -> _providerManager.provide(clazz, httpServletRequest);
+		return clazz -> _providerManager.provideOptional(
+			clazz, httpServletRequest);
 	}
 
 	private <T, U extends Identifier> Function<HttpServletRequest, Routes<?>>

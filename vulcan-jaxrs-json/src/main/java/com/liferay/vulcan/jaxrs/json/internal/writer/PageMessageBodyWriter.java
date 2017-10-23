@@ -148,26 +148,27 @@ public class PageMessageBodyWriter<T>
 
 		pageMessageMapper.onStart(jsonObjectBuilder, page, _httpHeaders);
 
-		Optional<Fields> fieldsOptional = _providerManager.provide(
+		Optional<Fields> fieldsOptional = _providerManager.provideOptional(
 			Fields.class, _httpServletRequest);
 
 		Fields fields = fieldsOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Fields.class));
 
-		Optional<Embedded> embeddedOptional = _providerManager.provide(
+		Optional<Embedded> embeddedOptional = _providerManager.provideOptional(
 			Embedded.class, _httpServletRequest);
 
 		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Embedded.class));
 
-		Optional<Language> optional = _providerManager.provide(
+		Optional<Language> optional = _providerManager.provideOptional(
 			Language.class, _httpServletRequest);
 
 		Language language = optional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Language.class));
 
-		Optional<ServerURL> serverURLOptional = _providerManager.provide(
-			ServerURL.class, _httpServletRequest);
+		Optional<ServerURL> serverURLOptional =
+			_providerManager.provideOptional(
+				ServerURL.class, _httpServletRequest);
 
 		ServerURL serverURL = serverURLOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(ServerURL.class));
