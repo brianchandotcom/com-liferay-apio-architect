@@ -30,27 +30,25 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to map a {@link Path} to an {@code Identifier} type and vice
- * versa.
+ * Provides methods to map a {@link com.liferay.vulcan.uri.Path} to an
+ * {@code com.liferay.vulcan.resource.identifier.Identifier}, and vice versa.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component(immediate = true, service = PathIdentifierMapperManager.class)
 public class PathIdentifierMapperManager
 	extends BaseManager<PathIdentifierMapper> {
 
 	/**
-	 * Converts a {@code Path} to its equivalent {@code Identifier} of type T if
-	 * a valid {@link PathIdentifierMapper} can be found. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * Converts a {@code Path} to its equivalent {@code Identifier} of type
+	 * {@code T}, if a valid {@link 
+	 * com.liferay.vulcan.resource.identifier.mapper.PathIdentifierMapper} can
+	 * be found. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @param  clazz the type class of the desired {@code Identifier}.
-	 * @param  path the {@code Path} to be mapped.
-	 * @return the correspondent {@code Identifier}, if a valid {@link
-	 *         PathIdentifierMapper} is present; {@code Optional#empty()}
-	 *         otherwise.
-	 * @review
+	 * @param  clazz the class of the desired {@code Identifier}
+	 * @param  path the {@code Path}
+	 * @return the {@code Identifier}, if a valid {@code PathIdentifierMapper}
+	 *         is present; {@code Optional#empty()} otherwise
 	 */
 	public <T extends Identifier> Optional<T> map(Class<T> clazz, Path path) {
 		if (Identifier.class == clazz) {
@@ -72,17 +70,15 @@ public class PathIdentifierMapperManager
 	}
 
 	/**
-	 * Converts an {@code Identifier} to its equivalent {@code Path} if a valid
-	 * {@link PathIdentifierMapper} can be found. Returns {@code
+	 * Converts an {@code Identifier} to its equivalent {@code Path}, if a valid
+	 * {@code PathIdentifierMapper} can be found. Returns {@code
 	 * Optional#empty()} otherwise.
 	 *
-	 * @param  identifier the {@code Identifier} to be mapped.
+	 * @param  identifier the {@code Identifier}
 	 * @param  modelClass the class of the model identified by the {@code
-	 *         Identifier}.
-	 * @return the correspondent {@code Path}, if a valid {@link
-	 *         PathIdentifierMapper} is present; {@code Optional#empty()}
-	 *         otherwise.
-	 * @review
+	 *         Identifier}
+	 * @return the {@code Path}, if a valid {@code PathIdentifierMapper} is
+	 *         present; {@code Optional#empty()} otherwise
 	 */
 	public <T extends Identifier, U> Optional<Path> map(
 		T identifier, Class<? extends Identifier> identifierClass,

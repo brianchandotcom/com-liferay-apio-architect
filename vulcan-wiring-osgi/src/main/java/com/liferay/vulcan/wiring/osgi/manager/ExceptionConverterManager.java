@@ -28,28 +28,34 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to convert exceptions to generic {@link APIError}
- * representations.
+ * Provides methods to convert exceptions to generic {@link 
+ * com.liferay.vulcan.result.APIError} representations.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component(immediate = true, service = ExceptionConverterManager.class)
 public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
 
 	/**
-	 * Converts an exception to its generic {@code APIError} representation. If
-	 * no {@link ExceptionConverter} can be found for the actual exception
-	 * class, it tries to use the superclass {@link ExceptionConverter}.
+	 * Converts an exception to its generic {@code APIError} representation, if
+	 * a valid {@link com.liferay.vulcan.converter.ExceptionConverter} exists.
+	 * Returns {@code Optional#empty()} otherwise.
+	 * 
+	 * <p>
+	 * If no {@link com.liferay.vulcan.converter.ExceptionConverter} can be
+	 * found for the exception class, this method tries to use the superclass of
+	 * {@code ExceptionConverter}.
+	 * </p>
 	 *
 	 * <p>
-	 * If non {@link ExceptionConverter} can be found a generic converter
+	 * If no {@link ExceptionConverter} can be found a generic converter
 	 * ({@code ExceptionConverter<Exception>} will be used.
 	 * </p>
 	 *
-	 * @param  exception the exception to be converted.
-	 * @return the corresponding error, if a valid {@link ExceptionConverter} is
-	 *         present; {@code Optional#empty()} otherwise.
+	 * @param  exception the exception to convert
+	 * @return the exception's {@code APIError} representation, if a valid
+	 *         {@code ExceptionConverter} is present; {@code Optional#empty()}
+	 *         otherwise
 	 * @review
 	 */
 	public <T extends Exception> Optional<APIError> convert(T exception) {

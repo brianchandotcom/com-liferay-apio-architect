@@ -25,11 +25,10 @@ import javax.ws.rs.core.Response;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@link BadRequestException} into its {@link APIError}
- * representation.
+ * Converts a {@code javax.ws.rs.BadRequestException} to its
+ * {@link com.liferay.vulcan.result.APIError} representation.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component(immediate = true)
 public class BadRequestExceptionConverter

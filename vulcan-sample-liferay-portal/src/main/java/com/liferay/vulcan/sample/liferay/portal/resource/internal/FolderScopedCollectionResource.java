@@ -47,12 +47,11 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides all the necessary information to expose folder resource through a
- * web API. <p> The resources are mapped from the internal {@link DLFolder}
- * model.
+ * Provides the information necessary to expose folder resources through a web
+ * API. The resources are mapped from the internal model
+ * {@code com.liferay.document.library.kernel.model.DLFolder}.
  *
  * @author Javier Gamarra
- * @review
  */
 @Component(immediate = true, service = CollectionResource.class)
 public class FolderScopedCollectionResource
