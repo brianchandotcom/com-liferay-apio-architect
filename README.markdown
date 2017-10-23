@@ -17,15 +17,15 @@
 
 Vulcan Architect is part of the [Vulcan project](#the-vulcan-project), which aims to promote the creation of APIs designed to evolve over time. The project also provides a set of guidelines for API providers and consumers that can be implemented in any technology and Vulcan Consumer, a library to facilitate the creation of consumers of any hypermedia API.
 
-Vulcan Architect is a server-side library to facilitate the creation of Vulcan REST APIs. Vulcan Architect is opinionated to reduce the amount of code API developers have to write. This is also achieved by implementing right out of the box well known patterns in REST APIs such as the Collection Pattern.
+A server-side library to facilitate the creation of Vulcan REST APIs. Vulcan Architect is opinionated to reduce the amount of code API developers have to write. This is also achieved by implementing right out of the box well known patterns in REST APIs such as the Collection Pattern.
 
 The two key techniques that make this possible are:
 
 **Hypermedia**: yeah, the good old links and forms that we all use through a browser every day can also be applied to APIs to get the same great decoupling and flexibility.
 
-**Shared Vocabularies**: instead of returning a JSON/XML with attributes tied to the names of the internal models, start with standard vocabularies that are well thought out by standardization bodies (such as [schema.org](https://schema.org) or [IANA](https://www.iana.org/assignments/link-relations/link-relations.xhtml)). Even if you have to create your own types (because an appropriate standard doesn’t exist), define it explicitly to be decoupled from any changes that you can make to the internal model.
+**Shared Vocabularies**: instead of returning a JSON/XML with attributes tied to the names of the internal models, use standard vocabularies that are well thought out by standardization bodies (such as [schema.org](https://schema.org) or [IANA](https://www.iana.org/assignments/link-relations/link-relations.xhtml)). Even if you have to create your own types (because a standard doesn’t exist), define it explicitly to be decoupled from any changes that you can make to the internal model.
 
-With Vulcan Architect you can create APIs that follow all the REST principles (including HATEOAS) and the Vulcan Guidelines with significantly reduced effort.
+With Vulcan Architect you can create APIs that follow all the REST principles and the Vulcan Guidelines without much effort.
 
 ## Why should I use it?
 
