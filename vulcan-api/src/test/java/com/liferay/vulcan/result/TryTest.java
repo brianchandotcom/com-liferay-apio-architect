@@ -14,9 +14,9 @@
 
 package com.liferay.vulcan.result;
 
-import static com.liferay.vulcan.result.TryMatchers.aFailTry;
-import static com.liferay.vulcan.result.TryMatchers.aSuccessTry;
-import static com.liferay.vulcan.result.TryMatchers.aTryWithValue;
+import static com.liferay.vulcan.test.result.TryMatchers.aFailTry;
+import static com.liferay.vulcan.test.result.TryMatchers.aSuccessTry;
+import static com.liferay.vulcan.test.result.TryMatchers.aTryWithValue;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.vulcan.result;
+package com.liferay.vulcan.test.result;
+
+import com.liferay.vulcan.result.Try;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
