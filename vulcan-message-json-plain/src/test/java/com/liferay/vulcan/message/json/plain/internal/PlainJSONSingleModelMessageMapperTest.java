@@ -20,20 +20,12 @@ import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.jaxrs.json.internal.StringFunctionalList;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Javier Gamarra
  */
 public class PlainJSONSingleModelMessageMapperTest {
-
-	@Before
-	public void setUp() {
-		_jsonObjectBuilder = new JSONObjectBuilderImpl();
-		_plainJSONSingleModelMessageMapper =
-			new PlainJSONSingleModelMessageMapper();
-	}
 
 	@Test
 	public void testMapBooleanField() {
@@ -66,7 +58,8 @@ public class PlainJSONSingleModelMessageMapperTest {
 		System.out.println(jsonObject.toString());
 
 		Assert.assertEquals(
-			"{\"fieldName\":\"https://localhost:8080\"}", jsonObject.toString());
+			"{\"fieldName\":\"https://localhost:8080\"}",
+			jsonObject.toString());
 	}
 
 	@Test
@@ -104,8 +97,10 @@ public class PlainJSONSingleModelMessageMapperTest {
 		Assert.assertEquals("{\"fieldName\":\"value\"}", jsonObject.toString());
 	}
 
-	private JSONObjectBuilderImpl _jsonObjectBuilder;
-	private PlainJSONSingleModelMessageMapper
-		_plainJSONSingleModelMessageMapper;
+	private final JSONObjectBuilderImpl _jsonObjectBuilder =
+		new JSONObjectBuilderImpl();
+	private final PlainJSONSingleModelMessageMapper
+		_plainJSONSingleModelMessageMapper =
+			new PlainJSONSingleModelMessageMapper();
 
 }

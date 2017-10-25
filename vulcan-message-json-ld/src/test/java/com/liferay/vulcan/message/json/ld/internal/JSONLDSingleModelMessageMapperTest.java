@@ -32,13 +32,6 @@ import org.junit.Test;
  */
 public class JSONLDSingleModelMessageMapperTest {
 
-	@Before
-	public void setUp() {
-		_jsonLDSingleModelMessageMapper =
-			new JSONLDSingleModelMessageMapper<>();
-		_jsonObjectBuilder = new JSONObjectBuilderImpl();
-	}
-
 	@Test
 	public void testMapLinkedResourceURL() {
 		_jsonLDSingleModelMessageMapper.mapLinkedResourceURL(
@@ -63,7 +56,9 @@ public class JSONLDSingleModelMessageMapperTest {
 		Assert.assertEquals("{\"@type\":[\"fieldName\"]}", build.toString());
 	}
 
-	private JSONLDSingleModelMessageMapper<T> _jsonLDSingleModelMessageMapper;
-	private JSONObjectBuilderImpl _jsonObjectBuilder;
+	private JSONLDSingleModelMessageMapper<T> _jsonLDSingleModelMessageMapper =
+		new JSONLDSingleModelMessageMapper<>();
+	private JSONObjectBuilderImpl _jsonObjectBuilder =
+		new JSONObjectBuilderImpl();
 
 }
