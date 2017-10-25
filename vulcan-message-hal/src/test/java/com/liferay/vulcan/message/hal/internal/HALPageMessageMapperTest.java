@@ -27,13 +27,6 @@ import org.junit.Test;
  */
 public class HALPageMessageMapperTest {
 
-	@Before
-	public void setUp() {
-		_jsonObjectBuilder = new JSONObjectBuilderImpl();
-
-		_halPageMessageMapper = new HALPageMessageMapper();
-	}
-
 	@Test
 	public void testMapCollectionURL() {
 		_halPageMessageMapper.mapCollectionURL(
@@ -100,7 +93,9 @@ public class HALPageMessageMapperTest {
 		Assert.assertEquals("{\"count\":1}", build.toString());
 	}
 
-	private HALPageMessageMapper _halPageMessageMapper;
-	private JSONObjectBuilderImpl _jsonObjectBuilder;
+	private HALPageMessageMapper _halPageMessageMapper =
+		new HALPageMessageMapper();
+	private JSONObjectBuilderImpl _jsonObjectBuilder =
+		new JSONObjectBuilderImpl();
 
 }
