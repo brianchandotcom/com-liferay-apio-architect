@@ -40,9 +40,9 @@ public class PlainJSONSingleModelMessageMapperTest {
 		_plainJSONSingleModelMessageMapper.mapBooleanField(
 			_jsonObjectBuilder, "fieldName", true);
 
-		JsonObject build = _jsonObjectBuilder.build();
+		JsonObject jsonObject = _jsonObjectBuilder.build();
 
-		Assert.assertEquals("{\"fieldName\":true}", build.toString());
+		Assert.assertEquals("{\"fieldName\":true}", jsonObject.toString());
 	}
 
 	@Test
@@ -51,9 +51,9 @@ public class PlainJSONSingleModelMessageMapperTest {
 			_jsonObjectBuilder, new StringFunctionalList(null, "element"),
 			"fieldName", true);
 
-		JsonObject build = _jsonObjectBuilder.build();
+		JsonObject jsonObject = _jsonObjectBuilder.build();
 
-		Assert.assertEquals("{\"element\":true}", build.toString());
+		Assert.assertEquals("{\"element\":true}", jsonObject.toString());
 	}
 
 	@Test
@@ -61,12 +61,12 @@ public class PlainJSONSingleModelMessageMapperTest {
 		_plainJSONSingleModelMessageMapper.mapLink(
 			_jsonObjectBuilder, "fieldName", "https://localhost:8080");
 
-		JsonObject build = _jsonObjectBuilder.build();
+		JsonObject jsonObject = _jsonObjectBuilder.build();
 
-		System.out.println(build.toString());
+		System.out.println(jsonObject.toString());
 
 		Assert.assertEquals(
-			"{\"fieldName\":\"https://localhost:8080\"}", build.toString());
+			"{\"fieldName\":\"https://localhost:8080\"}", jsonObject.toString());
 	}
 
 	@Test
@@ -74,11 +74,11 @@ public class PlainJSONSingleModelMessageMapperTest {
 		_plainJSONSingleModelMessageMapper.mapNumberField(
 			_jsonObjectBuilder, "fieldName", 1);
 
-		JsonObject build = _jsonObjectBuilder.build();
+		JsonObject jsonObject = _jsonObjectBuilder.build();
 
-		System.out.println(build.toString());
+		System.out.println(jsonObject.toString());
 
-		Assert.assertEquals("{\"fieldName\":1}", build.toString());
+		Assert.assertEquals("{\"fieldName\":1}", jsonObject.toString());
 	}
 
 	@Test
@@ -86,12 +86,12 @@ public class PlainJSONSingleModelMessageMapperTest {
 		_plainJSONSingleModelMessageMapper.mapSelfURL(
 			_jsonObjectBuilder, "https://localhost:8080");
 
-		JsonObject build = _jsonObjectBuilder.build();
+		JsonObject jsonObject = _jsonObjectBuilder.build();
 
-		System.out.println(build.toString());
+		System.out.println(jsonObject.toString());
 
 		Assert.assertEquals(
-			"{\"self\":\"https://localhost:8080\"}", build.toString());
+			"{\"self\":\"https://localhost:8080\"}", jsonObject.toString());
 	}
 
 	@Test
@@ -99,9 +99,9 @@ public class PlainJSONSingleModelMessageMapperTest {
 		_plainJSONSingleModelMessageMapper.mapStringField(
 			_jsonObjectBuilder, "fieldName", "value");
 
-		JsonObject build = _jsonObjectBuilder.build();
+		JsonObject jsonObject = _jsonObjectBuilder.build();
 
-		Assert.assertEquals("{\"fieldName\":\"value\"}", build.toString());
+		Assert.assertEquals("{\"fieldName\":\"value\"}", jsonObject.toString());
 	}
 
 	private JSONObjectBuilderImpl _jsonObjectBuilder;
