@@ -30,9 +30,9 @@ public class PlainJSONSingleModelMessageMapperTest {
 
 	@Before
 	public void setUp() {
+		_jsonObjectBuilder = new JSONObjectBuilderImpl();
 		_plainJSONSingleModelMessageMapper =
 			new PlainJSONSingleModelMessageMapper();
-		_jsonObjectBuilder = new JSONObjectBuilderImpl();
 	}
 
 	@Test
