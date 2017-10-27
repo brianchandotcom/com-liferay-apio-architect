@@ -17,7 +17,7 @@ package com.liferay.vulcan.liferay.portal.context;
 import com.liferay.portal.kernel.model.User;
 
 /**
- * Provides the current {@code com.liferay.portal.kernel.model.User}.
+ * Provides the current {@code User}.
  *
  * <p>
  * To use this class, add it as a parameter to the methods of {@link

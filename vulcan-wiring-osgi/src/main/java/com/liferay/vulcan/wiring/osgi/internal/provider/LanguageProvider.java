@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Lets resources provide the requested
- * {@link com.liferay.vulcan.language.Language} as a parameter in the methods of
- * {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
+ * Lets resources provide the requested {@link
+ * Language} as a parameter in the methods of {@link
+ * com.liferay.vulcan.resource.builder.RoutesBuilder}.
  *
  * @author Alejandro Hernández
  */

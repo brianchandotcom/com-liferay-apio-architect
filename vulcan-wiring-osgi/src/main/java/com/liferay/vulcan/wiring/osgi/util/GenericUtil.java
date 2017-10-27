@@ -30,7 +30,7 @@ public class GenericUtil {
 
 	/**
 	 * Returns the class of the parameterized class's first type argument.
-	 * 
+	 *
 	 * @param  clazz the parameterized class
 	 * @return the class of the parameterized class's first type argument
 	 */

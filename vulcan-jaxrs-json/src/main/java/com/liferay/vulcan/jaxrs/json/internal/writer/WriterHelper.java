@@ -76,11 +76,10 @@ import org.osgi.service.component.annotations.Reference;
 public class WriterHelper {
 
 	/**
-	 * Writes an {@link com.liferay.vulcan.result.APIError} to a JSON object.
+	 * Writes an {@link APIError} to a JSON object.
 	 *
-	 * @param  errorMessageMapper the 
-	 *         {@link com.liferay.vulcan.message.json.ErrorMessageMapper} that
-	 *         matches the {@code apiError} and {@code httpHeaders} parameters
+	 * @param  errorMessageMapper the {@link ErrorMessageMapper} that matches
+	 *         the {@code apiError} and {@code httpHeaders} parameters
 	 * @param  apiError the API error
 	 * @param  httpHeaders the current request's HTTP headers
 	 * @return the API error, as a JSON string
@@ -167,7 +166,7 @@ public class WriterHelper {
 
 	/**
 	 * Returns the model's resource URL, if a @link
-	 * com.liferay.vulcan.resource.CollectionResource} for the model class 
+	 * com.liferay.vulcan.resource.CollectionResource} for the model class
 	 * exists. Otherwise, this method returns {@code Optional#empty()}.
 	 *
 	 * @param  singleModel the single model
@@ -209,15 +208,14 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes binary resources. This method uses a
-	 * {@code java.util.function.BiConsumer} so each
-	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write each binary
-	 * differently.
+	 * Writes binary resources. This method uses a {@code
+	 * BiConsumer} so each {@code
+	 * javax.ws.rs.ext.MessageBodyWriter} can write each binary differently.
 	 *
-	 * @param  binaryFunctions the functions that obtain the binaries
-	 * @param  singleModel the single model
-	 * @param  httpServletRequest the HTTP request
-	 * @param  biConsumer the {@code BiConsumer} called to write each binary
+	 * @param binaryFunctions the functions that obtain the binaries
+	 * @param singleModel the single model
+	 * @param httpServletRequest the HTTP request
+	 * @param biConsumer the {@code BiConsumer} called to write each binary
 	 */
 	public <T> void writeBinaries(
 		Map<String, BinaryFunction<T>> binaryFunctions,
@@ -268,15 +266,14 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes the model's boolean fields. This method uses a
-	 * {@code java.util.function.BiConsumer} so each
-	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write each field
-	 * differently.
+	 * Writes the model's boolean fields. This method uses a {@code
+	 * BiConsumer} so each {@code
+	 * javax.ws.rs.ext.MessageBodyWriter} can write each field differently.
 	 *
-	 * @param  model the model
-	 * @param  modelClass the model class
-	 * @param  fields the requested fields
-	 * @param  biConsumer the {@code BiConsumer} called to write each field
+	 * @param model the model
+	 * @param modelClass the model class
+	 * @param fields the requested fields
+	 * @param biConsumer the {@code BiConsumer} called to write each field
 	 */
 	public <T> void writeBooleanFields(
 		T model, Class<T> modelClass, Fields fields,
@@ -312,18 +309,18 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes a linked model. This method uses a
-	 * {@code java.util.function.BiConsumer} so each
-	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write the related model
+	 * Writes a linked model. This method uses a {@code
+	 * BiConsumer} so each {@code
+	 * javax.ws.rs.ext.MessageBodyWriter} can write the related model
 	 * differently.
 	 *
-	 * @param  relatedModel the related model
-	 * @param  parentSingleModel the parent model
-	 * @param  parentEmbeddedPathElements the list of embedded path elements
-	 * @param  httpServletRequest the HTTP servlet request
-	 * @param  fields the requested fields
-	 * @param  embedded the information about the embedded resources
-	 * @param  biConsumer the {@code BiConsumer} called to write each field
+	 * @param relatedModel the related model
+	 * @param parentSingleModel the parent model
+	 * @param parentEmbeddedPathElements the list of embedded path elements
+	 * @param httpServletRequest the HTTP servlet request
+	 * @param fields the requested fields
+	 * @param embedded the information about the embedded resources
+	 * @param biConsumer the {@code BiConsumer} called to write each field
 	 */
 	public <T, U> void writeLinkedRelatedModel(
 		RelatedModel<T, U> relatedModel, SingleModel<T> parentSingleModel,
@@ -343,14 +340,13 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes the model's links. This method uses a
-	 * {@code java.util.function.BiConsumer} so each
-	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write each link
-	 * differently.
+	 * Writes the model's links. This method uses a {@code
+	 * BiConsumer} so each {@code
+	 * javax.ws.rs.ext.MessageBodyWriter} can write each link differently.
 	 *
-	 * @param  modelClass the model class
-	 * @param  fields the requested fields
-	 * @param  biConsumer the {@code BiConsumer} called to write each link
+	 * @param modelClass the model class
+	 * @param fields the requested fields
+	 * @param biConsumer the {@code BiConsumer} called to write each link
 	 */
 	public <T> void writeLinks(
 		Class<T> modelClass, Fields fields,
@@ -384,16 +380,15 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes a model's localized string fields. This method uses a
-	 * {@code java.util.function.BiConsumer} so each
-	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write each field
-	 * differently.
+	 * Writes a model's localized string fields. This method uses a {@code
+	 * BiConsumer} so each {@code
+	 * javax.ws.rs.ext.MessageBodyWriter} can write each field differently.
 	 *
-	 * @param  model the model
-	 * @param  modelClass the model class
-	 * @param  fields the requested fields
-	 * @param  language the language requested by the user
-	 * @param  biConsumer the {@code BiConsumer} called to write each field
+	 * @param model the model
+	 * @param modelClass the model class
+	 * @param fields the requested fields
+	 * @param language the language requested by the user
+	 * @param biConsumer the {@code BiConsumer} called to write each field
 	 */
 	public <T> void writeLocalizedStringFields(
 		T model, Class<T> modelClass, Fields fields, Language language,
@@ -430,15 +425,14 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes a model's number fields. This method uses a
-	 * {@code java.util.function.BiConsumer} so each
-	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write each field
-	 * differently.
+	 * Writes a model's number fields. This method uses a {@code
+	 * BiConsumer} so each {@code
+	 * javax.ws.rs.ext.MessageBodyWriter} can write each field differently.
 	 *
-	 * @param  model the model
-	 * @param  modelClass the model class
-	 * @param  fields the requested fields
-	 * @param  biConsumer the {@code BiConsumer} called to write each field
+	 * @param model the model
+	 * @param modelClass the model class
+	 * @param fields the requested fields
+	 * @param biConsumer the {@code BiConsumer} called to write each field
 	 */
 	public <T> void writeNumberFields(
 		T model, Class<T> modelClass, Fields fields,
@@ -474,8 +468,8 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes the model's related collection URL. This method uses a
-	 * {@code java.util.function.BiConsumer} to write the URL.
+	 * Writes the model's related collection URL. This method uses a {@code
+	 * BiConsumer} to write the URL.
 	 *
 	 * @param  relatedCollection the related collection
 	 * @param  parentSingleModel the parent single model.

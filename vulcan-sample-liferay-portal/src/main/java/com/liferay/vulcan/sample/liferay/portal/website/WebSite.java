@@ -23,11 +23,8 @@ import com.liferay.vulcan.resource.identifier.LongIdentifier;
  * Represents a website.
  *
  * <p>
- * Conforms to the
- * <a 
- * href="http://schema.org/WebSite">WebSite
- * </a>
- * type from schema.org.
+ * Conforms to the <a href="http://schema.org/WebSite">WebSite </a> type from
+ * schema.org.
  * </p>
  *
  * @author Victor Oliveira

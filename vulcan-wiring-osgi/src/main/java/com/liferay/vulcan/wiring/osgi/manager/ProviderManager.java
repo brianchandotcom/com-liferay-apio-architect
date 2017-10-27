@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides methods to provide instances of classes with a valid {@link
- * com.liferay.vulcan.provider.Provider}.
+ * Provider}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

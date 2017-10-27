@@ -29,9 +29,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides the information necessary to expose
- * {@link com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating}
- * resources through a web API.
+ * Provides the information necessary to expose {@link
+ * AggregateRating} resources
+ * through a web API.
  *
  * @author Alejandro Hernández
  */

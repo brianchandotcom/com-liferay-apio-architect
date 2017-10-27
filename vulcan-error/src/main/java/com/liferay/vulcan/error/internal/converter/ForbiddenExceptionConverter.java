@@ -25,8 +25,8 @@ import javax.ws.rs.core.Response;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code javax.ws.rs.ForbiddenException} to its
- * {@link com.liferay.vulcan.result.APIError} representation.
+ * Converts a {@code ForbiddenException} to its {@link
+ * APIError} representation.
  *
  * @author Alejandro Hernández
  */

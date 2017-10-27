@@ -57,12 +57,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides the information necessary to expose
- * <a
- * href="http://schema.org/Comment">Comment
- * </a>
- * resources through a web API. The resources are mapped from the internal model
- * {@code com.liferay.portal.kernel.comment.Comment}.
+ * Provides the information necessary to expose <a
+ * href="http://schema.org/Comment">Comment </a> resources through a web API.
+ * The resources are mapped from the internal model {@code
+ * Comment}.
  *
  * @author Alejandro Hernández
  */

@@ -29,14 +29,14 @@ import com.liferay.vulcan.resource.identifier.Identifier;
  * com.liferay.vulcan.resource.builder.RepresentorBuilder.FirstStep#addRelatedCollection(
  * String, Class, java.util.function.Function)}
  * </p>
- * 
+ *
  * @author Alejandro Hernández
  */
 @ProviderType
 public interface CommentableIdentifier extends Identifier {
 
 	/**
-	 * Creates and returns a new commentable identifier from a class name, class 
+	 * Creates and returns a new commentable identifier from a class name, class
 	 * PK, and group ID.
 	 *
 	 * @param  className the identifier's class name
@@ -70,8 +70,8 @@ public interface CommentableIdentifier extends Identifier {
 
 	/**
 	 * Creates and returns a new commentable identifier created from a model
-	 * that must be both a {@code com.liferay.portal.kernel.model.GroupedModel}
-	 * and a {@code com.liferay.portal.kernel.model.ClassedModel}.
+	 * that must be both a {@code GroupedModel}
+	 * and a {@code ClassedModel}.
 	 *
 	 * @param  t the {@code GroupedModel} and {@code ClassedModel}
 	 * @return the new commentable identifier

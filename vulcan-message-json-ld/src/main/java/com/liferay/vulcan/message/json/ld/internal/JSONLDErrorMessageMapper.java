@@ -23,15 +23,8 @@ import org.osgi.service.component.annotations.Component;
  * Represents errors in JSON-LD + Hydra format.
  *
  * <p>
- * For more information, see
- * <a
- * href="https://json-ld.org/">JSON-LD
- * </a>
- * and
- * <a
- * href="https://www.hydra-cg.com/">Hydra
- * </a>
- * .
+ * For more information, see <a href="https://json-ld.org/">JSON-LD </a> and <a
+ * href="https://www.hydra-cg.com/">Hydra </a> .
  * </p>
  *
  * @author Alejandro Hernández

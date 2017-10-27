@@ -66,7 +66,7 @@ public class BlogPosting {
 	/**
 	 * Deletes the blog posting that matches the specified ID.
 	 *
-	 * @param  blogPostingId the blog posting's ID
+	 * @param blogPostingId the blog posting's ID
 	 */
 	public static void deleteBlogPosting(long blogPostingId) {
 		_blogPostings.remove(blogPostingId);
@@ -205,7 +205,7 @@ public class BlogPosting {
 
 	/**
 	 * Returns the current blog posting's title.
-	 * 
+	 *
 	 * @return the current blog posting's title
 	 */
 	public String getTitle() {

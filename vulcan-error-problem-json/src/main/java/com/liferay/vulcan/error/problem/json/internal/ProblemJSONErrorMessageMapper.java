@@ -21,8 +21,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Represents errors in problem+json format. For more information on this
- * format, see
- * <a
+ * format, see <a
  * href="https://tools.ietf.org/html/draft-nottingham-http-problem-06">https://tools.ietf.org/html/draft-nottingham-http-problem-06
  * </a>.
  *

@@ -22,11 +22,9 @@ import com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRat
  * Represents an average rating for an item.
  *
  * <p>
- * This conforms to the 
- * <a
- * href="http://schema.org/AggregateRating">AggregateRating
- * </a>
- * type from schema.org.
+ * This conforms to the <a
+ * href="http://schema.org/AggregateRating">AggregateRating </a> type from
+ * schema.org.
  * </p>
  *
  * @author Alejandro Hernández

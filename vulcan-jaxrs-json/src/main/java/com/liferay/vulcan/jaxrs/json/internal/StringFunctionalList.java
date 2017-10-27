@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Implements {@link com.liferay.vulcan.list.FunctionalList} for Strings.
+ * Implements {@link FunctionalList} for Strings.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

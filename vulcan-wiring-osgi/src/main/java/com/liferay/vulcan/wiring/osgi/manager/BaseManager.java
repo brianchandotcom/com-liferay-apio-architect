@@ -46,7 +46,7 @@ public abstract class BaseManager<T> {
 	 * Adds a new {@code serviceReference/service} tuple to the internal map, if
 	 * a valid service can be obtained. Returns {@code Optional#empty()}
 	 * otherwise.
-	 * 
+	 *
 	 * @param  serviceReference the service reference
 	 * @return the generic inner class of the service reference service, if a
 	 *         valid service can be obtained; {@code Optional#empty()}

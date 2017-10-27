@@ -47,12 +47,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides the information necessary to expose
- * <a
- * href="http://schema.org/MediaObject">MediaObject
- * </a>
- * resources through a web API. The resources are mapped from the internal model
- * {@code com.liferay.document.library.kernel.model.DLFileEntry}.
+ * Provides the information necessary to expose <a
+ * href="http://schema.org/MediaObject">MediaObject </a> resources through a web
+ * API. The resources are mapped from the internal model {@code
+ * DLFileEntry}.
  *
  * @author Javier Gamarra
  */

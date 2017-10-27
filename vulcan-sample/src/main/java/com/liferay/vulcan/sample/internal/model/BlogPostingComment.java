@@ -68,7 +68,7 @@ public class BlogPostingComment {
 	/**
 	 * Deletes the blog posting comment that matches the specified ID.
 	 *
-	 * @param  blogPostingCommentId the blog posting comment's ID
+	 * @param blogPostingCommentId the blog posting comment's ID
 	 */
 	public static void deleteBlogPostingComment(long blogPostingCommentId) {
 		_blogPostingComments.remove(blogPostingCommentId);
@@ -105,7 +105,7 @@ public class BlogPostingComment {
 	}
 
 	/**
-	 * Returns the page of blog posting comments for a blog posting, as 
+	 * Returns the page of blog posting comments for a blog posting, as
 	 * specified by the page's start and end positions.
 	 *
 	 * @param  blogPostingId the blog posting's ID
@@ -156,8 +156,8 @@ public class BlogPostingComment {
 	 *
 	 * @param  blogPostingCommentId the blog posting comment's ID
 	 * @param  content the blog posting comment's new content
-	 * @return the updated blog posting comment, if present;
-	 *         {@code Optional#empty()} otherwise
+	 * @return the updated blog posting comment, if present; {@code
+	 *         Optional#empty()} otherwise
 	 */
 	public static Optional<BlogPostingComment> updateBlogPostingComment(
 		long blogPostingCommentId, String content) {

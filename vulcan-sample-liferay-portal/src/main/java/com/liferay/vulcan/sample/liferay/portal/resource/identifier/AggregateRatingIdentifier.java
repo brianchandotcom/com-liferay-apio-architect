@@ -23,8 +23,8 @@ import com.liferay.vulcan.resource.identifier.Identifier;
  * Represents an identifier for entities in an aggregate rating.
  *
  * <p>
- * This identifier should only be used to identify single items in
- * {@link com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating}.
+ * This identifier should only be used to identify single items in {@link
+ * com.liferay.vulcan.sample.liferay.portal.rating.AggregateRating}.
  * </p>
  *
  * @author Alejandro Hernández
@@ -35,7 +35,7 @@ public interface AggregateRatingIdentifier extends Identifier {
 	/**
 	 * Creates and returns a new aggregate rating identifier from a class name
 	 * and class PK.
-	 * 
+	 *
 	 * @param  className the identifier's class name
 	 * @param  classPK the identifier's class PK
 	 * @return the new aggregate rating identifier
@@ -60,8 +60,8 @@ public interface AggregateRatingIdentifier extends Identifier {
 	}
 
 	/**
-	 * Creates and returns a new aggregate rating identifier from a
-	 * {@code com.liferay.portal.kernel.model.ClassedModel}.
+	 * Creates and returns a new aggregate rating identifier from a {@code
+	 * ClassedModel}.
 	 *
 	 * @param  t the {@code ClassedModel}
 	 * @return the new aggregate rating identifier

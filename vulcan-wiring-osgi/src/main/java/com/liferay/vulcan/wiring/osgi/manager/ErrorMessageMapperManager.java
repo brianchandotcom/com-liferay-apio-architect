@@ -33,10 +33,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to get the
- * {@link com.liferay.vulcan.message.json.ErrorMessageMapper} that corresponds
- * to the {@link com.liferay.vulcan.result.APIError} and {@code 
- * javax.ws.rs.core.HttpHeaders}.
+ * Provides methods to get the {@link
+ * ErrorMessageMapper} that corresponds to the
+ * {@link APIError} and {@code
+ * HttpHeaders}.
  *
  * @author Alejandro Hernández
  */

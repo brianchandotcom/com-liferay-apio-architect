@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Creates the server's URL based on the HTTP request and the forwarded header, 
+ * Creates the server's URL based on the HTTP request and the forwarded header,
  * to account for proxies.
  *
  * @author Javier Gamarra

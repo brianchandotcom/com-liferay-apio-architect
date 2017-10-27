@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Lets resources provide {@code com.liferay.portal.kernel.model.Company} as a
+ * Lets resources provide {@code Company} as a
  * parameter to the methods of {@link
  * com.liferay.vulcan.resource.builder.RoutesBuilder}.
  *

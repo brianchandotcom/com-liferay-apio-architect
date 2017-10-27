@@ -49,13 +49,13 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides methods to retrieve information provided by the different {@link
- * com.liferay.vulcan.resource.CollectionResource} instances. This information
+ * CollectionResource} instances. This information
  * includes field functions, types, identifier functions, and more.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
- * @see    com.liferay.vulcan.resource.CollectionResource
+ * @see    CollectionResource
  */
 @Component(immediate = true, service = CollectionResourceManager.class)
 public class CollectionResourceManager extends BaseManager<CollectionResource> {

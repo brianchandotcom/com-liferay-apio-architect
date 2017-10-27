@@ -27,11 +27,8 @@ import java.util.stream.Stream;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Represents single models in
- * <a
- * href="http://stateless.co/hal_specification.html">HAL
- * </a>
- * format.
+ * Represents single models in <a
+ * href="http://stateless.co/hal_specification.html">HAL </a> format.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

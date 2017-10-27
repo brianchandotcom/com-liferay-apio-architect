@@ -59,12 +59,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides the information necessary to expose
- * <a
- * href="http://schema.org/WebPageElement">WebPageElement
- * </a>
- * resources through a web API. The resources are mapped from the internal model
- * {@code com.liferay.journal.model.JournalArticle}.
+ * Provides the information necessary to expose <a
+ * href="http://schema.org/WebPageElement">WebPageElement </a> resources through
+ * a web API. The resources are mapped from the internal model {@code
+ * JournalArticle}.
  *
  * @author Javier Gamarra
  */

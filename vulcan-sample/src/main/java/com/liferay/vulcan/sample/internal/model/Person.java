@@ -71,7 +71,7 @@ public class Person {
 	/**
 	 * Deletes a person that matches the specified ID.
 	 *
-	 * @param  personId the person's ID
+	 * @param personId the person's ID
 	 */
 	public static void deletePerson(long personId) {
 		_persons.remove(personId);
@@ -80,7 +80,7 @@ public class Person {
 	/**
 	 * Returns the page of persons, as specified by the page's start and end
 	 * positions.
-	 * 
+	 *
 	 * @param  start the page's start position
 	 * @param  end the page's end position
 	 * @return the page of persons

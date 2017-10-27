@@ -46,7 +46,7 @@ import javax.ws.rs.core.Response;
 public interface RootEndpoint {
 
 	/**
-	 * Adds a new {@link com.liferay.vulcan.pagination.SingleModel} to the
+	 * Adds a new {@link SingleModel} to the
 	 * resource specified by {@code name}. This occurs via a POST request to the
 	 * resource.
 	 *
@@ -61,10 +61,10 @@ public interface RootEndpoint {
 		@PathParam("name") String name, Map<String, Object> body);
 
 	/**
-	 * Adds a new {@link com.liferay.vulcan.pagination.SingleModel} to the
+	 * Adds a new {@link SingleModel} to the
 	 * nested resource specified. This occurs via a POST request to the nested
 	 * resource.
-	 * 
+	 *
 	 * @param  name the parent resource's name, extracted from the URL
 	 * @param  id the parent resource's ID
 	 * @param  nestedName the nested resource's name, extracted from the URL

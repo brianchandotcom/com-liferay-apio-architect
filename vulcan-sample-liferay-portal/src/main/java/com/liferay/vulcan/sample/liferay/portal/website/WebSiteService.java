@@ -20,8 +20,8 @@ import com.liferay.vulcan.pagination.Pagination;
 import java.util.Optional;
 
 /**
- * Provides the service for getting a {@link WebSite} or a page of a
- * {@code WebSite}.
+ * Provides the service for getting a {@link WebSite} or a page of a {@code
+ * WebSite}.
  *
  * @author Victor Oliveira
  * @author Alejandro Hernández
@@ -30,7 +30,7 @@ public interface WebSiteService {
 
 	/**
 	 * Returns the website's {@link com.liferay.vulcan.pagination.PageItems}
-	 * that correspond to the {@link com.liferay.vulcan.pagination.Pagination}
+	 * that correspond to the {@link Pagination}
 	 * and the ID of the {@code com.liferay.portal.kernel.model.Company}.
 	 *
 	 * @param  pagination the {@code Pagination} object

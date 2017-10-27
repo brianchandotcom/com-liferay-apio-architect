@@ -30,11 +30,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Represents collection pages in
- * <a
- * href="http://stateless.co/hal_specification.html">HAL
- * </a>
- * format.
+ * Represents collection pages in <a
+ * href="http://stateless.co/hal_specification.html">HAL </a> format.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

@@ -28,8 +28,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to convert exceptions to generic {@link 
- * com.liferay.vulcan.result.APIError} representations.
+ * Provides methods to convert exceptions to generic {@link
+ * APIError} representations.
  *
  * @author Alejandro Hernández
  */
@@ -38,18 +38,17 @@ public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
 
 	/**
 	 * Converts an exception to its generic {@code APIError} representation, if
-	 * a valid {@link com.liferay.vulcan.converter.ExceptionConverter} exists.
+	 * a valid {@link ExceptionConverter} exists.
 	 * Returns {@code Optional#empty()} otherwise.
-	 * 
+	 *
 	 * <p>
-	 * If no {@link com.liferay.vulcan.converter.ExceptionConverter} can be
-	 * found for the exception class, this method tries to use the superclass of
-	 * {@code ExceptionConverter}.
+	 * If no {@link ExceptionConverter} can be found for the exception class,
+	 * this method tries to use the superclass of {@code ExceptionConverter}.
 	 * </p>
 	 *
 	 * <p>
-	 * If no {@link ExceptionConverter} can be found a generic converter
-	 * ({@code ExceptionConverter<Exception>} will be used.
+	 * If no {@link ExceptionConverter} can be found a generic converter ({@code
+	 * ExceptionConverter<Exception>} will be used.
 	 * </p>
 	 *
 	 * @param  exception the exception to convert

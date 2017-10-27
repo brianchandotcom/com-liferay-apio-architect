@@ -22,7 +22,7 @@ import com.liferay.vulcan.result.APIError;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts any exception to its {@link com.liferay.vulcan.result.APIError}
+ * Converts any exception to its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández

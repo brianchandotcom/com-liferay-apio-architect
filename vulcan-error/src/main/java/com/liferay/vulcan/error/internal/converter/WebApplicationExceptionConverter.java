@@ -20,8 +20,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 /**
- * Converts a {@code javax.ws.rs.WebApplicationException} to its
- * {@link com.liferay.vulcan.result.APIError} representation.
+ * Converts a {@code WebApplicationException} to its {@link
+ * APIError} representation.
  *
  * @author Alejandro Hernández
  */

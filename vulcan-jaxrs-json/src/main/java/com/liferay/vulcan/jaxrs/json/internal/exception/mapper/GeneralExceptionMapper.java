@@ -34,9 +34,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
- * Captures and converts an exception to its corresponding
- * {@link com.liferay.vulcan.result.APIError}, and writes that error to the 
- * response.
+ * Captures and converts an exception to its corresponding {@link
+ * APIError}, and writes that error to the response.
  *
  * @author Alejandro Hernández
  */

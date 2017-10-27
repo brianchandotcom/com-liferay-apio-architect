@@ -68,9 +68,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Writes single models by using the
- * {@link com.liferay.vulcan.message.json.SingleModelMessageMapper} that
- * corresponds to the media type.
+ * Writes single models by using the {@link
+ * SingleModelMessageMapper} that corresponds to
+ * the media type.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

@@ -29,15 +29,14 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Maps a {@link com.liferay.vulcan.uri.Path} to a
- * {@link com.liferay.vulcan.resource.identifier.LongIdentifier}, and vice
- * versa.
- * 
+ * Maps a {@link Path} to a {@link
+ * LongIdentifier}, and vice versa.
+ *
  * <p>
  * {@code LongIdentifier} can then be provided as a parameter in the methods of
  * {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
  * </p>
- * 
+ *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
