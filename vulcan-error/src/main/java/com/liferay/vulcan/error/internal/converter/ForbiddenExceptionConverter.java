@@ -25,8 +25,7 @@ import javax.ws.rs.core.Response;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code ForbiddenException} to its {@link
- * APIError} representation.
+ * Converts a {@code ForbiddenException} to its {@link APIError} representation.
  *
  * @author Alejandro Hernández
  */

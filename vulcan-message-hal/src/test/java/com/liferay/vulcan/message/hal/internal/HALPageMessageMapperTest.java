@@ -19,7 +19,6 @@ import com.google.gson.JsonObject;
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -93,9 +92,9 @@ public class HALPageMessageMapperTest {
 		Assert.assertEquals("{\"count\":1}", jsonObject.toString());
 	}
 
-	private HALPageMessageMapper _halPageMessageMapper =
+	private final HALPageMessageMapper _halPageMessageMapper =
 		new HALPageMessageMapper();
-	private JSONObjectBuilderImpl _jsonObjectBuilder =
+	private final JSONObjectBuilderImpl _jsonObjectBuilder =
 		new JSONObjectBuilderImpl();
 
 }

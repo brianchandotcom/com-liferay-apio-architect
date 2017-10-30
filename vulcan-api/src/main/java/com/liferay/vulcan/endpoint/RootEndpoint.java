@@ -46,9 +46,8 @@ import javax.ws.rs.core.Response;
 public interface RootEndpoint {
 
 	/**
-	 * Adds a new {@link SingleModel} to the
-	 * resource specified by {@code name}. This occurs via a POST request to the
-	 * resource.
+	 * Adds a new {@link SingleModel} to the resource specified by {@code name}.
+	 * This occurs via a POST request to the resource.
 	 *
 	 * @param  name the resource's name, extracted from the URL
 	 * @param  body the request's body
@@ -61,9 +60,8 @@ public interface RootEndpoint {
 		@PathParam("name") String name, Map<String, Object> body);
 
 	/**
-	 * Adds a new {@link SingleModel} to the
-	 * nested resource specified. This occurs via a POST request to the nested
-	 * resource.
+	 * Adds a new {@link SingleModel} to the nested resource specified. This
+	 * occurs via a POST request to the nested resource.
 	 *
 	 * @param  name the parent resource's name, extracted from the URL
 	 * @param  id the parent resource's ID

@@ -24,7 +24,6 @@ import java.util.Arrays;
 import org.apache.poi.ss.formula.functions.T;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -56,9 +55,10 @@ public class JSONLDSingleModelMessageMapperTest {
 		Assert.assertEquals("{\"@type\":[\"fieldName\"]}", build.toString());
 	}
 
-	private JSONLDSingleModelMessageMapper<T> _jsonLDSingleModelMessageMapper =
-		new JSONLDSingleModelMessageMapper<>();
-	private JSONObjectBuilderImpl _jsonObjectBuilder =
+	private final JSONLDSingleModelMessageMapper<T>
+		_jsonLDSingleModelMessageMapper =
+			new JSONLDSingleModelMessageMapper<>();
+	private final JSONObjectBuilderImpl _jsonObjectBuilder =
 		new JSONObjectBuilderImpl();
 
 }

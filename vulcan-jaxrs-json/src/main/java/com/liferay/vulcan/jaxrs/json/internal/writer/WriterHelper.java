@@ -208,9 +208,9 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes binary resources. This method uses a {@code
-	 * BiConsumer} so each {@code
-	 * javax.ws.rs.ext.MessageBodyWriter} can write each binary differently.
+	 * Writes binary resources. This method uses a {@code BiConsumer} so each
+	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write each binary
+	 * differently.
 	 *
 	 * @param binaryFunctions the functions that obtain the binaries
 	 * @param singleModel the single model
@@ -266,9 +266,9 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes the model's boolean fields. This method uses a {@code
-	 * BiConsumer} so each {@code
-	 * javax.ws.rs.ext.MessageBodyWriter} can write each field differently.
+	 * Writes the model's boolean fields. This method uses a {@code BiConsumer}
+	 * so each {@code javax.ws.rs.ext.MessageBodyWriter} can write each field
+	 * differently.
 	 *
 	 * @param model the model
 	 * @param modelClass the model class
@@ -309,9 +309,8 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes a linked model. This method uses a {@code
-	 * BiConsumer} so each {@code
-	 * javax.ws.rs.ext.MessageBodyWriter} can write the related model
+	 * Writes a linked model. This method uses a {@code BiConsumer} so each
+	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write the related model
 	 * differently.
 	 *
 	 * @param relatedModel the related model
@@ -340,9 +339,9 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes the model's links. This method uses a {@code
-	 * BiConsumer} so each {@code
-	 * javax.ws.rs.ext.MessageBodyWriter} can write each link differently.
+	 * Writes the model's links. This method uses a {@code BiConsumer} so each
+	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write each link
+	 * differently.
 	 *
 	 * @param modelClass the model class
 	 * @param fields the requested fields
@@ -381,8 +380,8 @@ public class WriterHelper {
 
 	/**
 	 * Writes a model's localized string fields. This method uses a {@code
-	 * BiConsumer} so each {@code
-	 * javax.ws.rs.ext.MessageBodyWriter} can write each field differently.
+	 * BiConsumer} so each {@code javax.ws.rs.ext.MessageBodyWriter} can write
+	 * each field differently.
 	 *
 	 * @param model the model
 	 * @param modelClass the model class
@@ -425,9 +424,9 @@ public class WriterHelper {
 	}
 
 	/**
-	 * Writes a model's number fields. This method uses a {@code
-	 * BiConsumer} so each {@code
-	 * javax.ws.rs.ext.MessageBodyWriter} can write each field differently.
+	 * Writes a model's number fields. This method uses a {@code BiConsumer} so
+	 * each {@code javax.ws.rs.ext.MessageBodyWriter} can write each field
+	 * differently.
 	 *
 	 * @param model the model
 	 * @param modelClass the model class

@@ -20,8 +20,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 /**
- * Converts a {@code WebApplicationException} to its {@link
- * APIError} representation.
+ * Converts a {@code WebApplicationException} to its {@link APIError}
+ * representation.
  *
  * @author Alejandro Hernández
  */

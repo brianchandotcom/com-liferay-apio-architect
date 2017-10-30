@@ -71,9 +71,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Writes collection pages by using the {@link
- * PageMessageMapper} that corresponds to the
- * media type.
+ * Writes collection pages by using the {@link PageMessageMapper} that
+ * corresponds to the media type.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

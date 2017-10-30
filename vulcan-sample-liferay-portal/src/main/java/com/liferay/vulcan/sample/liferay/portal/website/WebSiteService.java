@@ -30,8 +30,8 @@ public interface WebSiteService {
 
 	/**
 	 * Returns the website's {@link com.liferay.vulcan.pagination.PageItems}
-	 * that correspond to the {@link Pagination}
-	 * and the ID of the {@code com.liferay.portal.kernel.model.Company}.
+	 * that correspond to the {@link Pagination} and the ID of the {@code
+	 * com.liferay.portal.kernel.model.Company}.
 	 *
 	 * @param  pagination the {@code Pagination} object
 	 * @param  companyId the company ID

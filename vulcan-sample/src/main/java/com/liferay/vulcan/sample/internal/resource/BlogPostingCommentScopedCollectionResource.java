@@ -37,8 +37,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * Provides all the information necessary to expose <a
  * href="http://schema.org/Comment">Comment </a> resources through a web API.
- * The resources are mapped from the internal {@link
- * BlogPostingComment} model.
+ * The resources are mapped from the internal {@link BlogPostingComment} model.
  *
  * @author Alejandro Hernández
  */

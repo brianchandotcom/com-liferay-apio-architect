@@ -23,9 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Lets resources provide {@link Pagination} as a
- * parameter in the methods of {@link
- * com.liferay.vulcan.resource.builder.RoutesBuilder}.
+ * Lets resources provide {@link Pagination} as a parameter in the methods of
+ * {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

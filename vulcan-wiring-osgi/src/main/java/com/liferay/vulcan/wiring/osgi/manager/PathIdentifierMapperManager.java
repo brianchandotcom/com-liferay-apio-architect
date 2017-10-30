@@ -30,8 +30,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to map a {@link Path} to an {@code
- * Identifier}, and vice versa.
+ * Provides methods to map a {@link Path} to an {@code Identifier}, and vice
+ * versa.
  *
  * @author Alejandro Hernández
  */
@@ -41,9 +41,8 @@ public class PathIdentifierMapperManager
 
 	/**
 	 * Converts a {@code Path} to its equivalent {@code Identifier} of type
-	 * {@code T}, if a valid {@link
-	 * PathIdentifierMapper} can
-	 * be found. Returns {@code Optional#empty()} otherwise.
+	 * {@code T}, if a valid {@link PathIdentifierMapper} can be found. Returns
+	 * {@code Optional#empty()} otherwise.
 	 *
 	 * @param  clazz the class of the desired {@code Identifier}
 	 * @param  path the {@code Path}

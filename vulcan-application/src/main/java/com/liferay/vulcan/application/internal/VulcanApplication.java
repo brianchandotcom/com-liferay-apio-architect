@@ -39,7 +39,7 @@ import org.osgi.service.component.annotations.Reference;
  * Registers the application's root endpoint, writers, and mappers in JAX-RS.
  *
  * <p>
- * The default {@link com.liferay.vulcan.endpoint.RootEndpoint} already deploys
+ * The default {@link RootEndpoint} already deploys
  * all components that implement the representor. Developers only need to
  * provide a valid {@code RootEndpoint} via this class if they want to customize
  * the default behavior.

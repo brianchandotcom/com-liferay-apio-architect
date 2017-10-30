@@ -39,9 +39,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
- * Filters and converts a {@link Try.Failure} entity
- * to its corresponding {@link APIError}, and writes
- * that error to the response.
+ * Filters and converts a {@link Try.Failure} entity to its corresponding {@link
+ * APIError}, and writes that error to the response.
  *
  * @author Alejandro Hernández
  */

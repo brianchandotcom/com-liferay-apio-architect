@@ -27,9 +27,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Lets resources provide {@code Company} as a
- * parameter to the methods of {@link
- * com.liferay.vulcan.resource.builder.RoutesBuilder}.
+ * Lets resources provide {@code Company} as a parameter to the methods of
+ * {@link com.liferay.vulcan.resource.builder.RoutesBuilder}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

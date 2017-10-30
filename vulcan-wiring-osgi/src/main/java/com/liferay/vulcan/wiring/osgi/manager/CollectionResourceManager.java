@@ -49,8 +49,8 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides methods to retrieve information provided by the different {@link
- * CollectionResource} instances. This information
- * includes field functions, types, identifier functions, and more.
+ * CollectionResource} instances. This information includes field functions,
+ * types, identifier functions, and more.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

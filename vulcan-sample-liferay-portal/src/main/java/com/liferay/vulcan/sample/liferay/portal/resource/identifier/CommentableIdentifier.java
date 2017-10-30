@@ -70,8 +70,7 @@ public interface CommentableIdentifier extends Identifier {
 
 	/**
 	 * Creates and returns a new commentable identifier created from a model
-	 * that must be both a {@code GroupedModel}
-	 * and a {@code ClassedModel}.
+	 * that must be both a {@code GroupedModel} and a {@code ClassedModel}.
 	 *
 	 * @param  t the {@code GroupedModel} and {@code ClassedModel}
 	 * @return the new commentable identifier

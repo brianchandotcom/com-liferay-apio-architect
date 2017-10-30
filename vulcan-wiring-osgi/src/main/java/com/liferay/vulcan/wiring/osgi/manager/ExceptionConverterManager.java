@@ -28,8 +28,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to convert exceptions to generic {@link
- * APIError} representations.
+ * Provides methods to convert exceptions to generic {@link APIError}
+ * representations.
  *
  * @author Alejandro Hernández
  */
@@ -38,8 +38,8 @@ public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
 
 	/**
 	 * Converts an exception to its generic {@code APIError} representation, if
-	 * a valid {@link ExceptionConverter} exists.
-	 * Returns {@code Optional#empty()} otherwise.
+	 * a valid {@link ExceptionConverter} exists. Returns {@code
+	 * Optional#empty()} otherwise.
 	 *
 	 * <p>
 	 * If no {@link ExceptionConverter} can be found for the exception class,
