@@ -18,6 +18,7 @@ import static com.liferay.vulcan.test.result.TryMatchers.aFailTry;
 import static com.liferay.vulcan.test.result.TryMatchers.aSuccessTry;
 import static com.liferay.vulcan.test.result.TryMatchers.aTryWithValue;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -136,6 +137,45 @@ public class TryTest {
 		assertThat(
 			stringTry.filter(string -> string.startsWith("Live")),
 			is(aTryWithValue(equalTo("Live long"))));
+	}
+
+	@Parameters(method = FAIL)
+	@Test
+	public void testInvokingFoldOnFailureExecutesFailureFunction(
+		Try<String> stringTry) {
+
+		Integer integer = stringTry.fold(exception -> 3, string -> 5);
+
+		assertThat(integer, is(equalTo(3)));
+	}
+
+	@Parameters(method = SUCCESS)
+	@Test
+	public void testInvokingFoldOnSuccessExecutesSuccessFunction(
+		Try<String> stringTry) {
+
+		Integer integer = stringTry.fold(exception -> 3, string -> 5);
+
+		assertThat(integer, is(equalTo(5)));
+	}
+
+	@Parameters(method = SUCCESS)
+	@Test
+	public void testInvokingFoldOnSuccessWithFailureExecutesBothFunctions(
+		Try<String> stringTry) {
+
+		Integer integer = stringTry.fold(
+			exception -> {
+				assertThat(
+					exception, is(instanceOf(IllegalArgumentException.class)));
+
+				return 3;
+			},
+			string -> {
+				throw new IllegalArgumentException();
+			});
+
+		assertThat(integer, is(equalTo(3)));
 	}
 
 	@Test
