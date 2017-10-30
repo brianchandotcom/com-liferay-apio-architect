@@ -109,9 +109,9 @@ public interface JSONObjectBuilder {
 	 *
 	 * @param  condition the condition to check
 	 * @param  ifFunction the function that creates the field step if the
-	 *         condition is {@code <code>true</code>}
+	 *         condition is {@code true}
 	 * @param  elseFunction the function that creates the field step if the
-	 *         condition is {@code <code>false</code>}
+	 *         condition is {@code false}
 	 * @return the builder's field step
 	 */
 	public FieldStep ifElseCondition(
@@ -317,7 +317,7 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param  condition the condition to check
 		 * @param  ifFunction the function that creates the field step if the
-		 *         condition is {@code <code>true</code>}
+		 *         condition is {@code true}
 		 * @return the builder's field step
 		 */
 		public FieldStep ifCondition(
@@ -331,9 +331,9 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param  condition the condition to check
 		 * @param  ifFunction the function that creates the field step if the
-		 *         condition is {@code <code>true</code>}
+		 *         condition is {@code true}
 		 * @param  elseFunction the function that creates the field step if the
-		 *         condition is {@code <code>false</code>}
+		 *         condition is {@code false}
 		 * @return the builder's field step
 		 */
 		public FieldStep ifElseCondition(
