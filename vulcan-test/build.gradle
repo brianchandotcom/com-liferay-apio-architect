@@ -4,4 +4,6 @@ targetCompatibility = "1.8"
 dependencies {
 	provided group: "org.hamcrest", name: "hamcrest-all", version: "1.3"
 	provided project(":apps:foundation:vulcan:vulcan-api")
+
+	testCompile group: "org.hamcrest", name: "hamcrest-all", version: "1.3"
 }
