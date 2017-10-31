@@ -15,14 +15,19 @@
 package com.liferay.vulcan.test.result;
 
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.test.internal.result.FailTry;
+import com.liferay.vulcan.test.internal.result.SuccessTry;
+import com.liferay.vulcan.test.internal.result.ValueTry;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 /**
  * This class provides {@code Hamcrest} {@link Matcher}s that can be used for
  * testing the {@link Try} monadic type.
+ *
+ * <p>
+ * This class shouldn't be instantiated.
+ * </p>
  *
  * @author Alejandro Hernández
  * @review
@@ -35,7 +40,7 @@ public class TryMatchers {
 	 * @return a matcher that checks that this try is a failure
 	 * @review
 	 */
-	public static <T> Matcher<Try<? extends T>> aFailTry() {
+	public static <T> Matcher<Try<T>> aFailTry() {
 		return new FailTry<>();
 	}
 
@@ -45,7 +50,7 @@ public class TryMatchers {
 	 * @return a matcher that checks that this try is a success
 	 * @review
 	 */
-	public static <T> Matcher<Try<? extends T>> aSuccessTry() {
+	public static <T> Matcher<Try<T>> aSuccessTry() {
 		return new SuccessTry<>();
 	}
 
@@ -58,101 +63,14 @@ public class TryMatchers {
 	 *         value
 	 * @review
 	 */
-	public static <T> Matcher<Try<? extends T>> aTryWithValue(
+	public static <T> Matcher<Try<T>> aTryWithValueThat(
 		final Matcher<T> matcher) {
 
 		return new ValueTry<>(matcher);
 	}
 
-	private static class FailTry<T>
-		extends TypeSafeDiagnosingMatcher<Try<? extends T>> {
-
-		@Override
-		public void describeTo(final Description description) {
-			description.appendText("a Failure");
-		}
-
-		@Override
-		protected boolean matchesSafely(
-			final Try<? extends T> tTry, final Description description) {
-
-			if (tTry.isFailure()) {
-				return true;
-			}
-			else {
-				description.appendText("was a Failure");
-
-				return false;
-			}
-		}
-
-	}
-
-	private static class SuccessTry<T>
-		extends TypeSafeDiagnosingMatcher<Try<? extends T>> {
-
-		@Override
-		public void describeTo(final Description description) {
-			description.appendText("a Success");
-		}
-
-		@Override
-		protected boolean matchesSafely(
-			final Try<? extends T> tTry, final Description description) {
-
-			if (tTry.isSuccess()) {
-				return true;
-			}
-			else {
-				description.appendText("was a Success");
-
-				return false;
-			}
-		}
-
-	}
-
-	private static class ValueTry<T>
-		extends TypeSafeDiagnosingMatcher<Try<? extends T>> {
-
-		public ValueTry(final Matcher<T> matcher) {
-			_matcher = matcher;
-		}
-
-		@Override
-		public void describeTo(final Description description) {
-			description.appendText(
-				"a Try with a value that "
-			).appendDescriptionOf(
-				_matcher
-			);
-		}
-
-		@Override
-		protected boolean matchesSafely(
-			final Try<? extends T> tTry, final Description description) {
-
-			if (tTry.isSuccess()) {
-				if (_matcher.matches(tTry.getUnchecked())) {
-					return true;
-				}
-				else {
-					description.appendText("was a Try whose value ");
-
-					_matcher.describeMismatch(tTry.getUnchecked(), description);
-
-					return false;
-				}
-			}
-			else {
-				description.appendText("was a failure");
-
-				return false;
-			}
-		}
-
-		private final Matcher<T> _matcher;
-
+	private TryMatchers() {
+		throw new UnsupportedOperationException();
 	}
 
 }
