@@ -57,6 +57,32 @@ public class ConditionsTest {
 	}
 
 	@Test
+	public void testInvokingMatchesElementInSoftModeValidates() {
+		Conditions.Builder builder = new Conditions.Builder();
+
+		Conditions conditions = builder.where(
+			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
+		).where(
+			"geek", is(aJsonBoolean(true))
+		).withStrictModeDeactivated(
+		).build();
+
+		Description description = new StringDescription();
+
+		JsonObject jsonObject = new JsonObject();
+
+		jsonObject.addProperty("vulcan", "Live long and prosper");
+		jsonObject.addProperty("geek", true);
+		jsonObject.addProperty("number", 42);
+		jsonObject.addProperty("other", "vulcan");
+
+		boolean matchesElement = conditions.matches(jsonObject);
+		conditions.describeMismatch(jsonObject, description);
+
+		assertThat(matchesElement, is(true));
+	}
+
+	@Test
 	public void testInvokingMatchesElementInStrictModeUpdatedDescription() {
 		Conditions.Builder builder = new Conditions.Builder();
 
@@ -64,7 +90,6 @@ public class ConditionsTest {
 			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
 		).where(
 			"geek", is(aJsonBoolean(true))
-		).withStrictModeActivated(
 		).build();
 
 		Description description = new StringDescription();

@@ -89,7 +89,7 @@ public class Conditions
 		}
 
 		/**
-		 * Activate strict mode for this checking.
+		 * Deactivate strict mode for this checking.
 		 *
 		 * <p>
 		 * Strict mode means that the json object being tested should not
@@ -100,14 +100,14 @@ public class Conditions
 		 * @return the next step of the builder
 		 * @review
 		 */
-		public Builder withStrictModeActivated() {
-			return new Builder(_entryMatchers, true);
+		public Builder withStrictModeDeactivated() {
+			return new Builder(_entryMatchers, false);
 		}
 
 		private Builder(
 			Map<String, Matcher<? extends JsonElement>> entryMatchers) {
 
-			this(entryMatchers, false);
+			this(entryMatchers, true);
 		}
 
 		private Builder(
