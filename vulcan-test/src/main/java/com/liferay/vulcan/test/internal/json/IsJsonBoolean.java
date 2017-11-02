@@ -26,7 +26,11 @@ import java.util.Objects;
 import org.hamcrest.Matcher;
 
 /**
+ * A {@link Matcher} that can be used to check if an element is a correct bool
+ * json primitive.
+ *
  * @author Alejandro Hernández
+ * @review
  */
 public class IsJsonBoolean
 	extends AbstractJsonElementMatcher<JsonPrimitive, Boolean> {

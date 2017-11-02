@@ -25,7 +25,11 @@ import java.util.Objects;
 import org.hamcrest.Matcher;
 
 /**
+ * A {@link Matcher} that can be used to check if an element is a correct string
+ * json primitive.
+ *
  * @author Alejandro Hernández
+ * @review
  */
 public class IsJsonString
 	extends AbstractJsonElementMatcher<JsonPrimitive, String> {

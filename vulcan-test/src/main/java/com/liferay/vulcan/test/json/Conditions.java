@@ -76,8 +76,8 @@ public class Conditions
 		/**
 		 * Adds a new {@link Matcher} for a field of the json object.
 		 *
-		 * @param key the name of the field being tested
-		 * @param valueMatcher the matcher for testing the field value
+		 * @param  key the name of the field being tested
+		 * @param  valueMatcher the matcher for testing the field value
 		 * @return the next step of the builder
 		 * @review
 		 */

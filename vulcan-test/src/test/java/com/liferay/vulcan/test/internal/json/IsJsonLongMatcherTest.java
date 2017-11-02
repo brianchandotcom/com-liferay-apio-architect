@@ -35,14 +35,14 @@ import org.junit.Test;
 public class IsJsonLongMatcherTest {
 
 	@Test
-	public void testInvalidJsonNumberFails() {
+	public void testInvalidJsonLongFails() {
 		JsonPrimitive jsonPrimitive = new JsonPrimitive(42L);
 
 		assertThat(jsonPrimitive, is(not(aJsonLong(equalTo(23L)))));
 	}
 
 	@Test
-	public void testInvalidJsonNumberUpdatesValidDescription() {
+	public void testInvalidJsonLongUpdatesValidDescription() {
 		JsonPrimitive jsonPrimitive = new JsonPrimitive(42L);
 
 		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonLong(equalTo(23L));
@@ -57,7 +57,7 @@ public class IsJsonLongMatcherTest {
 	}
 
 	@Test
-	public void testIsJsonNumberMatcherUpdatesDescription() {
+	public void testIsJsonLongMatcherUpdatesDescription() {
 		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonLong(equalTo(23L));
 
 		Description description = new StringDescription();
@@ -70,7 +70,7 @@ public class IsJsonLongMatcherTest {
 	}
 
 	@Test
-	public void testValidJsonNumberValidates() {
+	public void testValidJsonLongValidates() {
 		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonLong(equalTo(42L));
 
 		JsonPrimitive jsonPrimitive = new JsonPrimitive(42L);

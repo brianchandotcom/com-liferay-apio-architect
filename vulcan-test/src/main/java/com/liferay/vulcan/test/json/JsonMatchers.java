@@ -75,10 +75,11 @@ public final class JsonMatchers {
 	}
 
 	/**
-	 * Returns a matcher that checks that a {@link JsonObject}
-	 * is a valid json object by using different conditions.
+	 * Returns a matcher that checks that a {@link JsonObject} is a valid json
+	 * object by using different conditions.
 	 *
-	 * @return a matcher that checks that a {@code JsonObject} is a valid json object.
+	 * @return a matcher that checks that a {@code JsonObject} is a valid json
+	 *         object.
 	 * @review
 	 */
 	public static Matcher<JsonObject> aJsonObjectWith(Conditions conditions) {
