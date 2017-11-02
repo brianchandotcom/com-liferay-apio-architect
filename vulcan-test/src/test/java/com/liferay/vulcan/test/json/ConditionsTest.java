@@ -49,9 +49,9 @@ public class ConditionsTest {
 		conditions.describeTo(description);
 
 		String expected =
-			"{\n  vulcan: is a string element with a value that is \"Live " +
-				"long and prosper\"\n  geek: is a boolean element with a " +
-					"value that is <true>\n}";
+			"a json object where {\n  vulcan: is a string element with a " +
+				"value that is \"Live long and prosper\"\n  geek: is a " +
+					"boolean element with a value that is <true>\n}";
 
 		assertThat(description.toString(), is(equalTo(expected)));
 	}
@@ -105,7 +105,8 @@ public class ConditionsTest {
 		conditions.describeMismatch(jsonObject, description);
 
 		String expected =
-			"with more fields than validated. Extra keys: number, other";
+			"was a json object with more fields than validated. Extra keys: " +
+				"number, other";
 
 		assertThat(matchesElement, is(false));
 		assertThat(description.toString(), is(equalTo(expected)));
@@ -135,9 +136,9 @@ public class ConditionsTest {
 		conditions.describeMismatch(jsonObject, description);
 
 		String expected =
-			"{\n  vulcan: was a string element with a value that was \"Live " +
-				"long and\"\n  geek: was not a boolean element, but a number " +
-					"element\n  ...\n}";
+			"was a json object {\n  vulcan: was a string element with a " +
+				"value that was \"Live long and\"\n  geek: was not a boolean " +
+					"element, but a number element\n  ...\n}";
 
 		assertThat(matchesElement, is(false));
 		assertThat(description.toString(), is(equalTo(expected)));

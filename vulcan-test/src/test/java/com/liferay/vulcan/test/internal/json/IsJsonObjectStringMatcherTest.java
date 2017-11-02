@@ -88,7 +88,8 @@ public class IsJsonObjectStringMatcherTest {
 
 		stringMatcher.describeTo(description);
 
-		assertThat(description.toString(), is(equalTo("a json object {\n}")));
+		assertThat(
+			description.toString(), is(equalTo("a json object where {\n}")));
 	}
 
 	@Test

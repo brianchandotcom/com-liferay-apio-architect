@@ -44,7 +44,11 @@ public class Conditions
 
 	@Override
 	public void describeTo(Description description) {
-		description.appendDescriptionOf(getInnerMatcher());
+		description.appendText(
+			"a json object where "
+		).appendDescriptionOf(
+			getInnerMatcher()
+		);
 	}
 
 	/**

@@ -40,11 +40,7 @@ public class IsJsonObjectString extends TypeSafeDiagnosingMatcher<String> {
 
 	@Override
 	public void describeTo(Description description) {
-		description.appendText(
-			"a json object "
-		).appendDescriptionOf(
-			_jsonObjectMatcher
-		);
+		description.appendDescriptionOf(_jsonObjectMatcher);
 	}
 
 	@Override
@@ -65,8 +61,6 @@ public class IsJsonObjectString extends TypeSafeDiagnosingMatcher<String> {
 					return true;
 				}
 				else {
-					description.appendText("was a json object ");
-
 					_jsonObjectMatcher.describeMismatch(
 						jsonObject, description);
 
