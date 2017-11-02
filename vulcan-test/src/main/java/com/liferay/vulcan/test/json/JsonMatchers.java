@@ -17,6 +17,7 @@ package com.liferay.vulcan.test.json;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
@@ -25,6 +26,7 @@ import com.liferay.vulcan.test.internal.json.IsJsonInt;
 import com.liferay.vulcan.test.internal.json.IsJsonLong;
 import com.liferay.vulcan.test.internal.json.IsJsonObjectString;
 import com.liferay.vulcan.test.internal.json.IsJsonString;
+import com.liferay.vulcan.test.json.Conditions.Builder;
 
 import org.hamcrest.Matcher;
 
@@ -86,6 +88,26 @@ public final class JsonMatchers {
 	 */
 	public static Matcher<String> aJsonObjectStringWith(Conditions conditions) {
 		return new IsJsonObjectString(conditions);
+	}
+
+	/**
+	 * Returns a matcher that checks that a {@link JsonObject} is a valid json
+	 * object with one element inside.
+	 *
+	 * @return a matcher that checks that a {@code JsonObject} is a valid json
+	 *         object.
+	 * @review
+	 */
+	public static Matcher<JsonObject> aJsonObjectWhere(
+		String key, Matcher<? extends JsonElement> matcher) {
+
+		Builder builder = new Builder();
+
+		Conditions conditions = builder.where(
+			key, matcher
+		).build();
+
+		return aJsonObjectWith(conditions);
 	}
 
 	/**

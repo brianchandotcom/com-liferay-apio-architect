@@ -15,6 +15,7 @@
 package com.liferay.vulcan.test.json;
 
 import static com.liferay.vulcan.test.json.Conditions.Builder;
+import static com.liferay.vulcan.test.json.JsonMatchers.aJsonObjectWhere;
 import static com.liferay.vulcan.test.json.JsonMatchers.aJsonObjectWith;
 import static com.liferay.vulcan.test.json.JsonMatchers.aJsonString;
 
@@ -62,6 +63,20 @@ public class JsonMatchersTest {
 		jsonObject.addProperty("vulcan", "Live long and prosper");
 
 		assertThat(jsonObject, is(aJsonObjectWith(conditions)));
+	}
+
+	@Test
+	public void testIsJsonObjectWhereValidatesJsonObject() {
+		JsonObject jsonObject = new JsonObject();
+
+		jsonObject.addProperty("vulcan", "Live long and prosper");
+
+		assertThat(
+			jsonObject,
+			is(
+				aJsonObjectWhere(
+					"vulcan",
+					is(aJsonString(equalTo("Live long and prosper"))))));
 	}
 
 }
