@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import com.liferay.vulcan.test.internal.json.IsJsonBoolean;
+import com.liferay.vulcan.test.internal.json.IsJsonInt;
 import com.liferay.vulcan.test.internal.json.IsJsonLong;
 import com.liferay.vulcan.test.internal.json.IsJsonObjectString;
 import com.liferay.vulcan.test.internal.json.IsJsonString;
@@ -49,6 +50,19 @@ public final class JsonMatchers {
 	 */
 	public static Matcher<JsonPrimitive> aJsonBoolean(boolean bool) {
 		return new IsJsonBoolean(is(equalTo(bool)));
+	}
+
+	/**
+	 * Returns a matcher that checks that an element is an integer number {@link
+	 * JsonPrimitive}.
+	 *
+	 * @return a matcher that checks that an element is an integer number
+	 * @review
+	 */
+	public static Matcher<JsonPrimitive> aJsonInt(
+		Matcher<Integer> numberMatcher) {
+
+		return new IsJsonInt(is(numberMatcher));
 	}
 
 	/**
