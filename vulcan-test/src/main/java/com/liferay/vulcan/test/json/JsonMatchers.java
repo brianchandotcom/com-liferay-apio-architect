@@ -17,6 +17,7 @@ package com.liferay.vulcan.test.json;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import com.liferay.vulcan.test.internal.json.IsJsonBoolean;
@@ -71,6 +72,17 @@ public final class JsonMatchers {
 	 */
 	public static Matcher<String> aJsonObjectStringWith(Conditions conditions) {
 		return new IsJsonObjectString(conditions);
+	}
+
+	/**
+	 * Returns a matcher that checks that a {@link JsonObject}
+	 * is a valid json object by using different conditions.
+	 *
+	 * @return a matcher that checks that a {@code JsonObject} is a valid json object.
+	 * @review
+	 */
+	public static Matcher<JsonObject> aJsonObjectWith(Conditions conditions) {
+		return conditions;
 	}
 
 	/**

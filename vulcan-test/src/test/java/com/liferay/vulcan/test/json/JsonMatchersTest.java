@@ -14,6 +14,16 @@
 
 package com.liferay.vulcan.test.json;
 
+import static com.liferay.vulcan.test.json.Conditions.Builder;
+import static com.liferay.vulcan.test.json.JsonMatchers.aJsonObjectWith;
+import static com.liferay.vulcan.test.json.JsonMatchers.aJsonString;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
+import com.google.gson.JsonObject;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -37,6 +47,21 @@ public class JsonMatchersTest {
 		catch (InvocationTargetException ite) {
 			throw ite.getTargetException();
 		}
+	}
+
+	@Test
+	public void testIsJsonObjectValidatesJsonObject() {
+		Builder builder = new Builder();
+
+		Conditions conditions = builder.where(
+			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
+		).build();
+
+		JsonObject jsonObject = new JsonObject();
+
+		jsonObject.addProperty("vulcan", "Live long and prosper");
+
+		assertThat(jsonObject, is(aJsonObjectWith(conditions)));
 	}
 
 }
