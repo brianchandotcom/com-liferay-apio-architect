@@ -21,6 +21,7 @@ import com.google.gson.JsonPrimitive;
 
 import com.liferay.vulcan.test.internal.json.IsJsonBoolean;
 import com.liferay.vulcan.test.internal.json.IsJsonLong;
+import com.liferay.vulcan.test.internal.json.IsJsonObjectString;
 import com.liferay.vulcan.test.internal.json.IsJsonString;
 
 import org.hamcrest.Matcher;
@@ -60,6 +61,16 @@ public final class JsonMatchers {
 		Matcher<Long> numberMatcher) {
 
 		return new IsJsonLong(is(numberMatcher));
+	}
+
+	/**
+	 * Returns a matcher that checks that a string is a json object.
+	 *
+	 * @return a matcher that checks that a string is a json object.
+	 * @review
+	 */
+	public static Matcher<String> aJsonObjectStringWith(Conditions conditions) {
+		return new IsJsonObjectString(conditions);
 	}
 
 	/**
