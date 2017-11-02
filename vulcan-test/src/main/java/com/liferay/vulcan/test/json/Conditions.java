@@ -14,12 +14,11 @@
 
 package com.liferay.vulcan.test.json;
 
-import static com.liferay.vulcan.test.internal.json.JsonElementType.OBJECT;
+import static com.liferay.vulcan.test.json.JsonElementType.OBJECT;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import com.liferay.vulcan.test.internal.json.AbstractJsonElementMatcher;
 import com.liferay.vulcan.test.internal.json.IsJsonObject;
 
 import java.util.HashMap;

@@ -14,9 +14,11 @@
 
 package com.liferay.vulcan.test.internal.json;
 
-import static com.liferay.vulcan.test.internal.json.JsonElementType.STRING;
+import static com.liferay.vulcan.test.json.JsonElementType.STRING;
 
 import com.google.gson.JsonPrimitive;
+
+import com.liferay.vulcan.test.json.AbstractJsonElementMatcher;
 
 import java.util.Objects;
 

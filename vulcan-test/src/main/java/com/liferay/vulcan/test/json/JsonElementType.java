@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.test.internal.json;
+package com.liferay.vulcan.test.json;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;

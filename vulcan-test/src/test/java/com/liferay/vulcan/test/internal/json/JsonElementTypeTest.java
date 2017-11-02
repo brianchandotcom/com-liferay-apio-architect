@@ -14,11 +14,11 @@
 
 package com.liferay.vulcan.test.internal.json;
 
-import static com.liferay.vulcan.test.internal.json.JsonElementType.BOOLEAN;
-import static com.liferay.vulcan.test.internal.json.JsonElementType.NUMBER;
-import static com.liferay.vulcan.test.internal.json.JsonElementType.OBJECT;
-import static com.liferay.vulcan.test.internal.json.JsonElementType.OTHER;
-import static com.liferay.vulcan.test.internal.json.JsonElementType.STRING;
+import static com.liferay.vulcan.test.json.JsonElementType.BOOLEAN;
+import static com.liferay.vulcan.test.json.JsonElementType.NUMBER;
+import static com.liferay.vulcan.test.json.JsonElementType.OBJECT;
+import static com.liferay.vulcan.test.json.JsonElementType.OTHER;
+import static com.liferay.vulcan.test.json.JsonElementType.STRING;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,6 +28,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+
+import com.liferay.vulcan.test.json.JsonElementType;
 
 import org.junit.Test;
 

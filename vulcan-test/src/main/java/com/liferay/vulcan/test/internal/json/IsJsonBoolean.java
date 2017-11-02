@@ -14,10 +14,12 @@
 
 package com.liferay.vulcan.test.internal.json;
 
-import static com.liferay.vulcan.test.internal.json.JsonElementType.BOOLEAN;
+import static com.liferay.vulcan.test.json.JsonElementType.BOOLEAN;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+
+import com.liferay.vulcan.test.json.AbstractJsonElementMatcher;
 
 import java.util.Objects;
 

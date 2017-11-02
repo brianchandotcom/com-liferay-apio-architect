@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.vulcan.test.internal.json;
+package com.liferay.vulcan.test.json;
 
-import static com.liferay.vulcan.test.internal.json.JsonElementType.getJsonElementType;
+import static com.liferay.vulcan.test.json.JsonElementType.getJsonElementType;
 
 import com.google.gson.JsonElement;
 
