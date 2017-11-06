@@ -21,6 +21,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import org.hamcrest.Description;
@@ -45,11 +46,11 @@ public class IsJsonBooleanMatcherTest {
 	public void testInvalidJsonBooleanUpdatesValidDescription() {
 		JsonPrimitive jsonPrimitive = new JsonPrimitive(true);
 
-		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonBoolean(false);
+		Matcher<JsonElement> matcher = aJsonBoolean(false);
 
 		Description description = new StringDescription();
 
-		jsonPrimitiveMatcher.describeMismatch(jsonPrimitive, description);
+		matcher.describeMismatch(jsonPrimitive, description);
 
 		String expected = "was a boolean element with a value that was <true>";
 
@@ -58,11 +59,11 @@ public class IsJsonBooleanMatcherTest {
 
 	@Test
 	public void testIsJsonBooleanMatcherUpdatesDescription() {
-		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonBoolean(false);
+		Matcher<JsonElement> matcher = aJsonBoolean(false);
 
 		Description description = new StringDescription();
 
-		jsonPrimitiveMatcher.describeTo(description);
+		matcher.describeTo(description);
 
 		String expected = "a boolean element with a value that is <false>";
 
@@ -71,11 +72,11 @@ public class IsJsonBooleanMatcherTest {
 
 	@Test
 	public void testValidJsonBooleanValidates() {
-		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonBoolean(true);
+		Matcher<JsonElement> matcher = aJsonBoolean(true);
 
 		JsonPrimitive jsonPrimitive = new JsonPrimitive(true);
 
-		boolean matches = jsonPrimitiveMatcher.matches(jsonPrimitive);
+		boolean matches = matcher.matches(jsonPrimitive);
 
 		assertThat(matches, is(true));
 	}

@@ -15,6 +15,7 @@
 package com.liferay.vulcan.test.internal.json;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.result.Try;
@@ -34,7 +35,7 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
  */
 public class IsJsonObjectString extends TypeSafeDiagnosingMatcher<String> {
 
-	public IsJsonObjectString(Matcher<JsonObject> jsonObjectMatcher) {
+	public IsJsonObjectString(Matcher<JsonElement> jsonObjectMatcher) {
 		_jsonObjectMatcher = jsonObjectMatcher;
 	}
 
@@ -70,6 +71,6 @@ public class IsJsonObjectString extends TypeSafeDiagnosingMatcher<String> {
 		);
 	}
 
-	private final Matcher<JsonObject> _jsonObjectMatcher;
+	private final Matcher<JsonElement> _jsonObjectMatcher;
 
 }

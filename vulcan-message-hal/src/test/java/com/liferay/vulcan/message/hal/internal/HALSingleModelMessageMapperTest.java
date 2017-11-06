@@ -24,6 +24,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
@@ -85,12 +86,12 @@ public class HALSingleModelMessageMapperTest {
 		assertThat(mediaType, is(equalTo("application/hal+json")));
 	}
 
-	private static Matcher<JsonObject> _isALinkTo(String url) {
+	private static Matcher<JsonElement> _isALinkTo(String url) {
 		return is(aJsonObjectWhere("href", is(aJsonString(equalTo(url)))));
 	}
 
-	private static final Matcher<JsonObject> _isAJsonObjectWithTheEmbedded;
-	private static final Matcher<JsonObject> _isAJsonObjectWithTheLinks;
+	private static final Matcher<JsonElement> _isAJsonObjectWithTheEmbedded;
+	private static final Matcher<JsonElement> _isAJsonObjectWithTheLinks;
 
 	static {
 		Conditions.Builder builder = new Conditions.Builder();
@@ -133,7 +134,7 @@ public class HALSingleModelMessageMapperTest {
 			"string", is(aJsonString(equalTo("A string")))
 		).build();
 
-		Matcher<JsonObject> isAJsonObjectWithTheSecondEmbedded = is(
+		Matcher<JsonElement> isAJsonObjectWithTheSecondEmbedded = is(
 			aJsonObjectWhere(
 				"second-embedded",
 				is(aJsonObjectWith(secondEmbeddedConditions))));

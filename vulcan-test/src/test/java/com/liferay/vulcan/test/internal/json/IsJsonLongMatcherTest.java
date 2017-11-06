@@ -21,6 +21,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import org.hamcrest.Description;
@@ -45,11 +46,11 @@ public class IsJsonLongMatcherTest {
 	public void testInvalidJsonLongUpdatesValidDescription() {
 		JsonPrimitive jsonPrimitive = new JsonPrimitive(42L);
 
-		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonLong(equalTo(23L));
+		Matcher<JsonElement> matcher = aJsonLong(equalTo(23L));
 
 		Description description = new StringDescription();
 
-		jsonPrimitiveMatcher.describeMismatch(jsonPrimitive, description);
+		matcher.describeMismatch(jsonPrimitive, description);
 
 		String expected = "was a number element with a value that was <42L>";
 
@@ -58,11 +59,11 @@ public class IsJsonLongMatcherTest {
 
 	@Test
 	public void testIsJsonLongMatcherUpdatesDescription() {
-		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonLong(equalTo(23L));
+		Matcher<JsonElement> matcher = aJsonLong(equalTo(23L));
 
 		Description description = new StringDescription();
 
-		jsonPrimitiveMatcher.describeTo(description);
+		matcher.describeTo(description);
 
 		String expected = "a number element with a value that is <23L>";
 
@@ -71,11 +72,11 @@ public class IsJsonLongMatcherTest {
 
 	@Test
 	public void testValidJsonLongValidates() {
-		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonLong(equalTo(42L));
+		Matcher<JsonElement> matcher = aJsonLong(equalTo(42L));
 
 		JsonPrimitive jsonPrimitive = new JsonPrimitive(42L);
 
-		boolean matches = jsonPrimitiveMatcher.matches(jsonPrimitive);
+		boolean matches = matcher.matches(jsonPrimitive);
 
 		assertThat(matches, is(true));
 	}

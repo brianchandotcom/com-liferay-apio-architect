@@ -18,8 +18,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 import com.liferay.vulcan.test.internal.json.IsJsonBoolean;
 import com.liferay.vulcan.test.internal.json.IsJsonInt;
@@ -45,23 +43,23 @@ public final class JsonMatchers {
 
 	/**
 	 * Returns a matcher that checks that an element is a boolean {@link
-	 * JsonPrimitive}.
+	 * JsonElement}.
 	 *
 	 * @return a matcher that checks that an element is a boolean
 	 * @review
 	 */
-	public static Matcher<JsonPrimitive> aJsonBoolean(boolean bool) {
+	public static Matcher<JsonElement> aJsonBoolean(boolean bool) {
 		return new IsJsonBoolean(is(equalTo(bool)));
 	}
 
 	/**
 	 * Returns a matcher that checks that an element is an integer number {@link
-	 * JsonPrimitive}.
+	 * JsonElement}.
 	 *
 	 * @return a matcher that checks that an element is an integer number
 	 * @review
 	 */
-	public static Matcher<JsonPrimitive> aJsonInt(
+	public static Matcher<JsonElement> aJsonInt(
 		Matcher<Integer> numberMatcher) {
 
 		return new IsJsonInt(is(numberMatcher));
@@ -69,14 +67,12 @@ public final class JsonMatchers {
 
 	/**
 	 * Returns a matcher that checks that an element is a long number {@link
-	 * JsonPrimitive}.
+	 * JsonElement}.
 	 *
 	 * @return a matcher that checks that an element is a long number
 	 * @review
 	 */
-	public static Matcher<JsonPrimitive> aJsonLong(
-		Matcher<Long> numberMatcher) {
-
+	public static Matcher<JsonElement> aJsonLong(Matcher<Long> numberMatcher) {
 		return new IsJsonLong(is(numberMatcher));
 	}
 
@@ -91,14 +87,14 @@ public final class JsonMatchers {
 	}
 
 	/**
-	 * Returns a matcher that checks that a {@link JsonObject} is a valid json
+	 * Returns a matcher that checks that a {@link JsonElement} is a valid json
 	 * object with one element inside.
 	 *
-	 * @return a matcher that checks that a {@code JsonObject} is a valid json
+	 * @return a matcher that checks that a {@code JsonElement} is a valid json
 	 *         object.
 	 * @review
 	 */
-	public static Matcher<JsonObject> aJsonObjectWhere(
+	public static Matcher<JsonElement> aJsonObjectWhere(
 		String key, Matcher<? extends JsonElement> matcher) {
 
 		Builder builder = new Builder();
@@ -111,25 +107,25 @@ public final class JsonMatchers {
 	}
 
 	/**
-	 * Returns a matcher that checks that a {@link JsonObject} is a valid json
+	 * Returns a matcher that checks that a {@link JsonElement} is a valid json
 	 * object by using different conditions.
 	 *
-	 * @return a matcher that checks that a {@code JsonObject} is a valid json
+	 * @return a matcher that checks that a {@code JsonElement} is a valid json
 	 *         object.
 	 * @review
 	 */
-	public static Matcher<JsonObject> aJsonObjectWith(Conditions conditions) {
+	public static Matcher<JsonElement> aJsonObjectWith(Conditions conditions) {
 		return conditions;
 	}
 
 	/**
 	 * Returns a matcher that checks that an element is a string {@link
-	 * JsonPrimitive}.
+	 * JsonElement}.
 	 *
 	 * @return a matcher that checks that an element is a string
 	 * @review
 	 */
-	public static Matcher<JsonPrimitive> aJsonString(
+	public static Matcher<JsonElement> aJsonString(
 		Matcher<String> stringMatcher) {
 
 		return new IsJsonString(is(stringMatcher));

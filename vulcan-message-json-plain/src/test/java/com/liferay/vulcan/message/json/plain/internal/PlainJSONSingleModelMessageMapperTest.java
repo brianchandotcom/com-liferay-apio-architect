@@ -96,7 +96,8 @@ public class PlainJSONSingleModelMessageMapperTest {
 		return is(aJsonString(equalTo(url)));
 	}
 
-	private static final Matcher<JsonObject> _isAJsonObjectWithTheFirstEmbedded;
+	private static final Matcher<JsonElement>
+		_isAJsonObjectWithTheFirstEmbedded;
 
 	static {
 		Conditions.Builder builder = new Conditions.Builder();
@@ -115,7 +116,7 @@ public class PlainJSONSingleModelMessageMapperTest {
 			"third-linked", _isALinkTo("localhost:8080/third-linked")
 		).build();
 
-		Matcher<JsonObject> isAJsonObjectWithTheSecondEmbedded = is(
+		Matcher<JsonElement> isAJsonObjectWithTheSecondEmbedded = is(
 			aJsonObjectWith(secondEmbeddedConditions));
 
 		Conditions firstEmbeddedConditions = builder.where(

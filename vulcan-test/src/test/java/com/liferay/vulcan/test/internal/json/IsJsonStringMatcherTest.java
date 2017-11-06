@@ -21,6 +21,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import org.hamcrest.Description;
@@ -45,12 +46,11 @@ public class IsJsonStringMatcherTest {
 	public void testInvalidJsonTextUpdatesValidDescription() {
 		JsonPrimitive jsonPrimitive = new JsonPrimitive("Live long");
 
-		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonString(
-			equalTo("and prosper"));
+		Matcher<JsonElement> matcher = aJsonString(equalTo("and prosper"));
 
 		Description description = new StringDescription();
 
-		jsonPrimitiveMatcher.describeMismatch(jsonPrimitive, description);
+		matcher.describeMismatch(jsonPrimitive, description);
 
 		String expected =
 			"was a string element with a value that was \"Live long\"";
@@ -60,12 +60,11 @@ public class IsJsonStringMatcherTest {
 
 	@Test
 	public void testIsJsonTextMatcherUpdatesDescription() {
-		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonString(
-			equalTo("and prosper"));
+		Matcher<JsonElement> matcher = aJsonString(equalTo("and prosper"));
 
 		Description description = new StringDescription();
 
-		jsonPrimitiveMatcher.describeTo(description);
+		matcher.describeTo(description);
 
 		String expected =
 			"a string element with a value that is \"and prosper\"";
@@ -75,12 +74,11 @@ public class IsJsonStringMatcherTest {
 
 	@Test
 	public void testValidJsonTextValidates() {
-		Matcher<JsonPrimitive> jsonPrimitiveMatcher = aJsonString(
-			equalTo("Live long"));
+		Matcher<JsonElement> matcher = aJsonString(equalTo("Live long"));
 
 		JsonPrimitive jsonPrimitive = new JsonPrimitive("Live long");
 
-		boolean matches = jsonPrimitiveMatcher.matches(jsonPrimitive);
+		boolean matches = matcher.matches(jsonPrimitive);
 
 		assertThat(matches, is(true));
 	}

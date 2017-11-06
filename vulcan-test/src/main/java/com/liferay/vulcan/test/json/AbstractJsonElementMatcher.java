@@ -33,7 +33,7 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
  * @review
  */
 public abstract class AbstractJsonElementMatcher<A extends JsonElement, B>
-	extends TypeSafeDiagnosingMatcher<A> {
+	extends TypeSafeDiagnosingMatcher<JsonElement> {
 
 	public AbstractJsonElementMatcher(
 		JsonElementType jsonElementType, Matcher<B> bMatcher,
