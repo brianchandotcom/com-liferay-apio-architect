@@ -28,7 +28,7 @@ import org.hamcrest.SelfDescribing;
  */
 public enum JsonElementType implements SelfDescribing {
 
-	BOOLEAN, NUMBER, OBJECT, OTHER, STRING;
+	ARRAY, BOOLEAN, NUMBER, OBJECT, OTHER, STRING;
 
 	/**
 	 * Returns the correct {@code JsonElementType} for a {@code JsonElement}.
@@ -40,6 +40,10 @@ public enum JsonElementType implements SelfDescribing {
 	public static JsonElementType getJsonElementType(JsonElement jsonElement) {
 		if (jsonElement.isJsonObject()) {
 			return OBJECT;
+		}
+
+		if (jsonElement.isJsonArray()) {
+			return ARRAY;
 		}
 
 		if (jsonElement.isJsonPrimitive()) {
@@ -74,6 +78,8 @@ public enum JsonElementType implements SelfDescribing {
 	 */
 	public String getReadableName() {
 		switch (this) {
+			case ARRAY:
+				return "an array";
 			case BOOLEAN:
 				return "a boolean";
 			case NUMBER:

@@ -19,6 +19,7 @@ import static org.hamcrest.core.Is.is;
 
 import com.google.gson.JsonElement;
 
+import com.liferay.vulcan.test.internal.json.IsJsonArray;
 import com.liferay.vulcan.test.internal.json.IsJsonBoolean;
 import com.liferay.vulcan.test.internal.json.IsJsonInt;
 import com.liferay.vulcan.test.internal.json.IsJsonLong;
@@ -40,6 +41,19 @@ import org.hamcrest.Matcher;
  * @review
  */
 public final class JsonMatchers {
+
+	/**
+	 * Returns a matcher that checks that an element is a {@link
+	 * com.google.gson.JsonArray}.
+	 *
+	 * @return a matcher that checks that an element is an json array
+	 * @review
+	 */
+	public static Matcher<JsonElement> aJsonArrayThat(
+		Matcher<Iterable<? extends JsonElement>> elementsMatcher) {
+
+		return new IsJsonArray(elementsMatcher);
+	}
 
 	/**
 	 * Returns a matcher that checks that an element is a boolean {@link
