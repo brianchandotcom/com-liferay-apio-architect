@@ -37,10 +37,10 @@ import org.osgi.service.component.annotations.Reference;
 public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
 
 	/**
-	 * Converts an exception to its generic {@link 
-	 * com.liferay.vulcan.result.APIError} representation, if a valid
-	 * {@link com.liferay.vulcan.converter.ExceptionConverter} exists. Returns
-	 * {@code Optional#empty()} otherwise.
+	 * Converts an exception to its generic {@link
+	 * APIError} representation, if a valid {@link
+	 * ExceptionConverter} exists. Returns {@code
+	 * Optional#empty()} otherwise.
 	 *
 	 * <p>
 	 * If no {@code ExceptionConverter} can be found for the exception class,

@@ -33,10 +33,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to get the {@link 
- * com.liferay.vulcan.message.json.ErrorMessageMapper} that corresponds to the
- * {@link com.liferay.vulcan.result.APIError} and {@code 
- * javax.ws.rs.core.HttpHeaders}.
+ * Provides methods to get the {@link
+ * ErrorMessageMapper} that corresponds to the
+ * {@link APIError} and {@code
+ * HttpHeaders}.
  *
  * @author Alejandro Hernández
  */
@@ -46,8 +46,8 @@ public class ErrorMessageMapperManager {
 	/**
 	 * Returns the {@code ErrorMessageMapper} that corresponds to the {@code
 	 * APIError} and {@code HttpHeaders}. If no acceptable media type is found
-	 * in the current request, or no mapper is found for that request's {@code 
-	 * Accept} type, this method returns a mapper for the {@code 
+	 * in the current request, or no mapper is found for that request's {@code
+	 * Accept} type, this method returns a mapper for the {@code
 	 * application/problem+json} media type.
 	 *
 	 * @param  apiError the {@code APIError}

@@ -469,13 +469,13 @@ public class WriterHelper {
 	/**
 	 * Writes the related collection's URL, using a {@code BiConsumer}.
 	 *
-	 * @param  relatedCollection the related collection
-	 * @param  parentSingleModel the parent single model
-	 * @param  parentEmbeddedPathElements the list of embedded path elements
-	 * @param  httpServletRequest the HTTP servlet request
-	 * @param  fields the requested fields
-	 * @param  biConsumer the {@code BiConsumer} that writes the related
-	 *         collection URL
+	 * @param relatedCollection the related collection
+	 * @param parentSingleModel the parent single model
+	 * @param parentEmbeddedPathElements the list of embedded path elements
+	 * @param httpServletRequest the HTTP servlet request
+	 * @param fields the requested fields
+	 * @param biConsumer the {@code BiConsumer} that writes the related
+	 *        collection URL
 	 */
 	public <U, V> void writeRelatedCollection(
 		RelatedCollection<U, V> relatedCollection,
@@ -515,19 +515,19 @@ public class WriterHelper {
 
 	/**
 	 * Writes related models. This method uses two consumers (one that writes
-	 * the model's info, and one that writes its URL), so each
-	 * {@link javax.ws.rs.ext.MessageBodyWriter} can write the related model
+	 * the model's info, and one that writes its URL), so each {@link
+	 * javax.ws.rs.ext.MessageBodyWriter} can write the related model
 	 * differently.
 	 *
-	 * @param  relatedModel the related model instance
-	 * @param  parentSingleModel the parent single model
-	 * @param  parentEmbeddedPathElements list of embedded path elements
-	 * @param  httpServletRequest the HTTP servlet request
-	 * @param  fields the requested fields
-	 * @param  embedded the information about the embedded resources
-	 * @param  modelBiConsumer the consumer that writes the related model's
-	 *         information
-	 * @param  urlTriConsumer the consumer that writes the related model's URL
+	 * @param relatedModel the related model instance
+	 * @param parentSingleModel the parent single model
+	 * @param parentEmbeddedPathElements list of embedded path elements
+	 * @param httpServletRequest the HTTP servlet request
+	 * @param fields the requested fields
+	 * @param embedded the information about the embedded resources
+	 * @param modelBiConsumer the consumer that writes the related model's
+	 *        information
+	 * @param urlTriConsumer the consumer that writes the related model's URL
 	 */
 	public <T, U> void writeRelatedModel(
 		RelatedModel<T, U> relatedModel, SingleModel<T> parentSingleModel,
@@ -593,10 +593,10 @@ public class WriterHelper {
 	 * {@link javax.ws.rs.ext.MessageBodyWriter} can write each field
 	 * differently.
 	 *
-	 * @param  model the model
-	 * @param  modelClass the model's class
-	 * @param  fields the requested fields
-	 * @param  biConsumer the consumer that writes each field
+	 * @param model the model
+	 * @param modelClass the model's class
+	 * @param fields the requested fields
+	 * @param biConsumer the consumer that writes each field
 	 */
 	public <T> void writeStringFields(
 		T model, Class<T> modelClass, Fields fields,
@@ -635,8 +635,8 @@ public class WriterHelper {
 	 * Writes the model's types. This method uses a consumer so each {@link
 	 * javax.ws.rs.ext.MessageBodyWriter} can write the types differently.
 	 *
-	 * @param  modelClass the model class
-	 * @param  consumer the consumer that writes the types
+	 * @param modelClass the model class
+	 * @param consumer the consumer that writes the types
 	 */
 	public <U> void writeTypes(
 		Class<U> modelClass, Consumer<List<String>> consumer) {

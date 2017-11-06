@@ -30,8 +30,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Converts a {@link com.liferay.vulcan.uri.Path} to a {@link 
- * com.liferay.vulcan.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier},
+ * Converts a {@link Path} to a {@link
+ * AggregateRatingIdentifier},
  * and vice versa.
  *
  * <p>

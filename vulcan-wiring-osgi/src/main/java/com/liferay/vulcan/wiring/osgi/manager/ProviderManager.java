@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Manages services that have a {@link com.liferay.vulcan.provider.Provider}.
+ * Manages services that have a {@link Provider}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
@@ -41,7 +41,7 @@ public class ProviderManager extends BaseManager<Provider> {
 	/**
 	 * Returns the instance of type {@code T} if a valid {@code Provider} can be
 	 * found. Returns {@code Optional#empty()} otherwise.
-	 * 
+	 *
 	 * @param  clazz the class type {@code T}
 	 * @param  httpServletRequest the current request
 	 * @return the instance of {@code T}, if a valid {@code Provider} is
