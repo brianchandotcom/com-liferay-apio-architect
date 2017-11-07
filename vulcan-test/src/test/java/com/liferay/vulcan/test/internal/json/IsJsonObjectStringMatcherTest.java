@@ -55,7 +55,8 @@ public class IsJsonObjectStringMatcherTest {
 
 		stringMatcher.describeMismatch("{", description);
 
-		assertThat(description.toString(), is(equalTo("wasn't a JSON object")));
+		assertThat(
+			description.toString(), is(equalTo("was not a JSON object")));
 	}
 
 	@Test
