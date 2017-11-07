@@ -62,7 +62,7 @@ public class JsonElementTypeTest {
 		JsonElementType objectJsonElementType =
 			JsonElementType.getJsonElementType(objectJsonElement);
 
-		JsonElement otherJsonElement = new JsonNull();
+		JsonElement otherJsonElement = JsonNull.INSTANCE;
 
 		JsonElementType otherJsonElementType =
 			JsonElementType.getJsonElementType(otherJsonElement);
