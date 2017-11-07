@@ -72,9 +72,9 @@ public class FunctionalList<T> {
 
 			init.add(_first);
 
-			Stream<T> middle = middleStream();
+			Stream<T> stream = middleStream();
 
-			init.addAll(middle.collect(Collectors.toList()));
+			init.addAll(stream.collect(Collectors.toList()));
 
 			_init = init;
 		}
