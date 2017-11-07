@@ -22,7 +22,6 @@ import com.google.gson.JsonObject;
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.error.VulcanDeveloperError.UnresolvableURI;
-import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -136,7 +135,7 @@ public class PageMessageBodyWriter<T>
 				mediaTypeString, page.getModelClass())
 		);
 
-		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
 		pageMessageMapper.onStart(jsonObjectBuilder, page, _httpHeaders);
 
@@ -340,7 +339,7 @@ public class PageMessageBodyWriter<T>
 		items.forEach(
 			item -> {
 				JSONObjectBuilder itemJSONObjectBuilder =
-					new JSONObjectBuilderImpl();
+					new JSONObjectBuilder();
 
 				Class<T> modelClass = page.getModelClass();
 

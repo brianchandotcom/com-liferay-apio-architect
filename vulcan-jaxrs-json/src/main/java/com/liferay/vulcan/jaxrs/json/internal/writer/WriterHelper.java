@@ -21,7 +21,6 @@ import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.consumer.TriConsumer;
-import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.ErrorMessageMapper;
@@ -82,7 +81,7 @@ public class WriterHelper {
 		ErrorMessageMapper errorMessageMapper, APIError apiError,
 		HttpHeaders httpHeaders) {
 
-		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
 		errorMessageMapper.onStart(jsonObjectBuilder, apiError, httpHeaders);
 

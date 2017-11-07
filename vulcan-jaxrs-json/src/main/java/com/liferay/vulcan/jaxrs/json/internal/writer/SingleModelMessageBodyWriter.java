@@ -22,7 +22,6 @@ import com.google.gson.JsonObject;
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
-import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -134,7 +133,7 @@ public class SingleModelMessageBodyWriter<T>
 				mediaTypeString, singleModel.getModelClass())
 		);
 
-		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
 		Optional<Fields> fieldsOptional = _providerManager.provide(
 			Fields.class, _httpServletRequest);

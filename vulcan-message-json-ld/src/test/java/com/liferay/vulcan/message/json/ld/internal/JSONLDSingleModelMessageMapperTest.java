@@ -29,7 +29,7 @@ import static org.hamcrest.core.Is.is;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
+import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.test.json.Conditions;
 import com.liferay.vulcan.test.message.MockModel;
 import com.liferay.vulcan.test.message.MockSingleModelWriter;
@@ -52,7 +52,7 @@ public class JSONLDSingleModelMessageMapperTest {
 	public void testJSONLDSingleModelMessageMapper() {
 		HttpHeaders httpHeaders = Mockito.mock(HttpHeaders.class);
 
-		JSONObjectBuilderImpl jsonObjectBuilder = new JSONObjectBuilderImpl();
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
 		MockSingleModelWriter.write(
 			_singleModelMessageMapper, jsonObjectBuilder, httpHeaders);
