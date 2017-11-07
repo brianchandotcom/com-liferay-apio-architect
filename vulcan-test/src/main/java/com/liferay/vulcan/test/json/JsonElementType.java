@@ -77,17 +77,20 @@ public enum JsonElementType implements SelfDescribing {
 	 * @review
 	 */
 	public String getReadableName() {
-		switch (this) {
-			case ARRAY:
-				return "an array";
-			case BOOLEAN:
-				return "a boolean";
-			case NUMBER:
-				return "a number";
-			case OBJECT:
-				return "an object";
-			case STRING:
-				return "a string";
+		if (this == ARRAY) {
+			return "an array";
+		}
+		else if (this == BOOLEAN) {
+			return "a boolean";
+		}
+		else if (this == NUMBER) {
+			return "a number";
+		}
+		else if (this == OBJECT) {
+			return "an object";
+		}
+		else if (this == STRING) {
+			return "a string";
 		}
 
 		return "other";
