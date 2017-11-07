@@ -17,7 +17,7 @@ package com.liferay.vulcan.message.json.ld.internal;
 import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
-import com.liferay.vulcan.jaxrs.json.internal.StringFunctionalList;
+import com.liferay.vulcan.list.FunctionalList;
 
 import java.util.Arrays;
 
@@ -34,7 +34,7 @@ public class JSONLDSingleModelMessageMapperTest {
 	@Test
 	public void testMapLinkedResourceURL() {
 		_jsonLDSingleModelMessageMapper.mapLinkedResourceURL(
-			_jsonObjectBuilder, new StringFunctionalList(null, "fieldValue"),
+			_jsonObjectBuilder, new FunctionalList<>(null, "fieldValue"),
 			"url");
 
 		JsonObject build = _jsonObjectBuilder.build();

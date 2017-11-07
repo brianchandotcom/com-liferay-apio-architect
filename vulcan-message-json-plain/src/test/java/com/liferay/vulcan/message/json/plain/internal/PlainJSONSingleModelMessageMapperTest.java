@@ -17,7 +17,7 @@ package com.liferay.vulcan.message.json.plain.internal;
 import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
-import com.liferay.vulcan.jaxrs.json.internal.StringFunctionalList;
+import com.liferay.vulcan.list.FunctionalList;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class PlainJSONSingleModelMessageMapperTest {
 	@Test
 	public void testMapEmbeddedResourceBooleanField() {
 		_plainJSONSingleModelMessageMapper.mapEmbeddedResourceBooleanField(
-			_jsonObjectBuilder, new StringFunctionalList(null, "element"),
+			_jsonObjectBuilder, new FunctionalList<>(null, "element"),
 			"fieldName", true);
 
 		JsonObject jsonObject = _jsonObjectBuilder.build();

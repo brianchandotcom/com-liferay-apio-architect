@@ -22,7 +22,6 @@ import com.google.gson.JsonObject;
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
-import com.liferay.vulcan.jaxrs.json.internal.StringFunctionalList;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.ErrorMessageMapper;
@@ -506,7 +505,7 @@ public class WriterHelper {
 		).ifPresent(
 			url -> {
 				FunctionalList<String> embeddedPathElements =
-					new StringFunctionalList(parentEmbeddedPathElements, key);
+					new FunctionalList<>(parentEmbeddedPathElements, key);
 
 				biConsumer.accept(url, embeddedPathElements);
 			}
@@ -563,7 +562,7 @@ public class WriterHelper {
 
 		Predicate<String> embeddedPredicate = embedded.getEmbeddedPredicate();
 
-		FunctionalList<String> embeddedPathElements = new StringFunctionalList(
+		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
 			parentEmbeddedPathElements, key);
 
 		Stream<String> stream = Stream.concat(
