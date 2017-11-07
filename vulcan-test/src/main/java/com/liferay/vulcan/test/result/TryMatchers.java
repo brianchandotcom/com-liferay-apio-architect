@@ -32,7 +32,7 @@ import org.hamcrest.Matcher;
  * @author Alejandro Hernández
  * @review
  */
-public class TryMatchers {
+public final class TryMatchers {
 
 	/**
 	 * Returns a matcher that checks that this try is a {@link Try.Failure}.
