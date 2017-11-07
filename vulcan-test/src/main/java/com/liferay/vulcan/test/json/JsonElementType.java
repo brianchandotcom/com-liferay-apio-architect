@@ -21,7 +21,7 @@ import org.hamcrest.Description;
 import org.hamcrest.SelfDescribing;
 
 /**
- * Instances of this enum, represent the different types a json object allows.
+ * Instances of this enum, represent the different types a JSON object allows.
  *
  * @author Alejandro Hernández
  * @review

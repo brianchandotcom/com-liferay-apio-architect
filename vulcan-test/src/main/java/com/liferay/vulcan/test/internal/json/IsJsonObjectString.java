@@ -53,7 +53,7 @@ public class IsJsonObjectString extends TypeSafeDiagnosingMatcher<String> {
 			Objects::nonNull
 		).fold(
 			__ -> {
-				description.appendText("wasn't a json object");
+				description.appendText("wasn't a JSON object");
 
 				return false;
 			},

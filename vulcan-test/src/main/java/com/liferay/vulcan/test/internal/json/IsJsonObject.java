@@ -91,7 +91,7 @@ public class IsJsonObject extends TypeSafeDiagnosingMatcher<JsonObject> {
 		Set<String> keys = _entryMatchers.keySet();
 
 		if (!mismatchedKeys.isEmpty()) {
-			description.appendText("was a json object ");
+			description.appendText("was a JSON object ");
 
 			describeNestedMismatches(
 				keys, description, mismatchedKeys,
@@ -110,7 +110,7 @@ public class IsJsonObject extends TypeSafeDiagnosingMatcher<JsonObject> {
 			String extraKeys = stream.collect(Collectors.joining(", "));
 
 			description.appendText(
-				"was a json object "
+				"was a JSON object "
 			).appendText(
 				"with more fields than validated. "
 			).appendText(

@@ -91,9 +91,9 @@ public final class JsonMatchers {
 	}
 
 	/**
-	 * Returns a matcher that checks that a string is a json object.
+	 * Returns a matcher that checks that a string is a JSON object.
 	 *
-	 * @return a matcher that checks that a string is a json object.
+	 * @return a matcher that checks that a string is a JSON object.
 	 * @review
 	 */
 	public static Matcher<String> aJsonObjectStringWith(Conditions conditions) {
