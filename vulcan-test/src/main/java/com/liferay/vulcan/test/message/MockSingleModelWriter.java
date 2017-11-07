@@ -51,38 +51,40 @@ public class MockSingleModelWriter {
 		SingleModelMessageMapper<MockModel> singleModelMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, HttpHeaders httpHeaders) {
 
-		MockModel model = new MockModel();
+		MockModel mockModel = new MockModel();
 
 		singleModelMessageMapper.onStart(
-			jsonObjectBuilder, model, MockModel.class, httpHeaders);
+			jsonObjectBuilder, mockModel, MockModel.class, httpHeaders);
 
-		Map<String, String> stringFields = model.getStringFields();
+		Map<String, String> stringFields = mockModel.getStringFields();
 
 		stringFields.forEach(
 			(key, value) -> singleModelMessageMapper.mapStringField(
 				jsonObjectBuilder, key, value));
 
-		Map<String, Number> numberFields = model.getNumberFields();
+		Map<String, Number> numberFields = mockModel.getNumberFields();
 
 		numberFields.forEach(
 			(key, value) -> singleModelMessageMapper.mapNumberField(
 				jsonObjectBuilder, key, value));
 
-		Map<String, Boolean> booleanFields = model.getBooleanFields();
+		Map<String, Boolean> booleanFields = mockModel.getBooleanFields();
 
 		booleanFields.forEach(
 			(key, value) -> singleModelMessageMapper.mapBooleanField(
 				jsonObjectBuilder, key, value));
 
-		Map<String, String> links = model.getLinks();
+		Map<String, String> links = mockModel.getLinks();
 
 		links.forEach(
 			(key, value) -> singleModelMessageMapper.mapLink(
 				jsonObjectBuilder, key, value));
 
-		singleModelMessageMapper.mapTypes(jsonObjectBuilder, model.getTypes());
+		singleModelMessageMapper.mapTypes(
+			jsonObjectBuilder, mockModel.getTypes());
 
-		singleModelMessageMapper.mapSelfURL(jsonObjectBuilder, model.getURL());
+		singleModelMessageMapper.mapSelfURL(
+			jsonObjectBuilder, mockModel.getURL());
 
 		singleModelMessageMapper.mapLinkedResourceURL(
 			jsonObjectBuilder, _first_linked_path_elements,
@@ -105,7 +107,7 @@ public class MockSingleModelWriter {
 			_second_embedded_path_elements);
 
 		singleModelMessageMapper.onFinish(
-			jsonObjectBuilder, model, MockModel.class, httpHeaders);
+			jsonObjectBuilder, mockModel, MockModel.class, httpHeaders);
 	}
 
 	/**
