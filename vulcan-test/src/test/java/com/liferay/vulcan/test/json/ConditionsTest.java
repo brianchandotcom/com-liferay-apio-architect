@@ -39,9 +39,9 @@ public class ConditionsTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions conditions = builder.where(
-			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
-		).where(
 			"geek", is(aJsonBoolean(true))
+		).where(
+			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
 		).build();
 
 		Description description = new StringDescription();
@@ -49,9 +49,9 @@ public class ConditionsTest {
 		conditions.describeTo(description);
 
 		String expected =
-			"a JSON object where {\n  vulcan: is a string element with a " +
-				"value that is \"Live long and prosper\"\n  geek: is a " +
-					"boolean element with a value that is <true>\n}";
+			"a JSON object where {\n  geek: is a boolean element with a " +
+				"value that is <true>\n  vulcan: is a string element with a " +
+					"value that is \"Live long and prosper\"\n}";
 
 		assertThat(description.toString(), is(equalTo(expected)));
 	}
@@ -61,9 +61,9 @@ public class ConditionsTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions conditions = builder.where(
-			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
-		).where(
 			"geek", is(aJsonBoolean(true))
+		).where(
+			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
 		).withStrictModeDeactivated(
 		).build();
 
@@ -71,10 +71,10 @@ public class ConditionsTest {
 
 		JsonObject jsonObject = new JsonObject();
 
-		jsonObject.addProperty("vulcan", "Live long and prosper");
 		jsonObject.addProperty("geek", true);
 		jsonObject.addProperty("number", 42);
 		jsonObject.addProperty("other", "vulcan");
+		jsonObject.addProperty("vulcan", "Live long and prosper");
 
 		boolean matchesElement = conditions.matches(jsonObject);
 		conditions.describeMismatch(jsonObject, description);
@@ -87,19 +87,19 @@ public class ConditionsTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions conditions = builder.where(
-			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
-		).where(
 			"geek", is(aJsonBoolean(true))
+		).where(
+			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
 		).build();
 
 		Description description = new StringDescription();
 
 		JsonObject jsonObject = new JsonObject();
 
-		jsonObject.addProperty("vulcan", "Live long and prosper");
 		jsonObject.addProperty("geek", true);
 		jsonObject.addProperty("number", 42);
 		jsonObject.addProperty("other", "vulcan");
+		jsonObject.addProperty("vulcan", "Live long and prosper");
 
 		boolean matchesElement = conditions.matches(jsonObject);
 		conditions.describeMismatch(jsonObject, description);
@@ -117,28 +117,28 @@ public class ConditionsTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions conditions = builder.where(
-			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
-		).where(
 			"geek", is(aJsonBoolean(true))
 		).where(
 			"number", is(aJsonLong(equalTo(42L)))
+		).where(
+			"vulcan", is(aJsonString(equalTo("Live long and prosper")))
 		).build();
 
 		Description description = new StringDescription();
 
 		JsonObject jsonObject = new JsonObject();
 
-		jsonObject.addProperty("vulcan", "Live long and");
 		jsonObject.addProperty("geek", 23);
 		jsonObject.addProperty("number", 42);
+		jsonObject.addProperty("vulcan", "Live long and");
 
 		boolean matchesElement = conditions.matches(jsonObject);
 		conditions.describeMismatch(jsonObject, description);
 
 		String expected =
-			"was a JSON object {\n  vulcan: was a string element with a " +
-				"value that was \"Live long and\"\n  geek: was not a boolean " +
-					"element, but a number element\n  ...\n}";
+			"was a JSON object {\n  geek: was not a boolean element, but a " +
+				"number element\n  vulcan: was a string element with a value " +
+					"that was \"Live long and\"\n  ...\n}";
 
 		assertThat(matchesElement, is(false));
 		assertThat(description.toString(), is(equalTo(expected)));
