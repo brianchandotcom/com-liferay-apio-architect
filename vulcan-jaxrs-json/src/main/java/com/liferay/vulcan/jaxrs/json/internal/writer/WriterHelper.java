@@ -14,11 +14,12 @@
 
 package com.liferay.vulcan.jaxrs.json.internal.writer;
 
+import static com.liferay.vulcan.writer.url.URLCreator.createCollectionURL;
+
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.RelatedModel;
@@ -30,6 +31,7 @@ import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.url.ServerURL;
 import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 import com.liferay.vulcan.wiring.osgi.manager.PathIdentifierMapperManager;
+import com.liferay.vulcan.writer.url.URLCreator;
 
 import java.util.List;
 import java.util.Map;
@@ -58,58 +60,15 @@ import org.osgi.service.component.annotations.Reference;
 public class WriterHelper {
 
 	/**
-	 * Returns the absolute URL from a relative URI.
-	 *
-	 * @param  serverURL the server URL
-	 * @param  relativeURI the relative URI
-	 * @return the absolute URL
-	 */
-	public String getAbsoluteURL(ServerURL serverURL, String relativeURI) {
-		return serverURL.getServerURL() + "/" + relativeURI;
-	}
-
-	/**
-	 * Returns the page collection URL, if a {@link
-	 * com.liferay.vulcan.resource.CollectionResource} for the model class
-	 * exists. Otherwise, this method returns {@code Optional#empty()}.
-	 *
-	 * @param  page the page of the collection resource's collection
-	 * @param  serverURL the server URL
-	 * @return the page collection URL, if a collection resource for the model
-	 *         class exists; {@code Optional#empty()} otherwise
-	 */
-	public <T> Optional<String> getCollectionURLOptional(
-		Page<T> page, ServerURL serverURL) {
-
-		Path path = page.getPath();
-
-		String pathString = "/p" + path.asURI() + "/";
-
-		Class<T> modelClass = page.getModelClass();
-
-		Optional<String> optional = _collectionResourceManager.getNameOptional(
-			modelClass.getName());
-
-		return optional.map(
-			pathString::concat
-		).map(
-			uri -> getAbsoluteURL(serverURL, uri)
-		);
-	}
-
-	/**
-	 * Returns the model's resource URL, if a @link
+	 * Returns the model's resource {@code Path}, if a {@link
 	 * com.liferay.vulcan.resource.CollectionResource} for the model class
 	 * exists. Otherwise, this method returns {@code Optional#empty()}.
 	 *
 	 * @param  singleModel the single model
-	 * @param  serverURL the server URL
-	 * @return the model's resource URL, if a collection resource for the model
-	 *         class exists; {@code Optional#empty()} otherwise
+	 * @return the model's resource {@code Path}, if a collection resource for
+	 *         the model class exists; {@code Optional#empty()} otherwise
 	 */
-	public <T> Optional<String> getSingleURLOptional(
-		SingleModel<T> singleModel, ServerURL serverURL) {
-
+	public <T> Optional<Path> getPathOptional(SingleModel<T> singleModel) {
 		Class<T> modelClass = singleModel.getModelClass();
 
 		Optional<Representor<T, Identifier>> optional =
@@ -125,14 +84,7 @@ public class WriterHelper {
 
 				return _pathIdentifierMapperManager.map(
 					identifier, identifierClass, modelClass);
-			}
-		).map(
-			Path::asURI
-		).map(
-			"/p/"::concat
-		).map(
-			uri -> getAbsoluteURL(serverURL, uri)
-		);
+			});
 	}
 
 	/**
@@ -166,16 +118,11 @@ public class WriterHelper {
 				return _pathIdentifierMapperManager.map(
 					identifier, identifierClass, modelClass);
 			}
-		).map(
-			Path::asURI
-		).map(
-			"/b/"::concat
 		).ifPresent(
-			resourceURI -> {
+			path -> {
 				for (String binaryId : binaryFunctions.keySet()) {
-					String binaryURI = resourceURI + binaryId;
-
-					String url = getAbsoluteURL(serverURL, binaryURI);
+					String url = URLCreator.createBinaryURL(
+						serverURL, binaryId, path);
 
 					biConsumer.accept(binaryId, url);
 				}
@@ -409,8 +356,7 @@ public class WriterHelper {
 			return;
 		}
 
-		Optional<String> singleURLOptional = getSingleURLOptional(
-			parentSingleModel, serverURL);
+		Optional<Path> pathOptional = getPathOptional(parentSingleModel);
 
 		Class<V> modelClass = relatedCollection.getModelClass();
 
@@ -418,7 +364,8 @@ public class WriterHelper {
 			_collectionResourceManager.getNameOptional(modelClass.getName());
 
 		nameOptional.flatMap(
-			name -> singleURLOptional.map(singleURL -> singleURL + "/" + name)
+			name -> pathOptional.map(
+				path -> createCollectionURL(serverURL, path, name))
 		).ifPresent(
 			url -> {
 				FunctionalList<String> embeddedPathElements =
@@ -490,17 +437,19 @@ public class WriterHelper {
 
 		boolean isEmbedded = embeddedPredicate.test(embeddedPath);
 
-		Optional<String> optional = getSingleURLOptional(
-			singleModel, serverURL);
+		Optional<Path> optional = getPathOptional(singleModel);
 
-		optional.ifPresent(
+		optional.map(
+			path -> URLCreator.createSingleURL(serverURL, path)
+		).ifPresent(
 			url -> {
 				urlTriConsumer.accept(url, embeddedPathElements, isEmbedded);
 
 				if (isEmbedded) {
 					modelBiConsumer.accept(singleModel, embeddedPathElements);
 				}
-			});
+			}
+		);
 	}
 
 	/**

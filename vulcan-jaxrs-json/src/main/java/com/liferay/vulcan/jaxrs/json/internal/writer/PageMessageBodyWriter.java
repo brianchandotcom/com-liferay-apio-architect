@@ -14,6 +14,15 @@
 
 package com.liferay.vulcan.jaxrs.json.internal.writer;
 
+import static com.liferay.vulcan.pagination.PageType.CURRENT;
+import static com.liferay.vulcan.pagination.PageType.FIRST;
+import static com.liferay.vulcan.pagination.PageType.LAST;
+import static com.liferay.vulcan.pagination.PageType.NEXT;
+import static com.liferay.vulcan.pagination.PageType.PREVIOUS;
+import static com.liferay.vulcan.writer.url.URLCreator.createCollectionPageURL;
+import static com.liferay.vulcan.writer.url.URLCreator.createCollectionURL;
+import static com.liferay.vulcan.writer.url.URLCreator.createSingleURL;
+
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
@@ -21,7 +30,6 @@ import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.error.VulcanDeveloperError;
-import com.liferay.vulcan.error.VulcanDeveloperError.UnresolvableURI;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
@@ -35,6 +43,7 @@ import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.url.ServerURL;
 import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
@@ -64,7 +73,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
@@ -186,39 +194,23 @@ public class PageMessageBodyWriter<T>
 		printWriter.close();
 	}
 
-	private String _getCollectionURL(Page<T> page, ServerURL serverURL) {
-		Optional<String> optional = _writerHelper.getCollectionURLOptional(
-			page, serverURL);
-
-		Class<T> modelClass = page.getModelClass();
-
-		return optional.orElseThrow(
-			() -> new UnresolvableURI(modelClass.getName()));
-	}
-
-	private String _getPageURL(
-		Page<T> page, ServerURL serverURL, int pageNumber, int itemsPerPage) {
-
-		String url = _getCollectionURL(page, serverURL);
-
-		return UriBuilder.fromUri(
-			url
-		).queryParam(
-			"page", pageNumber
-		).queryParam(
-			"per_page", itemsPerPage
-		).build(
-		).toString();
-	}
-
 	private void _writeCollectionURL(
 		PageMessageMapper<T> pageMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
 		ServerURL serverURL) {
 
-		String url = _getCollectionURL(page, serverURL);
+		Path path = page.getPath();
 
-		pageMessageMapper.mapCollectionURL(jsonObjectBuilder, url);
+		Class<T> modelClass = page.getModelClass();
+
+		Optional<String> optional = _collectionResourceManager.getNameOptional(
+			modelClass.getName());
+
+		optional.map(
+			name -> createCollectionURL(serverURL, path, name)
+		).ifPresent(
+			url -> pageMessageMapper.mapCollectionURL(jsonObjectBuilder, url)
+		);
 	}
 
 	private <U, V> void _writeEmbeddedRelatedModel(
@@ -393,12 +385,15 @@ public class PageMessageBodyWriter<T>
 				SingleModel<T> singleModel = new SingleModel<>(
 					item, modelClass);
 
-				Optional<String> optional = _writerHelper.getSingleURLOptional(
-					singleModel, serverURL);
+				Optional<Path> singleURLOptional =
+					_writerHelper.getPathOptional(singleModel);
 
-				optional.ifPresent(
+				singleURLOptional.map(
+					path -> createSingleURL(serverURL, path)
+				).ifPresent(
 					url -> pageMessageMapper.mapItemSelfURL(
-						jsonObjectBuilder, itemJSONObjectBuilder, url));
+						jsonObjectBuilder, itemJSONObjectBuilder, url)
+				);
 
 				Optional<Representor<T, Identifier>> representorOptional =
 					_collectionResourceManager.getRepresentorOptional(
@@ -491,36 +486,42 @@ public class PageMessageBodyWriter<T>
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
 		ServerURL serverURL) {
 
-		pageMessageMapper.mapCurrentPageURL(
-			jsonObjectBuilder,
-			_getPageURL(
-				page, serverURL, page.getPageNumber(), page.getItemsPerPage()));
+		Path path = page.getPath();
 
-		pageMessageMapper.mapFirstPageURL(
-			jsonObjectBuilder,
-			_getPageURL(page, serverURL, 1, page.getItemsPerPage()));
+		Class<T> modelClass = page.getModelClass();
 
-		if (page.hasPrevious()) {
-			pageMessageMapper.mapPreviousPageURL(
-				jsonObjectBuilder,
-				_getPageURL(
-					page, serverURL, page.getPageNumber() - 1,
-					page.getItemsPerPage()));
-		}
+		Optional<String> optional = _collectionResourceManager.getNameOptional(
+			modelClass.getName());
 
-		if (page.hasNext()) {
-			pageMessageMapper.mapNextPageURL(
-				jsonObjectBuilder,
-				_getPageURL(
-					page, serverURL, page.getPageNumber() + 1,
-					page.getItemsPerPage()));
-		}
+		optional.map(
+			name -> createCollectionURL(serverURL, path, name)
+		).ifPresent(
+			url -> {
+				pageMessageMapper.mapCurrentPageURL(
+					jsonObjectBuilder,
+					createCollectionPageURL(url, page, CURRENT));
 
-		pageMessageMapper.mapLastPageURL(
-			jsonObjectBuilder,
-			_getPageURL(
-				page, serverURL, page.getLastPageNumber(),
-				page.getItemsPerPage()));
+				pageMessageMapper.mapFirstPageURL(
+					jsonObjectBuilder,
+					createCollectionPageURL(url, page, FIRST));
+
+				pageMessageMapper.mapLastPageURL(
+					jsonObjectBuilder,
+					createCollectionPageURL(url, page, LAST));
+
+				if (page.hasNext()) {
+					pageMessageMapper.mapNextPageURL(
+						jsonObjectBuilder,
+						createCollectionPageURL(url, page, NEXT));
+				}
+
+				if (page.hasPrevious()) {
+					pageMessageMapper.mapPreviousPageURL(
+						jsonObjectBuilder,
+						createCollectionPageURL(url, page, PREVIOUS));
+				}
+			}
+		);
 	}
 
 	private <U, V> void _writeRelatedCollection(

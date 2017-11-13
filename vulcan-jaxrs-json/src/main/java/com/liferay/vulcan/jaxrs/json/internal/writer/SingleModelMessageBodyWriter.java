@@ -14,6 +14,8 @@
 
 package com.liferay.vulcan.jaxrs.json.internal.writer;
 
+import static com.liferay.vulcan.writer.url.URLCreator.createSingleURL;
+
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
@@ -34,6 +36,7 @@ import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
 import com.liferay.vulcan.result.Try;
+import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.url.ServerURL;
 import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
 import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
@@ -355,12 +358,15 @@ public class SingleModelMessageBodyWriter<T>
 					(field, value) -> singleModelMessageMapper.mapStringField(
 						jsonObjectBuilder, field, value));
 
-				Optional<String> singleURLOptional =
-					_writerHelper.getSingleURLOptional(singleModel, serverURL);
+				Optional<Path> singleURLOptional =
+					_writerHelper.getPathOptional(singleModel);
 
-				singleURLOptional.ifPresent(
+				singleURLOptional.map(
+					path -> createSingleURL(serverURL, path)
+				).ifPresent(
 					url -> singleModelMessageMapper.mapSelfURL(
-						jsonObjectBuilder, url));
+						jsonObjectBuilder, url)
+				);
 
 				List<RelatedModel<U, ?>> embeddedRelatedModels =
 					representor.getEmbeddedRelatedModels();
