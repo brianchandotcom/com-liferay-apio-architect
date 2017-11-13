@@ -14,9 +14,6 @@
 
 package com.liferay.vulcan.jaxrs.json.internal.writer;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.language.Language;
@@ -29,7 +26,6 @@ import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.response.control.Embedded;
 import com.liferay.vulcan.response.control.Fields;
-import com.liferay.vulcan.uri.CollectionResourceURITransformer;
 import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.url.ServerURL;
 import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
@@ -97,9 +93,6 @@ public class WriterHelper {
 		return optional.map(
 			pathString::concat
 		).map(
-			_getTransformURIFunction(
-				(uri, transformer) -> transformer.transformPageURI(uri, page))
-		).map(
 			uri -> getAbsoluteURL(serverURL, uri)
 		);
 	}
@@ -137,11 +130,6 @@ public class WriterHelper {
 			Path::asURI
 		).map(
 			"/p/"::concat
-		).map(
-			_getTransformURIFunction(
-				(uri, transformer) ->
-					transformer.transformCollectionItemSingleResourceURI(
-						uri, singleModel))
 		).map(
 			uri -> getAbsoluteURL(serverURL, uri)
 		);
@@ -187,16 +175,7 @@ public class WriterHelper {
 				for (String binaryId : binaryFunctions.keySet()) {
 					String binaryURI = resourceURI + binaryId;
 
-					Function<String, String> transformURIFunction =
-						_getTransformURIFunction(
-							(uri, transformer) ->
-								transformer.transformBinaryURI(
-									uri, singleModel, binaryId));
-
-					String transformedURI = transformURIFunction.apply(
-						binaryURI);
-
-					String url = getAbsoluteURL(serverURL, transformedURI);
+					String url = getAbsoluteURL(serverURL, binaryURI);
 
 					biConsumer.accept(binaryId, url);
 				}
@@ -602,28 +581,8 @@ public class WriterHelper {
 		);
 	}
 
-	private Function<String, String> _getTransformURIFunction(
-		BiFunction<String, CollectionResourceURITransformer, String>
-			biFunction) {
-
-		return uri -> {
-			Optional<CollectionResourceURITransformer>
-				collectionResourceURITransformerOptional = Optional.ofNullable(
-					_collectionResourceURITransformer);
-
-			return collectionResourceURITransformerOptional.map(
-				transformer -> biFunction.apply(uri, transformer)
-			).orElse(
-				uri
-			);
-		};
-	}
-
 	@Reference
 	private CollectionResourceManager _collectionResourceManager;
-
-	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
-	private CollectionResourceURITransformer _collectionResourceURITransformer;
 
 	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;
