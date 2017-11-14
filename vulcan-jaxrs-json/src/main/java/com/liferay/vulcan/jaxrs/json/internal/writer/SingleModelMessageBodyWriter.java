@@ -17,7 +17,7 @@ package com.liferay.vulcan.jaxrs.json.internal.writer;
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
-import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveMessageMapper;
 import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.message.json.SingleModelMessageMapper;
@@ -109,28 +109,12 @@ public class SingleModelMessageBodyWriter<T>
 
 		PrintWriter printWriter = new PrintWriter(outputStreamWriter, true);
 
-		Stream<SingleModelMessageMapper<T>> stream =
-			_singleModelMessageMappers.stream();
-
-		String mediaTypeString = mediaType.toString();
-
 		SingleModel<T> singleModel = success.getValue();
 
-		SingleModelMessageMapper<T> singleModelMessageMapper = stream.filter(
-			messageMapper ->
-				mediaTypeString.equals(messageMapper.getMediaType()) &&
-				messageMapper.supports(singleModel, _httpHeaders)
-		).findFirst(
-		).orElseThrow(
-			() -> new VulcanDeveloperError.MustHaveMessageMapper(
-				mediaTypeString, singleModel.getModelClass())
-		);
+		SingleModelMessageMapper<T> singleModelMessageMapper =
+			getSingleModelMessageMapper(mediaType, singleModel);
 
-		Optional<ServerURL> optional = _providerManager.provideOptional(
-			ServerURL.class, _httpServletRequest);
-
-		ServerURL serverURL = optional.orElseThrow(
-			() -> new MustHaveProvider(ServerURL.class));
+		ServerURL serverURL = getServerURL();
 
 		RequestInfo requestInfo = RequestInfo.create(
 			builder -> builder.httpHeaders(
@@ -168,6 +152,50 @@ public class SingleModelMessageBodyWriter<T>
 		resultOptional.ifPresent(printWriter::write);
 
 		printWriter.close();
+	}
+
+	/**
+	 * Returns the server URL, or throws a {@link MustHaveProvider} developer
+	 * error.
+	 *
+	 * @return the server URL.
+	 * @review
+	 */
+	protected ServerURL getServerURL() {
+		Optional<ServerURL> optional = _providerManager.provideOptional(
+			ServerURL.class, _httpServletRequest);
+
+		return optional.orElseThrow(
+			() -> new MustHaveProvider(ServerURL.class));
+	}
+
+	/**
+	 * Returns the right {@link SingleModelMessageMapper} for the provided
+	 * {@link MediaType} that supports writing the provided {@link SingleModel}.
+	 *
+	 * @param  mediaType the request media type
+	 * @param  singleModel the single model to write
+	 * @return the {@code SingleModelMessageMapper} that writes the {@code
+	 *         SingleModel} in the media type
+	 * @review
+	 */
+	protected SingleModelMessageMapper<T> getSingleModelMessageMapper(
+		MediaType mediaType, SingleModel<T> singleModel) {
+
+		Stream<SingleModelMessageMapper<T>> stream =
+			_singleModelMessageMappers.stream();
+
+		String mediaTypeString = mediaType.toString();
+
+		return stream.filter(
+			messageMapper ->
+				mediaTypeString.equals(messageMapper.getMediaType()) &&
+				 messageMapper.supports(singleModel, _httpHeaders)
+		).findFirst(
+		).orElseThrow(
+			() -> new MustHaveMessageMapper(
+				mediaTypeString, singleModel.getModelClass())
+		);
 	}
 
 	@Reference
