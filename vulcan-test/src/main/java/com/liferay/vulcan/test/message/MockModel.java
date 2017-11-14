@@ -23,10 +23,28 @@ import java.util.Map;
  * Instances of this class represent a mock model that can be written using a
  * {@link com.liferay.vulcan.message.json.SingleModelMessageMapper}.
  *
+ * <p>
+ * This class has two operation-modes, with {@code null} fields, or without
+ * them. This means that when activating {@code nulls}, methods such as {@link
+ * #getBooleanFields()} will generate one or more extra fields with {@code null}
+ * or {@code empty} values. In order to activate this mode, instantiate this
+ * class with the constructor {@link #MockModel(boolean)} with a boolean {@code
+ * true}. Instantiating this class with the no-parameters constructor will
+ * create a version with the {@code nulls} deactivated.
+ * </p>
+ *
  * @author Alejandro Hernández
  * @review
  */
 public class MockModel {
+
+	public MockModel() {
+		_activateNulls = false;
+	}
+
+	public MockModel(boolean activateNulls) {
+		_activateNulls = activateNulls;
+	}
 
 	/**
 	 * Return the boolean fields of this model.
@@ -39,6 +57,10 @@ public class MockModel {
 			{
 				put("boolean1", true);
 				put("boolean2", false);
+
+				if (_activateNulls) {
+					put("boolean3", null);
+				}
 			}
 		};
 	}
@@ -54,6 +76,11 @@ public class MockModel {
 			{
 				put("link1", "www.liferay.com");
 				put("link2", "community.liferay.com");
+
+				if (_activateNulls) {
+					put("link3", null);
+					put("link4", "");
+				}
 			}
 		};
 	}
@@ -69,6 +96,10 @@ public class MockModel {
 			{
 				put("number1", 2017);
 				put("number2", 42);
+
+				if (_activateNulls) {
+					put("number3", null);
+				}
 			}
 		};
 	}
@@ -84,6 +115,11 @@ public class MockModel {
 			{
 				put("string1", "Live long and prosper");
 				put("string2", "Hypermedia");
+
+				if (_activateNulls) {
+					put("string3", null);
+					put("string4", "");
+				}
 			}
 		};
 	}
@@ -112,5 +148,7 @@ public class MockModel {
 	public String getURL() {
 		return "localhost:8080";
 	}
+
+	private final boolean _activateNulls;
 
 }
