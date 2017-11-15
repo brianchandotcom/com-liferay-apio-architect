@@ -28,8 +28,8 @@ import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.test.json.Conditions;
-import com.liferay.vulcan.test.message.MockModel;
 import com.liferay.vulcan.test.message.MockSingleModelWriter;
+import com.liferay.vulcan.test.resource.RootModel;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -139,7 +139,7 @@ public class PlainJSONSingleModelMessageMapperTest {
 			aJsonObjectWith(firstEmbeddedConditions));
 	}
 
-	private final PlainJSONSingleModelMessageMapper<MockModel>
+	private final PlainJSONSingleModelMessageMapper<RootModel>
 		_singleModelMessageMapper = new PlainJSONSingleModelMessageMapper<>();
 
 }

@@ -17,6 +17,8 @@ package com.liferay.vulcan.test.message;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.SingleModelMessageMapper;
+import com.liferay.vulcan.test.resource.InnerModel;
+import com.liferay.vulcan.test.resource.RootModel;
 
 import java.util.List;
 import java.util.Map;
@@ -37,8 +39,8 @@ import javax.ws.rs.core.HttpHeaders;
 public class MockSingleModelWriter {
 
 	/**
-	 * Writes a model of type {@link MockModel}, with an embedded {@link
-	 * MockInnerModel} and some links.
+	 * Writes a model of type {@link RootModel}, with an embedded {@link
+	 * InnerModel} and some links.
 	 *
 	 * @param  singleModelMessageMapper the message mapper to use for writing
 	 *         the json object
@@ -48,43 +50,43 @@ public class MockSingleModelWriter {
 	 * @review
 	 */
 	public static void write(
-		SingleModelMessageMapper<MockModel> singleModelMessageMapper,
+		SingleModelMessageMapper<RootModel> singleModelMessageMapper,
 		JSONObjectBuilder jsonObjectBuilder, HttpHeaders httpHeaders) {
 
-		MockModel mockModel = new MockModel();
+		RootModel rootModel = new RootModel();
 
 		singleModelMessageMapper.onStart(
-			jsonObjectBuilder, mockModel, MockModel.class, httpHeaders);
+			jsonObjectBuilder, rootModel, RootModel.class, httpHeaders);
 
-		Map<String, String> stringFields = mockModel.getStringFields();
+		Map<String, String> stringFields = rootModel.getStringFields();
 
 		stringFields.forEach(
 			(key, value) -> singleModelMessageMapper.mapStringField(
 				jsonObjectBuilder, key, value));
 
-		Map<String, Number> numberFields = mockModel.getNumberFields();
+		Map<String, Number> numberFields = rootModel.getNumberFields();
 
 		numberFields.forEach(
 			(key, value) -> singleModelMessageMapper.mapNumberField(
 				jsonObjectBuilder, key, value));
 
-		Map<String, Boolean> booleanFields = mockModel.getBooleanFields();
+		Map<String, Boolean> booleanFields = rootModel.getBooleanFields();
 
 		booleanFields.forEach(
 			(key, value) -> singleModelMessageMapper.mapBooleanField(
 				jsonObjectBuilder, key, value));
 
-		Map<String, String> links = mockModel.getLinks();
+		Map<String, String> links = rootModel.getLinks();
 
 		links.forEach(
 			(key, value) -> singleModelMessageMapper.mapLink(
 				jsonObjectBuilder, key, value));
 
 		singleModelMessageMapper.mapTypes(
-			jsonObjectBuilder, mockModel.getTypes());
+			jsonObjectBuilder, rootModel.getTypes());
 
 		singleModelMessageMapper.mapSelfURL(
-			jsonObjectBuilder, mockModel.getURL());
+			jsonObjectBuilder, rootModel.getURL());
 
 		singleModelMessageMapper.mapLinkedResourceURL(
 			jsonObjectBuilder, _first_linked_path_elements,
@@ -107,11 +109,11 @@ public class MockSingleModelWriter {
 			_second_embedded_path_elements);
 
 		singleModelMessageMapper.onFinish(
-			jsonObjectBuilder, mockModel, MockModel.class, httpHeaders);
+			jsonObjectBuilder, rootModel, RootModel.class, httpHeaders);
 	}
 
 	/**
-	 * Writes an embedded model of type {@link MockInnerModel} with some links.
+	 * Writes an embedded model of type {@link InnerModel} with some links.
 	 *
 	 * @param  singleModelMessageMapper the message mapper to use for writing
 	 *         the json object
@@ -124,38 +126,41 @@ public class MockSingleModelWriter {
 		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements) {
 
-		MockInnerModel mockInnerModel = new MockInnerModel();
+		InnerModel innerModel = new InnerModel("21");
 
-		Field<Boolean> booleanField = mockInnerModel.getBooleanField();
+		Map<String, String> stringFields = innerModel.getStringFields();
 
-		singleModelMessageMapper.mapEmbeddedResourceBooleanField(
-			jsonObjectBuilder, embeddedPathElements, booleanField.getKey(),
-			booleanField.getValue());
+		stringFields.forEach(
+			(key, value) ->
+				singleModelMessageMapper.mapEmbeddedResourceStringField(
+					jsonObjectBuilder, embeddedPathElements, key, value));
 
-		Field<String> linkField = mockInnerModel.getLink();
+		Map<String, Number> numberFields = innerModel.getNumberFields();
 
-		singleModelMessageMapper.mapEmbeddedResourceLink(
-			jsonObjectBuilder, embeddedPathElements, linkField.getKey(),
-			linkField.getValue());
+		numberFields.forEach(
+			(key, value) ->
+				singleModelMessageMapper.mapEmbeddedResourceNumberField(
+					jsonObjectBuilder, embeddedPathElements, key, value));
 
-		Field<Number> numberField = mockInnerModel.getNumberField();
+		Map<String, Boolean> booleanFields = innerModel.getBooleanFields();
 
-		singleModelMessageMapper.mapEmbeddedResourceNumberField(
-			jsonObjectBuilder, embeddedPathElements, numberField.getKey(),
-			numberField.getValue());
+		booleanFields.forEach(
+			(key, value) ->
+				singleModelMessageMapper.mapEmbeddedResourceBooleanField(
+					jsonObjectBuilder, embeddedPathElements, key, value));
 
-		Field<String> stringField = mockInnerModel.getStringField();
+		Map<String, String> links = innerModel.getLinks();
 
-		singleModelMessageMapper.mapEmbeddedResourceStringField(
-			jsonObjectBuilder, embeddedPathElements, stringField.getKey(),
-			stringField.getValue());
+		links.forEach(
+			(key, value) -> singleModelMessageMapper.mapEmbeddedResourceLink(
+				jsonObjectBuilder, embeddedPathElements, key, value));
 
-		List<String> types = mockInnerModel.getTypes();
+		List<String> types = innerModel.getTypes();
 
 		singleModelMessageMapper.mapEmbeddedResourceTypes(
 			jsonObjectBuilder, embeddedPathElements, types);
 
-		String url = mockInnerModel.getURL();
+		String url = innerModel.getURL();
 
 		singleModelMessageMapper.mapEmbeddedResourceURL(
 			jsonObjectBuilder, embeddedPathElements, url);
