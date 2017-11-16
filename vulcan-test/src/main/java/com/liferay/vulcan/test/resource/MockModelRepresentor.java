@@ -21,6 +21,7 @@ import com.liferay.vulcan.resource.RelatedModel;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.identifier.StringIdentifier;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,9 +39,10 @@ import java.util.stream.Stream;
  * @review
  */
 public class MockModelRepresentor<T extends Model>
-	implements Representor<T, StringIdentifier> {
+	extends Representor<T, StringIdentifier> {
 
 	public MockModelRepresentor(Model model) {
+		super(StringIdentifier.class, Collections::emptyList);
 		_model = model;
 	}
 
