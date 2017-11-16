@@ -111,7 +111,7 @@ public class SingleModelWriter<T> {
 				_jsonObjectBuilder, types));
 
 		fieldsWriter.writeBinaries(
-			(field, value) -> _singleModelMessageMapper.mapStringField(
+			(field, value) -> _singleModelMessageMapper.mapLink(
 				_jsonObjectBuilder, field, value));
 
 		fieldsWriter.writeSingleURL(
@@ -384,9 +384,8 @@ public class SingleModelWriter<T> {
 				_jsonObjectBuilder, embeddedPathElements, types));
 
 		fieldsWriter.writeBinaries(
-			(field, value) ->
-				_singleModelMessageMapper.mapEmbeddedResourceStringField(
-					_jsonObjectBuilder, embeddedPathElements, field, value));
+			(field, value) -> _singleModelMessageMapper.mapEmbeddedResourceLink(
+				_jsonObjectBuilder, embeddedPathElements, field, value));
 
 		fieldsWriter.writeEmbeddedRelatedModels(
 			this::_getPathOptional, this::_writeEmbeddedModelFields,
