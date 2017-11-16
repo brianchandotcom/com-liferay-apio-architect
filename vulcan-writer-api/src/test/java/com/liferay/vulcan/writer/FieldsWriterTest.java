@@ -34,10 +34,9 @@ import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.request.RequestInfo;
 import com.liferay.vulcan.resource.RelatedModel;
 import com.liferay.vulcan.resource.identifier.StringIdentifier;
-import com.liferay.vulcan.test.resource.InnerModel;
-import com.liferay.vulcan.test.resource.MockModelRepresentor;
-import com.liferay.vulcan.test.resource.Model;
-import com.liferay.vulcan.test.resource.RootModel;
+import com.liferay.vulcan.test.resource.MockRepresentorCreator;
+import com.liferay.vulcan.test.resource.model.FirstEmbeddedModel;
+import com.liferay.vulcan.test.resource.model.RootModel;
 import com.liferay.vulcan.uri.Path;
 
 import java.util.ArrayList;
@@ -87,12 +86,10 @@ public class FieldsWriterTest {
 			Optional.of(Mockito.mock(Language.class))
 		);
 
-		Model model = new RootModel(true);
-
 		_fieldsWriter = new FieldsWriter<>(
-			new SingleModel<>(model, Model.class), _requestInfo,
-			new MockModelRepresentor<>(model), new Path("name", "id"),
-			new FunctionalList<>(null, "first"));
+			new SingleModel<>(() -> "first", RootModel.class), _requestInfo,
+			MockRepresentorCreator.createRootModelRepresentor(true),
+			new Path("name", "id"), new FunctionalList<>(null, "first"));
 	}
 
 	@Test
@@ -223,7 +220,8 @@ public class FieldsWriterTest {
 
 		SingleModel singleModel = singleModels.get(0);
 
-		assertThat(singleModel.getModel(), is(instanceOf(InnerModel.class)));
+		assertThat(
+			singleModel.getModel(), is(instanceOf(FirstEmbeddedModel.class)));
 
 		assertThat(linkedRelatedModelURLs, hasSize(equalTo(1)));
 		assertThat(
@@ -585,7 +583,7 @@ public class FieldsWriterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testWriteRelatedModelFailsIfEmptyRelatedModel() {
-		RelatedModel<Model, Integer> relatedModel = new RelatedModel<>(
+		RelatedModel<RootModel, Integer> relatedModel = new RelatedModel<>(
 			"key", Integer.class, __ -> Optional.empty());
 
 		Function<SingleModel<?>, Optional<Path>> pathFunction = Mockito.mock(
@@ -646,7 +644,7 @@ public class FieldsWriterTest {
 		assertThat(types, contains("Type 1", "Type 2"));
 	}
 
-	private FieldsWriter<Model, StringIdentifier> _fieldsWriter;
+	private FieldsWriter<RootModel, StringIdentifier> _fieldsWriter;
 	private final RequestInfo _requestInfo = Mockito.mock(RequestInfo.class);
 
 }

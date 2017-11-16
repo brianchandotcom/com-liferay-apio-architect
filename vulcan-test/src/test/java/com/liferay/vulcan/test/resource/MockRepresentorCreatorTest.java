@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.test.message;
+package com.liferay.vulcan.test.resource;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -22,12 +22,12 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class MockSingleModelWriterTest {
+public class MockRepresentorCreatorTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testConstructorThrowsException() throws Throwable {
 		Constructor<?> constructor =
-			MockSingleModelWriter.class.getDeclaredConstructors()[0];
+			MockRepresentorCreator.class.getDeclaredConstructors()[0];
 
 		constructor.setAccessible(true);
 
