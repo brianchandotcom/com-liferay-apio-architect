@@ -17,7 +17,8 @@ package com.liferay.vulcan.jaxrs.json.internal.writer;
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
-import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveMessageMapper;
+import com.liferay.vulcan.error.VulcanDeveloperError.MustHaveProvider;
 import com.liferay.vulcan.language.Language;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
@@ -108,33 +109,13 @@ public class PageMessageBodyWriter<T>
 
 		PrintWriter printWriter = new PrintWriter(outputStreamWriter, true);
 
-		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
-
-		String mediaTypeString = mediaType.toString();
-
 		Page<T> page = success.getValue();
-
-		PageMessageMapper<T> pageMessageMapper = stream.filter(
-			bodyWriter ->
-				mediaTypeString.equals(bodyWriter.getMediaType()) &&
-				bodyWriter.supports(page, _httpHeaders)
-		).findFirst(
-		).orElseThrow(
-			() -> new VulcanDeveloperError.MustHaveMessageMapper(
-				mediaTypeString, page.getModelClass())
-		);
-
-		Optional<ServerURL> optional = _providerManager.provideOptional(
-			ServerURL.class, _httpServletRequest);
-
-		ServerURL serverURL = optional.orElseThrow(
-			() -> new VulcanDeveloperError.MustHaveProvider(ServerURL.class));
 
 		RequestInfo requestInfo = RequestInfo.create(
 			builder -> builder.httpHeaders(
 				_httpHeaders
 			).serverURL(
-				serverURL
+				getServerURL()
 			).embedded(
 				_providerManager.provideOrNull(
 					Embedded.class, _httpServletRequest)
@@ -150,7 +131,7 @@ public class PageMessageBodyWriter<T>
 			builder -> builder.page(
 				page
 			).pageMessageMapper(
-				pageMessageMapper
+				getPageMessageMapper(mediaType, page)
 			).pathFunction(
 				_pathIdentifierMapperManager::map
 			).resourceNameFunction(
@@ -164,6 +145,49 @@ public class PageMessageBodyWriter<T>
 		printWriter.println(pageWriter.write());
 
 		printWriter.close();
+	}
+
+	/**
+	 * Returns the right {@link PageMessageMapper} for the provided {@link
+	 * MediaType} that supports writing the provided {@link Page}.
+	 *
+	 * @param  mediaType the request media type
+	 * @param  page the page to write
+	 * @return the {@code PageMessageMapper} that writes the {@code Page} in the
+	 *         media type
+	 * @review
+	 */
+	protected PageMessageMapper<T> getPageMessageMapper(
+		MediaType mediaType, Page<T> page) {
+
+		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
+
+		String mediaTypeString = mediaType.toString();
+
+		return stream.filter(
+			bodyWriter ->
+				mediaTypeString.equals(bodyWriter.getMediaType()) &&
+				bodyWriter.supports(page, _httpHeaders)
+		).findFirst(
+		).orElseThrow(
+			() -> new MustHaveMessageMapper(
+				mediaTypeString, page.getModelClass())
+		);
+	}
+
+	/**
+	 * Returns the server URL, or throws a {@link MustHaveProvider} developer
+	 * error.
+	 *
+	 * @return the server URL.
+	 * @review
+	 */
+	protected ServerURL getServerURL() {
+		Optional<ServerURL> optional = _providerManager.provideOptional(
+			ServerURL.class, _httpServletRequest);
+
+		return optional.orElseThrow(
+			() -> new MustHaveProvider(ServerURL.class));
 	}
 
 	@Reference

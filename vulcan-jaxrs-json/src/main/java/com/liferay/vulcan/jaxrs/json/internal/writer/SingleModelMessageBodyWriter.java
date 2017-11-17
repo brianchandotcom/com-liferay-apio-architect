@@ -111,16 +111,11 @@ public class SingleModelMessageBodyWriter<T>
 
 		SingleModel<T> singleModel = success.getValue();
 
-		SingleModelMessageMapper<T> singleModelMessageMapper =
-			getSingleModelMessageMapper(mediaType, singleModel);
-
-		ServerURL serverURL = getServerURL();
-
 		RequestInfo requestInfo = RequestInfo.create(
 			builder -> builder.httpHeaders(
 				_httpHeaders
 			).serverURL(
-				serverURL
+				getServerURL()
 			).embedded(
 				_providerManager.provideOrNull(
 					Embedded.class, _httpServletRequest)
@@ -136,7 +131,7 @@ public class SingleModelMessageBodyWriter<T>
 			builder -> builder.singleModel(
 				singleModel
 			).modelMessageMapper(
-				singleModelMessageMapper
+				getSingleModelMessageMapper(mediaType, singleModel)
 			).pathFunction(
 				_pathIdentifierMapperManager::map
 			).resourceNameFunction(
