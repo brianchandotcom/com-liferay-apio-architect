@@ -14,6 +14,9 @@
 
 package com.liferay.vulcan.writer;
 
+import static com.liferay.vulcan.writer.util.WriterUtil.getFieldsWriter;
+import static com.liferay.vulcan.writer.util.WriterUtil.getPathOptional;
+
 import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.function.TriFunction;
@@ -73,8 +76,9 @@ public class SingleModelWriter<T> {
 	 * @review
 	 */
 	public Optional<String> write() {
-		Optional<FieldsWriter<T, Identifier>> optional = _getFieldsWriter(
-			_singleModel, null);
+		Optional<FieldsWriter<T, Identifier>> optional = getFieldsWriter(
+			_singleModel, null, _requestInfo, _pathFunction,
+			_representorFunction);
 
 		if (!optional.isPresent()) {
 			return Optional.empty();
@@ -119,7 +123,9 @@ public class SingleModelWriter<T> {
 				_jsonObjectBuilder, url));
 
 		fieldsWriter.writeEmbeddedRelatedModels(
-			this::_getPathOptional, this::_writeEmbeddedModelFields,
+			singleModel -> getPathOptional(
+				singleModel, _pathFunction, _representorFunction),
+			this::_writeEmbeddedModelFields,
 			(resourceURL, embeddedPathElements) ->
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					_jsonObjectBuilder, embeddedPathElements, resourceURL),
@@ -128,7 +134,8 @@ public class SingleModelWriter<T> {
 					_jsonObjectBuilder, embeddedPathElements, resourceURL));
 
 		fieldsWriter.writeLinkedRelatedModels(
-			this::_getPathOptional,
+			singleModel -> getPathOptional(
+				singleModel, _pathFunction, _representorFunction),
 			(url, embeddedPathElements) ->
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					_jsonObjectBuilder, embeddedPathElements, url));
@@ -197,9 +204,8 @@ public class SingleModelWriter<T> {
 			 * @review
 			 */
 			public ResourceNameFunctionStep pathFunction(
-				TriFunction<Identifier,
-					Class<? extends Identifier>, Class<?>, Optional<Path>>
-						pathFunction) {
+				TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
+					Optional<Path>> pathFunction) {
 
 				_pathFunction = pathFunction;
 
@@ -220,9 +226,8 @@ public class SingleModelWriter<T> {
 			 * @review
 			 */
 			public RequestInfoStep representorFunction(
-				Function<Class<?>,
-					Optional<? extends Representor<?, ? extends Identifier>>>
-						representorFunction) {
+				Function<Class<?>, Optional<? extends Representor
+					<?, ? extends Identifier>>> representorFunction) {
 
 				_representorFunction = representorFunction;
 
@@ -292,12 +297,10 @@ public class SingleModelWriter<T> {
 
 		}
 
-		private TriFunction<Identifier,
-			Class<? extends Identifier>, Class<?>, Optional<Path>>
-				_pathFunction;
-		private Function<Class<?>,
-			Optional<? extends Representor<?, ? extends Identifier>>>
-				_representorFunction;
+		private TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
+			Optional<Path>> _pathFunction;
+		private Function<Class<?>, Optional<? extends Representor
+			<?, ? extends Identifier>>> _representorFunction;
 		private RequestInfo _requestInfo;
 		private Function<String, Optional<String>> _resourceNameFunction;
 		private SingleModel<T> _singleModel;
@@ -305,48 +308,13 @@ public class SingleModelWriter<T> {
 
 	}
 
-	private <U> Optional<FieldsWriter<U, Identifier>> _getFieldsWriter(
-		SingleModel<U> singleModel,
-		FunctionalList<String> embeddedPathElements) {
-
-		Optional<Representor<U, Identifier>> representorOptional =
-			_getRepresentorOptional(singleModel.getModelClass());
-
-		Optional<Path> pathOptional = _getPathOptional(singleModel);
-
-		return representorOptional.flatMap(
-			representor -> pathOptional.map(
-				path -> new FieldsWriter<>(
-					singleModel, _requestInfo, representor, path,
-					embeddedPathElements)));
-	}
-
-	private <V> Optional<Path> _getPathOptional(SingleModel<V> singleModel) {
-		Optional<Representor<V, Identifier>> optional = _getRepresentorOptional(
-			singleModel.getModelClass());
-
-		return optional.flatMap(
-			representor -> _pathFunction.apply(
-				representor.getIdentifier(singleModel.getModel()),
-				representor.getIdentifierClass(), singleModel.getModelClass()));
-	}
-
-	@SuppressWarnings("unchecked")
-	private <V, W extends Identifier> Optional<Representor<V, W>>
-		_getRepresentorOptional(Class<V> modelClass) {
-
-		Optional<? extends Representor<?, ? extends Identifier>> optional =
-			_representorFunction.apply(modelClass);
-
-		return optional.map(representor -> (Representor<V, W>)representor);
-	}
-
 	private <V> void _writeEmbeddedModelFields(
 		SingleModel<V> singleModel,
 		FunctionalList<String> embeddedPathElements) {
 
-		Optional<FieldsWriter<V, Identifier>> optional = _getFieldsWriter(
-			singleModel, embeddedPathElements);
+		Optional<FieldsWriter<V, Identifier>> optional = getFieldsWriter(
+			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
+			_representorFunction);
 
 		if (!optional.isPresent()) {
 			return;
@@ -388,7 +356,9 @@ public class SingleModelWriter<T> {
 				_jsonObjectBuilder, embeddedPathElements, field, value));
 
 		fieldsWriter.writeEmbeddedRelatedModels(
-			this::_getPathOptional, this::_writeEmbeddedModelFields,
+			embeddedSingleModel -> getPathOptional(
+				embeddedSingleModel, _pathFunction, _representorFunction),
+			this::_writeEmbeddedModelFields,
 			(resourceURL, resourceEmbeddedPathElements) ->
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					_jsonObjectBuilder, resourceEmbeddedPathElements,
@@ -399,7 +369,8 @@ public class SingleModelWriter<T> {
 					resourceURL));
 
 		fieldsWriter.writeLinkedRelatedModels(
-			this::_getPathOptional,
+			embeddedSingleModel -> getPathOptional(
+				embeddedSingleModel, _pathFunction, _representorFunction),
 			(url, resourceEmbeddedPathElements) ->
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					_jsonObjectBuilder, resourceEmbeddedPathElements, url));
@@ -412,11 +383,10 @@ public class SingleModelWriter<T> {
 	}
 
 	private final JSONObjectBuilder _jsonObjectBuilder;
-	private final TriFunction<Identifier,
-		Class<? extends Identifier>, Class<?>, Optional<Path>> _pathFunction;
-	private final Function<Class<?>,
-		Optional<? extends Representor<?, ? extends Identifier>>>
-			_representorFunction;
+	private final TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
+		Optional<Path>> _pathFunction;
+	private final Function<Class<?>, Optional<? extends Representor
+		<?, ? extends Identifier>>> _representorFunction;
 	private final RequestInfo _requestInfo;
 	private final Function<String, Optional<String>> _resourceNameFunction;
 	private final SingleModel<T> _singleModel;

@@ -21,6 +21,8 @@ import static com.liferay.vulcan.pagination.PageType.NEXT;
 import static com.liferay.vulcan.pagination.PageType.PREVIOUS;
 import static com.liferay.vulcan.writer.url.URLCreator.createCollectionPageURL;
 import static com.liferay.vulcan.writer.url.URLCreator.createCollectionURL;
+import static com.liferay.vulcan.writer.util.WriterUtil.getFieldsWriter;
+import static com.liferay.vulcan.writer.util.WriterUtil.getPathOptional;
 
 import com.google.gson.JsonObject;
 
@@ -179,9 +181,8 @@ public class PageWriter<T> {
 			 * @review
 			 */
 			public ResourceNameFunctionStep pathFunction(
-				TriFunction<Identifier,
-					Class<? extends Identifier>, Class<?>, Optional<Path>>
-						pathFunction) {
+				TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
+					Optional<Path>> pathFunction) {
 
 				_pathFunction = pathFunction;
 
@@ -202,8 +203,8 @@ public class PageWriter<T> {
 			 * @review
 			 */
 			public RequestInfoStep representorFunction(
-				Function<Class<?>,
-					Optional<? extends Representor<?, ? extends Identifier>>>
+				Function<Class<?>, Optional<? extends Representor<
+					?, ? extends Identifier>>>
 						representorFunction) {
 
 				_representorFunction = representorFunction;
@@ -255,12 +256,10 @@ public class PageWriter<T> {
 
 		private Page<T> _page;
 		private PageMessageMapper<T> _pageMessageMapper;
-		private TriFunction<Identifier,
-			Class<? extends Identifier>, Class<?>, Optional<Path>>
-				_pathFunction;
-		private Function<Class<?>,
-			Optional<? extends Representor<?, ? extends Identifier>>>
-				_representorFunction;
+		private TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
+			Optional<Path>> _pathFunction;
+		private Function<Class<?>, Optional<? extends Representor
+			<?, ? extends Identifier>>> _representorFunction;
 		private RequestInfo _requestInfo;
 		private Function<String, Optional<String>> _resourceNameFunction;
 
@@ -279,45 +278,10 @@ public class PageWriter<T> {
 				_requestInfo.getServerURL(), path, name));
 	}
 
-	private <U> Optional<FieldsWriter<U, Identifier>> _getFieldsWriter(
-		SingleModel<U> singleModel,
-		FunctionalList<String> embeddedPathElements) {
-
-		Optional<Representor<U, Identifier>> representorOptional =
-			_getRepresentorOptional(singleModel.getModelClass());
-
-		Optional<Path> pathOptional = _getPathOptional(singleModel);
-
-		return representorOptional.flatMap(
-			representor -> pathOptional.map(
-				path -> new FieldsWriter<>(
-					singleModel, _requestInfo, representor, path,
-					embeddedPathElements)));
-	}
-
-	private <V> Optional<Path> _getPathOptional(SingleModel<V> singleModel) {
-		Optional<Representor<V, Identifier>> optional = _getRepresentorOptional(
-			singleModel.getModelClass());
-
-		return optional.flatMap(
-			representor -> _pathFunction.apply(
-				representor.getIdentifier(singleModel.getModel()),
-				representor.getIdentifierClass(), singleModel.getModelClass()));
-	}
-
-	@SuppressWarnings("unchecked")
-	private <V, W extends Identifier> Optional<Representor<V, W>>
-		_getRepresentorOptional(Class<V> modelClass) {
-
-		Optional<? extends Representor<?, ? extends Identifier>> optional =
-			_representorFunction.apply(modelClass);
-
-		return optional.map(representor -> (Representor<V, W>)representor);
-	}
-
 	private void _writeItem(SingleModel<T> singleModel) {
-		Optional<FieldsWriter<T, Identifier>> optional = _getFieldsWriter(
-			singleModel, null);
+		Optional<FieldsWriter<T, Identifier>> optional = getFieldsWriter(
+			singleModel, null, _requestInfo, _pathFunction,
+			_representorFunction);
 
 		if (!optional.isPresent()) {
 			return;
@@ -366,7 +330,8 @@ public class PageWriter<T> {
 				_pageJsonObjectBuilder, itemJsonObjectBuilder, url));
 
 		fieldsWriter.writeEmbeddedRelatedModels(
-			this::_getPathOptional,
+			embeddedSingleModel -> getPathOptional(
+				embeddedSingleModel, _pathFunction, _representorFunction),
 			(embeddedSingleModel, embeddedPathElements1) ->
 				_writeItemEmbeddedModelFields(
 					embeddedSingleModel, embeddedPathElements1,
@@ -381,7 +346,8 @@ public class PageWriter<T> {
 					embeddedPathElements, resourceURL));
 
 		fieldsWriter.writeLinkedRelatedModels(
-			this::_getPathOptional,
+			embeddedSingleModel -> getPathOptional(
+				embeddedSingleModel, _pathFunction, _representorFunction),
 			(url, embeddedPathElements) ->
 				_pageMessageMapper.mapItemLinkedResourceURL(
 					_pageJsonObjectBuilder, itemJsonObjectBuilder,
@@ -404,8 +370,9 @@ public class PageWriter<T> {
 		SingleModel<V> singleModel, FunctionalList<String> embeddedPathElements,
 		JSONObjectBuilder itemJsonObjectBuilder) {
 
-		Optional<FieldsWriter<V, Identifier>> optional = _getFieldsWriter(
-			singleModel, embeddedPathElements);
+		Optional<FieldsWriter<V, Identifier>> optional = getFieldsWriter(
+			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
+			_representorFunction);
 
 		if (!optional.isPresent()) {
 			return;
@@ -453,7 +420,8 @@ public class PageWriter<T> {
 				embeddedPathElements, field, value));
 
 		fieldsWriter.writeEmbeddedRelatedModels(
-			this::_getPathOptional,
+			embeddedSingleModel -> getPathOptional(
+				embeddedSingleModel, _pathFunction, _representorFunction),
 			(embeddedSingleModel, embeddedModelEmbeddedPathElements) ->
 				_writeItemEmbeddedModelFields(
 					embeddedSingleModel, embeddedModelEmbeddedPathElements,
@@ -468,7 +436,8 @@ public class PageWriter<T> {
 					resourceEmbeddedPathElements, resourceURL));
 
 		fieldsWriter.writeLinkedRelatedModels(
-			this::_getPathOptional,
+			embeddedSingleModel -> getPathOptional(
+				embeddedSingleModel, _pathFunction, _representorFunction),
 			(url, resourceEmbeddedPathElements) ->
 				_pageMessageMapper.mapItemLinkedResourceURL(
 					_pageJsonObjectBuilder, itemJsonObjectBuilder,
@@ -516,11 +485,10 @@ public class PageWriter<T> {
 	private final Page<T> _page;
 	private final JSONObjectBuilder _pageJsonObjectBuilder;
 	private final PageMessageMapper<T> _pageMessageMapper;
-	private final TriFunction<Identifier,
-		Class<? extends Identifier>, Class<?>, Optional<Path>> _pathFunction;
-	private final Function<Class<?>,
-		Optional<? extends Representor<?, ? extends Identifier>>>
-			_representorFunction;
+	private final TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
+		Optional<Path>> _pathFunction;
+	private final Function<Class<?>, Optional<? extends Representor
+		<?, ? extends Identifier>>> _representorFunction;
 	private final RequestInfo _requestInfo;
 	private final Function<String, Optional<String>> _resourceNameFunction;
 
