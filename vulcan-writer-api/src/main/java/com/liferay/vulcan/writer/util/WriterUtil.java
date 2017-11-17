@@ -14,7 +14,6 @@
 
 package com.liferay.vulcan.writer.util;
 
-import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.request.RequestInfo;
@@ -22,9 +21,10 @@ import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.writer.FieldsWriter;
+import com.liferay.vulcan.writer.alias.PathFunction;
+import com.liferay.vulcan.writer.alias.RepresentorFunction;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * This class provides util functions for writers.
@@ -51,11 +51,8 @@ public class WriterUtil {
 	 */
 	public static <T> Optional<FieldsWriter<T, Identifier>> getFieldsWriter(
 		SingleModel<T> singleModel, FunctionalList<String> embeddedPathElements,
-		RequestInfo requestInfo,
-		TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
-			Optional<Path>> pathFunction,
-		Function<Class<?>, Optional<? extends Representor
-			<?, ? extends Identifier>>> representorFunction) {
+		RequestInfo requestInfo, PathFunction pathFunction,
+		RepresentorFunction representorFunction) {
 
 		Optional<Representor<T, Identifier>> representorOptional =
 			getRepresentorOptional(
@@ -85,11 +82,8 @@ public class WriterUtil {
 	 * @review
 	 */
 	public static <T> Optional<Path> getPathOptional(
-		SingleModel<T> singleModel,
-		TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
-			Optional<Path>> pathFunction,
-		Function<Class<?>, Optional<? extends Representor
-			<?, ? extends Identifier>>> representorFunction) {
+		SingleModel<T> singleModel, PathFunction pathFunction,
+		RepresentorFunction representorFunction) {
 
 		Optional<Representor<T, Identifier>> optional = getRepresentorOptional(
 			singleModel.getModelClass(), representorFunction);
@@ -113,9 +107,7 @@ public class WriterUtil {
 	@SuppressWarnings("unchecked")
 	public static <T, V extends Identifier> Optional<Representor<T, V>>
 		getRepresentorOptional(
-			Class<T> modelClass,
-			Function<Class<?>, Optional<? extends Representor<?,
-				? extends Identifier>>> representorFunction) {
+			Class<T> modelClass, RepresentorFunction representorFunction) {
 
 		Optional<? extends Representor<?, ? extends Identifier>> optional =
 			representorFunction.apply(modelClass);

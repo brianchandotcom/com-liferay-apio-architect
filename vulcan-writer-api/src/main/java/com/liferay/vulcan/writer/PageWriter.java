@@ -26,16 +26,17 @@ import static com.liferay.vulcan.writer.util.WriterUtil.getPathOptional;
 
 import com.google.gson.JsonObject;
 
-import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.list.FunctionalList;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.request.RequestInfo;
-import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.uri.Path;
+import com.liferay.vulcan.writer.alias.PathFunction;
+import com.liferay.vulcan.writer.alias.RepresentorFunction;
+import com.liferay.vulcan.writer.alias.ResourceNameFunction;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -76,8 +77,9 @@ public class PageWriter<T> {
 	/**
 	 * Write the handled {@link Page} to a String. It uses a {@link
 	 * FieldsWriter} in order to write the different fields of the {@link
-	 * Representor} of its items. If no {@code Representor} or {@code Path} can
-	 * be found for the model, {@code Optional#empty()} is returned.
+	 * com.liferay.vulcan.resource.Representor} of its items. If no {@code
+	 * Representor} or {@code Path} can be found for the model, {@code
+	 * Optional#empty()} is returned.
 	 *
 	 * @return the representation of the {@code Page} if both its {@code
 	 *         Representor} and {@code Path} are available; returns {@code
@@ -181,8 +183,7 @@ public class PageWriter<T> {
 			 * @review
 			 */
 			public ResourceNameFunctionStep pathFunction(
-				TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
-					Optional<Path>> pathFunction) {
+				PathFunction pathFunction) {
 
 				_pathFunction = pathFunction;
 
@@ -203,9 +204,7 @@ public class PageWriter<T> {
 			 * @review
 			 */
 			public RequestInfoStep representorFunction(
-				Function<Class<?>, Optional<? extends Representor<
-					?, ? extends Identifier>>>
-						representorFunction) {
+				RepresentorFunction representorFunction) {
 
 				_representorFunction = representorFunction;
 
@@ -245,7 +244,7 @@ public class PageWriter<T> {
 			 * @review
 			 */
 			public RepresentorFunctionStep resourceNameFunction(
-				Function<String, Optional<String>> resourceNameFunction) {
+				ResourceNameFunction resourceNameFunction) {
 
 				_resourceNameFunction = resourceNameFunction;
 
@@ -256,12 +255,10 @@ public class PageWriter<T> {
 
 		private Page<T> _page;
 		private PageMessageMapper<T> _pageMessageMapper;
-		private TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
-			Optional<Path>> _pathFunction;
-		private Function<Class<?>, Optional<? extends Representor
-			<?, ? extends Identifier>>> _representorFunction;
+		private PathFunction _pathFunction;
+		private RepresentorFunction _representorFunction;
 		private RequestInfo _requestInfo;
-		private Function<String, Optional<String>> _resourceNameFunction;
+		private ResourceNameFunction _resourceNameFunction;
 
 	}
 
@@ -485,11 +482,9 @@ public class PageWriter<T> {
 	private final Page<T> _page;
 	private final JSONObjectBuilder _pageJsonObjectBuilder;
 	private final PageMessageMapper<T> _pageMessageMapper;
-	private final TriFunction<Identifier, Class<? extends Identifier>, Class<?>,
-		Optional<Path>> _pathFunction;
-	private final Function<Class<?>, Optional<? extends Representor
-		<?, ? extends Identifier>>> _representorFunction;
+	private final PathFunction _pathFunction;
+	private final RepresentorFunction _representorFunction;
 	private final RequestInfo _requestInfo;
-	private final Function<String, Optional<String>> _resourceNameFunction;
+	private final ResourceNameFunction _resourceNameFunction;
 
 }
