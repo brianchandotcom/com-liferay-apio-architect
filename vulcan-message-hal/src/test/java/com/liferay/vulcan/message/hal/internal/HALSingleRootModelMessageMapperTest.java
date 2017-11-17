@@ -62,6 +62,10 @@ public class HALSingleRootModelMessageMapperTest {
 		).where(
 			"boolean2", is(aJsonBoolean(false))
 		).where(
+			"localizedString1", is(aJsonString(equalTo("Translated 1")))
+		).where(
+			"localizedString2", is(aJsonString(equalTo("Translated 2")))
+		).where(
 			"number1", is(aJsonInt(equalTo(2017)))
 		).where(
 			"number2", is(aJsonInt(equalTo(42)))

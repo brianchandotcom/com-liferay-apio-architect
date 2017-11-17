@@ -83,6 +83,10 @@ public class JSONLDSingleModelMessageMapperTest {
 		).where(
 			"linked2", _isALinkTo("localhost:8080/p/first-inner-model/fourth")
 		).where(
+			"localizedString1", is(aJsonString(equalTo("Translated 1")))
+		).where(
+			"localizedString2", is(aJsonString(equalTo("Translated 2")))
+		).where(
 			"number1", is(aJsonInt(equalTo(2017)))
 		).where(
 			"number2", is(aJsonInt(equalTo(42)))

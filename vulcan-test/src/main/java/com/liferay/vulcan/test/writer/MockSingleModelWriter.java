@@ -35,6 +35,7 @@ import com.liferay.vulcan.uri.Path;
 import com.liferay.vulcan.writer.SingleModelWriter;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -80,8 +81,9 @@ public class MockSingleModelWriter {
 
 	/**
 	 * Returns a {@link RequestInfo} with the provided {@link HttpHeaders}, a
-	 * mock {@link com.liferay.vulcan.url.ServerURL} and a mock {@link
-	 * com.liferay.vulcan.response.control.Embedded} request.
+	 * mock {@link com.liferay.vulcan.url.ServerURL}, a mock {@link
+	 * com.liferay.vulcan.response.control.Embedded} request and a mock {@link
+	 * com.liferay.vulcan.language.Language} with {@link Locale#US}.
 	 *
 	 * @param  httpHeaders the HTTP headers
 	 * @return the request info
@@ -95,6 +97,8 @@ public class MockSingleModelWriter {
 				() -> "localhost:8080"
 			).embedded(
 				() -> Arrays.asList("embedded1", "embedded1.embedded")::contains
+			).language(
+				() -> Locale.US
 			).build());
 	}
 
