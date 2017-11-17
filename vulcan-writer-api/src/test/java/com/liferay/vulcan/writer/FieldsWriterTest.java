@@ -614,9 +614,11 @@ public class FieldsWriterTest {
 
 		_fieldsWriter.writeStringFields(strings::put);
 
-		assertThat(strings, is(aMapWithSize(2)));
+		assertThat(strings, is(aMapWithSize(4)));
 		assertThat(strings, hasEntry("string1", "Live long and prosper"));
 		assertThat(strings, hasEntry("string2", "Hypermedia"));
+		assertThat(strings, hasEntry("date1", "2016-06-15T09:00Z"));
+		assertThat(strings, hasEntry("date2", "2017-04-03T18:36Z"));
 	}
 
 	@Test

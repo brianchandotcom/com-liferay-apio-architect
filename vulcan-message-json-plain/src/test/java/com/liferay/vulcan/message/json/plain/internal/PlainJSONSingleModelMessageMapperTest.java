@@ -69,6 +69,10 @@ public class PlainJSONSingleModelMessageMapperTest {
 		).where(
 			"boolean2", is(aJsonBoolean(false))
 		).where(
+			"date1", is(aJsonString(equalTo("2016-06-15T09:00Z")))
+		).where(
+			"date2", is(aJsonString(equalTo("2017-04-03T18:36Z")))
+		).where(
 			"embedded1", _isAJsonObjectWithTheFirstEmbedded
 		).where(
 			"embedded2", _isALinkTo("localhost:8080/p/first-inner-model/second")

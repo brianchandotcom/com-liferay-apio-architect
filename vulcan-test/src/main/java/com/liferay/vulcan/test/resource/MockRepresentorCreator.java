@@ -22,6 +22,7 @@ import com.liferay.vulcan.test.resource.model.RootModel;
 import com.liferay.vulcan.test.resource.model.SecondEmbeddedModel;
 import com.liferay.vulcan.test.resource.model.ThirdEmbeddedModel;
 
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -101,6 +102,10 @@ public class MockRepresentorCreator {
 				"boolean1", __ -> true
 			).addBoolean(
 				"boolean2", __ -> false
+			).addDate(
+				"date1", __ -> new Date(1465981200000L)
+			).addDate(
+				"date2", __ -> new Date(1491244560000L)
 			).addEmbeddedModel(
 				"embedded1", FirstEmbeddedModel.class,
 				__ -> Optional.of(() -> "first")
