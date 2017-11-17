@@ -59,13 +59,13 @@ public class JSONLDSingleModelMessageMapperTest {
 		Conditions conditions = builder.where(
 			"@context", _isAJsonObjectWithTheContext
 		).where(
-			"@id", _isALinkTo("localhost:8080/p/model/first")
+			"@id", _isALinkTo("localhost/p/model/first")
 		).where(
 			"@type", is(aJsonArrayThat(_containsTheTypes))
 		).where(
-			"binary1", _isALinkTo("localhost:8080/b/model/first/binary1")
+			"binary1", _isALinkTo("localhost/b/model/first/binary1")
 		).where(
-			"binary2", _isALinkTo("localhost:8080/b/model/first/binary2")
+			"binary2", _isALinkTo("localhost/b/model/first/binary2")
 		).where(
 			"boolean1", is(aJsonBoolean(true))
 		).where(
@@ -77,15 +77,15 @@ public class JSONLDSingleModelMessageMapperTest {
 		).where(
 			"embedded1", _isAJsonObjectWithTheFirstEmbedded
 		).where(
-			"embedded2", _isALinkTo("localhost:8080/p/first-inner-model/second")
+			"embedded2", _isALinkTo("localhost/p/first-inner-model/second")
 		).where(
 			"link1", _isALinkTo("www.liferay.com")
 		).where(
 			"link2", _isALinkTo("community.liferay.com")
 		).where(
-			"linked1", _isALinkTo("localhost:8080/p/first-inner-model/third")
+			"linked1", _isALinkTo("localhost/p/first-inner-model/third")
 		).where(
-			"linked2", _isALinkTo("localhost:8080/p/first-inner-model/fourth")
+			"linked2", _isALinkTo("localhost/p/first-inner-model/fourth")
 		).where(
 			"localizedString1", is(aJsonString(equalTo("Translated 1")))
 		).where(
@@ -95,11 +95,9 @@ public class JSONLDSingleModelMessageMapperTest {
 		).where(
 			"number2", is(aJsonInt(equalTo(42)))
 		).where(
-			"relatedCollection1",
-			_isALinkTo("localhost:8080/p/model/first/models")
+			"relatedCollection1", _isALinkTo("localhost/p/model/first/models")
 		).where(
-			"relatedCollection2",
-			_isALinkTo("localhost:8080/p/model/first/models")
+			"relatedCollection2", _isALinkTo("localhost/p/model/first/models")
 		).where(
 			"string1", is(aJsonString(equalTo("Live long and prosper")))
 		).where(
@@ -147,27 +145,26 @@ public class JSONLDSingleModelMessageMapperTest {
 		Conditions secondEmbeddedConditions = builder.where(
 			"@context", is(aJsonObjectWith(secondEmbeddedContextConditions))
 		).where(
-			"@id", _isALinkTo("localhost:8080/p/second-inner-model/first")
+			"@id", _isALinkTo("localhost/p/second-inner-model/first")
 		).where(
 			"@type", _isAJsonArrayWithTheType
 		).where(
 			"boolean", is(aJsonBoolean(false))
 		).where(
-			"binary",
-			_isALinkTo("localhost:8080/b/second-inner-model/first/binary")
+			"binary", _isALinkTo("localhost/b/second-inner-model/first/binary")
 		).where(
-			"embedded", _isALinkTo("localhost:8080/p/third-inner-model/first")
+			"embedded", _isALinkTo("localhost/p/third-inner-model/first")
 		).where(
 			"link", _isALinkTo("community.liferay.com")
 		).where(
 			"number", is(aJsonInt(equalTo(2017)))
 		).where(
 			"relatedCollection",
-			_isALinkTo("localhost:8080/p/second-inner-model/first/models")
+			_isALinkTo("localhost/p/second-inner-model/first/models")
 		).where(
 			"string", is(aJsonString(equalTo("A string")))
 		).where(
-			"linked", _isALinkTo("localhost:8080/p/third-inner-model/second")
+			"linked", _isALinkTo("localhost/p/third-inner-model/second")
 		).build();
 
 		Conditions firstEmbeddedContextConditions = builder.where(
@@ -179,12 +176,11 @@ public class JSONLDSingleModelMessageMapperTest {
 		Conditions firstEmbeddedConditions = builder.where(
 			"@context", is(aJsonObjectWith(firstEmbeddedContextConditions))
 		).where(
-			"@id", _isALinkTo("localhost:8080/p/first-inner-model/first")
+			"@id", _isALinkTo("localhost/p/first-inner-model/first")
 		).where(
 			"@type", _isAJsonArrayWithTheType
 		).where(
-			"binary",
-			_isALinkTo("localhost:8080/b/first-inner-model/first/binary")
+			"binary", _isALinkTo("localhost/b/first-inner-model/first/binary")
 		).where(
 			"boolean", is(aJsonBoolean(true))
 		).where(
@@ -194,10 +190,10 @@ public class JSONLDSingleModelMessageMapperTest {
 		).where(
 			"embedded", is(aJsonObjectWith(secondEmbeddedConditions))
 		).where(
-			"linked", _isALinkTo("localhost:8080/p/second-inner-model/second")
+			"linked", _isALinkTo("localhost/p/second-inner-model/second")
 		).where(
 			"relatedCollection",
-			_isALinkTo("localhost:8080/p/first-inner-model/first/models")
+			_isALinkTo("localhost/p/first-inner-model/first/models")
 		).where(
 			"string", is(aJsonString(equalTo("A string")))
 		).build();

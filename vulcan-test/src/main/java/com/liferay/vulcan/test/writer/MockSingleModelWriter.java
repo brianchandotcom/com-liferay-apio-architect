@@ -94,7 +94,7 @@ public class MockSingleModelWriter {
 			builder -> builder.httpHeaders(
 				httpHeaders
 			).serverURL(
-				() -> "localhost:8080"
+				() -> "localhost"
 			).embedded(
 				() -> Arrays.asList("embedded1", "embedded1.embedded")::contains
 			).language(

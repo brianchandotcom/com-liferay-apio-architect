@@ -100,59 +100,55 @@ public class HALSingleRootModelMessageMapperTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions linkConditions = builder.where(
-			"binary1", _isALinkTo("localhost:8080/b/model/first/binary1")
+			"binary1", _isALinkTo("localhost/b/model/first/binary1")
 		).where(
-			"binary2", _isALinkTo("localhost:8080/b/model/first/binary2")
+			"binary2", _isALinkTo("localhost/b/model/first/binary2")
 		).where(
-			"embedded2", _isALinkTo("localhost:8080/p/first-inner-model/second")
+			"embedded2", _isALinkTo("localhost/p/first-inner-model/second")
 		).where(
 			"link1", _isALinkTo("www.liferay.com")
 		).where(
 			"link2", _isALinkTo("community.liferay.com")
 		).where(
-			"linked1", _isALinkTo("localhost:8080/p/first-inner-model/third")
+			"linked1", _isALinkTo("localhost/p/first-inner-model/third")
 		).where(
-			"linked2", _isALinkTo("localhost:8080/p/first-inner-model/fourth")
+			"linked2", _isALinkTo("localhost/p/first-inner-model/fourth")
 		).where(
-			"relatedCollection1",
-			_isALinkTo("localhost:8080/p/model/first/models")
+			"relatedCollection1", _isALinkTo("localhost/p/model/first/models")
 		).where(
-			"relatedCollection2",
-			_isALinkTo("localhost:8080/p/model/first/models")
+			"relatedCollection2", _isALinkTo("localhost/p/model/first/models")
 		).where(
-			"self", _isALinkTo("localhost:8080/p/model/first")
+			"self", _isALinkTo("localhost/p/model/first")
 		).build();
 
 		_isAJsonObjectWithTheLinks = is(aJsonObjectWith(linkConditions));
 
 		Conditions firstEmbeddedLinkConditions = builder.where(
-			"binary",
-			_isALinkTo("localhost:8080/b/first-inner-model/first/binary")
+			"binary", _isALinkTo("localhost/b/first-inner-model/first/binary")
 		).where(
 			"link", _isALinkTo("www.liferay.com")
 		).where(
-			"linked", _isALinkTo("localhost:8080/p/second-inner-model/second")
+			"linked", _isALinkTo("localhost/p/second-inner-model/second")
 		).where(
 			"relatedCollection",
-			_isALinkTo("localhost:8080/p/first-inner-model/first/models")
+			_isALinkTo("localhost/p/first-inner-model/first/models")
 		).where(
-			"self", _isALinkTo("localhost:8080/p/first-inner-model/first")
+			"self", _isALinkTo("localhost/p/first-inner-model/first")
 		).build();
 
 		Conditions secondEmbeddedLinkConditions = builder.where(
-			"binary",
-			_isALinkTo("localhost:8080/b/second-inner-model/first/binary")
+			"binary", _isALinkTo("localhost/b/second-inner-model/first/binary")
 		).where(
-			"embedded", _isALinkTo("localhost:8080/p/third-inner-model/first")
+			"embedded", _isALinkTo("localhost/p/third-inner-model/first")
 		).where(
 			"link", _isALinkTo("community.liferay.com")
 		).where(
-			"linked", _isALinkTo("localhost:8080/p/third-inner-model/second")
+			"linked", _isALinkTo("localhost/p/third-inner-model/second")
 		).where(
 			"relatedCollection",
-			_isALinkTo("localhost:8080/p/second-inner-model/first/models")
+			_isALinkTo("localhost/p/second-inner-model/first/models")
 		).where(
-			"self", _isALinkTo("localhost:8080/p/second-inner-model/first")
+			"self", _isALinkTo("localhost/p/second-inner-model/first")
 		).build();
 
 		Conditions secondEmbeddedConditions = builder.where(
