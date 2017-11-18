@@ -50,6 +50,7 @@ import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -69,7 +70,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<Routes<T>> routesTry = _getRoutesTry(name);
 
 		return routesTry.map(
-			Routes::getPostSingleModelFunctionOptional
+			Routes::getCreateItemFunctionOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
@@ -91,13 +92,22 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<Routes<T>> routesTry = _getRoutesTry(nestedName);
 
 		return routesTry.map(
-			Routes::getPostSingleModelFunctionOptional
+			Routes::getCreateItemFunctionOptional
 		).map(
 			Optional::get
 		).map(
 			function -> function.apply(_httpServletRequest)
 		).flatMap(
-			_getAddNestedCollectionItemFunction(name, id, nestedName)
+			postFunction -> {
+				Try<SingleModel<T>> parentSingleModelTry =
+					getCollectionItemSingleModelTry(name, id);
+
+				return parentSingleModelTry.map(
+					_getIdentifierFunction(nestedName)
+				).map(
+					optional -> optional.map(postFunction)
+				);
+			}
 		).map(
 			Optional::get
 		).map(
@@ -114,7 +124,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<Routes<Object>> routesTry = _getRoutesTry(name);
 
 		routesTry.map(
-			Routes::getDeleteSingleModelConsumerOptional
+			Routes::getDeleteConsumerOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
@@ -127,7 +137,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			new Path(name, id)
 		);
 
-		Response.ResponseBuilder responseBuilder = Response.noContent();
+		ResponseBuilder responseBuilder = Response.noContent();
 
 		return responseBuilder.build();
 	}
@@ -166,7 +176,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<Routes<T>> routesTry = _getRoutesTry(name);
 
 		return routesTry.map(
-			Routes::getSingleModelFunctionOptional
+			Routes::getItemFunctionOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
@@ -184,7 +194,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<Routes<T>> routesTry = _getRoutesTry(name);
 
 		return routesTry.map(
-			Routes::getPageFunctionOptional
+			Routes::getGetPageFunctionOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
@@ -236,7 +246,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<Routes<T>> routesTry = _getRoutesTry(nestedName);
 
 		return routesTry.map(
-			Routes::getPageFunctionOptional
+			Routes::getGetPageFunctionOptional
 		).map(
 			Optional::get
 		).map(
@@ -261,7 +271,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<Routes<T>> routesTry = _getRoutesTry(name);
 
 		return routesTry.map(
-			Routes::getUpdateSingleModelFunctionOptional
+			Routes::getUpdateItemFunctionOptional
 		).map(
 			Optional::get
 		).mapFailMatching(
@@ -274,24 +284,6 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			function -> function.apply(body)
 		);
-	}
-
-	private <T> ThrowableFunction<Function<
-		Identifier, Function<Map<String, Object>, SingleModel<T>>>,
-			Try<Optional<Function<Map<String, Object>, SingleModel<T>>>>>
-				_getAddNestedCollectionItemFunction(
-					String name, String id, String nestedName) {
-
-		return postFunction -> {
-			Try<SingleModel<T>> parentSingleModelTry =
-				getCollectionItemSingleModelTry(name, id);
-
-			return parentSingleModelTry.map(
-				_getIdentifierFunction(nestedName)
-			).map(
-				optional -> optional.map(postFunction)
-			);
-		};
 	}
 
 	private <T> Predicate<RelatedCollection<T, ?>>

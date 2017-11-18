@@ -14,17 +14,14 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource;
 
-import com.liferay.vulcan.alias.RequestFunction;
-import com.liferay.vulcan.pagination.Page;
-import com.liferay.vulcan.pagination.SingleModel;
+import com.liferay.vulcan.alias.routes.CreateItemFunction;
+import com.liferay.vulcan.alias.routes.DeleteItemConsumer;
+import com.liferay.vulcan.alias.routes.GetItemFunction;
+import com.liferay.vulcan.alias.routes.GetPageFunction;
+import com.liferay.vulcan.alias.routes.UpdateItemFunction;
 import com.liferay.vulcan.resource.Routes;
-import com.liferay.vulcan.resource.identifier.Identifier;
-import com.liferay.vulcan.uri.Path;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * @author Alejandro Hernández
@@ -32,83 +29,58 @@ import java.util.function.Function;
 public class RoutesImpl<T> implements Routes<T> {
 
 	@Override
-	public Optional<RequestFunction<Consumer<Path>>>
-		getDeleteSingleModelConsumerOptional() {
-
-		return Optional.ofNullable(_deleteSingleModelConsumer);
+	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional() {
+		return Optional.ofNullable(_createItemFunction);
 	}
 
 	@Override
-	public Optional<RequestFunction<Function<Path,
-		Function<Identifier, Page<T>>>>> getPageFunctionOptional() {
-
-		return Optional.ofNullable(_pageFunction);
+	public Optional<DeleteItemConsumer> getDeleteConsumerOptional() {
+		return Optional.ofNullable(_deleteItemConsumer);
 	}
 
 	@Override
-	public Optional<RequestFunction<Function<Identifier,
-		Function<Map<String, Object>, SingleModel<T>>>>>
-			getPostSingleModelFunctionOptional() {
-
-		return Optional.ofNullable(_postSingleModelFunction);
+	public Optional<GetPageFunction<T>> getGetPageFunctionOptional() {
+		return Optional.ofNullable(_getPageFunction);
 	}
 
 	@Override
-	public Optional<RequestFunction<Function<Path,
-		SingleModel<T>>>> getSingleModelFunctionOptional() {
-
+	public Optional<GetItemFunction<T>> getItemFunctionOptional() {
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
 	@Override
-	public Optional<RequestFunction<Function<Path, Function<
-		Map<String, Object>, SingleModel<T>>>>>
-			getUpdateSingleModelFunctionOptional() {
-
-		return Optional.ofNullable(_putSingleModelFunction);
+	public Optional<UpdateItemFunction<T>> getUpdateItemFunctionOptional() {
+		return Optional.ofNullable(_updateItemFunction);
 	}
 
-	public void setDeleteSingleModelConsumer(
-		RequestFunction<Consumer<Path>> deleteSingleModelConsumer) {
+	public void setCreateItemFunction(
+		CreateItemFunction<T> createItemFunction) {
 
-		_deleteSingleModelConsumer = deleteSingleModelConsumer;
+		_createItemFunction = createItemFunction;
 	}
 
-	public void setPageFunction(
-		RequestFunction<Function<Path, Function<Identifier,
-			Page<T>>>> pageFunction) {
-
-		_pageFunction = pageFunction;
+	public void setDeleteItemConsumer(DeleteItemConsumer deleteItemConsumer) {
+		_deleteItemConsumer = deleteItemConsumer;
 	}
 
-	public void setPostSingleModelFunction(
-		RequestFunction<Function<Identifier, Function
-			<Map<String, Object>, SingleModel<T>>>> postSingleModelFunction) {
-
-		_postSingleModelFunction = postSingleModelFunction;
+	public void setGetPageFunction(GetPageFunction<T> getPageFunction) {
+		_getPageFunction = getPageFunction;
 	}
 
-	public void setPutSingleModelFunction(
-		RequestFunction<Function<Path, Function
-			<Map<String, Object>, SingleModel<T>>>> putSingleModelFunction) {
-
-		_putSingleModelFunction = putSingleModelFunction;
-	}
-
-	public void setSingleModelFunction(
-		RequestFunction<Function<Path, SingleModel<T>>> singleModelFunction) {
-
+	public void setSingleModelFunction(GetItemFunction<T> singleModelFunction) {
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private RequestFunction<Consumer<Path>> _deleteSingleModelConsumer;
-	private RequestFunction<Function<Path,
-		Function<Identifier, Page<T>>>> _pageFunction;
-	private RequestFunction<Function<Identifier, Function
-		<Map<String, Object>, SingleModel<T>>>> _postSingleModelFunction;
-	private RequestFunction<Function<Path,
-		Function<Map<String, Object>, SingleModel<T>>>> _putSingleModelFunction;
-	private RequestFunction<Function<Path, SingleModel<T>>>
-		_singleModelFunction;
+	public void setUpdateItemFunction(
+		UpdateItemFunction<T> updateItemFunction) {
+
+		_updateItemFunction = updateItemFunction;
+	}
+
+	private CreateItemFunction<T> _createItemFunction;
+	private DeleteItemConsumer _deleteItemConsumer;
+	private GetPageFunction<T> _getPageFunction;
+	private GetItemFunction<T> _singleModelFunction;
+	private UpdateItemFunction<T> _updateItemFunction;
 
 }
