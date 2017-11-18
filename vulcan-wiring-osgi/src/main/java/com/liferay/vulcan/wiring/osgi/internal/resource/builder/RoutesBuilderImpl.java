@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource.builder;
 
+import com.liferay.vulcan.alias.RequestFunction;
 import com.liferay.vulcan.consumer.DecaConsumer;
 import com.liferay.vulcan.consumer.EnneaConsumer;
 import com.liferay.vulcan.consumer.HeptaConsumer;
@@ -62,8 +63,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 	public RoutesBuilderImpl(
 		Class<T> modelClass, Class<U> singleModelIdentifierClass,
-		Function<HttpServletRequest, Function<Class<?>, Optional<?>>>
-			provideClassFunction,
+		RequestFunction<Function<Class<?>, Optional<?>>> provideClassFunction,
 		BiFunction<Class<? extends Identifier>, Path,
 			Optional<? extends Identifier>> identifierFunction) {
 
@@ -845,15 +845,13 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public <A> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		BiConsumer<U, A> biConsumer, Class<A> aClass) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 				A a = _provideClass(httpServletRequest, aClass);
 
 				biConsumer.accept(u, a);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -862,14 +860,12 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public RoutesBuilder<T, U> addCollectionPageItemRemover(
 		Consumer<U> consumer) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
 				consumer.accept(u);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -882,7 +878,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
 			Class<I> iClass) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 				A a = _provideClass(httpServletRequest, aClass);
@@ -896,9 +892,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				I i = _provideClass(httpServletRequest, iClass);
 
 				decaConsumer.accept(u, a, b, c, d, e, f, g, h, i);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -911,7 +905,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
 			Class<H> hClass) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 				A a = _provideClass(httpServletRequest, aClass);
@@ -924,9 +918,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				H h = _provideClass(httpServletRequest, hClass);
 
 				enneaConsumer.accept(u, a, b, c, d, e, f, g, h);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -937,7 +929,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 		Class<F> fClass) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 				A a = _provideClass(httpServletRequest, aClass);
@@ -948,9 +940,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				F f = _provideClass(httpServletRequest, fClass);
 
 				heptaConsumer.accept(u, a, b, c, d, e, f);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -960,7 +950,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		HexaConsumer<U, A, B, C, D, E> hexaConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 				A a = _provideClass(httpServletRequest, aClass);
@@ -970,9 +960,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				E e = _provideClass(httpServletRequest, eClass);
 
 				hexaConsumer.accept(u, a, b, c, d, e);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -984,7 +972,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass, Class<G> gClass) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 				A a = _provideClass(httpServletRequest, aClass);
@@ -996,9 +984,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				G g = _provideClass(httpServletRequest, gClass);
 
 				octaConsumer.accept(u, a, b, c, d, e, f, g);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -1008,7 +994,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		PentaConsumer<U, A, B, C, D> pentaConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 				A a = _provideClass(httpServletRequest, aClass);
@@ -1017,9 +1003,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				D d = _provideClass(httpServletRequest, dClass);
 
 				pentaConsumer.accept(u, a, b, c, d);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -1029,7 +1013,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		TetraConsumer<U, A, B, C> tetraConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 				A a = _provideClass(httpServletRequest, aClass);
@@ -1037,9 +1021,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				C c = _provideClass(httpServletRequest, cClass);
 
 				tetraConsumer.accept(u, a, b, c);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -1048,16 +1030,14 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public <A, B> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		TriConsumer<U, A, B> triConsumer, Class<A> aClass, Class<B> bClass) {
 
-		Function<HttpServletRequest, Consumer<Path>> deleteSingleModelConsumer =
+		_routesImpl.setDeleteSingleModelConsumer(
 			httpServletRequest -> path -> {
 				U u = _convertIdentifier(path, _singleModelIdentifierClass);
 				A a = _provideClass(httpServletRequest, aClass);
 				B b = _provideClass(httpServletRequest, bClass);
 
 				triConsumer.accept(u, a, b);
-			};
-
-		_routesImpl.setDeleteSingleModelConsumer(deleteSingleModelConsumer);
+			});
 
 		return this;
 	}
@@ -1351,7 +1331,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	private final BiFunction<Class<? extends Identifier>, Path,
 		Optional<? extends Identifier>> _identifierFunction;
 	private final Class<T> _modelClass;
-	private final Function<HttpServletRequest, Function<Class<?>, Optional<?>>>
+	private final RequestFunction<Function<Class<?>, Optional<?>>>
 		_provideClassFunction;
 	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();
 	private final Class<U> _singleModelIdentifierClass;

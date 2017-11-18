@@ -18,6 +18,7 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIP
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.liferay.vulcan.alias.RequestFunction;
 import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.resource.CollectionResource;
@@ -38,8 +39,6 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
@@ -185,8 +184,14 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 
 				_representors.put(modelClass.getName(), representor);
 
+				RequestFunction<Function<Class<?>, Optional<?>>>
+					provideClassFunction =
+						httpServletRequest -> clazz ->
+							_providerManager.provideOptional(
+								clazz, httpServletRequest);
+
 				RoutesBuilderImpl<T, U> routesBuilder = new RoutesBuilderImpl<>(
-					modelClass, identifierClass, _getProvideClassFunction(),
+					modelClass, identifierClass, provideClassFunction,
 					_pathIdentifierMapperManager::map);
 
 				Routes<?> routes = collectionResource.routes(routesBuilder);
@@ -228,13 +233,6 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 		return classTry.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveValidGenericType(
 				resourceClass));
-	}
-
-	private Function<HttpServletRequest, Function<Class<?>, Optional<?>>>
-		_getProvideClassFunction() {
-
-		return httpServletRequest -> clazz -> _providerManager.provideOptional(
-			clazz, httpServletRequest);
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {

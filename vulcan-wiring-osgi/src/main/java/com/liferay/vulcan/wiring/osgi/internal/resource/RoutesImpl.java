@@ -14,6 +14,7 @@
 
 package com.liferay.vulcan.wiring.osgi.internal.resource;
 
+import com.liferay.vulcan.alias.RequestFunction;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.Routes;
@@ -25,29 +26,27 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @author Alejandro Hernández
  */
 public class RoutesImpl<T> implements Routes<T> {
 
 	@Override
-	public Optional<Function<HttpServletRequest, Consumer<Path>>>
+	public Optional<RequestFunction<Consumer<Path>>>
 		getDeleteSingleModelConsumerOptional() {
 
 		return Optional.ofNullable(_deleteSingleModelConsumer);
 	}
 
 	@Override
-	public Optional<Function<HttpServletRequest, Function<Path,
+	public Optional<RequestFunction<Function<Path,
 		Function<Identifier, Page<T>>>>> getPageFunctionOptional() {
 
 		return Optional.ofNullable(_pageFunction);
 	}
 
 	@Override
-	public Optional<Function<HttpServletRequest, Function<Identifier,
+	public Optional<RequestFunction<Function<Identifier,
 		Function<Map<String, Object>, SingleModel<T>>>>>
 			getPostSingleModelFunctionOptional() {
 
@@ -55,14 +54,14 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
-	public Optional<Function<HttpServletRequest, Function<Path,
+	public Optional<RequestFunction<Function<Path,
 		SingleModel<T>>>> getSingleModelFunctionOptional() {
 
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
 	@Override
-	public Optional<Function<HttpServletRequest, Function<Path, Function<
+	public Optional<RequestFunction<Function<Path, Function<
 		Map<String, Object>, SingleModel<T>>>>>
 			getUpdateSingleModelFunctionOptional() {
 
@@ -70,49 +69,46 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	public void setDeleteSingleModelConsumer(
-		Function<HttpServletRequest, Consumer<Path>>
-			deleteSingleModelConsumer) {
+		RequestFunction<Consumer<Path>> deleteSingleModelConsumer) {
 
 		_deleteSingleModelConsumer = deleteSingleModelConsumer;
 	}
 
 	public void setPageFunction(
-		Function<HttpServletRequest, Function<Path, Function<Identifier,
+		RequestFunction<Function<Path, Function<Identifier,
 			Page<T>>>> pageFunction) {
 
 		_pageFunction = pageFunction;
 	}
 
 	public void setPostSingleModelFunction(
-		Function<HttpServletRequest, Function<Identifier, Function
+		RequestFunction<Function<Identifier, Function
 			<Map<String, Object>, SingleModel<T>>>> postSingleModelFunction) {
 
 		_postSingleModelFunction = postSingleModelFunction;
 	}
 
 	public void setPutSingleModelFunction(
-		Function<HttpServletRequest, Function<Path, Function
+		RequestFunction<Function<Path, Function
 			<Map<String, Object>, SingleModel<T>>>> putSingleModelFunction) {
 
 		_putSingleModelFunction = putSingleModelFunction;
 	}
 
 	public void setSingleModelFunction(
-		Function<HttpServletRequest, Function<Path, SingleModel<T>>>
-			singleModelFunction) {
+		RequestFunction<Function<Path, SingleModel<T>>> singleModelFunction) {
 
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private Function<HttpServletRequest, Consumer<Path>>
-		_deleteSingleModelConsumer;
-	private Function<HttpServletRequest, Function<Path,
+	private RequestFunction<Consumer<Path>> _deleteSingleModelConsumer;
+	private RequestFunction<Function<Path,
 		Function<Identifier, Page<T>>>> _pageFunction;
-	private Function<HttpServletRequest, Function<Identifier, Function
+	private RequestFunction<Function<Identifier, Function
 		<Map<String, Object>, SingleModel<T>>>> _postSingleModelFunction;
-	private Function<HttpServletRequest, Function<Path,
+	private RequestFunction<Function<Path,
 		Function<Map<String, Object>, SingleModel<T>>>> _putSingleModelFunction;
-	private Function<HttpServletRequest, Function<Path, SingleModel<T>>>
+	private RequestFunction<Function<Path, SingleModel<T>>>
 		_singleModelFunction;
 
 }

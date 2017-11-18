@@ -16,6 +16,7 @@ package com.liferay.vulcan.resource;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.vulcan.alias.RequestFunction;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.identifier.Identifier;
@@ -25,8 +26,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Holds information about the routes supported for a {@link
@@ -54,7 +53,7 @@ public interface Routes<T> {
 	 * @return the function used to remove a single model, if the function
 	 *         exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<HttpServletRequest, Consumer<Path>>>
+	public Optional<RequestFunction<Consumer<Path>>>
 		getDeleteSingleModelConsumerOptional();
 
 	/**
@@ -66,7 +65,7 @@ public interface Routes<T> {
 	 * @return the function used to create the page, if the function exists;
 	 *         {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<HttpServletRequest, Function<Path,
+	public Optional<RequestFunction<Function<Path,
 		Function<Identifier, Page<T>>>>> getPageFunctionOptional();
 
 	/**
@@ -78,7 +77,7 @@ public interface Routes<T> {
 	 * @return the function that uses a POST request to create the single model,
 	 *         if the function exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<HttpServletRequest, Function<Identifier, Function<
+	public Optional<RequestFunction<Function<Identifier, Function<
 		Map<String, Object>, SingleModel<T>>>>>
 			getPostSingleModelFunctionOptional();
 
@@ -91,7 +90,7 @@ public interface Routes<T> {
 	 * @return the function that uses a GET request to retrieve the single
 	 *         model, if the function exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<HttpServletRequest, Function<Path,
+	public Optional<RequestFunction<Function<Path,
 		SingleModel<T>>>> getSingleModelFunctionOptional();
 
 	/**
@@ -103,7 +102,7 @@ public interface Routes<T> {
 	 * @return the function used to update the single model, if the function
 	 *         exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<HttpServletRequest, Function<Path, Function<
+	public Optional<RequestFunction<Function<Path, Function<
 		Map<String, Object>, SingleModel<T>>>>>
 			getUpdateSingleModelFunctionOptional();
 
