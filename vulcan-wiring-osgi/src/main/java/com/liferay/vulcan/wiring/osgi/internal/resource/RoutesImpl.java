@@ -47,7 +47,7 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
-	public Optional<Function<Identifier, Function<HttpServletRequest,
+	public Optional<Function<HttpServletRequest, Function<Identifier,
 		Function<Map<String, Object>, SingleModel<T>>>>>
 			getPostSingleModelFunctionOptional() {
 
@@ -55,14 +55,14 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	@Override
-	public Optional<Function<Path, Function<HttpServletRequest,
+	public Optional<Function<HttpServletRequest, Function<Path,
 		SingleModel<T>>>> getSingleModelFunctionOptional() {
 
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
 	@Override
-	public Optional<Function<Path, Function<HttpServletRequest, Function<
+	public Optional<Function<HttpServletRequest, Function<Path, Function<
 		Map<String, Object>, SingleModel<T>>>>>
 			getUpdateSingleModelFunctionOptional() {
 
@@ -84,21 +84,21 @@ public class RoutesImpl<T> implements Routes<T> {
 	}
 
 	public void setPostSingleModelFunction(
-		Function<Identifier, Function<HttpServletRequest, Function
+		Function<HttpServletRequest, Function<Identifier, Function
 			<Map<String, Object>, SingleModel<T>>>> postSingleModelFunction) {
 
 		_postSingleModelFunction = postSingleModelFunction;
 	}
 
 	public void setPutSingleModelFunction(
-		Function<Path, Function<HttpServletRequest, Function
+		Function<HttpServletRequest, Function<Path, Function
 			<Map<String, Object>, SingleModel<T>>>> putSingleModelFunction) {
 
 		_putSingleModelFunction = putSingleModelFunction;
 	}
 
 	public void setSingleModelFunction(
-		Function<Path, Function<HttpServletRequest, SingleModel<T>>>
+		Function<HttpServletRequest, Function<Path, SingleModel<T>>>
 			singleModelFunction) {
 
 		_singleModelFunction = singleModelFunction;
@@ -108,11 +108,11 @@ public class RoutesImpl<T> implements Routes<T> {
 		_deleteSingleModelConsumer;
 	private Function<HttpServletRequest, Function<Path,
 		Function<Identifier, Page<T>>>> _pageFunction;
-	private Function<Identifier, Function<HttpServletRequest, Function
+	private Function<HttpServletRequest, Function<Identifier, Function
 		<Map<String, Object>, SingleModel<T>>>> _postSingleModelFunction;
-	private Function<Path, Function<HttpServletRequest,
+	private Function<HttpServletRequest, Function<Path,
 		Function<Map<String, Object>, SingleModel<T>>>> _putSingleModelFunction;
-	private Function<Path, Function<HttpServletRequest, SingleModel<T>>>
+	private Function<HttpServletRequest, Function<Path, SingleModel<T>>>
 		_singleModelFunction;
 
 }

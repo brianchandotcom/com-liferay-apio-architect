@@ -78,7 +78,7 @@ public interface Routes<T> {
 	 * @return the function that uses a POST request to create the single model,
 	 *         if the function exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<Identifier, Function<HttpServletRequest, Function<
+	public Optional<Function<HttpServletRequest, Function<Identifier, Function<
 		Map<String, Object>, SingleModel<T>>>>>
 			getPostSingleModelFunctionOptional();
 
@@ -91,7 +91,7 @@ public interface Routes<T> {
 	 * @return the function that uses a GET request to retrieve the single
 	 *         model, if the function exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<Path, Function<HttpServletRequest,
+	public Optional<Function<HttpServletRequest, Function<Path,
 		SingleModel<T>>>> getSingleModelFunctionOptional();
 
 	/**
@@ -103,7 +103,7 @@ public interface Routes<T> {
 	 * @return the function used to update the single model, if the function
 	 *         exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<Path, Function<HttpServletRequest, Function<
+	public Optional<Function<HttpServletRequest, Function<Path, Function<
 		Map<String, Object>, SingleModel<T>>>>>
 			getUpdateSingleModelFunctionOptional();
 
