@@ -115,20 +115,12 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	 * Returns the model class's routes for the collection resource's name.
 	 *
 	 * @param  name the collection resource's name
-	 * @param  httpServletRequest the request
 	 * @return the model class's routes
 	 */
-	public <T> Optional<Routes<T>> getRoutesOptional(
-		String name, HttpServletRequest httpServletRequest) {
+	public <T> Optional<Routes<T>> getRoutesOptional(String name) {
+		Optional<Routes<?>> optional = Optional.ofNullable(_routes.get(name));
 
-		Optional<Function<HttpServletRequest, Routes<?>>> optional =
-			Optional.ofNullable(_routesFunctions.get(name));
-
-		return optional.map(
-			routesFunction -> routesFunction.apply(httpServletRequest)
-		).map(
-			routes -> (Routes<T>)routes
-		);
+		return optional.map(routes -> (Routes<T>)routes);
 	}
 
 	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
@@ -193,12 +185,13 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 
 				_representors.put(modelClass.getName(), representor);
 
-				Function<HttpServletRequest, Routes<?>> routesFunction =
-					_getRoutesFunction(
-						modelClass, identifierClass, collectionResource);
+				RoutesBuilderImpl<T, U> routesBuilder = new RoutesBuilderImpl<>(
+					modelClass, identifierClass, _getProvideClassFunction(),
+					_pathIdentifierMapperManager::map);
 
-				_routesFunctions.put(
-					collectionResource.getName(), routesFunction);
+				Routes<?> routes = collectionResource.routes(routesBuilder);
+
+				_routes.put(collectionResource.getName(), routes);
 			}
 		);
 	}
@@ -237,26 +230,11 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 				resourceClass));
 	}
 
-	private Function<Class<?>, Optional<?>> _getProvideClassFunction(
-		HttpServletRequest httpServletRequest) {
+	private Function<HttpServletRequest, Function<Class<?>, Optional<?>>>
+		_getProvideClassFunction() {
 
-		return clazz -> _providerManager.provideOptional(
+		return httpServletRequest -> clazz -> _providerManager.provideOptional(
 			clazz, httpServletRequest);
-	}
-
-	private <T, U extends Identifier> Function<HttpServletRequest, Routes<?>>
-		_getRoutesFunction(
-			Class<T> modelClass, Class<U> identifierClass,
-			CollectionResource<T, U> collectionResource) {
-
-		return httpServletRequest -> {
-			RoutesBuilderImpl<T, U> routesBuilder = new RoutesBuilderImpl<>(
-				modelClass, identifierClass,
-				_getProvideClassFunction(httpServletRequest),
-				_pathIdentifierMapperManager::map);
-
-			return collectionResource.routes(routesBuilder);
-		};
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
@@ -284,7 +262,6 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	private final Map<String, Representor> _representors =
 		new ConcurrentHashMap<>();
 	private final List<String> _rootCollectionResourceNames = new ArrayList<>();
-	private final Map<String, Function<HttpServletRequest, Routes<?>>>
-		_routesFunctions = new ConcurrentHashMap<>();
+	private final Map<String, Routes<?>> _routes = new ConcurrentHashMap<>();
 
 }

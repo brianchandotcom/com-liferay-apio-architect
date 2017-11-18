@@ -78,6 +78,8 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			function -> function.apply(new RootIdentifier() {})
 		).map(
+			function -> function.apply(_httpServletRequest)
+		).map(
 			function -> function.apply(body)
 		);
 	}
@@ -96,6 +98,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			_getAddNestedCollectionItemFunction(name, id, nestedName)
 		).map(
 			Optional::get
+		).map(
+			function -> function.apply(_httpServletRequest)
 		).map(
 			function -> function.apply(body)
 		).mapFailMatching(
@@ -117,6 +121,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			NoSuchElementException.class,
 			_getNotAllowedExceptionSupplier("DELETE", name + "/" + id)
 		).getUnchecked(
+		).apply(
+			_httpServletRequest
 		).accept(
 			new Path(name, id)
 		);
@@ -168,6 +174,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			_getNotFoundExceptionSupplier(name + "/" + id)
 		).map(
 			function -> function.apply(new Path(name, id))
+		).map(
+			function -> function.apply(_httpServletRequest)
 		);
 	}
 
@@ -181,6 +189,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class, _getNotFoundExceptionSupplier(name)
+		).map(
+			function -> function.apply(_httpServletRequest)
 		).map(
 			function -> function.apply(new Path())
 		).map(
@@ -230,6 +240,8 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			Optional::get
 		).map(
+			function -> function.apply(_httpServletRequest)
+		).map(
 			function -> function.apply(new Path(name, id))
 		).flatMap(
 			_getNestedCollectionPageTryFunction(name, id, nestedName)
@@ -258,15 +270,18 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			function -> function.apply(new Path(name, id))
 		).map(
+			function -> function.apply(_httpServletRequest)
+		).map(
 			function -> function.apply(body)
 		);
 	}
 
-	private <T> ThrowableFunction<Function<Identifier,
-		Function<Map<String, Object>, SingleModel<T>>>,
-			Try<Optional<Function<Map<String, Object>, SingleModel<T>>>>>
-				_getAddNestedCollectionItemFunction(
-					String name, String id, String nestedName) {
+	private <T> ThrowableFunction<Function<Identifier, Function<
+		HttpServletRequest, Function<Map<String, Object>, SingleModel<T>>>>,
+			Try<Optional<Function<HttpServletRequest, Function<
+				Map<String, Object>, SingleModel<T>>>>>>
+					_getAddNestedCollectionItemFunction(
+						String name, String id, String nestedName) {
 
 		return postFunction -> {
 			Try<SingleModel<T>> parentSingleModelTry =
@@ -368,8 +383,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	private <T> Try<Routes<T>> _getRoutesTry(String name) {
 		Try<Optional<Routes<T>>> optionalTry = Try.success(
-			_collectionResourceManager.getRoutesOptional(
-				name, _httpServletRequest));
+			_collectionResourceManager.getRoutesOptional(name));
 
 		return optionalTry.map(
 			Optional::get

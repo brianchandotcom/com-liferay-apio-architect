@@ -26,6 +26,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Holds information about the routes supported for a {@link
  * CollectionResource}.
@@ -52,7 +54,8 @@ public interface Routes<T> {
 	 * @return the function used to remove a single model, if the function
 	 *         exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Consumer<Path>> getDeleteSingleModelConsumerOptional();
+	public Optional<Function<HttpServletRequest, Consumer<Path>>>
+		getDeleteSingleModelConsumerOptional();
 
 	/**
 	 * Returns the function used to create the page of a {@link
@@ -63,8 +66,8 @@ public interface Routes<T> {
 	 * @return the function used to create the page, if the function exists;
 	 *         {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<Path, Function<Identifier, Page<T>>>>
-		getPageFunctionOptional();
+	public Optional<Function<HttpServletRequest, Function<Path,
+		Function<Identifier, Page<T>>>>> getPageFunctionOptional();
 
 	/**
 	 * Returns the function that uses a POST request to create the single model
@@ -75,8 +78,9 @@ public interface Routes<T> {
 	 * @return the function that uses a POST request to create the single model,
 	 *         if the function exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<Identifier, Function<Map<String, Object>,
-		SingleModel<T>>>> getPostSingleModelFunctionOptional();
+	public Optional<Function<Identifier, Function<HttpServletRequest, Function<
+		Map<String, Object>, SingleModel<T>>>>>
+			getPostSingleModelFunctionOptional();
 
 	/**
 	 * Returns the function that uses a GET request to retrieve the single model
@@ -87,8 +91,8 @@ public interface Routes<T> {
 	 * @return the function that uses a GET request to retrieve the single
 	 *         model, if the function exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<Path, SingleModel<T>>>
-		getSingleModelFunctionOptional();
+	public Optional<Function<Path, Function<HttpServletRequest,
+		SingleModel<T>>>> getSingleModelFunctionOptional();
 
 	/**
 	 * Returns the function used to update the single model of a {@link
@@ -99,7 +103,8 @@ public interface Routes<T> {
 	 * @return the function used to update the single model, if the function
 	 *         exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<Function<Path, Function<Map<String, Object>,
-		SingleModel<T>>>> getUpdateSingleModelFunctionOptional();
+	public Optional<Function<Path, Function<HttpServletRequest, Function<
+		Map<String, Object>, SingleModel<T>>>>>
+			getUpdateSingleModelFunctionOptional();
 
 }

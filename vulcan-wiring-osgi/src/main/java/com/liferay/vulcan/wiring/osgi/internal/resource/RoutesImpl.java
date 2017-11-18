@@ -25,82 +25,94 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Alejandro Hernández
  */
 public class RoutesImpl<T> implements Routes<T> {
 
 	@Override
-	public Optional<Consumer<Path>> getDeleteSingleModelConsumerOptional() {
+	public Optional<Function<HttpServletRequest, Consumer<Path>>>
+		getDeleteSingleModelConsumerOptional() {
+
 		return Optional.ofNullable(_deleteSingleModelConsumer);
 	}
 
 	@Override
-	public Optional<Function<Path, Function<Identifier, Page<T>>>>
-		getPageFunctionOptional() {
+	public Optional<Function<HttpServletRequest, Function<Path,
+		Function<Identifier, Page<T>>>>> getPageFunctionOptional() {
 
 		return Optional.ofNullable(_pageFunction);
 	}
 
 	@Override
-	public Optional<Function<Identifier, Function<Map<String, Object>,
-		SingleModel<T>>>> getPostSingleModelFunctionOptional() {
+	public Optional<Function<Identifier, Function<HttpServletRequest,
+		Function<Map<String, Object>, SingleModel<T>>>>>
+			getPostSingleModelFunctionOptional() {
 
 		return Optional.ofNullable(_postSingleModelFunction);
 	}
 
 	@Override
-	public Optional<Function<Path, SingleModel<T>>>
-		getSingleModelFunctionOptional() {
+	public Optional<Function<Path, Function<HttpServletRequest,
+		SingleModel<T>>>> getSingleModelFunctionOptional() {
 
 		return Optional.ofNullable(_singleModelFunction);
 	}
 
 	@Override
-	public Optional<Function<Path, Function<Map<String, Object>,
-		SingleModel<T>>>> getUpdateSingleModelFunctionOptional() {
+	public Optional<Function<Path, Function<HttpServletRequest, Function<
+		Map<String, Object>, SingleModel<T>>>>>
+			getUpdateSingleModelFunctionOptional() {
 
 		return Optional.ofNullable(_putSingleModelFunction);
 	}
 
 	public void setDeleteSingleModelConsumer(
-		Consumer<Path> deleteSingleModelConsumer) {
+		Function<HttpServletRequest, Consumer<Path>>
+			deleteSingleModelConsumer) {
 
 		_deleteSingleModelConsumer = deleteSingleModelConsumer;
 	}
 
 	public void setPageFunction(
-		Function<Path, Function<Identifier, Page<T>>> pageFunction) {
+		Function<HttpServletRequest, Function<Path, Function<Identifier,
+			Page<T>>>> pageFunction) {
 
 		_pageFunction = pageFunction;
 	}
 
 	public void setPostSingleModelFunction(
-		Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
-			postSingleModelFunction) {
+		Function<Identifier, Function<HttpServletRequest, Function
+			<Map<String, Object>, SingleModel<T>>>> postSingleModelFunction) {
 
 		_postSingleModelFunction = postSingleModelFunction;
 	}
 
 	public void setPutSingleModelFunction(
-		Function<Path, Function<Map<String, Object>, SingleModel<T>>>
-			putSingleModelFunction) {
+		Function<Path, Function<HttpServletRequest, Function
+			<Map<String, Object>, SingleModel<T>>>> putSingleModelFunction) {
 
 		_putSingleModelFunction = putSingleModelFunction;
 	}
 
 	public void setSingleModelFunction(
-		Function<Path, SingleModel<T>> singleModelFunction) {
+		Function<Path, Function<HttpServletRequest, SingleModel<T>>>
+			singleModelFunction) {
 
 		_singleModelFunction = singleModelFunction;
 	}
 
-	private Consumer<Path> _deleteSingleModelConsumer;
-	private Function<Path, Function<Identifier, Page<T>>> _pageFunction;
-	private Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>
-		_postSingleModelFunction;
-	private Function<Path, Function<Map<String, Object>, SingleModel<T>>>
-		_putSingleModelFunction;
-	private Function<Path, SingleModel<T>> _singleModelFunction;
+	private Function<HttpServletRequest, Consumer<Path>>
+		_deleteSingleModelConsumer;
+	private Function<HttpServletRequest, Function<Path,
+		Function<Identifier, Page<T>>>> _pageFunction;
+	private Function<Identifier, Function<HttpServletRequest, Function
+		<Map<String, Object>, SingleModel<T>>>> _postSingleModelFunction;
+	private Function<Path, Function<HttpServletRequest,
+		Function<Map<String, Object>, SingleModel<T>>>> _putSingleModelFunction;
+	private Function<Path, Function<HttpServletRequest, SingleModel<T>>>
+		_singleModelFunction;
 
 }
