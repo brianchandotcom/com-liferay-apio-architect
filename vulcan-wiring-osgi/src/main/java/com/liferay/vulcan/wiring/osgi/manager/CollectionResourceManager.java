@@ -22,10 +22,12 @@ import com.liferay.vulcan.alias.RequestFunction;
 import com.liferay.vulcan.consumer.TriConsumer;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.resource.CollectionResource;
+import com.liferay.vulcan.resource.CollectionResourceInfo;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Routes;
 import com.liferay.vulcan.resource.ScopedCollectionResource;
+import com.liferay.vulcan.resource.builder.RoutesBuilder;
 import com.liferay.vulcan.resource.identifier.Identifier;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
@@ -63,6 +65,7 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	 * @param  name the resource name
 	 * @return the resource name's model class
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> Optional<Class<T>> getModelClassOptional(String name) {
 		Optional<? extends Class<?>> optional = Optional.ofNullable(
 			_classes.get(name));
@@ -95,10 +98,32 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	public <T, U extends Identifier> Optional<Representor<T, U>>
 		getRepresentorOptional(Class<T> modelClass) {
 
-		Optional<Representor> optional = Optional.ofNullable(
-			_representors.get(modelClass.getName()));
+		Optional<CollectionResourceInfo<T, U>> optional =
+			getResourceInfoOptional(modelClass);
 
-		return optional.map(representor -> (Representor<T, U>)representor);
+		return optional.map(CollectionResourceInfo::getRepresentor);
+	}
+
+	/**
+	 * Returns the {@code CollectionResourceInfo} of the collection resource's
+	 * model class, if that info exists. Returns {@code Optional#empty()}
+	 * otherwise.
+	 *
+	 * @param  modelClass the collection resource's model class
+	 * @return the model class's {@code CollectionResourceInfo}, if present;
+	 *         {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	@SuppressWarnings("unchecked")
+	public <T, U extends Identifier> Optional<CollectionResourceInfo<T, U>>
+		getResourceInfoOptional(Class<T> modelClass) {
+
+		Optional<CollectionResourceInfo> optional = Optional.ofNullable(
+			_collectionResourceInfoMap.get(modelClass.getName()));
+
+		return optional.map(
+			collectionResourceInfo ->
+				(CollectionResourceInfo<T, U>)collectionResourceInfo);
 	}
 
 	/**
@@ -117,9 +142,13 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	 * @return the model class's routes
 	 */
 	public <T> Optional<Routes<T>> getRoutesOptional(String name) {
-		Optional<Routes<?>> optional = Optional.ofNullable(_routes.get(name));
+		Optional<Class<T>> optional = getModelClassOptional(name);
 
-		return optional.map(routes -> (Routes<T>)routes);
+		return optional.flatMap(
+			this::getResourceInfoOptional
+		).map(
+			CollectionResourceInfo::getRoutes
+		);
 	}
 
 	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
@@ -151,6 +180,7 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 		);
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T, U extends Identifier> void _addModelClassMaps(
 		Class<T> modelClass) {
 
@@ -161,11 +191,12 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 			collectionResource -> (CollectionResource<T, U>)collectionResource
 		).ifPresent(
 			collectionResource -> {
-				_classes.put(collectionResource.getName(), modelClass);
+				String name = collectionResource.getName();
+
+				_classes.put(name, modelClass);
 
 				if (!(collectionResource instanceof ScopedCollectionResource)) {
-					_rootCollectionResourceNames.add(
-						collectionResource.getName());
+					_rootCollectionResourceNames.add(name);
 				}
 
 				Class<U> identifierClass = _getIdentifierClass(
@@ -176,13 +207,12 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 						() -> (List)_relatedCollections.get(
 							modelClass.getName());
 
-				Representor representor = collectionResource.buildRepresentor(
-					new Representor.Builder<>(
-						identifierClass,
-						_addRelatedCollectionTriConsumer(modelClass),
-						relatedCollectionSupplier));
-
-				_representors.put(modelClass.getName(), representor);
+				Representor<T, U> representor =
+					collectionResource.buildRepresentor(
+						new Representor.Builder<>(
+							identifierClass,
+							_addRelatedCollectionTriConsumer(modelClass),
+							relatedCollectionSupplier));
 
 				RequestFunction<Function<Class<?>, Optional<?>>>
 					provideClassFunction =
@@ -190,13 +220,17 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 							_providerManager.provideOptional(
 								clazz, httpServletRequest);
 
-				RoutesBuilderImpl<T, U> routesBuilder = new RoutesBuilderImpl<>(
+				RoutesBuilder<T, U> routesBuilder = new RoutesBuilderImpl<>(
 					modelClass, identifierClass, provideClassFunction,
 					_pathIdentifierMapperManager::map);
 
-				Routes<?> routes = collectionResource.routes(routesBuilder);
+				Routes<T> routes = collectionResource.routes(routesBuilder);
 
-				_routes.put(collectionResource.getName(), routes);
+				CollectionResourceInfo<T, U> collectionResourceInfo =
+					new CollectionResourceInfo<>(name, representor, routes);
+
+				_collectionResourceInfoMap.put(
+					modelClass.getName(), collectionResourceInfo);
 			}
 		);
 	}
@@ -244,10 +278,12 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 			(className, relatedCollections) -> relatedCollections.removeIf(
 				relatedCollection ->
 					relatedCollection.getModelClass().equals(modelClass)));
-		_representors.remove(modelClass.getName());
+		_collectionResourceInfoMap.remove(modelClass.getName());
 	}
 
 	private final Map<String, Class<?>> _classes = new ConcurrentHashMap<>();
+	private final Map<String, CollectionResourceInfo>
+		_collectionResourceInfoMap = new ConcurrentHashMap<>();
 
 	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;
@@ -257,9 +293,6 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 
 	private final Map<String, List<RelatedCollection<?, ?>>>
 		_relatedCollections = new ConcurrentHashMap<>();
-	private final Map<String, Representor> _representors =
-		new ConcurrentHashMap<>();
 	private final List<String> _rootCollectionResourceNames = new ArrayList<>();
-	private final Map<String, Routes<?>> _routes = new ConcurrentHashMap<>();
 
 }
