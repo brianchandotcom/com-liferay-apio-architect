@@ -229,7 +229,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		rootCollectionResourceNames.forEach(
 			name -> {
-				String url = serverURL.getServerURL() + "/p/" + name;
+				String url = serverURL.get() + "/p/" + name;
 
 				JsonObject jsonObject = new JsonObject();
 
