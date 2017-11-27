@@ -31,6 +31,10 @@ public enum PageType {
 	 * @return the page number for a type
 	 */
 	public Integer getPageNumber(Page page) {
+		if (this == FIRST) {
+			return 1;
+		}
+
 		if (this == LAST) {
 			return page.getLastPageNumber();
 		}
@@ -47,15 +51,13 @@ public enum PageType {
 
 			return pageNumber - 1;
 		}
-		else if (this == NEXT) {
+		else {
 			if (page.getLastPageNumber() == pageNumber) {
 				return pageNumber;
 			}
 
 			return pageNumber + 1;
 		}
-
-		return 1;
 	}
 
 }
