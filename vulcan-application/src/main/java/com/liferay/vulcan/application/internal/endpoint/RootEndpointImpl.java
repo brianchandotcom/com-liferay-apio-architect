@@ -17,6 +17,7 @@ package com.liferay.vulcan.application.internal.endpoint;
 import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.alias.BinaryFunction;
+import com.liferay.vulcan.documentation.Documentation;
 import com.liferay.vulcan.endpoint.RootEndpoint;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.pagination.Page;
@@ -206,6 +207,11 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			function -> function.apply(new RootIdentifier() {})
 		);
+	}
+
+	@Override
+	public Documentation getDocumentation() {
+		return _collectionResourceManager.getDocumentation();
 	}
 
 	@Override

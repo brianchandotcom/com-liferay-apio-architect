@@ -20,6 +20,9 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.vulcan.alias.RequestFunction;
 import com.liferay.vulcan.consumer.TriConsumer;
+import com.liferay.vulcan.documentation.APIDescription;
+import com.liferay.vulcan.documentation.APITitle;
+import com.liferay.vulcan.documentation.Documentation;
 import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.resource.CollectionResource;
 import com.liferay.vulcan.resource.CollectionResourceInfo;
@@ -43,6 +46,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -58,6 +62,24 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true, service = CollectionResourceManager.class)
 public class CollectionResourceManager extends BaseManager<CollectionResource> {
+
+	@Activate
+	public void activate() {
+		RequestFunction<Optional<APITitle>> apiTitleFunction =
+			httpServletRequest -> _providerManager.provideOptional(
+				APITitle.class, httpServletRequest);
+
+		RequestFunction<Optional<APIDescription>> apiDescriptionFunction =
+			httpServletRequest -> _providerManager.provideOptional(
+				APIDescription.class, httpServletRequest);
+
+		_documentation = new Documentation(
+			apiTitleFunction, apiDescriptionFunction);
+	}
+
+	public Documentation getDocumentation() {
+		return _documentation;
+	}
 
 	/**
 	 * Returns the resource name's model class.
@@ -284,6 +306,7 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	private final Map<String, Class<?>> _classes = new ConcurrentHashMap<>();
 	private final Map<String, CollectionResourceInfo>
 		_collectionResourceInfoMap = new ConcurrentHashMap<>();
+	private Documentation _documentation;
 
 	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;
