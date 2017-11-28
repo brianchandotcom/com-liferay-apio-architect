@@ -14,15 +14,17 @@
 
 package com.liferay.vulcan.message.json;
 
-import com.liferay.vulcan.documentation.Documentation;
-import com.liferay.vulcan.test.result.MockAPIError;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import org.junit.Test;
-import org.mockito.Mockito;
+
+import com.liferay.vulcan.documentation.Documentation;
 
 import javax.ws.rs.core.HttpHeaders;
+
+import org.junit.Test;
+
+import org.mockito.Mockito;
 
 /**
  * @author Alejandro Hernández
