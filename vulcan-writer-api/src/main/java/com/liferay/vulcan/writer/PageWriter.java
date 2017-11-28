@@ -65,13 +65,14 @@ public class PageWriter<T> {
 	}
 
 	public PageWriter(Builder<T> builder) {
-		_pageMessageMapper = builder._pageMessageMapper;
 		_page = builder._page;
-		_jsonObjectBuilder = new JSONObjectBuilder();
-		_requestInfo = builder._requestInfo;
-		_representorFunction = builder._representorFunction;
+		_pageMessageMapper = builder._pageMessageMapper;
 		_pathFunction = builder._pathFunction;
+		_representorFunction = builder._representorFunction;
+		_requestInfo = builder._requestInfo;
 		_resourceNameFunction = builder._resourceNameFunction;
+
+		_jsonObjectBuilder = new JSONObjectBuilder();
 	}
 
 	/**
