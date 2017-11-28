@@ -296,10 +296,15 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 
 		classes.removeIf(next -> next.equals(modelClass));
 
+		Optional<String> optional = getNameOptional(modelClass.getName());
+
+		optional.ifPresent(_rootCollectionResourceNames::remove);
+
 		_relatedCollections.forEach(
 			(className, relatedCollections) -> relatedCollections.removeIf(
 				relatedCollection ->
 					relatedCollection.getModelClass().equals(modelClass)));
+
 		_collectionResourceInfoMap.remove(modelClass.getName());
 	}
 
