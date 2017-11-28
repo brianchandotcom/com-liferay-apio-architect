@@ -290,9 +290,8 @@ public class PageWriter<T> {
 		JSONObjectBuilder itemJsonObjectBuilder = new JSONObjectBuilder();
 
 		_pageMessageMapper.onStartItem(
-			_jsonObjectBuilder, itemJsonObjectBuilder,
-			singleModel.getModel(), singleModel.getModelClass(),
-			_requestInfo.getHttpHeaders());
+			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel.getModel(),
+			singleModel.getModelClass(), _requestInfo.getHttpHeaders());
 
 		fieldsWriter.writeBooleanFields(
 			(field, value) -> _pageMessageMapper.mapItemBooleanField(
@@ -312,8 +311,7 @@ public class PageWriter<T> {
 
 		fieldsWriter.writeLinks(
 			(fieldName, link) -> _pageMessageMapper.mapItemLink(
-				_jsonObjectBuilder, itemJsonObjectBuilder, fieldName,
-				link));
+				_jsonObjectBuilder, itemJsonObjectBuilder, fieldName, link));
 
 		fieldsWriter.writeTypes(
 			types -> _pageMessageMapper.mapItemTypes(
@@ -359,9 +357,8 @@ public class PageWriter<T> {
 					embeddedPathElements, url));
 
 		_pageMessageMapper.onFinishItem(
-			_jsonObjectBuilder, itemJsonObjectBuilder,
-			singleModel.getModel(), singleModel.getModelClass(),
-			_requestInfo.getHttpHeaders());
+			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel.getModel(),
+			singleModel.getModelClass(), _requestInfo.getHttpHeaders());
 	}
 
 	private <V> void _writeItemEmbeddedModelFields(
@@ -404,18 +401,18 @@ public class PageWriter<T> {
 
 		fieldsWriter.writeLinks(
 			(fieldName, link) -> _pageMessageMapper.mapItemEmbeddedResourceLink(
-				_jsonObjectBuilder, itemJsonObjectBuilder,
-				embeddedPathElements, fieldName, link));
+				_jsonObjectBuilder, itemJsonObjectBuilder, embeddedPathElements,
+				fieldName, link));
 
 		fieldsWriter.writeTypes(
 			types -> _pageMessageMapper.mapItemEmbeddedResourceTypes(
-				_jsonObjectBuilder, itemJsonObjectBuilder,
-				embeddedPathElements, types));
+				_jsonObjectBuilder, itemJsonObjectBuilder, embeddedPathElements,
+				types));
 
 		fieldsWriter.writeBinaries(
 			(field, value) -> _pageMessageMapper.mapItemEmbeddedResourceLink(
-				_jsonObjectBuilder, itemJsonObjectBuilder,
-				embeddedPathElements, field, value));
+				_jsonObjectBuilder, itemJsonObjectBuilder, embeddedPathElements,
+				field, value));
 
 		fieldsWriter.writeEmbeddedRelatedModels(
 			embeddedSingleModel -> getPathOptional(
@@ -480,8 +477,8 @@ public class PageWriter<T> {
 			});
 	}
 
-	private final Page<T> _page;
 	private final JSONObjectBuilder _jsonObjectBuilder;
+	private final Page<T> _page;
 	private final PageMessageMapper<T> _pageMessageMapper;
 	private final PathFunction _pathFunction;
 	private final RepresentorFunction _representorFunction;
