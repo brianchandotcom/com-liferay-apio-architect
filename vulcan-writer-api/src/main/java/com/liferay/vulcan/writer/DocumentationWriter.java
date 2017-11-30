@@ -62,20 +62,20 @@ public class DocumentationWriter {
 	public String write() {
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		RequestFunction<Optional<String>> titleFunction =
-			_documentation.getTitleFunction();
+		RequestFunction<Optional<String>> titleRequestFunction =
+			_documentation.getTitleRequestFunction();
 
-		titleFunction.apply(
+		titleRequestFunction.apply(
 			_requestInfo.getHttpServletRequest()
 		).ifPresent(
 			title -> _documentationMessageMapper.mapTitle(
 				jsonObjectBuilder, title)
 		);
 
-		RequestFunction<Optional<String>> descriptionFunction =
-			_documentation.getDescriptionFunction();
+		RequestFunction<Optional<String>> descriptionRequestFunction =
+			_documentation.getDescriptionRequestFunction();
 
-		descriptionFunction.apply(
+		descriptionRequestFunction.apply(
 			_requestInfo.getHttpServletRequest()
 		).ifPresent(
 			description -> _documentationMessageMapper.mapDescription(

@@ -27,11 +27,12 @@ import java.util.Optional;
 public class Documentation {
 
 	public Documentation(
-		RequestFunction<Optional<APITitle>> apiTitleFunction,
-		RequestFunction<Optional<APIDescription>> apiDescriptionFunction) {
+		RequestFunction<Optional<APITitle>> apiTitleRequestFunction,
+		RequestFunction<Optional<APIDescription>>
+			apiDescriptionRequestFunction) {
 
-		_apiTitleFunction = apiTitleFunction;
-		_apiDescriptionFunction = apiDescriptionFunction;
+		_apiTitleRequestFunction = apiTitleRequestFunction;
+		_apiDescriptionRequestFunction = apiDescriptionRequestFunction;
 	}
 
 	/**
@@ -42,8 +43,8 @@ public class Documentation {
 	 *         otherwise.
 	 * @review
 	 */
-	public RequestFunction<Optional<String>> getDescriptionFunction() {
-		return httpServletRequest -> _apiDescriptionFunction.apply(
+	public RequestFunction<Optional<String>> getDescriptionRequestFunction() {
+		return httpServletRequest -> _apiDescriptionRequestFunction.apply(
 			httpServletRequest
 		).map(
 			APIDescription::get
@@ -58,8 +59,8 @@ public class Documentation {
 	 *         otherwise.
 	 * @review
 	 */
-	public RequestFunction<Optional<String>> getTitleFunction() {
-		return httpServletRequest -> _apiTitleFunction.apply(
+	public RequestFunction<Optional<String>> getTitleRequestFunction() {
+		return httpServletRequest -> _apiTitleRequestFunction.apply(
 			httpServletRequest
 		).map(
 			APITitle::get
@@ -67,7 +68,7 @@ public class Documentation {
 	}
 
 	private final RequestFunction<Optional<APIDescription>>
-		_apiDescriptionFunction;
-	private final RequestFunction<Optional<APITitle>> _apiTitleFunction;
+		_apiDescriptionRequestFunction;
+	private final RequestFunction<Optional<APITitle>> _apiTitleRequestFunction;
 
 }

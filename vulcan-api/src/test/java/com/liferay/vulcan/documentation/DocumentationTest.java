@@ -43,10 +43,10 @@ public class DocumentationTest {
 			HttpServletRequest.class);
 
 		Optional<String> optionalTitle =
-			documentation.getTitleFunction().apply(httpServletRequest);
+			documentation.getTitleRequestFunction().apply(httpServletRequest);
 
 		Optional<String> optionalDescription =
-			documentation.getDescriptionFunction().apply(httpServletRequest);
+			documentation.getDescriptionRequestFunction().apply(httpServletRequest);
 
 		assertThat(optionalTitle, is(emptyOptional()));
 		assertThat(optionalDescription, is(emptyOptional()));
@@ -61,10 +61,10 @@ public class DocumentationTest {
 			HttpServletRequest.class);
 
 		Optional<String> optionalTitle =
-			documentation.getTitleFunction().apply(httpServletRequest);
+			documentation.getTitleRequestFunction().apply(httpServletRequest);
 
 		Optional<String> optionalDescription =
-			documentation.getDescriptionFunction().apply(httpServletRequest);
+			documentation.getDescriptionRequestFunction().apply(httpServletRequest);
 
 		assertThat(optionalTitle, is(optionalWithValue(equalTo("A"))));
 		assertThat(optionalDescription, is(optionalWithValue(equalTo("B"))));

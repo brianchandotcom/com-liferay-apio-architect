@@ -65,16 +65,17 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 
 	@Activate
 	public void activate() {
-		RequestFunction<Optional<APITitle>> apiTitleFunction =
+		RequestFunction<Optional<APITitle>> apiTitleRequestFunction =
 			httpServletRequest -> _providerManager.provideOptional(
 				APITitle.class, httpServletRequest);
 
-		RequestFunction<Optional<APIDescription>> apiDescriptionFunction =
-			httpServletRequest -> _providerManager.provideOptional(
-				APIDescription.class, httpServletRequest);
+		RequestFunction<Optional<APIDescription>>
+			apiDescriptionRequestFunction =
+				httpServletRequest -> _providerManager.provideOptional(
+					APIDescription.class, httpServletRequest);
 
 		_documentation = new Documentation(
-			apiTitleFunction, apiDescriptionFunction);
+			apiTitleRequestFunction, apiDescriptionRequestFunction);
 	}
 
 	public Documentation getDocumentation() {
