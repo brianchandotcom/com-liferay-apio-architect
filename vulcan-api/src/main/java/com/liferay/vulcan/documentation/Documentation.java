@@ -43,7 +43,9 @@ public class Documentation {
 	 *         otherwise.
 	 * @review
 	 */
-	public RequestFunction<Optional<String>> getDescriptionRequestFunction() {
+	public RequestFunction<Optional<String>>
+	getAPIDescriptionRequestFunction() {
+
 		return httpServletRequest -> _apiDescriptionRequestFunction.apply(
 			httpServletRequest
 		).map(
@@ -59,7 +61,7 @@ public class Documentation {
 	 *         otherwise.
 	 * @review
 	 */
-	public RequestFunction<Optional<String>> getTitleRequestFunction() {
+	public RequestFunction<Optional<String>> getAPITitleRequestFunction() {
 		return httpServletRequest -> _apiTitleRequestFunction.apply(
 			httpServletRequest
 		).map(

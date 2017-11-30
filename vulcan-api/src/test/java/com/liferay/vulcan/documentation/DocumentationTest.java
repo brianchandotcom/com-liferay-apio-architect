@@ -21,6 +21,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import com.liferay.vulcan.alias.RequestFunction;
+
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,32 +41,44 @@ public class DocumentationTest {
 		Documentation documentation = new Documentation(
 			__ -> Optional.empty(), __ -> Optional.empty());
 
+		RequestFunction<Optional<String>> apiTitleRequestFunction =
+			documentation.getAPITitleRequestFunction();
+
 		HttpServletRequest httpServletRequest = Mockito.mock(
 			HttpServletRequest.class);
 
-		Optional<String> optionalTitle =
-			documentation.getTitleRequestFunction().apply(httpServletRequest);
+		Optional<String> optionalTitle = apiTitleRequestFunction.apply(
+			httpServletRequest);
+
+		RequestFunction<Optional<String>> apiDescriptionRequestFunction =
+			documentation.getAPIDescriptionRequestFunction();
 
 		Optional<String> optionalDescription =
-			documentation.getDescriptionRequestFunction().apply(httpServletRequest);
+			apiDescriptionRequestFunction.apply(httpServletRequest);
 
 		assertThat(optionalTitle, is(emptyOptional()));
 		assertThat(optionalDescription, is(emptyOptional()));
 	}
 
 	@Test
-	public void testDocumentationWithNonEmptyValuesReturnThem() {
+	public void testDocumentationWithNonemptyValuesReturnThem() {
 		Documentation documentation = new Documentation(
 			__ -> Optional.of(() -> "A"), __ -> Optional.of(() -> "B"));
+
+		RequestFunction<Optional<String>> apiTitleRequestFunction =
+			documentation.getAPITitleRequestFunction();
 
 		HttpServletRequest httpServletRequest = Mockito.mock(
 			HttpServletRequest.class);
 
-		Optional<String> optionalTitle =
-			documentation.getTitleRequestFunction().apply(httpServletRequest);
+		Optional<String> optionalTitle = apiTitleRequestFunction.apply(
+			httpServletRequest);
+
+		RequestFunction<Optional<String>> apiDescriptionRequestFunction =
+			documentation.getAPIDescriptionRequestFunction();
 
 		Optional<String> optionalDescription =
-			documentation.getDescriptionRequestFunction().apply(httpServletRequest);
+			apiDescriptionRequestFunction.apply(httpServletRequest);
 
 		assertThat(optionalTitle, is(optionalWithValue(equalTo("A"))));
 		assertThat(optionalDescription, is(optionalWithValue(equalTo("B"))));
