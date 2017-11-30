@@ -48,8 +48,8 @@ public class DocumentationWriter {
 	}
 
 	public DocumentationWriter(Builder builder) {
-		_documentationMessageMapper = builder._documentationMessageMapper;
 		_documentation = builder._documentation;
+		_documentationMessageMapper = builder._documentationMessageMapper;
 		_requestInfo = builder._requestInfo;
 	}
 

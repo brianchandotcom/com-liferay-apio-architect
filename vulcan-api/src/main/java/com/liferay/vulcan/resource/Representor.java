@@ -215,6 +215,7 @@ public class Representor<T, U extends Identifier> {
 		 */
 		public IdentifierStep types(String type, String... types) {
 			_representor._types.add(type);
+
 			Collections.addAll(_representor._types, types);
 
 			return new IdentifierStep();
