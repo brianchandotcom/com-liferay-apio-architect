@@ -32,8 +32,9 @@ public class APIDescriptionProvider implements Provider<APIDescription> {
 
 	@Override
 	public APIDescription createContext(HttpServletRequest httpServletRequest) {
-		return () -> "A set of APIs that allows you to consume all of " +
-			"Liferay Portal resources";
+		return () ->
+			"A set of APIs that allows you to consume all of Liferay Portal " +
+				"resources";
 	}
 
 }

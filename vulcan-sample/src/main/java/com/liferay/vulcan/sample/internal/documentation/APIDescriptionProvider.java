@@ -32,8 +32,9 @@ public class APIDescriptionProvider implements Provider<APIDescription> {
 
 	@Override
 	public APIDescription createContext(HttpServletRequest httpServletRequest) {
-		return () -> "This API allows developers try a Hypermedia API " +
-			"without creating one";
+		return () ->
+			"This API allows developers try a Hypermedia API without " +
+				"creating one";
 	}
 
 }
