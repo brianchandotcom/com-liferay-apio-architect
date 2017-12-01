@@ -43,19 +43,17 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * An instance of this class can be used to write a page.
+ * Writes a page.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class PageWriter<T> {
 
 	/**
-	 * This method can be used to create a new {@code PageWriter} object,
-	 * without creating the builder.
+	 * Creates a new {@code PageWriter} object, without creating the builder.
 	 *
-	 * @param  function the function that transforms a builder into a {@code
-	 *         PageWriter}
+	 * @param  function the function that creates a {@code PageWriter} from a
+	 *         builder
 	 * @return the {@code PageWriter} instance
 	 */
 	public static <T> PageWriter<T> create(
@@ -76,16 +74,15 @@ public class PageWriter<T> {
 	}
 
 	/**
-	 * Write the handled {@link Page} to a String. It uses a {@link
-	 * FieldsWriter} in order to write the different fields of the {@link
-	 * com.liferay.vulcan.resource.Representor} of its items. If no {@code
-	 * Representor} or {@code Path} can be found for the model, {@code
-	 * Optional#empty()} is returned.
+	 * Writes the handled {@link Page} to a
+	 * string. This method uses a {@link FieldsWriter} to write the different
+	 * fields of its items' {@link com.liferay.vulcan.resource.Representor}. If
+	 * no {@code Representor} or {@code Path} exist for the model, this method
+	 * returns {@code Optional#empty()}.
 	 *
-	 * @return the representation of the {@code Page} if both its {@code
-	 *         Representor} and {@code Path} are available; returns {@code
+	 * @return the representation of the {@code Page}, if the {@code
+	 *         Representor} and {@code Path} exist for the model; returns {@code
 	 *         Optional#empty()} otherwise
-	 * @review
 	 */
 	public String write() {
 		_pageMessageMapper.onStart(
@@ -119,14 +116,12 @@ public class PageWriter<T> {
 	}
 
 	/**
-	 * Use instances of this builder to create {@link PageWriter} instances.
-	 *
-	 * @review
+	 * Creates {@code PageWriter} instances.
 	 */
 	public static class Builder<T> {
 
 		/**
-		 * Add information about the page being written to the builder.
+		 * Adds information about the page being written to the builder.
 		 *
 		 * @param  page the page being written
 		 * @return the updated builder
@@ -140,11 +135,10 @@ public class PageWriter<T> {
 		public class BuildStep {
 
 			/**
-			 * Constructs and returns a {@link PageWriter} instance with the
+			 * Constructs and returns a {@code PageWriter} instance with the
 			 * information provided to the builder.
 			 *
-			 * @return the {@code SingleModelWriter} instance
-			 * @review
+			 * @return the {@code PageWriter} instance
 			 */
 			public PageWriter<T> build() {
 				return new PageWriter<>(Builder.this);
@@ -155,12 +149,11 @@ public class PageWriter<T> {
 		public class PageMessageMapperStep {
 
 			/**
-			 * Add information about the {@code PageMessageMapper} to the
-			 * builder.
+			 * Adds information to the builder about the {@link
+			 * com.liferay.vulcan.message.json.PageMessageMapperPageMessageMapper}.
 			 *
 			 * @param  pageMessageMapper the {@code PageMessageMapper} headers.
-			 * @return the updated builder.
-			 * @review
+			 * @return the updated builder
 			 */
 			public PathFunctionStep pageMessageMapper(
 				PageMessageMapper<T> pageMessageMapper) {
@@ -175,13 +168,13 @@ public class PageWriter<T> {
 		public class PathFunctionStep {
 
 			/**
-			 * Add information to the builder about the function that can be
-			 * used to convert an {@code Identifier} into a {@code Path}.
+			 * Adds information to the builder about the function that converts
+			 * an {@link Identifier} to a
+			 * {@link Path}.
 			 *
-			 * @param  pathFunction the function to map an {@code Identifier}
-			 *         into a {@code Path}
-			 * @return the updated builder.
-			 * @review
+			 * @param  pathFunction the function to map an {@code Identifier} to
+			 *         a {@code Path}
+			 * @return the updated builder
 			 */
 			public ResourceNameFunctionStep pathFunction(
 				PathFunction pathFunction) {
@@ -196,13 +189,12 @@ public class PageWriter<T> {
 		public class RepresentorFunctionStep {
 
 			/**
-			 * Add information to the builder about the function that can be
-			 * used to obtain the {@code Representor} of a certain class.
+			 * Adds information to the builder about the function that gets a
+			 * class's {@link com.liferay.vulcan.resource.Representor}.
 			 *
-			 * @param  representorFunction the function to obtain the {@code
-			 *         Representor} of a class
-			 * @return the updated builder.
-			 * @review
+			 * @param  representorFunction the function that gets a class's
+			 *         {@code Representor}
+			 * @return the updated builder
 			 */
 			public RequestInfoStep representorFunction(
 				RepresentorFunction representorFunction) {
@@ -217,12 +209,12 @@ public class PageWriter<T> {
 		public class RequestInfoStep {
 
 			/**
-			 * Add information about the request info to the builder.
+			 * Adds information to the builder about the request.
 			 *
-			 * @param  requestInfo the information obtained from the request. It
-			 *         can be created by using a {@link RequestInfo.Builder}
-			 * @return the updated builder.
-			 * @review
+			 * @param  requestInfo the information obtained from the request.
+			 *         This can be created by using a {@link
+			 *         com.liferay.vulcan.request.RequestInfoRequestInfo.Builder}
+			 * @return the updated builder
 			 */
 			public BuildStep requestInfo(RequestInfo requestInfo) {
 				_requestInfo = requestInfo;
@@ -235,14 +227,13 @@ public class PageWriter<T> {
 		public class ResourceNameFunctionStep {
 
 			/**
-			 * Add information to the builder about the function that can be
-			 * used to obtain the name of the {@code Representor} of a certain
-			 * class name.
+			 * Adds information to the builder about the function that gets the
+			 * name of a class's {@link
+			 * com.liferay.vulcan.resource.Representor}.
 			 *
-			 * @param  resourceNameFunction the function to obtain the name of
-			 *         the {@code Representor} of a certain class name
-			 * @return the updated builder.
-			 * @review
+			 * @param  resourceNameFunction the function that gets the name of a
+			 *         class's {@code Representor}
+			 * @return the updated builder
 			 */
 			public RepresentorFunctionStep resourceNameFunction(
 				ResourceNameFunction resourceNameFunction) {

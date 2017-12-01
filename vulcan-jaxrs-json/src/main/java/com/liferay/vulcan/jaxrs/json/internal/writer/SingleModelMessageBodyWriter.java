@@ -152,11 +152,11 @@ public class SingleModelMessageBodyWriter<T>
 	}
 
 	/**
-	 * Returns the server URL, or throws a {@link MustHaveProvider} developer
+	 * Returns the server URL, or throws a {@link
+	 * MustHaveProvider} developer
 	 * error.
 	 *
-	 * @return the server URL.
-	 * @review
+	 * @return the server URL
 	 */
 	protected ServerURL getServerURL() {
 		Optional<ServerURL> optional = _providerManager.provideOptional(
@@ -167,14 +167,15 @@ public class SingleModelMessageBodyWriter<T>
 	}
 
 	/**
-	 * Returns the right {@link SingleModelMessageMapper} for the provided
-	 * {@link MediaType} that supports writing the provided {@link SingleModel}.
+	 * Returns the right {@link
+	 * SingleModelMessageMapper} for the
+	 * provided {@code MediaType} that supports writing the
+	 * provided {@link SingleModel}.
 	 *
-	 * @param  mediaType the request media type
+	 * @param  mediaType the request's {@code MediaType}
 	 * @param  singleModel the single model to write
 	 * @return the {@code SingleModelMessageMapper} that writes the {@code
-	 *         SingleModel} in the media type
-	 * @review
+	 *         SingleModel} in the {@code MediaType}
 	 */
 	protected SingleModelMessageMapper<T> getSingleModelMessageMapper(
 		MediaType mediaType, SingleModel<T> singleModel) {

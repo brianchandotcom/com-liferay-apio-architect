@@ -21,11 +21,10 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Defines a type alias for a function that receives the class of a model and
- * returns an {@code Optional} {@code Representor} for that class.
+ * Defines a type alias for a function that receives a model class and returns
+ * an optional {@link Representor} for that class.
  *
  * @author Alejandro Hernández
- * @review
  */
 @FunctionalInterface
 public interface RepresentorFunction extends

@@ -18,12 +18,11 @@ package com.liferay.vulcan.documentation;
  * Represents the API description.
  *
  * @author Alejandro Hernández
- * @review
  */
 public interface APIDescription {
 
 	/**
-	 * Returns the description
+	 * Returns the description.
 	 *
 	 * @return the description
 	 */

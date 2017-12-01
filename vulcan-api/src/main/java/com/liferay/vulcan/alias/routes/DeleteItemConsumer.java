@@ -24,7 +24,6 @@ import java.util.function.Consumer;
  * item.
  *
  * @author Alejandro Hernández
- * @review
  */
 @FunctionalInterface
 public interface DeleteItemConsumer extends RequestFunction<Consumer<Path>> {

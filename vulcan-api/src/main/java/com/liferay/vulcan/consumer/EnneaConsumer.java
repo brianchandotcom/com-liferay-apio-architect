@@ -34,7 +34,6 @@ public interface EnneaConsumer<A, B, C, D, E, F, G, H, I> {
 	 * operation.
 	 *
 	 * @return an empty {@code EnneaConsumer} that doesn't perform any operation
-	 * @review
 	 */
 	public static <A, B, C, D, E, F, G, H, I>
 		EnneaConsumer<A, B, C, D, E, F, G, H, I> empty() {

@@ -33,7 +33,6 @@ public interface OctaConsumer<A, B, C, D, E, F, G, H> {
 	 * Returns an empty {@code OctaConsumer} that doesn't perform any operation.
 	 *
 	 * @return an empty {@code OctaConsumer} that doesn't perform any operation
-	 * @review
 	 */
 	public static <A, B, C, D, E, F, G, H>
 		OctaConsumer<A, B, C, D, E, F, G, H> empty() {

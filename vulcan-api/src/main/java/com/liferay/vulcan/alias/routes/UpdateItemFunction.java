@@ -26,7 +26,6 @@ import java.util.function.Function;
  * item.
  *
  * @author Alejandro Hernández
- * @review
  */
 @FunctionalInterface
 public interface UpdateItemFunction<T>

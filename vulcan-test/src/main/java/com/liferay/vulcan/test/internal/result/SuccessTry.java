@@ -20,11 +20,10 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 /**
- * A {@link org.hamcrest.Matcher} that can be used to check if an element is a
- * {@link Try.Success}.
+ * A {@code org.hamcrest.Matcher} that checks if an element is a {@link
+ * Try.Success}.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class SuccessTry<T> extends TypeSafeDiagnosingMatcher<Try<T>> {
 

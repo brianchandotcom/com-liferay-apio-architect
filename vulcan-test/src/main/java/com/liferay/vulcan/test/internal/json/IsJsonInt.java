@@ -26,11 +26,10 @@ import java.util.Objects;
 import org.hamcrest.Matcher;
 
 /**
- * A {@link Matcher} that can be used to check if an element is a correct
- * integer json primitive.
+ * A {@code Matcher} that checks if an element is a correct integer
+ * JSON primitive.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class IsJsonInt
 	extends AbstractJsonElementMatcher<JsonPrimitive, Integer> {

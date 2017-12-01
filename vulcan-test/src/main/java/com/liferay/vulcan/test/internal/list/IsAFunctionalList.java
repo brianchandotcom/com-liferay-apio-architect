@@ -25,11 +25,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 /**
- * A {@link Matcher} that can be used to check if an element is a {@link
+ * A {@code Matcher} that checks if an element is a {@link
  * FunctionalList} containing some values.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class IsAFunctionalList<T>
 	extends TypeSafeDiagnosingMatcher<FunctionalList<T>> {

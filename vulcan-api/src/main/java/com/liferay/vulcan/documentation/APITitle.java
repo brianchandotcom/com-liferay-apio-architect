@@ -18,12 +18,11 @@ package com.liferay.vulcan.documentation;
  * Represents the API title.
  *
  * @author Alejandro Hernández
- * @review
  */
 public interface APITitle {
 
 	/**
-	 * Returns the title
+	 * Returns the title.
 	 *
 	 * @return the title
 	 */

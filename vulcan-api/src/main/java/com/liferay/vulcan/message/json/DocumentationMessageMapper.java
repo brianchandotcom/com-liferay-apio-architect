@@ -21,26 +21,22 @@ import com.liferay.vulcan.documentation.Documentation;
 import javax.ws.rs.core.HttpHeaders;
 
 /**
- * Maps the API {@link Documentation} its representation in a JSON object.
- * Instances of this interface work like events. The {@code
- * javax.ws.rs.ext.MessageBodyWriter} of the {@code Documentation} calls the
- * {@code DocumentationMessageMapper} methods. In each method, developers should
- * only map the provided part of the resource to its representation in a JSON
- * object. To enable this, each method receives a {@link JSONObjectBuilder}.
+ * Maps the API {@link Documentation} to its
+ * JSON object representation. Instances of this interface work like events. The
+ * {@code javax.ws.rs.ext.MessageBodyWriter} of the {@code Documentation} calls
+ * the {@code DocumentationMessageMapper} methods. In each method, developers
+ * should only map the provided part of the resource to its representation in a
+ * JSON object. To enable this, each method receives a {@link
+ * JSONObjectBuilder}.
  *
  * <p>
  * The methods {@link #onStart(JSONObjectBuilder, Documentation, HttpHeaders)}
  * and {@link #onFinish(JSONObjectBuilder, Documentation, HttpHeaders)} are
- * called when the writer starts and finishes the page, respectively.
- * </p>
- *
- * <p>
- * Otherwise, the page message mapper's methods aren't called in a particular
- * order.
+ * called when the writer starts and finishes the page, respectively. Otherwise,
+ * the page message mapper's methods aren't called in a particular order.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 @ConsumerType
 @SuppressWarnings("unused")

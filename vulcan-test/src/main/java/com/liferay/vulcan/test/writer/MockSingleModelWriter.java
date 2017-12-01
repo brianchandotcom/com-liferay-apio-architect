@@ -42,24 +42,22 @@ import java.util.function.Function;
 import javax.ws.rs.core.HttpHeaders;
 
 /**
- * This class provides methods that can be used for testing single model message
- * mappers.
+ * Provides methods that test {@code
+ * SingleModelMessageMapper} objects.
  *
  * <p>
  * This class shouldn't be instantiated.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public class MockSingleModelWriter {
 
 	/**
-	 * Returns the corresponding {@link Representor} for a given model class.
+	 * Returns a model class's {@link com.liferay.vulcan.resource.Representor}.
 	 *
 	 * @param  modelClass the model class
-	 * @return the {@code Representor} of the model class
-	 * @review
+	 * @return the model class's {@code Representor}
 	 */
 	public static <T> Optional<Representor<?, ? extends Identifier>>
 		getRepresentorOptional(Class<T> modelClass) {
@@ -80,14 +78,15 @@ public class MockSingleModelWriter {
 	}
 
 	/**
-	 * Returns a {@link RequestInfo} with the provided {@link HttpHeaders}, a
-	 * mock {@link com.liferay.vulcan.url.ServerURL}, a mock {@link
-	 * com.liferay.vulcan.response.control.Embedded} request and a mock {@link
-	 * com.liferay.vulcan.language.Language} with {@link Locale#US}.
+	 * Returns a {@link RequestInfo} with the
+	 * provided {@code HttpHeaders}, a mock {@link
+	 * com.liferay.vulcan.url.ServerURL}, a mock {@link
+	 * com.liferay.vulcan.response.control.Embedded} request, and a mock {@link
+	 * com.liferay.vulcan.language.Language} with {@code
+	 * java.util.LocaleLocale#US}.
 	 *
-	 * @param  httpHeaders the HTTP headers
-	 * @return the request info
-	 * @review
+	 * @param  httpHeaders the {@code HttpHeaders}
+	 * @return the {@code RequestInfo}
 	 */
 	public static RequestInfo getRequestInfo(HttpHeaders httpHeaders) {
 		return RequestInfo.create(
@@ -105,17 +104,17 @@ public class MockSingleModelWriter {
 	}
 
 	/**
-	 * Returns a mock {@link Path} from an {@link Identifier}. The {@code
-	 * Identifier} must be of type {@link StringIdentifier}. If the {@code
-	 * Identifier} is not a {@code StringIdentifier}, {@code Optional#empty()}
-	 * is returned.
+	 * Returns a mock {@link Path} from an {@link
+	 * Identifier}. The {@code
+	 * Identifier} must be a {@link
+	 * StringIdentifier}, otherwise
+	 * {@code Optional#empty()} is returned.
 	 *
 	 * @param  identifier the {@code Identifier}
-	 * @param  modelClass the class of the model
-	 * @return the {@code Path} originated from the {@code Identifier}, if its
-	 *         of type {@code StringIdentifier}; {@code Optional#empty()}
-	 *         otherwise
-	 * @review
+	 * @param  modelClass the model class
+	 * @return the mock {@code Path} from the {@code Identifier}, if the {@code
+	 *         Identifier} is a {@code StringIdentifier}; {@code
+	 *         Optional#empty()} otherwise
 	 */
 	public static Optional<Path> identifierToPath(
 		Identifier identifier, Class<?> modelClass) {
@@ -145,13 +144,12 @@ public class MockSingleModelWriter {
 	}
 
 	/**
-	 * Writes a model of type {@link RootModel}, with hierarchy of embedded
-	 * models and multiple fields.
+	 * Writes a {@link RootModel}, with
+	 * the hierarchy of embedded models and multiple fields.
 	 *
-	 * @param  httpHeaders the HTTP headers from the request
-	 * @param  singleModelMessageMapper the message mapper to use for writing
-	 *         the json object
-	 * @review
+	 * @param httpHeaders the request's {@code HttpHeaders}
+	 * @param singleModelMessageMapper the {@link SingleModelMessageMapper} to
+	 *        use for writing the JSON object
 	 */
 	public static JsonObject write(
 		HttpHeaders httpHeaders,

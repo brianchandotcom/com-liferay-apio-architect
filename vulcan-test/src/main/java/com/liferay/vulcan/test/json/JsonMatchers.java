@@ -30,24 +30,22 @@ import com.liferay.vulcan.test.json.Conditions.Builder;
 import org.hamcrest.Matcher;
 
 /**
- * This class provides {@code Hamcrest} {@link Matcher}s that can be used for
- * testing json files/strings.
+ * Provides {@link Matcher} objects that can be used in testing
+ * JSON files and strings.
  *
  * <p>
  * This class shouldn't be instantiated.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public final class JsonMatchers {
 
 	/**
-	 * Returns a matcher that checks that an element is a {@link
+	 * Returns a matcher that checks if an element is a {@code
 	 * com.google.gson.JsonArray}.
 	 *
-	 * @return a matcher that checks that an element is an json array
-	 * @review
+	 * @return the matcher that checks if an element is a JSON array
 	 */
 	public static Matcher<JsonElement> aJsonArrayThat(
 		Matcher<Iterable<? extends JsonElement>> elementsMatcher) {
@@ -56,22 +54,22 @@ public final class JsonMatchers {
 	}
 
 	/**
-	 * Returns a matcher that checks that an element is a boolean {@link
+	 * Returns a matcher that checks if an element is a boolean {@code
 	 * JsonElement}.
 	 *
-	 * @return a matcher that checks that an element is a boolean
-	 * @review
+	 * @return the matcher that checks if an element is a boolean {@code
+	 *         JsonElement}
 	 */
 	public static Matcher<JsonElement> aJsonBoolean(boolean bool) {
 		return new IsJsonBoolean(is(equalTo(bool)));
 	}
 
 	/**
-	 * Returns a matcher that checks that an element is an integer number {@link
+	 * Returns a matcher that checks if an element is an integer {@code
 	 * JsonElement}.
 	 *
-	 * @return a matcher that checks that an element is an integer number
-	 * @review
+	 * @return the matcher that checks if an element is an integer {@code
+	 *         JsonElement}
 	 */
 	public static Matcher<JsonElement> aJsonInt(
 		Matcher<Integer> numberMatcher) {
@@ -80,33 +78,31 @@ public final class JsonMatchers {
 	}
 
 	/**
-	 * Returns a matcher that checks that an element is a long number {@link
+	 * Returns a matcher that checks if an element is a long {@code
 	 * JsonElement}.
 	 *
-	 * @return a matcher that checks that an element is a long number
-	 * @review
+	 * @return the matcher that checks if an element is a long {@code
+	 *         JsonElement}
 	 */
 	public static Matcher<JsonElement> aJsonLong(Matcher<Long> numberMatcher) {
 		return new IsJsonLong(is(numberMatcher));
 	}
 
 	/**
-	 * Returns a matcher that checks that a string is a JSON object.
+	 * Returns a matcher that checks if a string is a JSON object.
 	 *
-	 * @return a matcher that checks that a string is a JSON object.
-	 * @review
+	 * @return the matcher that checks if a string is a JSON object
 	 */
 	public static Matcher<String> aJsonObjectStringWith(Conditions conditions) {
 		return new IsJsonObjectString(conditions);
 	}
 
 	/**
-	 * Returns a matcher that checks that a {@link JsonElement} is a valid json
-	 * object with one element inside.
+	 * Returns a matcher that checks if a {@code JsonElement} is a valid JSON
+	 * object containing an element.
 	 *
-	 * @return a matcher that checks that a {@code JsonElement} is a valid json
-	 *         object.
-	 * @review
+	 * @return the matcher that checks if a {@code JsonElement} is a valid JSON
+	 *         object containing an element
 	 */
 	public static Matcher<JsonElement> aJsonObjectWhere(
 		String key, Matcher<? extends JsonElement> matcher) {
@@ -121,23 +117,22 @@ public final class JsonMatchers {
 	}
 
 	/**
-	 * Returns a matcher that checks that a {@link JsonElement} is a valid json
-	 * object by using different conditions.
+	 * Returns a matcher that uses different conditions to check if a {@code
+	 * JsonElement} is a valid JSON object.
 	 *
-	 * @return a matcher that checks that a {@code JsonElement} is a valid json
-	 *         object.
-	 * @review
+	 * @return the matcher that uses different conditions to check if a {@code
+	 *         JsonElement} is a valid JSON object
 	 */
 	public static Matcher<JsonElement> aJsonObjectWith(Conditions conditions) {
 		return conditions;
 	}
 
 	/**
-	 * Returns a matcher that checks that an element is a string {@link
+	 * Returns a matcher that checks if an element is a string {@code
 	 * JsonElement}.
 	 *
-	 * @return a matcher that checks that an element is a string
-	 * @review
+	 * @return the matcher that checks if an element is a string {@code
+	 *         JsonElement}
 	 */
 	public static Matcher<JsonElement> aJsonString(
 		Matcher<String> stringMatcher) {

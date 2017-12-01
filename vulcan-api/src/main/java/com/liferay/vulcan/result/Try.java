@@ -146,22 +146,21 @@ public abstract class Try<T> {
 		ThrowableFunction<? super T, Try<U>> function);
 
 	/**
-	 * Returns the value resultant of applying {@code failureFunction} if this
-	 * is a {@code Failure} or {@code successFunction} if this is a {@code
+	 * Returns the value that results from applying {@code failureFunction} if
+	 * this is a {@code Failure}, or {@code successFunction} if this is a {@code
 	 * Success}.
 	 *
 	 * <p>
-	 * If {@code successFunction} is applied and throws an {@code Exception} the
-	 * result of the method is the result of applying {@code successFunction} to
-	 * the new {@code Exception}.
+	 * If {@code successFunction} throws an {@code Exception}, this method
+	 * returns the result of applying {@code successFunction} to the new {@code
+	 * Exception}.
 	 * </p>
 	 *
 	 * @param  failureFunction the function to apply when this {@code Try} is a
 	 *         {@code Failure}
 	 * @param  successFunction the function to apply when this {@code Try} is a
 	 *         {@code Success}
-	 * @return the value resultant of applying the correspondent function.
-	 * @review
+	 * @return the value that results from applying the corresponding function
 	 */
 	public abstract <U> U fold(
 		Function<Exception, U> failureFunction,

@@ -22,26 +22,23 @@ import com.liferay.vulcan.url.ServerURL;
 import javax.ws.rs.core.UriBuilder;
 
 /**
- * This class manages the creation of URLs and has all the necessary information
- * about them.
+ * Manages the creation of URLs, and has all their necessary information.
  *
  * <p>
  * This class shouldn't be instantiated.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public final class URLCreator {
 
 	/**
 	 * Returns the URL for a binary resource.
 	 *
-	 * @param  serverURL the server URL.
-	 * @param  binaryId the ID of the binary resource
-	 * @param  path the {@code Path} of the resource
+	 * @param  serverURL the server URL
+	 * @param  binaryId the binary resource's ID
+	 * @param  path the resource's {@code com.liferay.vulcan.uri.Path}
 	 * @return the URL for a binary resource
-	 * @review
 	 */
 	public static String createBinaryURL(
 		ServerURL serverURL, String binaryId, Path path) {
@@ -50,12 +47,11 @@ public final class URLCreator {
 	}
 
 	/**
-	 * Returns the URL for a collection.
+	 * Returns the URL for a collection page.
 	 *
 	 * @param  collectionURL the collection URL
 	 * @param  page the page
 	 * @return the collection page URL
-	 * @review
 	 */
 	public static String createCollectionPageURL(
 		String collectionURL, Page page, PageType pageType) {
@@ -74,10 +70,9 @@ public final class URLCreator {
 	 * Returns the URL for a collection.
 	 *
 	 * @param  serverURL the server URL
-	 * @param  path the {@code Path} of the single resource
-	 * @param  name the name of the resource
+	 * @param  path the single resource's {@link com.liferay.vulcan.uri.Path}
+	 * @param  name the resource's name
 	 * @return the collection URL
-	 * @review
 	 */
 	public static String createCollectionURL(
 		ServerURL serverURL, Path path, String name) {
@@ -86,12 +81,12 @@ public final class URLCreator {
 	}
 
 	/**
-	 * Returns the URL to the resource of a certain model.
+	 * Returns the URL of a model's resource.
 	 *
 	 * @param  serverURL the server URL
-	 * @param  path the {@code Path} of the resource
-	 * @return the single URL for the {@code CollectionResource}
-	 * @review
+	 * @param  path the resource's {@link com.liferay.vulcan.uri.Path}
+	 * @return the URL for the {@link
+	 *         com.liferay.vulcan.resource.CollectionResource}
 	 */
 	public static String createSingleURL(ServerURL serverURL, Path path) {
 		return serverURL.get() + "/p/" + path.asURI();

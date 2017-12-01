@@ -26,18 +26,17 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * An instance of this class can be used to write the documentation.
+ * Writes the documentation.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class DocumentationWriter {
 
 	/**
-	 * This method can be used to create a new {@code DocumentationWriter}
-	 * object, without creating the builder.
+	 * Creates a new {@code DocumentationWriter} object, without creating the
+	 * builder.
 	 *
-	 * @param  function the function that transforms a builder into a {@code
+	 * @param  function the function that transforms a builder into the {@code
 	 *         DocumentationWriter}
 	 * @return the {@code DocumentationWriter} instance
 	 */
@@ -54,10 +53,10 @@ public class DocumentationWriter {
 	}
 
 	/**
-	 * Write the handled {@link Documentation} to a String.
+	 * Writes the {@link Documentation} to a
+	 * string.
 	 *
 	 * @return the JSON representation of the {@code Documentation}
-	 * @review
 	 */
 	public String write() {
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
@@ -94,10 +93,7 @@ public class DocumentationWriter {
 	}
 
 	/**
-	 * Use instances of this builder to create {@link DocumentationWriter}
-	 * instances.
-	 *
-	 * @review
+	 * Creates {@code DocumentationWriter} instances.
 	 */
 	public static class Builder {
 
@@ -118,11 +114,10 @@ public class DocumentationWriter {
 		public class BuildStep {
 
 			/**
-			 * Constructs and returns a {@link DocumentationWriter} instance
+			 * Constructs and returns a {@code DocumentationWriter} instance
 			 * with the information provided to the builder.
 			 *
-			 * @return the {@code Documentation} instance
-			 * @review
+			 * @return the {@code DocumentationWriter} instance
 			 */
 			public DocumentationWriter build() {
 				return new DocumentationWriter(Builder.this);
@@ -133,13 +128,13 @@ public class DocumentationWriter {
 		public class DocumentationMessageMapperStep {
 
 			/**
-			 * Add information about the {@code DocumentationMessageMapper} to
+			 * Adds information to the builder about the {@link
+			 * DocumentationMessageMapper} to
 			 * the builder.
 			 *
 			 * @param  documentationMessageMapper the {@code
-			 *         DocumentationMessageMapper} headers.
-			 * @return the updated builder.
-			 * @review
+			 *         DocumentationMessageMapper} headers
+			 * @return the updated builder
 			 */
 			public RequestInfoStep documentationMessageMapper(
 				DocumentationMessageMapper documentationMessageMapper) {
@@ -154,12 +149,11 @@ public class DocumentationWriter {
 		public class RequestInfoStep {
 
 			/**
-			 * Add information about the request info to the builder.
+			 * Adds information to the builder about the request.
 			 *
 			 * @param  requestInfo the information obtained from the request. It
-			 *         can be created by using a {@link RequestInfo.Builder}
-			 * @return the updated builder.
-			 * @review
+			 *         can be created by using a {@link RequestInfo.Builder}.
+			 * @return the updated builder
 			 */
 			public BuildStep requestInfo(RequestInfo requestInfo) {
 				_requestInfo = requestInfo;

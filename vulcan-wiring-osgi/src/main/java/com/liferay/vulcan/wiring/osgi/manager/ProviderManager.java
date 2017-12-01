@@ -60,14 +60,14 @@ public class ProviderManager extends BaseManager<Provider> {
 	}
 
 	/**
-	 * Returns an instance of type T if a valid {@link Provider} can be found.
-	 * Returns {@code null} otherwise.
+	 * Returns an instance of type {@code T} if a valid {@link
+	 * Provider} exists. Returns {@code null}
+	 * otherwise.
 	 *
-	 * @param  clazz the type class to be provided.
-	 * @param  httpServletRequest the current request.
-	 * @return the instance of T, if a valid {@link Provider} is present; {@code
-	 *         null} otherwise.
-	 * @review
+	 * @param  clazz the type class to provide
+	 * @param  httpServletRequest the current request
+	 * @return the instance of {@code T}, if a valid {@code Provider} exists;
+	 *         {@code null} otherwise
 	 */
 	public <T> T provideOrNull(
 		Class<T> clazz, HttpServletRequest httpServletRequest) {

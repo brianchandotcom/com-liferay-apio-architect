@@ -28,16 +28,15 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
 /**
- * An instance of this class must be used to provide tests for a {@link
- * JsonMatchers#aJsonObjectStringWith(Conditions)} {@link Matcher}.
+ * Provides tests for the {@code Matcher} returned by {@link
+ * JsonMatchers#aJsonObjectStringWith(Conditions)}.
  *
  * <p>
- * This class shouldn't be instantiated directly. Use an instance of a {@link
+ * Don't directly instantiate this class. Use an instance of a {@link
  * Conditions.Builder} instead.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public class Conditions
 	extends AbstractJsonElementMatcher<JsonObject, JsonObject> {
@@ -52,9 +51,7 @@ public class Conditions
 	}
 
 	/**
-	 * An instance of this builder can be used to create {@link Conditions}.
-	 *
-	 * @review
+	 * Creates {@link Conditions}.
 	 */
 	public static class Builder {
 
@@ -63,23 +60,21 @@ public class Conditions
 		}
 
 		/**
-		 * Constructs the {@link Conditions} instance with the information
-		 * provided to the builder.
+		 * Constructs the {@link Conditions} instance by using the builder's
+		 * information.
 		 *
 		 * @return the {@code Conditions} instance
-		 * @review
 		 */
 		public Conditions build() {
 			return new Conditions(this);
 		}
 
 		/**
-		 * Adds a new {@link Matcher} for a field of the json object.
+		 * Adds a new {@code Matcher} for a JSON object field.
 		 *
 		 * @param  key the name of the field being tested
 		 * @param  valueMatcher the matcher for testing the field value
-		 * @return the next step of the builder
-		 * @review
+		 * @return the builder's next step
 		 */
 		public Builder where(
 			String key, Matcher<? extends JsonElement> valueMatcher) {
@@ -96,13 +91,11 @@ public class Conditions
 		 * Deactivate strict mode for this checking.
 		 *
 		 * <p>
-		 * Strict mode means that the json object being tested should not
-		 * contain any element that is not being tested with a {@link
-		 * #where(String, Matcher)} call.
+		 * Strict mode means that all the elements of the JSON object being
+		 * tested must be tested with a {@link #where(String, Matcher)} call.
 		 * </p>
 		 *
-		 * @return the next step of the builder
-		 * @review
+		 * @return the builder's next step
 		 */
 		public Builder withStrictModeDeactivated() {
 			return new Builder(_entryMatchers, false);

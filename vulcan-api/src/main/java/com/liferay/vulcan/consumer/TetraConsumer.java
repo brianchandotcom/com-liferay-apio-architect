@@ -34,7 +34,6 @@ public interface TetraConsumer<A, B, C, D> {
 	 * operation.
 	 *
 	 * @return an empty {@code TetraConsumer} that doesn't perform any operation
-	 * @review
 	 */
 	public static <A, B, C, D> TetraConsumer<A, B, C, D> empty() {
 		return (a, b, c, d) -> {

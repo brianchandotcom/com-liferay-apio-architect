@@ -35,7 +35,6 @@ public interface UndecaConsumer<A, B, C, D, E, F, G, H, I, J, K> {
 	 *
 	 * @return an empty {@code UndecaConsumer} that doesn't perform any
 	 *         operation
-	 * @review
 	 */
 	public static <A, B, C, D, E, F, G, H, I, J, K>
 		UndecaConsumer<A, B, C, D, E, F, G, H, I, J, K> empty() {

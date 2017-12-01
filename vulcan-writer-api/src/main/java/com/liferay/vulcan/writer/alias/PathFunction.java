@@ -21,12 +21,12 @@ import com.liferay.vulcan.uri.Path;
 import java.util.Optional;
 
 /**
- * Defines a type alias for a function that receives an {@code Identifier}, the
- * class of that {@code Identifier}, and the class of the identifier model, and
- * returns an {@code Optional} {@code Path} for that {@code Identifier}.
+ * Defines a type alias for a function that receives an {@link
+ * Identifier}, the identifier's class,
+ * and the identifier's model class. The function returns an optional {@link
+ * Path} for the identifier.
  *
  * @author Alejandro Hernández
- * @review
  */
 @FunctionalInterface
 public interface PathFunction extends

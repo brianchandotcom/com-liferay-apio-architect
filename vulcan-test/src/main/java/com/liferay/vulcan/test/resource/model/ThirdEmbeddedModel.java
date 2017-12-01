@@ -15,12 +15,11 @@
 package com.liferay.vulcan.test.resource.model;
 
 /**
- * Instances of this interface represent a third layer embeddable mock model
- * that can be mapped into a {@link com.liferay.vulcan.resource.Representor}
- * using {@link MockRepresentorCreator} methods.
+ * Represents a third-layer embeddable mock model that can be mapped to a {@link
+ * com.liferay.vulcan.resource.Representor} using {@link
+ * com.liferay.vulcan.test.resource.MockRepresentorCreator} methods.
  *
  * @author Alejandro Hernández
- * @review
  */
 @FunctionalInterface
 public interface ThirdEmbeddedModel {

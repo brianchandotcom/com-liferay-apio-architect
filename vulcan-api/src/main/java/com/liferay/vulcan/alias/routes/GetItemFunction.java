@@ -21,11 +21,10 @@ import com.liferay.vulcan.uri.Path;
 import java.util.function.Function;
 
 /**
- * Defines a type alias for a function that can be used to obtain a collection
+ * Defines a type alias for a function that can be used to get a collection
  * item.
  *
  * @author Alejandro Hernández
- * @review
  */
 @FunctionalInterface
 public interface GetItemFunction<T>

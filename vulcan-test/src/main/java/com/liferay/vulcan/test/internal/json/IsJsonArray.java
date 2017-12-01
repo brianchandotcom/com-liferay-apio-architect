@@ -29,11 +29,10 @@ import java.util.Objects;
 import org.hamcrest.Matcher;
 
 /**
- * A {@link Matcher} that can be used to check if an element is a correct json
+ * A {@code Matcher} that checks if an element is a correct JSON
  * array.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class IsJsonArray
 	extends AbstractJsonElementMatcher

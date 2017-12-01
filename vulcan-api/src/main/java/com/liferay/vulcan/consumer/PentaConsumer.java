@@ -34,7 +34,6 @@ public interface PentaConsumer<A, B, C, D, E> {
 	 * operation.
 	 *
 	 * @return an empty {@code PentaConsumer} that doesn't perform any operation
-	 * @review
 	 */
 	public static <A, B, C, D, E> PentaConsumer<A, B, C, D, E> empty() {
 		return (a, b, c, d, e) -> {

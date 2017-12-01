@@ -150,14 +150,15 @@ public class PageMessageBodyWriter<T>
 	}
 
 	/**
-	 * Returns the right {@link PageMessageMapper} for the provided {@link
-	 * MediaType} that supports writing the provided {@link Page}.
+	 * Returns the right {@link
+	 * PageMessageMapper} for the provided
+	 * {@code MediaType} that supports writing the provided
+	 * {@link Page}.
 	 *
-	 * @param  mediaType the request media type
-	 * @param  page the page to write
+	 * @param  mediaType the request's {@code MediaType}
+	 * @param  page the {@code Page} to write
 	 * @return the {@code PageMessageMapper} that writes the {@code Page} in the
-	 *         media type
-	 * @review
+	 *         {@code MediaType}
 	 */
 	protected PageMessageMapper<T> getPageMessageMapper(
 		MediaType mediaType, Page<T> page) {
@@ -178,11 +179,11 @@ public class PageMessageBodyWriter<T>
 	}
 
 	/**
-	 * Returns the server URL, or throws a {@link MustHaveProvider} developer
+	 * Returns the server URL, or throws a {@link
+	 * MustHaveProvider} developer
 	 * error.
 	 *
-	 * @return the server URL.
-	 * @review
+	 * @return the server URL
 	 */
 	protected ServerURL getServerURL() {
 		Optional<ServerURL> optional = _providerManager.provideOptional(

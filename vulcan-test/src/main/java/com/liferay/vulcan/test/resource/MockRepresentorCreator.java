@@ -26,24 +26,24 @@ import java.util.Date;
 import java.util.Optional;
 
 /**
- * This class provides methods that can be used to create {@link Representor} of
- * {@link RootModel}, {@link FirstEmbeddedModel}, {@link SecondEmbeddedModel} or
- * {@link ThirdEmbeddedModel}.
+ * Provides methods that create {@link Representor}
+ * objects for {@link RootModel}, {@link
+ * FirstEmbeddedModel}, {@link
+ * SecondEmbeddedModel} or {@link
+ * ThirdEmbeddedModel}.
  *
  * <p>
  * This class shouldn't be instantiated.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public class MockRepresentorCreator {
 
 	/**
-	 * Creates a {@link FirstEmbeddedModel}'s mock {@link Representor}.
+	 * Creates a mock {@code Representor} for {@code FirstEmbeddedModel}.
 	 *
-	 * @return a {@link FirstEmbeddedModel}'s mock {@link Representor}
-	 * @review
+	 * @return the mock {@code Representor} for {@code FirstEmbeddedModel}
 	 */
 	public static Representor<FirstEmbeddedModel, StringIdentifier>
 		createFirstEmbeddedModelRepresentor() {
@@ -78,12 +78,10 @@ public class MockRepresentorCreator {
 	}
 
 	/**
-	 * Creates a {@link RootModel}'s mock {@link Representor}.
+	 * Creates a mock {@code Representor} for {@code RootModel}.
 	 *
-	 * @param  activateNulls {@code true} if {@code null} or empty values should
-	 *         be added; {@code false} otherwise
-	 * @return a {@link RootModel}'s mock {@link Representor}
-	 * @review
+	 * @param  activateNulls whether to add {@code null} empty values
+	 * @return the mock {@code Representor} for {@code RootModel}
 	 */
 	public static Representor<RootModel, StringIdentifier>
 		createRootModelRepresentor(boolean activateNulls) {
@@ -168,10 +166,9 @@ public class MockRepresentorCreator {
 	}
 
 	/**
-	 * Creates a {@link SecondEmbeddedModel}'s mock {@link Representor}.
+	 * Creates a mock {@code Representor} for {@code SecondEmbeddedModel}.
 	 *
-	 * @return a {@link SecondEmbeddedModel}'s mock {@link Representor}
-	 * @review
+	 * @return the mock {@code Representor} for {@code SecondEmbeddedModel}
 	 */
 	public static Representor<SecondEmbeddedModel, StringIdentifier>
 		createSecondEmbeddedModelRepresentor() {
@@ -206,10 +203,9 @@ public class MockRepresentorCreator {
 	}
 
 	/**
-	 * Creates a {@link ThirdEmbeddedModel}'s mock {@link Representor}.
+	 * Creates a mock {@code Representor} for {@code ThirdEmbeddedModel}.
 	 *
-	 * @return a {@link ThirdEmbeddedModel}'s mock {@link Representor}
-	 * @review
+	 * @return the mock {@code Representor} for {@code ThirdEmbeddedModel}
 	 */
 	public static Representor<ThirdEmbeddedModel, StringIdentifier>
 		createThirdEmbeddedModelRepresentor() {

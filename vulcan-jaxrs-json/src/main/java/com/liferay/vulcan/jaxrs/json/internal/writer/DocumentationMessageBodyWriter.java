@@ -121,15 +121,15 @@ public class DocumentationMessageBodyWriter
 	}
 
 	/**
-	 * Returns the right {@link DocumentationMessageMapper} for the provided
-	 * {@link MediaType} that supports writing the provided {@link
-	 * Documentation}.
+	 * Returns the right {@link
+	 * DocumentationMessageMapper} for the
+	 * provided {@code MediaType} that supports writing the
+	 * provided {@link Documentation}.
 	 *
-	 * @param  mediaType the request media type
-	 * @param  documentation the documentation to write
+	 * @param  mediaType the request's {@code MediaType}
+	 * @param  documentation the {@code Documentation} to write
 	 * @return the {@code DocumentationMessageMapper} that writes the {@code
-	 *         Documentation} in the media type
-	 * @review
+	 *         Documentation} in the {@code MediaType}
 	 */
 	protected DocumentationMessageMapper getDocumentationMessageMapper(
 		MediaType mediaType, Documentation documentation) {
@@ -150,11 +150,11 @@ public class DocumentationMessageBodyWriter
 	}
 
 	/**
-	 * Returns the server URL, or throws a {@link MustHaveProvider} developer
+	 * Returns the server URL, or throws a {@link
+	 * MustHaveProvider} developer
 	 * error.
 	 *
-	 * @return the server URL.
-	 * @review
+	 * @return the server URL
 	 */
 	protected ServerURL getServerURL() {
 		Optional<ServerURL> optional = _providerManager.provideOptional(

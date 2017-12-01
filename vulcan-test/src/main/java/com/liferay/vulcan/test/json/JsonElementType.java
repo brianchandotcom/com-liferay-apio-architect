@@ -21,21 +21,19 @@ import org.hamcrest.Description;
 import org.hamcrest.SelfDescribing;
 
 /**
- * Instances of this enum, represent the different types a JSON object allows.
+ * Represents the different types a JSON object allows.
  *
  * @author Alejandro Hernández
- * @review
  */
 public enum JsonElementType implements SelfDescribing {
 
 	ARRAY, BOOLEAN, NUMBER, OBJECT, OTHER, STRING;
 
 	/**
-	 * Returns the correct {@code JsonElementType} for a {@code JsonElement}.
+	 * Returns the correct {@code JsonElementType} for the {@code JsonElement}.
 	 *
-	 * @param  jsonElement the {@code JsonElement} whose type is wanted
-	 * @return the correct {@code JsonElementType} for a {@code JsonElement}
-	 * @review
+	 * @param  jsonElement the {@code JsonElement}
+	 * @return the correct {@code JsonElementType} for the {@code JsonElement}
 	 */
 	public static JsonElementType getJsonElementType(JsonElement jsonElement) {
 		if (jsonElement.isJsonObject()) {
@@ -71,10 +69,9 @@ public enum JsonElementType implements SelfDescribing {
 	}
 
 	/**
-	 * Returns the readable name of this type.
+	 * Returns this type's readable name.
 	 *
-	 * @return the readable name of this type.
-	 * @review
+	 * @return this type's readable name
 	 */
 	public String getReadableName() {
 		if (this == ARRAY) {

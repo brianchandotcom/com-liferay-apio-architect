@@ -19,11 +19,10 @@ import com.liferay.vulcan.result.APIError;
 import java.util.Optional;
 
 /**
- * Instances of this class represent a mock {@link APIError} that can be used to
- * test an {@link com.liferay.vulcan.message.json.ErrorMessageMapper}.
+ * Represents a mock {@link APIError} that can be used
+ * to test an {@link com.liferay.vulcan.message.json.ErrorMessageMapper}.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class MockAPIError implements APIError {
 

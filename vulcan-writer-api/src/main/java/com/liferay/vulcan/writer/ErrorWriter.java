@@ -25,7 +25,7 @@ import java.util.Optional;
 import javax.ws.rs.core.HttpHeaders;
 
 /**
- * Gives Vulcan the ability to write {@link APIError} by using an {@link
+ * Writes an {@link APIError} by using an {@link
  * ErrorMessageMapper}.
  *
  * <p>
@@ -33,7 +33,6 @@ import javax.ws.rs.core.HttpHeaders;
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public final class ErrorWriter {
 

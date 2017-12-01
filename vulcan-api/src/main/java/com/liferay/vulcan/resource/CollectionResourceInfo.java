@@ -17,11 +17,9 @@ package com.liferay.vulcan.resource;
 import com.liferay.vulcan.resource.identifier.Identifier;
 
 /**
- * Instances of this class contain information about a {@code
- * CollectionResource}.
+ * Contains information about a {@link CollectionResource}.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class CollectionResourceInfo<T, U extends Identifier> {
 
@@ -34,10 +32,9 @@ public class CollectionResourceInfo<T, U extends Identifier> {
 	}
 
 	/**
-	 * Returns the name of the resource.
+	 * Returns the resource's name.
 	 *
-	 * @return the name of the resource
-	 * @review
+	 * @return the resource's name
 	 */
 	public String getName() {
 		return _name;
@@ -46,8 +43,7 @@ public class CollectionResourceInfo<T, U extends Identifier> {
 	/**
 	 * Returns the {@link Representor} declared in the resource.
 	 *
-	 * @return the {@link Representor} declared in the resource.
-	 * @review
+	 * @return the {@link Representor} declared in the resource
 	 */
 	public Representor<T, U> getRepresentor() {
 		return _representor;
@@ -56,8 +52,7 @@ public class CollectionResourceInfo<T, U extends Identifier> {
 	/**
 	 * Returns the {@link Routes} declared in the resource.
 	 *
-	 * @return the {@link Routes} declared in the resource.
-	 * @review
+	 * @return the {@link Routes} declared in the resource
 	 */
 	public Routes<T> getRoutes() {
 		return _routes;

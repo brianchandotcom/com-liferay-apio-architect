@@ -27,26 +27,25 @@ import java.util.Optional;
 import javax.ws.rs.core.HttpHeaders;
 
 /**
- * This class provides methods that can be used for testing documentation
- * message mappers.
+ * Provides methods that test {@link
+ * DocumentationMessageMapper} objects.
  *
  * <p>
  * This class shouldn't be instantiated.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public class MockDocumentationWriter {
 
 	/**
-	 * Returns a {@link RequestInfo} with the provided {@link HttpHeaders}, a
-	 * mock {@link com.liferay.vulcan.url.ServerURL} and a mock {@link
+	 * Returns a {@link RequestInfo} with the
+	 * provided {@code HttpHeaders}, a mock {@link
+	 * com.liferay.vulcan.url.ServerURL}, and a mock {@code
 	 * javax.servlet.http.HttpServletRequest}.
 	 *
 	 * @param  httpHeaders the HTTP headers
-	 * @return the request info
-	 * @review
+	 * @return the {@code RequestInfo}
 	 */
 	public static RequestInfo getRequestInfo(HttpHeaders httpHeaders) {
 		return RequestInfo.create(
@@ -60,12 +59,11 @@ public class MockDocumentationWriter {
 	}
 
 	/**
-	 * Writes a documentation.
+	 * Writes a {@link Documentation} object.
 	 *
-	 * @param  httpHeaders the HTTP headers from the request
-	 * @param  documentationMessageMapper the message mapper to use for writing
-	 *         the json object
-	 * @review
+	 * @param httpHeaders the request's HTTP headers
+	 * @param documentationMessageMapper the {@code DocumentationMessageMapper}
+	 *        to use for writing the JSON object
 	 */
 	public static JsonObject write(
 		HttpHeaders httpHeaders,

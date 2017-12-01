@@ -128,14 +128,13 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 	}
 
 	/**
-	 * Returns the {@code CollectionResourceInfo} of the collection resource's
-	 * model class, if that info exists. Returns {@code Optional#empty()}
-	 * otherwise.
+	 * Returns the {@link CollectionResourceInfo} of
+	 * the collection resource's model class, if that info exists. Returns
+	 * {@code Optional#empty()} otherwise.
 	 *
 	 * @param  modelClass the collection resource's model class
 	 * @return the model class's {@code CollectionResourceInfo}, if present;
 	 *         {@code Optional#empty()} otherwise
-	 * @review
 	 */
 	@SuppressWarnings("unchecked")
 	public <T, U extends Identifier> Optional<CollectionResourceInfo<T, U>>

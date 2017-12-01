@@ -20,10 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Defines a type alias for a function that receives an {@link
- * HttpServletRequest} and returns another thing.
+ * HttpServletRequest} and returns another item.
  *
  * @author Alejandro Hernández
- * @review
  */
 @FunctionalInterface
 public interface RequestFunction<T> extends Function<HttpServletRequest, T> {

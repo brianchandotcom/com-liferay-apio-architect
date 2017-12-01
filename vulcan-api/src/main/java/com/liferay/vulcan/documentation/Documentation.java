@@ -19,10 +19,9 @@ import com.liferay.vulcan.alias.RequestFunction;
 import java.util.Optional;
 
 /**
- * An instance of this class represents the auto-documentation of the API.
+ * Represents the API's auto-documentation.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class Documentation {
 
@@ -36,12 +35,11 @@ public class Documentation {
 	}
 
 	/**
-	 * Returns the function that calculates the description of the API, if
-	 * present. Returns {@code Optional#empty()} otherwise.
+	 * Returns the function that calculates the API's description, if present.
+	 * Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the description of the API, if present; {@code Optional#empty()}
-	 *         otherwise.
-	 * @review
+	 * @return the API's description, if present; {@code Optional#empty()}
+	 *         otherwise
 	 */
 	public RequestFunction<Optional<String>>
 	getAPIDescriptionRequestFunction() {
@@ -54,12 +52,10 @@ public class Documentation {
 	}
 
 	/**
-	 * Returns the function that calculates the description of the API, if
-	 * present. Returns {@code Optional#empty()} otherwise.
+	 * Returns the function that calculates the API's description, if present.
+	 * Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the title of the API, if present; {@code Optional#empty()}
-	 *         otherwise.
-	 * @review
+	 * @return the API's title, if present; {@code Optional#empty()} otherwise
 	 */
 	public RequestFunction<Optional<String>> getAPITitleRequestFunction() {
 		return httpServletRequest -> _apiTitleRequestFunction.apply(

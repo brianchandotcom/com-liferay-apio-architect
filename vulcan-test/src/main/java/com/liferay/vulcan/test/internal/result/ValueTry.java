@@ -23,11 +23,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 /**
- * A {@link Matcher} that can be used to check if an element is a {@link
+ * A {@code Matcher} that checks if an element is a {@link
  * Try.Success} with a specific value.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class ValueTry<T> extends TypeSafeDiagnosingMatcher<Try<T>> {
 

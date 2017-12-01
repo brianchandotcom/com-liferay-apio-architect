@@ -27,21 +27,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 
 /**
- * Instances of this class represent the information the server has about a
- * request.
+ * Represents the information the server has about a request.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class RequestInfo {
 
 	/**
-	 * This method can be used to create a new {@code RequestInfo} object,
-	 * without creating the builder.
+	 * Creates a new {@code RequestInfo} object without creating the builder.
 	 *
 	 * @param  function the function that transforms a builder into a {@code
 	 *         RequestInfo}
-	 * @return the {@code RequestInfo} instance
+	 * @return the new {@code RequestInfo} instance
 	 */
 	public static RequestInfo create(Function<Builder, RequestInfo> function) {
 		return function.apply(new Builder());
@@ -53,7 +50,6 @@ public class RequestInfo {
 	 *
 	 * @return the information about embedded resources, if present; {@code
 	 *         Optional#empty()} otherwise
-	 * @review
 	 */
 	public Optional<Embedded> getEmbeddedOptional() {
 		return Optional.ofNullable(_embedded);
@@ -65,7 +61,6 @@ public class RequestInfo {
 	 *
 	 * @return the information about selected fields, if present; {@code
 	 *         Optional#empty()} otherwise
-	 * @review
 	 */
 	public Optional<Fields> getFieldsOptional() {
 		return Optional.ofNullable(_fields);
@@ -74,8 +69,7 @@ public class RequestInfo {
 	/**
 	 * Returns the HTTP headers.
 	 *
-	 * @return the HTTP headers.
-	 * @review
+	 * @return the HTTP headers
 	 */
 	public HttpHeaders getHttpHeaders() {
 		return _httpHeaders;
@@ -91,7 +85,6 @@ public class RequestInfo {
 	 *
 	 * @return the information about the language, if present; {@code
 	 *         Optional#empty()} otherwise
-	 * @review
 	 */
 	public Optional<Language> getLanguageOptional() {
 		return Optional.ofNullable(_language);
@@ -100,26 +93,22 @@ public class RequestInfo {
 	/**
 	 * Returns the server URL.
 	 *
-	 * @return the server URL.
-	 * @review
+	 * @return the server URL
 	 */
 	public ServerURL getServerURL() {
 		return _serverURL;
 	}
 
 	/**
-	 * Use instances of this builder to create {@link RequestInfo} instances.
-	 *
-	 * @review
+	 * Creates {@link RequestInfo} instances.
 	 */
 	public static class Builder {
 
 		/**
-		 * Add information about the HTTP headers to the builder.
+		 * Adds information about the HTTP headers to the builder.
 		 *
-		 * @param  httpHeaders the request HTTP headers.
-		 * @return the following step of the builder.
-		 * @review
+		 * @param  httpHeaders the request's HTTP headers
+		 * @return the builder's following step
 		 */
 		public HttpServletRequestStep httpHeaders(HttpHeaders httpHeaders) {
 			_httpHeaders = httpHeaders;
@@ -130,11 +119,10 @@ public class RequestInfo {
 		public class HttpServletRequestStep {
 
 			/**
-			 * Add information about the HTTP request to the builder.
+			 * Adds information about the HTTP request to the builder.
 			 *
 			 * @param  httpServletRequest the HTTP request
-			 * @return the following step of the builder.
-			 * @review
+			 * @return the builder's following step
 			 */
 			public ServerURLStep httpServletRequest(
 				HttpServletRequest httpServletRequest) {
@@ -153,18 +141,16 @@ public class RequestInfo {
 			 * information provided to the builder.
 			 *
 			 * @return the {@code RequestInfo} instance
-			 * @review
 			 */
 			public RequestInfo build() {
 				return new RequestInfo(Builder.this);
 			}
 
 			/**
-			 * Add information about embedded resources to the builder.
+			 * Adds information about embedded resources to the builder.
 			 *
-			 * @param  embedded the information about embedded resources.
-			 * @return the next step of the builder.
-			 * @review
+			 * @param  embedded the information about embedded resources
+			 * @return the builder's next step
 			 */
 			public OptionalStep embedded(Embedded embedded) {
 				_embedded = embedded;
@@ -173,11 +159,10 @@ public class RequestInfo {
 			}
 
 			/**
-			 * Add information about selected fields to the builder.
+			 * Adds information about selected fields to the builder.
 			 *
-			 * @param  fields the information about selected fields.
-			 * @return the next step of the builder.
-			 * @review
+			 * @param  fields the information about selected fields
+			 * @return the builder's next step
 			 */
 			public OptionalStep fields(Fields fields) {
 				_fields = fields;
@@ -186,11 +171,10 @@ public class RequestInfo {
 			}
 
 			/**
-			 * Add information about the language to the builder.
+			 * Adds information about the language to the builder.
 			 *
-			 * @param  language the request selected language.
-			 * @return the next step of the builder.
-			 * @review
+			 * @param  language the request's selected language
+			 * @return the builder's next step
 			 */
 			public OptionalStep language(Language language) {
 				_language = language;
@@ -205,9 +189,8 @@ public class RequestInfo {
 			/**
 			 * Add information about the server URL to the builder.
 			 *
-			 * @param  serverURL the server URL.
-			 * @return the next step of the builder.
-			 * @review
+			 * @param  serverURL the server URL
+			 * @return the builder's next step
 			 */
 			public OptionalStep serverURL(ServerURL serverURL) {
 				_serverURL = serverURL;

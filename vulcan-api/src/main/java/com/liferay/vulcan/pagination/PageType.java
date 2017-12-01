@@ -18,17 +18,16 @@ package com.liferay.vulcan.pagination;
  * Represents the different types of pages.
  *
  * @author Alejandro Hernández
- * @review
  */
 public enum PageType {
 
 	CURRENT, FIRST, LAST, NEXT, PREVIOUS;
 
 	/**
-	 * Returns the correspondent page number for a certain type.
+	 * Returns the corresponding page number for a certain page type.
 	 *
 	 * @param  page the original page
-	 * @return the page number for a type
+	 * @return the page number for the page type
 	 */
 	public Integer getPageNumber(Page page) {
 		if (this == FIRST) {

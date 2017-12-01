@@ -18,11 +18,11 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Defines a type alias for a function that receives the class name of a model
- * and returns an {@code Optional} of the name of its {@code Representor}.
+ * Defines a type alias for a function that receives a model's class name and
+ * returns an {@code Optional} of its {@link
+ * com.liferay.vulcan.resource.Representor} name.
  *
  * @author Alejandro Hernández
- * @review
  */
 @FunctionalInterface
 public interface ResourceNameFunction

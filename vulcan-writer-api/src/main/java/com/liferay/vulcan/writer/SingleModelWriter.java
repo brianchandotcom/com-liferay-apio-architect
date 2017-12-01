@@ -33,18 +33,17 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * An instance of this class can be used to write a single model.
+ * Writes a single model.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class SingleModelWriter<T> {
 
 	/**
-	 * This method can be used to create a new {@code SingleModelWriter} object,
-	 * without creating the builder.
+	 * Creates a new {@code SingleModelWriter} object, without creating the
+	 * builder.
 	 *
-	 * @param  function the function that transforms a builder into a {@code
+	 * @param  function the function that converts a builder to a {@code
 	 *         SingleModelWriter}
 	 * @return the {@code SingleModelWriter} instance
 	 */
@@ -66,16 +65,15 @@ public class SingleModelWriter<T> {
 	}
 
 	/**
-	 * Write the handled {@link SingleModel} to a String. It uses a {@link
-	 * FieldsWriter} in order to write the different fields of its {@link
-	 * com.liferay.vulcan.resource.Representor}. If no {@code Representor} or
-	 * {@code Path} can be found for the model, {@code Optional#empty()} is
-	 * returned.
+	 * Writes the handled {@link SingleModel} to a
+	 * string. This method uses a {@link FieldsWriter} to write the different
+	 * fields of its {@link com.liferay.vulcan.resource.Representor}. If no
+	 * {@code Representor} or {@code Path} exists for the model, this method
+	 * returns {@code Optional#empty()}.
 	 *
-	 * @return the representation of the {@code SingleModel} if both its {@code
-	 *         Representor} and {@code Path} are available; returns {@code
-	 *         Optional#empty()} otherwise
-	 * @review
+	 * @return the string representation of the {@code SingleModel}, if the
+	 *         model's {@code Representor} and {@code Path} exist; returns
+	 *         {@code Optional#empty()} otherwise
 	 */
 	public Optional<String> write() {
 		Optional<FieldsWriter<T, Identifier>> optional = getFieldsWriter(
@@ -158,17 +156,14 @@ public class SingleModelWriter<T> {
 	}
 
 	/**
-	 * Use instances of this builder to create {@link SingleModelWriter}
-	 * instances.
-	 *
-	 * @review
+	 * Creates {@code SingleModelWriter} instances.
 	 */
 	public static class Builder<T> {
 
 		/**
-		 * Add information about the single model being written to the builder.
+		 * Adds information to the builder about the single model being written.
 		 *
-		 * @param  singleModel the single model being written
+		 * @param  singleModel the single model
 		 * @return the updated builder
 		 */
 		public SingleModelMessageMapperStep singleModel(
@@ -182,11 +177,10 @@ public class SingleModelWriter<T> {
 		public class BuildStep {
 
 			/**
-			 * Constructs and returns a {@link SingleModelWriter} instance with
-			 * the information provided to the builder.
+			 * Constructs and returns a {@link SingleModelWriter} instance by
+			 * using the builder's information.
 			 *
 			 * @return the {@code SingleModelWriter} instance
-			 * @review
 			 */
 			public SingleModelWriter<T> build() {
 				return new SingleModelWriter<>(Builder.this);
@@ -197,13 +191,13 @@ public class SingleModelWriter<T> {
 		public class PathFunctionStep {
 
 			/**
-			 * Add information to the builder about the function that can be
-			 * used to convert an {@code Identifier} into a {@code Path}.
+			 * Adds information to the builder about the function that converts
+			 * an {@link Identifier} to a
+			 * {@link com.liferay.vulcan.uri.Path}.
 			 *
-			 * @param  pathFunction the function to map an {@code Identifier}
-			 *         into a {@code Path}
-			 * @return the updated builder.
-			 * @review
+			 * @param  pathFunction the function that converts an {@code
+			 *         Identifier} to a {@code Path}
+			 * @return the updated builder
 			 */
 			public ResourceNameFunctionStep pathFunction(
 				PathFunction pathFunction) {
@@ -218,13 +212,12 @@ public class SingleModelWriter<T> {
 		public class RepresentorFunctionStep {
 
 			/**
-			 * Add information to the builder about the function that can be
-			 * used to obtain the {@code Representor} of a certain class.
+			 * Adds information to the builder about the function that gets a
+			 * class's {@link com.liferay.vulcan.resource.Representor}.
 			 *
-			 * @param  representorFunction the function to obtain the {@code
-			 *         Representor} of a class
-			 * @return the updated builder.
-			 * @review
+			 * @param  representorFunction the function that gets a class's
+			 *         {@code Representor}
+			 * @return the updated builder
 			 */
 			public RequestInfoStep representorFunction(
 				RepresentorFunction representorFunction) {
@@ -239,12 +232,11 @@ public class SingleModelWriter<T> {
 		public class RequestInfoStep {
 
 			/**
-			 * Add information about the request info to the builder.
+			 * Adds information to the builder about the request.
 			 *
-			 * @param  requestInfo the information obtained from the request. It
-			 *         can be created by using a {@link RequestInfo.Builder}
-			 * @return the updated builder.
-			 * @review
+			 * @param  requestInfo the information about the request. It can be
+			 *         created by using a {@link RequestInfo.Builder}
+			 * @return the updated builder
 			 */
 			public BuildStep requestInfo(RequestInfo requestInfo) {
 				_requestInfo = requestInfo;
@@ -257,14 +249,13 @@ public class SingleModelWriter<T> {
 		public class ResourceNameFunctionStep {
 
 			/**
-			 * Add information to the builder about the function that can be
-			 * used to obtain the name of the {@code Representor} of a certain
-			 * class name.
+			 * Adds information to the builder about the function that gets the
+			 * name of a class's {@code
+			 * com.liferay.vulcan.resource.Representor}.
 			 *
-			 * @param  resourceNameFunction the function to obtain the name of
-			 *         the {@code Representor} of a certain class name
-			 * @return the updated builder.
-			 * @review
+			 * @param  resourceNameFunction the function that gets the name of a
+			 *         class's {@code Representor}
+			 * @return the updated builder
 			 */
 			public RepresentorFunctionStep resourceNameFunction(
 				ResourceNameFunction resourceNameFunction) {
@@ -279,13 +270,12 @@ public class SingleModelWriter<T> {
 		public class SingleModelMessageMapperStep {
 
 			/**
-			 * Add information about the {@code SingleModelMessageMapper} to the
-			 * builder.
+			 * Adds information to the builder about the {@link
+			 * SingleModelMessageMapper}.
 			 *
 			 * @param  singleModelMessageMapper the {@code
-			 *         SingleModelMessageMapper} headers.
-			 * @return the updated builder.
-			 * @review
+			 *         SingleModelMessageMapper} headers
+			 * @return the updated builder
 			 */
 			public PathFunctionStep modelMessageMapper(
 				SingleModelMessageMapper<T> singleModelMessageMapper) {

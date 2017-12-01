@@ -34,11 +34,10 @@ import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 /**
- * A {@link Matcher} that can be used to check if an element is a correct json
+ * A {@code Matcher} that checks if an element is a correct JSON
  * object.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class IsJsonObject extends TypeSafeDiagnosingMatcher<JsonObject> {
 

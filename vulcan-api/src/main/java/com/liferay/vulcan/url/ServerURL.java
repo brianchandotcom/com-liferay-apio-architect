@@ -19,7 +19,6 @@ package com.liferay.vulcan.url;
  * depends on any proxy configuration, SSO, and so on.
  *
  * @author Javier Gamarra
- * @review
  */
 public interface ServerURL {
 
@@ -27,7 +26,6 @@ public interface ServerURL {
 	 * Returns the HTTP servlet request's original URL.
 	 *
 	 * @return a string URL constructed from the HTTP servlet request
-	 * @review
 	 */
 	public String get();
 

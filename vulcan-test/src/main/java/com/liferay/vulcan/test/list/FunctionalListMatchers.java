@@ -20,27 +20,25 @@ import com.liferay.vulcan.test.internal.list.IsAFunctionalList;
 import org.hamcrest.Matcher;
 
 /**
- * This class provides {@code Hamcrest} {@link Matcher}s that can be used for
- * testing a {@link FunctionalList}.
+ * Provides {@code Matcher} objects that can be used for testing a
+ * {@link FunctionalList}.
  *
  * <p>
  * This class shouldn't be instantiated.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public final class FunctionalListMatchers {
 
 	/**
-	 * Returns a matcher that checks that this is a functional list that
-	 * conforms with the matcher receive as parameter.
+	 * Returns a matcher that checks if this is a functional list that conforms
+	 * with the {@code matcher} parameter.
 	 *
-	 * @param  matcher the matcher used for checking the contents of this
-	 *         functional interface
-	 * @return a matcher that checks that this is a functional list that matches
-	 *         the matcher receives as parameter
-	 * @review
+	 * @param  matcher the matcher used to check the contents of this functional
+	 *         interface
+	 * @return the matcher that checks if this is a functional list that
+	 *         conforms with the {@code matcher} parameter
 	 */
 	public static <T> Matcher<FunctionalList<T>> aFunctionalListThat(
 		Matcher<Iterable<? extends T>> matcher) {

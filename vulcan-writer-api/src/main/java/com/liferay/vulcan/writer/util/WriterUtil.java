@@ -27,27 +27,26 @@ import com.liferay.vulcan.writer.alias.RepresentorFunction;
 import java.util.Optional;
 
 /**
- * This class provides util functions for writers.
+ * Provides utililty functions for writers.
  *
  * <p>
  * This class shouldn't be instantiated.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public class WriterUtil {
 
 	/**
-	 * Return the {@code FieldsWriter} for a given model.
+	 * Returns the {@link FieldsWriter} for a given
+	 * model.
 	 *
 	 * @param  singleModel the single model
 	 * @param  embeddedPathElements the embedded path element list
-	 * @param  requestInfo the information of the current request
-	 * @param  pathFunction the function to get the {@code Path}
-	 * @param  representorFunction the function to get the {@code Representor}
+	 * @param  requestInfo the current request's information
+	 * @param  pathFunction the function to get the {@link Path}
+	 * @param  representorFunction the function to get the {@link Representor}
 	 * @return the {@code FieldsWriter} for the model
-	 * @review
 	 */
 	public static <T> Optional<FieldsWriter<T, Identifier>> getFieldsWriter(
 		SingleModel<T> singleModel, FunctionalList<String> embeddedPathElements,
@@ -69,17 +68,16 @@ public class WriterUtil {
 	}
 
 	/**
-	 * Return the {@code Path} for a given model. If no {@code Representor} or
-	 * {@code Path} can be found for the model, {@code Optional#empty()} is
-	 * returned.
+	 * Returns a model's {@link com.liferay.vulcan.uri.Path}, if the model's
+	 * {@code Representor} and {@code Path} exist.
+	 * Otherwise, this method returns {@code Optional#empty()}.
 	 *
 	 * @param  singleModel the single model
-	 * @param  pathFunction the function to get the {@code Path}
-	 * @param  representorFunction the function to get the {@code Representor}
-	 * @return the {@code Path} of the model if both its {@code Representor} and
-	 *         {@code Path} are available; returns {@code Optional#empty()}
-	 *         otherwise
-	 * @review
+	 * @param  pathFunction the function that gets the {@code Path}
+	 * @param  representorFunction the function that gets the {@code
+	 *         Representor}
+	 * @return the model's {@code Path}, if the model's {@code Representor} and
+	 *         {@code Path} exist; returns {@code Optional#empty()} otherwise
 	 */
 	public static <T> Optional<Path> getPathOptional(
 		SingleModel<T> singleModel, PathFunction pathFunction,
@@ -95,14 +93,14 @@ public class WriterUtil {
 	}
 
 	/**
-	 * Return the {@code Path} for a given model. If no {@code Representor} can
-	 * be found for the model class, {@code Optional#empty()} is returned.
+	 * Returns a model's {@link com.liferay.vulcan.resource.Representor}, if it
+	 * exists. Otherwise, this method returns {@code Optional#empty()}.
 	 *
-	 * @param  modelClass the class of the model
-	 * @param  representorFunction the function to get the {@code Representor}
-	 * @return the {@code Representor} of the model class if it's available;
-	 *         returns {@code Optional#empty()} otherwise
-	 * @review
+	 * @param  modelClass the model's class
+	 * @param  representorFunction the function that gets the {@code
+	 *         Representor}
+	 * @return the model's {@code Representor}, if it exists; returns {@code
+	 *         Optional#empty()} otherwise
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, V extends Identifier> Optional<Representor<T, V>>

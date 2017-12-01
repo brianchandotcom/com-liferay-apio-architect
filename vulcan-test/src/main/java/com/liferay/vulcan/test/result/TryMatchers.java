@@ -22,46 +22,44 @@ import com.liferay.vulcan.test.internal.result.ValueTry;
 import org.hamcrest.Matcher;
 
 /**
- * This class provides {@code Hamcrest} {@link Matcher}s that can be used for
- * testing the {@link Try} monadic type.
+ * Provides {@code Matcher} objects that can be used for testing
+ * the {@link Try} monadic type.
  *
  * <p>
  * This class shouldn't be instantiated.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public final class TryMatchers {
 
 	/**
-	 * Returns a matcher that checks that this try is a {@link Try.Failure}.
+	 * Returns a matcher that checks if this {@code Try} is a {@code
+	 * Try.Failure}.
 	 *
-	 * @return a matcher that checks that this try is a failure
-	 * @review
+	 * @return the matcher that checks if this {@code Try} is a failure
 	 */
 	public static <T> Matcher<Try<T>> aFailTry() {
 		return new FailTry<>();
 	}
 
 	/**
-	 * Returns a matcher that checks that this try is a {@link Try.Success}.
+	 * Returns a matcher that checks if this {@code Try} is a {@code
+	 * Try.Success}.
 	 *
-	 * @return a matcher that checks that this try is a success
-	 * @review
+	 * @return the matcher that checks if this try is a success
 	 */
 	public static <T> Matcher<Try<T>> aSuccessTry() {
 		return new SuccessTry<>();
 	}
 
 	/**
-	 * Returns a matcher that checks that this try is a {@link Try.Success} with
-	 * a certain value.
+	 * Returns a matcher that checks if this {@code Try} is a {@code
+	 * Try.Success} with a certain value.
 	 *
-	 * @param  matcher the matcher used for checking the value
-	 * @return a matcher that checks that this try is a success with a certain
-	 *         value
-	 * @review
+	 * @param  matcher the matcher used to check the value
+	 * @return the matcher that checks if this {@code Try} is a success with a
+	 *         certain value
 	 */
 	public static <T> Matcher<Try<T>> aTryWithValueThat(
 		final Matcher<T> matcher) {

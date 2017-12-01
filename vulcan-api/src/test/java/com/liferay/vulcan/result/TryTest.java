@@ -49,20 +49,18 @@ public class TryTest {
 	public static final String SUCCESS = "success";
 
 	/**
-	 * Returns a new list of failures to be used in tests using {@code
+	 * Returns a new list of failures for use in tests.
 	 *
-	 * @return a list of failures to be used in tests.
-	 * @review
+	 * @return the list of failures
 	 */
 	public Try[] fail() {
 		return new Try[] {Try.fail(new IllegalArgumentException())};
 	}
 
 	/**
-	 * Returns a new list of successes to be used in tests using {@code
+	 * Returns a new list of successes for use in tests.
 	 *
-	 * @return a list of successes to be used in tests.
-	 * @review
+	 * @return the list of successes
 	 */
 	public Try[] success() {
 		return new Try[] {Try.success("Live long")};

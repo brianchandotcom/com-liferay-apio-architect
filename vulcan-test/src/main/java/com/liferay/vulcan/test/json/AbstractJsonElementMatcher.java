@@ -26,11 +26,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 /**
- * Abstract class that can be inherited from to create a {@link Matcher} for a
- * type of {@link JsonElement}.
+ * Creates a {@code Matcher} for a type of {@code
+ * JsonElement}.
  *
  * @author Alejandro Hernández
- * @review
  */
 public abstract class AbstractJsonElementMatcher<A extends JsonElement, B>
 	extends TypeSafeDiagnosingMatcher<JsonElement> {
@@ -58,10 +57,9 @@ public abstract class AbstractJsonElementMatcher<A extends JsonElement, B>
 	}
 
 	/**
-	 * Returns the text that will be used when validation fails.
+	 * Returns the text to use when validation fails.
 	 *
-	 * @return the text to be used when validation fails.
-	 * @review
+	 * @return the text to use when validation fails
 	 */
 	protected String getFailText() {
 		return "was " + _jsonElementType.getReadableName() +
@@ -69,10 +67,9 @@ public abstract class AbstractJsonElementMatcher<A extends JsonElement, B>
 	}
 
 	/**
-	 * Returns the inner {@code Matcher} this {@code Matcher} uses.
+	 * Returns this matcher's inner matcher.
 	 *
-	 * @return the inner {@code Matcher} this {@code Matcher} uses.
-	 * @review
+	 * @return this matcher's inner matcher
 	 */
 	protected Matcher<B> getInnerMatcher() {
 		return _bMatcher;
