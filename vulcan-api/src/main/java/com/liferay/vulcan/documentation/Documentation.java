@@ -42,7 +42,7 @@ public class Documentation {
 	 *         otherwise
 	 */
 	public RequestFunction<Optional<String>>
-	getAPIDescriptionRequestFunction() {
+		getAPIDescriptionRequestFunction() {
 
 		return httpServletRequest -> _apiDescriptionRequestFunction.apply(
 			httpServletRequest
