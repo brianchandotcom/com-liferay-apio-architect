@@ -32,14 +32,14 @@ import java.util.Collection;
 public class Page<T> {
 
 	public Page(
-		Class<T> modelClass, Collection<T> items, int itemsPerPage,
-		int pageNumber, int totalCount, Path path) {
+		Class<T> modelClass, PageItems<T> pageItems, Pagination pagination,
+		Path path) {
 
 		_modelClass = modelClass;
-		_items = items;
-		_itemsPerPage = itemsPerPage;
-		_pageNumber = pageNumber;
-		_totalCount = totalCount;
+		_items = pageItems.getItems();
+		_itemsPerPage = pagination.getItemsPerPage();
+		_pageNumber = pagination.getPageNumber();
+		_totalCount = pageItems.getTotalCount();
 		_path = path;
 	}
 

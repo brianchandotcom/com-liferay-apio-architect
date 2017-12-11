@@ -14,21 +14,25 @@
 
 package com.liferay.apio.architect.writer.url;
 
+import static java.util.Collections.emptyList;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.PageType;
+import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import java.util.Collections;
-
 import org.junit.Test;
+
+import org.mockito.Mockito;
 
 /**
  * @author Alejandro Hernández
@@ -61,8 +65,23 @@ public class URLCreatorTest {
 
 	@Test
 	public void testCreateCollectionPageURL() {
-		Page page = new Page<>(
-			String.class, Collections.emptyList(), 30, 1, 0, null);
+		Pagination pagination = Mockito.mock(Pagination.class);
+
+		Mockito.when(
+			pagination.getItemsPerPage()
+		).thenReturn(
+			30
+		);
+
+		Mockito.when(
+			pagination.getPageNumber()
+		).thenReturn(
+			1
+		);
+
+		PageItems<String> pageItems = new PageItems<>(emptyList(), 0);
+
+		Page page = new Page<>(String.class, pageItems, pagination, null);
 
 		String firstPageURL = URLCreator.createCollectionPageURL(
 			"www.liferay.com", page, PageType.FIRST);

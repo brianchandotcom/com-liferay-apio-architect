@@ -89,9 +89,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 			PageItems<T> pageItems = biFunction.apply(pagination, v);
 
-			return new Page<>(
-				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+			return new Page<>(_modelClass, pageItems, pagination, path);
 		};
 
 		return this;
@@ -123,9 +121,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			PageItems<T> pageItems = decaFunction.apply(
 				pagination, v, a, b, c, d, e, f, g, h);
 
-			return new Page<>(
-				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+			return new Page<>(_modelClass, pageItems, pagination, path);
 		};
 
 		return this;
@@ -156,9 +152,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			PageItems<T> pageItems = enneaFunction.apply(
 				pagination, v, a, b, c, d, e, f, g);
 
-			return new Page<>(
-				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+			return new Page<>(_modelClass, pageItems, pagination, path);
 		};
 
 		return this;
@@ -186,9 +180,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			PageItems<T> pageItems = heptaFunction.apply(
 				pagination, v, a, b, c, d, e);
 
-			return new Page<>(
-				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+			return new Page<>(_modelClass, pageItems, pagination, path);
 		};
 
 		return this;
@@ -214,9 +206,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			PageItems<T> pageItems = hexaFunction.apply(
 				pagination, v, a, b, c, d);
 
-			return new Page<>(
-				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+			return new Page<>(_modelClass, pageItems, pagination, path);
 		};
 
 		return this;
@@ -246,9 +236,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			PageItems<T> pageItems = octaFunction.apply(
 				pagination, v, a, b, c, d, e, f);
 
-			return new Page<>(
-				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+			return new Page<>(_modelClass, pageItems, pagination, path);
 		};
 
 		return this;
@@ -273,9 +261,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			PageItems<T> pageItems = pentaFunction.apply(
 				pagination, v, a, b, c);
 
-			return new Page<>(
-				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+			return new Page<>(_modelClass, pageItems, pagination, path);
 		};
 
 		return this;
@@ -297,9 +283,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 			PageItems<T> pageItems = tetraFunction.apply(pagination, v, a, b);
 
-			return new Page<>(
-				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+			return new Page<>(_modelClass, pageItems, pagination, path);
 		};
 
 		return this;
@@ -320,9 +304,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 			PageItems<T> pageItems = triFunction.apply(pagination, v, a);
 
-			return new Page<>(
-				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
-				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+			return new Page<>(_modelClass, pageItems, pagination, path);
 		};
 
 		return this;
