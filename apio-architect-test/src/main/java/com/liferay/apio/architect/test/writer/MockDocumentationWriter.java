@@ -39,7 +39,7 @@ public class MockDocumentationWriter {
 
 	/**
 	 * Returns a {@link RequestInfo} with the provided {@code HttpHeaders}, a
-	 * mock {@link ServerURL}, and a mock {@code
+	 * mock {@link com.liferay.apio.architect.url.ServerURL}, and a mock {@code
 	 * javax.servlet.http.HttpServletRequest}.
 	 *
 	 * @param  httpHeaders the HTTP headers

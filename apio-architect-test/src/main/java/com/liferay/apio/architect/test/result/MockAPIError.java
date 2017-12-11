@@ -20,7 +20,7 @@ import java.util.Optional;
 
 /**
  * Represents a mock {@link APIError} that can be used to test an {@link
- * ErrorMessageMapper}.
+ * com.liferay.apio.architect.message.json.ErrorMessageMapper}.
  *
  * @author Alejandro Hernández
  */

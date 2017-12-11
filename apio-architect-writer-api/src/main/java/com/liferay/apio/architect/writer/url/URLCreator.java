@@ -85,7 +85,8 @@ public final class URLCreator {
 	 *
 	 * @param  serverURL the server URL
 	 * @param  path the resource's {@link Path}
-	 * @return the URL for the {@link CollectionResource}
+	 * @return the URL for the {@link
+	 *         com.liferay.apio.architect.resource.CollectionResource}
 	 */
 	public static String createSingleURL(ServerURL serverURL, Path path) {
 		return serverURL.get() + "/p/" + path.asURI();

@@ -40,12 +40,14 @@ import com.liferay.apio.architect.resource.identifier.Identifier;
  *
  * <p>
  * Finally, you can add the different supported routes for the resource via the
- * method {@link CollectionResource#routes(RoutesBuilder)}.
+ * method {@link
+ * CollectionResource#routes(
+ * com.liferay.apio.architect.resource.builder.RoutesBuilder)}.
  * </p>
  *
  * @author Alejandro Hernández
  * @see    Representor.Builder
- * @see    RoutesBuilder
+ * @see    com.liferay.apio.architect.resource.builder.RoutesBuilder
  */
 @ConsumerType
 public interface ScopedCollectionResource<T, U extends Identifier>

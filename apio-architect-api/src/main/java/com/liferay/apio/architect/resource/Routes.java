@@ -30,12 +30,13 @@ import java.util.Optional;
  *
  * <p>
  * This interface's methods return functions to get the different endpoints of
- * the collection resource. You should always use a {@link RoutesBuilder} to
- * create instances of this interface.
+ * the collection resource. You should always use a {@link
+ * com.liferay.apio.architect.resource.builder.RoutesBuilder} to create
+ * instances of this interface.
  * </p>
  *
  * @author Alejandro Hernández
- * @see    RoutesBuilder
+ * @see    com.liferay.apio.architect.resource.builder.RoutesBuilder
  */
 @ProviderType
 public interface Routes<T> {
@@ -43,8 +44,8 @@ public interface Routes<T> {
 	/**
 	 * Returns the function that is used to create the single model of a {@link
 	 * CollectionResource}, if the endpoint was added through the {@link
-	 * RoutesBuilder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.builder.RoutesBuilder} and the
+	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function that uses a POST request to create the single model,
 	 *         if the function exists; {@code Optional#empty()} otherwise
@@ -54,8 +55,8 @@ public interface Routes<T> {
 	/**
 	 * Returns the function used to remove a single model of a {@link
 	 * CollectionResource}, if the endpoint was added through the {@link
-	 * RoutesBuilder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.builder.RoutesBuilder} and the
+	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function used to remove a single model, if the function
 	 *         exists; {@code Optional#empty()} otherwise
@@ -65,8 +66,8 @@ public interface Routes<T> {
 	/**
 	 * Returns the function used to obtain the page of a {@link
 	 * CollectionResource}, if the endpoint was added through the {@link
-	 * RoutesBuilder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.builder.RoutesBuilder} and the
+	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function used to create the page, if the function exists;
 	 *         {@code Optional#empty()} otherwise
@@ -76,8 +77,8 @@ public interface Routes<T> {
 	/**
 	 * Returns the function used to retrieve the single model of a {@link
 	 * CollectionResource}, if the endpoint was added through the {@link
-	 * RoutesBuilder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.builder.RoutesBuilder} and the
+	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function that uses a GET request to retrieve the single
 	 *         model, if the function exists; {@code Optional#empty()} otherwise
@@ -87,8 +88,8 @@ public interface Routes<T> {
 	/**
 	 * Returns the function used to update the single model of a {@link
 	 * CollectionResource}, if the endpoint was added through the {@link
-	 * RoutesBuilder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.builder.RoutesBuilder} and the
+	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function used to update the single model, if the function
 	 *         exists; {@code Optional#empty()} otherwise

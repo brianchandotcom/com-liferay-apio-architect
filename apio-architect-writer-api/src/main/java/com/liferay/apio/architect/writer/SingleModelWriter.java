@@ -67,8 +67,9 @@ public class SingleModelWriter<T> {
 	/**
 	 * Writes the handled {@link SingleModel} to a string. This method uses a
 	 * {@link FieldsWriter} to write the different fields of its {@link
-	 * Representor}. If no {@code Representor} or {@code Path} exists for the
-	 * model, this method returns {@code Optional#empty()}.
+	 * com.liferay.apio.architect.resource.Representor}. If no {@code
+	 * Representor} or {@code Path} exists for the model, this method returns
+	 * {@code Optional#empty()}.
 	 *
 	 * @return the string representation of the {@code SingleModel}, if the
 	 *         model's {@code Representor} and {@code Path} exist; returns
@@ -191,7 +192,8 @@ public class SingleModelWriter<T> {
 
 			/**
 			 * Adds information to the builder about the function that converts
-			 * an {@link Identifier} to a {@link Path}.
+			 * an {@link Identifier} to a {@link
+			 * com.liferay.apio.architect.uri.Path}.
 			 *
 			 * @param  pathFunction the function that converts an {@code
 			 *         Identifier} to a {@code Path}
@@ -211,7 +213,7 @@ public class SingleModelWriter<T> {
 
 			/**
 			 * Adds information to the builder about the function that gets a
-			 * class's {@link Representor}.
+			 * class's {@link com.liferay.apio.architect.resource.Representor}.
 			 *
 			 * @param  representorFunction the function that gets a class's
 			 *         {@code Representor}

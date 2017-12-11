@@ -86,57 +86,58 @@ public class MockRepresentorCreator {
 		Representor.Builder<RootModel, StringIdentifier> builder =
 			new Representor.Builder<>(StringIdentifier.class);
 
-		Representor.Builder.FirstStep firstStepBuilder = builder.types(
-			"Type 1", "Type 2"
-		).identifier(
-			model -> model::getId
-		).addBinary(
-			"binary1", __ -> null
-		).addBinary(
-			"binary2", __ -> null
-		).addBoolean(
-			"boolean1", __ -> true
-		).addBoolean(
-			"boolean2", __ -> false
-		).addDate(
-			"date1", __ -> new Date(1465981200000L)
-		).addDate(
-			"date2", __ -> new Date(1491244560000L)
-		).addEmbeddedModel(
-			"embedded1", FirstEmbeddedModel.class,
-			__ -> Optional.of(() -> "first")
-		).addEmbeddedModel(
-			"embedded2", FirstEmbeddedModel.class,
-			__ -> Optional.of(() -> "second")
-		).addLinkedModel(
-			"linked1", FirstEmbeddedModel.class,
-			__ -> Optional.of(() -> "third")
-		).addLinkedModel(
-			"linked2", FirstEmbeddedModel.class,
-			__ -> Optional.of(() -> "fourth")
-		).addLink(
-			"link1", "www.liferay.com"
-		).addLink(
-			"link2", "community.liferay.com"
-		).addLocalizedString(
-			"localizedString1", (model, language) -> "Translated 1"
-		).addLocalizedString(
-			"localizedString2", (model, language) -> "Translated 2"
-		).addNumber(
-			"number1", __ -> 2017
-		).addNumber(
-			"number2", __ -> 42
-		).addRelatedCollection(
-			"relatedCollection1", FirstEmbeddedModel.class,
-			model -> (StringIdentifier)model::getId
-		).addRelatedCollection(
-			"relatedCollection2", FirstEmbeddedModel.class,
-			model -> (StringIdentifier)model::getId
-		).addString(
-			"string1", __ -> "Live long and prosper"
-		).addString(
-			"string2", __ -> "Hypermedia"
-		);
+		Representor.Builder<RootModel, StringIdentifier>.FirstStep
+			firstStepBuilder = builder.types(
+				"Type 1", "Type 2"
+			).identifier(
+				model -> model::getId
+			).addBinary(
+				"binary1", __ -> null
+			).addBinary(
+				"binary2", __ -> null
+			).addBoolean(
+				"boolean1", __ -> true
+			).addBoolean(
+				"boolean2", __ -> false
+			).addDate(
+				"date1", __ -> new Date(1465981200000L)
+			).addDate(
+				"date2", __ -> new Date(1491244560000L)
+			).addEmbeddedModel(
+				"embedded1", FirstEmbeddedModel.class,
+				__ -> Optional.of(() -> "first")
+			).addEmbeddedModel(
+				"embedded2", FirstEmbeddedModel.class,
+				__ -> Optional.of(() -> "second")
+			).addLinkedModel(
+				"linked1", FirstEmbeddedModel.class,
+				__ -> Optional.of(() -> "third")
+			).addLinkedModel(
+				"linked2", FirstEmbeddedModel.class,
+				__ -> Optional.of(() -> "fourth")
+			).addLink(
+				"link1", "www.liferay.com"
+			).addLink(
+				"link2", "community.liferay.com"
+			).addLocalizedString(
+				"localizedString1", (model, language) -> "Translated 1"
+			).addLocalizedString(
+				"localizedString2", (model, language) -> "Translated 2"
+			).addNumber(
+				"number1", __ -> 2017
+			).addNumber(
+				"number2", __ -> 42
+			).addRelatedCollection(
+				"relatedCollection1", FirstEmbeddedModel.class,
+				model -> (StringIdentifier)model::getId
+			).addRelatedCollection(
+				"relatedCollection2", FirstEmbeddedModel.class,
+				model -> (StringIdentifier)model::getId
+			).addString(
+				"string1", __ -> "Live long and prosper"
+			).addString(
+				"string2", __ -> "Hypermedia"
+			);
 
 		if (activateNulls) {
 			return firstStepBuilder.addBoolean(

@@ -72,8 +72,9 @@ public class PageWriter<T> {
 	/**
 	 * Writes the handled {@link Page} to a string. This method uses a {@link
 	 * FieldsWriter} to write the different fields of its items' {@link
-	 * Representor}. If no {@code Representor} or {@code Path} exist for the
-	 * model, this method returns {@code Optional#empty()}.
+	 * com.liferay.apio.architect.resource.Representor}. If no {@code
+	 * Representor} or {@code Path} exist for the model, this method returns
+	 * {@code Optional#empty()}.
 	 *
 	 * @return the representation of the {@code Page}, if the {@code
 	 *         Representor} and {@code Path} exist for the model; returns {@code
@@ -145,7 +146,7 @@ public class PageWriter<T> {
 
 			/**
 			 * Adds information to the builder about the {@link
-			 * com.liferay.apio.architect.message.json.PageMessageMapperPageMessageMapper}.
+			 * PageMessageMapper}.
 			 *
 			 * @param  pageMessageMapper the {@code PageMessageMapper} headers.
 			 * @return the updated builder
@@ -184,7 +185,7 @@ public class PageWriter<T> {
 
 			/**
 			 * Adds information to the builder about the function that gets a
-			 * class's {@link Representor}.
+			 * class's {@link com.liferay.apio.architect.resource.Representor}.
 			 *
 			 * @param  representorFunction the function that gets a class's
 			 *         {@code Representor}
@@ -207,7 +208,7 @@ public class PageWriter<T> {
 			 *
 			 * @param  requestInfo the information obtained from the request.
 			 *         This can be created by using a {@link
-			 *         com.liferay.apio.architect.request.RequestInfoRequestInfo.Builder}
+			 *         RequestInfo.Builder}
 			 * @return the updated builder
 			 */
 			public BuildStep requestInfo(RequestInfo requestInfo) {
@@ -222,7 +223,8 @@ public class PageWriter<T> {
 
 			/**
 			 * Adds information to the builder about the function that gets the
-			 * name of a class's {@link Representor}.
+			 * name of a class's {@link
+			 * com.liferay.apio.architect.resource.Representor}.
 			 *
 			 * @param  resourceNameFunction the function that gets the name of a
 			 *         class's {@code Representor}

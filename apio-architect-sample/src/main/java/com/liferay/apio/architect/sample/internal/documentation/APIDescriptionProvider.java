@@ -23,7 +23,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Lets resources provide {@link APIDescription} as a parameter in the methods
- * of {@link RoutesBuilder}.
+ * of {@link com.liferay.apio.architect.resource.builder.RoutesBuilder}.
  *
  * @author Alejandro Hernández
  */

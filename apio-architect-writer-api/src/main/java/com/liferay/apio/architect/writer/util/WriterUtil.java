@@ -27,7 +27,7 @@ import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import java.util.Optional;
 
 /**
- * Provides utililty functions for writers.
+ * Provides utility functions for writers.
  *
  * <p>
  * This class shouldn't be instantiated.

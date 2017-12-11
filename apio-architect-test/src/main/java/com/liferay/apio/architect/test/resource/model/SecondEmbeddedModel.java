@@ -16,7 +16,8 @@ package com.liferay.apio.architect.test.resource.model;
 
 /**
  * Represents a second-layer embeddable mock model that can be mapped to a
- * {@link Representor} using {@link MockRepresentorCreator} methods.
+ * {@link com.liferay.apio.architect.resource.Representor} using {@link
+ * com.liferay.apio.architect.test.resource.MockRepresentorCreator} methods.
  *
  * @author Alejandro Hernández
  */

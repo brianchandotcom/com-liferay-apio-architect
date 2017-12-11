@@ -24,7 +24,7 @@ import com.liferay.portal.kernel.model.ClassedModel;
  *
  * <p>
  * This identifier should only be used to identify single items in {@link
- * AggregateRating}.
+ * com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRating}.
  * </p>
  *
  * @author Alejandro Hernández

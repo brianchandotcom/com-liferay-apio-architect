@@ -45,7 +45,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Creates {@link Routes} of a {@link CollectionResource}.
+ * Creates {@link Routes} of a {@link
+ * com.liferay.apio.architect.resource.CollectionResource}.
  *
  * @author Alejandro Hernández
  */

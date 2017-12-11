@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.model.GroupedModel;
  * <p>
  * This identifier should only be used to identify comment collections added
  * through {@link
- * com.liferay.apio.architect.resource.builder.Representor.Builder.FirstStep#addRelatedCollection(
+ * com.liferay.apio.architect.resource.Representor.Builder.FirstStep#addRelatedCollection(
  * String, Class, java.util.function.Function)}
  * </p>
  *

@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * Lets resources provide {@code Company} as a parameter to the methods of
- * {@link RoutesBuilder}.
+ * {@link com.liferay.apio.architect.resource.builder.RoutesBuilder}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

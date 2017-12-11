@@ -78,8 +78,10 @@ public class MockSingleModelWriter {
 
 	/**
 	 * Returns a {@link RequestInfo} with the provided {@code HttpHeaders}, a
-	 * mock {@link ServerURL}, a mock {@link Embedded} request, and a mock
-	 * {@link Language} with {@code java.util.LocaleLocale#US}.
+	 * mock {@link com.liferay.apio.architect.url.ServerURL}, a mock {@link
+	 * com.liferay.apio.architect.response.control.Embedded} request, and a mock
+	 * {@link com.liferay.apio.architect.language.Language} with {@code
+	 * java.util.LocaleLocale#US}.
 	 *
 	 * @param  httpHeaders the {@code HttpHeaders}
 	 * @return the {@code RequestInfo}
