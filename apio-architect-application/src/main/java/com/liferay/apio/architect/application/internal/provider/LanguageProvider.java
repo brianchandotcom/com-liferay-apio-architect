@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.provider;
+package com.liferay.apio.architect.application.internal.provider;
 
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.provider.Provider;
@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Lets resources provide the requested {@link Language} as a parameter in the
- * methods of {@link RoutesBuilder}.
+ * methods of {@link com.liferay.apio.architect.resource.builder.RoutesBuilder}.
  *
  * @author Alejandro Hernández
  */

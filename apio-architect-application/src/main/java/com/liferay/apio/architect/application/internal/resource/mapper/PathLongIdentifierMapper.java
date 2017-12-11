@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.resource.mapper;
+package com.liferay.apio.architect.application.internal.resource.mapper;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.UnresolvableURI;
 import com.liferay.apio.architect.resource.identifier.LongIdentifier;

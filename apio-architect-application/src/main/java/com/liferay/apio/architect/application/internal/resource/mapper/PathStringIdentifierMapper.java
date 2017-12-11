@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.resource.mapper;
+package com.liferay.apio.architect.application.internal.resource.mapper;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.UnresolvableURI;
 import com.liferay.apio.architect.resource.identifier.StringIdentifier;
@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Reference;
  *
  * <p>
  * {@code StringIdentifier} can then be provided as a parameter in the methods
- * of {@link RoutesBuilder}.
+ * of {@link com.liferay.apio.architect.resource.builder.RoutesBuilder}.
  * </p>
  *
  * @author Alejandro Hernández
