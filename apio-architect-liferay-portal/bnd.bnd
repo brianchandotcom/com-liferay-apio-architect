@@ -1,4 +1,0 @@
-Bundle-Name: Liferay Apio Architect Liferay Portal
-Bundle-SymbolicName: com.liferay.apio.architect.liferay.portal
-Bundle-Version: 1.0.0
-Export-Package: com.liferay.apio.architect.liferay.portal.context

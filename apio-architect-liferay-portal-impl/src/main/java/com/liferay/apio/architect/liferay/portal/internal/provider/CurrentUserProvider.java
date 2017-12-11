@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * Lets resources provide the current {@code
  * com.liferay.portal.kernel.model.User} as a parameter in the methods of {@link
- * RoutesBuilder}.
+ * com.liferay.apio.architect.resource.builder.RoutesBuilder}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
