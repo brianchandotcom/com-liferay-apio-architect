@@ -17,8 +17,9 @@ package com.liferay.apio.architect.pagination;
 import java.util.Collection;
 
 /**
- * Provides the information needed by {@link RootEndpoint} to construct a valid
- * {@link Page}.
+ * Provides the information needed by {@link
+ * com.liferay.apio.architect.endpoint.RootEndpoint} to construct a valid {@link
+ * Page}.
  *
  * @author Alejandro Hernández
  */
