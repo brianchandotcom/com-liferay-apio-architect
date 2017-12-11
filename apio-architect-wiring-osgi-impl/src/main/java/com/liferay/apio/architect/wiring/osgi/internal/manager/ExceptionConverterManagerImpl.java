@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
@@ -20,6 +20,7 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.apio.architect.converter.ExceptionConverter;
 import com.liferay.apio.architect.result.APIError;
+import com.liferay.apio.architect.wiring.osgi.manager.ExceptionConverterManager;
 
 import java.util.Optional;
 
@@ -28,29 +29,15 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to convert exceptions to generic {@link APIError}
- * representations.
- *
  * @author Alejandro Hernández
  */
-@Component(immediate = true, service = ExceptionConverterManager.class)
-public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
+@Component(immediate = true)
+public class ExceptionConverterManagerImpl
+	extends BaseManager<ExceptionConverter>
+	implements ExceptionConverterManager {
 
-	/**
-	 * Converts an exception to its generic {@link APIError} representation, if
-	 * a valid {@link ExceptionConverter} exists. Returns {@code
-	 * Optional#empty()} otherwise.
-	 *
-	 * <p>
-	 * If no {@code ExceptionConverter} can be found for the exception class,
-	 * this method tries to use the superclass of {@code ExceptionConverter}.
-	 * </p>
-	 *
-	 * @param  exception the exception to convert
-	 * @return the exception's {@code APIError} representation, if a valid
-	 *         {@code ExceptionConverter} is present; {@code Optional#empty()}
-	 *         otherwise
-	 */
+	@Override
+	@SuppressWarnings("unchecked")
 	public <T extends Exception> Optional<APIError> convert(T exception) {
 		return _convert(exception, (Class<T>)exception.getClass());
 	}
@@ -69,6 +56,7 @@ public class ExceptionConverterManager extends BaseManager<ExceptionConverter> {
 		removeService(serviceReference);
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T extends Exception> Optional<APIError> _convert(
 		T exception, Class<T> exceptionClass) {
 

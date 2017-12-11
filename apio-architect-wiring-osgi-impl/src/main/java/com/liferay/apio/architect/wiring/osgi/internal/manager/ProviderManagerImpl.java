@@ -12,13 +12,14 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.provider.Provider;
+import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 
 import java.util.Optional;
 
@@ -29,24 +30,16 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Manages services that have a {@link Provider}.
- *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(immediate = true, service = ProviderManager.class)
-public class ProviderManager extends BaseManager<Provider> {
+@Component(immediate = true)
+public class ProviderManagerImpl
+	extends BaseManager<Provider> implements ProviderManager {
 
-	/**
-	 * Returns the instance of type {@code T} if a valid {@code Provider} can be
-	 * found. Returns {@code Optional#empty()} otherwise.
-	 *
-	 * @param  clazz the class type {@code T}
-	 * @param  httpServletRequest the current request
-	 * @return the instance of {@code T}, if a valid {@code Provider} is
-	 *         present; {@code Optional#empty()} otherwise
-	 */
+	@Override
+	@SuppressWarnings("unchecked")
 	public <T> Optional<T> provideOptional(
 		Class<T> clazz, HttpServletRequest httpServletRequest) {
 
@@ -59,15 +52,7 @@ public class ProviderManager extends BaseManager<Provider> {
 		);
 	}
 
-	/**
-	 * Returns an instance of type {@code T} if a valid {@link Provider} exists.
-	 * Returns {@code null} otherwise.
-	 *
-	 * @param  clazz the type class to provide
-	 * @param  httpServletRequest the current request
-	 * @return the instance of {@code T}, if a valid {@code Provider} exists;
-	 *         {@code null} otherwise
-	 */
+	@Override
 	public <T> T provideOrNull(
 		Class<T> clazz, HttpServletRequest httpServletRequest) {
 

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
 import com.liferay.apio.architect.error.ApioDeveloperError;
 import com.liferay.apio.architect.result.Try;

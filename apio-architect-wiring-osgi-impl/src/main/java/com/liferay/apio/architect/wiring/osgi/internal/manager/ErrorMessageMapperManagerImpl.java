@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
@@ -21,6 +21,7 @@ import com.liferay.apio.architect.error.ApioDeveloperError;
 import com.liferay.apio.architect.message.json.ErrorMessageMapper;
 import com.liferay.apio.architect.result.APIError;
 import com.liferay.apio.architect.result.Try;
+import com.liferay.apio.architect.wiring.osgi.manager.ErrorMessageMapperManager;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,26 +34,13 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to get the {@link ErrorMessageMapper} that corresponds to
- * the {@link APIError} and {@code HttpHeaders}.
- *
  * @author Alejandro Hernández
  */
-@Component(immediate = true, service = ErrorMessageMapperManager.class)
-public class ErrorMessageMapperManager {
+@Component(immediate = true)
+public class ErrorMessageMapperManagerImpl
+	implements ErrorMessageMapperManager {
 
-	/**
-	 * Returns the {@code ErrorMessageMapper} that corresponds to the {@code
-	 * APIError} and {@code HttpHeaders}. If no acceptable media type is found
-	 * in the current request, or no mapper is found for that request's {@code
-	 * Accept} type, this method returns a mapper for the {@code
-	 * application/problem+json} media type.
-	 *
-	 * @param  apiError the {@code APIError}
-	 * @param  httpHeaders the current request's HTTP headers
-	 * @return the {@code ErrorMessageMapper} that corresponds to the {@code
-	 *         APIError} and {@code HttpHeaders}
-	 */
+	@Override
 	public ErrorMessageMapper getErrorMessageMapper(
 		APIError apiError, HttpHeaders httpHeaders) {
 
