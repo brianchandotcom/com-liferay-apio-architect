@@ -32,7 +32,8 @@ public class ApioDeveloperError extends Error {
 
 		public MustHaveDocumentationMessageMapper(String mediaType) {
 			super(
-				"Documentation media type " + mediaType + " does not have a message mapper");
+				"Documentation media type " + mediaType +
+					" does not have a message mapper");
 		}
 
 	}
