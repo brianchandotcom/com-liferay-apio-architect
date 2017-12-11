@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Reference;
  *
  * <p>
  * {@code StringIdentifier} can then be provided as a parameter in the methods
- * of {@link Routes.Builder}.
+ * of {@link com.liferay.apio.architect.resource.Routes.Builder}.
  * </p>
  *
  * @author Alejandro Hernández

@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Lets resources provide {@link Embedded} as a parameter in the methods of
- * {@link Routes.Builder}.
+ * {@link com.liferay.apio.architect.resource.Routes.Builder}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
