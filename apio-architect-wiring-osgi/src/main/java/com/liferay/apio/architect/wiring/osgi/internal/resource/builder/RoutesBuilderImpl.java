@@ -35,6 +35,7 @@ import com.liferay.apio.architect.function.PentaFunction;
 import com.liferay.apio.architect.function.TetraFunction;
 import com.liferay.apio.architect.function.TriFunction;
 import com.liferay.apio.architect.function.UndecaFunction;
+import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.pagination.SingleModel;
@@ -42,7 +43,6 @@ import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.Identifier;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.wiring.osgi.internal.pagination.PageImpl;
 import com.liferay.apio.architect.wiring.osgi.internal.resource.RoutesImpl;
 
 import java.util.Map;
@@ -87,7 +87,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 				PageItems<T> pageItems = biFunction.apply(pagination, v);
 
-				return new PageImpl<>(
+				return new Page<>(
 					_modelClass, pageItems.getItems(),
 					pagination.getItemsPerPage(), pagination.getPageNumber(),
 					pageItems.getTotalCount(), path);
@@ -123,7 +123,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				PageItems<T> pageItems = decaFunction.apply(
 					pagination, v, a, b, c, d, e, f, g, h);
 
-				return new PageImpl<>(
+				return new Page<>(
 					_modelClass, pageItems.getItems(),
 					pagination.getItemsPerPage(), pagination.getPageNumber(),
 					pageItems.getTotalCount(), path);
@@ -158,7 +158,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				PageItems<T> pageItems = enneaFunction.apply(
 					pagination, v, a, b, c, d, e, f, g);
 
-				return new PageImpl<>(
+				return new Page<>(
 					_modelClass, pageItems.getItems(),
 					pagination.getItemsPerPage(), pagination.getPageNumber(),
 					pageItems.getTotalCount(), path);
@@ -190,7 +190,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				PageItems<T> pageItems = heptaFunction.apply(
 					pagination, v, a, b, c, d, e);
 
-				return new PageImpl<>(
+				return new Page<>(
 					_modelClass, pageItems.getItems(),
 					pagination.getItemsPerPage(), pagination.getPageNumber(),
 					pageItems.getTotalCount(), path);
@@ -220,7 +220,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				PageItems<T> pageItems = hexaFunction.apply(
 					pagination, v, a, b, c, d);
 
-				return new PageImpl<>(
+				return new Page<>(
 					_modelClass, pageItems.getItems(),
 					pagination.getItemsPerPage(), pagination.getPageNumber(),
 					pageItems.getTotalCount(), path);
@@ -254,7 +254,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				PageItems<T> pageItems = octaFunction.apply(
 					pagination, v, a, b, c, d, e, f);
 
-				return new PageImpl<>(
+				return new Page<>(
 					_modelClass, pageItems.getItems(),
 					pagination.getItemsPerPage(), pagination.getPageNumber(),
 					pageItems.getTotalCount(), path);
@@ -283,7 +283,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				PageItems<T> pageItems = pentaFunction.apply(
 					pagination, v, a, b, c);
 
-				return new PageImpl<>(
+				return new Page<>(
 					_modelClass, pageItems.getItems(),
 					pagination.getItemsPerPage(), pagination.getPageNumber(),
 					pageItems.getTotalCount(), path);
@@ -310,7 +310,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 				PageItems<T> pageItems = tetraFunction.apply(
 					pagination, v, a, b);
 
-				return new PageImpl<>(
+				return new Page<>(
 					_modelClass, pageItems.getItems(),
 					pagination.getItemsPerPage(), pagination.getPageNumber(),
 					pageItems.getTotalCount(), path);
@@ -335,7 +335,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 
 				PageItems<T> pageItems = triFunction.apply(pagination, v, a);
 
-				return new PageImpl<>(
+				return new Page<>(
 					_modelClass, pageItems.getItems(),
 					pagination.getItemsPerPage(), pagination.getPageNumber(),
 					pageItems.getTotalCount(), path);

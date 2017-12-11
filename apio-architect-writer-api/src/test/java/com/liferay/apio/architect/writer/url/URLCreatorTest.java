@@ -25,10 +25,9 @@ import com.liferay.apio.architect.url.ServerURL;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 
 import org.junit.Test;
-
-import org.mockito.Mockito;
 
 /**
  * @author Alejandro Hernández
@@ -61,13 +60,8 @@ public class URLCreatorTest {
 
 	@Test
 	public void testCreateCollectionPageURL() {
-		Page page = Mockito.mock(Page.class);
-
-		Mockito.when(
-			page.getItemsPerPage()
-		).thenReturn(
-			30
-		);
+		Page page = new Page<>(
+			String.class, Collections.emptyList(), 30, 1, 0, null);
 
 		String firstPageURL = URLCreator.createCollectionPageURL(
 			"www.liferay.com", page, PageType.FIRST);

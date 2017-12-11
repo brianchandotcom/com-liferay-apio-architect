@@ -29,56 +29,82 @@ import java.util.Collection;
  * @author Jorge Ferrer
  */
 @ProviderType
-public interface Page<T> {
+public class Page<T> {
+
+	public Page(
+		Class<T> modelClass, Collection<T> items, int itemsPerPage,
+		int pageNumber, int totalCount, Path path) {
+
+		_modelClass = modelClass;
+		_items = items;
+		_itemsPerPage = itemsPerPage;
+		_pageNumber = pageNumber;
+		_totalCount = totalCount;
+		_path = path;
+	}
 
 	/**
 	 * Returns the page's items.
 	 *
 	 * @return the page's items
 	 */
-	public Collection<T> getItems();
+	public Collection<T> getItems() {
+		return _items;
+	}
 
 	/**
 	 * Returns the number of items the user selected on the page.
 	 *
 	 * @return the number of items the user selected on the page
 	 */
-	public int getItemsPerPage();
+	public int getItemsPerPage() {
+		return _itemsPerPage;
+	}
 
 	/**
 	 * Returns the number of the collection's last page.
 	 *
 	 * @return the number of the collection's last page
 	 */
-	public int getLastPageNumber();
+	public int getLastPageNumber() {
+		return -Math.floorDiv(-_totalCount, _itemsPerPage);
+	}
 
 	/**
 	 * Returns the page's model class.
 	 *
 	 * @return the page's model class
 	 */
-	public Class<T> getModelClass();
+	public Class<T> getModelClass() {
+		return _modelClass;
+	}
 
 	/**
 	 * Returns the page number in the collection.
 	 *
 	 * @return the page number in the collection
 	 */
-	public int getPageNumber();
+	public int getPageNumber() {
+		return _pageNumber;
+	}
 
 	/**
 	 * Returns the identifier.
 	 *
 	 * @return the identifier
 	 */
-	public Path getPath();
+	public Path getPath() {
+		return _path;
+	}
 
 	/**
 	 * Returns the total number of elements in the collection.
 	 *
 	 * @return the total number of elements in the collection
 	 */
-	public int getTotalCount();
+	public int getTotalCount() {
+		return _totalCount;
+	}
 
 	/**
 	 * Returns {@code true} if another page follows this page in the collection.
@@ -86,7 +112,13 @@ public interface Page<T> {
 	 * @return {@code true} if another page follows this page in the collection;
 	 *         {@code false} otherwise
 	 */
-	public boolean hasNext();
+	public boolean hasNext() {
+		if (getLastPageNumber() > _pageNumber) {
+			return true;
+		}
+
+		return false;
+	}
 
 	/**
 	 * Returns {@code true} if another page precedes this page in the
@@ -95,6 +127,19 @@ public interface Page<T> {
 	 * @return {@code true} if another page precedes this page in the
 	 *         collection; {@code false} otherwise
 	 */
-	public boolean hasPrevious();
+	public boolean hasPrevious() {
+		if (_pageNumber > 1) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private final Collection<T> _items;
+	private final int _itemsPerPage;
+	private final Class<T> _modelClass;
+	private final int _pageNumber;
+	private final Path _path;
+	private final int _totalCount;
 
 }
