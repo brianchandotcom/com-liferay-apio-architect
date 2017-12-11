@@ -15,6 +15,11 @@
 package com.liferay.apio.architect.wiring.osgi.internal.resource.builder;
 
 import com.liferay.apio.architect.alias.RequestFunction;
+import com.liferay.apio.architect.alias.routes.CreateItemFunction;
+import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
+import com.liferay.apio.architect.alias.routes.GetItemFunction;
+import com.liferay.apio.architect.alias.routes.GetPageFunction;
+import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
 import com.liferay.apio.architect.consumer.DecaConsumer;
 import com.liferay.apio.architect.consumer.EnneaConsumer;
 import com.liferay.apio.architect.consumer.HeptaConsumer;
@@ -43,7 +48,6 @@ import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.Identifier;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.wiring.osgi.internal.resource.RoutesImpl;
 
 import java.util.Map;
 import java.util.Optional;
@@ -57,7 +61,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Alejandro Hernández
  */
-@SuppressWarnings("Duplicates")
 public class RoutesBuilderImpl<T, U extends Identifier>
 	implements RoutesBuilder<T, U> {
 
@@ -78,20 +81,18 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		BiFunction<Pagination, V, PageItems<T>> biFunction,
 		Class<V> identifierClass) {
 
-		_routesImpl.setGetPageFunction(
-			httpServletRequest -> path -> identifier -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
+		_getPageFunction = httpServletRequest -> path -> identifier -> {
+			Pagination pagination = _provideClass(
+				httpServletRequest, Pagination.class);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				PageItems<T> pageItems = biFunction.apply(pagination, v);
+			PageItems<T> pageItems = biFunction.apply(pagination, v);
 
-				return new Page<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount(), path);
-			});
+			return new Page<>(
+				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+		};
 
 		return this;
 	}
@@ -105,29 +106,27 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 			Class<G> gClass, Class<H> hClass) {
 
-		_routesImpl.setGetPageFunction(
-			httpServletRequest -> path -> identifier -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
-				H h = _provideClass(httpServletRequest, hClass);
+		_getPageFunction = httpServletRequest -> path -> identifier -> {
+			Pagination pagination = _provideClass(
+				httpServletRequest, Pagination.class);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
+			H h = _provideClass(httpServletRequest, hClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				PageItems<T> pageItems = decaFunction.apply(
-					pagination, v, a, b, c, d, e, f, g, h);
+			PageItems<T> pageItems = decaFunction.apply(
+				pagination, v, a, b, c, d, e, f, g, h);
 
-				return new Page<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount(), path);
-			});
+			return new Page<>(
+				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+		};
 
 		return this;
 	}
@@ -141,28 +140,26 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 			Class<G> gClass) {
 
-		_routesImpl.setGetPageFunction(
-			httpServletRequest -> path -> identifier -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
+		_getPageFunction = httpServletRequest -> path -> identifier -> {
+			Pagination pagination = _provideClass(
+				httpServletRequest, Pagination.class);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				PageItems<T> pageItems = enneaFunction.apply(
-					pagination, v, a, b, c, d, e, f, g);
+			PageItems<T> pageItems = enneaFunction.apply(
+				pagination, v, a, b, c, d, e, f, g);
 
-				return new Page<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount(), path);
-			});
+			return new Page<>(
+				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+		};
 
 		return this;
 	}
@@ -175,26 +172,24 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
-		_routesImpl.setGetPageFunction(
-			httpServletRequest -> path -> identifier -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
+		_getPageFunction = httpServletRequest -> path -> identifier -> {
+			Pagination pagination = _provideClass(
+				httpServletRequest, Pagination.class);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				PageItems<T> pageItems = heptaFunction.apply(
-					pagination, v, a, b, c, d, e);
+			PageItems<T> pageItems = heptaFunction.apply(
+				pagination, v, a, b, c, d, e);
 
-				return new Page<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount(), path);
-			});
+			return new Page<>(
+				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+		};
 
 		return this;
 	}
@@ -206,25 +201,23 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass) {
 
-		_routesImpl.setGetPageFunction(
-			httpServletRequest -> path -> identifier -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
+		_getPageFunction = httpServletRequest -> path -> identifier -> {
+			Pagination pagination = _provideClass(
+				httpServletRequest, Pagination.class);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				PageItems<T> pageItems = hexaFunction.apply(
-					pagination, v, a, b, c, d);
+			PageItems<T> pageItems = hexaFunction.apply(
+				pagination, v, a, b, c, d);
 
-				return new Page<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount(), path);
-			});
+			return new Page<>(
+				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+		};
 
 		return this;
 	}
@@ -238,27 +231,25 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass) {
 
-		_routesImpl.setGetPageFunction(
-			httpServletRequest -> path -> identifier -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
+		_getPageFunction = httpServletRequest -> path -> identifier -> {
+			Pagination pagination = _provideClass(
+				httpServletRequest, Pagination.class);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				PageItems<T> pageItems = octaFunction.apply(
-					pagination, v, a, b, c, d, e, f);
+			PageItems<T> pageItems = octaFunction.apply(
+				pagination, v, a, b, c, d, e, f);
 
-				return new Page<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount(), path);
-			});
+			return new Page<>(
+				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+		};
 
 		return this;
 	}
@@ -270,24 +261,22 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass) {
 
-		_routesImpl.setGetPageFunction(
-			httpServletRequest -> path -> identifier -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
+		_getPageFunction = httpServletRequest -> path -> identifier -> {
+			Pagination pagination = _provideClass(
+				httpServletRequest, Pagination.class);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				PageItems<T> pageItems = pentaFunction.apply(
-					pagination, v, a, b, c);
+			PageItems<T> pageItems = pentaFunction.apply(
+				pagination, v, a, b, c);
 
-				return new Page<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount(), path);
-			});
+			return new Page<>(
+				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+		};
 
 		return this;
 	}
@@ -298,23 +287,20 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			TetraFunction<Pagination, V, A, B, PageItems<T>> tetraFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass) {
 
-		_routesImpl.setGetPageFunction(
-			httpServletRequest -> path -> identifier -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
+		_getPageFunction = httpServletRequest -> path -> identifier -> {
+			Pagination pagination = _provideClass(
+				httpServletRequest, Pagination.class);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				PageItems<T> pageItems = tetraFunction.apply(
-					pagination, v, a, b);
+			PageItems<T> pageItems = tetraFunction.apply(pagination, v, a, b);
 
-				return new Page<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount(), path);
-			});
+			return new Page<>(
+				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+		};
 
 		return this;
 	}
@@ -325,21 +311,19 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			TriFunction<Pagination, V, A, PageItems<T>> triFunction,
 			Class<V> identifierClass, Class<A> aClass) {
 
-		_routesImpl.setGetPageFunction(
-			httpServletRequest -> path -> identifier -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
+		_getPageFunction = httpServletRequest -> path -> identifier -> {
+			Pagination pagination = _provideClass(
+				httpServletRequest, Pagination.class);
+			A a = _provideClass(httpServletRequest, aClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				PageItems<T> pageItems = triFunction.apply(pagination, v, a);
+			PageItems<T> pageItems = triFunction.apply(pagination, v, a);
 
-				return new Page<>(
-					_modelClass, pageItems.getItems(),
-					pagination.getItemsPerPage(), pagination.getPageNumber(),
-					pageItems.getTotalCount(), path);
-			});
+			return new Page<>(
+				_modelClass, pageItems.getItems(), pagination.getItemsPerPage(),
+				pagination.getPageNumber(), pageItems.getTotalCount(), path);
+		};
 
 		return this;
 	}
@@ -350,14 +334,13 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			BiFunction<V, Map<String, Object>, T> biFunction,
 			Class<V> identifierClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				V v = _getIdentifier(identifier, identifierClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = biFunction.apply(v, body);
+			T t = biFunction.apply(v, body);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -371,23 +354,22 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 			Class<G> gClass, Class<H> hClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
-				H h = _provideClass(httpServletRequest, hClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
+			H h = _provideClass(httpServletRequest, hClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = decaFunction.apply(v, body, a, b, c, d, e, f, g, h);
+			T t = decaFunction.apply(v, body, a, b, c, d, e, f, g, h);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -401,22 +383,21 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 			Class<G> gClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = enneaFunction.apply(v, body, a, b, c, d, e, f, g);
+			T t = enneaFunction.apply(v, body, a, b, c, d, e, f, g);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -429,20 +410,19 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = heptaFunction.apply(v, body, a, b, c, d, e);
+			T t = heptaFunction.apply(v, body, a, b, c, d, e);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -454,19 +434,18 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass, Class<D> dClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = hexaFunction.apply(v, body, a, b, c, d);
+			T t = hexaFunction.apply(v, body, a, b, c, d);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -480,21 +459,20 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = octaFunction.apply(v, body, a, b, c, d, e, f);
+			T t = octaFunction.apply(v, body, a, b, c, d, e, f);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -506,18 +484,17 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass,
 			Class<C> cClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = pentaFunction.apply(v, body, a, b, c);
+			T t = pentaFunction.apply(v, body, a, b, c);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -528,17 +505,16 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			TetraFunction<V, Map<String, Object>, A, B, T> tetraFunction,
 			Class<V> identifierClass, Class<A> aClass, Class<B> bClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = tetraFunction.apply(v, body, a, b);
+			T t = tetraFunction.apply(v, body, a, b);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -549,16 +525,15 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			TriFunction<V, Map<String, Object>, A, T> triFunction,
 			Class<V> identifierClass, Class<A> aClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = triFunction.apply(v, body, a);
+			T t = triFunction.apply(v, body, a);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -572,24 +547,23 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
 			Class<G> gClass, Class<H> hClass, Class<I> iClass) {
 
-		_routesImpl.setCreateItemFunction(
-			httpServletRequest -> identifier -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
-				H h = _provideClass(httpServletRequest, hClass);
-				I i = _provideClass(httpServletRequest, iClass);
+		_createItemFunction = httpServletRequest -> identifier -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
+			H h = _provideClass(httpServletRequest, hClass);
+			I i = _provideClass(httpServletRequest, iClass);
 
-				V v = _getIdentifier(identifier, identifierClass);
+			V v = _getIdentifier(identifier, identifierClass);
 
-				T t = undecaFunction.apply(v, body, a, b, c, d, e, f, g, h, i);
+			T t = undecaFunction.apply(v, body, a, b, c, d, e, f, g, h, i);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -598,18 +572,17 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public <A> RoutesBuilder<T, U> addCollectionPageItemGetter(
 		BiFunction<U, A, T> biFunction, Class<A> aClass) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> {
-				A a = _provideClass(httpServletRequest, aClass);
+		_singleModelFunction = httpServletRequest -> path -> {
+			A a = _provideClass(httpServletRequest, aClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				return biFunction.andThen(
-					_getCreateSingleModelFunction()
-				).apply(
-					u, a
-				);
-			});
+			return biFunction.andThen(
+				_getCreateSingleModelFunction()
+			).apply(
+				u, a
+			);
+		};
 
 		return this;
 	}
@@ -622,26 +595,25 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
 			Class<I> iClass) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
-				H h = _provideClass(httpServletRequest, hClass);
-				I i = _provideClass(httpServletRequest, iClass);
+		_singleModelFunction = httpServletRequest -> path -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
+			H h = _provideClass(httpServletRequest, hClass);
+			I i = _provideClass(httpServletRequest, iClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				return decaFunction.andThen(
-					_getCreateSingleModelFunction()
-				).apply(
-					u, a, b, c, d, e, f, g, h, i
-				);
-			});
+			return decaFunction.andThen(
+				_getCreateSingleModelFunction()
+			).apply(
+				u, a, b, c, d, e, f, g, h, i
+			);
+		};
 
 		return this;
 	}
@@ -654,25 +626,24 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
 			Class<H> hClass) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
-				H h = _provideClass(httpServletRequest, hClass);
+		_singleModelFunction = httpServletRequest -> path -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
+			H h = _provideClass(httpServletRequest, hClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				return enneaFunction.andThen(
-					_getCreateSingleModelFunction()
-				).apply(
-					u, a, b, c, d, e, f, g, h
-				);
-			});
+			return enneaFunction.andThen(
+				_getCreateSingleModelFunction()
+			).apply(
+				u, a, b, c, d, e, f, g, h
+			);
+		};
 
 		return this;
 	}
@@ -681,12 +652,10 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public RoutesBuilder<T, U> addCollectionPageItemGetter(
 		Function<U, T> function) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> function.andThen(
-				_getCreateSingleModelFunction()
-			).apply(
-				_convertIdentifier(path, _singleModelIdentifierClass)
-			)
+		_singleModelFunction = httpServletRequest -> path -> function.andThen(
+			_getCreateSingleModelFunction()
+		).apply(
+			_convertIdentifier(path, _singleModelIdentifierClass)
 		);
 
 		return this;
@@ -698,23 +667,22 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 		Class<F> fClass) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
+		_singleModelFunction = httpServletRequest -> path -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				return heptaFunction.andThen(
-					_getCreateSingleModelFunction()
-				).apply(
-					u, a, b, c, d, e, f
-				);
-			});
+			return heptaFunction.andThen(
+				_getCreateSingleModelFunction()
+			).apply(
+				u, a, b, c, d, e, f
+			);
+		};
 
 		return this;
 	}
@@ -724,22 +692,21 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		HexaFunction<U, A, B, C, D, E, T> hexaFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
+		_singleModelFunction = httpServletRequest -> path -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				return hexaFunction.andThen(
-					_getCreateSingleModelFunction()
-				).apply(
-					u, a, b, c, d, e
-				);
-			});
+			return hexaFunction.andThen(
+				_getCreateSingleModelFunction()
+			).apply(
+				u, a, b, c, d, e
+			);
+		};
 
 		return this;
 	}
@@ -751,24 +718,23 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass, Class<F> fClass, Class<G> gClass) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
+		_singleModelFunction = httpServletRequest -> path -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				return octaFunction.andThen(
-					_getCreateSingleModelFunction()
-				).apply(
-					u, a, b, c, d, e, f, g
-				);
-			});
+			return octaFunction.andThen(
+				_getCreateSingleModelFunction()
+			).apply(
+				u, a, b, c, d, e, f, g
+			);
+		};
 
 		return this;
 	}
@@ -778,21 +744,20 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		PentaFunction<U, A, B, C, D, T> pentaFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
+		_singleModelFunction = httpServletRequest -> path -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				return pentaFunction.andThen(
-					_getCreateSingleModelFunction()
-				).apply(
-					u, a, b, c, d
-				);
-			});
+			return pentaFunction.andThen(
+				_getCreateSingleModelFunction()
+			).apply(
+				u, a, b, c, d
+			);
+		};
 
 		return this;
 	}
@@ -802,20 +767,19 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		TetraFunction<U, A, B, C, T> tetraFunction, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
+		_singleModelFunction = httpServletRequest -> path -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				return tetraFunction.andThen(
-					_getCreateSingleModelFunction()
-				).apply(
-					u, a, b, c
-				);
-			});
+			return tetraFunction.andThen(
+				_getCreateSingleModelFunction()
+			).apply(
+				u, a, b, c
+			);
+		};
 
 		return this;
 	}
@@ -824,19 +788,18 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public <A, B> RoutesBuilder<T, U> addCollectionPageItemGetter(
 		TriFunction<U, A, B, T> triFunction, Class<A> aClass, Class<B> bClass) {
 
-		_routesImpl.setSingleModelFunction(
-			httpServletRequest -> path -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
+		_singleModelFunction = httpServletRequest -> path -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				return triFunction.andThen(
-					_getCreateSingleModelFunction()
-				).apply(
-					u, a, b
-				);
-			});
+			return triFunction.andThen(
+				_getCreateSingleModelFunction()
+			).apply(
+				u, a, b
+			);
+		};
 
 		return this;
 	}
@@ -845,13 +808,12 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public <A> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		BiConsumer<U, A> biConsumer, Class<A> aClass) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
-				A a = _provideClass(httpServletRequest, aClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			A a = _provideClass(httpServletRequest, aClass);
 
-				biConsumer.accept(u, a);
-			});
+			biConsumer.accept(u, a);
+		};
 
 		return this;
 	}
@@ -860,12 +822,11 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public RoutesBuilder<T, U> addCollectionPageItemRemover(
 		Consumer<U> consumer) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				consumer.accept(u);
-			});
+			consumer.accept(u);
+		};
 
 		return this;
 	}
@@ -878,21 +839,20 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
 			Class<I> iClass) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
-				H h = _provideClass(httpServletRequest, hClass);
-				I i = _provideClass(httpServletRequest, iClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
+			H h = _provideClass(httpServletRequest, hClass);
+			I i = _provideClass(httpServletRequest, iClass);
 
-				decaConsumer.accept(u, a, b, c, d, e, f, g, h, i);
-			});
+			decaConsumer.accept(u, a, b, c, d, e, f, g, h, i);
+		};
 
 		return this;
 	}
@@ -905,20 +865,19 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
 			Class<H> hClass) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
-				H h = _provideClass(httpServletRequest, hClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
+			H h = _provideClass(httpServletRequest, hClass);
 
-				enneaConsumer.accept(u, a, b, c, d, e, f, g, h);
-			});
+			enneaConsumer.accept(u, a, b, c, d, e, f, g, h);
+		};
 
 		return this;
 	}
@@ -929,18 +888,17 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 		Class<F> fClass) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
 
-				heptaConsumer.accept(u, a, b, c, d, e, f);
-			});
+			heptaConsumer.accept(u, a, b, c, d, e, f);
+		};
 
 		return this;
 	}
@@ -950,17 +908,16 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		HexaConsumer<U, A, B, C, D, E> hexaConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
 
-				hexaConsumer.accept(u, a, b, c, d, e);
-			});
+			hexaConsumer.accept(u, a, b, c, d, e);
+		};
 
 		return this;
 	}
@@ -972,19 +929,18 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 			Class<F> fClass, Class<G> gClass) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
 
-				octaConsumer.accept(u, a, b, c, d, e, f, g);
-			});
+			octaConsumer.accept(u, a, b, c, d, e, f, g);
+		};
 
 		return this;
 	}
@@ -994,16 +950,15 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		PentaConsumer<U, A, B, C, D> pentaConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
 
-				pentaConsumer.accept(u, a, b, c, d);
-			});
+			pentaConsumer.accept(u, a, b, c, d);
+		};
 
 		return this;
 	}
@@ -1013,15 +968,14 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		TetraConsumer<U, A, B, C> tetraConsumer, Class<A> aClass,
 		Class<B> bClass, Class<C> cClass) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
 
-				tetraConsumer.accept(u, a, b, c);
-			});
+			tetraConsumer.accept(u, a, b, c);
+		};
 
 		return this;
 	}
@@ -1030,14 +984,13 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public <A, B> RoutesBuilder<T, U> addCollectionPageItemRemover(
 		TriConsumer<U, A, B> triConsumer, Class<A> aClass, Class<B> bClass) {
 
-		_routesImpl.setDeleteItemConsumer(
-			httpServletRequest -> path -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
+		_deleteItemConsumer = httpServletRequest -> path -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
 
-				triConsumer.accept(u, a, b);
-			});
+			triConsumer.accept(u, a, b);
+		};
 
 		return this;
 	}
@@ -1046,14 +999,13 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 	public RoutesBuilder<T, U> addCollectionPageItemUpdater(
 		BiFunction<U, Map<String, Object>, T> biFunction) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = biFunction.apply(u, body);
+			T t = biFunction.apply(u, body);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -1067,23 +1019,22 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass,
 			Class<H> hClass) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
-				H h = _provideClass(httpServletRequest, hClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
+			H h = _provideClass(httpServletRequest, hClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = decaFunction.apply(u, body, a, b, c, d, e, f, g, h);
+			T t = decaFunction.apply(u, body, a, b, c, d, e, f, g, h);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -1096,22 +1047,21 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			Class<E> eClass, Class<F> fClass, Class<G> gClass) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = enneaFunction.apply(u, body, a, b, c, d, e, f, g);
+			T t = enneaFunction.apply(u, body, a, b, c, d, e, f, g);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -1122,20 +1072,19 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Class<E> eClass) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = heptaFunction.apply(u, body, a, b, c, d, e);
+			T t = heptaFunction.apply(u, body, a, b, c, d, e);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -1145,19 +1094,18 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		HexaFunction<U, Map<String, Object>, A, B, C, D, T> hexaFunction,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = hexaFunction.apply(u, body, a, b, c, d);
+			T t = hexaFunction.apply(u, body, a, b, c, d);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -1168,21 +1116,20 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Class<E> eClass, Class<F> fClass) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = octaFunction.apply(u, body, a, b, c, d, e, f);
+			T t = octaFunction.apply(u, body, a, b, c, d, e, f);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -1192,18 +1139,17 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		PentaFunction<U, Map<String, Object>, A, B, C, T> pentaFunction,
 		Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = pentaFunction.apply(u, body, a, b, c);
+			T t = pentaFunction.apply(u, body, a, b, c);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -1213,17 +1159,16 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		TetraFunction<U, Map<String, Object>, A, B, T> tetraFunction,
 		Class<A> aClass, Class<B> bClass) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = tetraFunction.apply(u, body, a, b);
+			T t = tetraFunction.apply(u, body, a, b);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -1233,16 +1178,15 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		TriFunction<U, Map<String, Object>, A, T> triFunction,
 		Class<A> aClass) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = triFunction.apply(u, body, a);
+			T t = triFunction.apply(u, body, a);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
@@ -1256,33 +1200,64 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 			Class<E> eClass, Class<F> fClass, Class<G> gClass, Class<H> hClass,
 			Class<I> iClass) {
 
-		_routesImpl.setUpdateItemFunction(
-			httpServletRequest -> path -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-				E e = _provideClass(httpServletRequest, eClass);
-				F f = _provideClass(httpServletRequest, fClass);
-				G g = _provideClass(httpServletRequest, gClass);
-				H h = _provideClass(httpServletRequest, hClass);
-				I i = _provideClass(httpServletRequest, iClass);
+		_updateItemFunction = httpServletRequest -> path -> body -> {
+			A a = _provideClass(httpServletRequest, aClass);
+			B b = _provideClass(httpServletRequest, bClass);
+			C c = _provideClass(httpServletRequest, cClass);
+			D d = _provideClass(httpServletRequest, dClass);
+			E e = _provideClass(httpServletRequest, eClass);
+			F f = _provideClass(httpServletRequest, fClass);
+			G g = _provideClass(httpServletRequest, gClass);
+			H h = _provideClass(httpServletRequest, hClass);
+			I i = _provideClass(httpServletRequest, iClass);
 
-				U u = _convertIdentifier(path, _singleModelIdentifierClass);
+			U u = _convertIdentifier(path, _singleModelIdentifierClass);
 
-				T t = undecaFunction.apply(u, body, a, b, c, d, e, f, g, h, i);
+			T t = undecaFunction.apply(u, body, a, b, c, d, e, f, g, h, i);
 
-				return _getCreateSingleModelFunction().apply(t);
-			});
+			return _getCreateSingleModelFunction().apply(t);
+		};
 
 		return this;
 	}
 
 	@Override
 	public Routes<T> build() {
-		return _routesImpl;
+		return new Routes<T>() {
+
+			@Override
+			public Optional<CreateItemFunction<T>>
+				getCreateItemFunctionOptional() {
+
+				return Optional.ofNullable(_createItemFunction);
+			}
+
+			@Override
+			public Optional<DeleteItemConsumer> getDeleteConsumerOptional() {
+				return Optional.ofNullable(_deleteItemConsumer);
+			}
+
+			@Override
+			public Optional<GetPageFunction<T>> getGetPageFunctionOptional() {
+				return Optional.ofNullable(_getPageFunction);
+			}
+
+			@Override
+			public Optional<GetItemFunction<T>> getItemFunctionOptional() {
+				return Optional.ofNullable(_singleModelFunction);
+			}
+
+			@Override
+			public Optional<UpdateItemFunction<T>>
+				getUpdateItemFunctionOptional() {
+
+				return Optional.ofNullable(_updateItemFunction);
+			}
+
+		};
 	}
 
+	@SuppressWarnings("unchecked")
 	private <V extends Identifier> V _convertIdentifier(
 		Path path, Class<V> identifierClass) {
 
@@ -1300,6 +1275,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return t -> new SingleModel<>(t, _modelClass);
 	}
 
+	@SuppressWarnings("unchecked")
 	private <V extends Identifier> V _getIdentifier(
 		Identifier identifier, Class<V> identifierClass) {
 
@@ -1312,6 +1288,7 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		return (V)identifier;
 	}
 
+	@SuppressWarnings("unchecked")
 	private <V> V _provideClass(
 		HttpServletRequest httpServletRequest, Class<V> clazz) {
 
@@ -1328,12 +1305,16 @@ public class RoutesBuilderImpl<T, U extends Identifier>
 		);
 	}
 
+	private CreateItemFunction<T> _createItemFunction;
+	private DeleteItemConsumer _deleteItemConsumer;
+	private GetPageFunction<T> _getPageFunction;
 	private final BiFunction<Class<? extends Identifier>, Path,
 		Optional<? extends Identifier>> _identifierFunction;
 	private final Class<T> _modelClass;
 	private final RequestFunction<Function<Class<?>, Optional<?>>>
 		_provideClassFunction;
-	private final RoutesImpl<T> _routesImpl = new RoutesImpl<>();
+	private GetItemFunction<T> _singleModelFunction;
 	private final Class<U> _singleModelIdentifierClass;
+	private UpdateItemFunction<T> _updateItemFunction;
 
 }
