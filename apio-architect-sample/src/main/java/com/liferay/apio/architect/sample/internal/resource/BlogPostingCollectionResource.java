@@ -19,7 +19,6 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.Representor;
 import com.liferay.apio.architect.resource.Routes;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.LongIdentifier;
 import com.liferay.apio.architect.resource.identifier.RootIdentifier;
 import com.liferay.apio.architect.sample.internal.model.BlogPosting;
@@ -81,9 +80,9 @@ public class BlogPostingCollectionResource
 
 	@Override
 	public Routes<BlogPosting> routes(
-		RoutesBuilder<BlogPosting, LongIdentifier> routesBuilder) {
+		Routes.Builder<BlogPosting, LongIdentifier> builder) {
 
-		return routesBuilder.addCollectionPageGetter(
+		return builder.addCollectionPageGetter(
 			this::_getPageItems, RootIdentifier.class
 		).addCollectionPageItemCreator(
 			this::_addBlogPosting, RootIdentifier.class

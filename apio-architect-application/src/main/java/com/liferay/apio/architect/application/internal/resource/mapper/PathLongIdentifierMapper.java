@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Reference;
  *
  * <p>
  * {@code LongIdentifier} can then be provided as a parameter in the methods of
- * {@link com.liferay.apio.architect.resource.builder.RoutesBuilder}.
+ * {@link Routes.Builder}.
  * </p>
  *
  * @author Alejandro Hernández

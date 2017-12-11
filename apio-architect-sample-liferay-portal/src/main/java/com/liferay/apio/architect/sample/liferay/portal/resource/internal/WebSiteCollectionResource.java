@@ -19,7 +19,6 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.Representor;
 import com.liferay.apio.architect.resource.Routes;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.LongIdentifier;
 import com.liferay.apio.architect.resource.identifier.RootIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSite;
@@ -67,9 +66,9 @@ public class WebSiteCollectionResource
 
 	@Override
 	public Routes<WebSite> routes(
-		RoutesBuilder<WebSite, LongIdentifier> routesBuilder) {
+		Routes.Builder<WebSite, LongIdentifier> builder) {
 
-		return routesBuilder.addCollectionPageGetter(
+		return builder.addCollectionPageGetter(
 			this::_getPageItems, RootIdentifier.class, Company.class
 		).addCollectionPageItemGetter(
 			this::_getWebSite

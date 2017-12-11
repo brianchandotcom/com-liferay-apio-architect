@@ -20,7 +20,6 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.Representor;
 import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.LongIdentifier;
 import com.liferay.apio.architect.result.Try;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSite;
@@ -86,9 +85,9 @@ public class FolderScopedCollectionResource
 
 	@Override
 	public Routes<DLFolder> routes(
-		RoutesBuilder<DLFolder, LongIdentifier> routesBuilder) {
+		Routes.Builder<DLFolder, LongIdentifier> builder) {
 
-		return routesBuilder.addCollectionPageGetter(
+		return builder.addCollectionPageGetter(
 			this::_getPageItems, LongIdentifier.class
 		).addCollectionPageItemCreator(
 			this::_addDLFolder, LongIdentifier.class

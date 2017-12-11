@@ -21,7 +21,6 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.Representor;
 import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.LongIdentifier;
 import com.liferay.apio.architect.result.Try;
 import com.liferay.apio.architect.sample.liferay.portal.resource.identifier.CommentableIdentifier;
@@ -88,9 +87,9 @@ public class CommentScopedCollectionResource
 
 	@Override
 	public Routes<Comment> routes(
-		RoutesBuilder<Comment, LongIdentifier> routesBuilder) {
+		Routes.Builder<Comment, LongIdentifier> builder) {
 
-		return routesBuilder.addCollectionPageGetter(
+		return builder.addCollectionPageGetter(
 			this::_getPageItems, CommentableIdentifier.class, CurrentUser.class
 		).addCollectionPageItemCreator(
 			this::_addComment, CommentableIdentifier.class, CurrentUser.class

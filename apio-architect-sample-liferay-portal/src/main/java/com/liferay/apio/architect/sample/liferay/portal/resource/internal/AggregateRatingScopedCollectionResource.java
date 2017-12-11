@@ -18,7 +18,6 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.Representor;
 import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRatingService;
 import com.liferay.apio.architect.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
@@ -66,10 +65,9 @@ public class AggregateRatingScopedCollectionResource
 
 	@Override
 	public Routes<AggregateRating> routes(
-		RoutesBuilder<AggregateRating, AggregateRatingIdentifier>
-			routesBuilder) {
+		Routes.Builder<AggregateRating, AggregateRatingIdentifier> builder) {
 
-		return routesBuilder.addCollectionPageItemGetter(
+		return builder.addCollectionPageItemGetter(
 			aggregateRatingService::getAggregateRating
 		).build();
 	}

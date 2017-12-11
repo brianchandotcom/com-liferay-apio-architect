@@ -20,7 +20,6 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.Representor;
 import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.LongIdentifier;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingComment;
 import com.liferay.apio.architect.sample.internal.model.Person;
@@ -73,9 +72,9 @@ public class BlogPostingCommentScopedCollectionResource
 
 	@Override
 	public Routes<BlogPostingComment> routes(
-		RoutesBuilder<BlogPostingComment, LongIdentifier> routesBuilder) {
+		Routes.Builder<BlogPostingComment, LongIdentifier> builder) {
 
-		return routesBuilder.addCollectionPageGetter(
+		return builder.addCollectionPageGetter(
 			this::_getPageItems, LongIdentifier.class
 		).addCollectionPageItemCreator(
 			this::_addBlogPostingComment, LongIdentifier.class

@@ -20,7 +20,6 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.Representor;
 import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.LongIdentifier;
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.document.library.kernel.exception.NoSuchFolderException;
@@ -98,9 +97,9 @@ public class MediaObjectScopedCollectionResource
 
 	@Override
 	public Routes<DLFileEntry> routes(
-		RoutesBuilder<DLFileEntry, LongIdentifier> routesBuilder) {
+		Routes.Builder<DLFileEntry, LongIdentifier> builder) {
 
-		return routesBuilder.addCollectionPageGetter(
+		return builder.addCollectionPageGetter(
 			this::_getPageItems, LongIdentifier.class
 		).addCollectionPageItemGetter(
 			this::_getDLFileEntry

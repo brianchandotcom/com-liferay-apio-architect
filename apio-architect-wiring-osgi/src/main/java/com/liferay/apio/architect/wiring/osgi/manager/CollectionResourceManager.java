@@ -30,10 +30,8 @@ import com.liferay.apio.architect.resource.RelatedCollection;
 import com.liferay.apio.architect.resource.Representor;
 import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.Identifier;
 import com.liferay.apio.architect.result.Try;
-import com.liferay.apio.architect.wiring.osgi.internal.resource.builder.RoutesBuilderImpl;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 
 import java.util.ArrayList;
@@ -242,11 +240,11 @@ public class CollectionResourceManager extends BaseManager<CollectionResource> {
 							_providerManager.provideOptional(
 								clazz, httpServletRequest);
 
-				RoutesBuilder<T, U> routesBuilder = new RoutesBuilderImpl<>(
+				Routes.Builder<T, U> builder = new Routes.Builder<>(
 					modelClass, identifierClass, provideClassFunction,
 					_pathIdentifierMapperManager::map);
 
-				Routes<T> routes = collectionResource.routes(routesBuilder);
+				Routes<T> routes = collectionResource.routes(builder);
 
 				CollectionResourceInfo<T, U> collectionResourceInfo =
 					new CollectionResourceInfo<>(name, representor, routes);

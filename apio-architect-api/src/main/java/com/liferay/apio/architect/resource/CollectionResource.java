@@ -16,8 +16,6 @@ package com.liferay.apio.architect.resource;
 
 import aQute.bnd.annotation.ConsumerType;
 
-import com.liferay.apio.architect.resource.Representor.Builder;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.Identifier;
 
 /**
@@ -36,34 +34,36 @@ import com.liferay.apio.architect.resource.identifier.Identifier;
  *
  * <p>
  * You can add the different supported routes for the resource via the {@link
- * #routes(RoutesBuilder)} method.
+ * #routes(Routes.Builder)} method.
  * </p>
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
- * @see    Builder
- * @see    RoutesBuilder
+ * @see    Representor.Builder
+ * @see    Routes.Builder
  */
 @ConsumerType
 public interface CollectionResource<T, U extends Identifier> {
 
 	/**
 	 * Creates a {@link Representor} for a certain domain model from the
-	 * provided {@link Builder}.
+	 * provided {@link Representor.Builder}.
 	 *
 	 * <p>
 	 * To construct a representor, you must call {@link
-	 * Builder.FirstStep#build()} ()}. Before calling this method, you must call
-	 * the other representor builder methods to populate the builder with data.
-	 * This ensures that the resulting representor contains the data.
+	 * Representor.Builder.FirstStep#build()} ()}. Before calling this method,
+	 * you must call the other representor builder methods to populate the
+	 * builder with data. This ensures that the resulting representor contains
+	 * the data.
 	 * </p>
 	 *
 	 * @param representorBuilder the representor builder used to create the
 	 *        representor
-	 * @see   Builder
+	 * @see   Representor.Builder
 	 */
-	public Representor<T, U> buildRepresentor(Builder<T, U> representorBuilder);
+	public Representor<T, U> buildRepresentor(
+		Representor.Builder<T, U> representorBuilder);
 
 	/**
 	 * Returns the resource's name.
@@ -76,10 +76,10 @@ public interface CollectionResource<T, U extends Identifier> {
 	 * Creates the {@link Routes} supported by the {@code CollectionResource}.
 	 * Use the provided routes builder to create the {@code Routes} instance.
 	 *
-	 * @param routesBuilder the routes builder to use to create the {@code
-	 *        Routes} instance
-	 * @see   RoutesBuilder
+	 * @param builder the routes builder to use to create the {@code Routes}
+	 *        instance
+	 * @see   Routes.Builder
 	 */
-	public Routes<T> routes(RoutesBuilder<T, U> routesBuilder);
+	public Routes<T> routes(Routes.Builder<T, U> builder);
 
 }

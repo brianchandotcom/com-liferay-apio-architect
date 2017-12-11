@@ -19,7 +19,6 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.Representor;
 import com.liferay.apio.architect.resource.Routes;
-import com.liferay.apio.architect.resource.builder.RoutesBuilder;
 import com.liferay.apio.architect.resource.identifier.LongIdentifier;
 import com.liferay.apio.architect.resource.identifier.RootIdentifier;
 import com.liferay.apio.architect.sample.internal.model.Person;
@@ -80,9 +79,9 @@ public class PersonCollectionResource
 
 	@Override
 	public Routes<Person> routes(
-		RoutesBuilder<Person, LongIdentifier> routesBuilder) {
+		Routes.Builder<Person, LongIdentifier> builder) {
 
-		return routesBuilder.addCollectionPageGetter(
+		return builder.addCollectionPageGetter(
 			this::_getPageItems, RootIdentifier.class
 		).addCollectionPageItemCreator(
 			this::_addPerson, RootIdentifier.class
