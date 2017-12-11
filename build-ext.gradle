@@ -117,9 +117,9 @@ configure(subprojects.findAll {!it.childProjects}) {
 appDocker {
 	imageName this.getImageName()
 	imageUser this.getUserName()
-	inputDir "vulcan-docker"
+	inputDir "apio-architect-docker"
 
-	def excludedModules = project.getProperty('com.liferay.vulcan.docker.excluded.modules').split(',')
+	def excludedModules = project.getProperty('com.liferay.apio.architect.docker.excluded.modules').split(',')
 
 	onlyIf {
 		project -> !excludedModules.contains(project.name)
@@ -159,7 +159,7 @@ task checkDocker() {
 task stopDocker(type: Exec) {
 	ignoreExitValue true
 
-	commandLine 'docker', 'stop', '-t', '0', "vulcan"
+	commandLine 'docker', 'stop', '-t', '0', "apio"
 }
 
 task rmDocker(type: Exec) {
@@ -167,19 +167,19 @@ task rmDocker(type: Exec) {
 
 	ignoreExitValue true
 
-	commandLine 'docker', 'rm', "vulcan"
+	commandLine 'docker', 'rm', "apio"
 }
 
 task runDocker(type: Exec) {
 	dependsOn rmDocker
 	dependsOn subprojects.findAll {!it.childProjects}.copyJacocoAgent
 
-	def javaOpts = project.getProperty('com.liferay.vulcan.java.opts')
+	def javaOpts = project.getProperty('com.liferay.apio.architect.java.opts')
 
-	javaOpts += ' ' + project.getProperty('com.liferay.vulcan.jacoco.opts')
+	javaOpts += ' ' + project.getProperty('com.liferay.apio.architect.jacoco.opts')
 
 	if (project.hasProperty('debug')) {
-		javaOpts += ' ' + project.getProperty('com.liferay.vulcan.debug.opts')
+		javaOpts += ' ' + project.getProperty('com.liferay.apio.architect.debug.opts')
 	}
 
 	commandLine 'docker', 'run',
@@ -193,26 +193,26 @@ task runDocker(type: Exec) {
 	'-v', "${rootDir}/build/jacoco:/jacoco",
 	'-v', "${getClientDeployDir()}:/deploy",
 	'-d',
-	'--name', "vulcan",
+	'--name', "apio",
 	getImageNameWithUserAndVersion()
 
 	finalizedBy checkDocker
 }
 
 def getClientDeployDir() {
-	return new File(rootDir, project.property("com.liferay.vulcan.deploy.dir"))
+	return new File(rootDir, project.property("com.liferay.apio.architect.deploy.dir"))
 }
 
 def getImageName() {
-	return project.property("com.liferay.vulcan.docker.image.name")
+	return project.property("com.liferay.apio.architect.docker.image.name")
 }
 
 def getImageVersion() {
-	return project.property("com.liferay.vulcan.docker.image.version")
+	return project.property("com.liferay.apio.architect.docker.image.version")
 }
 
 def getUserName() {
-	return project.property("com.liferay.vulcan.docker.username")
+	return project.property("com.liferay.apio.architect.docker.username")
 }
 
 def getImageNameWithUser() {
