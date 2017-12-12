@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.liferay.portal.resource.internal;
+package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.LongIdentifier;
@@ -22,10 +22,10 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
 import com.liferay.apio.architect.routes.Routes;
+import com.liferay.apio.architect.sample.liferay.portal.identifier.AggregateRatingIdentifier;
+import com.liferay.apio.architect.sample.liferay.portal.identifier.CommentableIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRatingService;
-import com.liferay.apio.architect.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
-import com.liferay.apio.architect.sample.liferay.portal.resource.identifier.CommentableIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSite;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSiteService;
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;

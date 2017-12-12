@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.liferay.portal.resource.identifier;
+package com.liferay.apio.architect.sample.liferay.portal.identifier;
 
 import aQute.bnd.annotation.ProviderType;
 

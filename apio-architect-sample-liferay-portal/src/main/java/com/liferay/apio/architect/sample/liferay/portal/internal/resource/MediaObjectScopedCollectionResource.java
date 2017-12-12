@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.liferay.portal.resource.internal;
+package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;

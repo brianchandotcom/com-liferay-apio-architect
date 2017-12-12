@@ -12,15 +12,15 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.liferay.portal.resource.internal;
+package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
 import com.liferay.apio.architect.routes.Routes;
+import com.liferay.apio.architect.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRatingService;
-import com.liferay.apio.architect.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
 import com.liferay.apio.architect.wiring.osgi.manager.CollectionResourceManager;
 
 import org.osgi.service.component.annotations.Component;

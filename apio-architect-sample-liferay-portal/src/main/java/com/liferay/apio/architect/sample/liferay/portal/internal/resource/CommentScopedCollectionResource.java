@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.liferay.portal.resource.internal;
+package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.LongIdentifier;
@@ -23,7 +23,7 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
 import com.liferay.apio.architect.routes.Routes;
-import com.liferay.apio.architect.sample.liferay.portal.resource.identifier.CommentableIdentifier;
+import com.liferay.apio.architect.sample.liferay.portal.identifier.CommentableIdentifier;
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.portal.kernel.comment.Comment;
