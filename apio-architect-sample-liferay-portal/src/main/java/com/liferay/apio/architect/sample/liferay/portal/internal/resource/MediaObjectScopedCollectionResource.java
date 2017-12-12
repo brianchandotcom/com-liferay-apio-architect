@@ -80,7 +80,7 @@ public class MediaObjectScopedCollectionResource
 			"dateModified", DLFileEntry::getModifiedDate
 		).addDate(
 			"datePublished", DLFileEntry::getLastPublishDate
-		).addEmbeddedModel(
+		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
 		).addNumber(
 			"contentSize", DLFileEntry::getSize

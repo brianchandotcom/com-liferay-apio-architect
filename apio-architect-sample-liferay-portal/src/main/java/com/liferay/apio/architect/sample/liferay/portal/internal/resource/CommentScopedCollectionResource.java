@@ -78,7 +78,7 @@ public class CommentScopedCollectionResource
 			"Comment"
 		).identifier(
 			comment -> comment::getCommentId
-		).addEmbeddedModel(
+		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
 		).addString(
 			"text", Comment::getBody

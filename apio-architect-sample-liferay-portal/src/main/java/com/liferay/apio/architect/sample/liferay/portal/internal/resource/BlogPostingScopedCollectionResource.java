@@ -95,13 +95,13 @@ public class BlogPostingScopedCollectionResource
 			"modifiedDate", BlogsEntry::getModifiedDate
 		).addDate(
 			"publishedDate", BlogsEntry::getLastPublishDate
-		).addEmbeddedModel(
-			"aggregateRating", AggregateRating.class,
-			this::_getAggregateRatingOptional
-		).addEmbeddedModel(
-			"creator", User.class, this::_getUserOptional
 		).addLink(
 			"license", "https://creativecommons.org/licenses/by/4.0"
+		).addLinkedModel(
+			"aggregateRating", AggregateRating.class,
+			this::_getAggregateRatingOptional
+		).addLinkedModel(
+			"creator", User.class, this::_getUserOptional
 		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
 		).addRelatedCollection(

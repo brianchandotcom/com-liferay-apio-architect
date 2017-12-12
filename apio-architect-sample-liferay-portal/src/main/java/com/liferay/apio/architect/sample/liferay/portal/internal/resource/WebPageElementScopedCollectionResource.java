@@ -84,8 +84,6 @@ public class WebPageElementScopedCollectionResource
 		).addBidirectionalModel(
 			"webSite", "webPageElements", WebSite.class,
 			this::_getWebSiteOptional, WebSite::getWebSiteLongIdentifier
-		).addEmbeddedModel(
-			"creator", User.class, this::_getUserOptional
 		).addDate(
 			"dateCreated", JournalArticle::getCreateDate
 		).addDate(
@@ -96,6 +94,8 @@ public class WebPageElementScopedCollectionResource
 			"lastReviewed", JournalArticle::getReviewDate
 		).addLinkedModel(
 			"author", User.class, this::_getUserOptional
+		).addLinkedModel(
+			"creator", User.class, this::_getUserOptional
 		).addString(
 			"description", JournalArticle::getDescription
 		).addString(

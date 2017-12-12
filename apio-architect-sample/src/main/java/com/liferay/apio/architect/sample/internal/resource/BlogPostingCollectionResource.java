@@ -61,7 +61,7 @@ public class BlogPostingCollectionResource
 			"dateCreated", BlogPosting::getCreateDate
 		).addDate(
 			"dateModified", BlogPosting::getModifiedDate
-		).addEmbeddedModel(
+		).addLinkedModel(
 			"creator", Person.class,
 			blogPosting -> Person.getPerson(blogPosting.getCreatorId())
 		).addRelatedCollection(

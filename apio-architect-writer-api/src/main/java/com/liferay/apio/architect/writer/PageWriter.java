@@ -312,7 +312,7 @@ public class PageWriter<T> {
 			url -> _pageMessageMapper.mapItemSelfURL(
 				_jsonObjectBuilder, itemJsonObjectBuilder, url));
 
-		fieldsWriter.writeEmbeddedRelatedModels(
+		fieldsWriter.writeRelatedModels(
 			embeddedSingleModel -> getPathOptional(
 				embeddedSingleModel, _pathFunction, _representorFunction),
 			(embeddedSingleModel, embeddedPathElements1) ->
@@ -327,14 +327,6 @@ public class PageWriter<T> {
 				_pageMessageMapper.mapItemEmbeddedResourceURL(
 					_jsonObjectBuilder, itemJsonObjectBuilder,
 					embeddedPathElements, resourceURL));
-
-		fieldsWriter.writeLinkedRelatedModels(
-			embeddedSingleModel -> getPathOptional(
-				embeddedSingleModel, _pathFunction, _representorFunction),
-			(url, embeddedPathElements) ->
-				_pageMessageMapper.mapItemLinkedResourceURL(
-					_jsonObjectBuilder, itemJsonObjectBuilder,
-					embeddedPathElements, url));
 
 		fieldsWriter.writeRelatedCollections(
 			_resourceNameFunction,
@@ -401,7 +393,7 @@ public class PageWriter<T> {
 				_jsonObjectBuilder, itemJsonObjectBuilder, embeddedPathElements,
 				field, value));
 
-		fieldsWriter.writeEmbeddedRelatedModels(
+		fieldsWriter.writeRelatedModels(
 			embeddedSingleModel -> getPathOptional(
 				embeddedSingleModel, _pathFunction, _representorFunction),
 			(embeddedSingleModel, embeddedModelEmbeddedPathElements) ->
@@ -416,14 +408,6 @@ public class PageWriter<T> {
 				_pageMessageMapper.mapItemEmbeddedResourceURL(
 					_jsonObjectBuilder, itemJsonObjectBuilder,
 					resourceEmbeddedPathElements, resourceURL));
-
-		fieldsWriter.writeLinkedRelatedModels(
-			embeddedSingleModel -> getPathOptional(
-				embeddedSingleModel, _pathFunction, _representorFunction),
-			(url, resourceEmbeddedPathElements) ->
-				_pageMessageMapper.mapItemLinkedResourceURL(
-					_jsonObjectBuilder, itemJsonObjectBuilder,
-					resourceEmbeddedPathElements, url));
 
 		fieldsWriter.writeRelatedCollections(
 			_resourceNameFunction,

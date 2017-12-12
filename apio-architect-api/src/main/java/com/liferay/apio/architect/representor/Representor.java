@@ -81,15 +81,6 @@ public class Representor<T, U extends Identifier> {
 	}
 
 	/**
-	 * Returns the embedded related models.
-	 *
-	 * @return the embedded related models
-	 */
-	public List<RelatedModel<T, ?>> getEmbeddedRelatedModels() {
-		return _embeddedRelatedModels;
-	}
-
-	/**
 	 * Returns the model's identifier.
 	 *
 	 * @param  model the model instance
@@ -106,15 +97,6 @@ public class Representor<T, U extends Identifier> {
 	 */
 	public Class<U> getIdentifierClass() {
 		return _identifierClass;
-	}
-
-	/**
-	 * Returns the linked related models.
-	 *
-	 * @return the linked related models
-	 */
-	public List<RelatedModel<T, ?>> getLinkedRelatedModels() {
-		return _linkedRelatedModels;
 	}
 
 	/**
@@ -162,6 +144,15 @@ public class Representor<T, U extends Identifier> {
 		).flatMap(
 			Collection::stream
 		);
+	}
+
+	/**
+	 * Returns the related models.
+	 *
+	 * @return the related models
+	 */
+	public List<RelatedModel<T, ?>> getRelatedModels() {
+		return _relatedModels;
 	}
 
 	/**
@@ -245,7 +236,7 @@ public class Representor<T, U extends Identifier> {
 				Function<T, Optional<S>> modelFunction,
 				Function<S, Identifier> identifierFunction) {
 
-				_representor._linkedRelatedModels.add(
+				_representor._relatedModels.add(
 					new RelatedModel<>(key, modelClass, modelFunction));
 
 				_addRelatedCollectionTriConsumer.accept(
@@ -318,24 +309,6 @@ public class Representor<T, U extends Identifier> {
 			}
 
 			/**
-			 * Adds information about an embeddable related model.
-			 *
-			 * @param  key the relation's name
-			 * @param  modelClass the related model's class
-			 * @param  modelFunction the function used to get the related model
-			 * @return the builder's step
-			 */
-			public <S> FirstStep addEmbeddedModel(
-				String key, Class<S> modelClass,
-				Function<T, Optional<S>> modelFunction) {
-
-				_representor._embeddedRelatedModels.add(
-					new RelatedModel<>(key, modelClass, modelFunction));
-
-				return this;
-			}
-
-			/**
 			 * Adds information about a resource link.
 			 *
 			 * @param  key the field's name
@@ -349,7 +322,7 @@ public class Representor<T, U extends Identifier> {
 			}
 
 			/**
-			 * Adds information about a non-embeddable related model.
+			 * Adds information about an embeddable related model.
 			 *
 			 * @param  key the relation's name
 			 * @param  modelClass the related model's class
@@ -360,7 +333,7 @@ public class Representor<T, U extends Identifier> {
 				String key, Class<S> modelClass,
 				Function<T, Optional<S>> modelFunction) {
 
-				_representor._linkedRelatedModels.add(
+				_representor._relatedModels.add(
 					new RelatedModel<>(key, modelClass, modelFunction));
 
 				return this;
@@ -472,10 +445,8 @@ public class Representor<T, U extends Identifier> {
 	private Map<String, BinaryFunction<T>> _binaryFunctions = new HashMap<>();
 	private Map<String, Function<T, Boolean>> _booleanFunctions =
 		new HashMap<>();
-	private List<RelatedModel<T, ?>> _embeddedRelatedModels = new ArrayList<>();
 	private final Class<U> _identifierClass;
 	private Function<T, U> _identifierFunction;
-	private List<RelatedModel<T, ?>> _linkedRelatedModels = new ArrayList<>();
 	private Map<String, String> _links = new HashMap<>();
 	private Map<String, BiFunction<T, Language, String>>
 		_localizedStringFunctions = new HashMap<>();
@@ -484,6 +455,7 @@ public class Representor<T, U extends Identifier> {
 		new ArrayList<>();
 	private final Supplier<List<RelatedCollection<T, ?>>>
 		_relatedCollectionsSupplier;
+	private List<RelatedModel<T, ?>> _relatedModels = new ArrayList<>();
 	private Map<String, Function<T, String>> _stringFunctions = new HashMap<>();
 	private List<String> _types = new ArrayList<>();
 

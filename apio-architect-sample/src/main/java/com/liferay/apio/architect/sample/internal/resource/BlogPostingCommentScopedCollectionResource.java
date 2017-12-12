@@ -60,7 +60,7 @@ public class BlogPostingCommentScopedCollectionResource
 			"dateCreated", BlogPostingComment::getCreateDate
 		).addDate(
 			"dateModified", BlogPostingComment::getModifiedDate
-		).addEmbeddedModel(
+		).addLinkedModel(
 			"author", Person.class,
 			blogPostingComment ->
 				Person.getPerson(blogPostingComment.getAuthorId())
