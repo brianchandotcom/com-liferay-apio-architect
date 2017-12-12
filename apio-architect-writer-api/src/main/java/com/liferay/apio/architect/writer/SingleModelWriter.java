@@ -19,12 +19,12 @@ import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
 
 import com.google.gson.JsonObject;
 
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
-import com.liferay.apio.architect.pagination.SingleModel;
 import com.liferay.apio.architect.request.RequestInfo;
-import com.liferay.apio.architect.resource.identifier.Identifier;
+import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
@@ -67,7 +67,7 @@ public class SingleModelWriter<T> {
 	/**
 	 * Writes the handled {@link SingleModel} to a string. This method uses a
 	 * {@link FieldsWriter} to write the different fields of its {@link
-	 * com.liferay.apio.architect.resource.Representor}. If no {@code
+	 * com.liferay.apio.architect.representor.Representor}. If no {@code
 	 * Representor} or {@code Path} exists for the model, this method returns
 	 * {@code Optional#empty()}.
 	 *
@@ -213,7 +213,8 @@ public class SingleModelWriter<T> {
 
 			/**
 			 * Adds information to the builder about the function that gets a
-			 * class's {@link com.liferay.apio.architect.resource.Representor}.
+			 * class's {@link
+			 * com.liferay.apio.architect.representor.Representor}.
 			 *
 			 * @param  representorFunction the function that gets a class's
 			 *         {@code Representor}

@@ -18,16 +18,16 @@ import static com.liferay.apio.architect.writer.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createSingleURL;
 
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.list.FunctionalList;
-import com.liferay.apio.architect.pagination.SingleModel;
+import com.liferay.apio.architect.related.RelatedCollection;
+import com.liferay.apio.architect.related.RelatedModel;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
-import com.liferay.apio.architect.resource.RelatedCollection;
-import com.liferay.apio.architect.resource.RelatedModel;
-import com.liferay.apio.architect.resource.Representor;
-import com.liferay.apio.architect.resource.identifier.Identifier;
 import com.liferay.apio.architect.response.control.Embedded;
 import com.liferay.apio.architect.response.control.Fields;
+import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.List;

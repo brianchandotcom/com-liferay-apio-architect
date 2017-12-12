@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Lets resources provide the requested {@link Language} as a parameter in the
- * methods of {@link com.liferay.apio.architect.resource.Routes.Builder}.
+ * methods of {@link Routes.Builder}.
  *
  * @author Alejandro Hernández
  */

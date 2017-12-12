@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource;
+package com.liferay.apio.architect.related;
 
 import java.util.Optional;
 import java.util.function.Function;

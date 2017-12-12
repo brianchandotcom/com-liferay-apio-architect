@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.result;
+package com.liferay.apio.architect.functional;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;

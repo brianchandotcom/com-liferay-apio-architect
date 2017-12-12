@@ -16,7 +16,7 @@ package com.liferay.apio.architect.sample.liferay.portal.resource.identifier;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.apio.architect.resource.identifier.Identifier;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.portal.kernel.model.ClassedModel;
 
 /**

@@ -12,26 +12,13 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource.identifier;
+package com.liferay.apio.architect.identifier;
 
 /**
- * Represents a simple identifier with a {@code String} ID.
+ * Represents a resource's root identifier. For resources hanging directly from
+ * the application root, this is their only identifier.
  *
  * @author Alejandro Hernández
  */
-@FunctionalInterface
-public interface StringIdentifier extends Identifier {
-
-	/**
-	 * Returns the identifier's ID as a {@code String}.
-	 *
-	 * <p>
-	 * For example, for a resource in the URL {@code /p/product/thing}, this
-	 * method returns {@code "thing"} as a {@code String}.
-	 * </p>
-	 *
-	 * @return the identifier's {@code String} ID
-	 */
-	public String getId();
-
+public interface RootIdentifier extends Identifier {
 }

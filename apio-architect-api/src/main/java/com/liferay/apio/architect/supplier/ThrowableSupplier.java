@@ -12,13 +12,23 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource.identifier;
+package com.liferay.apio.architect.supplier;
 
 /**
- * Represents a resource's root identifier. For resources hanging directly from
- * the application root, this is their only identifier.
+ * Defines a {@code java.util.function.Supplier} that can throw an exception.
  *
  * @author Alejandro Hernández
  */
-public interface RootIdentifier extends Identifier {
+@FunctionalInterface
+public interface ThrowableSupplier<T> {
+
+	/**
+	 * Returns a result of type {@code T} if the operation succeeds; otherwise
+	 * throws an exception.
+	 *
+	 * @return a result of type {@code T} if the operation succeeds; an
+	 *         exception otherwise
+	 */
+	public T get() throws Exception;
+
 }

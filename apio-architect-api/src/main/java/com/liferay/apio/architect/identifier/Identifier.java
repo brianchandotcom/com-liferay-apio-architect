@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource.identifier;
+package com.liferay.apio.architect.identifier;
 
 /**
  * Represents a resource identifier. Resources shouldn't use this class

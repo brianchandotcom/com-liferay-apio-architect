@@ -16,7 +16,7 @@ package com.liferay.apio.architect.sample.liferay.portal.resource.identifier;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.apio.architect.resource.identifier.Identifier;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.portal.kernel.model.ClassedModel;
 import com.liferay.portal.kernel.model.GroupedModel;
 
@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.model.GroupedModel;
  * <p>
  * This identifier should only be used to identify comment collections added
  * through {@link
- * com.liferay.apio.architect.resource.Representor.Builder.FirstStep#addRelatedCollection(
+ * com.liferay.apio.architect.representor.Representor.Builder.FirstStep#addRelatedCollection(
  * String, Class, java.util.function.Function)}
  * </p>
  *

@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Lets resources provide {@link Fields} as a parameter in the methods of {@link
- * com.liferay.apio.architect.resource.Routes.Builder}.
+ * com.liferay.apio.architect.routes.Routes.Builder}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

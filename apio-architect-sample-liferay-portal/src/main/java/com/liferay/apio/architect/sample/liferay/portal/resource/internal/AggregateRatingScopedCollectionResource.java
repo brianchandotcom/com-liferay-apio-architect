@@ -14,10 +14,10 @@
 
 package com.liferay.apio.architect.sample.liferay.portal.resource.internal;
 
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.resource.Representor;
-import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
+import com.liferay.apio.architect.routes.Routes;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRatingService;
 import com.liferay.apio.architect.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;

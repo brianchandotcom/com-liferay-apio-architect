@@ -12,12 +12,14 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource;
+package com.liferay.apio.architect.representor;
 
 import com.liferay.apio.architect.alias.BinaryFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
-import com.liferay.apio.architect.resource.identifier.Identifier;
+import com.liferay.apio.architect.related.RelatedCollection;
+import com.liferay.apio.architect.related.RelatedModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,7 +41,7 @@ import java.util.stream.Stream;
 
 /**
  * Holds information about the metadata supported for a {@link
- * CollectionResource}.
+ * com.liferay.apio.architect.resource.CollectionResource}.
  *
  * <p>
  * Instances of this interface should always be created by using a {@link
@@ -226,7 +228,8 @@ public class Representor<T, U extends Identifier> {
 			/**
 			 * Adds information about the bidirectional relation of a linked
 			 * model in the resource and a collection of {@link
-			 * CollectionResource} items in the related resource.
+			 * com.liferay.apio.architect.resource.CollectionResource} items in
+			 * the related resource.
 			 *
 			 * @param  key the relation's name in the resource
 			 * @param  relatedKey the relation's name in the related resource

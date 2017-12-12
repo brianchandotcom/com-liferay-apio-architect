@@ -12,11 +12,11 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource.identifier.mapper;
+package com.liferay.apio.architect.identifier.mapper;
 
 import aQute.bnd.annotation.ConsumerType;
 
-import com.liferay.apio.architect.resource.identifier.Identifier;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.uri.Path;
 
 /**
@@ -27,7 +27,7 @@ import com.liferay.apio.architect.uri.Path;
  * Instances of {@code PathIdentifierMapper} should only be created for
  * identifiers used as a single model's identifier. The identifier's class can
  * then be provided as a parameter in the {@code addCollectionPageItemGetter}
- * methods of {@link com.liferay.apio.architect.resource.Routes.Builder}.
+ * methods of {@link com.liferay.apio.architect.routes.Routes.Builder}.
  * </p>
  *
  * @author Alejandro Hernández

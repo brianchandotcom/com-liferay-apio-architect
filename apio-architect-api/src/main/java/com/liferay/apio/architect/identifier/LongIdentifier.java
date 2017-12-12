@@ -12,40 +12,26 @@
  * details.
  */
 
-package com.liferay.apio.architect.pagination;
+package com.liferay.apio.architect.identifier;
 
 /**
- * Provides a wrapper for a model. This avoids problems related to the Java
- * generics system.
+ * Represents a simple identifier with a {@code long} ID.
  *
  * @author Alejandro Hernández
  */
-public class SingleModel<T> {
-
-	public SingleModel(T model, Class<T> modelClass) {
-		_model = model;
-		_modelClass = modelClass;
-	}
+@FunctionalInterface
+public interface LongIdentifier extends Identifier {
 
 	/**
-	 * Returns the model.
+	 * Returns the identifier's ID as a {@code long}.
 	 *
-	 * @return the model
-	 */
-	public T getModel() {
-		return _model;
-	}
-
-	/**
-	 * Returns the model class.
+	 * <p>
+	 * For example, for a resource in the URL {@code /p/product/100}, this
+	 * method returns {@code 100} as a {@code long}.
+	 * </p>
 	 *
-	 * @return the model class
+	 * @return the identifier's {@code long} ID
 	 */
-	public Class<T> getModelClass() {
-		return _modelClass;
-	}
-
-	private final T _model;
-	private final Class<T> _modelClass;
+	public long getId();
 
 }

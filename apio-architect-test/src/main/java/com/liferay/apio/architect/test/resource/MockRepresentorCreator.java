@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.test.resource;
 
-import com.liferay.apio.architect.resource.Representor;
-import com.liferay.apio.architect.resource.identifier.StringIdentifier;
+import com.liferay.apio.architect.identifier.StringIdentifier;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.test.resource.model.FirstEmbeddedModel;
 import com.liferay.apio.architect.test.resource.model.RootModel;
 import com.liferay.apio.architect.test.resource.model.SecondEmbeddedModel;

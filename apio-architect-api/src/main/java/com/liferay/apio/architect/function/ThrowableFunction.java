@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.result;
+package com.liferay.apio.architect.function;
 
 import java.util.Objects;
 

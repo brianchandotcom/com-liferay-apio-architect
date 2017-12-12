@@ -12,23 +12,26 @@
  * details.
  */
 
-package com.liferay.apio.architect.result;
+package com.liferay.apio.architect.identifier;
 
 /**
- * Defines a {@code java.util.function.Supplier} that can throw an exception.
+ * Represents a simple identifier with a {@code String} ID.
  *
  * @author Alejandro Hernández
  */
 @FunctionalInterface
-public interface ThrowableSupplier<T> {
+public interface StringIdentifier extends Identifier {
 
 	/**
-	 * Returns a result of type {@code T} if the operation succeeds; otherwise
-	 * throws an exception.
+	 * Returns the identifier's ID as a {@code String}.
 	 *
-	 * @return a result of type {@code T} if the operation succeeds; an
-	 *         exception otherwise
+	 * <p>
+	 * For example, for a resource in the URL {@code /p/product/thing}, this
+	 * method returns {@code "thing"} as a {@code String}.
+	 * </p>
+	 *
+	 * @return the identifier's {@code String} ID
 	 */
-	public T get() throws Exception;
+	public String getId();
 
 }

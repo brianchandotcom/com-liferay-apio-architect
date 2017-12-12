@@ -28,12 +28,12 @@ import static org.hamcrest.collection.IsMapWithSize.anEmptyMap;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import com.liferay.apio.architect.identifier.StringIdentifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.list.FunctionalList;
-import com.liferay.apio.architect.pagination.SingleModel;
+import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.request.RequestInfo;
-import com.liferay.apio.architect.resource.RelatedModel;
-import com.liferay.apio.architect.resource.identifier.StringIdentifier;
+import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.resource.MockRepresentorCreator;
 import com.liferay.apio.architect.test.resource.model.FirstEmbeddedModel;
 import com.liferay.apio.architect.test.resource.model.RootModel;

@@ -15,8 +15,8 @@
 package com.liferay.apio.architect.sample.liferay.portal.resource.internal.mapper;
 
 import com.liferay.apio.architect.error.ApioDeveloperError;
-import com.liferay.apio.architect.resource.identifier.mapper.PathIdentifierMapper;
-import com.liferay.apio.architect.result.Try;
+import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.sample.liferay.portal.resource.identifier.AggregateRatingIdentifier;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.wiring.osgi.manager.CollectionResourceManager;
@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Reference;
  * <p>
  * The {@code AggregateRatingPathIdentifierMapper} can then be provided as a
  * parameter in the methods of {@link
- * com.liferay.apio.architect.resource.Routes.Builder}.
+ * com.liferay.apio.architect.routes.Routes.Builder}.
  * </p>
  *
  * @author Alejandro Hernández

@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource;
+package com.liferay.apio.architect.related;
 
-import com.liferay.apio.architect.resource.identifier.Identifier;
+import com.liferay.apio.architect.identifier.Identifier;
 
 import java.util.function.Function;
 

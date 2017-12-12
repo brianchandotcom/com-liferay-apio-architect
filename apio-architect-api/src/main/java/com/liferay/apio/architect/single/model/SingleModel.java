@@ -12,26 +12,40 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource.identifier;
+package com.liferay.apio.architect.single.model;
 
 /**
- * Represents a simple identifier with a {@code long} ID.
+ * Provides a wrapper for a model. This avoids problems related to the Java
+ * generics system.
  *
  * @author Alejandro Hernández
  */
-@FunctionalInterface
-public interface LongIdentifier extends Identifier {
+public class SingleModel<T> {
+
+	public SingleModel(T model, Class<T> modelClass) {
+		_model = model;
+		_modelClass = modelClass;
+	}
 
 	/**
-	 * Returns the identifier's ID as a {@code long}.
+	 * Returns the model.
 	 *
-	 * <p>
-	 * For example, for a resource in the URL {@code /p/product/100}, this
-	 * method returns {@code 100} as a {@code long}.
-	 * </p>
-	 *
-	 * @return the identifier's {@code long} ID
+	 * @return the model
 	 */
-	public long getId();
+	public T getModel() {
+		return _model;
+	}
+
+	/**
+	 * Returns the model class.
+	 *
+	 * @return the model class
+	 */
+	public Class<T> getModelClass() {
+		return _modelClass;
+	}
+
+	private final T _model;
+	private final Class<T> _modelClass;
 
 }

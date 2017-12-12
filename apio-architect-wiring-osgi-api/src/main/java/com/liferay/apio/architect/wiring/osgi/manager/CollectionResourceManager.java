@@ -17,10 +17,10 @@ package com.liferay.apio.architect.wiring.osgi.manager;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.apio.architect.documentation.Documentation;
+import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.CollectionResourceInfo;
-import com.liferay.apio.architect.resource.Representor;
-import com.liferay.apio.architect.resource.Routes;
-import com.liferay.apio.architect.resource.identifier.Identifier;
+import com.liferay.apio.architect.routes.Routes;
 
 import java.util.List;
 import java.util.Optional;

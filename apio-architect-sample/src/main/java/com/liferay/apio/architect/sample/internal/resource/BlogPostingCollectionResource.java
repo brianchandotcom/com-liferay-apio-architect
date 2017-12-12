@@ -14,13 +14,13 @@
 
 package com.liferay.apio.architect.sample.internal.resource;
 
+import com.liferay.apio.architect.identifier.LongIdentifier;
+import com.liferay.apio.architect.identifier.RootIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.resource.Representor;
-import com.liferay.apio.architect.resource.Routes;
-import com.liferay.apio.architect.resource.identifier.LongIdentifier;
-import com.liferay.apio.architect.resource.identifier.RootIdentifier;
+import com.liferay.apio.architect.routes.Routes;
 import com.liferay.apio.architect.sample.internal.model.BlogPosting;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingComment;
 import com.liferay.apio.architect.sample.internal.model.Person;

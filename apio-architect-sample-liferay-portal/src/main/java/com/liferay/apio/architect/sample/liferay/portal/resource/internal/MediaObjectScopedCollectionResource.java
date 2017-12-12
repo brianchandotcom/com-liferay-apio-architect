@@ -14,13 +14,13 @@
 
 package com.liferay.apio.architect.sample.liferay.portal.resource.internal;
 
+import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.resource.Representor;
-import com.liferay.apio.architect.resource.Routes;
 import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.resource.identifier.LongIdentifier;
+import com.liferay.apio.architect.routes.Routes;
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.document.library.kernel.exception.NoSuchFolderException;
 import com.liferay.document.library.kernel.model.DLFileEntry;

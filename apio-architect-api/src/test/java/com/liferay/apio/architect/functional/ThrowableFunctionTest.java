@@ -12,12 +12,13 @@
  * details.
  */
 
-package com.liferay.apio.architect.result;
+package com.liferay.apio.architect.functional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import com.liferay.apio.architect.function.ThrowableFunction;
 import com.liferay.apio.architect.test.result.TryMatchers;
 
 import org.hamcrest.MatcherAssert;

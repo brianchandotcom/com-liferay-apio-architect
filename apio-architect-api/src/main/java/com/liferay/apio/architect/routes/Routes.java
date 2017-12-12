@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource;
+package com.liferay.apio.architect.routes;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -42,11 +42,11 @@ import com.liferay.apio.architect.function.PentaFunction;
 import com.liferay.apio.architect.function.TetraFunction;
 import com.liferay.apio.architect.function.TriFunction;
 import com.liferay.apio.architect.function.UndecaFunction;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.pagination.SingleModel;
-import com.liferay.apio.architect.resource.identifier.Identifier;
+import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Map;
@@ -60,7 +60,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Holds information about the routes supported for a {@link
- * CollectionResource}.
+ * com.liferay.apio.architect.resource.CollectionResource}.
  *
  * <p>
  * This interface's methods return functions to get the different endpoints of
@@ -84,9 +84,9 @@ public class Routes<T> {
 
 	/**
 	 * Returns the function that is used to create the single model of a {@link
-	 * CollectionResource}, if the endpoint was added through the {@link
-	 * Builder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.CollectionResource}, if the endpoint
+	 * was added through the {@link Builder} and the function therefore exists.
+	 * Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function that uses a POST request to create the single model,
 	 *         if the function exists; {@code Optional#empty()} otherwise
@@ -97,9 +97,9 @@ public class Routes<T> {
 
 	/**
 	 * Returns the function used to remove a single model of a {@link
-	 * CollectionResource}, if the endpoint was added through the {@link
-	 * Builder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.CollectionResource}, if the endpoint
+	 * was added through the {@link Builder} and the function therefore exists.
+	 * Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function used to remove a single model, if the function
 	 *         exists; {@code Optional#empty()} otherwise
@@ -110,9 +110,9 @@ public class Routes<T> {
 
 	/**
 	 * Returns the function used to obtain the page of a {@link
-	 * CollectionResource}, if the endpoint was added through the {@link
-	 * Builder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.CollectionResource}, if the endpoint
+	 * was added through the {@link Builder} and the function therefore exists.
+	 * Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function used to create the page, if the function exists;
 	 *         {@code Optional#empty()} otherwise
@@ -123,9 +123,9 @@ public class Routes<T> {
 
 	/**
 	 * Returns the function used to retrieve the single model of a {@link
-	 * CollectionResource}, if the endpoint was added through the {@link
-	 * Builder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.CollectionResource}, if the endpoint
+	 * was added through the {@link Builder} and the function therefore exists.
+	 * Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function that uses a GET request to retrieve the single
 	 *         model, if the function exists; {@code Optional#empty()} otherwise
@@ -136,9 +136,9 @@ public class Routes<T> {
 
 	/**
 	 * Returns the function used to update the single model of a {@link
-	 * CollectionResource}, if the endpoint was added through the {@link
-	 * Builder} and the function therefore exists. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * com.liferay.apio.architect.resource.CollectionResource}, if the endpoint
+	 * was added through the {@link Builder} and the function therefore exists.
+	 * Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function used to update the single model, if the function
 	 *         exists; {@code Optional#empty()} otherwise
@@ -148,7 +148,8 @@ public class Routes<T> {
 	}
 
 	/**
-	 * Creates {@link Routes} of a {@link CollectionResource}.
+	 * Creates {@link Routes} of a {@link
+	 * com.liferay.apio.architect.resource.CollectionResource}.
 	 */
 	@ProviderType
 	@SuppressWarnings("unused")

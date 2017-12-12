@@ -16,7 +16,9 @@ package com.liferay.apio.architect.resource;
 
 import aQute.bnd.annotation.ConsumerType;
 
-import com.liferay.apio.architect.resource.identifier.Identifier;
+import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.routes.Routes;
 
 /**
  * Maps your domain models to resources that Vulcan can understand.
