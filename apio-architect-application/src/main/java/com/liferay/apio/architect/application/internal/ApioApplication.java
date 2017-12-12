@@ -54,7 +54,7 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true, property = "liferay.apio.architect.application=true",
 	service = Application.class
 )
-public class VulcanApplication extends Application {
+public class ApioApplication extends Application {
 
 	@Override
 	public Set<Object> getSingletons() {

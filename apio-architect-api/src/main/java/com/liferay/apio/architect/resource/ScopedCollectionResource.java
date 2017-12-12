@@ -19,7 +19,7 @@ import aQute.bnd.annotation.ConsumerType;
 import com.liferay.apio.architect.identifier.Identifier;
 
 /**
- * Maps your domain models to resources that Vulcan can understand.
+ * Maps your domain models to resources that Apio can understand.
  *
  * <p>
  * {@code ScopedCollectionResources} are a special type of {@code

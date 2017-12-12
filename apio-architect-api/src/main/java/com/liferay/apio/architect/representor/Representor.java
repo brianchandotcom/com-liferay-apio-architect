@@ -175,7 +175,7 @@ public class Representor<T, U extends Identifier> {
 	}
 
 	/**
-	 * Creates generic representations of your domain models that Vulcan
+	 * Creates generic representations of your domain models that Apio
 	 * hypermedia writers can understand.
 	 */
 	public static class Builder<T, U extends Identifier> {

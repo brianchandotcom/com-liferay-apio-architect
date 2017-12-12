@@ -21,7 +21,7 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.Routes;
 
 /**
- * Maps your domain models to resources that Vulcan can understand.
+ * Maps your domain models to resources that Apio can understand.
  *
  * <p>
  * Resources behave like an API so you must add the API's name via the {@link

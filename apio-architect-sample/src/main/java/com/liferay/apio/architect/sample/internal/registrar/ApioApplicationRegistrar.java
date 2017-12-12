@@ -28,14 +28,14 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * This component registers the {@code VulcanApplication} from the {@code
+ * This component registers the {@code ApioApplication} from the {@code
  * apio-architect-application} module in a OSGi JAX-RS Whiteboard following the
  * standard specifications.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class VulcanApplicationRegistrar {
+public class ApioApplicationRegistrar {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
