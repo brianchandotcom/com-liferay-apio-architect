@@ -45,10 +45,15 @@ public class BlogPostingCollectionResource
 	implements CollectionResource<BlogPosting, LongIdentifier> {
 
 	@Override
-	public Representor<BlogPosting, LongIdentifier> buildRepresentor(
-		Representor.Builder<BlogPosting, LongIdentifier> representorBuilder) {
+	public String getName() {
+		return "blog-postings";
+	}
 
-		return representorBuilder.types(
+	@Override
+	public Representor<BlogPosting, LongIdentifier> representor(
+		Representor.Builder<BlogPosting, LongIdentifier> builder) {
+
+		return builder.types(
 			"BlogPosting"
 		).identifier(
 			blogPosting -> blogPosting::getBlogPostingId
@@ -71,11 +76,6 @@ public class BlogPostingCollectionResource
 		).addString(
 			"headline", BlogPosting::getTitle
 		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "blog-postings";
 	}
 
 	@Override

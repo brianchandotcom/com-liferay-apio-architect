@@ -45,10 +45,15 @@ public class WebSiteCollectionResource
 	implements CollectionResource<WebSite, LongIdentifier> {
 
 	@Override
-	public Representor<WebSite, LongIdentifier> buildRepresentor(
-		Representor.Builder<WebSite, LongIdentifier> representorBuilder) {
+	public String getName() {
+		return "web-sites";
+	}
 
-		return representorBuilder.types(
+	@Override
+	public Representor<WebSite, LongIdentifier> representor(
+		Representor.Builder<WebSite, LongIdentifier> builder) {
+
+		return builder.types(
 			"WebSite"
 		).identifier(
 			WebSite::getWebSiteLongIdentifier
@@ -57,11 +62,6 @@ public class WebSiteCollectionResource
 		).addString(
 			"description", WebSite::getDescription
 		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "web-sites";
 	}
 
 	@Override

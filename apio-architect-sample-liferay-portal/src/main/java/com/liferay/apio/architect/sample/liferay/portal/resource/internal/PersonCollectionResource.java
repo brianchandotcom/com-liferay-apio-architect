@@ -65,10 +65,15 @@ public class PersonCollectionResource
 	implements CollectionResource<User, LongIdentifier> {
 
 	@Override
-	public Representor<User, LongIdentifier> buildRepresentor(
-		Representor.Builder<User, LongIdentifier> representorBuilder) {
+	public String getName() {
+		return "people";
+	}
 
-		return representorBuilder.types(
+	@Override
+	public Representor<User, LongIdentifier> representor(
+		Representor.Builder<User, LongIdentifier> builder) {
+
+		return builder.types(
 			"Person"
 		).identifier(
 			user -> user::getUserId
@@ -91,11 +96,6 @@ public class PersonCollectionResource
 		).addString(
 			"name", User::getFullName
 		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "people";
 	}
 
 	@Override

@@ -38,12 +38,16 @@ public class AggregateRatingScopedCollectionResource
 		ScopedCollectionResource<AggregateRating, AggregateRatingIdentifier> {
 
 	@Override
-	public Representor<AggregateRating, AggregateRatingIdentifier>
-		buildRepresentor(
-			Representor.Builder<AggregateRating, AggregateRatingIdentifier>
-				representorBuilder) {
+	public String getName() {
+		return "aggregate-ratings";
+	}
 
-		return representorBuilder.types(
+	@Override
+	public Representor<AggregateRating, AggregateRatingIdentifier> representor(
+		Representor.Builder<AggregateRating, AggregateRatingIdentifier>
+			builder) {
+
+		return builder.types(
 			"AggregateRating"
 		).identifier(
 			AggregateRating::getAggregateRatingIdentifier
@@ -56,11 +60,6 @@ public class AggregateRatingScopedCollectionResource
 		).addNumber(
 			"worstRating", aggregateRating -> 0
 		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "aggregate-ratings";
 	}
 
 	@Override

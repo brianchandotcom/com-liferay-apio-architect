@@ -55,10 +55,15 @@ public class FolderScopedCollectionResource
 	implements ScopedCollectionResource<DLFolder, LongIdentifier> {
 
 	@Override
-	public Representor<DLFolder, LongIdentifier> buildRepresentor(
-		Representor.Builder<DLFolder, LongIdentifier> representorBuilder) {
+	public String getName() {
+		return "folders";
+	}
 
-		return representorBuilder.types(
+	@Override
+	public Representor<DLFolder, LongIdentifier> representor(
+		Representor.Builder<DLFolder, LongIdentifier> builder) {
+
+		return builder.types(
 			"Folder"
 		).identifier(
 			dlFolder -> dlFolder::getFolderId
@@ -76,11 +81,6 @@ public class FolderScopedCollectionResource
 		).addString(
 			"path", this::_getPath
 		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "folders";
 	}
 
 	@Override

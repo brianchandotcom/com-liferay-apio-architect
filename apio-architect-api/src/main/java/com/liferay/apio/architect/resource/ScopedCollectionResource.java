@@ -34,8 +34,8 @@ import com.liferay.apio.architect.resource.identifier.Identifier;
  *
  * <p>
  * Representors created by the method {@link
- * CollectionResource#buildRepresentor(Representor.Builder)} hold all the
- * information needed to write your domain models' hypermedia representations.
+ * CollectionResource#representor(Representor.Builder)} hold all the information
+ * needed to write your domain models' hypermedia representations.
  * </p>
  *
  * <p>

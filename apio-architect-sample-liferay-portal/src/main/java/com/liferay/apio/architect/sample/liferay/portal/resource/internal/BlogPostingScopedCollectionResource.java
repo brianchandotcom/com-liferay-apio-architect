@@ -72,10 +72,15 @@ public class BlogPostingScopedCollectionResource
 	implements ScopedCollectionResource<BlogsEntry, LongIdentifier> {
 
 	@Override
-	public Representor<BlogsEntry, LongIdentifier> buildRepresentor(
-		Representor.Builder<BlogsEntry, LongIdentifier> representorBuilder) {
+	public String getName() {
+		return "blog-postings";
+	}
 
-		return representorBuilder.types(
+	@Override
+	public Representor<BlogsEntry, LongIdentifier> representor(
+		Representor.Builder<BlogsEntry, LongIdentifier> builder) {
+
+		return builder.types(
 			"BlogPosting"
 		).identifier(
 			blogsEntry -> blogsEntry::getEntryId
@@ -112,11 +117,6 @@ public class BlogPostingScopedCollectionResource
 		).addString(
 			"headline", BlogsEntry::getTitle
 		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "blog-postings";
 	}
 
 	@Override

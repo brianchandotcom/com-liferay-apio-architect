@@ -66,10 +66,15 @@ public class CommentScopedCollectionResource
 	implements ScopedCollectionResource<Comment, LongIdentifier> {
 
 	@Override
-	public Representor<Comment, LongIdentifier> buildRepresentor(
-		Representor.Builder<Comment, LongIdentifier> representorBuilder) {
+	public String getName() {
+		return "comments";
+	}
 
-		return representorBuilder.types(
+	@Override
+	public Representor<Comment, LongIdentifier> representor(
+		Representor.Builder<Comment, LongIdentifier> builder) {
+
+		return builder.types(
 			"Comment"
 		).identifier(
 			comment -> comment::getCommentId
@@ -78,11 +83,6 @@ public class CommentScopedCollectionResource
 		).addString(
 			"text", Comment::getBody
 		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "comments";
 	}
 
 	@Override

@@ -56,10 +56,15 @@ public class MediaObjectScopedCollectionResource
 	implements ScopedCollectionResource<DLFileEntry, LongIdentifier> {
 
 	@Override
-	public Representor<DLFileEntry, LongIdentifier> buildRepresentor(
-		Representor.Builder<DLFileEntry, LongIdentifier> representorBuilder) {
+	public String getName() {
+		return "media-objects";
+	}
 
-		return representorBuilder.types(
+	@Override
+	public Representor<DLFileEntry, LongIdentifier> representor(
+		Representor.Builder<DLFileEntry, LongIdentifier> builder) {
+
+		return builder.types(
 			"MediaObject"
 		).identifier(
 			dlFileEntry -> dlFileEntry::getFileEntryId
@@ -88,11 +93,6 @@ public class MediaObjectScopedCollectionResource
 		).addString(
 			"text", DLFileEntry::getDescription
 		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "media-objects";
 	}
 
 	@Override

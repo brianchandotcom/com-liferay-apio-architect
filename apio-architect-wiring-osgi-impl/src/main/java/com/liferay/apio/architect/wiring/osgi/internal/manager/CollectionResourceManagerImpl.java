@@ -191,12 +191,11 @@ public class CollectionResourceManagerImpl
 						() -> (List)_relatedCollections.get(
 							modelClass.getName());
 
-				Representor<T, U> representor =
-					collectionResource.buildRepresentor(
-						new Representor.Builder<>(
-							identifierClass,
-							_addRelatedCollectionTriConsumer(modelClass),
-							relatedCollectionSupplier));
+				Representor<T, U> representor = collectionResource.representor(
+					new Representor.Builder<>(
+						identifierClass,
+						_addRelatedCollectionTriConsumer(modelClass),
+						relatedCollectionSupplier));
 
 				RequestFunction<Function<Class<?>, Optional<?>>>
 					provideClassFunction =

@@ -69,11 +69,15 @@ public class WebPageElementScopedCollectionResource
 	implements ScopedCollectionResource<JournalArticle, LongIdentifier> {
 
 	@Override
-	public Representor<JournalArticle, LongIdentifier> buildRepresentor(
-		Representor.Builder<JournalArticle, LongIdentifier>
-			representorBuilder) {
+	public String getName() {
+		return "web-page-elements";
+	}
 
-		return representorBuilder.types(
+	@Override
+	public Representor<JournalArticle, LongIdentifier> representor(
+		Representor.Builder<JournalArticle, LongIdentifier> builder) {
+
+		return builder.types(
 			"WebPageElement"
 		).identifier(
 			journalArticle -> journalArticle::getId
@@ -99,11 +103,6 @@ public class WebPageElementScopedCollectionResource
 		).addString(
 			"title", JournalArticle::getTitle
 		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "web-page-elements";
 	}
 
 	@Override
