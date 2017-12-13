@@ -16,33 +16,21 @@ package com.liferay.apio.architect.wiring.osgi.manager;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.routes.Routes;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
  * Provides methods to retrieve information provided by the different {@link
- * com.liferay.apio.architect.resource.CollectionResource} instances. This
+ * com.liferay.apio.architect.representor.Representable} instances. This
  * information includes field functions, types, identifier functions, and more.
  *
  * @author Alejandro Hernández
- * @author Carlos Sierra Andrés
- * @author Jorge Ferrer
- * @see    com.liferay.apio.architect.resource.CollectionResource
+ * @see    com.liferay.apio.architect.representor.Representable
  */
 @ProviderType
-public interface CollectionResourceManager {
-
-	/**
-	 * Returns the API documentation.
-	 *
-	 * @return the API documentation
-	 */
-	public Documentation getDocumentation();
+public interface RepresentableManager {
 
 	/**
 	 * Returns the resource name's model class.
@@ -71,20 +59,5 @@ public interface CollectionResourceManager {
 	 */
 	public <T, U extends Identifier> Optional<Representor<T, U>>
 		getRepresentorOptional(Class<T> modelClass);
-
-	/**
-	 * Returns the root collection resource's list of names.
-	 *
-	 * @return the root collection resource's list of names
-	 */
-	public List<String> getRootCollectionResourceNames();
-
-	/**
-	 * Returns the model class's routes for the collection resource's name.
-	 *
-	 * @param  name the collection resource's name
-	 * @return the model class's routes
-	 */
-	public <T> Optional<Routes<T>> getRoutesOptional(String name);
 
 }
