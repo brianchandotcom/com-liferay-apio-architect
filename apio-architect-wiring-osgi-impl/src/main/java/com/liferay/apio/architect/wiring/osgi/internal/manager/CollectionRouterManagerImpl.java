@@ -84,7 +84,8 @@ public class CollectionRouterManagerImpl
 	protected void setServiceReference(
 		ServiceReference<CollectionRouter> serviceReference) {
 
-		Optional<Class<Object>> optional = addService(serviceReference);
+		Optional<Class<Object>> optional = addService(
+			serviceReference, CollectionRouter.class);
 
 		optional.ifPresent(this::_addRoutes);
 	}
@@ -93,7 +94,8 @@ public class CollectionRouterManagerImpl
 	protected void unsetServiceReference(
 		ServiceReference<CollectionRouter> serviceReference) {
 
-		Optional<Class<Object>> optional = removeService(serviceReference);
+		Optional<Class<Object>> optional = removeService(
+			serviceReference, CollectionRouter.class);
 
 		optional.map(
 			Class::getName

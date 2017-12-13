@@ -90,7 +90,8 @@ public class PageMessageBodyWriter<T>
 		MediaType mediaType) {
 
 		Try<Class<Object>> classTry =
-			GenericUtil.getFirstGenericTypeArgumentTry(genericType);
+			GenericUtil.getFirstGenericTypeArgumentFromTypeTry(
+				genericType, Try.class);
 
 		return classTry.filter(
 			Page.class::equals

@@ -74,7 +74,8 @@ public class NestedCollectionRouterManagerImpl
 	protected void setServiceReference(
 		ServiceReference<NestedCollectionRouter> serviceReference) {
 
-		Optional<Class<Object>> optional = addService(serviceReference);
+		Optional<Class<Object>> optional = addService(
+			serviceReference, NestedCollectionRouter.class);
 
 		optional.ifPresent(this::_addRoutes);
 	}
@@ -83,7 +84,8 @@ public class NestedCollectionRouterManagerImpl
 	protected void unsetServiceReference(
 		ServiceReference<NestedCollectionRouter> serviceReference) {
 
-		Optional<Class<Object>> optional = removeService(serviceReference);
+		Optional<Class<Object>> optional = removeService(
+			serviceReference, NestedCollectionRouter.class);
 
 		optional.map(
 			Class::getName
@@ -115,10 +117,10 @@ public class NestedCollectionRouterManagerImpl
 		).ifPresent(
 			nestedCollectionRouter -> {
 				Class<U> parentClass = ManagerUtil.getTypeParamOrFail(
-					nestedCollectionRouter, 1);
+					nestedCollectionRouter, NestedCollectionRouter.class, 1);
 
 				Class<V> identifierClass = ManagerUtil.getTypeParamOrFail(
-					nestedCollectionRouter, 2);
+					nestedCollectionRouter, NestedCollectionRouter.class, 2);
 
 				RequestFunction<Function<Class<?>, Optional<?>>>
 					provideClassFunction =

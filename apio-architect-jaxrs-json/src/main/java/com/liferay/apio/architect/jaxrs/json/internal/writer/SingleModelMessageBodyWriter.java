@@ -89,7 +89,8 @@ public class SingleModelMessageBodyWriter<T>
 		MediaType mediaType) {
 
 		Try<Class<Object>> classTry =
-			GenericUtil.getFirstGenericTypeArgumentTry(genericType);
+			GenericUtil.getFirstGenericTypeArgumentFromTypeTry(
+				genericType, Try.class);
 
 		return classTry.filter(
 			SingleModel.class::equals

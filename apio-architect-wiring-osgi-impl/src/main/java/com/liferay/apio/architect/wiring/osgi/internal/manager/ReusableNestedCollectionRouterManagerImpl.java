@@ -65,7 +65,8 @@ public class ReusableNestedCollectionRouterManagerImpl
 	protected void setServiceReference(
 		ServiceReference<ReusableNestedCollectionRouter> serviceReference) {
 
-		Optional<Class<Object>> optional = addService(serviceReference);
+		Optional<Class<Object>> optional = addService(
+			serviceReference, ReusableNestedCollectionRouter.class);
 
 		optional.ifPresent(this::_addRoutes);
 	}
@@ -74,7 +75,8 @@ public class ReusableNestedCollectionRouterManagerImpl
 	protected void unsetServiceReference(
 		ServiceReference<ReusableNestedCollectionRouter> serviceReference) {
 
-		Optional<Class<Object>> optional = removeService(serviceReference);
+		Optional<Class<Object>> optional = removeService(
+			serviceReference, ReusableNestedCollectionRouter.class);
 
 		optional.map(
 			Class::getName
@@ -106,7 +108,8 @@ public class ReusableNestedCollectionRouterManagerImpl
 		).ifPresent(
 			nestedCollectionRouter -> {
 				Class<U> identifierClass = ManagerUtil.getTypeParamOrFail(
-					nestedCollectionRouter, 1);
+					nestedCollectionRouter,
+					ReusableNestedCollectionRouter.class, 1);
 
 				RequestFunction<Function<Class<?>, Optional<?>>>
 					provideClassFunction =

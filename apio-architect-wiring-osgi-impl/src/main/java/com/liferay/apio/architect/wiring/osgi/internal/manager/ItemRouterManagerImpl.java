@@ -63,7 +63,8 @@ public class ItemRouterManagerImpl
 	protected void setServiceReference(
 		ServiceReference<ItemRouter> serviceReference) {
 
-		Optional<Class<Object>> optional = addService(serviceReference);
+		Optional<Class<Object>> optional = addService(
+			serviceReference, ItemRouter.class);
 
 		optional.ifPresent(this::_addRoutes);
 	}
@@ -72,7 +73,8 @@ public class ItemRouterManagerImpl
 	protected void unsetServiceReference(
 		ServiceReference<ItemRouter> serviceReference) {
 
-		Optional<Class<Object>> optional = removeService(serviceReference);
+		Optional<Class<Object>> optional = removeService(
+			serviceReference, ItemRouter.class);
 
 		optional.map(
 			Class::getName
@@ -107,7 +109,7 @@ public class ItemRouterManagerImpl
 								clazz, httpServletRequest);
 
 				Class<U> identifierClass = ManagerUtil.getTypeParamOrFail(
-					itemRouter, 1);
+					itemRouter, ItemRouter.class, 1);
 
 				Builder<T, U> builder = new Builder<>(
 					modelClass, identifierClass, provideClassFunction,

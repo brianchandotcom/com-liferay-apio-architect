@@ -79,7 +79,8 @@ public class RepresentableManagerImpl
 	protected void setServiceReference(
 		ServiceReference<Representable> serviceReference) {
 
-		Optional<Class<Object>> optional = addService(serviceReference);
+		Optional<Class<Object>> optional = addService(
+			serviceReference, Representable.class);
 
 		optional.ifPresent(this::_addModelClassMaps);
 	}
@@ -88,7 +89,8 @@ public class RepresentableManagerImpl
 	protected void unsetServiceReference(
 		ServiceReference<Representable> serviceReference) {
 
-		Optional<Class<Object>> optional = removeService(serviceReference);
+		Optional<Class<Object>> optional = removeService(
+			serviceReference, Representable.class);
 
 		optional.ifPresent(this::_removeModelClassMaps);
 
@@ -157,7 +159,7 @@ public class RepresentableManagerImpl
 		Class<? extends Representable> resourceClass = representable.getClass();
 
 		Try<Class<U>> classTry = GenericUtil.getGenericTypeArgumentTry(
-			resourceClass, 1);
+			resourceClass, Representable.class, 1);
 
 		return classTry.orElseThrow(
 			() -> new ApioDeveloperError.MustHaveValidGenericType(

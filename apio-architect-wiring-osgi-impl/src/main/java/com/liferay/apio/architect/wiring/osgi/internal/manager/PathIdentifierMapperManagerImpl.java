@@ -80,14 +80,14 @@ public class PathIdentifierMapperManagerImpl
 	protected void setServiceReference(
 		ServiceReference<PathIdentifierMapper> serviceReference) {
 
-		addService(serviceReference);
+		addService(serviceReference, PathIdentifierMapper.class);
 	}
 
 	@SuppressWarnings("unused")
 	protected void unsetServiceReference(
 		ServiceReference<PathIdentifierMapper> serviceReference) {
 
-		removeService(serviceReference);
+		removeService(serviceReference, PathIdentifierMapper.class);
 	}
 
 }
