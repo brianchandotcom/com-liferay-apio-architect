@@ -17,10 +17,12 @@ package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.routes.Routes;
+import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.router.NestedCollectionRouter;
+import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.document.library.kernel.exception.NoSuchFolderException;
 import com.liferay.document.library.kernel.model.DLFileEntry;
@@ -51,13 +53,39 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Javier Gamarra
  */
-@Component(immediate = true, service = CollectionResource.class)
-public class MediaObjectScopedCollectionResource
-	implements ScopedCollectionResource<DLFileEntry, LongIdentifier> {
+@Component(
+	immediate = true,
+	service =
+		{ItemRouter.class, NestedCollectionRouter.class, Representable.class}
+)
+public class MediaObjectNestedCollectionResource
+	implements ItemRouter<DLFileEntry, LongIdentifier>,
+			   NestedCollectionRouter<DLFileEntry, DLFolder, LongIdentifier>,
+			   Representable<DLFileEntry, LongIdentifier> {
+
+	@Override
+	public NestedCollectionRoutes<DLFileEntry> collectionRoutes(
+		NestedCollectionRoutes.Builder<DLFileEntry, LongIdentifier> builder) {
+
+		return builder.addGetter(
+			this::_getPageItems
+		).build();
+	}
 
 	@Override
 	public String getName() {
 		return "media-objects";
+	}
+
+	@Override
+	public ItemRoutes<DLFileEntry> itemRoutes(
+		ItemRoutes.Builder<DLFileEntry, LongIdentifier> builder) {
+
+		return builder.addGetter(
+			this::_getDLFileEntry
+		).addRemover(
+			this::_deleteDLFileEntry
+		).build();
 	}
 
 	@Override
@@ -92,19 +120,6 @@ public class MediaObjectScopedCollectionResource
 			"name", DLFileEntry::getName
 		).addString(
 			"text", DLFileEntry::getDescription
-		).build();
-	}
-
-	@Override
-	public Routes<DLFileEntry> routes(
-		Routes.Builder<DLFileEntry, LongIdentifier> builder) {
-
-		return builder.addCollectionPageGetter(
-			this::_getPageItems, LongIdentifier.class
-		).addCollectionPageItemGetter(
-			this::_getDLFileEntry
-		).addCollectionPageItemRemover(
-			this::_deleteDLFileEntry
 		).build();
 	}
 

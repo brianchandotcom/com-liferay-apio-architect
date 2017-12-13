@@ -14,14 +14,13 @@
 
 package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 
+import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.routes.Routes;
+import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRatingService;
-import com.liferay.apio.architect.wiring.osgi.manager.CollectionResourceManager;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -32,14 +31,24 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true, service = CollectionResource.class)
-public class AggregateRatingScopedCollectionResource
-	implements
-		ScopedCollectionResource<AggregateRating, AggregateRatingIdentifier> {
+@Component(immediate = true, service = {ItemRouter.class, Representable.class})
+public class AggregateRatingNestedCollectionResource
+	implements Representable<AggregateRating, AggregateRatingIdentifier>,
+			   ItemRouter<AggregateRating, AggregateRatingIdentifier> {
 
 	@Override
 	public String getName() {
 		return "aggregate-ratings";
+	}
+
+	@Override
+	public ItemRoutes<AggregateRating> itemRoutes(
+		ItemRoutes.Builder<AggregateRating, AggregateRatingIdentifier>
+			builder) {
+
+		return builder.addGetter(
+			aggregateRatingService::getAggregateRating
+		).build();
 	}
 
 	@Override
@@ -62,19 +71,7 @@ public class AggregateRatingScopedCollectionResource
 		).build();
 	}
 
-	@Override
-	public Routes<AggregateRating> routes(
-		Routes.Builder<AggregateRating, AggregateRatingIdentifier> builder) {
-
-		return builder.addCollectionPageItemGetter(
-			aggregateRatingService::getAggregateRating
-		).build();
-	}
-
 	@Reference
 	protected AggregateRatingService aggregateRatingService;
-
-	@Reference
-	private CollectionResourceManager _collectionResourceManager;
 
 }

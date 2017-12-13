@@ -17,10 +17,13 @@ package com.liferay.apio.architect.sample.internal.resource;
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.routes.Routes;
+import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.router.NestedCollectionRouter;
+import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
+import com.liferay.apio.architect.sample.internal.model.BlogPosting;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingComment;
 import com.liferay.apio.architect.sample.internal.model.Person;
 
@@ -39,13 +42,44 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true, service = CollectionResource.class)
-public class BlogPostingCommentScopedCollectionResource
-	implements ScopedCollectionResource<BlogPostingComment, LongIdentifier> {
+@Component(
+	immediate = true,
+	service =
+		{ItemRouter.class, NestedCollectionRouter.class, Representable.class}
+)
+public class BlogPostingCommentNestedCollectionResource implements ItemRouter
+	<BlogPostingComment, LongIdentifier>, NestedCollectionRouter
+	<BlogPostingComment, BlogPosting, LongIdentifier>, Representable
+	<BlogPostingComment, LongIdentifier> {
+
+	@Override
+	public NestedCollectionRoutes<BlogPostingComment> collectionRoutes(
+		NestedCollectionRoutes.Builder<BlogPostingComment, LongIdentifier>
+			builder) {
+
+		return builder.addGetter(
+			this::_getPageItems
+		).addCreator(
+			this::_addBlogPostingComment
+		).build();
+	}
 
 	@Override
 	public String getName() {
 		return "comments";
+	}
+
+	@Override
+	public ItemRoutes<BlogPostingComment> itemRoutes(
+		ItemRoutes.Builder<BlogPostingComment, LongIdentifier> builder) {
+
+		return builder.addGetter(
+			this::_getBlogPostingComment
+		).addRemover(
+			this::_deleteBlogPostingComment
+		).addUpdater(
+			this::_updateBlogPostingComment
+		).build();
 	}
 
 	@Override
@@ -66,23 +100,6 @@ public class BlogPostingCommentScopedCollectionResource
 				Person.getPerson(blogPostingComment.getAuthorId())
 		).addString(
 			"text", BlogPostingComment::getContent
-		).build();
-	}
-
-	@Override
-	public Routes<BlogPostingComment> routes(
-		Routes.Builder<BlogPostingComment, LongIdentifier> builder) {
-
-		return builder.addCollectionPageGetter(
-			this::_getPageItems, LongIdentifier.class
-		).addCollectionPageItemCreator(
-			this::_addBlogPostingComment, LongIdentifier.class
-		).addCollectionPageItemGetter(
-			this::_getBlogPostingComment
-		).addCollectionPageItemRemover(
-			this::_deleteBlogPostingComment
-		).addCollectionPageItemUpdater(
-			this::_updateBlogPostingComment
 		).build();
 	}
 

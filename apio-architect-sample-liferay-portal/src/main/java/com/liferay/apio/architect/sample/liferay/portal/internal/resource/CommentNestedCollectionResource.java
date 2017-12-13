@@ -19,10 +19,12 @@ import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.liferay.portal.context.CurrentUser;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.routes.Routes;
+import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
+import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.CommentableIdentifier;
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
@@ -61,13 +63,46 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true, service = CollectionResource.class)
-public class CommentScopedCollectionResource
-	implements ScopedCollectionResource<Comment, LongIdentifier> {
+@Component(
+	immediate = true,
+	service = {
+		ItemRouter.class, Representable.class,
+		ReusableNestedCollectionRouter.class
+	}
+)
+public class CommentNestedCollectionResource
+	implements ItemRouter<Comment, LongIdentifier>,
+			   Representable<Comment, LongIdentifier>,
+			   ReusableNestedCollectionRouter<Comment, CommentableIdentifier> {
+
+	@Override
+	public NestedCollectionRoutes<Comment> collectionRoutes(
+		NestedCollectionRoutes.Builder<Comment, CommentableIdentifier>
+			builder) {
+
+		return builder.addGetter(
+			this::_getPageItems, CurrentUser.class
+		).addCreator(
+			this::_addComment, CurrentUser.class
+		).build();
+	}
 
 	@Override
 	public String getName() {
 		return "comments";
+	}
+
+	@Override
+	public ItemRoutes<Comment> itemRoutes(
+		ItemRoutes.Builder<Comment, LongIdentifier> builder) {
+
+		return builder.addGetter(
+			this::_getComment
+		).addRemover(
+			this::_deleteComment
+		).addUpdater(
+			this::_updateComment
+		).build();
 	}
 
 	@Override
@@ -82,23 +117,6 @@ public class CommentScopedCollectionResource
 			"author", User.class, this::_getUserOptional
 		).addString(
 			"text", Comment::getBody
-		).build();
-	}
-
-	@Override
-	public Routes<Comment> routes(
-		Routes.Builder<Comment, LongIdentifier> builder) {
-
-		return builder.addCollectionPageGetter(
-			this::_getPageItems, CommentableIdentifier.class, CurrentUser.class
-		).addCollectionPageItemCreator(
-			this::_addComment, CommentableIdentifier.class, CurrentUser.class
-		).addCollectionPageItemGetter(
-			this::_getComment
-		).addCollectionPageItemRemover(
-			this::_deleteComment
-		).addCollectionPageItemUpdater(
-			this::_updateComment
 		).build();
 	}
 

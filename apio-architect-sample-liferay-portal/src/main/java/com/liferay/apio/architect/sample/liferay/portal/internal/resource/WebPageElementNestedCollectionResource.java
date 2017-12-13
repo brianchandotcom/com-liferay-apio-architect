@@ -18,10 +18,12 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.routes.Routes;
+import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.router.NestedCollectionRouter;
+import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSite;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSiteService;
 import com.liferay.document.library.kernel.service.DLFolderService;
@@ -64,13 +66,44 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Javier Gamarra
  */
-@Component(immediate = true, service = CollectionResource.class)
-public class WebPageElementScopedCollectionResource
-	implements ScopedCollectionResource<JournalArticle, LongIdentifier> {
+@Component(
+	immediate = true,
+	service =
+		{ItemRouter.class, NestedCollectionRouter.class, Representable.class}
+)
+public class WebPageElementNestedCollectionResource
+	implements ItemRouter<JournalArticle, LongIdentifier>,
+			   NestedCollectionRouter<JournalArticle, WebSite, LongIdentifier>,
+			   Representable<JournalArticle, LongIdentifier> {
+
+	@Override
+	public NestedCollectionRoutes<JournalArticle> collectionRoutes(
+		NestedCollectionRoutes.Builder<JournalArticle, LongIdentifier>
+			builder) {
+
+		return builder.addGetter(
+			this::_getPageItems
+		).addCreator(
+			this::_addJournalArticle
+		).build();
+	}
 
 	@Override
 	public String getName() {
 		return "web-page-elements";
+	}
+
+	@Override
+	public ItemRoutes<JournalArticle> itemRoutes(
+		ItemRoutes.Builder<JournalArticle, LongIdentifier> builder) {
+
+		return builder.addGetter(
+			this::_getJournalArticle
+		).addRemover(
+			this::_deleteJournalArticle
+		).addUpdater(
+			this::_updateJournalArticle
+		).build();
 	}
 
 	@Override
@@ -102,23 +135,6 @@ public class WebPageElementScopedCollectionResource
 			"text", JournalArticle::getContent
 		).addString(
 			"title", JournalArticle::getTitle
-		).build();
-	}
-
-	@Override
-	public Routes<JournalArticle> routes(
-		Routes.Builder<JournalArticle, LongIdentifier> builder) {
-
-		return builder.addCollectionPageGetter(
-			this::_getPageItems, LongIdentifier.class
-		).addCollectionPageItemCreator(
-			this::_addJournalArticle, LongIdentifier.class
-		).addCollectionPageItemGetter(
-			this::_getJournalArticle
-		).addCollectionPageItemRemover(
-			this::_deleteJournalArticle
-		).addCollectionPageItemUpdater(
-			this::_updateJournalArticle
 		).build();
 	}
 
