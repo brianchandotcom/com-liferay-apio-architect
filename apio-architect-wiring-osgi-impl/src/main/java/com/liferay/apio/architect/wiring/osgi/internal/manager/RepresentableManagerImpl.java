@@ -18,22 +18,14 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIP
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
-import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
-import com.liferay.apio.architect.documentation.APIDescription;
-import com.liferay.apio.architect.documentation.APITitle;
-import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.error.ApioDeveloperError;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
+import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.resource.ScopedCollectionResource;
-import com.liferay.apio.architect.routes.Routes;
-import com.liferay.apio.architect.wiring.osgi.manager.CollectionResourceManager;
-import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
-import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
+import com.liferay.apio.architect.wiring.osgi.manager.RepresentableManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 
 import java.util.ArrayList;
@@ -46,7 +38,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -54,29 +45,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class CollectionResourceManagerImpl
-	extends BaseManager<CollectionResource>
-	implements CollectionResourceManager {
-
-	@Activate
-	public void activate() {
-		RequestFunction<Optional<APITitle>> apiTitleRequestFunction =
-			httpServletRequest -> _providerManager.provideOptional(
-				APITitle.class, httpServletRequest);
-
-		RequestFunction<Optional<APIDescription>>
-			apiDescriptionRequestFunction =
-				httpServletRequest -> _providerManager.provideOptional(
-					APIDescription.class, httpServletRequest);
-
-		_documentation = new Documentation(
-			apiTitleRequestFunction, apiDescriptionRequestFunction);
-	}
-
-	@Override
-	public Documentation getDocumentation() {
-		return _documentation;
-	}
+public class RepresentableManagerImpl
+	extends BaseManager<Representable> implements RepresentableManager {
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -89,10 +59,9 @@ public class CollectionResourceManagerImpl
 
 	@Override
 	public Optional<String> getNameOptional(String className) {
-		Optional<CollectionResource> optional = _getCollectionResourceOptional(
-			className);
+		Optional<Representable> optional = getServiceOptional(className);
 
-		return optional.map(CollectionResource::getName);
+		return optional.map(Representable::getName);
 	}
 
 	@Override
@@ -106,28 +75,9 @@ public class CollectionResourceManagerImpl
 		return optional.map(representor -> (Representor<T, U>)representor);
 	}
 
-	@Override
-	public List<String> getRootCollectionResourceNames() {
-		return _rootCollectionResourceNames;
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> Optional<Routes<T>> getRoutesOptional(String name) {
-		Optional<Class<T>> optional = getModelClassOptional(name);
-
-		return optional.map(
-			Class::getName
-		).map(
-			_routesMap::get
-		).map(
-			routes -> (Routes<T>)routes
-		);
-	}
-
 	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
 	protected void setServiceReference(
-		ServiceReference<CollectionResource> serviceReference) {
+		ServiceReference<Representable> serviceReference) {
 
 		Optional<Class<Object>> optional = addService(serviceReference);
 
@@ -136,7 +86,7 @@ public class CollectionResourceManagerImpl
 
 	@SuppressWarnings("unused")
 	protected void unsetServiceReference(
-		ServiceReference<CollectionResource> serviceReference) {
+		ServiceReference<Representable> serviceReference) {
 
 		Optional<Class<Object>> optional = removeService(serviceReference);
 
@@ -144,10 +94,10 @@ public class CollectionResourceManagerImpl
 
 		optional.filter(
 			modelClass -> {
-				Optional<CollectionResource> collectionResourceOptional =
-					_getCollectionResourceOptional(modelClass.getName());
+				Optional<Representable> representableOptional =
+					getServiceOptional(modelClass);
 
-				return collectionResourceOptional.isPresent();
+				return representableOptional.isPresent();
 			}
 		).ifPresent(
 			this::_addModelClassMaps
@@ -160,49 +110,29 @@ public class CollectionResourceManagerImpl
 
 		String className = modelClass.getName();
 
-		Optional<CollectionResource> optional = _getCollectionResourceOptional(
-			className);
+		Optional<Representable> optional = getServiceOptional(className);
 
 		optional.map(
-			collectionResource -> (CollectionResource<T, U>)collectionResource
+			representable -> (Representable<T, U>)representable
 		).ifPresent(
-			collectionResource -> {
-				String name = collectionResource.getName();
+			representable -> {
+				String name = representable.getName();
 
 				_classes.put(name, modelClass);
 
-				if (!(collectionResource instanceof ScopedCollectionResource)) {
-					_rootCollectionResourceNames.add(name);
-				}
-
-				Class<U> identifierClass = _getIdentifierClass(
-					collectionResource);
+				Class<U> identifierClass = _getIdentifierClass(representable);
 
 				Supplier<List<RelatedCollection<T, ?>>>
 					relatedCollectionSupplier =
 						() -> (List)_relatedCollections.get(className);
 
-				Representor<T, U> representor = collectionResource.representor(
+				Representor<T, U> representor = representable.representor(
 					new Representor.Builder<>(
 						identifierClass,
 						_addRelatedCollectionTriConsumer(modelClass),
 						relatedCollectionSupplier));
 
 				_representorMap.put(className, representor);
-
-				RequestFunction<Function<Class<?>, Optional<?>>>
-					provideClassFunction =
-						httpServletRequest -> clazz ->
-							_providerManager.provideOptional(
-								clazz, httpServletRequest);
-
-				Routes.Builder<T, U> builder = new Routes.Builder<>(
-					modelClass, identifierClass, provideClassFunction,
-					_pathIdentifierMapperManager::map);
-
-				Routes<T> routes = collectionResource.routes(builder);
-
-				_routesMap.put(className, routes);
 			}
 		);
 	}
@@ -221,17 +151,10 @@ public class CollectionResourceManagerImpl
 		};
 	}
 
-	private Optional<CollectionResource> _getCollectionResourceOptional(
-		String modelClassName) {
-
-		return getServiceOptional(modelClassName);
-	}
-
 	private <T, U extends Identifier> Class<U> _getIdentifierClass(
-		CollectionResource<T, U> collectionResource) {
+		Representable<T, U> representable) {
 
-		Class<? extends CollectionResource> resourceClass =
-			collectionResource.getClass();
+		Class<? extends Representable> resourceClass = representable.getClass();
 
 		Try<Class<U>> classTry = GenericUtil.getGenericTypeArgumentTry(
 			resourceClass, 1);
@@ -246,34 +169,18 @@ public class CollectionResourceManagerImpl
 
 		classes.removeIf(next -> next.equals(modelClass));
 
-		Optional<String> optional = getNameOptional(modelClass.getName());
-
-		optional.ifPresent(_rootCollectionResourceNames::remove);
-
 		_relatedCollections.forEach(
 			(className, relatedCollections) -> relatedCollections.removeIf(
 				relatedCollection ->
 					relatedCollection.getModelClass().equals(modelClass)));
 
 		_representorMap.remove(modelClass.getName());
-
-		_routesMap.remove(modelClass.getName());
 	}
 
 	private final Map<String, Class<?>> _classes = new ConcurrentHashMap<>();
-	private Documentation _documentation;
-
-	@Reference
-	private PathIdentifierMapperManager _pathIdentifierMapperManager;
-
-	@Reference
-	private ProviderManager _providerManager;
-
 	private final Map<String, List<RelatedCollection<?, ?>>>
 		_relatedCollections = new ConcurrentHashMap<>();
 	private final Map<String, Representor<?, ?>> _representorMap =
 		new ConcurrentHashMap<>();
-	private final List<String> _rootCollectionResourceNames = new ArrayList<>();
-	private final Map<String, Routes<?>> _routesMap = new ConcurrentHashMap<>();
 
 }
