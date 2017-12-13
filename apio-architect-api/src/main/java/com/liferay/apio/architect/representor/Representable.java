@@ -12,21 +12,16 @@
  * details.
  */
 
-package com.liferay.apio.architect.resource;
+package com.liferay.apio.architect.representor;
 
 import aQute.bnd.annotation.ConsumerType;
 
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.routes.Routes;
+import com.liferay.apio.architect.representor.Representor.Builder;
 
 /**
- * Maps your domain models to resources that Apio can understand.
- *
- * <p>
- * Resources behave like an API so you must add the API's name via the {@link
- * #getName()} method.
- * </p>
+ * Instances of this interface represent the mapping between an internal model
+ * and its generic representation.
  *
  * <p>
  * Representors created by the {@link #representor(Representor.Builder)} method
@@ -35,18 +30,18 @@ import com.liferay.apio.architect.routes.Routes;
  * </p>
  *
  * <p>
- * You can add the different supported routes for the resource via the {@link
- * #routes(Routes.Builder)} method.
+ * The union of an instance of this interface and one or more routers from the
+ * {@code com.liferay.apio.architect.router} package, such as {@link
+ * com.liferay.apio.architect.router.ItemRouter} creates a complete resource
+ * that will behave as its own API.
  * </p>
  *
  * @author Alejandro Hernández
- * @author Carlos Sierra Andrés
- * @author Jorge Ferrer
  * @see    Representor.Builder
- * @see    Routes.Builder
+ * @review
  */
 @ConsumerType
-public interface CollectionResource<T, U extends Identifier> {
+public interface Representable<T, U extends Identifier> {
 
 	/**
 	 * Returns the resource's name.
@@ -70,16 +65,6 @@ public interface CollectionResource<T, U extends Identifier> {
 	 * @param builder the representor builder used to create the representor
 	 * @see   Representor.Builder
 	 */
-	public Representor<T, U> representor(Representor.Builder<T, U> builder);
-
-	/**
-	 * Creates the {@link Routes} supported by the {@code CollectionResource}.
-	 * Use the provided routes builder to create the {@code Routes} instance.
-	 *
-	 * @param builder the routes builder to use to create the {@code Routes}
-	 *        instance
-	 * @see   Routes.Builder
-	 */
-	public Routes<T> routes(Routes.Builder<T, U> builder);
+	public Representor<T, U> representor(Builder<T, U> builder);
 
 }
