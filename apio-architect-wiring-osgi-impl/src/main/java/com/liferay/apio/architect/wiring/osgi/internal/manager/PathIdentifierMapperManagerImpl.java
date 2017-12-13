@@ -19,7 +19,6 @@ import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.identifier.RootIdentifier;
 import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
@@ -45,10 +44,6 @@ public class PathIdentifierMapperManagerImpl
 			return Optional.of((T)new Identifier() {});
 		}
 
-		if (RootIdentifier.class == clazz) {
-			return Optional.of((T)new RootIdentifier() {});
-		}
-
 		Optional<PathIdentifierMapper> optional = getServiceOptional(clazz);
 
 		return optional.map(
@@ -66,10 +61,6 @@ public class PathIdentifierMapperManagerImpl
 		Class<U> modelClass) {
 
 		if (Identifier.class == identifierClass) {
-			return Optional.of(new Path());
-		}
-
-		if (RootIdentifier.class == identifierClass) {
 			return Optional.of(new Path());
 		}
 
