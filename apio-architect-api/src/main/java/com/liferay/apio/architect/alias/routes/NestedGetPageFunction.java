@@ -15,18 +15,19 @@
 package com.liferay.apio.architect.alias.routes;
 
 import com.liferay.apio.architect.alias.RequestFunction;
-import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.uri.Path;
 
-import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Defines a type alias for a function that can be used to create a collection
- * item.
+ * Defines a type alias for a function that can be used to get a nested
+ * collection page.
  *
  * @author Alejandro Hernández
  */
 @FunctionalInterface
-public interface CreateItemFunction<T>
-	extends RequestFunction<Function<Map<String, Object>, SingleModel<T>>> {
+public interface NestedGetPageFunction<T>
+	extends RequestFunction<Function<Path, Function<Identifier, Page<T>>>> {
 }

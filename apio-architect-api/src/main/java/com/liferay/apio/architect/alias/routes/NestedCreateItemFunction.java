@@ -15,18 +15,19 @@
 package com.liferay.apio.architect.alias.routes;
 
 import com.liferay.apio.architect.alias.RequestFunction;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Defines a type alias for a function that can be used to create a collection
- * item.
+ * Defines a type alias for a function that can be used to create a nested
+ * collection item.
  *
  * @author Alejandro Hernández
  */
 @FunctionalInterface
-public interface CreateItemFunction<T>
-	extends RequestFunction<Function<Map<String, Object>, SingleModel<T>>> {
+public interface NestedCreateItemFunction<T> extends RequestFunction
+	<Function<Identifier, Function<Map<String, Object>, SingleModel<T>>>> {
 }
