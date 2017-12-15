@@ -19,14 +19,11 @@ import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.consumer.TriConsumer;
-import com.liferay.apio.architect.error.ApioDeveloperError;
-import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.wiring.osgi.manager.RepresentableManager;
-import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -122,7 +119,8 @@ public class RepresentableManagerImpl
 
 				_classes.put(name, modelClass);
 
-				Class<U> identifierClass = _getIdentifierClass(representable);
+				Class<U> identifierClass = ManagerUtil.getTypeParamOrFail(
+					representable, Representable.class, 1);
 
 				Supplier<List<RelatedCollection<T, ?>>>
 					relatedCollectionSupplier =
@@ -151,19 +149,6 @@ public class RepresentableManagerImpl
 				new RelatedCollection<>(
 					key, relatedModelClass, identifierFunction));
 		};
-	}
-
-	private <T, U extends Identifier> Class<U> _getIdentifierClass(
-		Representable<T, U> representable) {
-
-		Class<? extends Representable> resourceClass = representable.getClass();
-
-		Try<Class<U>> classTry = GenericUtil.getGenericTypeArgumentTry(
-			resourceClass, Representable.class, 1);
-
-		return classTry.orElseThrow(
-			() -> new ApioDeveloperError.MustHaveValidGenericType(
-				resourceClass));
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {

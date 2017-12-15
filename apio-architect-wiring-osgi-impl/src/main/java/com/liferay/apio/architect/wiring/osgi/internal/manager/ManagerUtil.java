@@ -110,7 +110,7 @@ public class ManagerUtil {
 	 * @review
 	 */
 	public static <T, U> Class<U> getTypeParamOrFail(
-		T t, Class<?> interfaceClass, Integer position) {
+		T t, Class<T> interfaceClass, Integer position) {
 
 		Class<?> clazz = t.getClass();
 
