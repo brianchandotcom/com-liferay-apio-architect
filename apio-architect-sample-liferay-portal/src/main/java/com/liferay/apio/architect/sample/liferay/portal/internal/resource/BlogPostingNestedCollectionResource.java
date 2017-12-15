@@ -18,10 +18,8 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.router.ItemRouter;
-import com.liferay.apio.architect.router.NestedCollectionRouter;
+import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.AggregateRatingIdentifier;
@@ -69,15 +67,10 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(
-	immediate = true,
-	service =
-		{ItemRouter.class, NestedCollectionRouter.class, Representable.class}
-)
+@Component(immediate = true)
 public class BlogPostingNestedCollectionResource
-	implements ItemRouter<BlogsEntry, LongIdentifier>,
-			   NestedCollectionRouter<BlogsEntry, WebSite, LongIdentifier>,
-			   Representable<BlogsEntry, LongIdentifier> {
+	implements NestedCollectionResource
+		<BlogsEntry, LongIdentifier, WebSite, LongIdentifier> {
 
 	@Override
 	public NestedCollectionRoutes<BlogsEntry> collectionRoutes(

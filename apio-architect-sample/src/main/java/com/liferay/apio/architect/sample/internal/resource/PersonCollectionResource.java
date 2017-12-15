@@ -17,10 +17,8 @@ package com.liferay.apio.architect.sample.internal.resource;
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.router.CollectionRouter;
-import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.model.Person;
@@ -43,13 +41,9 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component(
-	immediate = true,
-	service = {CollectionRouter.class, ItemRouter.class, Representable.class}
-)
+@Component(immediate = true)
 public class PersonCollectionResource
-	implements CollectionRouter<Person>, ItemRouter<Person, LongIdentifier>,
-			   Representable<Person, LongIdentifier> {
+	implements CollectionResource<Person, LongIdentifier> {
 
 	@Override
 	public CollectionRoutes<Person> collectionRoutes(

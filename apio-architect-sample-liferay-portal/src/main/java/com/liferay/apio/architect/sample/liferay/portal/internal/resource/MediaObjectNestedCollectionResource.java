@@ -17,10 +17,8 @@ package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.router.ItemRouter;
-import com.liferay.apio.architect.router.NestedCollectionRouter;
+import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.blogs.kernel.exception.NoSuchEntryException;
@@ -53,15 +51,10 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Javier Gamarra
  */
-@Component(
-	immediate = true,
-	service =
-		{ItemRouter.class, NestedCollectionRouter.class, Representable.class}
-)
+@Component(immediate = true)
 public class MediaObjectNestedCollectionResource
-	implements ItemRouter<DLFileEntry, LongIdentifier>,
-			   NestedCollectionRouter<DLFileEntry, DLFolder, LongIdentifier>,
-			   Representable<DLFileEntry, LongIdentifier> {
+	implements NestedCollectionResource
+		<DLFileEntry, LongIdentifier, DLFolder, LongIdentifier> {
 
 	@Override
 	public NestedCollectionRoutes<DLFileEntry> collectionRoutes(

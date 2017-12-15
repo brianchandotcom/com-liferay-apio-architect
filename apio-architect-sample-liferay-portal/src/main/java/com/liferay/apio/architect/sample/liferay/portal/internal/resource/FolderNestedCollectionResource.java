@@ -19,10 +19,8 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.router.ItemRouter;
-import com.liferay.apio.architect.router.NestedCollectionRouter;
+import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSite;
@@ -52,15 +50,10 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Javier Gamarra
  */
-@Component(
-	immediate = true,
-	service =
-		{ItemRouter.class, NestedCollectionRouter.class, Representable.class}
-)
+@Component(immediate = true)
 public class FolderNestedCollectionResource
-	implements ItemRouter<DLFolder, LongIdentifier>,
-			   NestedCollectionRouter<DLFolder, WebSite, LongIdentifier>,
-			   Representable<DLFolder, LongIdentifier> {
+	implements NestedCollectionResource
+		<DLFolder, LongIdentifier, WebSite, LongIdentifier> {
 
 	@Override
 	public NestedCollectionRoutes<DLFolder> collectionRoutes(

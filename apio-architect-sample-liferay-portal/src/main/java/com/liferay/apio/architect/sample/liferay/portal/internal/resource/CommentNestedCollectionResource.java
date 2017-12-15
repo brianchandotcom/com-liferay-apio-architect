@@ -19,9 +19,8 @@ import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.liferay.portal.context.CurrentUser;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.resource.ItemResource;
 import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
@@ -63,16 +62,9 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component(
-	immediate = true,
-	service = {
-		ItemRouter.class, Representable.class,
-		ReusableNestedCollectionRouter.class
-	}
-)
+@Component(immediate = true)
 public class CommentNestedCollectionResource
-	implements ItemRouter<Comment, LongIdentifier>,
-			   Representable<Comment, LongIdentifier>,
+	implements ItemResource<Comment, LongIdentifier>,
 			   ReusableNestedCollectionRouter<Comment, CommentableIdentifier> {
 
 	@Override

@@ -14,9 +14,8 @@
 
 package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 
-import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.resource.ItemResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRating;
@@ -31,10 +30,9 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true, service = {ItemRouter.class, Representable.class})
+@Component(immediate = true)
 public class AggregateRatingNestedCollectionResource
-	implements Representable<AggregateRating, AggregateRatingIdentifier>,
-			   ItemRouter<AggregateRating, AggregateRatingIdentifier> {
+	implements ItemResource<AggregateRating, AggregateRatingIdentifier> {
 
 	@Override
 	public String getName() {

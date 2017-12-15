@@ -18,10 +18,8 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.router.CollectionRouter;
-import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
@@ -62,13 +60,9 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(
-	immediate = true,
-	service = {CollectionRouter.class, ItemRouter.class, Representable.class}
-)
+@Component(immediate = true)
 public class PersonCollectionResource
-	implements CollectionRouter<User>, ItemRouter<User, LongIdentifier>,
-			   Representable<User, LongIdentifier> {
+	implements CollectionResource<User, LongIdentifier> {
 
 	@Override
 	public CollectionRoutes<User> collectionRoutes(
