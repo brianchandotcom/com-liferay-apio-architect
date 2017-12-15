@@ -34,9 +34,8 @@ import org.osgi.service.component.annotations.Reference;
  * versa.
  *
  * <p>
- * The {@code AggregateRatingPathIdentifierMapper} can then be provided as a
- * parameter in the methods of {@link
- * com.liferay.apio.architect.routes.Routes.Builder}.
+ * The {@code AggregateRatingPathIdentifierMapper} can then be used as the
+ * identifier of a resource.
  * </p>
  *
  * @author Alejandro Hernández

@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Lets resources provide {@link Pagination} as a parameter in the methods of
- * {@link Routes.Builder}.
+ * the different routes builders.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

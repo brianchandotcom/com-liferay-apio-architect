@@ -29,8 +29,7 @@ import org.osgi.service.component.annotations.Reference;
  * Maps a {@link Path} to a {@link StringIdentifier}, and vice versa.
  *
  * <p>
- * {@code StringIdentifier} can then be provided as a parameter in the methods
- * of {@link Routes.Builder}.
+ * {@code StringIdentifier} can then be used as the identifier of a resource.
  * </p>
  *
  * @author Alejandro Hernández

@@ -17,7 +17,6 @@ package com.liferay.apio.architect.response.control.internal;
 import com.liferay.apio.architect.provider.Provider;
 import com.liferay.apio.architect.response.control.Embedded;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -28,8 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Lets resources provide {@link Embedded} as a parameter in the methods of
- * {@link Routes.Builder}.
+ * Lets consumers use the {@code embedded} affordance in order to embed inner
+ * resources in representations.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés

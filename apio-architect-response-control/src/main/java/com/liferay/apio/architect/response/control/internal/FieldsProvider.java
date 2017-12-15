@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,8 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Lets resources provide {@link Fields} as a parameter in the methods of {@link
- * com.liferay.apio.architect.routes.Routes.Builder}.
+ * Lets consumers use the {@code fields} affordance in order to select which
+ * fields must be included in representations.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
