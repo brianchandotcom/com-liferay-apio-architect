@@ -32,15 +32,6 @@ import java.util.Optional;
 public interface CollectionRouterManager {
 
 	/**
-	 * Returns a list containing the names of the resources with routes in this
-	 * manager.
-	 *
-	 * @return a list containing the names of the resources with routes in this
-	 *         manager
-	 */
-	public List<String> getAllResourceNames();
-
-	/**
 	 * Returns the collection routes for the collection resource's name.
 	 *
 	 * @param  name the collection resource's name
@@ -48,5 +39,14 @@ public interface CollectionRouterManager {
 	 */
 	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
 		String name);
+
+	/**
+	 * Returns a list containing the names of the resources with routes in this
+	 * manager.
+	 *
+	 * @return a list containing the names of the resources with routes in this
+	 *         manager
+	 */
+	public List<String> getResourceNames();
 
 }

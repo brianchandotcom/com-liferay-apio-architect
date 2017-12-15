@@ -239,8 +239,8 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public String getHome() {
-		List<String> rootCollectionResourceNames =
-			_collectionRouterManager.getAllResourceNames();
+		List<String> resourceNames =
+			_collectionRouterManager.getResourceNames();
 
 		Optional<ServerURL> optional = _providerManager.provideOptional(
 			ServerURL.class, _httpServletRequest);
@@ -250,7 +250,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		JsonObject resourcesJsonObject = new JsonObject();
 
-		rootCollectionResourceNames.forEach(
+		resourceNames.forEach(
 			name -> {
 				String url = serverURL.get() + "/p/" + name;
 

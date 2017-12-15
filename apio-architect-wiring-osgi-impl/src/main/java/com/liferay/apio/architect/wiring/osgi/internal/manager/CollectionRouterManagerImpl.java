@@ -47,23 +47,6 @@ public class CollectionRouterManagerImpl
 	extends BaseManager<CollectionRouter> implements CollectionRouterManager {
 
 	@Override
-	public List<String> getAllResourceNames() {
-		Set<String> keys = _collectionRoutesMap.keySet();
-
-		Stream<String> stream = keys.stream();
-
-		return stream.map(
-			className -> _representableManager.getNameOptional(className)
-		).filter(
-			Optional::isPresent
-		).map(
-			Optional::get
-		).collect(
-			Collectors.toList()
-		);
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
 		String name) {
@@ -77,6 +60,23 @@ public class CollectionRouterManagerImpl
 			_collectionRoutesMap::get
 		).map(
 			routes -> (CollectionRoutes<T>)routes
+		);
+	}
+
+	@Override
+	public List<String> getResourceNames() {
+		Set<String> keys = _collectionRoutesMap.keySet();
+
+		Stream<String> stream = keys.stream();
+
+		return stream.map(
+			className -> _representableManager.getNameOptional(className)
+		).filter(
+			Optional::isPresent
+		).map(
+			Optional::get
+		).collect(
+			Collectors.toList()
 		);
 	}
 
