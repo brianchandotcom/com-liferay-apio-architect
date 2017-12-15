@@ -92,9 +92,10 @@ public class RootEndpointImpl implements RootEndpoint {
 	public <T> Try<SingleModel<T>> addCollectionItem(
 		String name, Map<String, Object> body) {
 
-		Try<CollectionRoutes<T>> routesTry = _getCollectionRoutesTry(name);
+		Try<CollectionRoutes<T>> collectionRoutesTry = _getCollectionRoutesTry(
+			name);
 
-		return routesTry.map(
+		return collectionRoutesTry.map(
 			CollectionRoutes::getCreateItemFunctionOptional
 		).map(
 			Optional::get
@@ -112,10 +113,10 @@ public class RootEndpointImpl implements RootEndpoint {
 	public <T> Try<SingleModel<T>> addNestedCollectionItem(
 		String name, String id, String nestedName, Map<String, Object> body) {
 
-		Try<NestedCollectionRoutes<T>> routesTry =
+		Try<NestedCollectionRoutes<T>> nestedCollectionRoutesTry =
 			_getNestedCollectionRoutesTry(name, nestedName);
 
-		return routesTry.map(
+		return nestedCollectionRoutesTry.map(
 			NestedCollectionRoutes::getNestedCreateItemFunctionOptional
 		).map(
 			Optional::get
@@ -145,9 +146,9 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public Response deleteCollectionItem(String name, String id) {
-		Try<ItemRoutes<Object>> routesTry = _getItemRoutesTry(name);
+		Try<ItemRoutes<Object>> itemRoutesTry = _getItemRoutesTry(name);
 
-		routesTry.map(
+		itemRoutesTry.map(
 			ItemRoutes::getDeleteConsumerOptional
 		).map(
 			Optional::get
@@ -197,9 +198,9 @@ public class RootEndpointImpl implements RootEndpoint {
 	public <T> Try<SingleModel<T>> getCollectionItemSingleModelTry(
 		String name, String id) {
 
-		Try<ItemRoutes<T>> routesTry = _getItemRoutesTry(name);
+		Try<ItemRoutes<T>> itemRoutesTry = _getItemRoutesTry(name);
 
-		return routesTry.map(
+		return itemRoutesTry.map(
 			ItemRoutes::getItemFunctionOptional
 		).map(
 			Optional::get
@@ -215,9 +216,10 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public <T> Try<Page<T>> getCollectionPageTry(String name) {
-		Try<CollectionRoutes<T>> routesTry = _getCollectionRoutesTry(name);
+		Try<CollectionRoutes<T>> collectionRoutesTry = _getCollectionRoutesTry(
+			name);
 
-		return routesTry.map(
+		return collectionRoutesTry.map(
 			CollectionRoutes::getGetPageFunctionOptional
 		).map(
 			Optional::get
@@ -270,10 +272,10 @@ public class RootEndpointImpl implements RootEndpoint {
 	public <T> Try<Page<T>> getNestedCollectionPageTry(
 		String name, String id, String nestedName) {
 
-		Try<NestedCollectionRoutes<T>> routesTry =
+		Try<NestedCollectionRoutes<T>> nestedCollectionRoutesTry =
 			_getNestedCollectionRoutesTry(name, nestedName);
 
-		return routesTry.map(
+		return nestedCollectionRoutesTry.map(
 			NestedCollectionRoutes::getNestedGetPageFunctionOptional
 		).map(
 			Optional::get
@@ -296,9 +298,9 @@ public class RootEndpointImpl implements RootEndpoint {
 	public <T> Try<SingleModel<T>> updateCollectionItem(
 		String name, String id, Map<String, Object> body) {
 
-		Try<ItemRoutes<T>> routesTry = _getItemRoutesTry(name);
+		Try<ItemRoutes<T>> itemRoutesTry = _getItemRoutesTry(name);
 
-		return routesTry.map(
+		return itemRoutesTry.map(
 			ItemRoutes::getUpdateItemFunctionOptional
 		).map(
 			Optional::get
