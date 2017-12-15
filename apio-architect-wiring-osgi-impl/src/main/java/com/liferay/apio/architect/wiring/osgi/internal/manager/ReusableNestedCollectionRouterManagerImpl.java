@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getTypeParamOrFail;
+
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
@@ -103,12 +105,13 @@ public class ReusableNestedCollectionRouterManagerImpl
 			modelClass);
 
 		optional.map(
-			nestedCollectionRouter ->
-				(ReusableNestedCollectionRouter<T, U>)nestedCollectionRouter
+			reusableNestedCollectionRouter ->
+				(ReusableNestedCollectionRouter<T, U>)
+					reusableNestedCollectionRouter
 		).ifPresent(
-			nestedCollectionRouter -> {
-				Class<U> identifierClass = ManagerUtil.getTypeParamOrFail(
-					nestedCollectionRouter,
+			reusableNestedCollectionRouter -> {
+				Class<U> identifierClass = getTypeParamOrFail(
+					reusableNestedCollectionRouter,
 					ReusableNestedCollectionRouter.class, 1);
 
 				RequestFunction<Function<Class<?>, Optional<?>>>
@@ -121,7 +124,7 @@ public class ReusableNestedCollectionRouterManagerImpl
 					modelClass, identifierClass, provideClassFunction);
 
 				NestedCollectionRoutes<T> routes =
-					nestedCollectionRouter.collectionRoutes(builder);
+					reusableNestedCollectionRouter.collectionRoutes(builder);
 
 				_routesMap.put(modelClass.getName(), routes);
 			}
