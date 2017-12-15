@@ -76,15 +76,17 @@ public class FieldsProvider implements Provider<Fields> {
 		return types -> field -> {
 			Stream<String> typesStream = types.stream();
 
-			return typesStream.map(
+			List<String> fields = typesStream.map(
 				fieldsMap::get
 			).filter(
 				Objects::nonNull
 			).flatMap(
 				List::stream
-			).anyMatch(
-				field::equals
+			).collect(
+				Collectors.toList()
 			);
+
+			return fields.isEmpty() || fields.contains(field);
 		};
 	}
 
