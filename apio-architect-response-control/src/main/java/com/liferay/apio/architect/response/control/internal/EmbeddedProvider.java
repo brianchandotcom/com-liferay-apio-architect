@@ -42,10 +42,10 @@ public class EmbeddedProvider implements Provider<Embedded> {
 		String embedded = httpServletRequest.getParameter("embedded");
 
 		if (embedded != null) {
-			return new EmbeddedImpl(Arrays.asList(_pattern.split(embedded)));
+			return () -> Arrays.asList(_pattern.split(embedded))::contains;
 		}
 
-		return new EmbeddedImpl(new ArrayList<>());
+		return () -> __ -> false;
 	}
 
 	public static class EmbeddedImpl implements Embedded {

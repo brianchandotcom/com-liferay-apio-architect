@@ -74,41 +74,19 @@ public class FieldsProvider implements Provider<Fields> {
 				entry -> Arrays.asList(entry.getValue()[0].split(",")))
 		);
 
-		return new FieldsImpl(fieldsMap);
-	}
+		return types -> field -> {
+			Stream<String> typesStream = types.stream();
 
-	public static class FieldsImpl implements Fields {
-
-		public FieldsImpl(Map<String, List<String>> fieldsMap) {
-			_fieldsMap = fieldsMap;
-		}
-
-		@Override
-		public Predicate<String> getFieldsPredicate(List<String> types) {
-			return field -> {
-				Stream<String> stream = types.stream();
-
-				List<String> fields = stream.map(
-					_fieldsMap::get
-				).filter(
-					Objects::nonNull
-				).flatMap(
-					List::stream
-				).collect(
-					Collectors.toList()
-				);
-
-				if (fields.isEmpty() || fields.contains(field)) {
-					return true;
-				}
-				else {
-					return false;
-				}
-			};
-		}
-
-		private final Map<String, List<String>> _fieldsMap;
-
+			return typesStream.map(
+				fieldsMap::get
+			).filter(
+				Objects::nonNull
+			).flatMap(
+				List::stream
+			).anyMatch(
+				field::equals
+			);
+		};
 	}
 
 	private static final String _REGEXP = "fields\\[([A-Z|a-z]+)]";

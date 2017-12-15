@@ -51,13 +51,7 @@ public class PaginationProvider implements Provider<Pagination> {
 		return stringTry.map(
 			Integer::parseInt
 		).filter(
-			integer -> {
-				if (integer > 0) {
-					return true;
-				}
-
-				return false;
-			}
+			integer -> integer > 0
 		).orElse(
 			defaultValue
 		);
