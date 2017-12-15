@@ -14,6 +14,10 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getTypeParamOrFail;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.ITEM_IDENTIFIER_CLASS;
+
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
@@ -79,7 +83,8 @@ public class RepresentableManagerImpl
 		Optional<Class<Object>> optional = addService(
 			serviceReference, Representable.class);
 
-		optional.ifPresent(this::_addModelClassMaps);
+		optional.ifPresent(
+			modelClass -> _addModelClassMaps(serviceReference, modelClass));
 	}
 
 	@SuppressWarnings("unused")
@@ -99,13 +104,13 @@ public class RepresentableManagerImpl
 				return representableOptional.isPresent();
 			}
 		).ifPresent(
-			this::_addModelClassMaps
+			modelClass -> _addModelClassMaps(serviceReference, modelClass)
 		);
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T, U extends Identifier> void _addModelClassMaps(
-		Class<T> modelClass) {
+		ServiceReference<Representable> serviceReference, Class<T> modelClass) {
 
 		String className = modelClass.getName();
 
@@ -119,8 +124,10 @@ public class RepresentableManagerImpl
 
 				_classes.put(name, modelClass);
 
-				Class<U> identifierClass = ManagerUtil.getTypeParamOrFail(
-					representable, Representable.class, 1);
+				Class<U> identifierClass = getGenericClassFromPropertyOrElse(
+					serviceReference, ITEM_IDENTIFIER_CLASS,
+					() -> getTypeParamOrFail(
+						representable, Representable.class, 1));
 
 				Supplier<List<RelatedCollection<T, ?>>>
 					relatedCollectionSupplier =

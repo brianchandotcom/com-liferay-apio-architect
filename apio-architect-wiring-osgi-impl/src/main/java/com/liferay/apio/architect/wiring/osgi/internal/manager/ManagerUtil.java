@@ -21,7 +21,9 @@ import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Objects;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -73,6 +75,37 @@ public class ManagerUtil {
 
 				return bundleContext.registerService(classes, t, properties);
 			});
+	}
+
+	/**
+	 * Returns the generic class stored inside the properties of a {@code
+	 * ServiceReference}, if it's present and a {@code Class}. Returns the
+	 * result of the provided {@code Supplier} otherwise.
+	 *
+	 * @param  serviceReference the service reference
+	 * @param  resourceClass the resource class to retrieve
+	 * @param  supplier the supplier to call if the property is not found or is
+	 *         not a {@code Class}
+	 * @return the generic class stored inside the properties of a {@code
+	 *         ServiceReference}, if it's present and a {@code Class}; the
+	 *         result of the provided {@code Supplier} otherwise.
+	 * @review
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getGenericClassFromPropertyOrElse(
+		ServiceReference serviceReference, ResourceClass resourceClass,
+		Supplier<Class<T>> supplier) {
+
+		Try<Object> propertyTry = Try.success(
+			serviceReference.getProperty(resourceClass.getName()));
+
+		return propertyTry.filter(
+			Objects::nonNull
+		).map(
+			property -> (Class<T>)property
+		).orElseGet(
+			supplier
+		);
 	}
 
 	/**

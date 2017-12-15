@@ -14,6 +14,9 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.MODEL_CLASS;
+
 import com.liferay.apio.architect.error.ApioDeveloperError;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
@@ -60,7 +63,9 @@ public abstract class BaseManager<T> {
 			return Optional.empty();
 		}
 
-		Class<U> genericClass = _getGenericClass(service, managedClass);
+		Class<U> genericClass = getGenericClassFromPropertyOrElse(
+			serviceReference, MODEL_CLASS,
+			() -> _getGenericClass(service, managedClass));
 
 		_services.computeIfAbsent(
 			genericClass.getName(), name -> new TreeSet<>());

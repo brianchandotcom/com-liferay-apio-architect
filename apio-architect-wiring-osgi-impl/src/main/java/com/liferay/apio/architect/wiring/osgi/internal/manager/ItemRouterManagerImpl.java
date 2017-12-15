@@ -14,6 +14,10 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getTypeParamOrFail;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.ITEM_IDENTIFIER_CLASS;
+
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
@@ -66,7 +70,8 @@ public class ItemRouterManagerImpl
 		Optional<Class<Object>> optional = addService(
 			serviceReference, ItemRouter.class);
 
-		optional.ifPresent(this::_addRoutes);
+		optional.ifPresent(
+			modelClass -> _addRoutes(serviceReference, modelClass));
 	}
 
 	@SuppressWarnings("unused")
@@ -90,26 +95,29 @@ public class ItemRouterManagerImpl
 				return itemRouterOptional.isPresent();
 			}
 		).ifPresent(
-			this::_addRoutes
+			modelClass -> _addRoutes(serviceReference, modelClass)
 		);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T, U extends Identifier> void _addRoutes(Class<T> modelClass) {
+	private <T, U extends Identifier> void _addRoutes(
+		ServiceReference<ItemRouter> serviceReference, Class<T> modelClass) {
+
 		Optional<ItemRouter> optional = getServiceOptional(modelClass);
 
 		optional.map(
 			itemRouter -> (ItemRouter<T, U>)itemRouter
 		).ifPresent(
-			itemRouter -> {
+			(ItemRouter<T, U> itemRouter) -> {
 				RequestFunction<Function<Class<?>, Optional<?>>>
 					provideClassFunction =
 						httpServletRequest -> clazz ->
 							_providerManager.provideOptional(
 								clazz, httpServletRequest);
 
-				Class<U> identifierClass = ManagerUtil.getTypeParamOrFail(
-					itemRouter, ItemRouter.class, 1);
+				Class<U> identifierClass = getGenericClassFromPropertyOrElse(
+					serviceReference, ITEM_IDENTIFIER_CLASS,
+					() -> getTypeParamOrFail(itemRouter, ItemRouter.class, 1));
 
 				Builder<T, U> builder = new Builder<>(
 					modelClass, identifierClass, provideClassFunction,

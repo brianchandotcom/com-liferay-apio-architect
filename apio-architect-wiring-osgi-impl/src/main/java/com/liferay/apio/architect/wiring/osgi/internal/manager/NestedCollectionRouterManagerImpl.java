@@ -14,6 +14,11 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getTypeParamOrFail;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.PARENT_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.PARENT_MODEL_CLASS;
+
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
@@ -77,7 +82,8 @@ public class NestedCollectionRouterManagerImpl
 		Optional<Class<Object>> optional = addService(
 			serviceReference, NestedCollectionRouter.class);
 
-		optional.ifPresent(this::_addRoutes);
+		optional.ifPresent(
+			modelClass -> _addRoutes(serviceReference, modelClass));
 	}
 
 	@SuppressWarnings("unused")
@@ -102,12 +108,15 @@ public class NestedCollectionRouterManagerImpl
 				return nestedCollectionRouterOptional.isPresent();
 			}
 		).ifPresent(
-			this::_addRoutes
+			modelClass -> _addRoutes(serviceReference, modelClass)
 		);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T, U, V extends Identifier> void _addRoutes(Class<T> modelClass) {
+	private <T, U, V extends Identifier> void _addRoutes(
+		ServiceReference<NestedCollectionRouter> serviceReference,
+		Class<T> modelClass) {
+
 		Optional<NestedCollectionRouter> optional = getServiceOptional(
 			modelClass);
 
@@ -116,11 +125,17 @@ public class NestedCollectionRouterManagerImpl
 				(NestedCollectionRouter<T, U, V>)nestedCollectionRouter
 		).ifPresent(
 			nestedCollectionRouter -> {
-				Class<U> parentClass = ManagerUtil.getTypeParamOrFail(
-					nestedCollectionRouter, NestedCollectionRouter.class, 1);
+				Class<U> parentClass = getGenericClassFromPropertyOrElse(
+					serviceReference, PARENT_MODEL_CLASS,
+					() -> getTypeParamOrFail(
+						nestedCollectionRouter, NestedCollectionRouter.class,
+						1));
 
-				Class<V> identifierClass = ManagerUtil.getTypeParamOrFail(
-					nestedCollectionRouter, NestedCollectionRouter.class, 2);
+				Class<V> identifierClass = getGenericClassFromPropertyOrElse(
+					serviceReference, PARENT_IDENTIFIER_CLASS,
+					() -> getTypeParamOrFail(
+						nestedCollectionRouter, NestedCollectionRouter.class,
+						2));
 
 				RequestFunction<Function<Class<?>, Optional<?>>>
 					provideClassFunction =
