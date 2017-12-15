@@ -15,6 +15,11 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.createServiceTracker;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getTypeParamOrFail;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.ITEM_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.MODEL_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.PARENT_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.PARENT_MODEL_CLASS;
 
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.resource.NestedCollectionResource;
@@ -47,7 +52,30 @@ public class NestedCollectionResourceManager {
 		};
 
 		_serviceTracker = createServiceTracker(
-			bundleContext, NestedCollectionResource.class, classes);
+			bundleContext, NestedCollectionResource.class, classes,
+			(properties, service) -> {
+				Class<?> modelClass = getTypeParamOrFail(
+					service, NestedCollectionResource.class, 0);
+
+				properties.put(MODEL_CLASS.getName(), modelClass);
+
+				Class<?> identifierClass = getTypeParamOrFail(
+					service, NestedCollectionResource.class, 1);
+
+				properties.put(
+					ITEM_IDENTIFIER_CLASS.getName(), identifierClass);
+
+				Class<?> parentClass = getTypeParamOrFail(
+					service, NestedCollectionResource.class, 2);
+
+				properties.put(PARENT_MODEL_CLASS.getName(), parentClass);
+
+				Class<?> parentIdentifierClass = getTypeParamOrFail(
+					service, NestedCollectionResource.class, 3);
+
+				properties.put(
+					PARENT_IDENTIFIER_CLASS.getName(), parentIdentifierClass);
+			});
 
 		_serviceTracker.open();
 	}

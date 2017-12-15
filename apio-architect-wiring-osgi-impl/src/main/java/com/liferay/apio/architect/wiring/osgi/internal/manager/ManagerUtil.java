@@ -21,6 +21,7 @@ import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.function.BiConsumer;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -43,12 +44,15 @@ public class ManagerUtil {
 	 * @param  clazz the managed class
 	 * @param  classes the list of classes with which the service will be
 	 *         registered
+	 * @param  biConsumer function that can be used to alter the properties
+	 *         dictionary
 	 * @return the service tracker
 	 * @review
 	 */
 	public static <T> ServiceTracker<T, ServiceRegistration<?>>
 		createServiceTracker(
-			BundleContext bundleContext, Class<T> clazz, String[] classes) {
+			BundleContext bundleContext, Class<T> clazz, String[] classes,
+			BiConsumer<Dictionary<String, Object>, T> biConsumer) {
 
 		return new ServiceTracker<>(
 			bundleContext, clazz,
@@ -64,6 +68,8 @@ public class ManagerUtil {
 				catch (Exception e) {
 					return null;
 				}
+
+				biConsumer.accept(properties, t);
 
 				return bundleContext.registerService(classes, t, properties);
 			});
