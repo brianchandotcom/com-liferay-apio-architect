@@ -19,7 +19,7 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.wiring.osgi.manager.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 
 import java.util.Optional;
 

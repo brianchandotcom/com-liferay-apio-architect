@@ -12,11 +12,11 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getGenericClassFromPropertyOrElse;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getTypeParamOrFail;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.ITEM_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.ITEM_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
@@ -27,7 +27,8 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.wiring.osgi.manager.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 
 import java.util.ArrayList;
 import java.util.Collection;

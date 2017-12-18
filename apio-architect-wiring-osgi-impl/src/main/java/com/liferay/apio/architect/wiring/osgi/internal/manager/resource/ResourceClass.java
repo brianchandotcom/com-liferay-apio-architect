@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager.resource;
 
 /**
  * Constants for {@code ServiceReference}'s properties that store the generic

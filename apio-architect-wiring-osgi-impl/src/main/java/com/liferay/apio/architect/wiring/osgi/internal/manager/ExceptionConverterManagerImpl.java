@@ -20,6 +20,7 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 
 import com.liferay.apio.architect.converter.ExceptionConverter;
 import com.liferay.apio.architect.error.APIError;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ExceptionConverterManager;
 
 import java.util.Optional;

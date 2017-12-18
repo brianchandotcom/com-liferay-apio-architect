@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.manager.service.tracker.customizer;
+package com.liferay.apio.architect.wiring.osgi.internal.service.tracker.customizer;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getProperties;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getProperties;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;

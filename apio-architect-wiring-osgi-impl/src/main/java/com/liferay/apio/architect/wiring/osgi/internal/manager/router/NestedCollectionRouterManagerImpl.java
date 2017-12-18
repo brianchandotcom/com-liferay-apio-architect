@@ -12,12 +12,12 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getGenericClassFromPropertyOrElse;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getTypeParamOrFail;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.PARENT_IDENTIFIER_CLASS;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.PARENT_MODEL_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.PARENT_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.PARENT_MODEL_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
@@ -28,9 +28,10 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.router.NestedCollectionRouter;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
-import com.liferay.apio.architect.wiring.osgi.manager.NestedCollectionRouterManager;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
-import com.liferay.apio.architect.wiring.osgi.manager.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
 
 import java.util.Map;
 import java.util.Optional;

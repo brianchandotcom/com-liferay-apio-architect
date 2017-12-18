@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager.base;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerUtil.getGenericClassFromPropertyOrElse;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ResourceClass.MODEL_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.MODEL_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 
 import com.liferay.apio.architect.error.ApioDeveloperError;
 import com.liferay.apio.architect.functional.Try;

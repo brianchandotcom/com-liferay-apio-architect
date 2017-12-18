@@ -18,7 +18,7 @@ import com.liferay.apio.architect.error.ApioDeveloperError.UnresolvableURI;
 import com.liferay.apio.architect.identifier.StringIdentifier;
 import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.wiring.osgi.manager.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 
 import java.util.Optional;
 

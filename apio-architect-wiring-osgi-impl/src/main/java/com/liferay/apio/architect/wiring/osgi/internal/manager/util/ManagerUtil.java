@@ -12,11 +12,12 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager.util;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.service.tracker.customizer.BaseServiceTrackerCustomizer;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass;
+import com.liferay.apio.architect.wiring.osgi.internal.service.tracker.customizer.BaseServiceTrackerCustomizer;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 
 import java.util.Dictionary;

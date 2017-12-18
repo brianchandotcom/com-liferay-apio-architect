@@ -21,6 +21,7 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 
 import java.util.Optional;
