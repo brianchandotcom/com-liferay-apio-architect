@@ -14,23 +14,16 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.base;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.MODEL_CLASS;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory.openSingleValueMap;
 
-import com.liferay.apio.architect.error.ApioDeveloperError;
-import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
+import com.liferay.apio.architect.wiring.osgi.internal.service.reference.mapper.CustomServiceReferenceMapper;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Deactivate;
 
 /**
  * Manages services that have a generic type.
@@ -39,47 +32,26 @@ import org.osgi.framework.ServiceReference;
  */
 public abstract class BaseManager<T> {
 
-	public BaseManager() {
-		Bundle bundle = FrameworkUtil.getBundle(BaseManager.class);
+	@Activate
+	public void activate(BundleContext bundleContext) {
+		_serviceTrackerMap = openSingleValueMap(
+			bundleContext, getManagedClass(), null,
+			new CustomServiceReferenceMapper<>(
+				bundleContext, getManagedClass()));
+	}
 
-		_bundleContext = bundle.getBundleContext();
+	@Deactivate
+	public void deactivate() {
+		_serviceTrackerMap.close();
 	}
 
 	/**
-	 * Adds a new {@code serviceReference/service} tuple to the internal map, if
-	 * a valid service can be obtained. Returns {@code Optional#empty()}
-	 * otherwise.
+	 * Returns the managed class.
 	 *
-	 * @param  serviceReference the service reference
-	 * @return the generic inner class of the service reference's service, if a
-	 *         valid service can be obtained; {@code Optional#empty()} otherwise
+	 * @return the managed class
+	 * @review
 	 */
-	protected <U> Optional<Class<U>> addService(
-		ServiceReference<T> serviceReference, Class<T> managedClass) {
-
-		T service = _bundleContext.getService(serviceReference);
-
-		if (service == null) {
-			return Optional.empty();
-		}
-
-		Class<U> genericClass = getGenericClassFromPropertyOrElse(
-			serviceReference, MODEL_CLASS,
-			() -> _getGenericClass(service, managedClass));
-
-		_services.computeIfAbsent(
-			genericClass.getName(), name -> new TreeSet<>());
-
-		TreeSet<ServiceReferenceServiceTuple<T>> serviceReferenceServiceTuples =
-			_services.get(genericClass.getName());
-
-		ServiceReferenceServiceTuple<T> serviceReferenceServiceTuple =
-			new ServiceReferenceServiceTuple<>(serviceReference, service);
-
-		serviceReferenceServiceTuples.add(serviceReferenceServiceTuple);
-
-		return Optional.of(genericClass);
-	}
+	protected abstract Class<T> getManagedClass();
 
 	/**
 	 * Returns a service from the inner map based on the service's generic inner
@@ -101,146 +73,9 @@ public abstract class BaseManager<T> {
 	 * @return the service, if present; {@code Optional#empty()} otherwise
 	 */
 	protected Optional<T> getServiceOptional(String className) {
-		TreeSet<ServiceReferenceServiceTuple<T>> serviceReferenceServiceTuples =
-			_services.get(className);
-
-		Optional<TreeSet<ServiceReferenceServiceTuple<T>>> optional =
-			Optional.ofNullable(serviceReferenceServiceTuples);
-
-		return optional.filter(
-			treeSet -> !treeSet.isEmpty()
-		).map(
-			TreeSet::first
-		).map(
-			ServiceReferenceServiceTuple::getService
-		);
+		return Optional.ofNullable(_serviceTrackerMap.getService(className));
 	}
 
-	/**
-	 * Removes a {@code serviceReference/service} tuple from the internal map,
-	 * if the service exists. Returns {@code Optional#empty()} otherwise.
-	 *
-	 * @param  serviceReference the service reference
-	 * @return the generic inner class of the service reference's service, if a
-	 *         valid service can be obtained; {@code Optional#empty()} otherwise
-	 */
-	protected <U> Optional<Class<U>> removeService(
-		ServiceReference<T> serviceReference, Class<?> managedClass) {
-
-		Consumer<T> identityConsumer = t -> {
-		};
-
-		return removeService(serviceReference, managedClass, identityConsumer);
-	}
-
-	/**
-	 * Removes a {@code serviceReference/service} tuple from the internal map,
-	 * after calling a consumer. Returns {@code Optional#empty()} if the service
-	 * doesn't exist.
-	 *
-	 * @param  serviceReference the service reference
-	 * @param  beforeRemovingConsumer the consumer called prior to removing the
-	 *         service
-	 * @return the generic inner class of the service reference's service, if a
-	 *         valid service can be obtained; {@code Optional#empty()} otherwise
-	 */
-	protected <U> Optional<Class<U>> removeService(
-		ServiceReference<T> serviceReference, Class<?> managedClass,
-		Consumer<T> beforeRemovingConsumer) {
-
-		T service = _bundleContext.getService(serviceReference);
-
-		if (service == null) {
-			return Optional.empty();
-		}
-
-		Class<U> genericClass = _getGenericClass(service, managedClass);
-
-		TreeSet<ServiceReferenceServiceTuple<T>> serviceReferenceServiceTuples =
-			_services.get(genericClass.getName());
-
-		beforeRemovingConsumer.accept(service);
-
-		if (serviceReferenceServiceTuples != null) {
-			serviceReferenceServiceTuples.removeIf(
-				serviceReferenceServiceTuple -> {
-					if (serviceReferenceServiceTuple.getService() == service) {
-						return true;
-					}
-
-					return false;
-				});
-		}
-
-		return Optional.of(genericClass);
-	}
-
-	private <U> Class<U> _getGenericClass(T service, Class<?> managedClass) {
-		Class<?> serviceClass = service.getClass();
-
-		Try<Class<U>> classTry = GenericUtil.getFirstGenericTypeArgumentTry(
-			serviceClass, managedClass);
-
-		return classTry.orElseThrow(
-			() -> new ApioDeveloperError.MustHaveValidGenericType(
-				serviceClass));
-	}
-
-	private final BundleContext _bundleContext;
-	private final Map<String, TreeSet<ServiceReferenceServiceTuple<T>>>
-		_services = new ConcurrentHashMap<>();
-
-	private static class ServiceReferenceServiceTuple<T>
-		implements Comparable<ServiceReferenceServiceTuple> {
-
-		public ServiceReferenceServiceTuple(
-			ServiceReference<T> serviceReference, T service) {
-
-			_serviceReference = serviceReference;
-			_service = service;
-		}
-
-		@Override
-		public int compareTo(
-			ServiceReferenceServiceTuple serviceReferenceServiceTuple) {
-
-			return _serviceReference.compareTo(
-				serviceReferenceServiceTuple._serviceReference);
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-
-			if (obj == null) {
-				return false;
-			}
-
-			if (!(obj instanceof ServiceReferenceServiceTuple)) {
-				return false;
-			}
-
-			if (compareTo((ServiceReferenceServiceTuple)obj) == 0) {
-				return true;
-			}
-
-			return false;
-		}
-
-		public T getService() {
-			return _service;
-		}
-
-		@Override
-		public int hashCode() {
-			return System.identityHashCode(_service);
-		}
-
-		private final T _service;
-		private final ServiceReference<T> _serviceReference;
-
-	}
+	private ServiceTrackerMap<String, T> _serviceTrackerMap;
 
 }
