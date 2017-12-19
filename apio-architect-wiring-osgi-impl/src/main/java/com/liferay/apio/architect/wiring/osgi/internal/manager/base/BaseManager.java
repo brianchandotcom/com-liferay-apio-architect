@@ -17,6 +17,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.base;
 import static com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory.openSingleValueMap;
 
 import com.liferay.apio.architect.wiring.osgi.internal.service.reference.mapper.CustomServiceReferenceMapper;
+import com.liferay.apio.architect.wiring.osgi.internal.service.tracker.customizer.TransformServiceTrackerCustomizer;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 
 import java.util.Optional;
@@ -26,18 +27,22 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
 
 /**
- * Manages services that have a generic type.
+ * Manages services that have a generic type. Stores the services transformed
+ * with the {@link #map(Object, ServiceReference, Class)} function.
  *
  * @author Alejandro Hernández
+ * @review
  */
-public abstract class BaseManager<T> {
+public abstract class BaseManager<T, U>
+	extends TransformServiceTrackerCustomizer<T, U> {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = openSingleValueMap(
 			bundleContext, getManagedClass(), null,
 			new CustomServiceReferenceMapper<>(
-				bundleContext, getManagedClass()));
+				bundleContext, getManagedClass()),
+			this);
 	}
 
 	@Deactivate
@@ -46,12 +51,13 @@ public abstract class BaseManager<T> {
 	}
 
 	/**
-	 * Returns the managed class.
+	 * Returns the {@code ServiceTrackerMap}.
 	 *
-	 * @return the managed class
-	 * @review
+	 * @return the service tracker map
 	 */
-	protected abstract Class<T> getManagedClass();
+	public ServiceTrackerMap<String, U> getServiceTrackerMap() {
+		return _serviceTrackerMap;
+	}
 
 	/**
 	 * Returns a service from the inner map based on the service's generic inner
@@ -60,7 +66,7 @@ public abstract class BaseManager<T> {
 	 * @param  clazz the generic inner class
 	 * @return the service, if present; {@code Optional#empty()} otherwise
 	 */
-	protected <U> Optional<T> getServiceOptional(Class<U> clazz) {
+	protected <V> Optional<U> getServiceOptional(Class<V> clazz) {
 		return getServiceOptional(clazz.getName());
 	}
 
@@ -72,10 +78,10 @@ public abstract class BaseManager<T> {
 	 * @param  className the generic inner class name
 	 * @return the service, if present; {@code Optional#empty()} otherwise
 	 */
-	protected Optional<T> getServiceOptional(String className) {
+	protected Optional<U> getServiceOptional(String className) {
 		return Optional.ofNullable(_serviceTrackerMap.getService(className));
 	}
 
-	private ServiceTrackerMap<String, T> _serviceTrackerMap;
+	private ServiceTrackerMap<String, U> _serviceTrackerMap;
 
 }
