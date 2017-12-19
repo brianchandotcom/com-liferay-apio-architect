@@ -43,6 +43,10 @@ import org.osgi.service.component.annotations.Reference;
 public class ItemRouterManagerImpl
 	extends BaseManager<ItemRouter, ItemRoutes> implements ItemRouterManager {
 
+	public ItemRouterManagerImpl() {
+		super(ItemRouter.class);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<ItemRoutes<T>> getItemRoutesOptional(String name) {
@@ -56,11 +60,6 @@ public class ItemRouterManagerImpl
 		).map(
 			routes -> (ItemRoutes<T>)routes
 		);
-	}
-
-	@Override
-	protected Class<ItemRouter> getManagedClass() {
-		return ItemRouter.class;
 	}
 
 	@Override

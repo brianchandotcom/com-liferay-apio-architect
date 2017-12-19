@@ -34,6 +34,10 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 public abstract class TransformServiceTrackerCustomizer<T, U>
 	implements ServiceTrackerCustomizer<T, U> {
 
+	public TransformServiceTrackerCustomizer(Class<T> managedClass) {
+		_managedClass = managedClass;
+	}
+
 	@Override
 	public U addingService(ServiceReference<T> serviceReference) {
 		Bundle bundle = FrameworkUtil.getBundle(
@@ -45,7 +49,7 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 
 		Class<?> modelClass = getGenericClassFromPropertyOrElse(
 			serviceReference, MODEL_CLASS,
-			() -> getTypeParamOrFail(t, getManagedClass(), 0));
+			() -> getTypeParamOrFail(t, _managedClass, 0));
 
 		return map(t, serviceReference, modelClass);
 	}
@@ -72,7 +76,9 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	 * @return the managed class
 	 * @review
 	 */
-	protected abstract Class<T> getManagedClass();
+	protected Class<T> getManagedClass() {
+		return _managedClass;
+	}
 
 	/**
 	 * Transforms a service of type {@link T} into a {@link U}.
@@ -95,5 +101,7 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	 */
 	protected void onRemovedService(ServiceReference<T> serviceReference, U u) {
 	}
+
+	private final Class<T> _managedClass;
 
 }

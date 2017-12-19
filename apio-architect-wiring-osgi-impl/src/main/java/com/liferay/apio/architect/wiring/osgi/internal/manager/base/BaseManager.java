@@ -40,6 +40,10 @@ import org.osgi.service.component.annotations.Deactivate;
 public abstract class BaseManager<T, U>
 	extends TransformServiceTrackerCustomizer<T, U> {
 
+	public BaseManager(Class<T> managedClass) {
+		super(managedClass);
+	}
+
 	@Activate
 	public void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = openSingleValueMap(

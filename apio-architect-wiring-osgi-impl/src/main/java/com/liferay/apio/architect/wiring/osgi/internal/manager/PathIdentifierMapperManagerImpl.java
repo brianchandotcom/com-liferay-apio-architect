@@ -32,6 +32,10 @@ public class PathIdentifierMapperManagerImpl
 	extends SimpleBaseManager<PathIdentifierMapper>
 	implements PathIdentifierMapperManager {
 
+	public PathIdentifierMapperManagerImpl() {
+		super(PathIdentifierMapper.class);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Identifier> Optional<T> map(Class<T> clazz, Path path) {
@@ -69,11 +73,6 @@ public class PathIdentifierMapperManagerImpl
 			pathIdentifierMapper ->
 				pathIdentifierMapper.map(identifier, modelClass)
 		);
-	}
-
-	@Override
-	protected Class<PathIdentifierMapper> getManagedClass() {
-		return PathIdentifierMapper.class;
 	}
 
 }

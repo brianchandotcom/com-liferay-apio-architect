@@ -33,6 +33,10 @@ import org.osgi.service.component.annotations.Component;
 public class ProviderManagerImpl
 	extends SimpleBaseManager<Provider> implements ProviderManager {
 
+	public ProviderManagerImpl() {
+		super(Provider.class);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> provideOptional(
@@ -54,11 +58,6 @@ public class ProviderManagerImpl
 		Optional<T> optional = provideOptional(clazz, httpServletRequest);
 
 		return optional.orElse(null);
-	}
-
-	@Override
-	protected Class<Provider> getManagedClass() {
-		return Provider.class;
 	}
 
 }

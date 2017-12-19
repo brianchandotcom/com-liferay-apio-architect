@@ -30,14 +30,13 @@ import org.osgi.service.component.annotations.Component;
 public class NameManagerImpl
 	extends BaseManager<Representable, String> implements NameManager {
 
-	@Override
-	public Optional<String> getNameOptional(String className) {
-		return getServiceOptional(className);
+	public NameManagerImpl() {
+		super(Representable.class);
 	}
 
 	@Override
-	protected Class<Representable> getManagedClass() {
-		return Representable.class;
+	public Optional<String> getNameOptional(String className) {
+		return getServiceOptional(className);
 	}
 
 	@Override

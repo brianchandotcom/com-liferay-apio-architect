@@ -41,6 +41,10 @@ public class ReusableNestedCollectionRouterManagerImpl
 	extends BaseManager<ReusableNestedCollectionRouter, NestedCollectionRoutes>
 	implements ReusableNestedCollectionRouterManager {
 
+	public ReusableNestedCollectionRouterManagerImpl() {
+		super(ReusableNestedCollectionRouter.class);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<NestedCollectionRoutes<T>>
@@ -56,11 +60,6 @@ public class ReusableNestedCollectionRouterManagerImpl
 		).map(
 			routes -> (NestedCollectionRoutes<T>)routes
 		);
-	}
-
-	@Override
-	protected Class<ReusableNestedCollectionRouter> getManagedClass() {
-		return ReusableNestedCollectionRouter.class;
 	}
 
 	@Override

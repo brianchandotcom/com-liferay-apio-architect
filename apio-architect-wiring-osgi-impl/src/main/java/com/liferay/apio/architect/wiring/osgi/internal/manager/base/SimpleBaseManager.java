@@ -25,6 +25,10 @@ import org.osgi.framework.ServiceReference;
  */
 public abstract class SimpleBaseManager<T> extends BaseManager<T, T> {
 
+	public SimpleBaseManager(Class<T> managedClass) {
+		super(managedClass);
+	}
+
 	@Override
 	public T map(
 		T t, ServiceReference<T> serviceReference, Class<?> modelClass) {

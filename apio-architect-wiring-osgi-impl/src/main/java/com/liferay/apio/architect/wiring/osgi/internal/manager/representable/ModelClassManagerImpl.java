@@ -39,6 +39,10 @@ import org.osgi.service.component.annotations.Component;
 public class ModelClassManagerImpl
 	extends BaseManager<Representable, Class> implements ModelClassManager {
 
+	public ModelClassManagerImpl() {
+		super(Representable.class);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<Class<T>> getModelClassOptional(String name) {
@@ -61,11 +65,6 @@ public class ModelClassManagerImpl
 			serviceReference);
 
 		emitter.emit(representable.getName());
-	}
-
-	@Override
-	protected Class<Representable> getManagedClass() {
-		return Representable.class;
 	}
 
 	@Override

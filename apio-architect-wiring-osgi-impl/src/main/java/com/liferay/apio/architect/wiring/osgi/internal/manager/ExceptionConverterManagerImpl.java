@@ -31,15 +31,14 @@ public class ExceptionConverterManagerImpl
 	extends SimpleBaseManager<ExceptionConverter>
 	implements ExceptionConverterManager {
 
+	public ExceptionConverterManagerImpl() {
+		super(ExceptionConverter.class);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Exception> Optional<APIError> convert(T exception) {
 		return _convert(exception, (Class<T>)exception.getClass());
-	}
-
-	@Override
-	protected Class<ExceptionConverter> getManagedClass() {
-		return ExceptionConverter.class;
 	}
 
 	@SuppressWarnings("unchecked")

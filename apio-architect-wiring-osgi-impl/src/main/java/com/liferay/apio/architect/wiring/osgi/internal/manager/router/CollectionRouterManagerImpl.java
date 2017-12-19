@@ -43,6 +43,10 @@ public class CollectionRouterManagerImpl
 	extends BaseManager<CollectionRouter, CollectionRoutes>
 	implements CollectionRouterManager {
 
+	public CollectionRouterManagerImpl() {
+		super(CollectionRouter.class);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
@@ -75,11 +79,6 @@ public class CollectionRouterManagerImpl
 		).collect(
 			Collectors.toList()
 		);
-	}
-
-	@Override
-	protected Class<CollectionRouter> getManagedClass() {
-		return CollectionRouter.class;
 	}
 
 	@Override

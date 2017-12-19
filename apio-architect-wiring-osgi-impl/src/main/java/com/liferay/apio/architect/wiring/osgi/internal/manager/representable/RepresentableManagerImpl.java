@@ -46,6 +46,10 @@ public class RepresentableManagerImpl
 	extends BaseManager<Representable, Representor>
 	implements RepresentableManager {
 
+	public RepresentableManagerImpl() {
+		super(Representable.class);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T, U extends Identifier> Optional<Representor<T, U>>
@@ -55,11 +59,6 @@ public class RepresentableManagerImpl
 			modelClass.getName());
 
 		return optional.map(representor -> (Representor<T, U>)representor);
-	}
-
-	@Override
-	protected Class<Representable> getManagedClass() {
-		return Representable.class;
 	}
 
 	@Override

@@ -49,6 +49,10 @@ public class NestedCollectionRouterManagerImpl
 	extends BaseManager<NestedCollectionRouter, NestedCollectionRoutes>
 	implements NestedCollectionRouterManager {
 
+	public NestedCollectionRouterManagerImpl() {
+		super(NestedCollectionRouter.class);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<NestedCollectionRoutes<T>>
@@ -100,11 +104,6 @@ public class NestedCollectionRouterManagerImpl
 		customServiceReferenceMapper.map(
 			serviceReference,
 			key -> emitter.emit(key + "-" + genericClass.getName()));
-	}
-
-	@Override
-	protected Class<NestedCollectionRouter> getManagedClass() {
-		return NestedCollectionRouter.class;
 	}
 
 	@Override
