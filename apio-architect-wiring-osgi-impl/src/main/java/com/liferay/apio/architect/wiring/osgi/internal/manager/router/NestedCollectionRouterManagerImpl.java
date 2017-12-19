@@ -27,7 +27,7 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.internal.service.reference.mapper.CustomServiceReferenceMapper;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
-import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.ModelClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
@@ -55,10 +55,10 @@ public class NestedCollectionRouterManagerImpl
 		getNestedCollectionRoutesOptional(String name, String nestedName) {
 
 		Optional<Class<T>> nameOptional =
-			_representableManager.getModelClassOptional(name);
+			_modelClassManager.getModelClassOptional(name);
 
 		Optional<Class<T>> nestedNameOptional =
-			_representableManager.getModelClassOptional(nestedName);
+			_modelClassManager.getModelClassOptional(nestedName);
 
 		return nameOptional.map(
 			Class::getName
@@ -130,9 +130,9 @@ public class NestedCollectionRouterManagerImpl
 	}
 
 	@Reference
-	private ProviderManager _providerManager;
+	private ModelClassManager _modelClassManager;
 
 	@Reference
-	private RepresentableManager _representableManager;
+	private ProviderManager _providerManager;
 
 }

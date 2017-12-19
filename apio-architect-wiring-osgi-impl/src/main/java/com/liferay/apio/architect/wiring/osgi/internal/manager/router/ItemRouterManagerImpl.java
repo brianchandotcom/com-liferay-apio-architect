@@ -26,7 +26,7 @@ import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
-import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.ModelClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 
 import java.util.Optional;
@@ -46,8 +46,8 @@ public class ItemRouterManagerImpl
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<ItemRoutes<T>> getItemRoutesOptional(String name) {
-		Optional<Class<T>> optional =
-			_representableManager.getModelClassOptional(name);
+		Optional<Class<T>> optional = _modelClassManager.getModelClassOptional(
+			name);
 
 		return optional.map(
 			Class::getName
@@ -85,12 +85,12 @@ public class ItemRouterManagerImpl
 	}
 
 	@Reference
+	private ModelClassManager _modelClassManager;
+
+	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 	@Reference
 	private ProviderManager _providerManager;
-
-	@Reference
-	private RepresentableManager _representableManager;
 
 }

@@ -20,7 +20,8 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
-import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.ModelClassManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
 
 import java.util.List;
@@ -47,8 +48,8 @@ public class CollectionRouterManagerImpl
 	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
 		String name) {
 
-		Optional<Class<T>> optional =
-			_representableManager.getModelClassOptional(name);
+		Optional<Class<T>> optional = _modelClassManager.getModelClassOptional(
+			name);
 
 		return optional.map(
 			Class::getName
@@ -66,7 +67,7 @@ public class CollectionRouterManagerImpl
 		Stream<String> stream = keys.stream();
 
 		return stream.map(
-			className -> _representableManager.getNameOptional(className)
+			className -> _nameManager.getNameOptional(className)
 		).filter(
 			Optional::isPresent
 		).map(
@@ -97,9 +98,12 @@ public class CollectionRouterManagerImpl
 	}
 
 	@Reference
-	private ProviderManager _providerManager;
+	private ModelClassManager _modelClassManager;
 
 	@Reference
-	private RepresentableManager _representableManager;
+	private NameManager _nameManager;
+
+	@Reference
+	private ProviderManager _providerManager;
 
 }
