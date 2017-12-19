@@ -24,14 +24,14 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
- * This interface can be used to create a {@code ServiceTrackerCustomizer} with
- * a lambda instead of an anonymous class.
+ * This interface can be used to create a {@code ServiceRegistration} {@code
+ * ServiceTrackerCustomizer} with a lambda instead of an anonymous class.
  *
  * @author Alejandro Hernández
  * @review
  */
 @FunctionalInterface
-public interface BaseServiceTrackerCustomizer<T>
+public interface ServiceRegistrationServiceTrackerCustomizer<T>
 	extends ServiceTrackerCustomizer<T, ServiceRegistration<?>> {
 
 	@Override
@@ -48,7 +48,7 @@ public interface BaseServiceTrackerCustomizer<T>
 		ServiceRegistration<?> serviceRegistration) {
 
 		Bundle bundle = FrameworkUtil.getBundle(
-			BaseServiceTrackerCustomizer.class);
+			ServiceRegistrationServiceTrackerCustomizer.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
