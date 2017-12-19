@@ -14,10 +14,6 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
-import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
 import com.liferay.apio.architect.provider.Provider;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
@@ -26,9 +22,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
@@ -62,18 +56,9 @@ public class ProviderManagerImpl
 		return optional.orElse(null);
 	}
 
-	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
-	protected void setServiceReference(
-		ServiceReference<Provider> serviceReference) {
-
-		addService(serviceReference, Provider.class);
-	}
-
-	@SuppressWarnings("unused")
-	protected void unsetServiceReference(
-		ServiceReference<Provider> serviceReference) {
-
-		removeService(serviceReference, Provider.class);
+	@Override
+	protected Class<Provider> getManagedClass() {
+		return Provider.class;
 	}
 
 }

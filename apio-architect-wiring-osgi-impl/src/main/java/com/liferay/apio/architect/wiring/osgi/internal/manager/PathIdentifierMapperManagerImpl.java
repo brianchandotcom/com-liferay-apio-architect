@@ -14,10 +14,6 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
-import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.uri.Path;
@@ -26,9 +22,7 @@ import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManage
 
 import java.util.Optional;
 
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
@@ -77,18 +71,9 @@ public class PathIdentifierMapperManagerImpl
 		);
 	}
 
-	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
-	protected void setServiceReference(
-		ServiceReference<PathIdentifierMapper> serviceReference) {
-
-		addService(serviceReference, PathIdentifierMapper.class);
-	}
-
-	@SuppressWarnings("unused")
-	protected void unsetServiceReference(
-		ServiceReference<PathIdentifierMapper> serviceReference) {
-
-		removeService(serviceReference, PathIdentifierMapper.class);
+	@Override
+	protected Class<PathIdentifierMapper> getManagedClass() {
+		return PathIdentifierMapper.class;
 	}
 
 }
