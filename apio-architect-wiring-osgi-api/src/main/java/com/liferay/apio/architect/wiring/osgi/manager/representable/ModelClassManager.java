@@ -16,31 +16,25 @@ package com.liferay.apio.architect.wiring.osgi.manager.representable;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.representor.Representor;
-
 import java.util.Optional;
 
 /**
- * Provides methods to retrieve information provided by the different {@link
- * com.liferay.apio.architect.representor.Representable} instances. This
- * information includes field functions, types, identifier functions, and more.
+ * Provides methods to retrieve generic model class information provided by the
+ * different {@link com.liferay.apio.architect.representor.Representable}
+ * instances.
  *
  * @author Alejandro Hernández
  * @see    com.liferay.apio.architect.representor.Representable
  */
 @ProviderType
-public interface RepresentableManager {
+public interface ModelClassManager {
 
 	/**
-	 * Returns the representor of the collection resource's model class, if that
-	 * representor exists. Returns {@code Optional#empty()} otherwise.
+	 * Returns the resource name's model class.
 	 *
-	 * @param  modelClass the collection resource's model class
-	 * @return the model class's representor, if present; {@code
-	 *         Optional#empty()} otherwise
+	 * @param  name the resource name
+	 * @return the resource name's model class
 	 */
-	public <T, U extends Identifier> Optional<Representor<T, U>>
-		getRepresentorOptional(Class<T> modelClass);
+	public <T> Optional<Class<T>> getModelClassOptional(String name);
 
 }
