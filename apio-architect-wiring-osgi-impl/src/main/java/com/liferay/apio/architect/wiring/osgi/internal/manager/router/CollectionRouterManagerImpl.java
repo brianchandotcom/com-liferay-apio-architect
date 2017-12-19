@@ -14,10 +14,6 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
-import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.routes.CollectionRoutes;
@@ -28,10 +24,8 @@ import com.liferay.apio.architect.wiring.osgi.manager.representable.Representabl
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,7 +39,8 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class CollectionRouterManagerImpl
-	extends BaseManager<CollectionRouter> implements CollectionRouterManager {
+	extends BaseManager<CollectionRouter, CollectionRoutes>
+	implements CollectionRouterManager {
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -57,8 +52,8 @@ public class CollectionRouterManagerImpl
 
 		return optional.map(
 			Class::getName
-		).map(
-			_collectionRoutesMap::get
+		).flatMap(
+			this::getServiceOptional
 		).map(
 			routes -> (CollectionRoutes<T>)routes
 		);
@@ -66,7 +61,7 @@ public class CollectionRouterManagerImpl
 
 	@Override
 	public List<String> getResourceNames() {
-		Set<String> keys = _collectionRoutesMap.keySet();
+		Set<String> keys = getServiceTrackerMap().keySet();
 
 		Stream<String> stream = keys.stream();
 
@@ -81,69 +76,25 @@ public class CollectionRouterManagerImpl
 		);
 	}
 
-	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
-	protected void setServiceReference(
-		ServiceReference<CollectionRouter> serviceReference) {
-
-		Optional<Class<Object>> optional = addService(
-			serviceReference, CollectionRouter.class);
-
-		optional.ifPresent(this::_addRoutes);
+	@Override
+	protected Class<CollectionRouter> getManagedClass() {
+		return CollectionRouter.class;
 	}
 
-	@SuppressWarnings("unused")
-	protected void unsetServiceReference(
-		ServiceReference<CollectionRouter> serviceReference) {
+	@Override
+	protected CollectionRoutes map(
+		CollectionRouter collectionRouter,
+		ServiceReference<CollectionRouter> serviceReference,
+		Class<?> modelClass) {
 
-		Optional<Class<Object>> optional = removeService(
-			serviceReference, CollectionRouter.class);
+		RequestFunction<Function<Class<?>, Optional<?>>> provideClassFunction =
+			httpServletRequest -> clazz -> _providerManager.provideOptional(
+				clazz, httpServletRequest);
 
-		optional.map(
-			Class::getName
-		).ifPresent(
-			_collectionRoutesMap::remove
-		);
+		Builder builder = new Builder<>(modelClass, provideClassFunction);
 
-		optional.filter(
-			modelClass -> {
-				Optional<CollectionRouter> collectionRouterOptional =
-					getServiceOptional(modelClass);
-
-				return collectionRouterOptional.isPresent();
-			}
-		).ifPresent(
-			this::_addRoutes
-		);
+		return collectionRouter.collectionRoutes(builder);
 	}
-
-	@SuppressWarnings("unchecked")
-	private <T> void _addRoutes(Class<T> modelClass) {
-		Optional<CollectionRouter> optional = getServiceOptional(modelClass);
-
-		optional.map(
-			collectionRouter -> (CollectionRouter<T>)collectionRouter
-		).ifPresent(
-			collectionRouter -> {
-				RequestFunction<Function<Class<?>, Optional<?>>>
-					provideClassFunction =
-						httpServletRequest -> clazz ->
-							_providerManager.provideOptional(
-								clazz, httpServletRequest);
-
-				Builder<T> builder = new Builder<>(
-					modelClass, provideClassFunction);
-
-				CollectionRoutes<T> collectionRoutes =
-					collectionRouter.collectionRoutes(builder);
-
-				_collectionRoutesMap.put(
-					modelClass.getName(), collectionRoutes);
-			}
-		);
-	}
-
-	private final Map<String, CollectionRoutes<?>> _collectionRoutesMap =
-		new ConcurrentHashMap<>();
 
 	@Reference
 	private ProviderManager _providerManager;

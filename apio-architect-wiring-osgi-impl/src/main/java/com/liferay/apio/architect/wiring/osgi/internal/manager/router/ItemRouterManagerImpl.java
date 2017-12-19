@@ -18,10 +18,6 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.R
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
-import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.router.ItemRouter;
@@ -33,9 +29,7 @@ import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import org.osgi.framework.ServiceReference;
@@ -47,7 +41,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class ItemRouterManagerImpl
-	extends BaseManager<ItemRouter> implements ItemRouterManager {
+	extends BaseManager<ItemRouter, ItemRoutes> implements ItemRouterManager {
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -57,82 +51,38 @@ public class ItemRouterManagerImpl
 
 		return optional.map(
 			Class::getName
-		).map(
-			_itemRoutesMap::get
+		).flatMap(
+			this::getServiceOptional
 		).map(
 			routes -> (ItemRoutes<T>)routes
 		);
 	}
 
-	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
-	protected void setServiceReference(
-		ServiceReference<ItemRouter> serviceReference) {
-
-		Optional<Class<Object>> optional = addService(
-			serviceReference, ItemRouter.class);
-
-		optional.ifPresent(
-			modelClass -> _addRoutes(serviceReference, modelClass));
+	@Override
+	protected Class<ItemRouter> getManagedClass() {
+		return ItemRouter.class;
 	}
 
-	@SuppressWarnings("unused")
-	protected void unsetServiceReference(
-		ServiceReference<ItemRouter> serviceReference) {
+	@Override
+	protected ItemRoutes map(
+		ItemRouter itemRouter, ServiceReference<ItemRouter> serviceReference,
+		Class<?> modelClass) {
 
-		Optional<Class<Object>> optional = removeService(
-			serviceReference, ItemRouter.class);
+		RequestFunction<Function<Class<?>, Optional<?>>> provideClassFunction =
+			httpServletRequest -> clazz -> _providerManager.provideOptional(
+				clazz, httpServletRequest);
 
-		optional.map(
-			Class::getName
-		).ifPresent(
-			_itemRoutesMap::remove
-		);
+		Class<? extends Identifier> identifierClass =
+			getGenericClassFromPropertyOrElse(
+				serviceReference, ITEM_IDENTIFIER_CLASS,
+				() -> getTypeParamOrFail(itemRouter, ItemRouter.class, 1));
 
-		optional.filter(
-			modelClass -> {
-				Optional<ItemRouter> itemRouterOptional = getServiceOptional(
-					modelClass);
+		Builder builder = new Builder<>(
+			modelClass, identifierClass, provideClassFunction,
+			() -> _pathIdentifierMapperManager::map);
 
-				return itemRouterOptional.isPresent();
-			}
-		).ifPresent(
-			modelClass -> _addRoutes(serviceReference, modelClass)
-		);
+		return itemRouter.itemRoutes(builder);
 	}
-
-	@SuppressWarnings("unchecked")
-	private <T, U extends Identifier> void _addRoutes(
-		ServiceReference<ItemRouter> serviceReference, Class<T> modelClass) {
-
-		Optional<ItemRouter> optional = getServiceOptional(modelClass);
-
-		optional.map(
-			itemRouter -> (ItemRouter<T, U>)itemRouter
-		).ifPresent(
-			(ItemRouter<T, U> itemRouter) -> {
-				RequestFunction<Function<Class<?>, Optional<?>>>
-					provideClassFunction =
-						httpServletRequest -> clazz ->
-							_providerManager.provideOptional(
-								clazz, httpServletRequest);
-
-				Class<U> identifierClass = getGenericClassFromPropertyOrElse(
-					serviceReference, ITEM_IDENTIFIER_CLASS,
-					() -> getTypeParamOrFail(itemRouter, ItemRouter.class, 1));
-
-				Builder<T, U> builder = new Builder<>(
-					modelClass, identifierClass, provideClassFunction,
-					() -> _pathIdentifierMapperManager::map);
-
-				ItemRoutes<T> itemRoutes = itemRouter.itemRoutes(builder);
-
-				_itemRoutesMap.put(modelClass.getName(), itemRoutes);
-			}
-		);
-	}
-
-	private final Map<String, ItemRoutes<?>> _itemRoutesMap =
-		new ConcurrentHashMap<>();
 
 	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;

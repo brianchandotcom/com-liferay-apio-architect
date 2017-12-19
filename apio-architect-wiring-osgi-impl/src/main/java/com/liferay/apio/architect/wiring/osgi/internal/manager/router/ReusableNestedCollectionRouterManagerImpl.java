@@ -16,10 +16,6 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
-import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
@@ -30,9 +26,7 @@ import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import org.osgi.framework.ServiceReference;
@@ -44,7 +38,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class ReusableNestedCollectionRouterManagerImpl
-	extends BaseManager<ReusableNestedCollectionRouter>
+	extends BaseManager<ReusableNestedCollectionRouter, NestedCollectionRoutes>
 	implements ReusableNestedCollectionRouterManager {
 
 	@Override
@@ -57,79 +51,36 @@ public class ReusableNestedCollectionRouterManagerImpl
 
 		return optional.map(
 			Class::getName
-		).map(
-			_routesMap::get
+		).flatMap(
+			this::getServiceOptional
 		).map(
 			routes -> (NestedCollectionRoutes<T>)routes
 		);
 	}
 
-	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
-	protected void setServiceReference(
-		ServiceReference<ReusableNestedCollectionRouter> serviceReference) {
-
-		Optional<Class<Object>> optional = addService(
-			serviceReference, ReusableNestedCollectionRouter.class);
-
-		optional.ifPresent(this::_addRoutes);
+	@Override
+	protected Class<ReusableNestedCollectionRouter> getManagedClass() {
+		return ReusableNestedCollectionRouter.class;
 	}
 
-	@SuppressWarnings("unused")
-	protected void unsetServiceReference(
-		ServiceReference<ReusableNestedCollectionRouter> serviceReference) {
+	@Override
+	protected NestedCollectionRoutes map(
+		ReusableNestedCollectionRouter reusableNestedCollectionRouter,
+		ServiceReference<ReusableNestedCollectionRouter> serviceReference,
+		Class<?> modelClass) {
 
-		Optional<Class<Object>> optional = removeService(
-			serviceReference, ReusableNestedCollectionRouter.class);
+		Class<? extends Identifier> identifierClass = getTypeParamOrFail(
+			reusableNestedCollectionRouter,
+			ReusableNestedCollectionRouter.class, 1);
 
-		optional.map(
-			Class::getName
-		).ifPresent(
-			_routesMap::remove
-		);
+		RequestFunction<Function<Class<?>, Optional<?>>> provideClassFunction =
+			httpServletRequest -> clazz -> _providerManager.provideOptional(
+				clazz, httpServletRequest);
 
-		optional.filter(
-			modelClass -> {
-				Optional<ReusableNestedCollectionRouter>
-					nestedCollectionRouterOptional = getServiceOptional(
-						modelClass);
+		Builder builder = new Builder<>(
+			modelClass, identifierClass, provideClassFunction);
 
-				return nestedCollectionRouterOptional.isPresent();
-			}
-		).ifPresent(
-			this::_addRoutes
-		);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T, U extends Identifier> void _addRoutes(Class<T> modelClass) {
-		Optional<ReusableNestedCollectionRouter> optional = getServiceOptional(
-			modelClass);
-
-		optional.map(
-			reusableNestedCollectionRouter ->
-				(ReusableNestedCollectionRouter<T, U>)
-					reusableNestedCollectionRouter
-		).ifPresent(
-			reusableNestedCollectionRouter -> {
-				Class<U> identifierClass = getTypeParamOrFail(
-					reusableNestedCollectionRouter,
-					ReusableNestedCollectionRouter.class, 1);
-
-				RequestFunction<Function<Class<?>, Optional<?>>>
-					provideClassFunction =
-						httpServletRequest -> clazz ->
-							_providerManager.provideOptional(
-								clazz, httpServletRequest);
-
-				Builder<T, U> builder = new Builder<>(
-					modelClass, identifierClass, provideClassFunction);
-
-				NestedCollectionRoutes<T> routes =
-					reusableNestedCollectionRouter.collectionRoutes(builder);
-
-				_routesMap.put(modelClass.getName(), routes);
-			}
-		);
+		return reusableNestedCollectionRouter.collectionRoutes(builder);
 	}
 
 	@Reference
@@ -137,8 +88,5 @@ public class ReusableNestedCollectionRouterManagerImpl
 
 	@Reference
 	private RepresentableManager _representableManager;
-
-	private final Map<String, NestedCollectionRoutes<?>> _routesMap =
-		new ConcurrentHashMap<>();
 
 }
