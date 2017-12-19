@@ -62,6 +62,8 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 		BundleContext bundleContext = bundle.getBundleContext();
 
 		bundleContext.ungetService(serviceReference);
+
+		onRemovedService(serviceReference, u);
 	}
 
 	/**
@@ -83,5 +85,15 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	 */
 	protected abstract U map(
 		T t, ServiceReference<T> serviceReference, Class<?> modelClass);
+
+	/**
+	 * Called when the service is being removed.
+	 *
+	 * @param  serviceReference the service reference being removed
+	 * @param  u the service being removed
+	 * @review
+	 */
+	protected void onRemovedService(ServiceReference<T> serviceReference, U u) {
+	}
 
 }

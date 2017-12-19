@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.ITEM_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
@@ -82,6 +83,22 @@ public class RepresentableManagerImpl
 		return representable.representor(builder);
 	}
 
+	@Override
+	protected void onRemovedService(
+		ServiceReference<Representable> serviceReference,
+		Representor representor) {
+
+		Class<? extends Identifier> modelClass =
+			getGenericClassFromPropertyOrElse(
+				serviceReference, MODEL_CLASS,
+				() -> getTypeParamOrFail(representor, Representor.class, 0));
+
+		_relatedCollections.forEach(
+			(className, relatedCollections) -> relatedCollections.removeIf(
+				relatedCollection ->
+					relatedCollection.getModelClass().equals(modelClass)));
+	}
+
 	private <T> TriConsumer<String, Class<?>, Function<Object, Identifier>>
 		_addRelatedCollectionTriConsumer(Class<T> relatedModelClass) {
 
@@ -94,13 +111,6 @@ public class RepresentableManagerImpl
 				new RelatedCollection<>(
 					key, relatedModelClass, identifierFunction));
 		};
-	}
-
-	private <T> void _removeModelClassMaps(Class<T> modelClass) {
-		_relatedCollections.forEach(
-			(className, relatedCollections) -> relatedCollections.removeIf(
-				relatedCollection ->
-					relatedCollection.getModelClass().equals(modelClass)));
 	}
 
 	private final Map<String, List<RelatedCollection<?, ?>>>
