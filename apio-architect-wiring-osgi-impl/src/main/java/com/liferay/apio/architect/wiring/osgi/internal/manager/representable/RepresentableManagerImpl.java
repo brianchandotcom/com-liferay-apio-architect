@@ -18,10 +18,6 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.R
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
-import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
@@ -31,7 +27,6 @@ import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,108 +36,50 @@ import java.util.function.Supplier;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
 public class RepresentableManagerImpl
-	extends BaseManager<Representable> implements RepresentableManager {
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> Optional<Class<T>> getModelClassOptional(String name) {
-		Optional<? extends Class<?>> optional = Optional.ofNullable(
-			_classes.get(name));
-
-		return optional.map(clazz -> (Class<T>)clazz);
-	}
-
-	@Override
-	public Optional<String> getNameOptional(String className) {
-		Optional<Representable> optional = getServiceOptional(className);
-
-		return optional.map(Representable::getName);
-	}
+	extends BaseManager<Representable, Representor>
+	implements RepresentableManager {
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T, U extends Identifier> Optional<Representor<T, U>>
 		getRepresentorOptional(Class<T> modelClass) {
 
-		Optional<? extends Representor<?, ?>> optional = Optional.ofNullable(
-			_representorMap.get(modelClass.getName()));
+		Optional<Representor> optional = getServiceOptional(
+			modelClass.getName());
 
 		return optional.map(representor -> (Representor<T, U>)representor);
 	}
 
-	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
-	protected void setServiceReference(
-		ServiceReference<Representable> serviceReference) {
-
-		Optional<Class<Object>> optional = addService(
-			serviceReference, Representable.class);
-
-		optional.ifPresent(
-			modelClass -> _addModelClassMaps(serviceReference, modelClass));
+	@Override
+	protected Class<Representable> getManagedClass() {
+		return Representable.class;
 	}
 
-	@SuppressWarnings("unused")
-	protected void unsetServiceReference(
-		ServiceReference<Representable> serviceReference) {
+	@Override
+	protected Representor map(
+		Representable representable,
+		ServiceReference<Representable> serviceReference, Class<?> modelClass) {
 
-		Optional<Class<Object>> optional = removeService(
-			serviceReference, Representable.class);
+		Class<? extends Identifier> identifierClass =
+			getGenericClassFromPropertyOrElse(
+				serviceReference, ITEM_IDENTIFIER_CLASS,
+				() -> getTypeParamOrFail(
+					representable, Representable.class, 1));
 
-		optional.ifPresent(this::_removeModelClassMaps);
+		Supplier<List<RelatedCollection<?, ?>>> relatedCollectionSupplier =
+			() -> _relatedCollections.get(modelClass.getName());
 
-		optional.filter(
-			modelClass -> {
-				Optional<Representable> representableOptional =
-					getServiceOptional(modelClass);
+		Representor.Builder builder = new Representor.Builder(
+			identifierClass, _addRelatedCollectionTriConsumer(modelClass),
+			relatedCollectionSupplier);
 
-				return representableOptional.isPresent();
-			}
-		).ifPresent(
-			modelClass -> _addModelClassMaps(serviceReference, modelClass)
-		);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T, U extends Identifier> void _addModelClassMaps(
-		ServiceReference<Representable> serviceReference, Class<T> modelClass) {
-
-		String className = modelClass.getName();
-
-		Optional<Representable> optional = getServiceOptional(className);
-
-		optional.map(
-			representable -> (Representable<T, U>)representable
-		).ifPresent(
-			representable -> {
-				String name = representable.getName();
-
-				_classes.put(name, modelClass);
-
-				Class<U> identifierClass = getGenericClassFromPropertyOrElse(
-					serviceReference, ITEM_IDENTIFIER_CLASS,
-					() -> getTypeParamOrFail(
-						representable, Representable.class, 1));
-
-				Supplier<List<RelatedCollection<T, ?>>>
-					relatedCollectionSupplier =
-						() -> (List)_relatedCollections.get(className);
-
-				Representor<T, U> representor = representable.representor(
-					new Representor.Builder<>(
-						identifierClass,
-						_addRelatedCollectionTriConsumer(modelClass),
-						relatedCollectionSupplier));
-
-				_representorMap.put(className, representor);
-			}
-		);
+		return representable.representor(builder);
 	}
 
 	private <T> TriConsumer<String, Class<?>, Function<Object, Identifier>>
@@ -160,22 +97,13 @@ public class RepresentableManagerImpl
 	}
 
 	private <T> void _removeModelClassMaps(Class<T> modelClass) {
-		Collection<Class<?>> classes = _classes.values();
-
-		classes.removeIf(next -> next.equals(modelClass));
-
 		_relatedCollections.forEach(
 			(className, relatedCollections) -> relatedCollections.removeIf(
 				relatedCollection ->
 					relatedCollection.getModelClass().equals(modelClass)));
-
-		_representorMap.remove(modelClass.getName());
 	}
 
-	private final Map<String, Class<?>> _classes = new ConcurrentHashMap<>();
 	private final Map<String, List<RelatedCollection<?, ?>>>
 		_relatedCollections = new ConcurrentHashMap<>();
-	private final Map<String, Representor<?, ?>> _representorMap =
-		new ConcurrentHashMap<>();
 
 }
