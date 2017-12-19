@@ -64,6 +64,7 @@ public class ItemRouterManagerImpl
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected ItemRoutes map(
 		ItemRouter itemRouter, ServiceReference<ItemRouter> serviceReference,
 		Class<?> modelClass) {

@@ -63,6 +63,7 @@ public class RepresentableManagerImpl
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected Representor map(
 		Representable representable,
 		ServiceReference<Representable> serviceReference, Class<?> modelClass) {

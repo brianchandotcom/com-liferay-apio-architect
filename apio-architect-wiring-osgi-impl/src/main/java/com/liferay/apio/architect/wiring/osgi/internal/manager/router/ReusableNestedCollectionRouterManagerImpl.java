@@ -64,6 +64,7 @@ public class ReusableNestedCollectionRouterManagerImpl
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected NestedCollectionRoutes map(
 		ReusableNestedCollectionRouter reusableNestedCollectionRouter,
 		ServiceReference<ReusableNestedCollectionRouter> serviceReference,

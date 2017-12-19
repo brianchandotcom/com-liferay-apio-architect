@@ -108,6 +108,7 @@ public class NestedCollectionRouterManagerImpl
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected NestedCollectionRoutes map(
 		NestedCollectionRouter nestedCollectionRouter,
 		ServiceReference<NestedCollectionRouter> serviceReference,

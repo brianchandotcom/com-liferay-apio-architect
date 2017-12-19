@@ -40,6 +40,7 @@ public class ModelClassManagerImpl
 	extends BaseManager<Representable, Class> implements ModelClassManager {
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T> Optional<Class<T>> getModelClassOptional(String name) {
 		Optional<Class> optional = getServiceOptional(name);
 

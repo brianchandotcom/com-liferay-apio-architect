@@ -83,6 +83,7 @@ public class CollectionRouterManagerImpl
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected CollectionRoutes map(
 		CollectionRouter collectionRouter,
 		ServiceReference<CollectionRouter> serviceReference,
