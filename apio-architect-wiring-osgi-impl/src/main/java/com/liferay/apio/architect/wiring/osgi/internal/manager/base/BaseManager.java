@@ -18,11 +18,15 @@ import static com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap
 
 import com.liferay.apio.architect.wiring.osgi.internal.service.reference.mapper.CustomServiceReferenceMapper;
 import com.liferay.apio.architect.wiring.osgi.internal.service.tracker.customizer.TransformServiceTrackerCustomizer;
+import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 
 import java.util.Optional;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
 
@@ -39,10 +43,7 @@ public abstract class BaseManager<T, U>
 	@Activate
 	public void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = openSingleValueMap(
-			bundleContext, getManagedClass(), null,
-			new CustomServiceReferenceMapper<>(
-				bundleContext, getManagedClass()),
-			this);
+			bundleContext, getManagedClass(), null, this::emit, this);
 	}
 
 	@Deactivate
@@ -57,6 +58,27 @@ public abstract class BaseManager<T, U>
 	 */
 	public ServiceTrackerMap<String, U> getServiceTrackerMap() {
 		return _serviceTrackerMap;
+	}
+
+	/**
+	 * Emits a the key of a service using an {@link Emitter<String>}.
+	 *
+	 * @param  serviceReference the service reference
+	 * @param  emitter the emitter
+	 * @review
+	 */
+	protected void emit(
+		ServiceReference<T> serviceReference, Emitter<String> emitter) {
+
+		Bundle bundle = FrameworkUtil.getBundle(BaseManager.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		CustomServiceReferenceMapper<T> customServiceReferenceMapper =
+			new CustomServiceReferenceMapper<>(
+				bundleContext, getManagedClass());
+
+		customServiceReferenceMapper.map(serviceReference, emitter);
 	}
 
 	/**
