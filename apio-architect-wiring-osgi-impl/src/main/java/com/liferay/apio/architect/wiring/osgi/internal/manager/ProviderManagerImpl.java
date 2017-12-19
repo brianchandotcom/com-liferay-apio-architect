@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
 import com.liferay.apio.architect.provider.Provider;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 
 import java.util.Optional;
@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(immediate = true)
 public class ProviderManagerImpl
-	extends BaseManager<Provider> implements ProviderManager {
+	extends SimpleBaseManager<Provider> implements ProviderManager {
 
 	@Override
 	@SuppressWarnings("unchecked")
