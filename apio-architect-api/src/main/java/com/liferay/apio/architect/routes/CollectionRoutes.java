@@ -17,7 +17,6 @@ package com.liferay.apio.architect.routes;
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
-import com.liferay.apio.architect.error.ApioDeveloperError;
 import com.liferay.apio.architect.function.PentaFunction;
 import com.liferay.apio.architect.function.TetraFunction;
 import com.liferay.apio.architect.function.TriFunction;
@@ -30,8 +29,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Holds information about the routes supported for a {@link
@@ -82,15 +79,16 @@ public class CollectionRoutes<T> {
 	 * com.liferay.apio.architect.router.CollectionRouter}.
 	 */
 	@SuppressWarnings("unused")
-	public static class Builder<T> {
+	public static class Builder<T> extends BaseRoutesBuilder {
 
 		public Builder(
 			Class<T> modelClass,
 			RequestFunction<Function<Class<?>, Optional<?>>>
 				provideClassFunction) {
 
+			super(provideClassFunction);
+
 			_modelClass = modelClass;
-			_provideClassFunction = provideClassFunction;
 		}
 
 		/**
@@ -104,15 +102,13 @@ public class CollectionRoutes<T> {
 		public <A> Builder<T> addCreator(
 			BiFunction<Map<String, Object>, A, T> biFunction, Class<A> aClass) {
 
-			_createItemFunction = httpServletRequest -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-
-				return biFunction.andThen(
+			_createItemFunction = httpServletRequest -> body -> provide(
+				httpServletRequest, aClass,
+				a -> biFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
 					body, a
-				);
-			};
+				));
 
 			return this;
 		}
@@ -156,18 +152,13 @@ public class CollectionRoutes<T> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
-			_createItemFunction = httpServletRequest -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-
-				return pentaFunction.andThen(
+			_createItemFunction = httpServletRequest -> body -> provide(
+				httpServletRequest, aClass, bClass, cClass, dClass,
+				a -> b -> c -> d -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
 					body, a, b, c, d
-				);
-			};
+				));
 
 			return this;
 		}
@@ -189,17 +180,13 @@ public class CollectionRoutes<T> {
 			TetraFunction<Map<String, Object>, A, B, C, T> pentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-			_createItemFunction = httpServletRequest -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-
-				return pentaFunction.andThen(
+			_createItemFunction = httpServletRequest -> body -> provide(
+				httpServletRequest, aClass, bClass, cClass,
+				a -> b -> c -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
 					body, a, b, c
-				);
-			};
+				));
 
 			return this;
 		}
@@ -219,16 +206,13 @@ public class CollectionRoutes<T> {
 			TriFunction<Map<String, Object>, A, B, T> triFunction,
 			Class<A> aClass, Class<B> bClass) {
 
-			_createItemFunction = httpServletRequest -> body -> {
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-
-				return triFunction.andThen(
+			_createItemFunction = httpServletRequest -> body -> provide(
+				httpServletRequest, aClass, bClass,
+				a -> b -> triFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
 					body, a, b
-				);
-			};
+				));
 
 			return this;
 		}
@@ -244,17 +228,13 @@ public class CollectionRoutes<T> {
 			BiFunction<Pagination, A, PageItems<T>> biFunction,
 			Class<A> aClass) {
 
-			_getPageFunction = httpServletRequest -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
-
-				return biFunction.andThen(
+			_getPageFunction = httpServletRequest -> provide(
+				httpServletRequest, Pagination.class, aClass,
+				pagination -> a -> biFunction.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
 					pagination, a
-				);
-			};
+				));
 
 			return this;
 		}
@@ -269,16 +249,13 @@ public class CollectionRoutes<T> {
 		public Builder<T> addGetter(
 			Function<Pagination, PageItems<T>> function) {
 
-			_getPageFunction = httpServletRequest -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-
-				return function.andThen(
+			_getPageFunction = httpServletRequest -> provide(
+				httpServletRequest, Pagination.class,
+				pagination -> function.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
 					pagination
-				);
-			};
+				));
 
 			return this;
 		}
@@ -299,20 +276,14 @@ public class CollectionRoutes<T> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
-			_getPageFunction = httpServletRequest -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-				D d = _provideClass(httpServletRequest, dClass);
-
-				return pentaFunction.andThen(
+			_getPageFunction = httpServletRequest -> provide(
+				httpServletRequest, Pagination.class, aClass, bClass, cClass,
+				dClass,
+				pagination -> a -> b -> c -> d -> pentaFunction.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
 					pagination, a, b, c, d
-				);
-			};
+				));
 
 			return this;
 		}
@@ -331,20 +302,13 @@ public class CollectionRoutes<T> {
 			TetraFunction<Pagination, A, B, C, PageItems<T>> tetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-			_getPageFunction = httpServletRequest -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-				C c = _provideClass(httpServletRequest, cClass);
-
-				return tetraFunction.andThen(
+			_getPageFunction = httpServletRequest -> provide(
+				httpServletRequest, Pagination.class, aClass, bClass, cClass,
+				pagination -> a -> b -> c -> tetraFunction.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
 					pagination, a, b, c
-				);
-			};
+				));
 
 			return this;
 		}
@@ -361,19 +325,13 @@ public class CollectionRoutes<T> {
 			TriFunction<Pagination, A, B, PageItems<T>> triFunction,
 			Class<A> aClass, Class<B> bClass) {
 
-			_getPageFunction = httpServletRequest -> {
-				Pagination pagination = _provideClass(
-					httpServletRequest, Pagination.class);
-
-				A a = _provideClass(httpServletRequest, aClass);
-				B b = _provideClass(httpServletRequest, bClass);
-
-				return triFunction.andThen(
+			_getPageFunction = httpServletRequest -> provide(
+				httpServletRequest, Pagination.class, aClass, bClass,
+				pagination -> a -> b -> triFunction.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
 					pagination, a, b
-				);
-			};
+				));
 
 			return this;
 		}
@@ -388,28 +346,9 @@ public class CollectionRoutes<T> {
 			return new CollectionRoutes<>(this);
 		}
 
-		@SuppressWarnings("unchecked")
-		private <V> V _provideClass(
-			HttpServletRequest httpServletRequest, Class<V> clazz) {
-
-			Optional<?> optional = _provideClassFunction.apply(
-				httpServletRequest
-			).apply(
-				clazz
-			);
-
-			return optional.map(
-				provided -> (V)provided
-			).orElseThrow(
-				() -> new ApioDeveloperError.MustHaveProvider(clazz)
-			);
-		}
-
 		private CreateItemFunction<T> _createItemFunction;
 		private GetPageFunction<T> _getPageFunction;
 		private final Class<T> _modelClass;
-		private final RequestFunction<Function<Class<?>, Optional<?>>>
-			_provideClassFunction;
 
 	}
 
