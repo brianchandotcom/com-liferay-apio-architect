@@ -89,7 +89,7 @@ public class FieldsWriter<T, U> {
 	public Predicate<String> getFieldsPredicate() {
 		Fields fields = _requestInfo.getFields();
 
-		return fields.getFieldsPredicate(_representor.getTypes());
+		return fields.apply(_representor.getTypes());
 	}
 
 	/**
