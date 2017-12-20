@@ -113,7 +113,7 @@ public class DocumentationMessageBodyWriter
 				_providerManager.provideOptional(
 					Embedded.class, _httpServletRequest
 				).orElse(
-					() -> __ -> false
+					__ -> false
 				)
 			).fields(
 				_providerManager.provideOptional(

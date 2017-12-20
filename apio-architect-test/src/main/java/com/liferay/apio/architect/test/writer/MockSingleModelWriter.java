@@ -93,7 +93,7 @@ public class MockSingleModelWriter {
 			).serverURL(
 				() -> "localhost"
 			).embedded(
-				() -> Arrays.asList("embedded1", "embedded1.embedded")::contains
+				Arrays.asList("embedded1", "embedded1.embedded")::contains
 			).fields(
 				__ -> string -> true
 			).language(

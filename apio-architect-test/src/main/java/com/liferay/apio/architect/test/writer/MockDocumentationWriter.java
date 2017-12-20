@@ -55,7 +55,7 @@ public class MockDocumentationWriter {
 			).serverURL(
 				() -> "localhost"
 			).embedded(
-				() -> __ -> false
+				__ -> false
 			).fields(
 				__ -> string -> true
 			).language(

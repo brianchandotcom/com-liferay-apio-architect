@@ -75,7 +75,7 @@ public class FieldsWriterTest {
 		Mockito.when(
 			_requestInfo.getEmbedded()
 		).thenReturn(
-			() -> __ -> false
+			__ -> false
 		);
 
 		Mockito.when(
@@ -189,7 +189,7 @@ public class FieldsWriterTest {
 		Mockito.when(
 			_requestInfo.getEmbedded()
 		).thenReturn(
-			() -> "first.embedded2"::equals
+			"first.embedded2"::equals
 		);
 
 		Mockito.when(

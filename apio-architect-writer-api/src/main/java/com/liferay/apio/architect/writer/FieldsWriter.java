@@ -23,7 +23,6 @@ import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
-import com.liferay.apio.architect.response.control.Embedded;
 import com.liferay.apio.architect.response.control.Fields;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
@@ -77,21 +76,6 @@ public class FieldsWriter<T, U> {
 		_representor = representor;
 		_path = path;
 		_embeddedPathElements = embeddedPathElements;
-	}
-
-	/**
-	 * Returns the {@link Embedded} predicate from the internal {@link
-	 * RequestInfo}. If no {@code Embedded} information is provided to the
-	 * {@code RequestInfo}, this method returns an always-unsuccessful
-	 * predicate.
-	 *
-	 * @return the {@code Embedded} predicate, if {@code Embedded} information
-	 *         exists; an always-unsuccessful predicate otherwise
-	 */
-	public Predicate<String> getEmbeddedPredicate() {
-		Embedded embedded = _requestInfo.getEmbedded();
-
-		return embedded.getEmbeddedPredicate();
 	}
 
 	/**
@@ -347,7 +331,7 @@ public class FieldsWriter<T, U> {
 					return;
 				}
 
-				Predicate<String> embeddedPredicate = getEmbeddedPredicate();
+				Predicate<String> embedded = _requestInfo.getEmbedded();
 
 				SingleModel<V> singleModel = singleModelOptional.get();
 
@@ -358,7 +342,7 @@ public class FieldsWriter<T, U> {
 				String embeddedPath = String.join(
 					".", stream.collect(Collectors.toList()));
 
-				if (embeddedPredicate.test(embeddedPath)) {
+				if (embedded.test(embeddedPath)) {
 					embeddedURLBiConsumer.accept(url, embeddedPathElements);
 					modelBiConsumer.accept(singleModel, embeddedPathElements);
 				}
