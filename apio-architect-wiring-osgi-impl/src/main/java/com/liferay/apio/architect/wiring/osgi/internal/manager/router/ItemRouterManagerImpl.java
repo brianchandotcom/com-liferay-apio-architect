@@ -19,7 +19,6 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.Manag
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import com.liferay.apio.architect.alias.RequestFunction;
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.router.ItemRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
@@ -72,10 +71,9 @@ public class ItemRouterManagerImpl
 			httpServletRequest -> clazz -> _providerManager.provideOptional(
 				clazz, httpServletRequest);
 
-		Class<? extends Identifier> identifierClass =
-			getGenericClassFromPropertyOrElse(
-				serviceReference, ITEM_IDENTIFIER_CLASS,
-				() -> getTypeParamOrFail(itemRouter, ItemRouter.class, 1));
+		Class<?> identifierClass = getGenericClassFromPropertyOrElse(
+			serviceReference, ITEM_IDENTIFIER_CLASS,
+			() -> getTypeParamOrFail(itemRouter, ItemRouter.class, 1));
 
 		Builder builder = new Builder<>(
 			modelClass, identifierClass, provideClassFunction,

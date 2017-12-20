@@ -16,7 +16,6 @@ package com.liferay.apio.architect.wiring.osgi.manager.representable;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.representor.Representor;
 
 import java.util.Optional;
@@ -40,7 +39,7 @@ public interface RepresentableManager {
 	 * @return the model class's representor, if present; {@code
 	 *         Optional#empty()} otherwise
 	 */
-	public <T, U extends Identifier> Optional<Representor<T, U>>
+	public <T, U> Optional<Representor<T, U>>
 		getRepresentorOptional(Class<T> modelClass);
 
 }

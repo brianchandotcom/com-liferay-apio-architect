@@ -17,7 +17,6 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import com.liferay.apio.architect.alias.RequestFunction;
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
@@ -69,7 +68,7 @@ public class ReusableNestedCollectionRouterManagerImpl
 		ServiceReference<ReusableNestedCollectionRouter> serviceReference,
 		Class<?> modelClass) {
 
-		Class<? extends Identifier> identifierClass = getTypeParamOrFail(
+		Class<?> identifierClass = getTypeParamOrFail(
 			reusableNestedCollectionRouter,
 			ReusableNestedCollectionRouter.class, 1);
 

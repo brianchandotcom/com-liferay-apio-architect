@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.message.hal.internal;
 
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
@@ -265,7 +264,7 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, T model, Class<T> modelClass,
 		HttpHeaders httpHeaders) {
 
-		Optional<Representor<T, Identifier>> optional =
+		Optional<Representor<T, Object>> optional =
 			_representableManager.getRepresentorOptional(modelClass);
 
 		optional.map(

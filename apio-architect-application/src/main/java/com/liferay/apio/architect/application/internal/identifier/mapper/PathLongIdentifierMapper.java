@@ -16,7 +16,6 @@ package com.liferay.apio.architect.application.internal.identifier.mapper;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.UnresolvableURI;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.identifier.LongIdentifier;
 import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -29,36 +28,36 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Maps a {@link Path} to a {@link LongIdentifier}, and vice versa.
+ * Maps a {@link Path} to a {@link Long}, and vice versa.
  *
  * <p>
- * {@code LongIdentifier} can then be used as the identifier of a resource.
+ * {@code Long} can then be used as the identifier of a resource.
  * </p>
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class PathLongIdentifierMapper
-	implements PathIdentifierMapper<LongIdentifier> {
+public class PathLongIdentifierMapper implements PathIdentifierMapper<Long> {
 
 	@Override
-	public <U> Path map(LongIdentifier longIdentifier, Class<U> modelClass) {
+	public <U> Path map(Long aLong, Class<U> modelClass) {
 		String className = modelClass.getName();
 
 		Optional<String> optional = _nameManager.getNameOptional(className);
 
-		String name = optional.orElseThrow(
-			() -> new UnresolvableURI(className));
-
-		return new Path(name, String.valueOf(longIdentifier.getId()));
+		return optional.map(
+			name -> new Path(name, String.valueOf(aLong))
+		).orElseThrow(
+			() -> new UnresolvableURI(className)
+		);
 	}
 
 	@Override
-	public LongIdentifier map(Path path) {
+	public Long map(Path path) {
 		Try<Long> longTry = Try.fromFallible(
 			() -> Long.parseLong(path.getId()));
 
-		return () -> longTry.orElseThrow(BadRequestException::new);
+		return longTry.orElseThrow(BadRequestException::new);
 	}
 
 	@Reference

@@ -14,7 +14,6 @@ Export-Package:\
 	com.liferay.apio.architect.exception,\
 	com.liferay.apio.architect.function,\
 	com.liferay.apio.architect.functional,\
-	com.liferay.apio.architect.identifier,\
 	com.liferay.apio.architect.identifier.mapper,\
 	com.liferay.apio.architect.language,\
 	com.liferay.apio.architect.list,\

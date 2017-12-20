@@ -28,7 +28,6 @@ import static org.hamcrest.collection.IsMapWithSize.anEmptyMap;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import com.liferay.apio.architect.identifier.StringIdentifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedModel;
@@ -674,7 +673,7 @@ public class FieldsWriterTest {
 		assertThat(types, contains("Type 1", "Type 2"));
 	}
 
-	private FieldsWriter<RootModel, StringIdentifier> _fieldsWriter;
+	private FieldsWriter<RootModel, String> _fieldsWriter;
 	private final RequestInfo _requestInfo = Mockito.mock(RequestInfo.class);
 
 }

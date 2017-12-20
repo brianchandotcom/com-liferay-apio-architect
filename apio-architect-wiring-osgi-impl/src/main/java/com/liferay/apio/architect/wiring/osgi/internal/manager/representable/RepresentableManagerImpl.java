@@ -20,7 +20,6 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.Manag
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import com.liferay.apio.architect.consumer.TriConsumer;
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
@@ -52,7 +51,7 @@ public class RepresentableManagerImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T, U extends Identifier> Optional<Representor<T, U>>
+	public <T, U> Optional<Representor<T, U>>
 		getRepresentorOptional(Class<T> modelClass) {
 
 		Optional<Representor> optional = getServiceOptional(
@@ -67,11 +66,9 @@ public class RepresentableManagerImpl
 		Representable representable,
 		ServiceReference<Representable> serviceReference, Class<?> modelClass) {
 
-		Class<? extends Identifier> identifierClass =
-			getGenericClassFromPropertyOrElse(
-				serviceReference, ITEM_IDENTIFIER_CLASS,
-				() -> getTypeParamOrFail(
-					representable, Representable.class, 1));
+		Class<?> identifierClass = getGenericClassFromPropertyOrElse(
+			serviceReference, ITEM_IDENTIFIER_CLASS,
+			() -> getTypeParamOrFail(representable, Representable.class, 1));
 
 		Supplier<List<RelatedCollection<?, ?>>> relatedCollectionSupplier =
 			() -> _relatedCollections.get(modelClass.getName());
@@ -88,10 +85,9 @@ public class RepresentableManagerImpl
 		ServiceReference<Representable> serviceReference,
 		Representor representor) {
 
-		Class<? extends Identifier> modelClass =
-			getGenericClassFromPropertyOrElse(
-				serviceReference, MODEL_CLASS,
-				() -> getTypeParamOrFail(representor, Representor.class, 0));
+		Class<?> modelClass = getGenericClassFromPropertyOrElse(
+			serviceReference, MODEL_CLASS,
+			() -> getTypeParamOrFail(representor, Representor.class, 0));
 
 		_relatedCollections.forEach(
 			(className, relatedCollections) -> relatedCollections.removeIf(
@@ -99,7 +95,7 @@ public class RepresentableManagerImpl
 					relatedCollection.getModelClass().equals(modelClass)));
 	}
 
-	private <T> TriConsumer<String, Class<?>, Function<Object, Identifier>>
+	private <T> TriConsumer<String, Class<?>, Function<?, ?>>
 		_addRelatedCollectionTriConsumer(Class<T> relatedModelClass) {
 
 		return (key, modelClass, identifierFunction) -> {

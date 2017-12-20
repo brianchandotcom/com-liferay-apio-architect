@@ -18,7 +18,6 @@ import static com.liferay.apio.architect.writer.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createSingleURL;
 
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedCollection;
@@ -47,7 +46,7 @@ import java.util.stream.Stream;
  *
  * @author Alejandro Hernández
  */
-public class FieldsWriter<T, U extends Identifier> {
+public class FieldsWriter<T, U> {
 
 	/**
 	 * Returns the {@link SingleModel} version of a {@link RelatedModel}.

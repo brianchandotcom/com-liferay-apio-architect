@@ -16,12 +16,10 @@ package com.liferay.apio.architect.identifier.mapper;
 
 import aQute.bnd.annotation.ConsumerType;
 
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.uri.Path;
 
 /**
- * Converts a {@link Path} to its corresponding {@link Identifier}, and vice
- * versa.
+ * Converts a {@link Path} to its corresponding identifier, and vice versa.
  *
  * <p>
  * Instances of {@code PathIdentifierMapper} should only be created for
@@ -33,7 +31,7 @@ import com.liferay.apio.architect.uri.Path;
  * @author Alejandro Hernández
  */
 @ConsumerType
-public interface PathIdentifierMapper<T extends Identifier> {
+public interface PathIdentifierMapper<T> {
 
 	/**
 	 * Converts a path to its corresponding identifier.

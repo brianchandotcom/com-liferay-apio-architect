@@ -25,7 +25,6 @@ import com.liferay.apio.architect.endpoint.RootEndpoint;
 import com.liferay.apio.architect.error.ApioDeveloperError;
 import com.liferay.apio.architect.function.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representor;
@@ -350,11 +349,11 @@ public class RootEndpointImpl implements RootEndpoint {
 		};
 	}
 
-	private <T> ThrowableFunction<SingleModel<T>, Optional<Identifier>>
+	private <T> ThrowableFunction<SingleModel<T>, Optional<Object>>
 		_getIdentifierFunction(String nestedName) {
 
 		return parentSingleModel -> {
-			Optional<Representor<T, Identifier>> optional =
+			Optional<Representor<T, Object>> optional =
 				_representableManager.getRepresentorOptional(
 					parentSingleModel.getModelClass());
 
@@ -398,7 +397,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		);
 	}
 
-	private <T, S> ThrowableFunction<Function<Identifier, Page<S>>,
+	private <T, S> ThrowableFunction<Function<Object, Page<S>>,
 		Try<Optional<Page<S>>>> _getNestedCollectionPageTryFunction(
 			String name, String id, String nestedName) {
 

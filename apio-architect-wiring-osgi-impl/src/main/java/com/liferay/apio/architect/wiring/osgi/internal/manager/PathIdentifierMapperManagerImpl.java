@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
@@ -38,11 +37,7 @@ public class PathIdentifierMapperManagerImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends Identifier> Optional<T> map(Class<T> clazz, Path path) {
-		if (Identifier.class == clazz) {
-			return Optional.of((T)new Identifier() {});
-		}
-
+	public <T> Optional<T> map(Class<T> clazz, Path path) {
 		Optional<PathIdentifierMapper> optional = getServiceOptional(clazz);
 
 		return optional.map(
@@ -55,13 +50,8 @@ public class PathIdentifierMapperManagerImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends Identifier, U> Optional<Path> map(
-		T identifier, Class<? extends Identifier> identifierClass,
-		Class<U> modelClass) {
-
-		if (Identifier.class == identifierClass) {
-			return Optional.of(new Path());
-		}
+	public <T, U> Optional<Path> map(
+		T identifier, Class<?> identifierClass, Class<U> modelClass) {
 
 		Optional<PathIdentifierMapper> optional = getServiceOptional(
 			identifierClass);

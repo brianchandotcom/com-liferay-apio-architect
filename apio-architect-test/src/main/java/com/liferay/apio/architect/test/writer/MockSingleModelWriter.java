@@ -22,8 +22,6 @@ import static com.liferay.apio.architect.test.resource.MockRepresentorCreator.cr
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.identifier.StringIdentifier;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
@@ -58,7 +56,7 @@ public class MockSingleModelWriter {
 	 * @param  modelClass the model class
 	 * @return the model class's {@code Representor}
 	 */
-	public static <T> Optional<Representor<?, ? extends Identifier>>
+	public static <T> Optional<Representor<?, ?>>
 		getRepresentorOptional(Class<T> modelClass) {
 
 		if (modelClass == RootModel.class) {
@@ -102,27 +100,25 @@ public class MockSingleModelWriter {
 	}
 
 	/**
-	 * Returns a mock {@link Path} from an {@link Identifier}. The {@code
-	 * Identifier} must be a {@link StringIdentifier}, otherwise {@code
-	 * Optional#empty()} is returned.
+	 * Returns a mock {@link Path} from an identifier. The identifier must be a
+	 * {@link String}, otherwise {@code Optional#empty()} is returned.
 	 *
-	 * @param  identifier the {@code Identifier}
+	 * @param  identifier the identifier
 	 * @param  modelClass the model class
-	 * @return the mock {@code Path} from the {@code Identifier}, if the {@code
-	 *         Identifier} is a {@code StringIdentifier}; {@code
-	 *         Optional#empty()} otherwise
+	 * @return the mock {@code Path} from the identifier, if the identifier is a
+	 *         {@code String}; {@code Optional#empty()} otherwise
 	 */
 	public static Optional<Path> identifierToPath(
-		Identifier identifier, Class<?> modelClass) {
+		Object identifier, Class<?> modelClass) {
 
-		if (!(identifier instanceof StringIdentifier)) {
+		if (!(identifier instanceof String)) {
 			return Optional.empty();
 		}
 
-		StringIdentifier stringIdentifier = (StringIdentifier)identifier;
+		String string = (String)identifier;
 
 		Function<String, Optional<Path>> function =
-			name -> Optional.of(new Path(name, stringIdentifier.getId()));
+			name -> Optional.of(new Path(name, string));
 
 		if (modelClass == RootModel.class) {
 			return function.apply("model");

@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.application.internal.identifier.mapper;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.UnresolvableURI;
-import com.liferay.apio.architect.identifier.StringIdentifier;
 import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -26,27 +25,25 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Maps a {@link Path} to a {@link StringIdentifier}, and vice versa.
+ * Maps a {@link Path} to a {@link String}, and vice versa.
  *
  * <p>
- * {@code StringIdentifier} can then be used as the identifier of a resource.
+ * {@code String} can then be used as the identifier of a resource.
  * </p>
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
 public class PathStringIdentifierMapper
-	implements PathIdentifierMapper<StringIdentifier> {
+	implements PathIdentifierMapper<String> {
 
 	@Override
-	public StringIdentifier map(Path path) {
-		return path::getId;
+	public String map(Path path) {
+		return path.getId();
 	}
 
 	@Override
-	public <U> Path map(
-		StringIdentifier stringIdentifier, Class<U> modelClass) {
-
+	public <U> Path map(String string, Class<U> modelClass) {
 		String className = modelClass.getName();
 
 		Optional<String> optional = _nameManager.getNameOptional(className);
@@ -54,7 +51,7 @@ public class PathStringIdentifierMapper
 		String name = optional.orElseThrow(
 			() -> new UnresolvableURI(className));
 
-		return new Path(name, stringIdentifier.getId());
+		return new Path(name, string);
 	}
 
 	@Reference
