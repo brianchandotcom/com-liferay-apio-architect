@@ -18,7 +18,6 @@ import static com.liferay.apio.architect.writer.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createSingleURL;
 
-import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
@@ -90,14 +89,9 @@ public class FieldsWriter<T, U> {
 	 *         exists; an always-unsuccessful predicate otherwise
 	 */
 	public Predicate<String> getEmbeddedPredicate() {
-		Optional<Embedded> embeddedOptional =
-			_requestInfo.getEmbeddedOptional();
+		Embedded embedded = _requestInfo.getEmbedded();
 
-		return embeddedOptional.map(
-			Embedded::getEmbeddedPredicate
-		).orElseGet(
-			() -> field -> false
-		);
+		return embedded.getEmbeddedPredicate();
 	}
 
 	/**
@@ -109,13 +103,9 @@ public class FieldsWriter<T, U> {
 	 *         exists; an always-successful predicate otherwise
 	 */
 	public Predicate<String> getFieldsPredicate() {
-		Optional<Fields> optional = _requestInfo.getFieldsOptional();
+		Fields fields = _requestInfo.getFields();
 
-		return optional.map(
-			fields -> fields.getFieldsPredicate(_representor.getTypes())
-		).orElseGet(
-			() -> field -> true
-		);
+		return fields.getFieldsPredicate(_representor.getTypes());
 	}
 
 	/**
@@ -244,20 +234,11 @@ public class FieldsWriter<T, U> {
 	public void writeLocalizedStringFields(
 		BiConsumer<String, String> biConsumer) {
 
-		Optional<Language> languageOptional =
-			_requestInfo.getLanguageOptional();
-
-		if (!languageOptional.isPresent()) {
-			return;
-		}
-
-		Language language = languageOptional.get();
-
 		writeFields(
 			Representor::getLocalizedStringFunctions,
 			writeField(
 				biFunction -> biFunction.apply(
-					_singleModel.getModel(), language),
+					_singleModel.getModel(), _requestInfo.getLanguage()),
 				biConsumer));
 	}
 

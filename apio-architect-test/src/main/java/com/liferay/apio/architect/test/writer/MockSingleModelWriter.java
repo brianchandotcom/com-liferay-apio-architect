@@ -79,7 +79,7 @@ public class MockSingleModelWriter {
 	 * mock {@link com.liferay.apio.architect.url.ServerURL}, a mock {@link
 	 * com.liferay.apio.architect.response.control.Embedded} request, and a mock
 	 * {@link com.liferay.apio.architect.language.Language} with {@code
-	 * java.util.LocaleLocale#US}.
+	 * Locale#getDefault()}.
 	 *
 	 * @param  httpHeaders the {@code HttpHeaders}
 	 * @return the {@code RequestInfo}
@@ -94,8 +94,10 @@ public class MockSingleModelWriter {
 				() -> "localhost"
 			).embedded(
 				() -> Arrays.asList("embedded1", "embedded1.embedded")::contains
+			).fields(
+				__ -> string -> true
 			).language(
-				() -> Locale.US
+				Locale::getDefault
 			).build());
 	}
 

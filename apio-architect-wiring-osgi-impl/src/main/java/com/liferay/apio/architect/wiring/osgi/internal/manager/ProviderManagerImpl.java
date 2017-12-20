@@ -51,13 +51,4 @@ public class ProviderManagerImpl
 		);
 	}
 
-	@Override
-	public <T> T provideOrNull(
-		Class<T> clazz, HttpServletRequest httpServletRequest) {
-
-		Optional<T> optional = provideOptional(clazz, httpServletRequest);
-
-		return optional.orElse(null);
-	}
-
 }
