@@ -227,8 +227,6 @@ public class RootEndpointImpl implements RootEndpoint {
 			NoSuchElementException.class, _getNotFoundExceptionSupplier(name)
 		).map(
 			function -> function.apply(_httpServletRequest)
-		).map(
-			function -> function.apply(new Path())
 		);
 	}
 

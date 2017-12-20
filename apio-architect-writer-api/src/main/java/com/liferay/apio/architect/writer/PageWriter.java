@@ -16,6 +16,7 @@ package com.liferay.apio.architect.writer;
 
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionPageURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionURL;
+import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
 
@@ -250,16 +251,22 @@ public class PageWriter<T> {
 	}
 
 	private Optional<String> _getCollectionURLOptional() {
-		Path path = _page.getPath();
-
 		Class<T> modelClass = _page.getModelClass();
 
 		Optional<String> optional = _resourceNameFunction.apply(
 			modelClass.getName());
 
 		return optional.map(
-			name -> createCollectionURL(
-				_requestInfo.getServerURL(), path, name));
+			name -> {
+				Optional<Path> pathOptional = _page.getPathOptional();
+
+				if (pathOptional.isPresent()) {
+					return createNestedCollectionURL(
+						_requestInfo.getServerURL(), pathOptional.get(), name);
+				}
+
+				return createCollectionURL(_requestInfo.getServerURL(), name);
+			});
 	}
 
 	private void _writeItem(SingleModel<T> singleModel) {

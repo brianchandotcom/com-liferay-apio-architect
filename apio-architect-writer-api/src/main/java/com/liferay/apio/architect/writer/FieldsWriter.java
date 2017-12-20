@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.writer;
 
 import static com.liferay.apio.architect.writer.url.URLCreator.createBinaryURL;
-import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionURL;
+import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createSingleURL;
 
 import com.liferay.apio.architect.language.Language;
@@ -293,7 +293,7 @@ public class FieldsWriter<T, U> {
 			return;
 		}
 
-		String url = createCollectionURL(
+		String url = createNestedCollectionURL(
 			_requestInfo.getServerURL(), _path, resourceName);
 
 		FunctionalList<String> embeddedPathElements = new FunctionalList<>(

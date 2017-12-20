@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.pagination;
 
+import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
@@ -22,6 +24,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,10 +72,15 @@ public class PageTest {
 
 	@Test
 	public void testGetPathReturnsPath() {
-		Path path = _page.getPath();
+		Optional<Path> optional = _page.getPathOptional();
 
-		assertThat(path.getId(), is(equalTo("id")));
-		assertThat(path.getName(), is(equalTo("name")));
+		assertThat(optional, is(optionalWithValue()));
+
+		optional.ifPresent(
+			path -> {
+				assertThat(path.getId(), is(equalTo("id")));
+				assertThat(path.getName(), is(equalTo("name")));
+			});
 	}
 
 	@Test
