@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.identifier.mapper;
+package com.liferay.apio.architect.uri.mapper;
 
 import aQute.bnd.annotation.ConsumerType;
 

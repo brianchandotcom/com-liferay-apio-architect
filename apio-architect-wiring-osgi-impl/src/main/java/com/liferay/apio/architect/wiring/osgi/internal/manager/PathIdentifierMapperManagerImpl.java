@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
-import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.uri.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 

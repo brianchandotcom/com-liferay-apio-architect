@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.liferay.portal.internal.identifier.mapper;
+package com.liferay.apio.architect.sample.liferay.portal.internal.uri.mapper;
 
 import com.liferay.apio.architect.error.ApioDeveloperError;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.identifier.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.uri.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.ModelClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 
