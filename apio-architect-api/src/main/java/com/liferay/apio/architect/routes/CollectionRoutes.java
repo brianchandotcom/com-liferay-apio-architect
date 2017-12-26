@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.routes;
 
+import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
+
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
@@ -79,12 +81,11 @@ public class CollectionRoutes<T> {
 	 * com.liferay.apio.architect.router.CollectionRouter}.
 	 */
 	@SuppressWarnings("unused")
-	public static class Builder<T> extends BaseRoutesBuilder {
+	public static class Builder<T> {
 
 		public Builder(Class<T> modelClass, ProvideFunction provideFunction) {
-			super(provideFunction);
-
 			_modelClass = modelClass;
+			_provideFunction = provideFunction;
 		}
 
 		/**
@@ -99,7 +100,7 @@ public class CollectionRoutes<T> {
 			BiFunction<Map<String, Object>, A, T> biFunction, Class<A> aClass) {
 
 			_createItemFunction = httpServletRequest -> body -> provide(
-				httpServletRequest, aClass,
+				_provideFunction, httpServletRequest, aClass,
 				a -> biFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -149,7 +150,8 @@ public class CollectionRoutes<T> {
 			Class<D> dClass) {
 
 			_createItemFunction = httpServletRequest -> body -> provide(
-				httpServletRequest, aClass, bClass, cClass, dClass,
+				_provideFunction, httpServletRequest, aClass, bClass, cClass,
+				dClass,
 				a -> b -> c -> d -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -177,7 +179,7 @@ public class CollectionRoutes<T> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
 			_createItemFunction = httpServletRequest -> body -> provide(
-				httpServletRequest, aClass, bClass, cClass,
+				_provideFunction, httpServletRequest, aClass, bClass, cClass,
 				a -> b -> c -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -203,7 +205,7 @@ public class CollectionRoutes<T> {
 			Class<A> aClass, Class<B> bClass) {
 
 			_createItemFunction = httpServletRequest -> body -> provide(
-				httpServletRequest, aClass, bClass,
+				_provideFunction, httpServletRequest, aClass, bClass,
 				a -> b -> triFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -225,7 +227,7 @@ public class CollectionRoutes<T> {
 			Class<A> aClass) {
 
 			_getPageFunction = httpServletRequest -> provide(
-				httpServletRequest, Pagination.class, aClass,
+				_provideFunction, httpServletRequest, Pagination.class, aClass,
 				pagination -> a -> biFunction.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
@@ -246,7 +248,7 @@ public class CollectionRoutes<T> {
 			Function<Pagination, PageItems<T>> function) {
 
 			_getPageFunction = httpServletRequest -> provide(
-				httpServletRequest, Pagination.class,
+				_provideFunction, httpServletRequest, Pagination.class,
 				pagination -> function.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
@@ -273,8 +275,8 @@ public class CollectionRoutes<T> {
 			Class<D> dClass) {
 
 			_getPageFunction = httpServletRequest -> provide(
-				httpServletRequest, Pagination.class, aClass, bClass, cClass,
-				dClass,
+				_provideFunction, httpServletRequest, Pagination.class, aClass,
+				bClass, cClass, dClass,
 				pagination -> a -> b -> c -> d -> pentaFunction.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
@@ -299,7 +301,8 @@ public class CollectionRoutes<T> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
 			_getPageFunction = httpServletRequest -> provide(
-				httpServletRequest, Pagination.class, aClass, bClass, cClass,
+				_provideFunction, httpServletRequest, Pagination.class, aClass,
+				bClass, cClass,
 				pagination -> a -> b -> c -> tetraFunction.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
@@ -322,7 +325,8 @@ public class CollectionRoutes<T> {
 			Class<A> aClass, Class<B> bClass) {
 
 			_getPageFunction = httpServletRequest -> provide(
-				httpServletRequest, Pagination.class, aClass, bClass,
+				_provideFunction, httpServletRequest, Pagination.class, aClass,
+				bClass,
 				pagination -> a -> b -> triFunction.andThen(
 					items -> new Page<>(_modelClass, items, pagination)
 				).apply(
@@ -345,6 +349,7 @@ public class CollectionRoutes<T> {
 		private CreateItemFunction<T> _createItemFunction;
 		private GetPageFunction<T> _getPageFunction;
 		private final Class<T> _modelClass;
+		private final ProvideFunction _provideFunction;
 
 	}
 
