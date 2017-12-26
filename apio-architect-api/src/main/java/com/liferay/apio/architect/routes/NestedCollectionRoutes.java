@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.routes;
 
-import com.liferay.apio.architect.alias.RequestFunction;
+import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedGetPageFunction;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustUseSameIdentifier;
@@ -30,7 +30,6 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Holds information about the routes supported for a {@link
@@ -89,10 +88,9 @@ public class NestedCollectionRoutes<T> {
 
 		public Builder(
 			Class<T> modelClass, Class<U> identifierClass,
-			RequestFunction<Function<Class<?>, Optional<?>>>
-				provideClassFunction) {
+			ProvideFunction provideFunction) {
 
-			super(provideClassFunction);
+			super(provideFunction);
 
 			_modelClass = modelClass;
 			_identifierClass = identifierClass;

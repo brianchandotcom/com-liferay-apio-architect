@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.routes;
 
-import com.liferay.apio.architect.alias.RequestFunction;
+import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.error.ApioDeveloperError;
 
 import java.util.Optional;
@@ -31,10 +31,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class BaseRoutesBuilder {
 
-	public BaseRoutesBuilder(
-		RequestFunction<Function<Class<?>, Optional<?>>> provideClassFunction) {
-
-		_provideClassFunction = provideClassFunction;
+	public BaseRoutesBuilder(ProvideFunction provideFunction) {
+		_provideFunction = provideFunction;
 	}
 
 	/**
@@ -280,7 +278,7 @@ public abstract class BaseRoutesBuilder {
 	private <V> V _provideClass(
 		HttpServletRequest httpServletRequest, Class<V> clazz) {
 
-		Optional<?> optional = _provideClassFunction.apply(
+		Optional<?> optional = _provideFunction.apply(
 			httpServletRequest
 		).apply(
 			clazz
@@ -293,7 +291,6 @@ public abstract class BaseRoutesBuilder {
 		);
 	}
 
-	private final RequestFunction<Function<Class<?>, Optional<?>>>
-		_provideClassFunction;
+	private final ProvideFunction _provideFunction;
 
 }

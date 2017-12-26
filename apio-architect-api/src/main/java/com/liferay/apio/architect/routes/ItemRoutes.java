@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.routes;
 
-import com.liferay.apio.architect.alias.RequestFunction;
+import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
@@ -103,12 +103,11 @@ public class ItemRoutes<T> {
 
 		public Builder(
 			Class<T> modelClass, Class<U> identifierClass,
-			RequestFunction<Function<Class<?>, Optional<?>>>
-				provideClassFunction,
+			ProvideFunction provideFunction,
 			Supplier<BiFunction<Class<?>, Path,
 				Optional<?>>> identifierFunctionSupplier) {
 
-			super(provideClassFunction);
+			super(provideFunction);
 
 			_modelClass = modelClass;
 			_identifierClass = identifierClass;

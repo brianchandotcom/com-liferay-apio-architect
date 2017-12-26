@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.routes;
 
-import com.liferay.apio.architect.alias.RequestFunction;
+import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.function.PentaFunction;
@@ -81,12 +81,8 @@ public class CollectionRoutes<T> {
 	@SuppressWarnings("unused")
 	public static class Builder<T> extends BaseRoutesBuilder {
 
-		public Builder(
-			Class<T> modelClass,
-			RequestFunction<Function<Class<?>, Optional<?>>>
-				provideClassFunction) {
-
-			super(provideClassFunction);
+		public Builder(Class<T> modelClass, ProvideFunction provideFunction) {
+			super(provideFunction);
 
 			_modelClass = modelClass;
 		}
