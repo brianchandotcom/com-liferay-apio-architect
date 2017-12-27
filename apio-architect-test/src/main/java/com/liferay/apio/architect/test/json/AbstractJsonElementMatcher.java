@@ -113,8 +113,8 @@ public abstract class AbstractJsonElementMatcher<T extends JsonElement, S>
 		return false;
 	}
 
-	private final Matcher<S> _sMatcher;
 	private final JsonElementType _jsonElementType;
+	private final Matcher<S> _sMatcher;
 	private final Function<T, S> _transformFunction;
 
 }
