@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.routes;
 
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.pagination.Pagination;
 
@@ -25,6 +26,13 @@ import java.util.Optional;
  * @author Alejandro Hernández
  */
 public class RoutesTestUtil {
+
+	/**
+	 * A {@code IdentifierFunction} that returns the {@code Path} ID long's
+	 * value.
+	 */
+	public static final IdentifierFunction IDENTIFIER_FUNCTION =
+		path -> Long.valueOf(path.getId());
 
 	/**
 	 * Mocked {@code Pagination}.
