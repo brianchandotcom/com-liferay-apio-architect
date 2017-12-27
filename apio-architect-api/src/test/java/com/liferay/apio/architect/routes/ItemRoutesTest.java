@@ -34,6 +34,9 @@ import com.liferay.apio.architect.uri.Path;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
@@ -283,8 +286,9 @@ public class ItemRoutesTest {
 		Optional<UpdateItemFunction<String>> updateItemFunctionOptional =
 			itemRoutes.getUpdateItemFunctionOptional();
 
-		UpdateItemFunction<String> updateItemFunction =
-			updateItemFunctionOptional.get();
+		Function<HttpServletRequest, Function<Path,
+			Function<Map<String, Object>, SingleModel<String>>>>
+				updateItemFunction = updateItemFunctionOptional.get();
 
 		SingleModel<String> updatedSingleModel = updateItemFunction.apply(
 			null

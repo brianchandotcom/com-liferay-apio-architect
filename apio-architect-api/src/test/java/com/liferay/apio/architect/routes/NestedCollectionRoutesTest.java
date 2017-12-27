@@ -41,6 +41,9 @@ import com.liferay.apio.architect.uri.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
@@ -329,8 +332,10 @@ public class NestedCollectionRoutesTest {
 			nestedCreateItemFunctionOptional =
 				nestedCollectionRoutes.getNestedCreateItemFunctionOptional();
 
-		NestedCreateItemFunction<String> nestedCreateItemFunction =
-			nestedCreateItemFunctionOptional.get();
+		Function<HttpServletRequest, Function<Object,
+			Function<Map<String, Object>, SingleModel<String>>>>
+				nestedCreateItemFunction =
+					nestedCreateItemFunctionOptional.get();
 
 		SingleModel<String> singleModel = nestedCreateItemFunction.apply(
 			null
@@ -346,8 +351,9 @@ public class NestedCollectionRoutesTest {
 		Optional<NestedGetPageFunction<String>> nestedGetPageFunctionOptional =
 			nestedCollectionRoutes.getNestedGetPageFunctionOptional();
 
-		NestedGetPageFunction<String> nestedGetPageFunction =
-			nestedGetPageFunctionOptional.get();
+		Function<HttpServletRequest, Function<Path,
+			Function<Object, Page<String>>>> nestedGetPageFunction =
+				nestedGetPageFunctionOptional.get();
 
 		Path path = new Path("name", "42");
 
