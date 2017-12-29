@@ -64,14 +64,14 @@ public class RequestInfoTest {
 				_language
 			).build());
 
+		assertThat(requestInfo.getEmbedded(), is(equalTo(_embedded)));
+		assertThat(requestInfo.getFields(), is(equalTo(_fields)));
 		assertThat(requestInfo.getHttpHeaders(), is(equalTo(_httpHeaders)));
 		assertThat(
 			requestInfo.getHttpServletRequest(),
 			is(equalTo(_httpServletRequest)));
-		assertThat(requestInfo.getServerURL(), is(equalTo(_serverURL)));
-		assertThat(requestInfo.getEmbedded(), is(equalTo(_embedded)));
-		assertThat(requestInfo.getFields(), is(equalTo(_fields)));
 		assertThat(requestInfo.getLanguage(), is(equalTo(_language)));
+		assertThat(requestInfo.getServerURL(), is(equalTo(_serverURL)));
 	}
 
 	private Embedded _embedded;
