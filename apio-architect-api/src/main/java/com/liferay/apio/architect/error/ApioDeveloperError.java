@@ -74,7 +74,7 @@ public class ApioDeveloperError extends Error {
 		extends ApioDeveloperError {
 
 		public MustHavePathIdentifierMapper(Class<?> identifier) {
-			super(identifier + " Identifier does not have a path mapper");
+			super(identifier + " identifier does not have a path mapper");
 		}
 
 	}
@@ -132,7 +132,7 @@ public class ApioDeveloperError extends Error {
 			Class<?> identifierClass, Class<?> collectionIdentifierClass) {
 
 			super(
-				identifierClass + " Identifier must be " +
+				identifierClass + " identifier must be " +
 					collectionIdentifierClass);
 		}
 
