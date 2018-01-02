@@ -60,15 +60,15 @@ public class Form<T> {
 	public T get(Map<String, Object> body) {
 		T t = _supplier.get();
 
-		_optionalDates.forEach(getOptionalDate(body, t));
-		_optionalLongs.forEach(getOptionalLong(body, t));
-		_optionalDoubles.forEach(getOptionalDouble(body, t));
 		_optionalBooleans.forEach(getOptionalBoolean(body, t));
+		_optionalDates.forEach(getOptionalDate(body, t));
+		_optionalDoubles.forEach(getOptionalDouble(body, t));
+		_optionalLongs.forEach(getOptionalLong(body, t));
 		_optionalStrings.forEach(getOptionalString(body, t));
-		_requiredLongs.forEach(getRequiredLong(body, t));
 		_requiredBooleans.forEach(getRequiredBoolean(body, t));
-		_requiredDoubles.forEach(getRequiredDouble(body, t));
 		_requiredDates.forEach(getRequiredDate(body, t));
+		_requiredDoubles.forEach(getRequiredDouble(body, t));
+		_requiredLongs.forEach(getRequiredLong(body, t));
 		_requiredStrings.forEach(getRequiredString(body, t));
 
 		return t;
