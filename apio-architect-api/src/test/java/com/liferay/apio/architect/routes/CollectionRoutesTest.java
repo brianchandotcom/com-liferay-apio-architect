@@ -30,6 +30,7 @@ import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
+import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -222,6 +223,16 @@ public class CollectionRoutesTest {
 
 	private void _testCollectionRoutes(
 		CollectionRoutes<String> collectionRoutes) {
+
+		Optional<Form> optional = collectionRoutes.getForm();
+
+		Map body = optional.map(
+			form -> form.get(_body)
+		).map(
+			Map.class::cast
+		).get();
+
+		assertThat(body, is(equalTo(_body)));
 
 		Optional<CreateItemFunction<String>> createItemFunctionOptional =
 			collectionRoutes.getCreateItemFunctionOptional();

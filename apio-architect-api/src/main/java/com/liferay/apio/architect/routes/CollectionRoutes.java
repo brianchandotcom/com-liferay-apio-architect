@@ -52,6 +52,7 @@ public class CollectionRoutes<T> {
 
 	public CollectionRoutes(Builder<T> builder) {
 		_createItemFunction = builder._createItemFunction;
+		_form = builder._form;
 		_getPageFunction = builder._getPageFunction;
 	}
 
@@ -65,6 +66,18 @@ public class CollectionRoutes<T> {
 	 */
 	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional() {
 		return Optional.ofNullable(_createItemFunction);
+	}
+
+	/**
+	 * Returns the form that is used to create a collection item, if it was
+	 * added through the {@link Builder}. Returns {@code Optional#empty()}
+	 * otherwise.
+	 *
+	 * @return the form used to create a collection item; {@code
+	 *         Optional#empty()} otherwise
+	 */
+	public Optional<Form> getForm() {
+		return Optional.ofNullable(_form);
 	}
 
 	/**
@@ -102,18 +115,19 @@ public class CollectionRoutes<T> {
 		 * @return the updated builder
 		 * @review
 		 */
+		@SuppressWarnings("unchecked")
 		public <A, R> Builder<T> addCreator(
 			BiFunction<R, A, T> biFunction, Class<A> aClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(new Form.Builder<>());
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction, httpServletRequest, aClass,
 				a -> biFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					form.get(body), a
+					(R)_form.get(body), a
 				));
 
 			return this;
@@ -128,17 +142,18 @@ public class CollectionRoutes<T> {
 		 * @return the updated builder
 		 * @review
 		 */
+		@SuppressWarnings("unchecked")
 		public <R> Builder<T> addCreator(
 			Function<R, T> function,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(new Form.Builder<>());
 
 			_createItemFunction = httpServletRequest -> body ->
 				function.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					form.get(body)
+					(R)_form.get(body)
 				);
 
 			return this;
@@ -162,12 +177,13 @@ public class CollectionRoutes<T> {
 		 * @return the updated builder
 		 * @review
 		 */
+		@SuppressWarnings("unchecked")
 		public <A, B, C, D, R> Builder<T> addCreator(
 			PentaFunction<R, A, B, C, D, T> pentaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(new Form.Builder<>());
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction, httpServletRequest, aClass, bClass, cClass,
@@ -175,7 +191,7 @@ public class CollectionRoutes<T> {
 				a -> b -> c -> d -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					form.get(body), a, b, c, d
+					(R)_form.get(body), a, b, c, d
 				));
 
 			return this;
@@ -197,19 +213,20 @@ public class CollectionRoutes<T> {
 		 * @return the updated builder
 		 * @review
 		 */
+		@SuppressWarnings("unchecked")
 		public <A, B, C, R> Builder<T> addCreator(
 			TetraFunction<R, A, B, C, T> pentaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(new Form.Builder<>());
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction, httpServletRequest, aClass, bClass, cClass,
 				a -> b -> c -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					form.get(body), a, b, c
+					(R)_form.get(body), a, b, c
 				));
 
 			return this;
@@ -229,18 +246,19 @@ public class CollectionRoutes<T> {
 		 * @return the updated builder
 		 * @review
 		 */
+		@SuppressWarnings("unchecked")
 		public <A, B, R> Builder<T> addCreator(
 			TriFunction<R, A, B, T> triFunction, Class<A> aClass,
 			Class<B> bClass, FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(new Form.Builder<>());
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction, httpServletRequest, aClass, bClass,
 				a -> b -> triFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					form.get(body), a, b
+					(R)_form.get(body), a, b
 				));
 
 			return this;
@@ -378,6 +396,7 @@ public class CollectionRoutes<T> {
 		}
 
 		private CreateItemFunction<T> _createItemFunction;
+		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private final Class<T> _modelClass;
 		private final ProvideFunction _provideFunction;
@@ -385,6 +404,7 @@ public class CollectionRoutes<T> {
 	}
 
 	private CreateItemFunction<T> _createItemFunction;
+	private final Form _form;
 	private GetPageFunction<T> _getPageFunction;
 
 }

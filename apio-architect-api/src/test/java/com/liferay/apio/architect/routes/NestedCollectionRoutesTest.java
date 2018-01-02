@@ -32,6 +32,7 @@ import static org.hamcrest.core.Is.is;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedGetPageFunction;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustUseSameIdentifier;
+import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -332,6 +333,16 @@ public class NestedCollectionRoutesTest {
 	private void _testNestedCollectionRoutes(
 		NestedCollectionRoutes<String> nestedCollectionRoutes,
 		Object identifier) {
+
+		Optional<Form> optional = nestedCollectionRoutes.getForm();
+
+		Map body = optional.map(
+			form -> form.get(_body)
+		).map(
+			Map.class::cast
+		).get();
+
+		assertThat(body, is(equalTo(_body)));
 
 		Optional<NestedCreateItemFunction<String>>
 			nestedCreateItemFunctionOptional =
