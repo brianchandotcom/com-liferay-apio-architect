@@ -356,9 +356,8 @@ public class NestedCollectionRoutesTest {
 		Optional<NestedGetPageFunction<String>> nestedGetPageFunctionOptional =
 			nestedCollectionRoutes.getNestedGetPageFunctionOptional();
 
-		Function<HttpServletRequest, Function<Path,
-			Function<Object, Page<String>>>> nestedGetPageFunction =
-				nestedGetPageFunctionOptional.get();
+		NestedGetPageFunction<String> nestedGetPageFunction =
+			nestedGetPageFunctionOptional.get();
 
 		Path path = new Path("name", "42");
 
