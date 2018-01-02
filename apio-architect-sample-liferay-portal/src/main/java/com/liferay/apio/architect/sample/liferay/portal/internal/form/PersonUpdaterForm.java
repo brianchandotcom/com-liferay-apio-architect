@@ -18,10 +18,21 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.Form.Builder;
 
 /**
+ * Instances of this class represent the values extracted from a person updater
+ * form.
+ *
  * @author Alejandro Hernández
+ * @review
  */
 public class PersonUpdaterForm {
 
+	/**
+	 * Builds a {@code Form} that generates {@code PersonUpdaterForm} depending
+	 * on the HTTP body.
+	 *
+	 * @param  formBuilder the {@code Form} builder
+	 * @return a person updater form
+	 */
 	public static Form<PersonUpdaterForm> buildForm(
 		Builder<PersonUpdaterForm> formBuilder) {
 
@@ -42,26 +53,62 @@ public class PersonUpdaterForm {
 		).build();
 	}
 
+	/**
+	 * Returns the person's alternate name
+	 *
+	 * @return the person's alternate name
+	 * @review
+	 */
 	public String getAlternateName() {
 		return _alternateName;
 	}
 
+	/**
+	 * Returns the person's email
+	 *
+	 * @return the person's email
+	 * @review
+	 */
 	public String getEmail() {
 		return _email;
 	}
 
+	/**
+	 * Returns the person's family name
+	 *
+	 * @return the person's family name
+	 * @review
+	 */
 	public String getFamilyName() {
 		return _familyName;
 	}
 
+	/**
+	 * Returns the person's given name
+	 *
+	 * @return the person's given name
+	 * @review
+	 */
 	public String getGivenName() {
 		return _givenName;
 	}
 
+	/**
+	 * Returns the person's job title
+	 *
+	 * @return the person's job title
+	 * @review
+	 */
 	public String getJobTitle() {
 		return _jobTitle;
 	}
 
+	/**
+	 * Returns the person's password
+	 *
+	 * @return the person's password
+	 * @review
+	 */
 	public String getPassword() {
 		return _password;
 	}
