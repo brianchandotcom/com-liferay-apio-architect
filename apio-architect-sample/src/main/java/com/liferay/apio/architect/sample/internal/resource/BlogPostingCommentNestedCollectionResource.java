@@ -20,6 +20,7 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
+import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentForm;
 import com.liferay.apio.architect.sample.internal.model.BlogPosting;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingComment;
 import com.liferay.apio.architect.sample.internal.model.Person;
@@ -51,7 +52,7 @@ public class BlogPostingCommentNestedCollectionResource implements
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addBlogPostingComment
+			this::_addBlogPostingComment, BlogPostingCommentForm::buildForm
 		).build();
 	}
 
@@ -95,13 +96,11 @@ public class BlogPostingCommentNestedCollectionResource implements
 	}
 
 	private BlogPostingComment _addBlogPostingComment(
-		Long blogPostId, Map<String, Object> body) {
-
-		Long authorId = (Long)body.get("author");
-		String content = (String)body.get("text");
+		Long blogPostId, BlogPostingCommentForm blogPostingCommentForm) {
 
 		return BlogPostingComment.addBlogPostingComment(
-			authorId, blogPostId, content);
+			blogPostingCommentForm.getAuthor(), blogPostId,
+			blogPostingCommentForm.getText());
 	}
 
 	private void _deleteBlogPostingComment(Long blogPostingCommentId) {

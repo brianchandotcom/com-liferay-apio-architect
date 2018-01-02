@@ -21,6 +21,7 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
+import com.liferay.apio.architect.sample.liferay.portal.internal.form.WebPageElementCreatorForm;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSite;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSiteService;
 import com.liferay.document.library.kernel.service.DLFolderService;
@@ -33,14 +34,8 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserService;
-import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -74,7 +69,7 @@ public class WebPageElementNestedCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addJournalArticle
+			this::_addJournalArticle, WebPageElementCreatorForm::buildForm
 		).build();
 	}
 
@@ -129,59 +124,7 @@ public class WebPageElementNestedCollectionResource
 	}
 
 	private JournalArticle _addJournalArticle(
-		Long groupId, Map<String, Object> body) {
-
-		String folderIdString = (String)body.get("folder");
-		String title = (String)body.get("title");
-		String description = (String)body.get("description");
-		String content = (String)body.get("text");
-		String ddmStructureKey = (String)body.get("structure");
-		String ddmTemplateKey = (String)body.get("template");
-		String displayDateString = (String)body.get("dateDisplayed");
-
-		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
-			() -> new BadRequestException("Invalid body");
-
-		if (Validator.isNull(folderIdString) || Validator.isNull(title) ||
-			Validator.isNull(description) || Validator.isNull(content) ||
-			Validator.isNull(ddmStructureKey) ||
-			Validator.isNull(ddmTemplateKey) ||
-			Validator.isNull(displayDateString)) {
-
-			throw incorrectBodyExceptionSupplier.get();
-		}
-
-		Try<Long> folderIdLongTry = Try.fromFallible(
-			() -> Long.valueOf(folderIdString));
-
-		long folderId = folderIdLongTry.orElse(0L);
-
-		Map<Locale, String> titleMap = new HashMap<>();
-
-		titleMap.put(Locale.getDefault(), title);
-
-		Map<Locale, String> descriptionMap = new HashMap<>();
-
-		descriptionMap.put(Locale.getDefault(), description);
-
-		Calendar calendar = Calendar.getInstance();
-
-		Try<DateFormat> dateFormatTry = Try.success(
-			DateUtil.getISO8601Format());
-
-		Date displayDate = dateFormatTry.map(
-			dateFormat -> dateFormat.parse(displayDateString)
-		).mapFailMatching(
-			ParseException.class, incorrectBodyExceptionSupplier
-		).getUnchecked();
-
-		calendar.setTime(displayDate);
-
-		int displayDateMonth = calendar.get(Calendar.MONTH);
-		int displayDateDay = calendar.get(Calendar.DATE);
-		int displayDateYear = calendar.get(Calendar.YEAR);
-		int displayDateHour = calendar.get(Calendar.HOUR);
-		int displayDateMinute = calendar.get(Calendar.MINUTE);
+		Long groupId, WebPageElementCreatorForm webPageElementCreatorForm) {
 
 		ServiceContext serviceContext = new ServiceContext();
 
@@ -191,11 +134,18 @@ public class WebPageElementNestedCollectionResource
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.addArticle(
-				groupId, folderId, 0, 0, null, true, titleMap, descriptionMap,
-				content, ddmStructureKey, ddmTemplateKey, null,
-				displayDateMonth, displayDateDay, displayDateYear,
-				displayDateHour, displayDateMinute, 0, 0, 0, 0, 0, true, 0, 0,
-				0, 0, 0, true, true, null, serviceContext));
+				groupId, webPageElementCreatorForm.getFolder(), 0, 0, null,
+				true, webPageElementCreatorForm.getTitleMap(),
+				webPageElementCreatorForm.getDescriptionMap(),
+				webPageElementCreatorForm.getText(),
+				webPageElementCreatorForm.getStructure(),
+				webPageElementCreatorForm.getTemplate(), null,
+				webPageElementCreatorForm.getDisplayDateMonth(),
+				webPageElementCreatorForm.getDisplayDateDay(),
+				webPageElementCreatorForm.getDisplayDateYear(),
+				webPageElementCreatorForm.getDisplayDateHour(),
+				webPageElementCreatorForm.getDisplayDateMinute(), 0, 0, 0, 0, 0,
+				true, 0, 0, 0, 0, 0, true, true, null, serviceContext));
 
 		return journalArticleTry.getUnchecked();
 	}

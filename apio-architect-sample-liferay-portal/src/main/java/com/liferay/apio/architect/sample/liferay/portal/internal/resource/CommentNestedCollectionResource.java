@@ -24,6 +24,7 @@ import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.CommentableIdentifier;
+import com.liferay.apio.architect.sample.liferay.portal.internal.form.CommentCreatorForm;
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.portal.kernel.comment.Comment;
@@ -74,7 +75,7 @@ public class CommentNestedCollectionResource
 		return builder.addGetter(
 			this::_getPageItems, CurrentUser.class
 		).addCreator(
-			this::_addComment, CurrentUser.class
+			this::_addComment, CurrentUser.class, CommentCreatorForm::buildForm
 		).build();
 	}
 
@@ -112,16 +113,10 @@ public class CommentNestedCollectionResource
 	}
 
 	private Comment _addComment(
-		CommentableIdentifier commentableIdentifier, Map<String, Object> body,
-		CurrentUser currentUser) {
+		CommentableIdentifier commentableIdentifier,
+		CommentCreatorForm commentCreatorForm, CurrentUser currentUser) {
 
 		User user = currentUser.getUser();
-
-		String content = (String)body.get("text");
-
-		if (Validator.isNull(content)) {
-			throw new BadRequestException("Invalid body");
-		}
 
 		Function<String, ServiceContext> createServiceContextFunction =
 			string -> new ServiceContext();
@@ -130,8 +125,8 @@ public class CommentNestedCollectionResource
 			() -> _commentManager.addComment(
 				user.getUserId(), commentableIdentifier.getGroupId(),
 				commentableIdentifier.getClassName(),
-				commentableIdentifier.getClassPK(), content,
-				createServiceContextFunction));
+				commentableIdentifier.getClassPK(),
+				commentCreatorForm.getText(), createServiceContextFunction));
 
 		return commentIdLongTry.map(
 			_commentManager::fetchComment

@@ -23,6 +23,7 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.CommentableIdentifier;
+import com.liferay.apio.architect.sample.liferay.portal.internal.form.BlogPostingCreatorForm;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRatingService;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSite;
@@ -77,7 +78,7 @@ public class BlogPostingNestedCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addBlogsEntry
+			this::_addBlogsEntry, BlogPostingCreatorForm::buildForm
 		).build();
 	}
 
@@ -142,41 +143,8 @@ public class BlogPostingNestedCollectionResource
 		).build();
 	}
 
-	private BlogsEntry _addBlogsEntry(Long groupId, Map<String, Object> body) {
-		String title = (String)body.get("headline");
-		String subtitle = (String)body.get("alternativeHeadline");
-		String description = (String)body.get("description");
-		String content = (String)body.get("articleBody");
-		String displayDateString = (String)body.get("displayDate");
-
-		Supplier<BadRequestException> invalidBodyExceptionSupplier =
-			() -> new BadRequestException("Invalid body");
-
-		if (Validator.isNull(title) || Validator.isNull(subtitle) ||
-			Validator.isNull(description) || Validator.isNull(content) ||
-			Validator.isNull(displayDateString)) {
-
-			throw invalidBodyExceptionSupplier.get();
-		}
-
-		Calendar calendar = Calendar.getInstance();
-
-		Try<DateFormat> dateFormatTry = Try.success(
-			DateUtil.getISO8601Format());
-
-		Date displayDate = dateFormatTry.map(
-			dateFormat -> dateFormat.parse(displayDateString)
-		).mapFailMatching(
-			ParseException.class, invalidBodyExceptionSupplier
-		).getUnchecked();
-
-		calendar.setTime(displayDate);
-
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DATE);
-		int year = calendar.get(Calendar.YEAR);
-		int hour = calendar.get(Calendar.HOUR);
-		int minute = calendar.get(Calendar.MINUTE);
+	private BlogsEntry _addBlogsEntry(
+		Long groupId, BlogPostingCreatorForm blogPostingCreatorForm) {
 
 		ServiceContext serviceContext = new ServiceContext();
 
@@ -186,8 +154,16 @@ public class BlogPostingNestedCollectionResource
 
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.addEntry(
-				title, subtitle, description, content, month, day, year, hour,
-				minute, false, false, null, null, null, null, serviceContext));
+				blogPostingCreatorForm.getHeadline(),
+				blogPostingCreatorForm.getAlternativeHeadline(),
+				blogPostingCreatorForm.getDescription(),
+				blogPostingCreatorForm.getArticleBody(),
+				blogPostingCreatorForm.getDisplayDateMonth(),
+				blogPostingCreatorForm.getDisplayDateDay(),
+				blogPostingCreatorForm.getDisplayDateYear(),
+				blogPostingCreatorForm.getDisplayDateHour(),
+				blogPostingCreatorForm.getDisplayDateMinute(), false, false,
+				null, null, null, null, serviceContext));
 
 		return blogsEntryTry.getUnchecked();
 	}
