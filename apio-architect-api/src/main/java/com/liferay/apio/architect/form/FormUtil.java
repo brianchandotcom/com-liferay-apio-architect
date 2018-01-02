@@ -215,7 +215,7 @@ public class FormUtil {
 			value -> {
 				if (!(value instanceof Boolean)) {
 					throw new BadRequestException(
-						"Field: " + key + " should be a boolean");
+						"Field \"" + key + "\" should be a boolean");
 				}
 
 				consumer.accept((Boolean)value);
@@ -227,7 +227,7 @@ public class FormUtil {
 		Consumer<Date> consumer) {
 
 		String message =
-			"Field: " + key + " should be a string date in ISO-8601 format";
+			"Field \"" + key + "\" should be a string date in ISO-8601 format";
 
 		_getString(
 			body, key, required, message,
@@ -258,7 +258,7 @@ public class FormUtil {
 			value -> {
 				if (!(value instanceof Double)) {
 					throw new BadRequestException(
-						"Field: " + key + " should be a double number");
+						"Field \"" + key + "\" should be a double number");
 				}
 
 				consumer.accept((Double)value);
@@ -273,7 +273,7 @@ public class FormUtil {
 			consumer.accept(body.get(key));
 		}
 		else if (required) {
-			throw new BadRequestException("Field: " + key + " is required");
+			throw new BadRequestException("Field \"" + key + "\" is required");
 		}
 	}
 
@@ -286,7 +286,7 @@ public class FormUtil {
 			value -> {
 				if (!(value instanceof Long)) {
 					throw new BadRequestException(
-						"Field: " + key + " should be a long number");
+						"Field \"" + key + "\" should be a long number");
 				}
 
 				consumer.accept((Long)value);
@@ -298,7 +298,7 @@ public class FormUtil {
 		Consumer<String> consumer) {
 
 		_getString(
-			body, key, required, "Field: " + key + " should be a string",
+			body, key, required, "Field \"" + key + "\" should be a string",
 			consumer);
 	}
 
