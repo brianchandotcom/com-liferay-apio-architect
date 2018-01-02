@@ -45,13 +45,13 @@ public class BlogPostingForm {
 		).addRequiredDate(
 			"displayDate", BlogPostingForm::_setDisplayDate
 		).addRequiredString(
-			"headline", BlogPostingForm::_setHeadline
+			"alternativeHeadline", BlogPostingForm::_setAlternativeHeadline
 		).addRequiredString(
 			"articleBody", BlogPostingForm::_setArticleBody
 		).addRequiredString(
 			"description", BlogPostingForm::_setDescription
 		).addRequiredString(
-			"alternativeHeadline", BlogPostingForm::_setAlternativeHeadline
+			"headline", BlogPostingForm::_setHeadline
 		).build();
 	}
 

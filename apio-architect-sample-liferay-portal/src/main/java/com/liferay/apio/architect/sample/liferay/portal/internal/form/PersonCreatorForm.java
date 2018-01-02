@@ -48,6 +48,10 @@ public class PersonCreatorForm {
 		).addRequiredDate(
 			"birthDate", PersonCreatorForm::_setBirthDate
 		).addRequiredString(
+			"email", PersonCreatorForm::_setEmail
+		).addRequiredString(
+			"familyName", PersonCreatorForm::_setFamilyName
+		).addRequiredString(
 			"givenName", PersonCreatorForm::_setGivenName
 		).addRequiredString(
 			"jobTitle", PersonCreatorForm::_setJobTitle
@@ -55,10 +59,6 @@ public class PersonCreatorForm {
 			"password1", PersonCreatorForm::_setPassword1
 		).addRequiredString(
 			"password2", PersonCreatorForm::_setPassword2
-		).addRequiredString(
-			"email", PersonCreatorForm::_setEmail
-		).addRequiredString(
-			"familyName", PersonCreatorForm::_setFamilyName
 		).build();
 	}
 

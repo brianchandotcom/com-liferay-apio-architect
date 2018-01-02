@@ -30,15 +30,15 @@ public class PersonUpdaterForm {
 		).addOptionalString(
 			"alternateName", PersonUpdaterForm::setAlternateName
 		).addRequiredString(
+			"email", PersonUpdaterForm::setEmail
+		).addRequiredString(
+			"familyName", PersonUpdaterForm::setFamilyName
+		).addRequiredString(
 			"givenName", PersonUpdaterForm::setGivenName
 		).addRequiredString(
 			"jobTitle", PersonUpdaterForm::setJobTitle
 		).addRequiredString(
 			"password", PersonUpdaterForm::setPassword
-		).addRequiredString(
-			"email", PersonUpdaterForm::setEmail
-		).addRequiredString(
-			"familyName", PersonUpdaterForm::setFamilyName
 		).build();
 	}
 

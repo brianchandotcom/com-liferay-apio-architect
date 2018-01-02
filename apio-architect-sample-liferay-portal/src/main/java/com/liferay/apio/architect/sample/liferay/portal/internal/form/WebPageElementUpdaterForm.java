@@ -43,20 +43,20 @@ public class WebPageElementUpdaterForm {
 
 		return formBuilder.constructor(
 			WebPageElementUpdaterForm::new
-		).addRequiredString(
-			"description", WebPageElementUpdaterForm::_setDescription
-		).addRequiredLong(
-			"version", WebPageElementUpdaterForm::_setVersion
-		).addRequiredLong(
-			"user", WebPageElementUpdaterForm::_setUser
-		).addRequiredString(
-			"text", WebPageElementUpdaterForm::_setText
-		).addRequiredString(
-			"title", WebPageElementUpdaterForm::_setTitle
 		).addOptionalLong(
 			"folder", WebPageElementUpdaterForm::_setFolder
 		).addRequiredLong(
 			"group", WebPageElementUpdaterForm::_setGroup
+		).addRequiredLong(
+			"user", WebPageElementUpdaterForm::_setUser
+		).addRequiredLong(
+			"version", WebPageElementUpdaterForm::_setVersion
+		).addRequiredString(
+			"description", WebPageElementUpdaterForm::_setDescription
+		).addRequiredString(
+			"text", WebPageElementUpdaterForm::_setText
+		).addRequiredString(
+			"title", WebPageElementUpdaterForm::_setTitle
 		).build();
 	}
 

@@ -45,6 +45,8 @@ public class WebPageElementCreatorForm {
 
 		return formBuilder.constructor(
 			WebPageElementCreatorForm::new
+		).addOptionalLong(
+			"folder", WebPageElementCreatorForm::_setFolder
 		).addRequiredDate(
 			"displayDate", WebPageElementCreatorForm::_setDisplayDate
 		).addRequiredString(
@@ -57,8 +59,6 @@ public class WebPageElementCreatorForm {
 			"text", WebPageElementCreatorForm::_setText
 		).addRequiredString(
 			"title", WebPageElementCreatorForm::_setTitle
-		).addOptionalLong(
-			"folder", WebPageElementCreatorForm::_setFolder
 		).build();
 	}
 
