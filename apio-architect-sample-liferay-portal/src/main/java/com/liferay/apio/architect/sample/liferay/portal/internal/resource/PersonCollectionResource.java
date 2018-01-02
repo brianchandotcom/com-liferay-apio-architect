@@ -22,6 +22,7 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.internal.form.PersonCreatorForm;
+import com.liferay.apio.architect.sample.liferay.portal.internal.form.PersonUpdaterForm;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
@@ -32,14 +33,10 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
@@ -82,7 +79,7 @@ public class PersonCollectionResource
 		).addRemover(
 			this::_deleteUser
 		).addUpdater(
-			this::_updateUser
+			this::_updateUser, PersonUpdaterForm::buildForm
 		).build();
 	}
 
@@ -189,36 +186,15 @@ public class PersonCollectionResource
 		}
 	}
 
-	private User _updateUser(Long userId, Map<String, Object> body) {
+	private User _updateUser(Long userId, PersonUpdaterForm personUpdaterForm) {
 		User user = _getUser(userId);
 
-		String password = (String)body.get("password");
-		String screenName = (String)body.get("alternateName");
-		String emailAddress = (String)body.get("email");
-		String firstName = (String)body.get("givenName");
-		String lastName = (String)body.get("familyName");
-
-		Supplier<BadRequestException> invalidBodyExceptionSupplier =
-			() -> new BadRequestException("Invalid body");
-
-		if (Validator.isNull(screenName) || Validator.isNull(emailAddress) ||
-			Validator.isNull(firstName) || Validator.isNull(lastName)) {
-
-			throw invalidBodyExceptionSupplier.get();
-		}
-
-		String jobTitle = (String)body.get("jobTitle");
-
-		if (Validator.isNull(jobTitle)) {
-			throw invalidBodyExceptionSupplier.get();
-		}
-
-		user.setPassword(password);
-		user.setScreenName(screenName);
-		user.setEmailAddress(emailAddress);
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setJobTitle(jobTitle);
+		user.setPassword(personUpdaterForm.getPassword());
+		user.setScreenName(personUpdaterForm.getAlternateName());
+		user.setEmailAddress(personUpdaterForm.getEmail());
+		user.setFirstName(personUpdaterForm.getGivenName());
+		user.setLastName(personUpdaterForm.getFamilyName());
+		user.setJobTitle(personUpdaterForm.getJobTitle());
 
 		Try<User> userTry = Try.fromFallible(
 			() -> _userLocalService.updateUser(user));

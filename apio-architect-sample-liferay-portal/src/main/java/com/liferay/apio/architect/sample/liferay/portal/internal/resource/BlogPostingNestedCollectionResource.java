@@ -23,7 +23,7 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.AggregateRatingIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.identifier.CommentableIdentifier;
-import com.liferay.apio.architect.sample.liferay.portal.internal.form.BlogPostingCreatorForm;
+import com.liferay.apio.architect.sample.liferay.portal.internal.form.BlogPostingForm;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRating;
 import com.liferay.apio.architect.sample.liferay.portal.rating.AggregateRatingService;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSite;
@@ -38,20 +38,10 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserService;
-import com.liferay.portal.kernel.util.DateUtil;
-import com.liferay.portal.kernel.util.Validator;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
@@ -78,7 +68,7 @@ public class BlogPostingNestedCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addBlogsEntry, BlogPostingCreatorForm::buildForm
+			this::_addBlogsEntry, BlogPostingForm::buildForm
 		).build();
 	}
 
@@ -96,7 +86,7 @@ public class BlogPostingNestedCollectionResource
 		).addRemover(
 			this::_deleteBlogsEntry
 		).addUpdater(
-			this::_updateBlogsEntry
+			this::_updateBlogsEntry, BlogPostingForm::buildForm
 		).build();
 	}
 
@@ -144,7 +134,7 @@ public class BlogPostingNestedCollectionResource
 	}
 
 	private BlogsEntry _addBlogsEntry(
-		Long groupId, BlogPostingCreatorForm blogPostingCreatorForm) {
+		Long groupId, BlogPostingForm blogPostingForm) {
 
 		ServiceContext serviceContext = new ServiceContext();
 
@@ -154,16 +144,16 @@ public class BlogPostingNestedCollectionResource
 
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.addEntry(
-				blogPostingCreatorForm.getHeadline(),
-				blogPostingCreatorForm.getAlternativeHeadline(),
-				blogPostingCreatorForm.getDescription(),
-				blogPostingCreatorForm.getArticleBody(),
-				blogPostingCreatorForm.getDisplayDateMonth(),
-				blogPostingCreatorForm.getDisplayDateDay(),
-				blogPostingCreatorForm.getDisplayDateYear(),
-				blogPostingCreatorForm.getDisplayDateHour(),
-				blogPostingCreatorForm.getDisplayDateMinute(), false, false,
-				null, null, null, null, serviceContext));
+				blogPostingForm.getHeadline(),
+				blogPostingForm.getAlternativeHeadline(),
+				blogPostingForm.getDescription(),
+				blogPostingForm.getArticleBody(),
+				blogPostingForm.getDisplayDateMonth(),
+				blogPostingForm.getDisplayDateDay(),
+				blogPostingForm.getDisplayDateYear(),
+				blogPostingForm.getDisplayDateHour(),
+				blogPostingForm.getDisplayDateMinute(), false, false, null,
+				null, null, null, serviceContext));
 
 		return blogsEntryTry.getUnchecked();
 	}
@@ -233,42 +223,7 @@ public class BlogPostingNestedCollectionResource
 	}
 
 	private BlogsEntry _updateBlogsEntry(
-		Long blogsEntryId, Map<String, Object> body) {
-
-		String title = (String)body.get("headline");
-		String subtitle = (String)body.get("alternativeHeadline");
-		String description = (String)body.get("description");
-		String content = (String)body.get("articleBody");
-		String displayDateString = (String)body.get("displayDate");
-
-		Supplier<BadRequestException> invalidBodyExceptionSupplier =
-			() -> new BadRequestException("Invalid body");
-
-		if (Validator.isNull(title) || Validator.isNull(subtitle) ||
-			Validator.isNull(description) || Validator.isNull(content) ||
-			Validator.isNull(displayDateString)) {
-
-			throw invalidBodyExceptionSupplier.get();
-		}
-
-		Calendar calendar = Calendar.getInstance();
-
-		Try<DateFormat> dateFormatTry = Try.success(
-			DateUtil.getISO8601Format());
-
-		Date displayDate = dateFormatTry.map(
-			dateFormat -> dateFormat.parse(displayDateString)
-		).mapFailMatching(
-			ParseException.class, invalidBodyExceptionSupplier
-		).getUnchecked();
-
-		calendar.setTime(displayDate);
-
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DATE);
-		int year = calendar.get(Calendar.YEAR);
-		int hour = calendar.get(Calendar.HOUR);
-		int minute = calendar.get(Calendar.MINUTE);
+		Long blogsEntryId, BlogPostingForm blogPostingForm) {
 
 		ServiceContext serviceContext = new ServiceContext();
 
@@ -281,9 +236,16 @@ public class BlogPostingNestedCollectionResource
 
 		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
 			() -> _blogsService.updateEntry(
-				blogsEntryId, title, subtitle, description, content, month, day,
-				year, hour, minute, false, false, null, null, null, null,
-				serviceContext));
+				blogsEntryId, blogPostingForm.getHeadline(),
+				blogPostingForm.getAlternativeHeadline(),
+				blogPostingForm.getDescription(),
+				blogPostingForm.getArticleBody(),
+				blogPostingForm.getDisplayDateMonth(),
+				blogPostingForm.getDisplayDateDay(),
+				blogPostingForm.getDisplayDateYear(),
+				blogPostingForm.getDisplayDateHour(),
+				blogPostingForm.getDisplayDateMinute(), false, false, null,
+				null, null, null, serviceContext));
 
 		return blogsEntryTry.getUnchecked();
 	}

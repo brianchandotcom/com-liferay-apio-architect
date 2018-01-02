@@ -26,7 +26,6 @@ import com.liferay.apio.architect.sample.internal.model.BlogPostingComment;
 import com.liferay.apio.architect.sample.internal.model.Person;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.ws.rs.NotFoundException;
@@ -69,7 +68,7 @@ public class BlogPostingCollectionResource
 		).addRemover(
 			this::_deleteBlogPosting
 		).addUpdater(
-			this::_updateBlogPosting
+			this::_updateBlogPosting, BlogPostingForm::buildForm
 		).build();
 	}
 
@@ -130,15 +129,13 @@ public class BlogPostingCollectionResource
 	}
 
 	private BlogPosting _updateBlogPosting(
-		Long blogPostingId, Map<String, Object> body) {
-
-		String content = (String)body.get("articleBody");
-		Long creatorId = (Long)body.get("creator");
-		String subtitle = (String)body.get("alternativeHeadline");
-		String title = (String)body.get("headline");
+		Long blogPostingId, BlogPostingForm blogPostingForm) {
 
 		Optional<BlogPosting> optional = BlogPosting.updateBlogPosting(
-			blogPostingId, content, creatorId, subtitle, title);
+			blogPostingId, blogPostingForm.getArticleBody(),
+			blogPostingForm.getCreator(),
+			blogPostingForm.getAlternativeHeadline(),
+			blogPostingForm.getHeadline());
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(

@@ -22,37 +22,36 @@ import java.util.Date;
 
 /**
  * Instances of this class represent the values extracted from a blog posting
- * creator form.
+ * form.
  *
  * @author Alejandro Hernández
  * @review
  */
-public class BlogPostingCreatorForm {
+public class BlogPostingForm {
 
 	/**
-	 * Builds a {@code Form} that generates {@code BlogPostingCreatorForm}
-	 * depending on the HTTP body.
+	 * Builds a {@code Form} that generates {@code BlogPostingForm} depending on
+	 * the HTTP body.
 	 *
 	 * @param  formBuilder the {@code Form} builder
-	 * @return a blog posting creator form
+	 * @return a blog posting form
 	 * @review
 	 */
-	public static Form<BlogPostingCreatorForm> buildForm(
-		Builder<BlogPostingCreatorForm> formBuilder) {
+	public static Form<BlogPostingForm> buildForm(
+		Builder<BlogPostingForm> formBuilder) {
 
 		return formBuilder.constructor(
-			BlogPostingCreatorForm::new
+			BlogPostingForm::new
 		).addRequiredDate(
-			"displayDate", BlogPostingCreatorForm::_setDisplayDate
+			"displayDate", BlogPostingForm::_setDisplayDate
 		).addRequiredString(
-			"headline", BlogPostingCreatorForm::_setHeadline
+			"headline", BlogPostingForm::_setHeadline
 		).addRequiredString(
-			"articleBody", BlogPostingCreatorForm::_setArticleBody
+			"articleBody", BlogPostingForm::_setArticleBody
 		).addRequiredString(
-			"description", BlogPostingCreatorForm::_setDescription
+			"description", BlogPostingForm::_setDescription
 		).addRequiredString(
-			"alternativeHeadline",
-			BlogPostingCreatorForm::_setAlternativeHeadline
+			"alternativeHeadline", BlogPostingForm::_setAlternativeHeadline
 		).build();
 	}
 

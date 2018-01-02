@@ -19,41 +19,29 @@ import com.liferay.apio.architect.form.Form.Builder;
 
 /**
  * Instances of this class represent the values extracted from a blog posting
- * comment form.
+ * comment updater form.
  *
  * @author Alejandro Hernández
  * @review
  */
-public class BlogPostingCommentForm {
+public class BlogPostingCommentUpdaterForm {
 
 	/**
-	 * Builds a {@code Form} that generates {@code BlogPostingCommentForm}
-	 * depending on the HTTP body.
+	 * Builds a {@code Form} that generates {@code
+	 * BlogPostingCommentUpdaterForm} depending on the HTTP body.
 	 *
 	 * @param  formBuilder the {@code Form} builder
-	 * @return a blog posting comment form
+	 * @return a blog posting comment updater form
 	 * @review
 	 */
-	public static Form<BlogPostingCommentForm> buildForm(
-		Builder<BlogPostingCommentForm> formBuilder) {
+	public static Form<BlogPostingCommentUpdaterForm> buildForm(
+		Builder<BlogPostingCommentUpdaterForm> formBuilder) {
 
 		return formBuilder.constructor(
-			BlogPostingCommentForm::new
+			BlogPostingCommentUpdaterForm::new
 		).addRequiredString(
-			"text", BlogPostingCommentForm::_setText
-		).addRequiredLong(
-			"author", BlogPostingCommentForm::_setAuthor
+			"text", BlogPostingCommentUpdaterForm::_setText
 		).build();
-	}
-
-	/**
-	 * Returns the blog posting comment's author ID
-	 *
-	 * @return the blog posting comment's author ID
-	 * @review
-	 */
-	public Long getAuthor() {
-		return _author;
 	}
 
 	/**
@@ -66,15 +54,10 @@ public class BlogPostingCommentForm {
 		return _text;
 	}
 
-	private void _setAuthor(Long author) {
-		_author = author;
-	}
-
 	private void _setText(String text) {
 		_text = text;
 	}
 
-	private Long _author;
 	private String _text;
 
 }

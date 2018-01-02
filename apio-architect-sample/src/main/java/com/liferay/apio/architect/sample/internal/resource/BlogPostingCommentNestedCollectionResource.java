@@ -20,13 +20,13 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
-import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentForm;
+import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
+import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentUpdaterForm;
 import com.liferay.apio.architect.sample.internal.model.BlogPosting;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingComment;
 import com.liferay.apio.architect.sample.internal.model.Person;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.ws.rs.NotFoundException;
@@ -42,8 +42,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(immediate = true)
 public class BlogPostingCommentNestedCollectionResource implements
-	NestedCollectionResource
-		<BlogPostingComment, Long, BlogPosting, Long> {
+	NestedCollectionResource<BlogPostingComment, Long, BlogPosting, Long> {
 
 	@Override
 	public NestedCollectionRoutes<BlogPostingComment> collectionRoutes(
@@ -52,7 +51,8 @@ public class BlogPostingCommentNestedCollectionResource implements
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addBlogPostingComment, BlogPostingCommentForm::buildForm
+			this::_addBlogPostingComment,
+			BlogPostingCommentCreatorForm::buildForm
 		).build();
 	}
 
@@ -70,7 +70,8 @@ public class BlogPostingCommentNestedCollectionResource implements
 		).addRemover(
 			this::_deleteBlogPostingComment
 		).addUpdater(
-			this::_updateBlogPostingComment
+			this::_updateBlogPostingComment,
+			BlogPostingCommentUpdaterForm::buildForm
 		).build();
 	}
 
@@ -96,11 +97,12 @@ public class BlogPostingCommentNestedCollectionResource implements
 	}
 
 	private BlogPostingComment _addBlogPostingComment(
-		Long blogPostId, BlogPostingCommentForm blogPostingCommentForm) {
+		Long blogPostId,
+		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm) {
 
 		return BlogPostingComment.addBlogPostingComment(
-			blogPostingCommentForm.getAuthor(), blogPostId,
-			blogPostingCommentForm.getText());
+			blogPostingCommentCreatorForm.getAuthor(), blogPostId,
+			blogPostingCommentCreatorForm.getText());
 	}
 
 	private void _deleteBlogPostingComment(Long blogPostingCommentId) {
@@ -132,13 +134,12 @@ public class BlogPostingCommentNestedCollectionResource implements
 	}
 
 	private BlogPostingComment _updateBlogPostingComment(
-		Long blogPostingCommentId, Map<String, Object> body) {
-
-		String content = (String)body.get("text");
+		Long blogPostingCommentId,
+		BlogPostingCommentUpdaterForm blogPostingCommentUpdaterForm) {
 
 		Optional<BlogPostingComment> optional =
 			BlogPostingComment.updateBlogPostingComment(
-				blogPostingCommentId, content);
+				blogPostingCommentId, blogPostingCommentUpdaterForm.getText());
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(

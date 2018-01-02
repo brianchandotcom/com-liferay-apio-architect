@@ -22,6 +22,7 @@ import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.internal.form.WebPageElementCreatorForm;
+import com.liferay.apio.architect.sample.liferay.portal.internal.form.WebPageElementUpdaterForm;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSite;
 import com.liferay.apio.architect.sample.liferay.portal.website.WebSiteService;
 import com.liferay.document.library.kernel.service.DLFolderService;
@@ -34,16 +35,10 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserService;
-import com.liferay.portal.kernel.util.Validator;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
@@ -87,7 +82,7 @@ public class WebPageElementNestedCollectionResource
 		).addRemover(
 			this::_deleteJournalArticle
 		).addUpdater(
-			this::_updateJournalArticle
+			this::_updateJournalArticle, WebPageElementUpdaterForm::buildForm
 		).build();
 	}
 
@@ -214,68 +209,25 @@ public class WebPageElementNestedCollectionResource
 	}
 
 	private JournalArticle _updateJournalArticle(
-		Long journalArticleId, Map<String, Object> body) {
-
-		String userIdString = (String)body.get("user");
-		String groupIdString = (String)body.get("group");
-		String folderIdString = (String)body.get("folder");
-		String versionString = (String)body.get("version");
-		String title = (String)body.get("title");
-		String description = (String)body.get("description");
-		String content = (String)body.get("text");
-
-		Supplier<BadRequestException> incorrectBodyExceptionSupplier =
-			() -> new BadRequestException("Invalid body");
-
-		if (Validator.isNull(userIdString) || Validator.isNull(groupIdString) ||
-			Validator.isNull(folderIdString) ||
-			Validator.isNull(versionString) || Validator.isNull(title) ||
-			Validator.isNull(description) || Validator.isNull(content)) {
-
-			throw incorrectBodyExceptionSupplier.get();
-		}
-
-		Try<Long> userIdLongTry = Try.fromFallible(
-			() -> Long.valueOf(userIdString));
-
-		long userId = userIdLongTry.orElseThrow(incorrectBodyExceptionSupplier);
-
-		Try<Long> groupIdLongTry = Try.fromFallible(
-			() -> Long.valueOf(groupIdString));
-
-		long groupId = groupIdLongTry.orElseThrow(
-			incorrectBodyExceptionSupplier);
-
-		Try<Long> folderIdLongTry = Try.fromFallible(
-			() -> Long.valueOf(folderIdString));
-
-		long folderId = folderIdLongTry.orElse(0L);
-
-		Try<Double> versionDoubleTry = Try.fromFallible(
-			() -> Double.valueOf(versionString));
-
-		double version = versionDoubleTry.orElseThrow(
-			incorrectBodyExceptionSupplier);
-
-		Map<Locale, String> titleMap = new HashMap<>();
-
-		titleMap.put(Locale.getDefault(), title);
-
-		Map<Locale, String> descriptionMap = new HashMap<>();
-
-		descriptionMap.put(Locale.getDefault(), description);
+		Long journalArticleId,
+		WebPageElementUpdaterForm webPageElementUpdaterForm) {
 
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
-		serviceContext.setScopeGroupId(groupId);
+		serviceContext.setScopeGroupId(webPageElementUpdaterForm.getGroup());
 
 		Try<JournalArticle> journalArticleTry = Try.fromFallible(() ->
 			_journalArticleService.updateArticle(
-				userId, groupId, folderId, String.valueOf(journalArticleId),
-				version, titleMap, descriptionMap, content, null,
-				serviceContext));
+				webPageElementUpdaterForm.getUser(),
+				webPageElementUpdaterForm.getGroup(),
+				webPageElementUpdaterForm.getFolder(),
+				String.valueOf(journalArticleId),
+				webPageElementUpdaterForm.getVersion(),
+				webPageElementUpdaterForm.getTitleMap(),
+				webPageElementUpdaterForm.getDescriptionMap(),
+				webPageElementUpdaterForm.getText(), null, serviceContext));
 
 		return journalArticleTry.getUnchecked();
 	}

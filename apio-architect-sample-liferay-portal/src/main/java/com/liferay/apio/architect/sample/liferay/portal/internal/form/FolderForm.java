@@ -18,46 +18,60 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.Form.Builder;
 
 /**
- * Instances of this class represent the values extracted from a comment creator
- * form.
+ * Instances of this class represent the values extracted from a folder form.
  *
  * @author Alejandro Hernández
  * @review
  */
-public class CommentCreatorForm {
+public class FolderForm {
 
 	/**
-	 * Builds a {@code Form} that generates {@code CommentCreatorForm} depending
-	 * on the HTTP body.
+	 * Builds a {@code Form} that generates {@code FolderForm} depending on the
+	 * HTTP body.
 	 *
 	 * @param  formBuilder the {@code Form} builder
-	 * @return a comment creator form
+	 * @return a folder form
 	 * @review
 	 */
-	public static Form<CommentCreatorForm> buildForm(
-		Builder<CommentCreatorForm> formBuilder) {
-
+	public static Form<FolderForm> buildForm(Builder<FolderForm> formBuilder) {
 		return formBuilder.constructor(
-			CommentCreatorForm::new
+			FolderForm::new
 		).addRequiredString(
-			"text", CommentCreatorForm::_setText
+			"description", FolderForm::_setDescription
+		).addRequiredString(
+			"name", FolderForm::_setName
 		).build();
 	}
 
 	/**
-	 * Returns the comment's text
+	 * Returns the folder's description
 	 *
-	 * @return the comment's text
+	 * @return the folder's description
 	 * @review
 	 */
-	public String getText() {
-		return _text;
+	public String getDescription() {
+		return _description;
 	}
 
-	private void _setText(String text) {
-		_text = text;
+	/**
+	 * Returns the folder's name
+	 *
+	 * @return the folder's name
+	 * @review
+	 */
+	public String getName() {
+		return _name;
 	}
 
-	private String _text;
+	private void _setDescription(String description) {
+		_description = description;
+	}
+
+	private void _setName(String name) {
+		_name = name;
+	}
+
+	private String _description;
+	private String _name;
 
 }
