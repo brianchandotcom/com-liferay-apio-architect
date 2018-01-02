@@ -32,6 +32,9 @@ import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.alias.form.FieldFormConsumer;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +47,21 @@ import org.junit.Test;
  * @author Alejandro Hernández
  */
 public class FormUtilTest {
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testConstructorThrowsException() throws Throwable {
+		Constructor<?> constructor =
+			FormUtil.class.getDeclaredConstructors()[0];
+
+		constructor.setAccessible(true);
+
+		try {
+			constructor.newInstance();
+		}
+		catch (InvocationTargetException ite) {
+			throw ite.getTargetException();
+		}
+	}
 
 	@Test
 	public void testGetOptionalDateDoesNotFailIfNotPresent() {

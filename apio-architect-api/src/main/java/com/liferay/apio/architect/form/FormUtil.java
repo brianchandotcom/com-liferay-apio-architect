@@ -216,4 +216,8 @@ public class FormUtil {
 			});
 	}
 
+	private FormUtil() {
+		throw new UnsupportedOperationException();
+	}
+
 }
