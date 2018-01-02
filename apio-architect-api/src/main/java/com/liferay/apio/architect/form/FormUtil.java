@@ -39,6 +39,23 @@ import javax.ws.rs.BadRequestException;
 public class FormUtil {
 
 	/**
+	 * Returns a field form consumer that tries to extract a boolean from the
+	 * body and store it in the provided {@code T} instance. If the field is not
+	 * a boolean, a {@link BadRequestException} is thrown.
+	 *
+	 * @param  body the HTTP request body
+	 * @param  t the form values store
+	 * @return a field form consumer for optional strings
+	 * @review
+	 */
+	public static <T> FieldFormConsumer<T, Boolean> getOptionalBoolean(
+		Map<String, Object> body, T t) {
+
+		return (key, function) -> _getBoolean(
+			body, key, false, function.apply(t));
+	}
+
+	/**
 	 * Returns a field form consumer that tries to extract a date from the body
 	 * and store it in the provided {@code T} instance. If the field is not an
 	 * ISO-8601 date, a {@link BadRequestException} is thrown.
@@ -52,6 +69,23 @@ public class FormUtil {
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getDate(body, key, false, function.apply(t));
+	}
+
+	/**
+	 * Returns a field form consumer that tries to extract a double number from
+	 * the body and store it in the provided {@code T} instance. If the field is
+	 * not a double, a {@link BadRequestException} is thrown.
+	 *
+	 * @param  body the HTTP request body
+	 * @param  t the form values store
+	 * @return a field form consumer for optional double numbers
+	 * @review
+	 */
+	public static <T> FieldFormConsumer<T, Double> getOptionalDouble(
+		Map<String, Object> body, T t) {
+
+		return (key, function) -> _getDouble(
+			body, key, false, function.apply(t));
 	}
 
 	/**
@@ -88,6 +122,23 @@ public class FormUtil {
 	}
 
 	/**
+	 * Returns a field form consumer that extracts a boolean from the body and
+	 * store it in the provided {@code T} instance. If the field is not found,
+	 * or it is not a boolean, a {@link BadRequestException} is thrown.
+	 *
+	 * @param  body the HTTP request body
+	 * @param  t the form values store
+	 * @return a date field form consumer for required booleans
+	 * @review
+	 */
+	public static <T> FieldFormConsumer<T, Boolean> getRequiredBoolean(
+		Map<String, Object> body, T t) {
+
+		return (key, function) -> _getBoolean(
+			body, key, true, function.apply(t));
+	}
+
+	/**
 	 * Returns a field form consumer that extracts a date from the body and
 	 * store it in the provided {@code T} instance. If the field is not found,
 	 * or it is not an ISO-8601 date, a {@link BadRequestException} is thrown.
@@ -101,6 +152,24 @@ public class FormUtil {
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getDate(body, key, true, function.apply(t));
+	}
+
+	/**
+	 * Returns a field form consumer that extracts a double number from the body
+	 * and store it in the provided {@code T} instance. If the field is not
+	 * found, or it is not a double number, a {@link BadRequestException} is
+	 * thrown.
+	 *
+	 * @param  body the HTTP request body
+	 * @param  t the form values store
+	 * @return a date field form consumer for required double numbers
+	 * @review
+	 */
+	public static <T> FieldFormConsumer<T, Double> getRequiredDouble(
+		Map<String, Object> body, T t) {
+
+		return (key, function) -> _getDouble(
+			body, key, true, function.apply(t));
 	}
 
 	/**
@@ -137,6 +206,22 @@ public class FormUtil {
 			body, key, true, function.apply(t));
 	}
 
+	private static void _getBoolean(
+		Map<String, Object> body, String key, boolean required,
+		Consumer<Boolean> consumer) {
+
+		_getField(
+			body, key, required,
+			value -> {
+				if (!(value instanceof Boolean)) {
+					throw new BadRequestException(
+						"Field: " + key + " should be a boolean");
+				}
+
+				consumer.accept((Boolean)value);
+			});
+	}
+
 	private static void _getDate(
 		Map<String, Object> body, String key, boolean required,
 		Consumer<Date> consumer) {
@@ -161,6 +246,22 @@ public class FormUtil {
 					() -> new BadRequestException(message));
 
 				consumer.accept(date);
+			});
+	}
+
+	private static void _getDouble(
+		Map<String, Object> body, String key, boolean required,
+		Consumer<Double> consumer) {
+
+		_getField(
+			body, key, required,
+			value -> {
+				if (!(value instanceof Double)) {
+					throw new BadRequestException(
+						"Field: " + key + " should be a double number");
+				}
+
+				consumer.accept((Double)value);
 			});
 	}
 

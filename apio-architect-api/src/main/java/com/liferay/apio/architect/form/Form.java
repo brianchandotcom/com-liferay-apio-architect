@@ -14,10 +14,14 @@
 
 package com.liferay.apio.architect.form;
 
+import static com.liferay.apio.architect.form.FormUtil.getOptionalBoolean;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalDate;
+import static com.liferay.apio.architect.form.FormUtil.getOptionalDouble;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalLong;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalString;
+import static com.liferay.apio.architect.form.FormUtil.getRequiredBoolean;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredDate;
+import static com.liferay.apio.architect.form.FormUtil.getRequiredDouble;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredLong;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredString;
 
@@ -58,8 +62,12 @@ public class Form<T> {
 
 		_optionalDates.forEach(getOptionalDate(body, t));
 		_optionalLongs.forEach(getOptionalLong(body, t));
+		_optionalDoubles.forEach(getOptionalDouble(body, t));
+		_optionalBooleans.forEach(getOptionalBoolean(body, t));
 		_optionalStrings.forEach(getOptionalString(body, t));
 		_requiredLongs.forEach(getRequiredLong(body, t));
+		_requiredBooleans.forEach(getRequiredBoolean(body, t));
+		_requiredDoubles.forEach(getRequiredDouble(body, t));
 		_requiredDates.forEach(getRequiredDate(body, t));
 		_requiredStrings.forEach(getRequiredString(body, t));
 
@@ -91,6 +99,28 @@ public class Form<T> {
 		public class FieldStep {
 
 			/**
+			 * Requests an optional boolean from the HTTP request body. Calls
+			 * the provided consumer with the store instance (provided with the
+			 * {@link #constructor(Supplier)} method and the field value if the
+			 * field is present. Throws a {@link
+			 * javax.ws.rs.BadRequestException} if the field is found but it
+			 * isn't a boolean.
+			 *
+			 * @param  key the field's key
+			 * @param  biConsumer the consumer to call if the field is found
+			 * @return the updated builder
+			 * @review
+			 */
+			public FieldStep addOptionalBoolean(
+				String key, BiConsumer<T, Boolean> biConsumer) {
+
+				_form._optionalBooleans.put(
+					key, t -> aBoolean -> biConsumer.accept(t, aBoolean));
+
+				return this;
+			}
+
+			/**
 			 * Requests an optional date from the HTTP request body. Calls the
 			 * provided consumer with the store instance (provided with the
 			 * {@link #constructor(Supplier)} method and the field value if the
@@ -108,6 +138,28 @@ public class Form<T> {
 
 				_form._optionalDates.put(
 					key, t -> date -> biConsumer.accept(t, date));
+
+				return this;
+			}
+
+			/**
+			 * Requests an optional double number from the HTTP request body.
+			 * Calls the provided consumer with the store instance (provided
+			 * with the {@link #constructor(Supplier)} method and the field
+			 * value if the field is present. Throws a {@link
+			 * javax.ws.rs.BadRequestException} if the field is found but it
+			 * isn't a double number.
+			 *
+			 * @param  key the field's key
+			 * @param  biConsumer the consumer to call if the field is found
+			 * @return the updated builder
+			 * @review
+			 */
+			public FieldStep addOptionalDouble(
+				String key, BiConsumer<T, Double> biConsumer) {
+
+				_form._optionalDoubles.put(
+					key, t -> aDouble -> biConsumer.accept(t, aDouble));
 
 				return this;
 			}
@@ -157,6 +209,27 @@ public class Form<T> {
 			}
 
 			/**
+			 * Requests a mandatory boolean from the HTTP request body. Calls
+			 * the provided consumer with the store instance (provided with the
+			 * {@link #constructor(Supplier)} method and the field value. Throws
+			 * a {@link javax.ws.rs.BadRequestException} if the field is not
+			 * found, or it's found but it isn't a boolean.
+			 *
+			 * @param  key the field's key
+			 * @param  biConsumer the consumer to call
+			 * @return the updated builder
+			 * @review
+			 */
+			public FieldStep addRequiredBoolean(
+				String key, BiConsumer<T, Boolean> biConsumer) {
+
+				_form._requiredBooleans.put(
+					key, t -> aBoolean -> biConsumer.accept(t, aBoolean));
+
+				return this;
+			}
+
+			/**
 			 * Requests a mandatory date from the HTTP request body. Calls the
 			 * provided consumer with the store instance (provided with the
 			 * {@link #constructor(Supplier)} method and the field value. Throws
@@ -173,6 +246,27 @@ public class Form<T> {
 
 				_form._requiredDates.put(
 					key, t -> date -> biConsumer.accept(t, date));
+
+				return this;
+			}
+
+			/**
+			 * Requests a mandatory double number from the HTTP request body.
+			 * Calls the provided consumer with the store instance (provided
+			 * with the {@link #constructor(Supplier)} method and the field
+			 * value. Throws a {@link javax.ws.rs.BadRequestException} if the
+			 * field is not found, or it's found but it isn't a double number.
+			 *
+			 * @param  key the field's key
+			 * @param  biConsumer the consumer to call
+			 * @return the updated builder
+			 * @review
+			 */
+			public FieldStep addRequiredDouble(
+				String key, BiConsumer<T, Double> biConsumer) {
+
+				_form._requiredDoubles.put(
+					key, t -> aDouble -> biConsumer.accept(t, aDouble));
 
 				return this;
 			}
@@ -238,13 +332,21 @@ public class Form<T> {
 	private Form() {
 	}
 
+	private final Map<String, Function<T, Consumer<Boolean>>>
+		_optionalBooleans = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Date>>> _optionalDates =
+		new HashMap<>();
+	private final Map<String, Function<T, Consumer<Double>>> _optionalDoubles =
 		new HashMap<>();
 	private final Map<String, Function<T, Consumer<Long>>> _optionalLongs =
 		new HashMap<>();
 	private final Map<String, Function<T, Consumer<String>>> _optionalStrings =
 		new HashMap<>();
+	private final Map<String, Function<T, Consumer<Boolean>>>
+		_requiredBooleans = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Date>>> _requiredDates =
+		new HashMap<>();
+	private final Map<String, Function<T, Consumer<Double>>> _requiredDoubles =
 		new HashMap<>();
 	private final Map<String, Function<T, Consumer<Long>>> _requiredLongs =
 		new HashMap<>();

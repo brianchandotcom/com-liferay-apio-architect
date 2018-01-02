@@ -14,10 +14,14 @@
 
 package com.liferay.apio.architect.form;
 
+import static com.liferay.apio.architect.form.FormUtil.getOptionalBoolean;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalDate;
+import static com.liferay.apio.architect.form.FormUtil.getOptionalDouble;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalLong;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalString;
+import static com.liferay.apio.architect.form.FormUtil.getRequiredBoolean;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredDate;
+import static com.liferay.apio.architect.form.FormUtil.getRequiredDouble;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredLong;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredString;
 
@@ -64,6 +68,44 @@ public class FormUtilTest {
 	}
 
 	@Test
+	public void testGetOptionalBooleanDoesNotFailIfNotPresent() {
+		List<Boolean> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Boolean>, Boolean> fieldFormConsumer =
+			getOptionalBoolean(emptyMap(), list);
+
+		fieldFormConsumer.accept("boolean", booleanList -> booleanList::add);
+
+		assertThat(list, is(empty()));
+	}
+
+	@Test
+	public void testGetOptionalBooleanExtractsBoolean() {
+		List<Boolean> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Boolean>, Boolean> fieldFormConsumer =
+			getOptionalBoolean(singletonMap("boolean", true), list);
+
+		fieldFormConsumer.accept("boolean", booleanList -> booleanList::add);
+
+		assertThat(list, hasSize(1));
+
+		Boolean aBoolean = list.get(0);
+
+		assertThat(aBoolean, is(true));
+	}
+
+	@Test(expected = BadRequestException.class)
+	public void testGetOptionalBooleanFailsIfNotABoolean() {
+		List<Boolean> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Boolean>, Boolean> fieldFormConsumer =
+			getOptionalBoolean(singletonMap("boolean", "Apio"), list);
+
+		fieldFormConsumer.accept("boolean", booleanList -> booleanList::add);
+	}
+
+	@Test
 	public void testGetOptionalDateDoesNotFailIfNotPresent() {
 		List<Date> list = new ArrayList<>();
 
@@ -99,6 +141,44 @@ public class FormUtilTest {
 			singletonMap("date", "2017-04-03"), list);
 
 		fieldFormConsumer.accept("date", dateList -> dateList::add);
+	}
+
+	@Test
+	public void testGetOptionalDoubleDoesNotFailIfNotPresent() {
+		List<Double> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Double>, Double> fieldFormConsumer =
+			getOptionalDouble(emptyMap(), list);
+
+		fieldFormConsumer.accept("double", doubleList -> doubleList::add);
+
+		assertThat(list, is(empty()));
+	}
+
+	@Test
+	public void testGetOptionalDoubleExtractsDouble() {
+		List<Double> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Double>, Double> fieldFormConsumer =
+			getOptionalDouble(singletonMap("double", 42.3D), list);
+
+		fieldFormConsumer.accept("double", doubleList -> doubleList::add);
+
+		assertThat(list, hasSize(1));
+
+		Double aDouble = list.get(0);
+
+		assertThat(aDouble, is(equalTo(42.3D)));
+	}
+
+	@Test(expected = BadRequestException.class)
+	public void testGetOptionalDoubleFailsIfNotADouble() {
+		List<Double> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Double>, Double> fieldFormConsumer =
+			getOptionalDouble(singletonMap("double", "Apio"), list);
+
+		fieldFormConsumer.accept("double", doubleList -> doubleList::add);
 	}
 
 	@Test
@@ -178,6 +258,42 @@ public class FormUtilTest {
 	}
 
 	@Test
+	public void testGetRequiredBooleanExtractsBoolean() {
+		List<Boolean> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Boolean>, Boolean> fieldFormConsumer =
+			getRequiredBoolean(singletonMap("boolean", true), list);
+
+		fieldFormConsumer.accept("boolean", booleanList -> booleanList::add);
+
+		assertThat(list, hasSize(1));
+
+		Boolean aBoolean = list.get(0);
+
+		assertThat(aBoolean, is(true));
+	}
+
+	@Test(expected = BadRequestException.class)
+	public void testGetRequiredBooleanFailsIfNotABoolean() {
+		List<Boolean> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Boolean>, Boolean> fieldFormConsumer =
+			getRequiredBoolean(singletonMap("boolean", "Apio"), list);
+
+		fieldFormConsumer.accept("boolean", booleanList -> booleanList::add);
+	}
+
+	@Test(expected = BadRequestException.class)
+	public void testGetRequiredBooleanFailsIfNotPresent() {
+		List<Boolean> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Boolean>, Boolean> fieldFormConsumer =
+			getRequiredBoolean(emptyMap(), list);
+
+		fieldFormConsumer.accept("boolean", booleanList -> booleanList::add);
+	}
+
+	@Test
 	public void testGetRequiredDateExtractsDate() {
 		List<Date> list = new ArrayList<>();
 
@@ -211,6 +327,42 @@ public class FormUtilTest {
 			emptyMap(), list);
 
 		fieldFormConsumer.accept("date", dateList -> dateList::add);
+	}
+
+	@Test
+	public void testGetRequiredDoubleExtractsDouble() {
+		List<Double> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Double>, Double> fieldFormConsumer =
+			getRequiredDouble(singletonMap("double", 42.3D), list);
+
+		fieldFormConsumer.accept("double", doubleList -> doubleList::add);
+
+		assertThat(list, hasSize(1));
+
+		Double aDouble = list.get(0);
+
+		assertThat(aDouble, is(equalTo(42.3D)));
+	}
+
+	@Test(expected = BadRequestException.class)
+	public void testGetRequiredDoubleFailsIfNotADouble() {
+		List<Double> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Double>, Double> fieldFormConsumer =
+			getRequiredDouble(singletonMap("double", "Apio"), list);
+
+		fieldFormConsumer.accept("double", doubleList -> doubleList::add);
+	}
+
+	@Test(expected = BadRequestException.class)
+	public void testGetRequiredDoubleFailsIfNotPresent() {
+		List<Double> list = new ArrayList<>();
+
+		FieldFormConsumer<List<Double>, Double> fieldFormConsumer =
+			getRequiredDouble(emptyMap(), list);
+
+		fieldFormConsumer.accept("double", doubleList -> doubleList::add);
 	}
 
 	@Test
