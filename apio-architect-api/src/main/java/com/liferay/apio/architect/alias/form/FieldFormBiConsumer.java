@@ -28,6 +28,6 @@ import java.util.function.Function;
  * @param  <S> the field's type
  * @review
  */
-public interface FieldFormConsumer<T, S>
+public interface FieldFormBiConsumer<T, S>
 	extends BiConsumer<String, Function<T, Consumer<S>>> {
 }

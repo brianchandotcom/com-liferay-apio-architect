@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.form;
 
-import com.liferay.apio.architect.alias.form.FieldFormConsumer;
+import com.liferay.apio.architect.alias.form.FieldFormBiConsumer;
 import com.liferay.apio.architect.functional.Try;
 
 import java.text.DateFormat;
@@ -48,7 +48,7 @@ public class FormUtil {
 	 * @return a field form consumer for optional strings
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, Boolean> getOptionalBoolean(
+	public static <T> FieldFormBiConsumer<T, Boolean> getOptionalBoolean(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getBoolean(
@@ -65,7 +65,7 @@ public class FormUtil {
 	 * @return a date field form consumer for optional dates
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, Date> getOptionalDate(
+	public static <T> FieldFormBiConsumer<T, Date> getOptionalDate(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getDate(body, key, false, function.apply(t));
@@ -81,7 +81,7 @@ public class FormUtil {
 	 * @return a field form consumer for optional double numbers
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, Double> getOptionalDouble(
+	public static <T> FieldFormBiConsumer<T, Double> getOptionalDouble(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getDouble(
@@ -98,7 +98,7 @@ public class FormUtil {
 	 * @return a field form consumer for optional long numbers
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, Long> getOptionalLong(
+	public static <T> FieldFormBiConsumer<T, Long> getOptionalLong(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getLong(body, key, false, function.apply(t));
@@ -114,7 +114,7 @@ public class FormUtil {
 	 * @return a field form consumer for optional strings
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, String> getOptionalString(
+	public static <T> FieldFormBiConsumer<T, String> getOptionalString(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getString(
@@ -131,7 +131,7 @@ public class FormUtil {
 	 * @return a date field form consumer for required booleans
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, Boolean> getRequiredBoolean(
+	public static <T> FieldFormBiConsumer<T, Boolean> getRequiredBoolean(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getBoolean(
@@ -148,7 +148,7 @@ public class FormUtil {
 	 * @return a date field form consumer for required dates
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, Date> getRequiredDate(
+	public static <T> FieldFormBiConsumer<T, Date> getRequiredDate(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getDate(body, key, true, function.apply(t));
@@ -165,7 +165,7 @@ public class FormUtil {
 	 * @return a date field form consumer for required double numbers
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, Double> getRequiredDouble(
+	public static <T> FieldFormBiConsumer<T, Double> getRequiredDouble(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getDouble(
@@ -183,7 +183,7 @@ public class FormUtil {
 	 * @return a date field form consumer for required long numbers
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, Long> getRequiredLong(
+	public static <T> FieldFormBiConsumer<T, Long> getRequiredLong(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getLong(body, key, true, function.apply(t));
@@ -199,7 +199,7 @@ public class FormUtil {
 	 * @return a date field form consumer for required strings
 	 * @review
 	 */
-	public static <T> FieldFormConsumer<T, String> getRequiredString(
+	public static <T> FieldFormBiConsumer<T, String> getRequiredString(
 		Map<String, Object> body, T t) {
 
 		return (key, function) -> _getString(
