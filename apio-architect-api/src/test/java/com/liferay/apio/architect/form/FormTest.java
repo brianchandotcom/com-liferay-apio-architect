@@ -40,31 +40,31 @@ public class FormTest {
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
-		).addRequiredString(
-			"string1", (map, string) -> map.put("s1", string)
-		).addOptionalString(
-			"string2", (map, string) -> map.put("s2", string)
-		).addRequiredDate(
-			"date1", (map, string) -> map.put("d1", string)
 		).addOptionalDate(
-			"date2", (map, string) -> map.put("d2", string)
-		).addRequiredLong(
-			"long1", (map, string) -> map.put("l1", string)
+			"date1", (map, date) -> map.put("d1", date)
 		).addOptionalLong(
-			"long2", (map, string) -> map.put("l2", string)
+			"long1", (map, aLong) -> map.put("l1", aLong)
+		).addOptionalString(
+			"string1", (map, string) -> map.put("s1", string)
+		).addRequiredDate(
+			"date2", (map, date) -> map.put("d2", date)
+		).addRequiredLong(
+			"long2", (map, aLong) -> map.put("l2", aLong)
+		).addRequiredString(
+			"string2", (map, string) -> map.put("s2", string)
 		).build();
 
 		Map<String, Object> map = form.get(_body);
 
 		assertThat(map.size(), is(equalTo(6)));
-		assertThat(map, hasEntry(equalTo("s1"), equalTo("Apio")));
-		assertThat(map, hasEntry(equalTo("s2"), equalTo("Hypermedia")));
 		assertThat(
 			map, hasEntry(equalTo("d1"), equalTo(new Date(1465981200000L))));
 		assertThat(
 			map, hasEntry(equalTo("d2"), equalTo(new Date(1491244560000L))));
 		assertThat(map, hasEntry(equalTo("l1"), equalTo(42L)));
 		assertThat(map, hasEntry(equalTo("l2"), equalTo(2017L)));
+		assertThat(map, hasEntry(equalTo("s1"), equalTo("Apio")));
+		assertThat(map, hasEntry(equalTo("s2"), equalTo("Hypermedia")));
 	}
 
 	@Test
@@ -73,12 +73,12 @@ public class FormTest {
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
+		).addOptionalDate(
+			"date3", (map, string) -> map.put("d2", string)
 		).addRequiredString(
 			"string1", (map, string) -> map.put("s1", string)
 		).addOptionalString(
 			"string3", (map, string) -> map.put("s2", string)
-		).addOptionalDate(
-			"date3", (map, string) -> map.put("d2", string)
 		).build();
 
 		Map<String, Object> map = form.get(_body);
@@ -182,12 +182,12 @@ public class FormTest {
 
 	private final Map<String, Object> _body = new HashMap<String, Object>() {
 		{
-			put("string1", "Apio");
-			put("string2", "Hypermedia");
 			put("date1", "2016-06-15T09:00Z");
 			put("date2", "2017-04-03T18:36Z");
 			put("long1", 42L);
 			put("long2", 2017L);
+			put("string1", "Apio");
+			put("string2", "Hypermedia");
 		}
 	};
 
