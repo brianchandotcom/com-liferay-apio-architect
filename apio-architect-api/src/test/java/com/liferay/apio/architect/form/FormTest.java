@@ -40,14 +40,22 @@ public class FormTest {
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
+		).addOptionalBoolean(
+			"boolean1", (map, aBoolean) -> map.put("b1", aBoolean)
 		).addOptionalDate(
 			"date1", (map, date) -> map.put("d1", date)
+		).addOptionalDouble(
+			"double1", (map, aDouble) -> map.put("do1", aDouble)
 		).addOptionalLong(
 			"long1", (map, aLong) -> map.put("l1", aLong)
 		).addOptionalString(
 			"string1", (map, string) -> map.put("s1", string)
+		).addRequiredBoolean(
+			"boolean2", (map, aBoolean) -> map.put("b2", aBoolean)
 		).addRequiredDate(
 			"date2", (map, date) -> map.put("d2", date)
+		).addRequiredDouble(
+			"double2", (map, aDouble) -> map.put("do2", aDouble)
 		).addRequiredLong(
 			"long2", (map, aLong) -> map.put("l2", aLong)
 		).addRequiredString(
@@ -56,13 +64,17 @@ public class FormTest {
 
 		Map<String, Object> map = form.get(_body);
 
-		assertThat(map.size(), is(equalTo(6)));
+		assertThat(map.size(), is(equalTo(10)));
+		assertThat(map, hasEntry(equalTo("b1"), equalTo(true)));
+		assertThat(map, hasEntry(equalTo("b2"), equalTo(false)));
 		assertThat(
 			map, hasEntry(equalTo("d1"), equalTo(new Date(1465981200000L))));
 		assertThat(
 			map, hasEntry(equalTo("d2"), equalTo(new Date(1491244560000L))));
 		assertThat(map, hasEntry(equalTo("l1"), equalTo(42L)));
 		assertThat(map, hasEntry(equalTo("l2"), equalTo(2017L)));
+		assertThat(map, hasEntry(equalTo("do1"), equalTo(3.5D)));
+		assertThat(map, hasEntry(equalTo("do2"), equalTo(25.2D)));
 		assertThat(map, hasEntry(equalTo("s1"), equalTo("Apio")));
 		assertThat(map, hasEntry(equalTo("s2"), equalTo("Hypermedia")));
 	}
@@ -73,6 +85,8 @@ public class FormTest {
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
+		).addOptionalBoolean(
+			"boolean3", (map, string) -> map.put("b2", string)
 		).addOptionalDate(
 			"date3", (map, string) -> map.put("d2", string)
 		).addRequiredString(
@@ -88,12 +102,38 @@ public class FormTest {
 	}
 
 	@Test(expected = BadRequestException.class)
+	public void testFormFailsIfOptionalBooleanIsNotBoolean() {
+		Builder<Map<String, Object>> builder = new Builder<>();
+
+		Form<Map<String, Object>> form = builder.constructor(
+			HashMap::new
+		).addOptionalBoolean(
+			"long1", (map, string) -> map.put("l1", string)
+		).build();
+
+		form.get(_body);
+	}
+
+	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfOptionalDateIsNotDate() {
 		Builder<Map<String, Object>> builder = new Builder<>();
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
 		).addOptionalDate(
+			"long1", (map, string) -> map.put("l1", string)
+		).build();
+
+		form.get(_body);
+	}
+
+	@Test(expected = BadRequestException.class)
+	public void testFormFailsIfOptionalDoubleIsNotDouble() {
+		Builder<Map<String, Object>> builder = new Builder<>();
+
+		Form<Map<String, Object>> form = builder.constructor(
+			HashMap::new
+		).addOptionalDouble(
 			"long1", (map, string) -> map.put("l1", string)
 		).build();
 
@@ -127,12 +167,38 @@ public class FormTest {
 	}
 
 	@Test(expected = BadRequestException.class)
+	public void testFormFailsIfRequiredBooleanIsNotBoolean() {
+		Builder<Map<String, Object>> builder = new Builder<>();
+
+		Form<Map<String, Object>> form = builder.constructor(
+			HashMap::new
+		).addRequiredBoolean(
+			"long1", (map, string) -> map.put("l1", string)
+		).build();
+
+		form.get(_body);
+	}
+
+	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfRequiredDateIsNotDate() {
 		Builder<Map<String, Object>> builder = new Builder<>();
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
 		).addRequiredDate(
+			"long1", (map, string) -> map.put("l1", string)
+		).build();
+
+		form.get(_body);
+	}
+
+	@Test(expected = BadRequestException.class)
+	public void testFormFailsIfRequiredDoubleIsNotDouble() {
+		Builder<Map<String, Object>> builder = new Builder<>();
+
+		Form<Map<String, Object>> form = builder.constructor(
+			HashMap::new
+		).addRequiredDouble(
 			"long1", (map, string) -> map.put("l1", string)
 		).build();
 
@@ -182,8 +248,12 @@ public class FormTest {
 
 	private final Map<String, Object> _body = new HashMap<String, Object>() {
 		{
+			put("boolean1", true);
+			put("boolean2", false);
 			put("date1", "2016-06-15T09:00Z");
 			put("date2", "2017-04-03T18:36Z");
+			put("double1", 3.5D);
+			put("double2", 25.2D);
 			put("long1", 42L);
 			put("long2", 2017L);
 			put("string1", "Apio");

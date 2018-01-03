@@ -63,6 +63,8 @@ public class MockRepresentorCreator {
 		).addLinkedModel(
 			"linked", SecondEmbeddedModel.class,
 			__ -> Optional.of(() -> "second")
+		).addLocalizedString(
+			"localizedString", (firstEmbeddedModel, language) -> "Translated"
 		).addNumber(
 			"number", __ -> 42
 		).addRelatedCollection(
