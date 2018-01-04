@@ -22,10 +22,12 @@ import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.form.Form.Builder;
+import com.liferay.apio.architect.language.Language;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.ws.rs.BadRequestException;
@@ -42,7 +44,11 @@ public class FormTest {
 		Builder<Map<String, Object>> builder = new Builder<>(
 			Arrays.asList("1", "2", "3"));
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addOptionalBoolean(
 			"boolean1", (map, aBoolean) -> map.put("b1", aBoolean)
@@ -70,6 +76,14 @@ public class FormTest {
 
 		Map<String, Object> map = form.get(_body);
 
+		Language language = Locale::getDefault;
+
+		String title = form.getTitle(language);
+		String description = form.getDescription(language);
+
+		assertThat(title, is(equalTo("title")));
+		assertThat(description, is(equalTo("description")));
+
 		assertThat(map.size(), is(equalTo(10)));
 		assertThat(map, hasEntry(equalTo("b1"), equalTo(true)));
 		assertThat(map, hasEntry(equalTo("b2"), equalTo(false)));
@@ -89,7 +103,11 @@ public class FormTest {
 	public void testFormDoesNotAddMissingOptionals() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addOptionalBoolean(
 			"boolean3", (map, string) -> map.put("b2", string)
@@ -111,7 +129,11 @@ public class FormTest {
 	public void testFormFailsIfOptionalBooleanIsNotBoolean() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addOptionalBoolean(
 			"long1", (map, string) -> map.put("l1", string)
@@ -124,7 +146,11 @@ public class FormTest {
 	public void testFormFailsIfOptionalDateIsNotDate() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addOptionalDate(
 			"long1", (map, string) -> map.put("l1", string)
@@ -137,7 +163,11 @@ public class FormTest {
 	public void testFormFailsIfOptionalDoubleIsNotDouble() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addOptionalDouble(
 			"long1", (map, string) -> map.put("l1", string)
@@ -150,7 +180,11 @@ public class FormTest {
 	public void testFormFailsIfOptionalLongIsNotLong() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addOptionalLong(
 			"string1", (map, string) -> map.put("s1", string)
@@ -163,7 +197,11 @@ public class FormTest {
 	public void testFormFailsIfOptionalStringIsNotString() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addOptionalString(
 			"long1", (map, string) -> map.put("l1", string)
@@ -176,7 +214,11 @@ public class FormTest {
 	public void testFormFailsIfRequiredBooleanIsNotBoolean() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addRequiredBoolean(
 			"long1", (map, string) -> map.put("l1", string)
@@ -189,7 +231,11 @@ public class FormTest {
 	public void testFormFailsIfRequiredDateIsNotDate() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addRequiredDate(
 			"long1", (map, string) -> map.put("l1", string)
@@ -202,7 +248,11 @@ public class FormTest {
 	public void testFormFailsIfRequiredDoubleIsNotDouble() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addRequiredDouble(
 			"long1", (map, string) -> map.put("l1", string)
@@ -215,7 +265,11 @@ public class FormTest {
 	public void testFormFailsIfRequiredIsNotPresent() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addRequiredString(
 			"string1", (map, string) -> map.put("s1", string)
@@ -230,7 +284,11 @@ public class FormTest {
 	public void testFormFailsIfRequiredLongIsNotLong() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addRequiredLong(
 			"string1", (map, string) -> map.put("s1", string)
@@ -243,7 +301,11 @@ public class FormTest {
 	public void testFormFailsIfRequiredStringIsNotString() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
-		Form<Map<String, Object>> form = builder.constructor(
+		Form<Map<String, Object>> form = builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			HashMap::new
 		).addRequiredString(
 			"long1", (map, string) -> map.put("l1", string)
