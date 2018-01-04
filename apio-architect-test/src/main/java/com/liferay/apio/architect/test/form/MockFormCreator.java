@@ -39,7 +39,11 @@ public class MockFormCreator {
 	public static Form createForm() {
 		Builder<Object> builder = new Builder<>(Arrays.asList("f", "s"));
 
-		return builder.constructor(
+		return builder.title(
+			__ -> "title"
+		).description(
+			__ -> "description"
+		).constructor(
 			Object::new
 		).addOptionalBoolean(
 			"boolean1", _emptyBiConsumer()
