@@ -22,8 +22,10 @@ import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import javax.ws.rs.BadRequestException;
 
@@ -86,6 +88,22 @@ public class FormUtil {
 
 		return (key, function) -> _getDouble(
 			body, key, false, function.apply(t));
+	}
+
+	/**
+	 * Returns a stream containing the optional {@code FormField} extracted from
+	 * a map.
+	 *
+	 * @param  map the map whose keys are the {@code FormField} names
+	 * @param  fieldType the {@code FieldType} of the fields of this map
+	 * @return a stream containing the optional {@code FormField} extracted from
+	 *         the map
+	 * @review
+	 */
+	public static Stream<FormField> getOptionalFormFieldStream(
+		Map<String, ?> map, FieldType fieldType) {
+
+		return _getFormFieldStream(map, false, fieldType);
 	}
 
 	/**
@@ -170,6 +188,22 @@ public class FormUtil {
 
 		return (key, function) -> _getDouble(
 			body, key, true, function.apply(t));
+	}
+
+	/**
+	 * Returns a stream containing the required {@code FormField} extracted from
+	 * a map.
+	 *
+	 * @param  map the map whose keys are the {@code FormField} names
+	 * @param  fieldType the {@code FieldType} of the fields of this map
+	 * @return a stream containing the required {@code FormField} extracted from
+	 *         the map
+	 * @review
+	 */
+	public static Stream<FormField> getRequiredFormFieldStream(
+		Map<String, ?> map, FieldType fieldType) {
+
+		return _getFormFieldStream(map, true, fieldType);
 	}
 
 	/**
@@ -275,6 +309,16 @@ public class FormUtil {
 		else if (required) {
 			throw new BadRequestException("Field \"" + key + "\" is required");
 		}
+	}
+
+	private static Stream<FormField> _getFormFieldStream(
+		Map<String, ?> map, Boolean required, FieldType fieldType) {
+
+		Set<String> keys = map.keySet();
+
+		Stream<String> stream = keys.stream();
+
+		return stream.map(name -> new FormField(name, required, fieldType));
 	}
 
 	private static void _getLong(
