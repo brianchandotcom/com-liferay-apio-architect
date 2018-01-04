@@ -14,14 +14,19 @@
 
 package com.liferay.apio.architect.form;
 
+import static co.unruly.matchers.StreamMatchers.contains;
+
+import static com.liferay.apio.architect.form.FieldType.BOOLEAN;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalBoolean;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalDate;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalDouble;
+import static com.liferay.apio.architect.form.FormUtil.getOptionalFormFieldStream;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalLong;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalString;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredBoolean;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredDate;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredDouble;
+import static com.liferay.apio.architect.form.FormUtil.getRequiredFormFieldStream;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredLong;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredString;
 
@@ -41,7 +46,10 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.ws.rs.BadRequestException;
 
@@ -179,6 +187,23 @@ public class FormUtilTest {
 			getOptionalDouble(singletonMap("double", "Apio"), list);
 
 		fieldFormBiConsumer.accept("double", doubleList -> doubleList::add);
+	}
+
+	@Test
+	public void testGetOptionalFormFieldStream() {
+		Map<String, String> map = new LinkedHashMap<String, String>() {
+			{
+				put("first", "first");
+				put("second", "second");
+			}
+		};
+
+		Stream<FormField> stream = getOptionalFormFieldStream(map, BOOLEAN);
+
+		FormField firstFormField = new FormField("first", false, BOOLEAN);
+		FormField secondFormField = new FormField("second", false, BOOLEAN);
+
+		assertThat(stream, contains(firstFormField, secondFormField));
 	}
 
 	@Test
@@ -363,6 +388,23 @@ public class FormUtilTest {
 			getRequiredDouble(emptyMap(), list);
 
 		fieldFormBiConsumer.accept("double", doubleList -> doubleList::add);
+	}
+
+	@Test
+	public void testGetRequiredFormFieldStream() {
+		Map<String, String> map = new LinkedHashMap<String, String>() {
+			{
+				put("first", "first");
+				put("second", "second");
+			}
+		};
+
+		Stream<FormField> stream = getRequiredFormFieldStream(map, BOOLEAN);
+
+		FormField firstFormField = new FormField("first", true, BOOLEAN);
+		FormField secondFormField = new FormField("second", true, BOOLEAN);
+
+		assertThat(stream, contains(firstFormField, secondFormField));
 	}
 
 	@Test

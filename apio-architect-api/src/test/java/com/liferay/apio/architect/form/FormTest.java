@@ -14,10 +14,18 @@
 
 package com.liferay.apio.architect.form;
 
+import static com.liferay.apio.architect.form.FieldType.BOOLEAN;
+import static com.liferay.apio.architect.form.FieldType.DATE;
+import static com.liferay.apio.architect.form.FieldType.DOUBLE;
+import static com.liferay.apio.architect.form.FieldType.LONG;
+import static com.liferay.apio.architect.form.FieldType.STRING;
+
 import static java.util.Collections.emptyList;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.Is.is;
 
@@ -27,6 +35,7 @@ import com.liferay.apio.architect.language.Language;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -74,15 +83,32 @@ public class FormTest {
 
 		assertThat(form.id, is("1/2/3"));
 
-		Map<String, Object> map = form.get(_body);
-
 		Language language = Locale::getDefault;
 
 		String title = form.getTitle(language);
 		String description = form.getDescription(language);
 
+		List<FormField> formFields = form.getFormFields();
+
+		assertThat(formFields, hasSize(10));
+		assertThat(
+			formFields,
+			contains(
+				new FormField("boolean1", false, BOOLEAN),
+				new FormField("date1", false, DATE),
+				new FormField("double1", false, DOUBLE),
+				new FormField("long1", false, LONG),
+				new FormField("string1", false, STRING),
+				new FormField("boolean2", true, BOOLEAN),
+				new FormField("date2", true, DATE),
+				new FormField("double2", true, DOUBLE),
+				new FormField("long2", true, LONG),
+				new FormField("string2", true, STRING)));
+
 		assertThat(title, is(equalTo("title")));
 		assertThat(description, is(equalTo("description")));
+
+		Map<String, Object> map = form.get(_body);
 
 		assertThat(map.size(), is(equalTo(10)));
 		assertThat(map, hasEntry(equalTo("b1"), equalTo(true)));

@@ -14,14 +14,21 @@
 
 package com.liferay.apio.architect.form;
 
+import static com.liferay.apio.architect.form.FieldType.BOOLEAN;
+import static com.liferay.apio.architect.form.FieldType.DATE;
+import static com.liferay.apio.architect.form.FieldType.DOUBLE;
+import static com.liferay.apio.architect.form.FieldType.LONG;
+import static com.liferay.apio.architect.form.FieldType.STRING;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalBoolean;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalDate;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalDouble;
+import static com.liferay.apio.architect.form.FormUtil.getOptionalFormFieldStream;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalLong;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalString;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredBoolean;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredDate;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredDouble;
+import static com.liferay.apio.architect.form.FormUtil.getRequiredFormFieldStream;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredLong;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredString;
 
@@ -35,6 +42,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Holds information about the form of an operation. The {@link #get(Map)}
@@ -87,6 +96,31 @@ public class Form<T> {
 	 */
 	public String getDescription(Language language) {
 		return _descriptionFunction.apply(language);
+	}
+
+	/**
+	 * Returns the list of fields from this {@code Form}.
+	 *
+	 * @return the list of form fields.
+	 */
+	public List<FormField> getFormFields() {
+		Stream<Stream<FormField>> stream = Stream.of(
+			getOptionalFormFieldStream(_optionalBooleans, BOOLEAN),
+			getOptionalFormFieldStream(_optionalDates, DATE),
+			getOptionalFormFieldStream(_optionalDoubles, DOUBLE),
+			getOptionalFormFieldStream(_optionalLongs, LONG),
+			getOptionalFormFieldStream(_optionalStrings, STRING),
+			getRequiredFormFieldStream(_requiredBooleans, BOOLEAN),
+			getRequiredFormFieldStream(_requiredDates, DATE),
+			getRequiredFormFieldStream(_requiredDoubles, DOUBLE),
+			getRequiredFormFieldStream(_requiredLongs, LONG),
+			getRequiredFormFieldStream(_requiredStrings, STRING));
+
+		return stream.flatMap(
+			Function.identity()
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	/**
