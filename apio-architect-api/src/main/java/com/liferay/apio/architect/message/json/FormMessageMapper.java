@@ -17,6 +17,7 @@ package com.liferay.apio.architect.message.json;
 import aQute.bnd.annotation.ConsumerType;
 
 import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.form.FormField;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -56,6 +57,16 @@ public interface FormMessageMapper {
 	 */
 	public default void mapFormDescription(
 		JSONObjectBuilder jsonObjectBuilder, String description) {
+	}
+
+	/**
+	 * Maps a form field to its JSON object representation.
+	 *
+	 * @param jsonObjectBuilder the JSON object builder for the form
+	 * @param formField a form's field
+	 */
+	public default void mapFormField(
+		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
 	}
 
 	/**

@@ -19,10 +19,12 @@ import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.message.json.FormMessageMapper;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.request.RequestInfo;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -71,6 +73,12 @@ public class FormWriter {
 		String description = _form.getDescription(_requestInfo.getLanguage());
 
 		_formMessageMapper.mapFormDescription(jsonObjectBuilder, description);
+
+		List<FormField> formFields = _form.getFormFields();
+
+		formFields.forEach(
+			formField -> _formMessageMapper.mapFormField(
+				jsonObjectBuilder, formField));
 
 		_formMessageMapper.onFinish(
 			jsonObjectBuilder, _form, _requestInfo.getHttpHeaders());
@@ -153,7 +161,7 @@ public class FormWriter {
 
 	}
 
-	private final Form _form;
+	private final Form<?> _form;
 	private final FormMessageMapper _formMessageMapper;
 	private final RequestInfo _requestInfo;
 
