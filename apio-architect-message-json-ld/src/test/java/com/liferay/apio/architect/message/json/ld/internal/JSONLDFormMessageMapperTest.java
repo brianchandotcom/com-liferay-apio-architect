@@ -14,11 +14,14 @@
 
 package com.liferay.apio.architect.message.json.ld.internal;
 
+import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonArrayThat;
+import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonBoolean;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonObjectWith;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonString;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.core.Is.is;
 
 import com.google.gson.JsonElement;
@@ -58,6 +61,8 @@ public class JSONLDFormMessageMapperTest {
 		).where(
 			"description", is(aJsonString(equalTo("description")))
 		).where(
+			"supportedProperty", is(aJsonArrayThat(_containsTheProperties))
+		).where(
 			"title", is(aJsonString(equalTo("title")))
 		).build();
 
@@ -71,9 +76,40 @@ public class JSONLDFormMessageMapperTest {
 		assertThat(mediaType, is(equalTo("application/ld+json")));
 	}
 
+	private static Conditions _conditionsForField(
+		String name, boolean required) {
+
+		Conditions.Builder builder = new Conditions.Builder();
+
+		return builder.where(
+			"@type", is(aJsonString(equalTo("SupportedProperty")))
+		).where(
+			"property", is(aJsonString(equalTo("#" + name)))
+		).where(
+			"readable", is(aJsonBoolean(false))
+		).where(
+			"required", is(aJsonBoolean(required))
+		).where(
+			"writeable", is(aJsonBoolean(true))
+		).build();
+	}
+
 	private static Matcher<? extends JsonElement> _isALinkTo(String url) {
 		return is(aJsonString(equalTo(url)));
 	}
+
+	private static final Matcher<Iterable<? extends JsonElement>>
+		_containsTheProperties = contains(
+			aJsonObjectWith(_conditionsForField("boolean1", false)),
+			aJsonObjectWith(_conditionsForField("date1", false)),
+			aJsonObjectWith(_conditionsForField("double1", false)),
+			aJsonObjectWith(_conditionsForField("long1", false)),
+			aJsonObjectWith(_conditionsForField("string1", false)),
+			aJsonObjectWith(_conditionsForField("boolean2", true)),
+			aJsonObjectWith(_conditionsForField("date2", true)),
+			aJsonObjectWith(_conditionsForField("double2", true)),
+			aJsonObjectWith(_conditionsForField("long2", true)),
+			aJsonObjectWith(_conditionsForField("string2", true)));
 
 	private final JSONLDFormMessageMapper _formMessageMapper =
 		new JSONLDFormMessageMapper();

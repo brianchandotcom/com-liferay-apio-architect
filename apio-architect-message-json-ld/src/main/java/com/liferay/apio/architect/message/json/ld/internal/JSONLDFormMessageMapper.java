@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.message.json.ld.internal;
 
 import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.message.json.FormMessageMapper;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 
@@ -48,6 +49,48 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 			"description"
 		).stringValue(
 			description
+		);
+	}
+
+	@Override
+	public void mapFormField(
+		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
+
+		jsonObjectBuilder.field(
+			"supportedProperty"
+		).arrayValue(
+		).add(
+			builder -> {
+				builder.field(
+					"@type"
+				).stringValue(
+					"SupportedProperty"
+				);
+
+				builder.field(
+					"property"
+				).stringValue(
+					"#" + formField.name
+				);
+
+				builder.field(
+					"required"
+				).booleanValue(
+					formField.isRequired
+				);
+
+				builder.field(
+					"readable"
+				).booleanValue(
+					false
+				);
+
+				builder.field(
+					"writeable"
+				).booleanValue(
+					true
+				);
+			}
 		);
 	}
 
