@@ -49,6 +49,26 @@ public interface FormMessageMapper {
 	public String getMediaType();
 
 	/**
+	 * Maps the {@code Form} description to its JSON object representation.
+	 *
+	 * @param jsonObjectBuilder the JSON object builder for the form
+	 * @param description the {@code Form} description
+	 */
+	public default void mapFormDescription(
+		JSONObjectBuilder jsonObjectBuilder, String description) {
+	}
+
+	/**
+	 * Maps the {@code Form} title to its JSON object representation.
+	 *
+	 * @param jsonObjectBuilder the JSON object builder for the form
+	 * @param title the {@code Form} title
+	 */
+	public default void mapFormTitle(
+		JSONObjectBuilder jsonObjectBuilder, String title) {
+	}
+
+	/**
 	 * Maps a form URL to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the form
