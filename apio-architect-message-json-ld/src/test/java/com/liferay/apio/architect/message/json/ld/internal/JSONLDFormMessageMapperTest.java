@@ -55,6 +55,10 @@ public class JSONLDFormMessageMapperTest {
 			"@id", _isALinkTo("localhost/f/f/s")
 		).where(
 			"@type", is(aJsonString(equalTo("Class")))
+		).where(
+			"description", is(aJsonString(equalTo("description")))
+		).where(
+			"title", is(aJsonString(equalTo("title")))
 		).build();
 
 		assertThat(jsonObject, is(aJsonObjectWith(conditions)));

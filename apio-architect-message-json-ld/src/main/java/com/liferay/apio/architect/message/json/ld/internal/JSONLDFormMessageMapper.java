@@ -41,6 +41,28 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 	}
 
 	@Override
+	public void mapFormDescription(
+		JSONObjectBuilder jsonObjectBuilder, String description) {
+
+		jsonObjectBuilder.field(
+			"description"
+		).stringValue(
+			description
+		);
+	}
+
+	@Override
+	public void mapFormTitle(
+		JSONObjectBuilder jsonObjectBuilder, String title) {
+
+		jsonObjectBuilder.field(
+			"title"
+		).stringValue(
+			title
+		);
+	}
+
+	@Override
 	public void mapFormURL(JSONObjectBuilder jsonObjectBuilder, String url) {
 		jsonObjectBuilder.field(
 			"@id"
