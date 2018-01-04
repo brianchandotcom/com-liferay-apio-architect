@@ -12,31 +12,23 @@
  * details.
  */
 
-package com.liferay.apio.architect.test.resource;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
-import org.junit.Test;
+package com.liferay.apio.architect.test.model;
 
 /**
+ * Represents a mock model that can be mapped to a {@link
+ * com.liferay.apio.architect.representor.Representor} using {@link
+ * com.liferay.apio.architect.test.representor.MockRepresentorCreator} methods.
+ *
  * @author Alejandro Hernández
  */
-public class MockRepresentorCreatorTest {
+@FunctionalInterface
+public interface RootModel {
 
-	@Test(expected = UnsupportedOperationException.class)
-	public void testConstructorThrowsException() throws Throwable {
-		Constructor<?> constructor =
-			MockRepresentorCreator.class.getDeclaredConstructors()[0];
-
-		constructor.setAccessible(true);
-
-		try {
-			constructor.newInstance();
-		}
-		catch (InvocationTargetException ite) {
-			throw ite.getTargetException();
-		}
-	}
+	/**
+	 * Returns the ID.
+	 *
+	 * @return the ID
+	 */
+	public String getId();
 
 }

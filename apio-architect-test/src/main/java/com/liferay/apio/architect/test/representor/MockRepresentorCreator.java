@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.apio.architect.test.resource;
+package com.liferay.apio.architect.test.representor;
 
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.test.resource.model.FirstEmbeddedModel;
-import com.liferay.apio.architect.test.resource.model.RootModel;
-import com.liferay.apio.architect.test.resource.model.SecondEmbeddedModel;
-import com.liferay.apio.architect.test.resource.model.ThirdEmbeddedModel;
+import com.liferay.apio.architect.test.model.FirstEmbeddedModel;
+import com.liferay.apio.architect.test.model.RootModel;
+import com.liferay.apio.architect.test.model.SecondEmbeddedModel;
+import com.liferay.apio.architect.test.model.ThirdEmbeddedModel;
 
 import java.util.Date;
 import java.util.Optional;

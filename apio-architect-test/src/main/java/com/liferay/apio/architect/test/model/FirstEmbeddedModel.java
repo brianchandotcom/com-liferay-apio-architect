@@ -12,17 +12,17 @@
  * details.
  */
 
-package com.liferay.apio.architect.test.resource.model;
+package com.liferay.apio.architect.test.model;
 
 /**
- * Represents a third-layer embeddable mock model that can be mapped to a {@link
+ * Represents a first-layer embeddable mock model that can be mapped to a {@link
  * com.liferay.apio.architect.representor.Representor} using {@link
- * com.liferay.apio.architect.test.resource.MockRepresentorCreator} methods.
+ * com.liferay.apio.architect.test.representor.MockRepresentorCreator} methods.
  *
  * @author Alejandro Hernández
  */
 @FunctionalInterface
-public interface ThirdEmbeddedModel {
+public interface FirstEmbeddedModel {
 
 	/**
 	 * Returns the ID.

@@ -28,7 +28,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.test.json.Conditions;
-import com.liferay.apio.architect.test.resource.model.RootModel;
+import com.liferay.apio.architect.test.model.RootModel;
 import com.liferay.apio.architect.test.writer.MockSingleModelWriter;
 
 import javax.ws.rs.core.HttpHeaders;
