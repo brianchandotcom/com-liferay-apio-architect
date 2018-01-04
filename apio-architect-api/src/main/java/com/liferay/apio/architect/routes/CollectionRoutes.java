@@ -29,6 +29,7 @@ import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.single.model.SingleModel;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -99,8 +100,11 @@ public class CollectionRoutes<T> {
 	@SuppressWarnings("unused")
 	public static class Builder<T> {
 
-		public Builder(Class<T> modelClass, ProvideFunction provideFunction) {
+		public Builder(
+			Class<T> modelClass, String name, ProvideFunction provideFunction) {
+
 			_modelClass = modelClass;
+			_name = name;
 			_provideFunction = provideFunction;
 		}
 
@@ -120,7 +124,8 @@ public class CollectionRoutes<T> {
 			BiFunction<R, A, T> biFunction, Class<A> aClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name)));
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction, httpServletRequest, aClass,
@@ -147,7 +152,8 @@ public class CollectionRoutes<T> {
 			Function<R, T> function,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name)));
 
 			_createItemFunction = httpServletRequest -> body ->
 				function.andThen(
@@ -183,7 +189,8 @@ public class CollectionRoutes<T> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name)));
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction, httpServletRequest, aClass, bClass, cClass,
@@ -219,7 +226,8 @@ public class CollectionRoutes<T> {
 			Class<B> bClass, Class<C> cClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name)));
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction, httpServletRequest, aClass, bClass, cClass,
@@ -251,7 +259,8 @@ public class CollectionRoutes<T> {
 			TriFunction<R, A, B, T> triFunction, Class<A> aClass,
 			Class<B> bClass, FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name)));
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction, httpServletRequest, aClass, bClass,
@@ -399,6 +408,7 @@ public class CollectionRoutes<T> {
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private final Class<T> _modelClass;
+		private final String _name;
 		private final ProvideFunction _provideFunction;
 
 	}

@@ -31,6 +31,7 @@ import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.single.model.SingleModel;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -110,10 +111,12 @@ public class NestedCollectionRoutes<T> {
 	public static class Builder<T, S> {
 
 		public Builder(
-			Class<T> modelClass, Class<S> identifierClass,
-			ProvideFunction provideFunction) {
+			Class<T> modelClass, String name, String nestedName,
+			Class<S> identifierClass, ProvideFunction provideFunction) {
 
 			_modelClass = modelClass;
+			_name = name;
+			_nestedName = nestedName;
 			_identifierClass = identifierClass;
 			_provideFunction = provideFunction;
 		}
@@ -133,7 +136,8 @@ public class NestedCollectionRoutes<T> {
 			BiFunction<V, R, T> biFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> biFunction.andThen(
@@ -169,7 +173,8 @@ public class NestedCollectionRoutes<T> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
@@ -207,7 +212,8 @@ public class NestedCollectionRoutes<T> {
 			Class<B> bClass, Class<C> cClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
@@ -241,7 +247,8 @@ public class NestedCollectionRoutes<T> {
 			TetraFunction<V, R, A, B, T> tetraFunction, Class<A> aClass,
 			Class<B> bClass, FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
@@ -272,7 +279,8 @@ public class NestedCollectionRoutes<T> {
 			TriFunction<V, R, A, T> triFunction, Class<A> aClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
@@ -442,8 +450,10 @@ public class NestedCollectionRoutes<T> {
 		private Form _form;
 		private final Class<S> _identifierClass;
 		private final Class<T> _modelClass;
+		private final String _name;
 		private NestedCreateItemFunction<T> _nestedCreateItemFunction;
 		private NestedGetPageFunction<T> _nestedGetPageFunction;
+		private final String _nestedName;
 		private final ProvideFunction _provideFunction;
 
 	}

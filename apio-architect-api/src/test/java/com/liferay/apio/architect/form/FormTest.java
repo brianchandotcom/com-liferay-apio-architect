@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.form;
 
+import static java.util.Collections.emptyList;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
@@ -21,6 +23,7 @@ import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.form.Form.Builder;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +39,8 @@ public class FormTest {
 
 	@Test
 	public void testFormCreatesValidForm() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(
+			Arrays.asList("1", "2", "3"));
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -62,6 +66,8 @@ public class FormTest {
 			"string2", (map, string) -> map.put("s2", string)
 		).build();
 
+		assertThat(form.id, is("1/2/3"));
+
 		Map<String, Object> map = form.get(_body);
 
 		assertThat(map.size(), is(equalTo(10)));
@@ -81,7 +87,7 @@ public class FormTest {
 
 	@Test
 	public void testFormDoesNotAddMissingOptionals() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -103,7 +109,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfOptionalBooleanIsNotBoolean() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -116,7 +122,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfOptionalDateIsNotDate() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -129,7 +135,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfOptionalDoubleIsNotDouble() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -142,7 +148,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfOptionalLongIsNotLong() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -155,7 +161,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfOptionalStringIsNotString() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -168,7 +174,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfRequiredBooleanIsNotBoolean() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -181,7 +187,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfRequiredDateIsNotDate() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -194,7 +200,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfRequiredDoubleIsNotDouble() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -207,7 +213,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfRequiredIsNotPresent() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -222,7 +228,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfRequiredLongIsNotLong() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new
@@ -235,7 +241,7 @@ public class FormTest {
 
 	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfRequiredStringIsNotString() {
-		Builder<Map<String, Object>> builder = new Builder<>();
+		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
 		Form<Map<String, Object>> form = builder.constructor(
 			HashMap::new

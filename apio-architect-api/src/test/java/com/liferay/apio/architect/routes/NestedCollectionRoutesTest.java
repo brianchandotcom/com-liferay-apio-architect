@@ -57,7 +57,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes = builder.build();
 
@@ -76,7 +76,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -93,7 +93,7 @@ public class NestedCollectionRoutesTest {
 	@Test(expected = MustUseSameIdentifier.class)
 	public void testFiveParameterBuilderMethodsFailIfDifferentIdentifier() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -110,7 +110,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -127,7 +127,7 @@ public class NestedCollectionRoutesTest {
 	@Test(expected = MustUseSameIdentifier.class)
 	public void testFourParameterBuilderMethodsFailIfDifferentIdentifier() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -144,7 +144,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -160,7 +160,7 @@ public class NestedCollectionRoutesTest {
 	@Test(expected = MustUseSameIdentifier.class)
 	public void testOneParameterBuilderMethodsFailIfDifferentIdentifier() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -176,7 +176,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -193,7 +193,7 @@ public class NestedCollectionRoutesTest {
 	@Test(expected = MustUseSameIdentifier.class)
 	public void testThreeParameterBuilderMethodsFailIfDifferentIdentifier() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -210,7 +210,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -226,7 +226,7 @@ public class NestedCollectionRoutesTest {
 	@Test(expected = MustUseSameIdentifier.class)
 	public void testTwoParameterBuilderMethodsFailIfDifferentIdentifier() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, Long.class, PROVIDE_FUNCTION);
+			String.class, "name", "nested", Long.class, PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String> nestedCollectionRoutes =
 			builder.addCreator(
@@ -336,11 +336,11 @@ public class NestedCollectionRoutesTest {
 
 		Optional<Form> optional = nestedCollectionRoutes.getForm();
 
-		Map body = optional.map(
-			form -> form.get(_body)
-		).map(
-			Map.class::cast
-		).get();
+		Form form = optional.get();
+
+		assertThat(form.id, is(equalTo("c/name/nested")));
+
+		Map body = (Map)form.get(_body);
 
 		assertThat(body, is(equalTo(_body)));
 

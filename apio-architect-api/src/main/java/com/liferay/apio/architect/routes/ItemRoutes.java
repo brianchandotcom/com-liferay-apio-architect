@@ -34,6 +34,7 @@ import com.liferay.apio.architect.function.TriFunction;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -125,10 +126,11 @@ public class ItemRoutes<T> {
 	public static class Builder<T, S> {
 
 		public Builder(
-			Class<T> modelClass, ProvideFunction provideFunction,
+			Class<T> modelClass, String name, ProvideFunction provideFunction,
 			IdentifierFunction identifierFunction) {
 
 			_modelClass = modelClass;
+			_name = name;
 			_provideFunction = provideFunction;
 			_identifierFunction = identifierFunction;
 		}
@@ -358,7 +360,8 @@ public class ItemRoutes<T> {
 			BiFunction<S, R, T> biFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("u", _name)));
 
 			_updateItemFunction =
 				httpServletRequest -> path -> body -> biFunction.andThen(
@@ -390,7 +393,8 @@ public class ItemRoutes<T> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("u", _name)));
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction, httpServletRequest, aClass, bClass, cClass,
@@ -422,7 +426,8 @@ public class ItemRoutes<T> {
 			Class<B> bClass, Class<C> cClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("u", _name)));
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction, httpServletRequest, aClass, bClass, cClass,
@@ -450,7 +455,8 @@ public class ItemRoutes<T> {
 			TetraFunction<S, R, A, B, T> tetraFunction, Class<A> aClass,
 			Class<B> bClass, FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("u", _name)));
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction, httpServletRequest, aClass, bClass,
@@ -476,7 +482,8 @@ public class ItemRoutes<T> {
 			TriFunction<S, R, A, T> triFunction, Class<A> aClass,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_form = formBuilderFunction.apply(new Form.Builder<>());
+			_form = formBuilderFunction.apply(
+				new Form.Builder<>(Arrays.asList("u", _name)));
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction, httpServletRequest, aClass,
@@ -508,6 +515,7 @@ public class ItemRoutes<T> {
 		private Form _form;
 		private final IdentifierFunction _identifierFunction;
 		private final Class<T> _modelClass;
+		private final String _name;
 		private final ProvideFunction _provideFunction;
 		private GetItemFunction<T> _singleModelFunction;
 		private UpdateItemFunction<T> _updateItemFunction;

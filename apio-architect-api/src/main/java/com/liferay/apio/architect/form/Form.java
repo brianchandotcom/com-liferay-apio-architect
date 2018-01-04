@@ -27,6 +27,7 @@ import static com.liferay.apio.architect.form.FormUtil.getRequiredString;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -75,12 +76,21 @@ public class Form<T> {
 	}
 
 	/**
+	 * The {@code Form} ID.
+	 */
+	public final String id;
+
+	/**
 	 * Populates and creates a {@code Form} of type {@code T}.
 	 *
 	 * @param  <T> the type used to store the {@code Form} information
 	 * @review
 	 */
 	public static class Builder<T> {
+
+		public Builder(List<String> paths) {
+			_form = new Form<>(paths);
+		}
 
 		/**
 		 * Adds a supplier that provides an instance of the class where the form
@@ -325,11 +335,12 @@ public class Form<T> {
 
 		}
 
-		private final Form<T> _form = new Form<>();
+		private final Form<T> _form;
 
 	}
 
-	private Form() {
+	private Form(List<String> paths) {
+		id = String.join("/", paths);
 	}
 
 	private final Map<String, Function<T, Consumer<Boolean>>>
