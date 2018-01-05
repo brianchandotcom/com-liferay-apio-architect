@@ -14,28 +14,19 @@
 
 package com.liferay.apio.architect.message.json.ld.internal;
 
-import static com.liferay.apio.architect.message.json.ld.internal.JSONLDTestUtil.containsTheTypes;
-import static com.liferay.apio.architect.message.json.ld.internal.JSONLDTestUtil.isALinkTo;
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonBoolean;
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonInt;
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonObjectWhere;
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonObjectWith;
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonString;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDTestUtil.aRootElementJsonObjectWithId;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import com.liferay.apio.architect.test.json.Conditions;
+import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.test.model.RootModel;
 import com.liferay.apio.architect.test.writer.MockSingleModelWriter;
 
 import javax.ws.rs.core.HttpHeaders;
-
-import org.hamcrest.Matcher;
 
 import org.junit.Test;
 
@@ -54,57 +45,7 @@ public class JSONLDSingleModelMessageMapperTest {
 		JsonObject jsonObject = MockSingleModelWriter.write(
 			httpHeaders, _singleModelMessageMapper);
 
-		Conditions.Builder builder = new Conditions.Builder();
-
-		Conditions conditions = builder.where(
-			"@context", _isAJsonObjectWithTheContext
-		).where(
-			"@id", isALinkTo("localhost/p/model/first")
-		).where(
-			"@type", containsTheTypes("Type 1", "Type 2")
-		).where(
-			"binary1", isALinkTo("localhost/b/model/first/binary1")
-		).where(
-			"binary2", isALinkTo("localhost/b/model/first/binary2")
-		).where(
-			"boolean1", is(aJsonBoolean(true))
-		).where(
-			"boolean2", is(aJsonBoolean(false))
-		).where(
-			"date1", is(aJsonString(equalTo("2016-06-15T09:00Z")))
-		).where(
-			"date2", is(aJsonString(equalTo("2017-04-03T18:36Z")))
-		).where(
-			"embedded1", _isAJsonObjectWithTheFirstEmbedded
-		).where(
-			"embedded2", isALinkTo("localhost/p/first-inner-model/second")
-		).where(
-			"link1", isALinkTo("www.liferay.com")
-		).where(
-			"link2", isALinkTo("community.liferay.com")
-		).where(
-			"linked1", isALinkTo("localhost/p/first-inner-model/third")
-		).where(
-			"linked2", isALinkTo("localhost/p/first-inner-model/fourth")
-		).where(
-			"localizedString1", is(aJsonString(equalTo("Translated 1")))
-		).where(
-			"localizedString2", is(aJsonString(equalTo("Translated 2")))
-		).where(
-			"number1", is(aJsonInt(equalTo(2017)))
-		).where(
-			"number2", is(aJsonInt(equalTo(42)))
-		).where(
-			"relatedCollection1", isALinkTo("localhost/p/model/first/models")
-		).where(
-			"relatedCollection2", isALinkTo("localhost/p/model/first/models")
-		).where(
-			"string1", is(aJsonString(equalTo("Live long and prosper")))
-		).where(
-			"string2", is(aJsonString(equalTo("Hypermedia")))
-		).build();
-
-		assertThat(jsonObject, is(aJsonObjectWith(conditions)));
+		assertThat(jsonObject, is(aRootElementJsonObjectWithId("first")));
 	}
 
 	@Test
@@ -114,102 +55,7 @@ public class JSONLDSingleModelMessageMapperTest {
 		assertThat(mediaType, is(equalTo("application/ld+json")));
 	}
 
-	private static final Matcher<JsonElement> _isAJsonObjectWithTheContext;
-	private static final Matcher<JsonElement>
-		_isAJsonObjectWithTheFirstEmbedded;
-	private static final Matcher<JsonElement> _isATypeIdContext = is(
-		aJsonObjectWhere("@type", is(aJsonString(equalTo("@id")))));
-
-	static {
-		Conditions.Builder builder = new Conditions.Builder();
-
-		Conditions secondEmbeddedContextConditions = builder.where(
-			"embedded", _isATypeIdContext
-		).where(
-			"linked", _isATypeIdContext
-		).where(
-			"relatedCollection", _isATypeIdContext
-		).build();
-
-		Conditions secondEmbeddedConditions = builder.where(
-			"@context", is(aJsonObjectWith(secondEmbeddedContextConditions))
-		).where(
-			"@id", isALinkTo("localhost/p/second-inner-model/first")
-		).where(
-			"@type", containsTheTypes("Type")
-		).where(
-			"boolean", is(aJsonBoolean(false))
-		).where(
-			"binary", isALinkTo("localhost/b/second-inner-model/first/binary")
-		).where(
-			"embedded", isALinkTo("localhost/p/third-inner-model/first")
-		).where(
-			"link", isALinkTo("community.liferay.com")
-		).where(
-			"number", is(aJsonInt(equalTo(2017)))
-		).where(
-			"relatedCollection",
-			isALinkTo("localhost/p/second-inner-model/first/models")
-		).where(
-			"string", is(aJsonString(equalTo("A string")))
-		).where(
-			"linked", isALinkTo("localhost/p/third-inner-model/second")
-		).build();
-
-		Conditions firstEmbeddedContextConditions = builder.where(
-			"linked", _isATypeIdContext
-		).where(
-			"relatedCollection", _isATypeIdContext
-		).build();
-
-		Conditions firstEmbeddedConditions = builder.where(
-			"@context", is(aJsonObjectWith(firstEmbeddedContextConditions))
-		).where(
-			"@id", isALinkTo("localhost/p/first-inner-model/first")
-		).where(
-			"@type", containsTheTypes("Type")
-		).where(
-			"binary", isALinkTo("localhost/b/first-inner-model/first/binary")
-		).where(
-			"boolean", is(aJsonBoolean(true))
-		).where(
-			"link", isALinkTo("www.liferay.com")
-		).where(
-			"localizedString", is(aJsonString(equalTo("Translated")))
-		).where(
-			"number", is(aJsonInt(equalTo(42)))
-		).where(
-			"embedded", is(aJsonObjectWith(secondEmbeddedConditions))
-		).where(
-			"linked", isALinkTo("localhost/p/second-inner-model/second")
-		).where(
-			"relatedCollection",
-			isALinkTo("localhost/p/first-inner-model/first/models")
-		).where(
-			"string", is(aJsonString(equalTo("A string")))
-		).build();
-
-		_isAJsonObjectWithTheFirstEmbedded = is(
-			aJsonObjectWith(firstEmbeddedConditions));
-
-		Conditions contextConditions = builder.where(
-			"@vocab", is(aJsonString(equalTo("http://schema.org")))
-		).where(
-			"embedded2", _isATypeIdContext
-		).where(
-			"linked1", _isATypeIdContext
-		).where(
-			"linked2", _isATypeIdContext
-		).where(
-			"relatedCollection1", _isATypeIdContext
-		).where(
-			"relatedCollection2", _isATypeIdContext
-		).build();
-
-		_isAJsonObjectWithTheContext = is(aJsonObjectWith(contextConditions));
-	}
-
-	private final JSONLDSingleModelMessageMapper<RootModel>
+	private final SingleModelMessageMapper<RootModel>
 		_singleModelMessageMapper = new JSONLDSingleModelMessageMapper<>();
 
 }
