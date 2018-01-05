@@ -45,7 +45,7 @@ public class JSONLDSingleModelMessageMapperTest {
 		JsonObject jsonObject = MockSingleModelWriter.write(
 			httpHeaders, _singleModelMessageMapper);
 
-		assertThat(jsonObject, is(aRootElementJsonObjectWithId("first")));
+		assertThat(jsonObject, is(aRootElementJsonObjectWithId("first", true)));
 	}
 
 	@Test

@@ -62,16 +62,17 @@ public class JSONLDTestUtil {
 	 * a {@code RootElement} with the provided ID.
 	 *
 	 * @param  id the ID of the {@code RootElement}
+	 * @param  addVocab {@code true} if the {@code @vocab} check must be added
 	 * @return a matcher for a JSON Object of a {@code RootElement} with the
 	 *         provided ID
 	 * @review
 	 */
-	public static Matcher<JsonElement> aRootElementJsonObjectWithId(String id) {
+	public static Matcher<JsonElement> aRootElementJsonObjectWithId(
+		String id, boolean addVocab) {
+
 		Builder builder = new Builder();
 
-		Conditions contextConditions = builder.where(
-			"@vocab", is(aJsonString(equalTo("http://schema.org")))
-		).where(
+		Builder step = builder.where(
 			"embedded2", IS_A_TYPE_ID_JSON_OBJECT
 		).where(
 			"linked1", IS_A_TYPE_ID_JSON_OBJECT
@@ -81,7 +82,18 @@ public class JSONLDTestUtil {
 			"relatedCollection1", IS_A_TYPE_ID_JSON_OBJECT
 		).where(
 			"relatedCollection2", IS_A_TYPE_ID_JSON_OBJECT
-		).build();
+		);
+
+		Conditions contextConditions = null;
+
+		if (addVocab) {
+			contextConditions = step.where(
+				"@vocab", is(aJsonString(equalTo("http://schema.org")))
+			).build();
+		}
+		else {
+			contextConditions = step.build();
+		}
 
 		Matcher<JsonElement> isAJsonObjectWithTheContext = is(
 			aJsonObjectWith(contextConditions));
