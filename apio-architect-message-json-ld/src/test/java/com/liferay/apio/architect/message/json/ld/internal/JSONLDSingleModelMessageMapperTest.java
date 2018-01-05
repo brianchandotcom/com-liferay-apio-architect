@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.message.json.ld.internal;
 
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDTestUtil.containsTheTypes;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDTestUtil.isALinkTo;
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonArrayThat;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonBoolean;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonInt;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonObjectWhere;
@@ -24,7 +24,6 @@ import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonString;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.core.Is.is;
 
 import com.google.gson.JsonElement;
@@ -62,7 +61,7 @@ public class JSONLDSingleModelMessageMapperTest {
 		).where(
 			"@id", isALinkTo("localhost/p/model/first")
 		).where(
-			"@type", is(aJsonArrayThat(_containsTheTypes))
+			"@type", containsTheTypes("Type 1", "Type 2")
 		).where(
 			"binary1", isALinkTo("localhost/b/model/first/binary1")
 		).where(
@@ -115,13 +114,6 @@ public class JSONLDSingleModelMessageMapperTest {
 		assertThat(mediaType, is(equalTo("application/ld+json")));
 	}
 
-	@SuppressWarnings("unchecked")
-	private static Matcher<Iterable<? extends JsonElement>> _containsTheTypes =
-		contains(
-			aJsonString(equalTo("Type 1")), aJsonString(equalTo("Type 2")));
-
-	private static final Matcher<JsonElement> _isAJsonArrayWithTheType = is(
-		aJsonArrayThat(contains(aJsonString(equalTo("Type")))));
 	private static final Matcher<JsonElement> _isAJsonObjectWithTheContext;
 	private static final Matcher<JsonElement>
 		_isAJsonObjectWithTheFirstEmbedded;
@@ -144,7 +136,7 @@ public class JSONLDSingleModelMessageMapperTest {
 		).where(
 			"@id", isALinkTo("localhost/p/second-inner-model/first")
 		).where(
-			"@type", _isAJsonArrayWithTheType
+			"@type", containsTheTypes("Type")
 		).where(
 			"boolean", is(aJsonBoolean(false))
 		).where(
@@ -175,7 +167,7 @@ public class JSONLDSingleModelMessageMapperTest {
 		).where(
 			"@id", isALinkTo("localhost/p/first-inner-model/first")
 		).where(
-			"@type", _isAJsonArrayWithTheType
+			"@type", containsTheTypes("Type")
 		).where(
 			"binary", isALinkTo("localhost/b/first-inner-model/first/binary")
 		).where(

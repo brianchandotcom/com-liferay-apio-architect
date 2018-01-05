@@ -14,13 +14,23 @@
 
 package com.liferay.apio.architect.message.json.ld.internal;
 
+import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonArrayThat;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonString;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.core.Is.is;
 
 import com.google.gson.JsonElement;
 
+import com.liferay.apio.architect.test.json.JsonMatchers;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 
 /**
@@ -33,6 +43,30 @@ import org.hamcrest.Matcher;
  * @author Alejandro Hernández
  */
 public class JSONLDTestUtil {
+
+	/**
+	 * Returns a {@link Matcher} that checks if the field contains the provided
+	 * types as a JSON Array.
+	 *
+	 * @param  types the types to match
+	 * @return a matcher for a type JSON Array
+	 * @review
+	 */
+	public static Matcher<? extends JsonElement> containsTheTypes(
+		String... types) {
+
+		Stream<String> stream = Arrays.stream(types);
+
+		List<Matcher<? super JsonElement>> matchers = stream.map(
+			CoreMatchers::equalTo
+		).map(
+			JsonMatchers::aJsonString
+		).collect(
+			Collectors.toList()
+		);
+
+		return is(aJsonArrayThat(contains(matchers)));
+	}
 
 	/**
 	 * Returns a {@link Matcher} that checks if the field is a link to the
