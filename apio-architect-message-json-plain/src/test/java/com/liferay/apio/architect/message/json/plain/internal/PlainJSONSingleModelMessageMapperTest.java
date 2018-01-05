@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.message.json.plain.internal;
 
+import static com.liferay.apio.architect.message.json.plain.internal.PlainJSONTestUtil.isALinkTo;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonBoolean;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonInt;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonObjectWith;
@@ -61,9 +62,9 @@ public class PlainJSONSingleModelMessageMapperTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions conditions = builder.where(
-			"binary1", _isALinkTo("localhost/b/model/first/binary1")
+			"binary1", isALinkTo("localhost/b/model/first/binary1")
 		).where(
-			"binary2", _isALinkTo("localhost/b/model/first/binary2")
+			"binary2", isALinkTo("localhost/b/model/first/binary2")
 		).where(
 			"boolean1", is(aJsonBoolean(true))
 		).where(
@@ -75,15 +76,15 @@ public class PlainJSONSingleModelMessageMapperTest {
 		).where(
 			"embedded1", _isAJsonObjectWithTheFirstEmbedded
 		).where(
-			"embedded2", _isALinkTo("localhost/p/first-inner-model/second")
+			"embedded2", isALinkTo("localhost/p/first-inner-model/second")
 		).where(
-			"link1", _isALinkTo("www.liferay.com")
+			"link1", isALinkTo("www.liferay.com")
 		).where(
-			"link2", _isALinkTo("community.liferay.com")
+			"link2", isALinkTo("community.liferay.com")
 		).where(
-			"linked1", _isALinkTo("localhost/p/first-inner-model/third")
+			"linked1", isALinkTo("localhost/p/first-inner-model/third")
 		).where(
-			"linked2", _isALinkTo("localhost/p/first-inner-model/fourth")
+			"linked2", isALinkTo("localhost/p/first-inner-model/fourth")
 		).where(
 			"localizedString1", is(aJsonString(equalTo("Translated 1")))
 		).where(
@@ -93,11 +94,11 @@ public class PlainJSONSingleModelMessageMapperTest {
 		).where(
 			"number2", is(aJsonInt(equalTo(42)))
 		).where(
-			"relatedCollection1", _isALinkTo("localhost/p/model/first/models")
+			"relatedCollection1", isALinkTo("localhost/p/model/first/models")
 		).where(
-			"relatedCollection2", _isALinkTo("localhost/p/model/first/models")
+			"relatedCollection2", isALinkTo("localhost/p/model/first/models")
 		).where(
-			"self", _isALinkTo("localhost/p/model/first")
+			"self", isALinkTo("localhost/p/model/first")
 		).where(
 			"string1", is(aJsonString(equalTo("Live long and prosper")))
 		).where(
@@ -107,10 +108,6 @@ public class PlainJSONSingleModelMessageMapperTest {
 		assertThat(jsonObject, is(aJsonObjectWith(conditions)));
 	}
 
-	private static Matcher<? extends JsonElement> _isALinkTo(String url) {
-		return is(aJsonString(equalTo(url)));
-	}
-
 	private static final Matcher<JsonElement>
 		_isAJsonObjectWithTheFirstEmbedded;
 
@@ -118,48 +115,48 @@ public class PlainJSONSingleModelMessageMapperTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions secondEmbeddedConditions = builder.where(
-			"binary", _isALinkTo("localhost/b/second-inner-model/first/binary")
+			"binary", isALinkTo("localhost/b/second-inner-model/first/binary")
 		).where(
 			"boolean", is(aJsonBoolean(false))
 		).where(
-			"embedded", _isALinkTo("localhost/p/third-inner-model/first")
+			"embedded", isALinkTo("localhost/p/third-inner-model/first")
 		).where(
-			"link", _isALinkTo("community.liferay.com")
+			"link", isALinkTo("community.liferay.com")
 		).where(
 			"number", is(aJsonInt(equalTo(2017)))
 		).where(
 			"relatedCollection",
-			_isALinkTo("localhost/p/second-inner-model/first/models")
+			isALinkTo("localhost/p/second-inner-model/first/models")
 		).where(
-			"self", _isALinkTo("localhost/p/second-inner-model/first")
+			"self", isALinkTo("localhost/p/second-inner-model/first")
 		).where(
 			"string", is(aJsonString(equalTo("A string")))
 		).where(
-			"linked", _isALinkTo("localhost/p/third-inner-model/second")
+			"linked", isALinkTo("localhost/p/third-inner-model/second")
 		).build();
 
 		Matcher<JsonElement> isAJsonObjectWithTheSecondEmbedded = is(
 			aJsonObjectWith(secondEmbeddedConditions));
 
 		Conditions firstEmbeddedConditions = builder.where(
-			"binary", _isALinkTo("localhost/b/first-inner-model/first/binary")
+			"binary", isALinkTo("localhost/b/first-inner-model/first/binary")
 		).where(
 			"boolean", is(aJsonBoolean(true))
 		).where(
-			"link", _isALinkTo("www.liferay.com")
+			"link", isALinkTo("www.liferay.com")
 		).where(
 			"localizedString", is(aJsonString(equalTo("Translated")))
 		).where(
 			"number", is(aJsonInt(equalTo(42)))
 		).where(
 			"relatedCollection",
-			_isALinkTo("localhost/p/first-inner-model/first/models")
+			isALinkTo("localhost/p/first-inner-model/first/models")
 		).where(
 			"embedded", isAJsonObjectWithTheSecondEmbedded
 		).where(
-			"linked", _isALinkTo("localhost/p/second-inner-model/second")
+			"linked", isALinkTo("localhost/p/second-inner-model/second")
 		).where(
-			"self", _isALinkTo("localhost/p/first-inner-model/first")
+			"self", isALinkTo("localhost/p/first-inner-model/first")
 		).where(
 			"string", is(aJsonString(equalTo("A string")))
 		).build();
