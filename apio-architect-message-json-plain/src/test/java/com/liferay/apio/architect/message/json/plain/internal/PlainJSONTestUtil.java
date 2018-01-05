@@ -118,6 +118,8 @@ public class PlainJSONTestUtil {
 		).where(
 			"link", isALinkTo("www.liferay.com")
 		).where(
+			"localizedString", is(aJsonString(equalTo("Translated")))
+		).where(
 			"number", is(aJsonInt(equalTo(42)))
 		).where(
 			"relatedCollection",

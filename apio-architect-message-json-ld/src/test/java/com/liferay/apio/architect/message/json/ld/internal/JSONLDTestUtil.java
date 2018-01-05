@@ -212,6 +212,8 @@ public class JSONLDTestUtil {
 		).where(
 			"linked", isALinkTo("localhost/p/second-inner-model/second")
 		).where(
+			"localizedString", is(aJsonString(equalTo("Translated")))
+		).where(
 			"relatedCollection",
 			isALinkTo("localhost/p/first-inner-model/first/models")
 		).where(
