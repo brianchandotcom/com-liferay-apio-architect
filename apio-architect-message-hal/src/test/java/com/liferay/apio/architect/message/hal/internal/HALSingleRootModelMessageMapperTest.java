@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.message.hal.internal;
 
+import static com.liferay.apio.architect.message.hal.internal.HALTestUtil.isALinkTo;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonBoolean;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonInt;
 import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonObjectWhere;
@@ -89,10 +90,6 @@ public class HALSingleRootModelMessageMapperTest {
 		assertThat(mediaType, is(equalTo("application/hal+json")));
 	}
 
-	private static Matcher<JsonElement> _isALinkTo(String url) {
-		return is(aJsonObjectWhere("href", is(aJsonString(equalTo(url)))));
-	}
-
 	private static final Matcher<JsonElement> _isAJsonObjectWithTheEmbedded;
 	private static final Matcher<JsonElement> _isAJsonObjectWithTheLinks;
 
@@ -100,55 +97,55 @@ public class HALSingleRootModelMessageMapperTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions linkConditions = builder.where(
-			"binary1", _isALinkTo("localhost/b/model/first/binary1")
+			"binary1", isALinkTo("localhost/b/model/first/binary1")
 		).where(
-			"binary2", _isALinkTo("localhost/b/model/first/binary2")
+			"binary2", isALinkTo("localhost/b/model/first/binary2")
 		).where(
-			"embedded2", _isALinkTo("localhost/p/first-inner-model/second")
+			"embedded2", isALinkTo("localhost/p/first-inner-model/second")
 		).where(
-			"link1", _isALinkTo("www.liferay.com")
+			"link1", isALinkTo("www.liferay.com")
 		).where(
-			"link2", _isALinkTo("community.liferay.com")
+			"link2", isALinkTo("community.liferay.com")
 		).where(
-			"linked1", _isALinkTo("localhost/p/first-inner-model/third")
+			"linked1", isALinkTo("localhost/p/first-inner-model/third")
 		).where(
-			"linked2", _isALinkTo("localhost/p/first-inner-model/fourth")
+			"linked2", isALinkTo("localhost/p/first-inner-model/fourth")
 		).where(
-			"relatedCollection1", _isALinkTo("localhost/p/model/first/models")
+			"relatedCollection1", isALinkTo("localhost/p/model/first/models")
 		).where(
-			"relatedCollection2", _isALinkTo("localhost/p/model/first/models")
+			"relatedCollection2", isALinkTo("localhost/p/model/first/models")
 		).where(
-			"self", _isALinkTo("localhost/p/model/first")
+			"self", isALinkTo("localhost/p/model/first")
 		).build();
 
 		_isAJsonObjectWithTheLinks = is(aJsonObjectWith(linkConditions));
 
 		Conditions firstEmbeddedLinkConditions = builder.where(
-			"binary", _isALinkTo("localhost/b/first-inner-model/first/binary")
+			"binary", isALinkTo("localhost/b/first-inner-model/first/binary")
 		).where(
-			"link", _isALinkTo("www.liferay.com")
+			"link", isALinkTo("www.liferay.com")
 		).where(
-			"linked", _isALinkTo("localhost/p/second-inner-model/second")
+			"linked", isALinkTo("localhost/p/second-inner-model/second")
 		).where(
 			"relatedCollection",
-			_isALinkTo("localhost/p/first-inner-model/first/models")
+			isALinkTo("localhost/p/first-inner-model/first/models")
 		).where(
-			"self", _isALinkTo("localhost/p/first-inner-model/first")
+			"self", isALinkTo("localhost/p/first-inner-model/first")
 		).build();
 
 		Conditions secondEmbeddedLinkConditions = builder.where(
-			"binary", _isALinkTo("localhost/b/second-inner-model/first/binary")
+			"binary", isALinkTo("localhost/b/second-inner-model/first/binary")
 		).where(
-			"embedded", _isALinkTo("localhost/p/third-inner-model/first")
+			"embedded", isALinkTo("localhost/p/third-inner-model/first")
 		).where(
-			"link", _isALinkTo("community.liferay.com")
+			"link", isALinkTo("community.liferay.com")
 		).where(
-			"linked", _isALinkTo("localhost/p/third-inner-model/second")
+			"linked", isALinkTo("localhost/p/third-inner-model/second")
 		).where(
 			"relatedCollection",
-			_isALinkTo("localhost/p/second-inner-model/first/models")
+			isALinkTo("localhost/p/second-inner-model/first/models")
 		).where(
-			"self", _isALinkTo("localhost/p/second-inner-model/first")
+			"self", isALinkTo("localhost/p/second-inner-model/first")
 		).build();
 
 		Conditions secondEmbeddedConditions = builder.where(
