@@ -21,7 +21,6 @@ import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.pagination.Page;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -82,11 +81,8 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
 		Boolean value) {
 
-		itemJSONObjectBuilder.field(
-			fieldName
-		).booleanValue(
-			value
-		);
+		_singleModelMessageMapper.mapBooleanField(
+			itemJSONObjectBuilder, fieldName, value);
 	}
 
 	@Override
@@ -96,15 +92,8 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Boolean value) {
 
-		Stream<String> tailStream = embeddedPathElements.tailStream();
-
-		itemJSONObjectBuilder.nestedField(
-			embeddedPathElements.head(), tailStream.toArray(String[]::new)
-		).field(
-			fieldName
-		).booleanValue(
-			value
-		);
+		_singleModelMessageMapper.mapEmbeddedResourceBooleanField(
+			itemJSONObjectBuilder, embeddedPathElements, fieldName, value);
 	}
 
 	@Override
@@ -125,15 +114,8 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		Number value) {
 
-		Stream<String> tailStream = embeddedPathElements.tailStream();
-
-		itemJSONObjectBuilder.nestedField(
-			embeddedPathElements.head(), tailStream.toArray(String[]::new)
-		).field(
-			fieldName
-		).numberValue(
-			value
-		);
+		_singleModelMessageMapper.mapEmbeddedResourceNumberField(
+			itemJSONObjectBuilder, embeddedPathElements, fieldName, value);
 	}
 
 	@Override
@@ -143,15 +125,8 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String value) {
 
-		Stream<String> tailStream = embeddedPathElements.tailStream();
-
-		itemJSONObjectBuilder.nestedField(
-			embeddedPathElements.head(), tailStream.toArray(String[]::new)
-		).field(
-			fieldName
-		).stringValue(
-			value
-		);
+		_singleModelMessageMapper.mapEmbeddedResourceStringField(
+			itemJSONObjectBuilder, embeddedPathElements, fieldName, value);
 	}
 
 	@Override
@@ -199,11 +174,8 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
 		Number value) {
 
-		itemJSONObjectBuilder.field(
-			fieldName
-		).numberValue(
-			value
-		);
+		_singleModelMessageMapper.mapNumberField(
+			itemJSONObjectBuilder, fieldName, value);
 	}
 
 	@Override
@@ -220,11 +192,8 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
 		String value) {
 
-		itemJSONObjectBuilder.field(
-			fieldName
-		).stringValue(
-			value
-		);
+		_singleModelMessageMapper.mapStringField(
+			itemJSONObjectBuilder, fieldName, value);
 	}
 
 	@Override

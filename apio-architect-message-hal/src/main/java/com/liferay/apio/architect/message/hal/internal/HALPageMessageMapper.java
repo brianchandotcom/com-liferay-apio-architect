@@ -84,11 +84,8 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
 		Boolean value) {
 
-		itemJSONObjectBuilder.field(
-			fieldName
-		).booleanValue(
-			value
-		);
+		_singleModelMessageMapper.mapBooleanField(
+			itemJSONObjectBuilder, fieldName, value);
 	}
 
 	@Override
@@ -170,11 +167,8 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
 		Number value) {
 
-		itemJSONObjectBuilder.field(
-			fieldName
-		).numberValue(
-			value
-		);
+		_singleModelMessageMapper.mapNumberField(
+			itemJSONObjectBuilder, fieldName, value);
 	}
 
 	@Override
@@ -191,11 +185,8 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
 		String value) {
 
-		itemJSONObjectBuilder.field(
-			fieldName
-		).stringValue(
-			value
-		);
+		_singleModelMessageMapper.mapStringField(
+			itemJSONObjectBuilder, fieldName, value);
 	}
 
 	@Override
