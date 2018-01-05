@@ -17,6 +17,7 @@ package com.liferay.apio.architect.message.json.ld.internal;
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
+import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.pagination.Page;
 
 import java.util.List;
@@ -25,7 +26,6 @@ import java.util.stream.Stream;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * Represents collection pages in JSON-LD + Hydra format.
@@ -51,7 +51,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	public void mapCollectionURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
-		_jsonLDSingleModelMessageMapper.mapSelfURL(jsonObjectBuilder, url);
+		_singleModelMessageMapper.mapSelfURL(jsonObjectBuilder, url);
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		FunctionalList<String> embeddedPathElements, String fieldName,
 		String url) {
 
-		_jsonLDSingleModelMessageMapper.mapEmbeddedResourceLink(
+		_singleModelMessageMapper.mapEmbeddedResourceLink(
 			itemJSONObjectBuilder, embeddedPathElements, fieldName, url);
 	}
 
@@ -160,7 +160,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, List<String> types) {
 
-		_jsonLDSingleModelMessageMapper.mapEmbeddedResourceTypes(
+		_singleModelMessageMapper.mapEmbeddedResourceTypes(
 			itemJSONObjectBuilder, embeddedPathElements, types);
 	}
 
@@ -170,7 +170,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		_jsonLDSingleModelMessageMapper.mapEmbeddedResourceURL(
+		_singleModelMessageMapper.mapEmbeddedResourceURL(
 			itemJSONObjectBuilder, embeddedPathElements, url);
 	}
 
@@ -179,7 +179,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName, String url) {
 
-		_jsonLDSingleModelMessageMapper.mapLink(
+		_singleModelMessageMapper.mapLink(
 			itemJSONObjectBuilder, fieldName, url);
 	}
 
@@ -189,7 +189,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String url) {
 
-		_jsonLDSingleModelMessageMapper.mapLinkedResourceURL(
+		_singleModelMessageMapper.mapLinkedResourceURL(
 			itemJSONObjectBuilder, embeddedPathElements, url);
 	}
 
@@ -211,7 +211,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String url) {
 
-		_jsonLDSingleModelMessageMapper.mapSelfURL(itemJSONObjectBuilder, url);
+		_singleModelMessageMapper.mapSelfURL(itemJSONObjectBuilder, url);
 	}
 
 	@Override
@@ -243,7 +243,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, List<String> types) {
 
-		_jsonLDSingleModelMessageMapper.mapTypes(itemJSONObjectBuilder, types);
+		_singleModelMessageMapper.mapTypes(itemJSONObjectBuilder, types);
 	}
 
 	@Override
@@ -334,7 +334,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		);
 	}
 
-	@Reference
-	private JSONLDSingleModelMessageMapper<T> _jsonLDSingleModelMessageMapper;
+	private final SingleModelMessageMapper<T> _singleModelMessageMapper =
+		new JSONLDSingleModelMessageMapper<>();
 
 }
