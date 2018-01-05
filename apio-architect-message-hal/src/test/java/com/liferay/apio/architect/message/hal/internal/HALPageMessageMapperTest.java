@@ -79,13 +79,13 @@ public class HALPageMessageMapperTest implements RepresentableManager {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions conditions = builder.where(
-			"count", is(aJsonInt(equalTo(3)))
-		).where(
-			"total", is(aJsonInt(equalTo(9)))
-		).where(
 			"_embedded", _isAJsonObjectWithTheEmbedded
 		).where(
 			"_links", _isAJsonObjectWithTheLinks
+		).where(
+			"count", is(aJsonInt(equalTo(3)))
+		).where(
+			"total", is(aJsonInt(equalTo(9)))
 		).build();
 
 		assertThat(jsonObject, is(aJsonObjectWith(conditions)));

@@ -116,7 +116,11 @@ public class PlainJSONTestUtil {
 		).where(
 			"boolean", is(aJsonBoolean(true))
 		).where(
+			"embedded", isAJsonObjectWithTheSecondEmbedded()
+		).where(
 			"link", isALinkTo("www.liferay.com")
+		).where(
+			"linked", isALinkTo("localhost/p/second-inner-model/second")
 		).where(
 			"localizedString", is(aJsonString(equalTo("Translated")))
 		).where(
@@ -124,12 +128,6 @@ public class PlainJSONTestUtil {
 		).where(
 			"relatedCollection",
 			isALinkTo("localhost/p/first-inner-model/first/models")
-		).where(
-			"embedded", isAJsonObjectWithTheSecondEmbedded()
-		).where(
-			"linked", isALinkTo("localhost/p/second-inner-model/second")
-		).where(
-			"localizedString", is(aJsonString(equalTo("Translated")))
 		).where(
 			"self", isALinkTo("localhost/p/first-inner-model/first")
 		).where(
@@ -158,6 +156,8 @@ public class PlainJSONTestUtil {
 		).where(
 			"link", isALinkTo("community.liferay.com")
 		).where(
+			"linked", isALinkTo("localhost/p/third-inner-model/second")
+		).where(
 			"number", is(aJsonInt(equalTo(2017)))
 		).where(
 			"relatedCollection",
@@ -166,8 +166,6 @@ public class PlainJSONTestUtil {
 			"self", isALinkTo("localhost/p/second-inner-model/first")
 		).where(
 			"string", is(aJsonString(equalTo("A string")))
-		).where(
-			"linked", isALinkTo("localhost/p/third-inner-model/second")
 		).build();
 
 		return is(aJsonObjectWith(secondEmbeddedConditions));

@@ -202,17 +202,15 @@ public class JSONLDTestUtil {
 		).where(
 			"boolean", is(aJsonBoolean(true))
 		).where(
-			"link", isALinkTo("www.liferay.com")
-		).where(
-			"localizedString", is(aJsonString(equalTo("Translated")))
-		).where(
-			"number", is(aJsonInt(equalTo(42)))
-		).where(
 			"embedded", isAJsonObjectWithTheSecondEmbedded()
+		).where(
+			"link", isALinkTo("www.liferay.com")
 		).where(
 			"linked", isALinkTo("localhost/p/second-inner-model/second")
 		).where(
 			"localizedString", is(aJsonString(equalTo("Translated")))
+		).where(
+			"number", is(aJsonInt(equalTo(42)))
 		).where(
 			"relatedCollection",
 			isALinkTo("localhost/p/first-inner-model/first/models")
@@ -248,13 +246,15 @@ public class JSONLDTestUtil {
 		).where(
 			"@type", containsTheTypes("Type")
 		).where(
-			"boolean", is(aJsonBoolean(false))
-		).where(
 			"binary", isALinkTo("localhost/b/second-inner-model/first/binary")
+		).where(
+			"boolean", is(aJsonBoolean(false))
 		).where(
 			"embedded", isALinkTo("localhost/p/third-inner-model/first")
 		).where(
 			"link", isALinkTo("community.liferay.com")
+		).where(
+			"linked", isALinkTo("localhost/p/third-inner-model/second")
 		).where(
 			"number", is(aJsonInt(equalTo(2017)))
 		).where(
@@ -262,8 +262,6 @@ public class JSONLDTestUtil {
 			isALinkTo("localhost/p/second-inner-model/first/models")
 		).where(
 			"string", is(aJsonString(equalTo("A string")))
-		).where(
-			"linked", isALinkTo("localhost/p/third-inner-model/second")
 		).build();
 
 		return is(aJsonObjectWith(secondEmbeddedConditions));
