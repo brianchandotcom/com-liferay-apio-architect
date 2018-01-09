@@ -119,7 +119,6 @@ public class JSONLDPageMessageMapperTest {
 
 		_isAJsonObjectWithTheContext = is(aJsonObjectWith(contextConditions));
 
-		//noinspection unchecked
 		_containsTheMembers = contains(
 			aRootElementJsonObjectWithId("1", false),
 			aRootElementJsonObjectWithId("2", false),
