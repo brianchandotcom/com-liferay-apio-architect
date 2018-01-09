@@ -101,7 +101,6 @@ public class PlainJSONPageMessageMapperTest {
 
 		_isAJsonObjectWithThePages = is(aJsonObjectWith(pagesConditions));
 
-		//noinspection unchecked
 		_containsTheElements = contains(
 			aRootElementJsonObjectWithId("1"),
 			aRootElementJsonObjectWithId("2"),
