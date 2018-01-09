@@ -42,9 +42,9 @@ public final class FormField {
 
 		FormField formField = (FormField)object;
 
-		if (Objects.equals(name, formField.name) &&
-			Objects.equals(required, formField.required) &&
-			Objects.equals(fieldType, formField.fieldType)) {
+		if (Objects.equals(fieldType, formField.fieldType) &&
+			Objects.equals(name, formField.name) &&
+			Objects.equals(required, formField.required)) {
 
 			return true;
 		}
