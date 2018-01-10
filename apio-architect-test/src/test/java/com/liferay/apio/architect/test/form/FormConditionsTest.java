@@ -16,7 +16,6 @@ package com.liferay.apio.architect.test.form;
 
 import static com.liferay.apio.architect.test.form.FormMatchers.isReturnedIn;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -65,7 +64,7 @@ public class FormConditionsTest {
 				"string)\n\t...that should have returned something that is " +
 					"\"String\" instead of null\n";
 
-		assertThat(description.toString(), is(equalTo(expected)));
+		assertThat(description.toString(), is(expected));
 	}
 
 	@Test
@@ -96,7 +95,7 @@ public class FormConditionsTest {
 			"was a Form...\n\t...that should have returned something that is " +
 				"<21.2> instead of null\n";
 
-		assertThat(description.toString(), is(equalTo(expected)));
+		assertThat(description.toString(), is(expected));
 	}
 
 	@Test
@@ -128,7 +127,7 @@ public class FormConditionsTest {
 				"\n\t...that should have returned something that is " +
 					"\"String\" instead of null\n";
 
-		assertThat(description.toString(), is(equalTo(expected)));
+		assertThat(description.toString(), is(expected));
 	}
 
 	@Test
@@ -151,7 +150,7 @@ public class FormConditionsTest {
 					"return something that is <true>\n\t...that should " +
 						"return something that is \"String\"\n";
 
-		assertThat(description.toString(), is(equalTo(expected)));
+		assertThat(description.toString(), is(expected));
 	}
 
 	@Test
@@ -185,7 +184,7 @@ public class FormConditionsTest {
 					"something that is \"String\" instead of null\n";
 
 		assertThat(matchesElement, is(false));
-		assertThat(description.toString(), is(equalTo(expected)));
+		assertThat(description.toString(), is(expected));
 	}
 
 }

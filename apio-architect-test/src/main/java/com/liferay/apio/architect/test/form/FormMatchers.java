@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.test.form;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.form.Form;
@@ -65,7 +64,7 @@ public class FormMatchers {
 	public static <T> Function<Object, Matcher<T>> isReturnedIn(
 		Function<T, ?> function) {
 
-		return object -> new IsReturnedIn<>(function, is(equalTo(object)));
+		return object -> new IsReturnedIn<>(function, is(object));
 	}
 
 	private FormMatchers() {

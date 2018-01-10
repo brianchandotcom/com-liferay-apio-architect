@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.test.internal.form;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
@@ -36,7 +35,7 @@ public class IsReturnedInTest {
 		Optional<String> optional = Optional.of("Api");
 
 		IsReturnedIn<Optional<String>> isReturnedIn = new IsReturnedIn<>(
-			Optional::get, is(equalTo("Apio")));
+			Optional::get, is("Apio"));
 
 		assertThat(optional, not(isReturnedIn));
 	}
@@ -46,7 +45,7 @@ public class IsReturnedInTest {
 		Optional<String> optional = Optional.of("Api");
 
 		IsReturnedIn<Optional<String>> isReturnedIn = new IsReturnedIn<>(
-			Optional::get, is(equalTo("Apio")));
+			Optional::get, is("Apio"));
 
 		Description description = new StringDescription();
 
@@ -55,13 +54,13 @@ public class IsReturnedInTest {
 		String expected =
 			"should have returned something that is \"Apio\" instead of Api";
 
-		assertThat(description.toString(), is(equalTo(expected)));
+		assertThat(description.toString(), is(expected));
 	}
 
 	@Test
 	public void testIsReturnedInMatcherUpdatesDescription() {
 		IsReturnedIn<Optional<String>> isReturnedIn = new IsReturnedIn<>(
-			Optional::get, is(equalTo("Apio")));
+			Optional::get, is("Apio"));
 
 		Description description = new StringDescription();
 
@@ -69,7 +68,7 @@ public class IsReturnedInTest {
 
 		String expected = "should return something that is \"Apio\"";
 
-		assertThat(description.toString(), is(equalTo(expected)));
+		assertThat(description.toString(), is(expected));
 	}
 
 	@Test
@@ -77,7 +76,7 @@ public class IsReturnedInTest {
 		Optional<String> optional = Optional.of("Apio");
 
 		IsReturnedIn<Optional<String>> isReturnedIn = new IsReturnedIn<>(
-			Optional::get, is(equalTo("Apio")));
+			Optional::get, is("Apio"));
 
 		assertThat(optional, isReturnedIn);
 	}

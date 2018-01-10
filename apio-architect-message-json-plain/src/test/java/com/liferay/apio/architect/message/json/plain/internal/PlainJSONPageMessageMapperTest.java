@@ -52,7 +52,7 @@ public class PlainJSONPageMessageMapperTest {
 	public void testMediaTypeIsCorrect() {
 		String mediaType = _pageMessageMapper.getMediaType();
 
-		assertThat(mediaType, is(equalTo("application/json")));
+		assertThat(mediaType, is("application/json"));
 	}
 
 	@Test

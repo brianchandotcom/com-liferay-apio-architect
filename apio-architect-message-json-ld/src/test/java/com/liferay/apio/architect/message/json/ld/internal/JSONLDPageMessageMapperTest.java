@@ -81,7 +81,7 @@ public class JSONLDPageMessageMapperTest {
 	public void testMediaTypeIsCorrect() {
 		String mediaType = _pageMessageMapper.getMediaType();
 
-		assertThat(mediaType, is(equalTo("application/ld+json")));
+		assertThat(mediaType, is("application/ld+json"));
 	}
 
 	private static final Matcher<Iterable<? extends JsonElement>>
