@@ -63,6 +63,8 @@ public class MockSingleModelWriter {
 					singleModel
 				).modelMessageMapper(
 					singleModelMessageMapper
+				).operationsFunction(
+					MockWriterUtil::getOperations
 				).pathFunction(
 					MockWriterUtil::identifierToPath
 				).resourceNameFunction(
@@ -71,8 +73,6 @@ public class MockSingleModelWriter {
 					MockWriterUtil::getRepresentorOptional
 				).requestInfo(
 					requestInfo
-				).operationsFunction(
-					MockWriterUtil::getOperations
 				).build());
 
 		Optional<String> optional = singleModelWriter.write();
