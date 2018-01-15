@@ -14,14 +14,17 @@
 
 package com.liferay.apio.architect.writer;
 
+import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
 
 import com.google.gson.JsonObject;
 
+import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.writer.alias.OperationsFunction;
@@ -29,6 +32,7 @@ import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -125,6 +129,37 @@ public class SingleModelWriter<T> {
 			url -> _singleModelMessageMapper.mapSelfURL(
 				_jsonObjectBuilder, url));
 
+		List<Operation> operations = _operationsFunction.apply(
+			_singleModel.getModelClass());
+
+		operations.forEach(
+			operation -> {
+				JSONObjectBuilder operationJSONObjectBuilder =
+					new JSONObjectBuilder();
+
+				_singleModelMessageMapper.onStartOperation(
+					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
+
+				Optional<Form> formOptional = operation.getFormOptional();
+
+				formOptional.ifPresent(
+					form -> {
+						String url = createFormURL(
+							_requestInfo.getServerURL(), form);
+
+						_singleModelMessageMapper.mapOperationFormURL(
+							_jsonObjectBuilder, operationJSONObjectBuilder,
+							url);
+					});
+
+				_singleModelMessageMapper.mapOperationMethod(
+					_jsonObjectBuilder, operationJSONObjectBuilder,
+					operation.method);
+
+				_singleModelMessageMapper.onFinishOperation(
+					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
+			});
+
 		fieldsWriter.writeRelatedModels(
 			singleModel -> getPathOptional(
 				singleModel, _pathFunction, _representorFunction),
@@ -210,6 +245,39 @@ public class SingleModelWriter<T> {
 		fieldsWriter.writeBinaries(
 			(field, value) -> _singleModelMessageMapper.mapEmbeddedResourceLink(
 				_jsonObjectBuilder, embeddedPathElements, field, value));
+
+		List<Operation> operations = _operationsFunction.apply(
+			singleModel.getModelClass());
+
+		operations.forEach(
+			operation -> {
+				JSONObjectBuilder operationJSONObjectBuilder =
+					new JSONObjectBuilder();
+
+				_singleModelMessageMapper.onStartEmbeddedOperation(
+					_jsonObjectBuilder, operationJSONObjectBuilder,
+					embeddedPathElements, operation);
+
+				Optional<Form> formOptional = operation.getFormOptional();
+
+				formOptional.ifPresent(
+					form -> {
+						String url = createFormURL(
+							_requestInfo.getServerURL(), form);
+
+						_singleModelMessageMapper.mapEmbeddedOperationFormURL(
+							_jsonObjectBuilder, operationJSONObjectBuilder,
+							embeddedPathElements, url);
+					});
+
+				_singleModelMessageMapper.mapEmbeddedOperationMethod(
+					_jsonObjectBuilder, operationJSONObjectBuilder,
+					embeddedPathElements, operation.method);
+
+				_singleModelMessageMapper.onFinishEmbeddedOperation(
+					_jsonObjectBuilder, operationJSONObjectBuilder,
+					embeddedPathElements, operation);
+			});
 
 		fieldsWriter.writeRelatedModels(
 			embeddedSingleModel -> getPathOptional(
