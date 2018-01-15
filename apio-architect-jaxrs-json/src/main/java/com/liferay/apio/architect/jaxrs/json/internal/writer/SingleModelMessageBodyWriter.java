@@ -30,6 +30,7 @@ import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManage
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 import com.liferay.apio.architect.writer.SingleModelWriter;
 
@@ -43,7 +44,6 @@ import java.lang.reflect.Type;
 
 import java.nio.charset.StandardCharsets;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -156,7 +156,7 @@ public class SingleModelMessageBodyWriter<T>
 			).requestInfo(
 				requestInfo
 			).operationsFunction(
-				__ -> Collections.emptyList()
+				_itemRouterManager::getOperations
 			).build());
 
 		Optional<String> resultOptional = singleModelWriter.write();
@@ -213,6 +213,9 @@ public class SingleModelMessageBodyWriter<T>
 
 	@Context
 	private HttpServletRequest _httpServletRequest;
+
+	@Reference
+	private ItemRouterManager _itemRouterManager;
 
 	@Reference
 	private NameManager _nameManager;
