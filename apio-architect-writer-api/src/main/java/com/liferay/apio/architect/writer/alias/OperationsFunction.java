@@ -24,6 +24,7 @@ import java.util.function.Function;
  * list of the single model operations.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @FunctionalInterface
 public interface OperationsFunction
