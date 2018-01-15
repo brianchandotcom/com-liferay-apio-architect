@@ -57,7 +57,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps a resource's boolean field to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param fieldName the field's name
 	 * @param value the field's value
 	 */
@@ -69,7 +69,7 @@ public interface SingleModelMessageMapper<T> {
 	 * Maps an embedded resource's boolean field to its JSON object
 	 * representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param embeddedPathElements the current resource's embedded path elements
 	 * @param fieldName the field's name
 	 * @param value the field's value
@@ -83,7 +83,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps an embedded resource's link to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param embeddedPathElements the current resource's embedded path elements
 	 * @param fieldName the field's name
 	 * @param url the field's value
@@ -98,7 +98,7 @@ public interface SingleModelMessageMapper<T> {
 	 * Maps an embedded resource's number field to its JSON object
 	 * representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param embeddedPathElements the current resource's embedded path elements
 	 * @param fieldName the field's name
 	 * @param value the field's value
@@ -113,7 +113,7 @@ public interface SingleModelMessageMapper<T> {
 	 * Maps an embedded resource's string field to its JSON object
 	 * representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param embeddedPathElements the current resource's embedded path elements
 	 * @param fieldName the field's name
 	 * @param value the field's value
@@ -127,7 +127,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps an embedded resource's types to their JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param embeddedPathElements the current resource's embedded path elements
 	 * @param types the resource's types
 	 */
@@ -139,7 +139,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps an embedded resource's URL to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param embeddedPathElements the current resource's embedded path elements
 	 * @param url the resource's URL
 	 */
@@ -151,7 +151,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps a resource's link to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param fieldName the field's name
 	 * @param url the link's URL
 	 */
@@ -162,7 +162,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps a linked resource's URL to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param embeddedPathElements the current resource's embedded path elements
 	 * @param url the resource's URL
 	 */
@@ -174,7 +174,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps a resource's number field to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param fieldName the field's name
 	 * @param value the field's value
 	 */
@@ -185,7 +185,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps a resource's URL to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param url the resource's URL
 	 */
 	public default void mapSelfURL(
@@ -195,7 +195,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps a resource's string field to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param fieldName the field's name
 	 * @param value the field's value
 	 */
@@ -206,7 +206,7 @@ public interface SingleModelMessageMapper<T> {
 	/**
 	 * Maps a resource's types to their JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the item
+	 * @param jsonObjectBuilder the JSON object builder for the model
 	 * @param types the resource's types
 	 */
 	public default void mapTypes(
