@@ -91,7 +91,7 @@ public class ItemRoutes<T> {
 	 * @return the form used to update a collection item; {@code
 	 *         Optional#empty()} otherwise
 	 */
-	public Optional<Form> getForm() {
+	public Optional<Form> getFormOptional() {
 		return Optional.ofNullable(_form);
 	}
 

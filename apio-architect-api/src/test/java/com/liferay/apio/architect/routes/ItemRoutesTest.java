@@ -265,7 +265,7 @@ public class ItemRoutesTest {
 	}
 
 	private void _testItemRoutes(ItemRoutes<String> itemRoutes) {
-		Optional<Form> optional = itemRoutes.getForm();
+		Optional<Form> optional = itemRoutes.getFormOptional();
 
 		Form form = optional.get();
 
