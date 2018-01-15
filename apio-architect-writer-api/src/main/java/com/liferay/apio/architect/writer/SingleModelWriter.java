@@ -24,6 +24,7 @@ import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.writer.alias.OperationsFunction;
 import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
@@ -56,6 +57,7 @@ public class SingleModelWriter<T> {
 
 	public SingleModelWriter(Builder<T> builder) {
 		_pathFunction = builder._pathFunction;
+		_operationsFunction = builder._operationsFunction;
 		_representorFunction = builder._representorFunction;
 		_requestInfo = builder._requestInfo;
 		_resourceNameFunction = builder._resourceNameFunction;
@@ -265,6 +267,26 @@ public class SingleModelWriter<T> {
 
 		}
 
+		public class OperationsFunctionStep {
+
+			/**
+			 * Adds information to the builder about the function that gets the
+			 * operations of single model class.
+			 *
+			 * @param  operationsFunction the function that gets the operations
+			 *         of a single model class
+			 * @return the updated builder
+			 */
+			public BuildStep operationsFunction(
+				OperationsFunction operationsFunction) {
+
+				_operationsFunction = operationsFunction;
+
+				return new BuildStep();
+			}
+
+		}
+
 		public class PathFunctionStep {
 
 			/**
@@ -315,10 +337,10 @@ public class SingleModelWriter<T> {
 			 *         created by using a {@link RequestInfo.Builder}
 			 * @return the updated builder
 			 */
-			public BuildStep requestInfo(RequestInfo requestInfo) {
+			public OperationsFunctionStep requestInfo(RequestInfo requestInfo) {
 				_requestInfo = requestInfo;
 
-				return new BuildStep();
+				return new OperationsFunctionStep();
 			}
 
 		}
@@ -364,6 +386,7 @@ public class SingleModelWriter<T> {
 
 		}
 
+		private OperationsFunction _operationsFunction;
 		private PathFunction _pathFunction;
 		private RepresentorFunction _representorFunction;
 		private RequestInfo _requestInfo;
@@ -374,6 +397,7 @@ public class SingleModelWriter<T> {
 	}
 
 	private final JSONObjectBuilder _jsonObjectBuilder;
+	private final OperationsFunction _operationsFunction;
 	private final PathFunction _pathFunction;
 	private final RepresentorFunction _representorFunction;
 	private final RequestInfo _requestInfo;

@@ -43,6 +43,7 @@ import java.lang.reflect.Type;
 
 import java.nio.charset.StandardCharsets;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -154,6 +155,8 @@ public class SingleModelMessageBodyWriter<T>
 				_representableManager::getRepresentorOptional
 			).requestInfo(
 				requestInfo
+			).operationsFunction(
+				__ -> Collections.emptyList()
 			).build());
 
 		Optional<String> resultOptional = singleModelWriter.write();
