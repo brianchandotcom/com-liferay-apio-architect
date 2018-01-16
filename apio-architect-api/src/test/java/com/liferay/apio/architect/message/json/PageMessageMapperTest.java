@@ -94,6 +94,10 @@ public class PageMessageMapperTest {
 		pageMessageMapper.mapItemSelfURL(null, null, null);
 		pageMessageMapper.mapItemStringField(null, null, null, null);
 		pageMessageMapper.mapItemTypes(null, null, null);
+		pageMessageMapper.mapOperationFormURL(null, null, null);
+		pageMessageMapper.mapOperationMethod(null, null, null);
+		pageMessageMapper.onFinishOperation(null, null, null);
+		pageMessageMapper.onStartOperation(null, null, null);
 
 		Mockito.verify(
 			singleModelMessageMapper
@@ -157,6 +161,18 @@ public class PageMessageMapperTest {
 
 		Mockito.verify(
 			singleModelMessageMapper
+		).mapOperationFormURL(
+			null, null, null
+		);
+
+		Mockito.verify(
+			singleModelMessageMapper
+		).mapOperationMethod(
+			null, null, null
+		);
+
+		Mockito.verify(
+			singleModelMessageMapper
 		).mapSelfURL(
 			null, null
 		);
@@ -171,6 +187,18 @@ public class PageMessageMapperTest {
 			singleModelMessageMapper
 		).mapTypes(
 			null, null
+		);
+
+		Mockito.verify(
+			singleModelMessageMapper
+		).onFinishOperation(
+			null, null, null
+		);
+
+		Mockito.verify(
+			singleModelMessageMapper
+		).onStartOperation(
+			null, null, null
 		);
 	}
 

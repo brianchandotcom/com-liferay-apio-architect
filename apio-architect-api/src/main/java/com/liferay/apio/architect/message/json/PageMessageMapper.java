@@ -17,6 +17,8 @@ package com.liferay.apio.architect.message.json;
 import aQute.bnd.annotation.ConsumerType;
 
 import com.liferay.apio.architect.list.FunctionalList;
+import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 
 import java.util.List;
@@ -44,7 +46,7 @@ import javax.ws.rs.core.HttpHeaders;
  * </p>
  *
  * <p>
- * By default all the "item" methods are based on a {@link
+ * By default all the "item" on "operation" methods are based on a {@link
  * SingleModelMessageMapper} if the {@link
  * #getSingleModelMessageMapperOptional()} returns one.
  * </p>
@@ -429,6 +431,48 @@ public interface PageMessageMapper<T> {
 	}
 
 	/**
+	 * Maps a resource operation form's URL to its JSON object representation.
+	 *
+	 * @param pageJSONObjectBuilder the JSON object builder for the page
+	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *        operation
+	 * @param url the operation form's URL
+	 */
+	public default void mapOperationFormURL(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, String url) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper ->
+				singleModelMessageMapper.mapOperationFormURL(
+					pageJSONObjectBuilder, operationJSONObjectBuilder, url));
+	}
+
+	/**
+	 * Maps a resource operation's method to its JSON object representation.
+	 *
+	 * @param pageJSONObjectBuilder the JSON object builder for the page
+	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *        operation
+	 * @param method the operation's method
+	 */
+	public default void mapOperationMethod(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, Method method) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper ->
+				singleModelMessageMapper.mapOperationMethod(
+					pageJSONObjectBuilder, operationJSONObjectBuilder, method));
+	}
+
+	/**
 	 * Maps the page count to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the page
@@ -478,6 +522,29 @@ public interface PageMessageMapper<T> {
 	}
 
 	/**
+	 * Finishes the operation. This is the final operation-mapper method the
+	 * writer calls.
+	 *
+	 * @param pageJSONObjectBuilder the JSON object builder for the page
+	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *        operation
+	 * @param operation the operation
+	 */
+	public default void onFinishOperation(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper ->
+				singleModelMessageMapper.onFinishOperation(
+					pageJSONObjectBuilder, operationJSONObjectBuilder,
+					operation));
+	}
+
+	/**
 	 * Starts the page. This is the first page message mapper method the writer
 	 * calls for the page.
 	 *
@@ -504,6 +571,29 @@ public interface PageMessageMapper<T> {
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, T item, Class<T> modelClass,
 		HttpHeaders httpHeaders) {
+	}
+
+	/**
+	 * Starts an operation. This is the first operation-mapper method the writer
+	 * calls.
+	 *
+	 * @param pageJSONObjectBuilder the JSON object builder for the page
+	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *        operation
+	 * @param operation the operation
+	 */
+	public default void onStartOperation(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper ->
+				singleModelMessageMapper.onStartOperation(
+					pageJSONObjectBuilder, operationJSONObjectBuilder,
+					operation));
 	}
 
 	/**
