@@ -14,18 +14,18 @@
 
 package com.liferay.apio.architect.message.json.plain.internal;
 
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonBoolean;
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonInt;
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonObjectWith;
-import static com.liferay.apio.architect.test.json.JsonMatchers.aJsonString;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonBoolean;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonInt;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWith;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 
 import com.google.gson.JsonElement;
 
-import com.liferay.apio.architect.test.json.Conditions;
-import com.liferay.apio.architect.test.json.Conditions.Builder;
+import com.liferay.apio.architect.test.util.json.Conditions;
+import com.liferay.apio.architect.test.util.json.Conditions.Builder;
 
 import org.hamcrest.Matcher;
 

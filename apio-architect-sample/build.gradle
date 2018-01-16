@@ -15,5 +15,5 @@ dependencies {
 	provided project(":apps:foundation:apio-architect:apio-architect-api")
 
 	testCompile group: "org.hamcrest", name: "java-hamcrest", version: "2.0.0.0"
-	testCompile project(":apps:foundation:apio-architect:apio-architect-test")
+	testCompile project(":apps:foundation:apio-architect:apio-architect-test-util")
 }

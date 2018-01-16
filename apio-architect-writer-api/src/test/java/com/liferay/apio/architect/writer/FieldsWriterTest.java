@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.writer;
 
-import static com.liferay.apio.architect.test.list.FunctionalListMatchers.aFunctionalListThat;
+import static com.liferay.apio.architect.test.util.list.FunctionalListMatchers.aFunctionalListThat;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
@@ -31,9 +31,9 @@ import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
-import com.liferay.apio.architect.test.model.FirstEmbeddedModel;
-import com.liferay.apio.architect.test.model.RootModel;
-import com.liferay.apio.architect.test.representor.MockRepresentorCreator;
+import com.liferay.apio.architect.test.util.model.FirstEmbeddedModel;
+import com.liferay.apio.architect.test.util.model.RootModel;
+import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.ArrayList;
