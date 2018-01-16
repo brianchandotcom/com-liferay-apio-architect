@@ -345,12 +345,12 @@ public class SingleModelWriter<T> {
 			 *         of a single model class
 			 * @return the updated builder
 			 */
-			public BuildStep operationsFunction(
+			public PathFunctionStep operationsFunction(
 				OperationsFunction operationsFunction) {
 
 				_operationsFunction = operationsFunction;
 
-				return new BuildStep();
+				return new PathFunctionStep();
 			}
 
 		}
@@ -405,10 +405,10 @@ public class SingleModelWriter<T> {
 			 *         created by using a {@link RequestInfo.Builder}
 			 * @return the updated builder
 			 */
-			public OperationsFunctionStep requestInfo(RequestInfo requestInfo) {
+			public BuildStep requestInfo(RequestInfo requestInfo) {
 				_requestInfo = requestInfo;
 
-				return new OperationsFunctionStep();
+				return new BuildStep();
 			}
 
 		}
@@ -444,12 +444,12 @@ public class SingleModelWriter<T> {
 			 *         SingleModelMessageMapper} headers
 			 * @return the updated builder
 			 */
-			public PathFunctionStep modelMessageMapper(
+			public OperationsFunctionStep modelMessageMapper(
 				SingleModelMessageMapper<T> singleModelMessageMapper) {
 
 				_singleModelMessageMapper = singleModelMessageMapper;
 
-				return new PathFunctionStep();
+				return new OperationsFunctionStep();
 			}
 
 		}
