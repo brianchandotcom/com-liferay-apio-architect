@@ -134,7 +134,7 @@ public class WebPageElementCreatorForm {
 	 * @review
 	 */
 	public long getFolder() {
-		if (_folder != null) {
+		if (_folder == null) {
 			return 0;
 		}
 
