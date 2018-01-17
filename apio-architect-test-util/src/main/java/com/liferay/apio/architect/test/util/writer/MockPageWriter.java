@@ -80,8 +80,10 @@ public class MockPageWriter {
 				page
 			).pageMessageMapper(
 				pageMessageMapper
-			).operationsFunction(
-				__ -> Collections.singletonList(
+			).pageOperationsFunction(
+				__ -> Collections.emptyList()
+			).nestedPageOperationsFunction(
+				modelClass -> parentName -> Collections.singletonList(
 					new Operation(
 						createForm("c", "p"), POST, "create-operation"))
 			).pathFunction(

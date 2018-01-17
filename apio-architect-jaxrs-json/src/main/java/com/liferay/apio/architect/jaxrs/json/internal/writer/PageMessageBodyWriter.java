@@ -148,8 +148,10 @@ public class PageMessageBodyWriter<T>
 				page
 			).pageMessageMapper(
 				getPageMessageMapper(mediaType, page)
-			).operationsFunction(
+			).pageOperationsFunction(
 				__ -> Collections.emptyList()
+			).nestedPageOperationsFunction(
+				modelClass -> parentName -> Collections.emptyList()
 			).pathFunction(
 				_pathIdentifierMapperManager::map
 			).resourceNameFunction(

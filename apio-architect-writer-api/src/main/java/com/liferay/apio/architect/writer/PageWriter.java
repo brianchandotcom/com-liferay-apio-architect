@@ -34,10 +34,11 @@ import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.writer.alias.NestedPageOperationsFunction;
+import com.liferay.apio.architect.writer.alias.PageOperationsFunction;
 import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
-import com.liferay.apio.architect.writer.alias.SingleModelOperationsFunction;
 
 import java.util.Collection;
 import java.util.List;
@@ -67,7 +68,8 @@ public class PageWriter<T> {
 	}
 
 	public PageWriter(Builder<T> builder) {
-		_singleModelOperationsFunction = builder._singleModelOperationsFunction;
+		_nestedPageOperationsFunction = builder._nestedPageOperationsFunction;
+		_pageOperationsFunction = builder._pageOperationsFunction;
 		_page = builder._page;
 		_pageMessageMapper = builder._pageMessageMapper;
 		_pathFunction = builder._pathFunction;
@@ -109,12 +111,22 @@ public class PageWriter<T> {
 			url -> _pageMessageMapper.mapCollectionURL(
 				_jsonObjectBuilder, url));
 
-		items.forEach(
-			model -> _writeItem(
-				new SingleModel<>(model, _page.getModelClass())));
+		Class<T> modelClass = _page.getModelClass();
 
-		List<Operation> operations = _singleModelOperationsFunction.apply(
-			_page.getModelClass());
+		items.forEach(
+			model -> _writeItem(new SingleModel<>(model, modelClass)));
+
+		Optional<Path> pathOptional = _page.getPathOptional();
+
+		List<Operation> operations = pathOptional.map(
+			path -> _nestedPageOperationsFunction.apply(
+				modelClass
+			).apply(
+				path.getName()
+			)
+		).orElseGet(
+			() -> _pageOperationsFunction.apply(modelClass)
+		);
 
 		operations.forEach(
 			operation -> {
@@ -183,6 +195,27 @@ public class PageWriter<T> {
 
 		}
 
+		public class NestedPageOperationsFunctionStep {
+
+			/**
+			 * Adds information to the builder about the function that gets the
+			 * operations of a page model class.
+			 *
+			 * @param  nestedPageOperationsFunction the function that gets the
+			 *         operations of a page model class
+			 * @return the updated builder
+			 * @review
+			 */
+			public PathFunctionStep nestedPageOperationsFunction(
+				NestedPageOperationsFunction nestedPageOperationsFunction) {
+
+				_nestedPageOperationsFunction = nestedPageOperationsFunction;
+
+				return new PathFunctionStep();
+			}
+
+		}
+
 		public class PageMessageMapperStep {
 
 			/**
@@ -192,12 +225,33 @@ public class PageWriter<T> {
 			 * @param  pageMessageMapper the {@code PageMessageMapper} headers.
 			 * @return the updated builder
 			 */
-			public SingleModelOperationsFunctionStep pageMessageMapper(
+			public PageOperationsFunctionStep pageMessageMapper(
 				PageMessageMapper<T> pageMessageMapper) {
 
 				_pageMessageMapper = pageMessageMapper;
 
-				return new SingleModelOperationsFunctionStep();
+				return new PageOperationsFunctionStep();
+			}
+
+		}
+
+		public class PageOperationsFunctionStep {
+
+			/**
+			 * Adds information to the builder about the function that gets the
+			 * operations of a page model class.
+			 *
+			 * @param  pageOperationsFunction the function that gets the
+			 *         operations of a page model class
+			 * @return the updated builder
+			 * @review
+			 */
+			public NestedPageOperationsFunctionStep pageOperationsFunction(
+				PageOperationsFunction pageOperationsFunction) {
+
+				_pageOperationsFunction = pageOperationsFunction;
+
+				return new NestedPageOperationsFunctionStep();
 			}
 
 		}
@@ -282,33 +336,14 @@ public class PageWriter<T> {
 
 		}
 
-		public class SingleModelOperationsFunctionStep {
-
-			/**
-			 * Adds information to the builder about the function that gets the
-			 * operations of single model class.
-			 *
-			 * @param  singleModelOperationsFunction the function that gets the
-			 *         operations of a single model class
-			 * @return the updated builder
-			 */
-			public PathFunctionStep operationsFunction(
-				SingleModelOperationsFunction singleModelOperationsFunction) {
-
-				_singleModelOperationsFunction = singleModelOperationsFunction;
-
-				return new PathFunctionStep();
-			}
-
-		}
-
+		private NestedPageOperationsFunction _nestedPageOperationsFunction;
 		private Page<T> _page;
 		private PageMessageMapper<T> _pageMessageMapper;
+		private PageOperationsFunction _pageOperationsFunction;
 		private PathFunction _pathFunction;
 		private RepresentorFunction _representorFunction;
 		private RequestInfo _requestInfo;
 		private ResourceNameFunction _resourceNameFunction;
-		private SingleModelOperationsFunction _singleModelOperationsFunction;
 
 	}
 
@@ -518,12 +553,13 @@ public class PageWriter<T> {
 	}
 
 	private final JSONObjectBuilder _jsonObjectBuilder;
+	private final NestedPageOperationsFunction _nestedPageOperationsFunction;
 	private final Page<T> _page;
 	private final PageMessageMapper<T> _pageMessageMapper;
+	private final PageOperationsFunction _pageOperationsFunction;
 	private final PathFunction _pathFunction;
 	private final RepresentorFunction _representorFunction;
 	private final RequestInfo _requestInfo;
 	private final ResourceNameFunction _resourceNameFunction;
-	private final SingleModelOperationsFunction _singleModelOperationsFunction;
 
 }
