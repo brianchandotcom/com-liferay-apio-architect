@@ -82,6 +82,7 @@ public class SingleModelWriter<T> {
 	 *         model's {@code Representor} and {@code Path} exist; returns
 	 *         {@code Optional#empty()} otherwise
 	 */
+	@SuppressWarnings("Duplicates")
 	public Optional<String> write() {
 		Optional<FieldsWriter<T, ?>> optional = getFieldsWriter(
 			_singleModel, null, _requestInfo, _pathFunction,
@@ -142,15 +143,12 @@ public class SingleModelWriter<T> {
 
 				Optional<Form> formOptional = operation.getFormOptional();
 
-				formOptional.ifPresent(
-					form -> {
-						String url = createFormURL(
-							_requestInfo.getServerURL(), form);
-
-						_singleModelMessageMapper.mapOperationFormURL(
-							_jsonObjectBuilder, operationJSONObjectBuilder,
-							url);
-					});
+				formOptional.map(
+					form -> createFormURL(_requestInfo.getServerURL(), form)
+				).ifPresent(
+					url -> _singleModelMessageMapper.mapOperationFormURL(
+						_jsonObjectBuilder, operationJSONObjectBuilder, url)
+				);
 
 				_singleModelMessageMapper.mapOperationMethod(
 					_jsonObjectBuilder, operationJSONObjectBuilder,

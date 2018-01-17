@@ -16,15 +16,18 @@ package com.liferay.apio.architect.writer;
 
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionPageURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionURL;
+import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
 
 import com.google.gson.JsonObject;
 
+import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageType;
 import com.liferay.apio.architect.request.RequestInfo;
@@ -37,6 +40,7 @@ import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -85,6 +89,7 @@ public class PageWriter<T> {
 	 *         Representor} and {@code Path} exist for the model; returns {@code
 	 *         Optional#empty()} otherwise
 	 */
+	@SuppressWarnings("Duplicates")
 	public String write() {
 		_pageMessageMapper.onStart(
 			_jsonObjectBuilder, _page, _requestInfo.getHttpHeaders());
@@ -107,6 +112,34 @@ public class PageWriter<T> {
 		items.forEach(
 			model -> _writeItem(
 				new SingleModel<>(model, _page.getModelClass())));
+
+		List<Operation> operations = _operationsFunction.apply(
+			_page.getModelClass());
+
+		operations.forEach(
+			operation -> {
+				JSONObjectBuilder operationJSONObjectBuilder =
+					new JSONObjectBuilder();
+
+				_pageMessageMapper.onStartOperation(
+					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
+
+				Optional<Form> formOptional = operation.getFormOptional();
+
+				formOptional.map(
+					form -> createFormURL(_requestInfo.getServerURL(), form)
+				).ifPresent(
+					url -> _pageMessageMapper.mapOperationFormURL(
+						_jsonObjectBuilder, operationJSONObjectBuilder, url)
+				);
+
+				_pageMessageMapper.mapOperationMethod(
+					_jsonObjectBuilder, operationJSONObjectBuilder,
+					operation.method);
+
+				_pageMessageMapper.onFinishOperation(
+					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
+			});
 
 		_pageMessageMapper.onFinish(
 			_jsonObjectBuilder, _page, _requestInfo.getHttpHeaders());
