@@ -77,7 +77,7 @@ public class CollectionRoutes<T> {
 	 * @return the form used to create a collection item; {@code
 	 *         Optional#empty()} otherwise
 	 */
-	public Optional<Form> getForm() {
+	public Optional<Form> getFormOptional() {
 		return Optional.ofNullable(_form);
 	}
 

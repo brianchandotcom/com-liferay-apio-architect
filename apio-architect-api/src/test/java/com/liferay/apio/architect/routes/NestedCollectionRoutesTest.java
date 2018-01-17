@@ -334,7 +334,7 @@ public class NestedCollectionRoutesTest {
 		NestedCollectionRoutes<String> nestedCollectionRoutes,
 		Object identifier) {
 
-		Optional<Form> optional = nestedCollectionRoutes.getForm();
+		Optional<Form> optional = nestedCollectionRoutes.getFormOptional();
 
 		Form form = optional.get();
 

@@ -229,7 +229,7 @@ public class CollectionRoutesTest {
 	private void _testCollectionRoutes(
 		CollectionRoutes<String> collectionRoutes) {
 
-		Optional<Form> optional = collectionRoutes.getForm();
+		Optional<Form> optional = collectionRoutes.getFormOptional();
 
 		Form form = optional.get();
 
