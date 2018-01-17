@@ -145,7 +145,7 @@ task checkDocker() {
 
 				url.toURL().text
 
-				println("Portal startup finished")
+				println("Whiteboard startup finished")
 
 				break
 			}
