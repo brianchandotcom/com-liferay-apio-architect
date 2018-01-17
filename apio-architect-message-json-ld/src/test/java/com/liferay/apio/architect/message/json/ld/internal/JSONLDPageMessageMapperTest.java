@@ -20,6 +20,7 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDTestUtil
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonArrayThat;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonInt;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWith;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -69,6 +70,8 @@ public class JSONLDPageMessageMapperTest {
 		).where(
 			"numberOfItems", is(aJsonInt(equalTo(3)))
 		).where(
+			"operation", is(aJsonArrayThat(_containsTheOperations))
+		).where(
 			"totalItems", is(aJsonInt(equalTo(9)))
 		).where(
 			"view", _isAJsonObjectWithTheView
@@ -86,6 +89,8 @@ public class JSONLDPageMessageMapperTest {
 
 	private static final Matcher<Iterable<? extends JsonElement>>
 		_containsTheMembers;
+	private static final Matcher<Iterable<? extends JsonElement>>
+		_containsTheOperations;
 	private static final Matcher<JsonElement> _isAJsonObjectWithTheContext;
 	private static final Matcher<? extends JsonElement>
 		_isAJsonObjectWithTheView;
@@ -123,6 +128,18 @@ public class JSONLDPageMessageMapperTest {
 			aRootElementJsonObjectWithId("1", false, true),
 			aRootElementJsonObjectWithId("2", false, true),
 			aRootElementJsonObjectWithId("3", false, true));
+
+		Conditions operationConditions = builder.where(
+			"@id", is(aJsonString(equalTo("create-operation")))
+		).where(
+			"@type", is(aJsonString(equalTo("Operation")))
+		).where(
+			"expects", is(aJsonString(equalTo("localhost/f/c/p")))
+		).where(
+			"method", is(aJsonString(equalTo("POST")))
+		).build();
+
+		_containsTheOperations = contains(aJsonObjectWith(operationConditions));
 	}
 
 	private final PageMessageMapper<RootModel> _pageMessageMapper =
