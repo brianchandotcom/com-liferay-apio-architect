@@ -34,10 +34,10 @@ import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
-import com.liferay.apio.architect.writer.alias.OperationsFunction;
 import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
+import com.liferay.apio.architect.writer.alias.SingleModelOperationsFunction;
 
 import java.util.Collection;
 import java.util.List;
@@ -67,7 +67,7 @@ public class PageWriter<T> {
 	}
 
 	public PageWriter(Builder<T> builder) {
-		_operationsFunction = builder._operationsFunction;
+		_singleModelOperationsFunction = builder._singleModelOperationsFunction;
 		_page = builder._page;
 		_pageMessageMapper = builder._pageMessageMapper;
 		_pathFunction = builder._pathFunction;
@@ -113,7 +113,7 @@ public class PageWriter<T> {
 			model -> _writeItem(
 				new SingleModel<>(model, _page.getModelClass())));
 
-		List<Operation> operations = _operationsFunction.apply(
+		List<Operation> operations = _singleModelOperationsFunction.apply(
 			_page.getModelClass());
 
 		operations.forEach(
@@ -183,26 +183,6 @@ public class PageWriter<T> {
 
 		}
 
-		public class OperationsFunctionStep {
-
-			/**
-			 * Adds information to the builder about the function that gets the
-			 * operations of single model class.
-			 *
-			 * @param  operationsFunction the function that gets the operations
-			 *         of a single model class
-			 * @return the updated builder
-			 */
-			public PathFunctionStep operationsFunction(
-				OperationsFunction operationsFunction) {
-
-				_operationsFunction = operationsFunction;
-
-				return new PathFunctionStep();
-			}
-
-		}
-
 		public class PageMessageMapperStep {
 
 			/**
@@ -212,12 +192,12 @@ public class PageWriter<T> {
 			 * @param  pageMessageMapper the {@code PageMessageMapper} headers.
 			 * @return the updated builder
 			 */
-			public OperationsFunctionStep pageMessageMapper(
+			public SingleModelOperationsFunctionStep pageMessageMapper(
 				PageMessageMapper<T> pageMessageMapper) {
 
 				_pageMessageMapper = pageMessageMapper;
 
-				return new OperationsFunctionStep();
+				return new SingleModelOperationsFunctionStep();
 			}
 
 		}
@@ -302,13 +282,33 @@ public class PageWriter<T> {
 
 		}
 
-		private OperationsFunction _operationsFunction;
+		public class SingleModelOperationsFunctionStep {
+
+			/**
+			 * Adds information to the builder about the function that gets the
+			 * operations of single model class.
+			 *
+			 * @param  singleModelOperationsFunction the function that gets the
+			 *         operations of a single model class
+			 * @return the updated builder
+			 */
+			public PathFunctionStep operationsFunction(
+				SingleModelOperationsFunction singleModelOperationsFunction) {
+
+				_singleModelOperationsFunction = singleModelOperationsFunction;
+
+				return new PathFunctionStep();
+			}
+
+		}
+
 		private Page<T> _page;
 		private PageMessageMapper<T> _pageMessageMapper;
 		private PathFunction _pathFunction;
 		private RepresentorFunction _representorFunction;
 		private RequestInfo _requestInfo;
 		private ResourceNameFunction _resourceNameFunction;
+		private SingleModelOperationsFunction _singleModelOperationsFunction;
 
 	}
 
@@ -518,12 +518,12 @@ public class PageWriter<T> {
 	}
 
 	private final JSONObjectBuilder _jsonObjectBuilder;
-	private final OperationsFunction _operationsFunction;
 	private final Page<T> _page;
 	private final PageMessageMapper<T> _pageMessageMapper;
 	private final PathFunction _pathFunction;
 	private final RepresentorFunction _representorFunction;
 	private final RequestInfo _requestInfo;
 	private final ResourceNameFunction _resourceNameFunction;
+	private final SingleModelOperationsFunction _singleModelOperationsFunction;
 
 }

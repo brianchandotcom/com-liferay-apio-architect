@@ -27,10 +27,10 @@ import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
-import com.liferay.apio.architect.writer.alias.OperationsFunction;
 import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
+import com.liferay.apio.architect.writer.alias.SingleModelOperationsFunction;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +61,7 @@ public class SingleModelWriter<T> {
 
 	public SingleModelWriter(Builder<T> builder) {
 		_pathFunction = builder._pathFunction;
-		_operationsFunction = builder._operationsFunction;
+		_singleModelOperationsFunction = builder._singleModelOperationsFunction;
 		_representorFunction = builder._representorFunction;
 		_requestInfo = builder._requestInfo;
 		_resourceNameFunction = builder._resourceNameFunction;
@@ -130,7 +130,7 @@ public class SingleModelWriter<T> {
 			url -> _singleModelMessageMapper.mapSelfURL(
 				_jsonObjectBuilder, url));
 
-		List<Operation> operations = _operationsFunction.apply(
+		List<Operation> operations = _singleModelOperationsFunction.apply(
 			_singleModel.getModelClass());
 
 		operations.forEach(
@@ -244,7 +244,7 @@ public class SingleModelWriter<T> {
 			(field, value) -> _singleModelMessageMapper.mapEmbeddedResourceLink(
 				_jsonObjectBuilder, embeddedPathElements, field, value));
 
-		List<Operation> operations = _operationsFunction.apply(
+		List<Operation> operations = _singleModelOperationsFunction.apply(
 			singleModel.getModelClass());
 
 		operations.forEach(
@@ -339,14 +339,14 @@ public class SingleModelWriter<T> {
 			 * Adds information to the builder about the function that gets the
 			 * operations of single model class.
 			 *
-			 * @param  operationsFunction the function that gets the operations
-			 *         of a single model class
+			 * @param  singleModelOperationsFunction the function that gets the
+			 *         operations of a single model class
 			 * @return the updated builder
 			 */
 			public PathFunctionStep operationsFunction(
-				OperationsFunction operationsFunction) {
+				SingleModelOperationsFunction singleModelOperationsFunction) {
 
-				_operationsFunction = operationsFunction;
+				_singleModelOperationsFunction = singleModelOperationsFunction;
 
 				return new PathFunctionStep();
 			}
@@ -452,23 +452,23 @@ public class SingleModelWriter<T> {
 
 		}
 
-		private OperationsFunction _operationsFunction;
 		private PathFunction _pathFunction;
 		private RepresentorFunction _representorFunction;
 		private RequestInfo _requestInfo;
 		private ResourceNameFunction _resourceNameFunction;
 		private SingleModel<T> _singleModel;
 		private SingleModelMessageMapper<T> _singleModelMessageMapper;
+		private SingleModelOperationsFunction _singleModelOperationsFunction;
 
 	}
 
 	private final JSONObjectBuilder _jsonObjectBuilder;
-	private final OperationsFunction _operationsFunction;
 	private final PathFunction _pathFunction;
 	private final RepresentorFunction _representorFunction;
 	private final RequestInfo _requestInfo;
 	private final ResourceNameFunction _resourceNameFunction;
 	private final SingleModel<T> _singleModel;
 	private final SingleModelMessageMapper<T> _singleModelMessageMapper;
+	private final SingleModelOperationsFunction _singleModelOperationsFunction;
 
 }

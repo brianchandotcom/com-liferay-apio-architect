@@ -20,13 +20,13 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * Defines a type alias for a function that receives a model class and returns a
- * list of the single model operations.
+ * Defines a type alias for a function that receives a single model class and
+ * returns a list of the single model operations.
  *
  * @author Alejandro Hernández
  * @review
  */
 @FunctionalInterface
-public interface OperationsFunction
+public interface SingleModelOperationsFunction
 	extends Function<Class<?>, List<Operation>> {
 }
