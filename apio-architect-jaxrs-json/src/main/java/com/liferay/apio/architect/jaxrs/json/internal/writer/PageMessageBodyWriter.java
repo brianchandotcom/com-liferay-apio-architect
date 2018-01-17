@@ -22,6 +22,7 @@ import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.response.control.Embedded;
@@ -31,6 +32,9 @@ import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManage
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
+import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
+import com.liferay.apio.architect.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 import com.liferay.apio.architect.writer.PageWriter;
 
@@ -44,7 +48,6 @@ import java.lang.reflect.Type;
 
 import java.nio.charset.StandardCharsets;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -149,9 +152,20 @@ public class PageMessageBodyWriter<T>
 			).pageMessageMapper(
 				getPageMessageMapper(mediaType, page)
 			).pageOperationsFunction(
-				__ -> Collections.emptyList()
+				_collectionRouterManager::getOperations
 			).nestedPageOperationsFunction(
-				modelClass -> parentName -> Collections.emptyList()
+				modelClass -> parentName -> {
+					List<Operation> operations =
+						_nestedCollectionRouterManager.getOperations(
+							modelClass, parentName);
+
+					if (!operations.isEmpty()) {
+						return operations;
+					}
+
+					return _reusableNestedCollectionRouterManager.getOperations(
+						modelClass);
+				}
 			).pathFunction(
 				_pathIdentifierMapperManager::map
 			).resourceNameFunction(
@@ -208,6 +222,9 @@ public class PageMessageBodyWriter<T>
 			() -> new MustHaveProvider(ServerURL.class));
 	}
 
+	@Reference
+	private CollectionRouterManager _collectionRouterManager;
+
 	@Context
 	private HttpHeaders _httpHeaders;
 
@@ -216,6 +233,9 @@ public class PageMessageBodyWriter<T>
 
 	@Reference
 	private NameManager _nameManager;
+
+	@Reference
+	private NestedCollectionRouterManager _nestedCollectionRouterManager;
 
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
 	private List<PageMessageMapper<T>> _pageMessageMappers;
@@ -228,5 +248,9 @@ public class PageMessageBodyWriter<T>
 
 	@Reference
 	private RepresentableManager _representableManager;
+
+	@Reference
+	private ReusableNestedCollectionRouterManager
+		_reusableNestedCollectionRouterManager;
 
 }
