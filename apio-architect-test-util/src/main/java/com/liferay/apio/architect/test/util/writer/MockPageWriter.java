@@ -14,12 +14,15 @@
 
 package com.liferay.apio.architect.test.util.writer;
 
+import static com.liferay.apio.architect.operation.Method.POST;
+import static com.liferay.apio.architect.test.util.form.MockFormCreator.createForm;
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.message.json.PageMessageMapper;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -30,6 +33,7 @@ import com.liferay.apio.architect.writer.PageWriter;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -76,6 +80,10 @@ public class MockPageWriter {
 				page
 			).pageMessageMapper(
 				pageMessageMapper
+			).operationsFunction(
+				__ -> Collections.singletonList(
+					new Operation(
+						createForm("c", "p"), POST, "create-operation"))
 			).pathFunction(
 				MockWriterUtil::identifierToPath
 			).resourceNameFunction(

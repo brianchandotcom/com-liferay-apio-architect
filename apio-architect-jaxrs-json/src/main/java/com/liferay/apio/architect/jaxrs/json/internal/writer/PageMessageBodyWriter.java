@@ -44,6 +44,7 @@ import java.lang.reflect.Type;
 
 import java.nio.charset.StandardCharsets;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -147,6 +148,8 @@ public class PageMessageBodyWriter<T>
 				page
 			).pageMessageMapper(
 				getPageMessageMapper(mediaType, page)
+			).operationsFunction(
+				__ -> Collections.emptyList()
 			).pathFunction(
 				_pathIdentifierMapperManager::map
 			).resourceNameFunction(
