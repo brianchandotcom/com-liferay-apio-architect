@@ -14,7 +14,10 @@
 
 package com.liferay.apio.architect.routes;
 
+import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
+
+import static java.lang.String.join;
 
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -26,12 +29,15 @@ import com.liferay.apio.architect.function.HexaFunction;
 import com.liferay.apio.architect.function.PentaFunction;
 import com.liferay.apio.architect.function.TetraFunction;
 import com.liferay.apio.architect.function.TriFunction;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.single.model.SingleModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -54,6 +60,8 @@ public class NestedCollectionRoutes<T> {
 
 	public NestedCollectionRoutes(Builder<T, ?> builder) {
 		_form = builder._form;
+		_nestedName = builder._nestedName;
+		_name = builder._name;
 		_nestedCreateItemFunction = builder._nestedCreateItemFunction;
 		_nestedGetPageFunction = builder._nestedGetPageFunction;
 	}
@@ -96,6 +104,25 @@ public class NestedCollectionRoutes<T> {
 		getNestedGetPageFunctionOptional() {
 
 		return Optional.ofNullable(_nestedGetPageFunction);
+	}
+
+	/**
+	 * Returns the list of operations for the single item resource.
+	 *
+	 * @return the list of operations for the single item resource
+	 * @review
+	 */
+	public List<Operation> getOperations() {
+		List<Operation> operations = new ArrayList<>();
+
+		Optional<Form> formOptional = getFormOptional();
+
+		formOptional.ifPresent(
+			form -> operations.add(
+				new Operation(
+					form, POST, join("/", _name, _nestedName, "create"))));
+
+		return operations;
 	}
 
 	/**
@@ -459,7 +486,10 @@ public class NestedCollectionRoutes<T> {
 	}
 
 	private Form _form;
+
+	private final String _name;
 	private NestedCreateItemFunction<T> _nestedCreateItemFunction;
 	private NestedGetPageFunction<T> _nestedGetPageFunction;
+	private final String _nestedName;
 
 }

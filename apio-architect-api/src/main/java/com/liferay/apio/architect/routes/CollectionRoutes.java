@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.routes;
 
+import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 
 import com.liferay.apio.architect.alias.ProvideFunction;
@@ -24,12 +25,15 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.PentaFunction;
 import com.liferay.apio.architect.function.TetraFunction;
 import com.liferay.apio.architect.function.TriFunction;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.single.model.SingleModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -55,6 +59,7 @@ public class CollectionRoutes<T> {
 		_createItemFunction = builder._createItemFunction;
 		_form = builder._form;
 		_getPageFunction = builder._getPageFunction;
+		_name = builder._name;
 	}
 
 	/**
@@ -91,6 +96,24 @@ public class CollectionRoutes<T> {
 	 */
 	public Optional<GetPageFunction<T>> getGetPageFunctionOptional() {
 		return Optional.ofNullable(_getPageFunction);
+	}
+
+	/**
+	 * Returns the list of operations for the single item resource.
+	 *
+	 * @return the list of operations for the single item resource
+	 * @review
+	 */
+	public List<Operation> getOperations() {
+		List<Operation> operations = new ArrayList<>();
+
+		Optional<Form> formOptional = getFormOptional();
+
+		formOptional.ifPresent(
+			form -> operations.add(
+				new Operation(form, POST, _name + "/create")));
+
+		return operations;
 	}
 
 	/**
@@ -414,7 +437,9 @@ public class CollectionRoutes<T> {
 	}
 
 	private CreateItemFunction<T> _createItemFunction;
+
 	private final Form _form;
 	private GetPageFunction<T> _getPageFunction;
+	private final String _name;
 
 }
