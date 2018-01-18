@@ -59,10 +59,11 @@ public class FieldsWriter<T, S> {
 	public static <T, S> Optional<SingleModel<S>> getSingleModel(
 		RelatedModel<T, S> relatedModel, SingleModel<T> parentSingleModel) {
 
-		Optional<S> optional = relatedModel.getModelFunction(
-		).apply(
-			parentSingleModel.getModel()
-		);
+		Function<T, Optional<S>> modelFunction =
+			relatedModel.getModelFunction();
+
+		Optional<S> optional = modelFunction.apply(
+			parentSingleModel.getModel());
 
 		Class<S> modelClass = relatedModel.getModelClass();
 
