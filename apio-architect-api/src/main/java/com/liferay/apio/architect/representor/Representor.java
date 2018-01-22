@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -51,14 +51,6 @@ import java.util.stream.Stream;
  * @review
  */
 public class Representor<T, S> {
-
-	public Representor(
-		Class<S> identifierClass,
-		Supplier<List<RelatedCollection<T, ?>>> relatedCollectionsSupplier) {
-
-		_identifierClass = identifierClass;
-		_relatedCollectionsSupplier = relatedCollectionsSupplier;
-	}
 
 	/**
 	 * Returns the binary resources linked to a model.
@@ -433,21 +425,32 @@ public class Representor<T, S> {
 
 	}
 
-	private Map<String, BinaryFunction<T>> _binaryFunctions = new HashMap<>();
+	private Representor(
+		Class<S> identifierClass,
+		Supplier<List<RelatedCollection<T, ?>>> relatedCollectionsSupplier) {
+
+		_identifierClass = identifierClass;
+		_relatedCollectionsSupplier = relatedCollectionsSupplier;
+	}
+
+	private Map<String, BinaryFunction<T>> _binaryFunctions =
+		new LinkedHashMap<>();
 	private Map<String, Function<T, Boolean>> _booleanFunctions =
-		new HashMap<>();
+		new LinkedHashMap<>();
 	private final Class<S> _identifierClass;
 	private Function<T, S> _identifierFunction;
-	private Map<String, String> _links = new HashMap<>();
+	private Map<String, String> _links = new LinkedHashMap<>();
 	private Map<String, BiFunction<T, Language, String>>
-		_localizedStringFunctions = new HashMap<>();
-	private Map<String, Function<T, Number>> _numberFunctions = new HashMap<>();
+		_localizedStringFunctions = new LinkedHashMap<>();
+	private Map<String, Function<T, Number>> _numberFunctions =
+		new LinkedHashMap<>();
 	private List<RelatedCollection<T, ?>> _relatedCollections =
 		new ArrayList<>();
 	private final Supplier<List<RelatedCollection<T, ?>>>
 		_relatedCollectionsSupplier;
 	private List<RelatedModel<T, ?>> _relatedModels = new ArrayList<>();
-	private Map<String, Function<T, String>> _stringFunctions = new HashMap<>();
+	private Map<String, Function<T, String>> _stringFunctions =
+		new LinkedHashMap<>();
 	private List<String> _types = new ArrayList<>();
 
 }
