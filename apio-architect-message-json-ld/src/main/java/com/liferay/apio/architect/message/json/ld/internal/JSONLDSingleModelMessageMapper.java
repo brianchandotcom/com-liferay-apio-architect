@@ -311,7 +311,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		jsonObjectBuilder.nestedField(
 			"@context", "@vocab"
 		).stringValue(
-			"http://schema.org"
+			"http://schema.org/"
 		);
 	}
 
