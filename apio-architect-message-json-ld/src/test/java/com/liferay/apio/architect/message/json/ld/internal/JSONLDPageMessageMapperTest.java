@@ -116,7 +116,7 @@ public class JSONLDPageMessageMapperTest {
 		_isAJsonObjectWithTheView = is(aJsonObjectWith(viewConditions));
 
 		Conditions contextConditions = builder.where(
-			"@vocab", isALinkTo("http://schema.org")
+			"@vocab", isALinkTo("http://schema.org/")
 		).where(
 			"Collection",
 			isALinkTo("http://www.w3.org/ns/hydra/pagination.jsonld")

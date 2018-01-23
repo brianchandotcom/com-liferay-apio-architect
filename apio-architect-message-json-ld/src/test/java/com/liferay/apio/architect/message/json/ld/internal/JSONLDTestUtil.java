@@ -90,7 +90,7 @@ public class JSONLDTestUtil {
 
 		if (addVocab) {
 			contextConditions = step.where(
-				"@vocab", is(aJsonString(equalTo("http://schema.org")))
+				"@vocab", is(aJsonString(equalTo("http://schema.org/")))
 			).build();
 		}
 		else {
