@@ -124,9 +124,9 @@ public class RepresentorTest {
 		).addRelatedCollection(
 			"relatedCollection", DummyLinked.class, Dummy::getId
 		).addString(
-			"string1", dummy -> dummy.string1
+			"string1", Dummy::getString1
 		).addString(
-			"string2", dummy -> dummy.string2
+			"string2", Dummy::getString2
 		).addStringList(
 			"stringList1", dummy -> dummy.stringList1
 		).addStringList(
