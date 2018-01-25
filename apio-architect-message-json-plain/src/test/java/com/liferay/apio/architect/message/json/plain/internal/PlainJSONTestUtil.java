@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonBoolea
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonInt;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWith;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.isAJsonArrayContaining;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
@@ -61,6 +62,10 @@ public class PlainJSONTestUtil {
 		).where(
 			"boolean2", is(aJsonBoolean(false))
 		).where(
+			"booleanList1", isAJsonArrayContaining(true, true, false, false)
+		).where(
+			"booleanList2", isAJsonArrayContaining(true, false, true, false)
+		).where(
 			"date1", is(aJsonString(equalTo("2016-06-15T09:00Z")))
 		).where(
 			"date2", is(aJsonString(equalTo("2017-04-03T18:36Z")))
@@ -85,6 +90,10 @@ public class PlainJSONTestUtil {
 		).where(
 			"number2", is(aJsonInt(equalTo(42)))
 		).where(
+			"numberList1", isAJsonArrayContaining(1, 2, 3, 4, 5)
+		).where(
+			"numberList2", isAJsonArrayContaining(6, 7, 8, 9, 10)
+		).where(
 			"relatedCollection1",
 			isALinkTo("localhost/p/model/" + id + "/models")
 		).where(
@@ -96,6 +105,10 @@ public class PlainJSONTestUtil {
 			"string1", is(aJsonString(equalTo("Live long and prosper")))
 		).where(
 			"string2", is(aJsonString(equalTo("Hypermedia")))
+		).where(
+			"stringList1", isAJsonArrayContaining("a", "b", "c", "d", "e")
+		).where(
+			"stringList2", isAJsonArrayContaining("f", "g", "h", "i", "j")
 		).build();
 
 		return is(aJsonObjectWith(conditions));
@@ -116,6 +129,8 @@ public class PlainJSONTestUtil {
 		).where(
 			"boolean", is(aJsonBoolean(true))
 		).where(
+			"booleanList", isAJsonArrayContaining(true, false)
+		).where(
 			"embedded", isAJsonObjectWithTheSecondEmbedded()
 		).where(
 			"link", isALinkTo("www.liferay.com")
@@ -126,12 +141,16 @@ public class PlainJSONTestUtil {
 		).where(
 			"number", is(aJsonInt(equalTo(42)))
 		).where(
+			"numberList", isAJsonArrayContaining(1, 2)
+		).where(
 			"relatedCollection",
 			isALinkTo("localhost/p/first-inner-model/first/models")
 		).where(
 			"self", isALinkTo("localhost/p/first-inner-model/first")
 		).where(
 			"string", is(aJsonString(equalTo("A string")))
+		).where(
+			"stringList", isAJsonArrayContaining("a", "b")
 		).build();
 
 		return is(aJsonObjectWith(firstEmbeddedConditions));
@@ -152,6 +171,8 @@ public class PlainJSONTestUtil {
 		).where(
 			"boolean", is(aJsonBoolean(false))
 		).where(
+			"booleanList", isAJsonArrayContaining(true)
+		).where(
 			"embedded", isALinkTo("localhost/p/third-inner-model/first")
 		).where(
 			"link", isALinkTo("community.liferay.com")
@@ -160,12 +181,16 @@ public class PlainJSONTestUtil {
 		).where(
 			"number", is(aJsonInt(equalTo(2017)))
 		).where(
+			"numberList", isAJsonArrayContaining(1)
+		).where(
 			"relatedCollection",
 			isALinkTo("localhost/p/second-inner-model/first/models")
 		).where(
 			"self", isALinkTo("localhost/p/second-inner-model/first")
 		).where(
 			"string", is(aJsonString(equalTo("A string")))
+		).where(
+			"stringList", isAJsonArrayContaining("a")
 		).build();
 
 		return is(aJsonObjectWith(secondEmbeddedConditions));

@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonInt;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWhere;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWith;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.isAJsonArrayContaining;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
@@ -61,6 +62,10 @@ public class HALTestUtil {
 		).where(
 			"boolean2", is(aJsonBoolean(false))
 		).where(
+			"booleanList1", isAJsonArrayContaining(true, true, false, false)
+		).where(
+			"booleanList2", isAJsonArrayContaining(true, false, true, false)
+		).where(
 			"date1", is(aJsonString(equalTo("2016-06-15T09:00Z")))
 		).where(
 			"date2", is(aJsonString(equalTo("2017-04-03T18:36Z")))
@@ -73,9 +78,17 @@ public class HALTestUtil {
 		).where(
 			"number2", is(aJsonInt(equalTo(42)))
 		).where(
+			"numberList1", isAJsonArrayContaining(1, 2, 3, 4, 5)
+		).where(
+			"numberList2", isAJsonArrayContaining(6, 7, 8, 9, 10)
+		).where(
 			"string1", is(aJsonString(equalTo("Live long and prosper")))
 		).where(
 			"string2", is(aJsonString(equalTo("Hypermedia")))
+		).where(
+			"stringList1", isAJsonArrayContaining("a", "b", "c", "d", "e")
+		).where(
+			"stringList2", isAJsonArrayContaining("f", "g", "h", "i", "j")
 		).build();
 
 		return aJsonObjectWith(conditions);
@@ -114,11 +127,17 @@ public class HALTestUtil {
 		).where(
 			"boolean", is(aJsonBoolean(true))
 		).where(
+			"booleanList", isAJsonArrayContaining(true, false)
+		).where(
 			"localizedString", is(aJsonString(equalTo("Translated")))
 		).where(
 			"number", is(aJsonInt(equalTo(42)))
 		).where(
+			"numberList", isAJsonArrayContaining(1, 2)
+		).where(
 			"string", is(aJsonString(equalTo("A string")))
+		).where(
+			"stringList", isAJsonArrayContaining("a", "b")
 		).build();
 
 		return is(
@@ -195,9 +214,15 @@ public class HALTestUtil {
 		).where(
 			"boolean", is(aJsonBoolean(false))
 		).where(
+			"booleanList", isAJsonArrayContaining(true)
+		).where(
 			"number", is(aJsonInt(equalTo(2017)))
 		).where(
+			"numberList", isAJsonArrayContaining(1)
+		).where(
 			"string", is(aJsonString(equalTo("A string")))
+		).where(
+			"stringList", isAJsonArrayContaining("a")
 		).build();
 
 		return is(aJsonObjectWith(secondEmbeddedConditions));
