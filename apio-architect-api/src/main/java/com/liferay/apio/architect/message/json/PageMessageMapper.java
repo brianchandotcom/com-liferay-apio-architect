@@ -46,16 +46,15 @@ import javax.ws.rs.core.HttpHeaders;
  * </p>
  *
  * <p>
- * By default all the "item" on "operation" methods are based on a {@link
- * SingleModelMessageMapper} if the {@link
- * #getSingleModelMessageMapperOptional()} returns one.
+ * By default, each item method calls {@link
+ * #getSingleModelMessageMapperOptional()} to get a {@link
+ * SingleModelMessageMapper}.
  * </p>
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  * @param  <T> the model's type
- * @review
  */
 @ConsumerType
 @SuppressWarnings("unused")
@@ -69,10 +68,9 @@ public interface PageMessageMapper<T> {
 	public String getMediaType();
 
 	/**
-	 * Returns the {@link SingleModelMessageMapper} used by the "item" methods.
+	 * Returns the {@link SingleModelMessageMapper} used by the item methods.
 	 *
-	 * @return the {@code SingleModelMessageMapper} used by the "item" methods.
-	 * @review
+	 * @return the {@code SingleModelMessageMapper}
 	 */
 	public default Optional<SingleModelMessageMapper<T>>
 		getSingleModelMessageMapperOptional() {

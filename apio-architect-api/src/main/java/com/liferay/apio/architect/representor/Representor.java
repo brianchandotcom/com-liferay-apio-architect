@@ -46,9 +46,9 @@ import java.util.stream.Stream;
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
- * @param  <S> the model identifier's type ({@link Long}, {@link String}, etc.)
+ * @param  <S> the model identifier's type (e.g., {@code Long}, {@code String},
+ *         etc.)
  * @see    Representor.Builder
- * @review
  */
 public class Representor<T, S> {
 
@@ -304,7 +304,6 @@ public class Representor<T, S> {
 			 * @param  booleanListFunction the function used to get the boolean
 			 *         list
 			 * @return the builder's step
-			 * @review
 			 */
 			public FirstStep addBooleanList(
 				String key, Function<T, List<Boolean>> booleanListFunction) {
@@ -408,7 +407,6 @@ public class Representor<T, S> {
 			 * @param  numberListFunction the function used to get the number
 			 *         list
 			 * @return the builder's step
-			 * @review
 			 */
 			public FirstStep addNumberList(
 				String key, Function<T, List<Number>> numberListFunction) {
@@ -461,7 +459,6 @@ public class Representor<T, S> {
 			 * @param  stringListFunction the function used to get the string
 			 *         list
 			 * @return the builder's step
-			 * @review
 			 */
 			public FirstStep addStringList(
 				String key, Function<T, List<String>> stringListFunction) {
