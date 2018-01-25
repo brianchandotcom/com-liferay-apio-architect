@@ -14,8 +14,7 @@
 
 package com.liferay.apio.architect.test.util.internal.json;
 
-import static com.spotify.hamcrest.util.DescriptionUtils.describeNestedMismatches;
-import static com.spotify.hamcrest.util.DescriptionUtils.indentDescription;
+import static com.liferay.apio.architect.test.util.internal.util.DescriptionUtil.indentDescription;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,6 +22,7 @@ import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 /**
@@ -53,17 +52,8 @@ public class IsJsonObject extends TypeSafeDiagnosingMatcher<JsonObject> {
 		description.appendText("{\n");
 
 		_entryMatchers.forEach(
-			(key, matcher) -> {
-				description.appendText("  ");
-				description.appendText(key);
-				description.appendText(": ");
-
-				Description innerDescription = new StringDescription();
-
-				matcher.describeTo(innerDescription);
-
-				indentDescription(description, innerDescription);
-			});
+			(key, matcher) -> indentDescription(
+				description, key, matcher::describeTo));
 
 		description.appendText("}");
 	}
@@ -91,9 +81,30 @@ public class IsJsonObject extends TypeSafeDiagnosingMatcher<JsonObject> {
 		if (!mismatchedKeys.isEmpty()) {
 			description.appendText("was a JSON object ");
 
-			describeNestedMismatches(
-				keys, description, mismatchedKeys,
-				(text, innerDescription) -> innerDescription.appendText(text));
+			String previousMismatchKey = null;
+			String previousKey = null;
+
+			description.appendText("{\n");
+
+			for (String key : keys) {
+				if (mismatchedKeys.containsKey(key)) {
+					if (previousKey != null) {
+						_checkPreviousKeys(
+							description, previousMismatchKey, previousKey);
+					}
+
+					indentDescription(
+						description, key, mismatchedKeys.get(key));
+
+					previousMismatchKey = key;
+				}
+
+				previousKey = key;
+			}
+
+			_checkPreviousKeys(description, previousMismatchKey, previousKey);
+
+			description.appendText("}");
 
 			return false;
 		}
@@ -121,6 +132,15 @@ public class IsJsonObject extends TypeSafeDiagnosingMatcher<JsonObject> {
 		}
 
 		return true;
+	}
+
+	private void _checkPreviousKeys(
+		Description description, String previousMismatchKey,
+		String previousKey) {
+
+		if (!Objects.equals(previousMismatchKey, previousKey)) {
+			description.appendText("  ...\n");
+		}
 	}
 
 	private final Map<String, Matcher<? extends JsonElement>> _entryMatchers;
