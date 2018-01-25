@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.test.util.json;
 
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 
 import com.google.gson.JsonElement;
@@ -24,6 +26,9 @@ import com.liferay.apio.architect.test.util.internal.json.IsJsonInt;
 import com.liferay.apio.architect.test.util.internal.json.IsJsonLong;
 import com.liferay.apio.architect.test.util.internal.json.IsJsonObjectString;
 import com.liferay.apio.architect.test.util.internal.json.IsJsonString;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 import org.hamcrest.Matcher;
 
@@ -136,6 +141,100 @@ public final class JsonMatchers {
 		Matcher<String> stringMatcher) {
 
 		return new IsJsonString(is(stringMatcher));
+	}
+
+	/**
+	 * Returns a matcher that checks if an element is a {@code
+	 * com.google.gson.JsonArray} containing the list of booleans provided.
+	 *
+	 * @param  values the list of values
+	 * @return the matcher that checks if an element is a JSON array with the
+	 *         provided booleans
+	 * @review
+	 */
+	@SuppressWarnings("unchecked")
+	public static Matcher<JsonElement> isAJsonArrayContaining(
+		Boolean... values) {
+
+		Stream<Boolean> stream = Arrays.stream(values);
+
+		Matcher[] objects = stream.map(
+			JsonMatchers::aJsonBoolean
+		).toArray(
+			Matcher[]::new
+		);
+
+		return is(aJsonArrayThat(contains(objects)));
+	}
+
+	/**
+	 * Returns a matcher that checks if an element is a {@code
+	 * com.google.gson.JsonArray} containing the list of ints provided.
+	 *
+	 * @param  values the list of values
+	 * @return the matcher that checks if an element is a JSON array with the
+	 *         provided ints
+	 * @review
+	 */
+	@SuppressWarnings("unchecked")
+	public static Matcher<JsonElement> isAJsonArrayContaining(
+		Integer... values) {
+
+		Stream<Integer> stream = Arrays.stream(values);
+
+		Matcher[] objects = stream.map(
+			integer -> aJsonInt(equalTo(integer))
+		).toArray(
+			Matcher[]::new
+		);
+
+		return is(aJsonArrayThat(contains(objects)));
+	}
+
+	/**
+	 * Returns a matcher that checks if an element is a {@code
+	 * com.google.gson.JsonArray} containing the list of longs provided.
+	 *
+	 * @param  values the list of values
+	 * @return the matcher that checks if an element is a JSON array with the
+	 *         provided longs
+	 * @review
+	 */
+	@SuppressWarnings("unchecked")
+	public static Matcher<JsonElement> isAJsonArrayContaining(Long... values) {
+		Stream<Long> stream = Arrays.stream(values);
+
+		Matcher[] objects = stream.map(
+			aLong -> aJsonLong(equalTo(aLong))
+		).toArray(
+			Matcher[]::new
+		);
+
+		return is(aJsonArrayThat(contains(objects)));
+	}
+
+	/**
+	 * Returns a matcher that checks if an element is a {@code
+	 * com.google.gson.JsonArray} containing the list of strings provided.
+	 *
+	 * @param  values the list of values
+	 * @return the matcher that checks if an element is a JSON array with the
+	 *         provided strings
+	 * @review
+	 */
+	@SuppressWarnings("unchecked")
+	public static Matcher<JsonElement> isAJsonArrayContaining(
+		String... values) {
+
+		Stream<String> stream = Arrays.stream(values);
+
+		Matcher[] objects = stream.map(
+			string -> aJsonString(equalTo(string))
+		).toArray(
+			Matcher[]::new
+		);
+
+		return is(aJsonArrayThat(contains(objects)));
 	}
 
 	private JsonMatchers() {
