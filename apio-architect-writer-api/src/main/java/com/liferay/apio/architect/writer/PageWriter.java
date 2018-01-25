@@ -388,6 +388,10 @@ public class PageWriter<T> {
 			(field, value) -> _pageMessageMapper.mapItemBooleanField(
 				_jsonObjectBuilder, itemJsonObjectBuilder, field, value));
 
+		fieldsWriter.writeBooleanListFields(
+			(field, value) -> _pageMessageMapper.mapItemBooleanListField(
+				_jsonObjectBuilder, itemJsonObjectBuilder, field, value));
+
 		fieldsWriter.writeLocalizedStringFields(
 			(field, value) -> _pageMessageMapper.mapItemStringField(
 				_jsonObjectBuilder, itemJsonObjectBuilder, field, value));
@@ -396,8 +400,16 @@ public class PageWriter<T> {
 			(field, value) -> _pageMessageMapper.mapItemNumberField(
 				_jsonObjectBuilder, itemJsonObjectBuilder, field, value));
 
+		fieldsWriter.writeNumberListFields(
+			(field, value) -> _pageMessageMapper.mapItemNumberListField(
+				_jsonObjectBuilder, itemJsonObjectBuilder, field, value));
+
 		fieldsWriter.writeStringFields(
 			(field, value) -> _pageMessageMapper.mapItemStringField(
+				_jsonObjectBuilder, itemJsonObjectBuilder, field, value));
+
+		fieldsWriter.writeStringListFields(
+			(field, value) -> _pageMessageMapper.mapItemStringListField(
 				_jsonObjectBuilder, itemJsonObjectBuilder, field, value));
 
 		fieldsWriter.writeLinks(
@@ -464,6 +476,12 @@ public class PageWriter<T> {
 					_jsonObjectBuilder, itemJsonObjectBuilder,
 					embeddedPathElements, field, value));
 
+		fieldsWriter.writeBooleanListFields(
+			(field, value) ->
+				_pageMessageMapper.mapItemEmbeddedResourceBooleanListField(
+					_jsonObjectBuilder, itemJsonObjectBuilder,
+					embeddedPathElements, field, value));
+
 		fieldsWriter.writeLocalizedStringFields(
 			(field, value) ->
 				_pageMessageMapper.mapItemEmbeddedResourceStringField(
@@ -476,9 +494,21 @@ public class PageWriter<T> {
 					_jsonObjectBuilder, itemJsonObjectBuilder,
 					embeddedPathElements, field, value));
 
+		fieldsWriter.writeNumberListFields(
+			(field, value) ->
+				_pageMessageMapper.mapItemEmbeddedResourceNumberListField(
+					_jsonObjectBuilder, itemJsonObjectBuilder,
+					embeddedPathElements, field, value));
+
 		fieldsWriter.writeStringFields(
 			(field, value) ->
 				_pageMessageMapper.mapItemEmbeddedResourceStringField(
+					_jsonObjectBuilder, itemJsonObjectBuilder,
+					embeddedPathElements, field, value));
+
+		fieldsWriter.writeStringListFields(
+			(field, value) ->
+				_pageMessageMapper.mapItemEmbeddedResourceStringListField(
 					_jsonObjectBuilder, itemJsonObjectBuilder,
 					embeddedPathElements, field, value));
 
