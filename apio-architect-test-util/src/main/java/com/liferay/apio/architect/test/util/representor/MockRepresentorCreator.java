@@ -14,6 +14,9 @@
 
 package com.liferay.apio.architect.test.util.representor;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.test.util.model.FirstEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
@@ -55,6 +58,8 @@ public class MockRepresentorCreator {
 			"binary", __ -> null
 		).addBoolean(
 			"boolean", __ -> true
+		).addBooleanList(
+			"booleanList", __ -> asList(true, false)
 		).addLink(
 			"link", "www.liferay.com"
 		).addLinkedModel(
@@ -67,11 +72,15 @@ public class MockRepresentorCreator {
 			"localizedString", (firstEmbeddedModel, language) -> "Translated"
 		).addNumber(
 			"number", __ -> 42
+		).addNumberList(
+			"numberList", __ -> asList(1, 2)
 		).addRelatedCollection(
 			"relatedCollection", SecondEmbeddedModel.class,
 			FirstEmbeddedModel::getId
 		).addString(
 			"string", __ -> "A string"
+		).addStringList(
+			"stringList", __ -> asList("a", "b")
 		).build();
 	}
 
@@ -100,6 +109,10 @@ public class MockRepresentorCreator {
 				"boolean1", __ -> true
 			).addBoolean(
 				"boolean2", __ -> false
+			).addBooleanList(
+				"booleanList1", __ -> asList(true, true, false, false)
+			).addBooleanList(
+				"booleanList2", __ -> asList(true, false, true, false)
 			).addDate(
 				"date1", __ -> new Date(1465981200000L)
 			).addDate(
@@ -128,6 +141,10 @@ public class MockRepresentorCreator {
 				"number1", __ -> 2017
 			).addNumber(
 				"number2", __ -> 42
+			).addNumberList(
+				"numberList1", __ -> asList(1, 2, 3, 4, 5)
+			).addNumberList(
+				"numberList2", __ -> asList(6, 7, 8, 9, 10)
 			).addRelatedCollection(
 				"relatedCollection1", FirstEmbeddedModel.class, RootModel::getId
 			).addRelatedCollection(
@@ -136,6 +153,10 @@ public class MockRepresentorCreator {
 				"string1", __ -> "Live long and prosper"
 			).addString(
 				"string2", __ -> "Hypermedia"
+			).addStringList(
+				"stringList1", __ -> asList("a", "b", "c", "d", "e")
+			).addStringList(
+				"stringList2", __ -> asList("f", "g", "h", "i", "j")
 			);
 
 		if (activateNulls) {
@@ -180,6 +201,8 @@ public class MockRepresentorCreator {
 			"binary", __ -> null
 		).addBoolean(
 			"boolean", __ -> false
+		).addBooleanList(
+			"booleanList", __ -> singletonList(true)
 		).addLink(
 			"link", "community.liferay.com"
 		).addLinkedModel(
@@ -190,11 +213,15 @@ public class MockRepresentorCreator {
 			__ -> Optional.of(() -> "second")
 		).addNumber(
 			"number", __ -> 2017
+		).addNumberList(
+			"numberList", __ -> singletonList(1)
 		).addRelatedCollection(
 			"relatedCollection", ThirdEmbeddedModel.class,
 			SecondEmbeddedModel::getId
 		).addString(
 			"string", __ -> "A string"
+		).addStringList(
+			"stringList", __ -> singletonList("a")
 		).build();
 	}
 

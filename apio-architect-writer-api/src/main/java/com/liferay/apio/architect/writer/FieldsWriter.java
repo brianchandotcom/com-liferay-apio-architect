@@ -125,6 +125,20 @@ public class FieldsWriter<T, S> {
 	}
 
 	/**
+	 * Writes the model's boolean list fields. This method uses a {@code
+	 * BiConsumer} so each {@code javax.ws.rs.ext.MessageBodyWriter} can write
+	 * each field differently.
+	 *
+	 * @param biConsumer the {@code BiConsumer} called to write each field
+	 */
+	public void writeBooleanListFields(
+		BiConsumer<String, List<Boolean>> biConsumer) {
+
+		writeFields(
+			Representor::getBooleanListFunctions, writeField(biConsumer));
+	}
+
+	/**
 	 * Returns a consumer for entries of a {@code Map<String, Function<T, S>}.
 	 * The consumer uses a value function to get the final value, then uses the
 	 * bi-consumer provided as the second parameter to process the key and the
@@ -239,6 +253,20 @@ public class FieldsWriter<T, S> {
 	 */
 	public void writeNumberFields(BiConsumer<String, Number> biConsumer) {
 		writeFields(Representor::getNumberFunctions, writeField(biConsumer));
+	}
+
+	/**
+	 * Writes the model's number list fields. This method uses a {@code
+	 * BiConsumer} so each {@code javax.ws.rs.ext.MessageBodyWriter} can write
+	 * each field differently.
+	 *
+	 * @param biConsumer the {@code BiConsumer} called to write each field
+	 */
+	public void writeNumberListFields(
+		BiConsumer<String, List<Number>> biConsumer) {
+
+		writeFields(
+			Representor::getNumberListFunctions, writeField(biConsumer));
 	}
 
 	/**
@@ -448,6 +476,20 @@ public class FieldsWriter<T, S> {
 	 */
 	public void writeStringFields(BiConsumer<String, String> biConsumer) {
 		writeFields(Representor::getStringFunctions, writeField(biConsumer));
+	}
+
+	/**
+	 * Writes the model's string list fields. This method uses a {@code
+	 * BiConsumer} so each {@code javax.ws.rs.ext.MessageBodyWriter} can write
+	 * each field differently.
+	 *
+	 * @param biConsumer the {@code BiConsumer} called to write each field
+	 */
+	public void writeStringListFields(
+		BiConsumer<String, List<String>> biConsumer) {
+
+		writeFields(
+			Representor::getStringListFunctions, writeField(biConsumer));
 	}
 
 	/**

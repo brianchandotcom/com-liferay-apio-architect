@@ -18,6 +18,8 @@ import static com.liferay.apio.architect.test.util.list.FunctionalListMatchers.a
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
+import static java.util.Arrays.asList;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasEntry;
@@ -167,6 +169,21 @@ public class FieldsWriterTest {
 
 		assertThat(booleans, is(aMapWithSize(1)));
 		assertThat(booleans, hasEntry("boolean2", false));
+	}
+
+	@Test
+	public void testWriteBooleanListFields() {
+		Map<String, List<Boolean>> booleans = new HashMap<>();
+
+		_fieldsWriter.writeBooleanListFields(booleans::put);
+
+		assertThat(booleans, is(aMapWithSize(2)));
+		assertThat(
+			booleans,
+			hasEntry("booleanList1", asList(true, true, false, false)));
+		assertThat(
+			booleans,
+			hasEntry("booleanList2", asList(true, false, true, false)));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -511,6 +528,17 @@ public class FieldsWriterTest {
 		assertThat(numbers, hasEntry("number2", 42));
 	}
 
+	@Test
+	public void testWriteNumberListFields() {
+		Map<String, List<Number>> numbers = new HashMap<>();
+
+		_fieldsWriter.writeNumberListFields(numbers::put);
+
+		assertThat(numbers, is(aMapWithSize(2)));
+		assertThat(numbers, hasEntry("numberList1", asList(1, 2, 3, 4, 5)));
+		assertThat(numbers, hasEntry("numberList2", asList(6, 7, 8, 9, 10)));
+	}
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testWriteRelatedCollections() {
@@ -643,6 +671,19 @@ public class FieldsWriterTest {
 
 		assertThat(strings, is(aMapWithSize(1)));
 		assertThat(strings, hasEntry("string2", "Hypermedia"));
+	}
+
+	@Test
+	public void testWriteStringListFields() {
+		Map<String, List<String>> strings = new HashMap<>();
+
+		_fieldsWriter.writeStringListFields(strings::put);
+
+		assertThat(strings, is(aMapWithSize(2)));
+		assertThat(
+			strings, hasEntry("stringList1", asList("a", "b", "c", "d", "e")));
+		assertThat(
+			strings, hasEntry("stringList2", asList("f", "g", "h", "i", "j")));
 	}
 
 	@Test
