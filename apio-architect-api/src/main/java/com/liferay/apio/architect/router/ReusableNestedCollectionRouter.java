@@ -66,6 +66,6 @@ public interface ReusableNestedCollectionRouter<T, S, U extends Identifier<S>> {
 	 *        NestedCollectionRoutes} instance
 	 * @see   NestedCollectionRoutes.Builder
 	 */
-	public NestedCollectionRoutes<T> collectionRoutes(Builder<T, S> builder);
+	public NestedCollectionRoutes<T, S> collectionRoutes(Builder<T, S> builder);
 
 }

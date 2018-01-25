@@ -24,9 +24,10 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentUpdaterForm;
-import com.liferay.apio.architect.sample.internal.model.BlogPosting;
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentId;
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingId;
+import com.liferay.apio.architect.sample.internal.identifier.PersonId;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingComment;
-import com.liferay.apio.architect.sample.internal.model.Person;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,10 +46,11 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(immediate = true)
 public class BlogPostingCommentNestedCollectionResource implements
-	NestedCollectionResource<BlogPostingComment, Long, BlogPosting, Long> {
+	NestedCollectionResource
+		<BlogPostingComment, Long, BlogPostingCommentId, Long, BlogPostingId> {
 
 	@Override
-	public NestedCollectionRoutes<BlogPostingComment> collectionRoutes(
+	public NestedCollectionRoutes<BlogPostingComment, Long> collectionRoutes(
 		NestedCollectionRoutes.Builder<BlogPostingComment, Long> builder) {
 
 		return builder.addGetter(
@@ -91,16 +93,14 @@ public class BlogPostingCommentNestedCollectionResource implements
 		).addDate(
 			"dateModified", BlogPostingComment::getModifiedDate
 		).addLinkedModel(
-			"author", Person.class,
-			blogPostingComment ->
-				Person.getPerson(blogPostingComment.getAuthorId())
+			"author", PersonId.class, BlogPostingComment::getAuthorId
 		).addString(
 			"text", BlogPostingComment::getContent
 		).build();
 	}
 
 	private BlogPostingComment _addBlogPostingComment(
-		Long blogPostId,
+		Long blogPostingId,
 		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm) {
 
 		if (!hasPermission()) {
@@ -108,7 +108,7 @@ public class BlogPostingCommentNestedCollectionResource implements
 		}
 
 		return BlogPostingComment.addBlogPostingComment(
-			blogPostingCommentCreatorForm.getAuthor(), blogPostId,
+			blogPostingCommentCreatorForm.getAuthor(), blogPostingId,
 			blogPostingCommentCreatorForm.getText());
 	}
 
@@ -133,13 +133,14 @@ public class BlogPostingCommentNestedCollectionResource implements
 	}
 
 	private PageItems<BlogPostingComment> _getPageItems(
-		Pagination pagination, Long blogPostId) {
+		Pagination pagination, Long blogPostingId) {
 
 		List<BlogPostingComment> blogsEntries =
 			BlogPostingComment.getBlogPostingComments(
-				blogPostId, pagination.getStartPosition(),
+				blogPostingId, pagination.getStartPosition(),
 				pagination.getEndPosition());
-		int count = BlogPostingComment.getBlogPostingCommentsCount(blogPostId);
+		int count = BlogPostingComment.getBlogPostingCommentsCount(
+			blogPostingId);
 
 		return new PageItems<>(blogsEntries, count);
 	}

@@ -52,8 +52,8 @@ import java.util.function.BiFunction;
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
- * @param  <S> the parent model identifier's type. It must be a subclass of
- *         {@code Identifier}.
+ * @param  <S> the type of the parent model's identifier (e.g., {@code Long},
+ *         {@code String}, etc.)
  * @see    Builder
  */
 public class NestedCollectionRoutes<T, S> {
@@ -129,8 +129,8 @@ public class NestedCollectionRoutes<T, S> {
 	 * com.liferay.apio.architect.router.NestedCollectionRouter}.
 	 *
 	 * @param  <T> the model's type
-	 * @param  <S> the parent model identifier's type. It must be a subclass of
-	 *         {@code Identifier}.
+	 * @param  <S> the type of the parent model's identifier (e.g., {@code
+	 *         Long}, {@code String}, etc.)
 	 * @review
 	 */
 	@SuppressWarnings("unused")

@@ -65,6 +65,6 @@ public interface NestedCollectionRouter
 	 *        NestedCollectionRoutes} instance
 	 * @see   NestedCollectionRoutes.Builder
 	 */
-	public NestedCollectionRoutes<T, V> collectionRoutes(Builder<T, V> builder);
+	public NestedCollectionRoutes<T, U> collectionRoutes(Builder<T, U> builder);
 
 }
