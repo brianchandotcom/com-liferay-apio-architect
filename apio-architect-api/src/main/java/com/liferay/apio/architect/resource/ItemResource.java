@@ -41,7 +41,7 @@ import com.liferay.apio.architect.router.ItemRouter;
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
- * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code 
+ * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code
  *         String}, etc.)
  * @see    com.liferay.apio.architect.representor.Representor.Builder
  * @see    com.liferay.apio.architect.routes.ItemRoutes.Builder

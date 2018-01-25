@@ -49,10 +49,10 @@ import com.liferay.apio.architect.router.NestedCollectionRouter;
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
- * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code 
+ * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code
  *         String}, etc.)
  * @param  <U> the parent model's type
- * @param  <V> the type of the parent model's identifier (e.g., {@code Long}, 
+ * @param  <V> the type of the parent model's identifier (e.g., {@code Long},
  *         {@link String}, etc.)
  * @see    com.liferay.apio.architect.representor.Representor.Builder
  * @see    com.liferay.apio.architect.routes.ItemRoutes.Builder
