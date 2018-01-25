@@ -194,6 +194,8 @@ public class RepresentorTestUtil {
 
 		public Boolean boolean1 = true;
 		public Boolean boolean2 = false;
+		public List<Boolean> booleanList1 = asList(true, false, false, true);
+		public List<Boolean> booleanList2 = asList(false, false, true, false);
 		public final Date date1 = new Date(1465981200000L);
 		public final Date date2 = new Date(1491244560000L);
 		public final InputStream inputStream1 = new ByteArrayInputStream(
@@ -206,6 +208,8 @@ public class RepresentorTestUtil {
 		public List<Number> numberList2 = asList(6, 7, 8, 9, 10);
 		public final String string1 = "String 1";
 		public final String string2 = "String 2";
+		public List<String> stringList1 = asList("a", "b", "c", "d");
+		public List<String> stringList2 = asList("e", "f", "g", "h");
 
 		private final int _id;
 

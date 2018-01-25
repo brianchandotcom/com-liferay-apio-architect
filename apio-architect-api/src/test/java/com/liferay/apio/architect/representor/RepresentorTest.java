@@ -89,6 +89,10 @@ public class RepresentorTest {
 			"boolean1", dummy -> dummy.boolean1
 		).addBoolean(
 			"boolean2", dummy -> dummy.boolean2
+		).addBooleanList(
+			"booleanList1", dummy -> dummy.booleanList1
+		).addBooleanList(
+			"booleanList2", dummy -> dummy.booleanList2
 		).addDate(
 			"date1", dummy -> dummy.date1
 		).addDate(
@@ -111,6 +115,10 @@ public class RepresentorTest {
 			"number1", dummy -> dummy.number1
 		).addNumber(
 			"number2", dummy -> dummy.number2
+		).addNumberList(
+			"numberList1", dummy -> dummy.numberList1
+		).addNumberList(
+			"numberList2", dummy -> dummy.numberList2
 		).addRelatedCollection(
 			"relatedCollection", DummyLinked.class, Dummy::getId
 		).addRelatedCollection(
@@ -119,6 +127,10 @@ public class RepresentorTest {
 			"string1", dummy -> dummy.string1
 		).addString(
 			"string2", dummy -> dummy.string2
+		).addStringList(
+			"stringList1", dummy -> dummy.stringList1
+		).addStringList(
+			"stringList2", dummy -> dummy.stringList2
 		).build();
 	}
 
@@ -186,6 +198,26 @@ public class RepresentorTest {
 			asList(
 				"2016-06-15T09:00Z", "2017-04-03T18:36Z", null, "String 1",
 				"String 2"));
+	}
+
+	@Test
+	public void testPrimitiveListFunctions() {
+		testFieldFunctions(
+			_dummy, _representor.getBooleanListFunctions(),
+			asList("booleanList1", "booleanList2"),
+			asList(
+				asList(true, false, false, true),
+				asList(false, false, true, false)));
+
+		testFieldFunctions(
+			_dummy, _representor.getNumberListFunctions(),
+			asList("numberList1", "numberList2"),
+			asList(asList(1, 2, 3, 4, 5), asList(6, 7, 8, 9, 10)));
+
+		testFieldFunctions(
+			_dummy, _representor.getStringListFunctions(),
+			asList("stringList1", "stringList2"),
+			asList(asList("a", "b", "c", "d"), asList("e", "f", "g", "h")));
 	}
 
 	@Test

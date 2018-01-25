@@ -72,6 +72,16 @@ public class Representor<T, S> {
 	}
 
 	/**
+	 * Returns the map containing the boolean list field names and the functions
+	 * to get those fields.
+	 *
+	 * @return the map containing the boolean list field names and functions
+	 */
+	public Map<String, Function<T, List<Boolean>>> getBooleanListFunctions() {
+		return _booleanListFunctions;
+	}
+
+	/**
 	 * Returns the model's identifier.
 	 *
 	 * @param  model the model instance
@@ -122,6 +132,16 @@ public class Representor<T, S> {
 	}
 
 	/**
+	 * Returns the map containing the number list field names and the functions
+	 * to get those fields.
+	 *
+	 * @return the map containing the number list field names and functions
+	 */
+	public Map<String, Function<T, List<Number>>> getNumberListFunctions() {
+		return _numberListFunctions;
+	}
+
+	/**
 	 * Returns the related collections.
 	 *
 	 * @return the related collections
@@ -154,6 +174,16 @@ public class Representor<T, S> {
 	 */
 	public Map<String, Function<T, String>> getStringFunctions() {
 		return _stringFunctions;
+	}
+
+	/**
+	 * Returns the map containing the string list field names and the functions
+	 * to get those fields.
+	 *
+	 * @return the map containing the string list field names and functions
+	 */
+	public Map<String, Function<T, List<String>>> getStringListFunctions() {
+		return _stringListFunctions;
 	}
 
 	/**
@@ -268,6 +298,24 @@ public class Representor<T, S> {
 			}
 
 			/**
+			 * Adds information about a resource's boolean list field.
+			 *
+			 * @param  key the field's name
+			 * @param  booleanListFunction the function used to get the boolean
+			 *         list
+			 * @return the builder's step
+			 * @review
+			 */
+			public FirstStep addBooleanList(
+				String key, Function<T, List<Boolean>> booleanListFunction) {
+
+				_representor._booleanListFunctions.put(
+					key, booleanListFunction);
+
+				return this;
+			}
+
+			/**
 			 * Adds information about a resource's date field.
 			 *
 			 * @param  key the field's name
@@ -354,6 +402,23 @@ public class Representor<T, S> {
 			}
 
 			/**
+			 * Adds information about a resource's number list field.
+			 *
+			 * @param  key the field's name
+			 * @param  numberListFunction the function used to get the number
+			 *         list
+			 * @return the builder's step
+			 * @review
+			 */
+			public FirstStep addNumberList(
+				String key, Function<T, List<Number>> numberListFunction) {
+
+				_representor._numberListFunctions.put(key, numberListFunction);
+
+				return this;
+			}
+
+			/**
 			 * Adds information about a related collection.
 			 *
 			 * @param  key the relation's name
@@ -385,6 +450,23 @@ public class Representor<T, S> {
 				String key, Function<T, String> stringFunction) {
 
 				_representor._stringFunctions.put(key, stringFunction);
+
+				return this;
+			}
+
+			/**
+			 * Adds information about a resource's string list field.
+			 *
+			 * @param  key the field's name
+			 * @param  stringListFunction the function used to get the string
+			 *         list
+			 * @return the builder's step
+			 * @review
+			 */
+			public FirstStep addStringList(
+				String key, Function<T, List<String>> stringListFunction) {
+
+				_representor._stringListFunctions.put(key, stringListFunction);
 
 				return this;
 			}
@@ -437,6 +519,8 @@ public class Representor<T, S> {
 		new LinkedHashMap<>();
 	private Map<String, Function<T, Boolean>> _booleanFunctions =
 		new LinkedHashMap<>();
+	private Map<String, Function<T, List<Boolean>>> _booleanListFunctions =
+		new LinkedHashMap<>();
 	private final Class<S> _identifierClass;
 	private Function<T, S> _identifierFunction;
 	private Map<String, String> _links = new LinkedHashMap<>();
@@ -444,12 +528,16 @@ public class Representor<T, S> {
 		_localizedStringFunctions = new LinkedHashMap<>();
 	private Map<String, Function<T, Number>> _numberFunctions =
 		new LinkedHashMap<>();
+	private Map<String, Function<T, List<Number>>> _numberListFunctions =
+		new LinkedHashMap<>();
 	private List<RelatedCollection<T, ?>> _relatedCollections =
 		new ArrayList<>();
 	private final Supplier<List<RelatedCollection<T, ?>>>
 		_relatedCollectionsSupplier;
 	private List<RelatedModel<T, ?>> _relatedModels = new ArrayList<>();
 	private Map<String, Function<T, String>> _stringFunctions =
+		new LinkedHashMap<>();
+	private Map<String, Function<T, List<String>>> _stringListFunctions =
 		new LinkedHashMap<>();
 	private List<String> _types = new ArrayList<>();
 
