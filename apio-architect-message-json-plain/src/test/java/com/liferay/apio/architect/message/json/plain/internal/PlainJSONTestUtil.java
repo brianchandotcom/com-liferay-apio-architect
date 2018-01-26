@@ -42,13 +42,11 @@ import org.hamcrest.Matcher;
 public class PlainJSONTestUtil {
 
 	/**
-	 * Returns a {@link Matcher} that checks if the field is the JSON Object of
-	 * a {@code RootElement} with the provided ID.
+	 * Returns a {@code Matcher} that checks if the field is the
+	 * JSON Object of a {@code RootElement} with the provided ID.
 	 *
 	 * @param  id the ID of the {@code RootElement}
-	 * @return a matcher for a JSON Object of a {@code RootElement} with the
-	 *         provided ID
-	 * @review
+	 * @return the matcher
 	 */
 	public static Matcher<JsonElement> aRootElementJsonObjectWithId(String id) {
 		Builder builder = new Builder();
@@ -115,11 +113,10 @@ public class PlainJSONTestUtil {
 	}
 
 	/**
-	 * Returns a {@link Matcher} that checks if the field is a JSON Object of
-	 * the first embedded.
+	 * Returns a {@code Matcher} that checks if the field is a JSON
+	 * object of the first embedded model.
 	 *
-	 * @return a matcher for a JSON Object of the first embedded
-	 * @review
+	 * @return the matcher
 	 */
 	public static Matcher<JsonElement> isAJsonObjectWithTheFirstEmbedded() {
 		Conditions.Builder builder = new Conditions.Builder();
@@ -157,11 +154,10 @@ public class PlainJSONTestUtil {
 	}
 
 	/**
-	 * Returns a {@link Matcher} that checks if the field is a JSON Object of
-	 * the second embedded.
+	 * Returns a {@code Matcher} that checks if the field is a JSON
+	 * object of the second embedded model.
 	 *
-	 * @return a matcher for a JSON Object of the second embedded
-	 * @review
+	 * @return the matcher
 	 */
 	public static Matcher<JsonElement> isAJsonObjectWithTheSecondEmbedded() {
 		Builder builder = new Builder();
@@ -197,12 +193,11 @@ public class PlainJSONTestUtil {
 	}
 
 	/**
-	 * Returns a {@link Matcher} that checks if the field is a link to the
-	 * provided URL.
+	 * Returns a {@code Matcher} that checks if the field is a link
+	 * to the URL.
 	 *
-	 * @param  url the URL to match
-	 * @return a matcher for URL fields
-	 * @review
+	 * @param  url the URL
+	 * @return the matcher
 	 */
 	public static Matcher<? extends JsonElement> isALinkTo(String url) {
 		return is(aJsonString(equalTo(url)));
