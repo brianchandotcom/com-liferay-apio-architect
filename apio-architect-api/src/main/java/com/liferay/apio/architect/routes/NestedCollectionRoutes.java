@@ -46,15 +46,14 @@ import java.util.function.BiFunction;
  * com.liferay.apio.architect.router.NestedCollectionRouter}.
  *
  * <p>
- * This interface's methods return functions to get the different endpoints of
- * the collection resource. You should always use a {@link
- * NestedCollectionRoutes.Builder} to create instances of this interface.
+ * This interface's methods return functions to get the collection resource's
+ * different endpoints. You should always use a {@link Builder} to create
+ * instances of this interface.
  * </p>
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
- * @see    NestedCollectionRoutes.Builder
- * @review
+ * @see    Builder
  */
 public class NestedCollectionRoutes<T> {
 
@@ -109,8 +108,7 @@ public class NestedCollectionRoutes<T> {
 	/**
 	 * Returns the list of operations for the single item resource.
 	 *
-	 * @return the list of operations for the single item resource
-	 * @review
+	 * @return the list of operations
 	 */
 	public List<Operation> getOperations() {
 		List<Operation> operations = new ArrayList<>();
@@ -129,10 +127,9 @@ public class NestedCollectionRoutes<T> {
 	 * Creates the {@link NestedCollectionRoutes} of a {@link
 	 * com.liferay.apio.architect.router.NestedCollectionRouter}.
 	 *
-	 * @param  <T> the model's type
-	 * @param  <S> the parent model identifier's type ({@link Long}, {@link
-	 *         String}, etc.)
-	 * @review
+	 * @param <T> the model's type
+	 * @param <S> the type of the parent model's identifier (e.g., {@code Long},
+	 *        {@code String}, etc.)
 	 */
 	@SuppressWarnings("unused")
 	public static class Builder<T, S> {
@@ -149,14 +146,12 @@ public class NestedCollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with none extra parameters.
+		 * Adds a route to a creator function that has no extra parameters.
 		 *
 		 * @param  biFunction the creator function that adds the collection item
 		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation      tor function that adds the collection
-		 *         item
+		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <R, V> Builder<T, S> addCreator(
@@ -177,22 +172,17 @@ public class NestedCollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with four extra parameters.
+		 * Adds a route to a creator function that has four extra parameters.
 		 *
 		 * @param  hexaFunction the creator function that adds the collection
 		 *         item
-		 * @param  aClass the class of the collection item creator function's
-		 *         third parameter
-		 * @param  bClass the class of the collection item creator function's
-		 *         fourth parameter
-		 * @param  cClass the class of the collection item creator function's
-		 *         fifth parameter
-		 * @param  dClass the class of the collection item creator function's
-		 *         sixth parameter
+		 * @param  aClass the class of the creator function's third parameter
+		 * @param  bClass the class of the creator function's fourth parameter
+		 * @param  cClass the class of the creator function's fifth parameter
+		 * @param  dClass the class of the creator function's sixth parameter
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <A, B, C, D, R, V> Builder<T, S> addCreator(
@@ -218,20 +208,16 @@ public class NestedCollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with three extra parameters.
+		 * Adds a route to a creator function that has three extra parameters.
 		 *
 		 * @param  pentaFunction the creator function that adds the collection
 		 *         item
-		 * @param  aClass the class of the collection item creator function's
-		 *         third parameter
-		 * @param  bClass the class of the collection item creator function's
-		 *         fourth parameter
-		 * @param  cClass the class of the collection item creator function's
-		 *         fifth parameter
+		 * @param  aClass the class of the creator function's third parameter
+		 * @param  bClass the class of the creator function's fourth parameter
+		 * @param  cClass the class of the creator function's fifth parameter
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <A, B, C, R, V> Builder<T, S> addCreator(
@@ -256,18 +242,15 @@ public class NestedCollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with two extra parameters.
+		 * Adds a route to a creator function that has two extra parameters.
 		 *
 		 * @param  tetraFunction the creator function that adds the collection
 		 *         item
-		 * @param  aClass the class of the collection item creator function's
-		 *         third parameter
-		 * @param  bClass the class of the collection item creator function's
-		 *         fourth parameter
+		 * @param  aClass the class of the creator function's third parameter
+		 * @param  bClass the class of the creator function's fourth parameter
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <A, B, R, V> Builder<T, S> addCreator(
@@ -290,16 +273,14 @@ public class NestedCollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with one extra parameter.
+		 * Adds a route to a creator function that has one extra parameter.
 		 *
 		 * @param  triFunction the creator function that adds the collection
 		 *         item
-		 * @param  aClass the class of the collection item creator function's
-		 *         third parameter
+		 * @param  aClass the class of the creator function's third parameter
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <A, R, V> Builder<T, S> addCreator(

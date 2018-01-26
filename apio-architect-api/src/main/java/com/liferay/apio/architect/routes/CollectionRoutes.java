@@ -43,15 +43,14 @@ import java.util.function.Function;
  * com.liferay.apio.architect.router.CollectionRouter}.
  *
  * <p>
- * This interface's methods return functions to get the different endpoints of
- * the collection resource. You should always use a {@link Builder} to create
+ * This interface's methods return functions that get the collection resource's
+ * different endpoints. You should always use a {@link Builder} to create
  * instances of this interface.
  * </p>
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
  * @see    Builder
- * @review
  */
 public class CollectionRoutes<T> {
 
@@ -101,8 +100,7 @@ public class CollectionRoutes<T> {
 	/**
 	 * Returns the list of operations for the single item resource.
 	 *
-	 * @return the list of operations for the single item resource
-	 * @review
+	 * @return the list of operations
 	 */
 	public List<Operation> getOperations() {
 		List<Operation> operations = new ArrayList<>();
@@ -132,15 +130,13 @@ public class CollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with one extra parameter.
+		 * Adds a route to a creator function that has one extra parameter.
 		 *
 		 * @param  biFunction the creator function that adds the collection item
-		 * @param  aClass the class of the collection item creator function's
-		 *         second parameter
+		 * @param  aClass the class of the creator function's second parameter
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <A, R> Builder<T> addCreator(
@@ -162,13 +158,12 @@ public class CollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with none extra parameters.
+		 * Adds a route to a creator function that has no extra parameters.
 		 *
 		 * @param  function the creator function that adds the collection item
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <R> Builder<T> addCreator(
@@ -189,22 +184,17 @@ public class CollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with four extra parameters.
+		 * Adds a route to a creator function that has four extra parameters.
 		 *
 		 * @param  pentaFunction the creator function that adds the collection
 		 *         item
-		 * @param  aClass the class of the collection item creator function's
-		 *         second parameter
-		 * @param  bClass the class of the collection item creator function's
-		 *         third parameter
-		 * @param  cClass the class of the collection item creator function's
-		 *         fourth parameter
-		 * @param  dClass the class of the collection item creator function's
-		 *         fifth parameter
+		 * @param  aClass the class of the creator function's second parameter
+		 * @param  bClass the class of the creator function's third parameter
+		 * @param  cClass the class of the creator function's fourth parameter
+		 * @param  dClass the class of the creator function's fifth parameter
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <A, B, C, D, R> Builder<T> addCreator(
@@ -228,20 +218,16 @@ public class CollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with three extra parameters.
+		 * Adds a route to a creator function that has three extra parameters.
 		 *
 		 * @param  pentaFunction the creator function that adds the collection
 		 *         item
-		 * @param  aClass the class of the collection item creator function's
-		 *         second parameter
-		 * @param  bClass the class of the collection item creator function's
-		 *         third parameter
-		 * @param  cClass the class of the collection item creator function's
-		 *         fourth parameter
+		 * @param  aClass the class of the creator function's second parameter
+		 * @param  bClass the class of the creator function's third parameter
+		 * @param  cClass the class of the creator function's fourth parameter
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <A, B, C, R> Builder<T> addCreator(
@@ -264,18 +250,15 @@ public class CollectionRoutes<T> {
 		}
 
 		/**
-		 * Adds a route to a creator function with two extra parameters.
+		 * Adds a route to a creator function that has two extra parameters.
 		 *
 		 * @param  triFunction the creator function that adds the collection
 		 *         item
-		 * @param  aClass the class of the collection item creator function's
-		 *         second parameter
-		 * @param  bClass the class of the collection item creator function's
-		 *         third parameter
+		 * @param  aClass the class of the creator function's second parameter
+		 * @param  bClass the class of the creator function's third parameter
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		@SuppressWarnings("unchecked")
 		public <A, B, R> Builder<T> addCreator(
