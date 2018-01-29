@@ -146,9 +146,10 @@ public class ItemRoutes<T> {
 	 * Creates the {@code ItemRoutes} of an {@link
 	 * com.liferay.apio.architect.router.ItemRouter}.
 	 *
-	 * @param <T> the model's type
-	 * @param <S> the type of the model's identifier (e.g., {@code Long}, {@code
-	 *        String}, etc.)
+	 * @param  <T> the model's type
+	 * @param  <S> the model identifier's type. It must be a subclass of {@code
+	 *         Identifier}.
+	 * @review
 	 */
 	@SuppressWarnings("unused")
 	public static class Builder<T, S> {
