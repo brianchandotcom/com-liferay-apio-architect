@@ -116,7 +116,7 @@ public class NestedCollectionRouterManagerImpl
 
 		CustomServiceReferenceMapper<NestedCollectionRouter>
 			customServiceReferenceMapper = new CustomServiceReferenceMapper<>(
-				bundleContext, NestedCollectionRouter.class);
+				bundleContext, NestedCollectionRouter.class, 1);
 
 		NestedCollectionRouter nestedCollectionRouter =
 			bundleContext.getService(serviceReference);
@@ -136,7 +136,7 @@ public class NestedCollectionRouterManagerImpl
 	protected NestedCollectionRoutes map(
 		NestedCollectionRouter nestedCollectionRouter,
 		ServiceReference<NestedCollectionRouter> serviceReference,
-		Class<?> modelClass) {
+		Class<?> clazz) {
 
 		Class<?> parentClass = getGenericClassFromPropertyOrElse(
 			serviceReference, PARENT_MODEL_CLASS,
@@ -153,19 +153,19 @@ public class NestedCollectionRouterManagerImpl
 				clazz, httpServletRequest);
 
 		Optional<String> nameOptional = _nameManager.getNameOptional(
-			modelClass.getName());
+			clazz.getName());
 
 		String name = nameOptional.orElseThrow(
-			() -> new MustHaveValidGenericType(modelClass));
+			() -> new MustHaveValidGenericType(clazz));
 
 		Optional<String> nestedNameOptional = _nameManager.getNameOptional(
 			parentClass.getName());
 
 		String nestedName = nestedNameOptional.orElseThrow(
-			() -> new MustHaveValidGenericType(modelClass));
+			() -> new MustHaveValidGenericType(clazz));
 
 		Builder builder = new Builder<>(
-			modelClass, name, nestedName, identifierClass, provideFunction);
+			clazz, name, nestedName, identifierClass, provideFunction);
 
 		return nestedCollectionRouter.collectionRoutes(builder);
 	}

@@ -98,20 +98,19 @@ public class CollectionRouterManagerImpl
 	@SuppressWarnings("unchecked")
 	protected CollectionRoutes map(
 		CollectionRouter collectionRouter,
-		ServiceReference<CollectionRouter> serviceReference,
-		Class<?> modelClass) {
+		ServiceReference<CollectionRouter> serviceReference, Class<?> clazz) {
 
 		ProvideFunction provideFunction =
 			httpServletRequest -> clazz -> _providerManager.provideOptional(
 				clazz, httpServletRequest);
 
 		Optional<String> optional = _nameManager.getNameOptional(
-			modelClass.getName());
+			clazz.getName());
 
 		String name = optional.orElseThrow(
-			() -> new MustHaveValidGenericType(modelClass));
+			() -> new MustHaveValidGenericType(clazz));
 
-		Builder builder = new Builder<>(modelClass, name, provideFunction);
+		Builder builder = new Builder<>(clazz, name, provideFunction);
 
 		return collectionRouter.collectionRoutes(builder);
 	}

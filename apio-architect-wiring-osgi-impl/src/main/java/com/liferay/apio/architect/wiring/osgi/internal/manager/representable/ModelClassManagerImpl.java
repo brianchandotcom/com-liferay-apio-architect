@@ -14,10 +14,6 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.MODEL_CLASS;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
-
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.router.NestedCollectionRouterManagerImpl;
@@ -70,11 +66,9 @@ public class ModelClassManagerImpl
 	@Override
 	protected Class map(
 		Representable representable,
-		ServiceReference<Representable> serviceReference, Class<?> modelClass) {
+		ServiceReference<Representable> serviceReference, Class<?> clazz) {
 
-		return getGenericClassFromPropertyOrElse(
-			serviceReference, MODEL_CLASS,
-			() -> getTypeParamOrFail(representable, Representable.class, 0));
+		return clazz;
 	}
 
 }

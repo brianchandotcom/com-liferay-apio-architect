@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.ITEM_IDENTIFIER_CLASS;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.MODEL_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
@@ -64,17 +64,17 @@ public class RepresentableManagerImpl
 	@SuppressWarnings("unchecked")
 	protected Representor map(
 		Representable representable,
-		ServiceReference<Representable> serviceReference, Class<?> modelClass) {
+		ServiceReference<Representable> serviceReference, Class<?> clazz) {
 
 		Class<?> identifierClass = getGenericClassFromPropertyOrElse(
 			serviceReference, ITEM_IDENTIFIER_CLASS,
 			() -> getTypeParamOrFail(representable, Representable.class, 1));
 
 		Supplier<List<RelatedCollection<?, ?>>> relatedCollectionSupplier =
-			() -> _relatedCollections.get(modelClass.getName());
+			() -> _relatedCollections.get(clazz.getName());
 
 		Representor.Builder builder = new Representor.Builder(
-			identifierClass, _addRelatedCollectionTriConsumer(modelClass),
+			identifierClass, _addRelatedCollectionTriConsumer(clazz),
 			relatedCollectionSupplier);
 
 		return representable.representor(builder);
@@ -86,7 +86,7 @@ public class RepresentableManagerImpl
 		Representor representor) {
 
 		Class<?> modelClass = getGenericClassFromPropertyOrElse(
-			serviceReference, MODEL_CLASS,
+			serviceReference, PRINCIPAL_TYPE_ARGUMENT,
 			() -> getTypeParamOrFail(representor, Representor.class, 0));
 
 		_relatedCollections.forEach(

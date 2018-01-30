@@ -81,7 +81,7 @@ public class ItemRouterManagerImpl
 	@SuppressWarnings("unchecked")
 	protected ItemRoutes map(
 		ItemRouter itemRouter, ServiceReference<ItemRouter> serviceReference,
-		Class<?> modelClass) {
+		Class<?> clazz) {
 
 		ProvideFunction provideFunction =
 			httpServletRequest -> clazz -> _providerManager.provideOptional(
@@ -92,13 +92,13 @@ public class ItemRouterManagerImpl
 			() -> getTypeParamOrFail(itemRouter, ItemRouter.class, 1));
 
 		Optional<String> nameOptional = _nameManager.getNameOptional(
-			modelClass.getName());
+			clazz.getName());
 
 		String name = nameOptional.orElseThrow(
-			() -> new MustHaveValidGenericType(modelClass));
+			() -> new MustHaveValidGenericType(clazz));
 
 		Builder builder = new Builder<>(
-			modelClass, name, provideFunction,
+			clazz, name, provideFunction,
 			path -> {
 				Optional<?> optional = _pathIdentifierMapperManager.map(
 					identifierClass, path);

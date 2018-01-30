@@ -82,24 +82,25 @@ public class ReusableNestedCollectionRouterManagerImpl
 	protected NestedCollectionRoutes map(
 		ReusableNestedCollectionRouter reusableNestedCollectionRouter,
 		ServiceReference<ReusableNestedCollectionRouter> serviceReference,
-		Class<?> modelClass) {
+		Class<?> clazz) {
 
 		Class<?> identifierClass = getTypeParamOrFail(
 			reusableNestedCollectionRouter,
 			ReusableNestedCollectionRouter.class, 1);
 
 		ProvideFunction provideFunction =
-			httpServletRequest -> clazz -> _providerManager.provideOptional(
-				clazz, httpServletRequest);
+			httpServletRequest -> provideClass ->
+				_providerManager.provideOptional(
+					provideClass, httpServletRequest);
 
 		Optional<String> nameOptional = _nameManager.getNameOptional(
-			modelClass.getName());
+			clazz.getName());
 
 		String name = nameOptional.orElseThrow(
-			() -> new MustHaveValidGenericType(modelClass));
+			() -> new MustHaveValidGenericType(clazz));
 
 		Builder builder = new Builder<>(
-			modelClass, "r", name, identifierClass, provideFunction);
+			clazz, "r", name, identifierClass, provideFunction);
 
 		return reusableNestedCollectionRouter.collectionRoutes(builder);
 	}

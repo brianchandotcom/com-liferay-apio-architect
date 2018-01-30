@@ -23,7 +23,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.resource;
  */
 public enum ResourceClass {
 
-	ITEM_IDENTIFIER_CLASS, MODEL_CLASS, PARENT_IDENTIFIER_CLASS,
+	ITEM_IDENTIFIER_CLASS, PRINCIPAL_TYPE_ARGUMENT, PARENT_IDENTIFIER_CLASS,
 	PARENT_MODEL_CLASS;
 
 	/**
@@ -37,8 +37,8 @@ public enum ResourceClass {
 		if (this == ITEM_IDENTIFIER_CLASS) {
 			return "apio.architect.item.identifier.class";
 		}
-		else if (this == MODEL_CLASS) {
-			return "apio.architect.model.class";
+		else if (this == PRINCIPAL_TYPE_ARGUMENT) {
+			return "apio.architect.first.type.argument";
 		}
 		else if (this == PARENT_IDENTIFIER_CLASS) {
 			return "apio.architect.parent.identifier.class";
