@@ -98,7 +98,7 @@ public class BlogPostingCollectionResource
 		).addString(
 			"articleBody", BlogPosting::getContent
 		).addString(
-			"fileFormat", blogPosting -> "text/html"
+			"fileFormat", __ -> "text/html"
 		).addString(
 			"headline", BlogPosting::getTitle
 		).build();
