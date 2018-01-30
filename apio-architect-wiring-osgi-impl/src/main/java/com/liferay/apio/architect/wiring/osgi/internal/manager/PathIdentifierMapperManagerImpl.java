@@ -14,6 +14,10 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
+import static com.liferay.apio.architect.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
+
+import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.uri.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
@@ -36,32 +40,37 @@ public class PathIdentifierMapperManagerImpl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public <T> Optional<T> map(Class<T> clazz, Path path) {
-		Optional<PathIdentifierMapper> optional = getServiceOptional(clazz);
+	public <T> Optional<T> map(
+		Class<? extends Identifier<T>> clazz, Path path) {
 
-		return optional.map(
-			pathIdentifierMapper ->
-				(PathIdentifierMapper<T>)pathIdentifierMapper
-		).map(
-			pathIdentifierMapper -> pathIdentifierMapper.map(path)
-		);
+		return _getPathIdentifierMapperOptional(clazz).map(
+			pathIdentifierMapper -> pathIdentifierMapper.map(path));
 	}
 
 	@Override
+	public <T> Optional<Path> map(
+		Class<? extends Identifier<T>> clazz, T identifier) {
+
+		return _getPathIdentifierMapperOptional(clazz).map(
+			pathIdentifierMapper -> pathIdentifierMapper.map(
+				clazz, identifier));
+	}
+
 	@SuppressWarnings("unchecked")
-	public <T, U> Optional<Path> map(
-		T identifier, Class<?> identifierClass, Class<U> modelClass) {
+	private <T> Optional<PathIdentifierMapper<T>>
+		_getPathIdentifierMapperOptional(Class<? extends Identifier<T>> clazz) {
 
-		Optional<PathIdentifierMapper> optional = getServiceOptional(
-			identifierClass);
+		Try<Class<Object>> classTry = getGenericTypeArgumentTry(
+			clazz, Identifier.class, 0);
 
-		return optional.map(
-			pathIdentifierMapper ->
-				(PathIdentifierMapper<T>)pathIdentifierMapper
+		return classTry.map(
+			this::getServiceOptional
 		).map(
-			pathIdentifierMapper ->
-				pathIdentifierMapper.map(identifier, modelClass)
+			optional -> optional.map(
+				pathIdentifierMapper ->
+					(PathIdentifierMapper<T>)pathIdentifierMapper)
+		).orElseGet(
+			Optional::empty
 		);
 	}
 
