@@ -30,9 +30,9 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.Representor.Builder;
-import com.liferay.apio.architect.representor.RepresentorTestUtil.Dummy;
-import com.liferay.apio.architect.representor.RepresentorTestUtil.DummyLinked;
-import com.liferay.apio.architect.representor.RepresentorTestUtil.DummyParent;
+import com.liferay.apio.architect.representor.dummy.Dummy;
+import com.liferay.apio.architect.representor.dummy.DummyLinked;
+import com.liferay.apio.architect.representor.dummy.DummyParent;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
