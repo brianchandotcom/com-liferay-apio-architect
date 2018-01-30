@@ -46,6 +46,8 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
  *         {@code Identifier}.
  * @param  <U> the type of the parent model's identifier (e.g., {@code Long},
  *         {@code String}, etc.)
+ * @param  <V> the type of the parent resource's identifier. It must be a
+ *         subclass of {@code Identifier<V>}.
  * @see    NestedCollectionRoutes.Builder
  * @review
  */
@@ -63,6 +65,6 @@ public interface NestedCollectionRouter
 	 *        NestedCollectionRoutes} instance
 	 * @see   NestedCollectionRoutes.Builder
 	 */
-	public NestedCollectionRoutes<T> collectionRoutes(Builder<T, U> builder);
+	public NestedCollectionRoutes<T, V> collectionRoutes(Builder<T, V> builder);
 
 }

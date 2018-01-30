@@ -227,7 +227,8 @@ public class RepresentorTest {
 
 		List<?> identifiers = relatedCollections.filter(
 			relatedCollection ->
-				relatedCollection.getModelClass() == DummyLinked.class
+				relatedCollection.getCollectionIdentifierClass() ==
+					DummyLinked.class
 		).filter(
 			relatedCollection ->
 				relatedCollection.getKey().equals("relatedCollection")

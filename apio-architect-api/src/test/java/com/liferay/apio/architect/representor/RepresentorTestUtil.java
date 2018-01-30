@@ -136,10 +136,10 @@ public class RepresentorTestUtil {
 		Class<? extends DummyIdentified> modelClass, Integer value) {
 
 		assertThat(relatedModel.getKey(), is(key));
-		assertThat(relatedModel.getModelClass(), is(modelClass));
+		assertThat(relatedModel.getIdentifierClass(), is(modelClass));
 
 		Function<Dummy, ? extends Optional<?>> function =
-			relatedModel.getModelFunction();
+			relatedModel.getIdentifierFunction();
 
 		DummyIdentified dummyIdentified = function.apply(
 			dummy
