@@ -467,7 +467,6 @@ public class NestedCollectionRoutes<T> {
 	}
 
 	private Form _form;
-
 	private final String _name;
 	private NestedCreateItemFunction<T> _nestedCreateItemFunction;
 	private NestedGetPageFunction<T> _nestedGetPageFunction;
