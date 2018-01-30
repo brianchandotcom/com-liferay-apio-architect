@@ -53,7 +53,7 @@ public class RoutesTestUtil {
 	 *
 	 * @review
 	 */
-	public static final IdentifierFunction IDENTIFIER_FUNCTION =
+	public static final IdentifierFunction<Long> IDENTIFIER_FUNCTION =
 		path -> Long.valueOf(path.getId());
 
 	/**

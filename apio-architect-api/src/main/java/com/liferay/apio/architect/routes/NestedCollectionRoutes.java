@@ -23,7 +23,6 @@ import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedGetPageFunction;
-import com.liferay.apio.architect.error.ApioDeveloperError.MustUseSameIdentifier;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.HexaFunction;
 import com.liferay.apio.architect.function.PentaFunction;
@@ -53,11 +52,13 @@ import java.util.function.BiFunction;
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
+ * @param  <S> the parent model identifier's type. It must be a subclass of
+ *         {@code Identifier}.
  * @see    Builder
  */
-public class NestedCollectionRoutes<T> {
+public class NestedCollectionRoutes<T, S> {
 
-	public NestedCollectionRoutes(Builder<T, ?> builder) {
+	public NestedCollectionRoutes(Builder<T, S> builder) {
 		_form = builder._form;
 		_nestedName = builder._nestedName;
 		_name = builder._name;
@@ -85,7 +86,7 @@ public class NestedCollectionRoutes<T> {
 	 * @return the function used to create a collection item, if the function
 	 *         exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<NestedCreateItemFunction<T>>
+	public Optional<NestedCreateItemFunction<T, S>>
 		getNestedCreateItemFunctionOptional() {
 
 		return Optional.ofNullable(_nestedCreateItemFunction);
@@ -99,7 +100,7 @@ public class NestedCollectionRoutes<T> {
 	 * @return the function used to obtain the page, if the function exists;
 	 *         {@code Optional#empty()} otherwise
 	 */
-	public Optional<NestedGetPageFunction<T>>
+	public Optional<NestedGetPageFunction<T, S>>
 		getNestedGetPageFunctionOptional() {
 
 		return Optional.ofNullable(_nestedGetPageFunction);
@@ -166,7 +167,7 @@ public class NestedCollectionRoutes<T> {
 				httpServletRequest -> identifier -> body -> biFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(identifier), (R)_form.get(body)
+					identifier, (R)_form.get(body)
 				);
 
 			return this;
@@ -201,8 +202,7 @@ public class NestedCollectionRoutes<T> {
 					a -> b -> c -> d -> hexaFunction.andThen(
 						t -> new SingleModel<>(t, _modelClass)
 					).apply(
-						_getIdentifier(identifier), (R)_form.get(body), a, b, c,
-						d
+						identifier, (R)_form.get(body), a, b, c, d
 					));
 
 			return this;
@@ -236,7 +236,7 @@ public class NestedCollectionRoutes<T> {
 					a -> b -> c -> pentaFunction.andThen(
 						t -> new SingleModel<>(t, _modelClass)
 					).apply(
-						_getIdentifier(identifier), (R)_form.get(body), a, b, c
+						identifier, (R)_form.get(body), a, b, c
 					));
 
 			return this;
@@ -267,7 +267,7 @@ public class NestedCollectionRoutes<T> {
 					a -> b -> tetraFunction.andThen(
 						t -> new SingleModel<>(t, _modelClass)
 					).apply(
-						_getIdentifier(identifier), (R)_form.get(body), a, b
+						identifier, (R)_form.get(body), a, b
 					));
 
 			return this;
@@ -297,7 +297,7 @@ public class NestedCollectionRoutes<T> {
 					a -> triFunction.andThen(
 						t -> new SingleModel<>(t, _modelClass)
 					).apply(
-						_getIdentifier(identifier), (R)_form.get(body), a
+						identifier, (R)_form.get(body), a
 					));
 
 			return this;
@@ -320,7 +320,7 @@ public class NestedCollectionRoutes<T> {
 						items -> new Page<>(
 							_modelClass, items, pagination, path)
 					).apply(
-						pagination, _getIdentifier(identifier)
+						pagination, identifier
 					));
 
 			return this;
@@ -350,7 +350,7 @@ public class NestedCollectionRoutes<T> {
 						items -> new Page<>(
 							_modelClass, items, pagination, path)
 					).apply(
-						pagination, _getIdentifier(identifier), a, b, c, d
+						pagination, identifier, a, b, c, d
 					));
 
 			return this;
@@ -378,7 +378,7 @@ public class NestedCollectionRoutes<T> {
 						items -> new Page<>(
 							_modelClass, items, pagination, path)
 					).apply(
-						pagination, _getIdentifier(identifier), a, b, c
+						pagination, identifier, a, b, c
 					));
 
 			return this;
@@ -404,7 +404,7 @@ public class NestedCollectionRoutes<T> {
 						items -> new Page<>(
 							_modelClass, items, pagination, path)
 					).apply(
-						pagination, _getIdentifier(identifier), a, b
+						pagination, identifier, a, b
 					));
 
 			return this;
@@ -429,7 +429,7 @@ public class NestedCollectionRoutes<T> {
 						items -> new Page<>(
 							_modelClass, items, pagination, path)
 					).apply(
-						pagination, _getIdentifier(identifier), a
+						pagination, identifier, a
 					));
 
 			return this;
@@ -441,27 +441,16 @@ public class NestedCollectionRoutes<T> {
 		 *
 		 * @return the {@code Routes} instance
 		 */
-		public NestedCollectionRoutes<T> build() {
+		public NestedCollectionRoutes<T, S> build() {
 			return new NestedCollectionRoutes<>(this);
-		}
-
-		@SuppressWarnings("unchecked")
-		private <U> U _getIdentifier(Object identifier) {
-			Class<?> clazz = identifier.getClass();
-
-			if (!_identifierClass.isAssignableFrom(clazz)) {
-				throw new MustUseSameIdentifier(clazz, _identifierClass);
-			}
-
-			return (U)identifier;
 		}
 
 		private Form _form;
 		private final Class<S> _identifierClass;
 		private final Class<T> _modelClass;
 		private final String _name;
-		private NestedCreateItemFunction<T> _nestedCreateItemFunction;
-		private NestedGetPageFunction<T> _nestedGetPageFunction;
+		private NestedCreateItemFunction<T, S> _nestedCreateItemFunction;
+		private NestedGetPageFunction<T, S> _nestedGetPageFunction;
 		private final String _nestedName;
 		private final ProvideFunction _provideFunction;
 
@@ -469,8 +458,8 @@ public class NestedCollectionRoutes<T> {
 
 	private Form _form;
 	private final String _name;
-	private NestedCreateItemFunction<T> _nestedCreateItemFunction;
-	private NestedGetPageFunction<T> _nestedGetPageFunction;
+	private NestedCreateItemFunction<T, S> _nestedCreateItemFunction;
+	private NestedGetPageFunction<T, S> _nestedGetPageFunction;
 	private final String _nestedName;
 
 }

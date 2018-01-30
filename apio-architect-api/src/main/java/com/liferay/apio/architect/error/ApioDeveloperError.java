@@ -136,23 +136,6 @@ public class ApioDeveloperError extends Error {
 	}
 
 	/**
-	 * Represents the error the developer should throw when the identifier used
-	 * for a related collection isn't the same as the one required by the
-	 * collection.
-	 */
-	public static class MustUseSameIdentifier extends ApioDeveloperError {
-
-		public MustUseSameIdentifier(
-			Class<?> identifierClass, Class<?> collectionIdentifierClass) {
-
-			super(
-				identifierClass + " identifier must be " +
-					collectionIdentifierClass);
-		}
-
-	}
-
-	/**
 	 * Represents the error the developer should throw when a URI can't be
 	 * resolved.
 	 */

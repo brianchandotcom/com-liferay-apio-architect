@@ -35,7 +35,6 @@ import com.liferay.apio.architect.function.TetraFunction;
 import com.liferay.apio.architect.function.TriFunction;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
-import com.liferay.apio.architect.uri.Path;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,7 +155,7 @@ public class ItemRoutes<T> {
 
 		public Builder(
 			Class<T> modelClass, String name, ProvideFunction provideFunction,
-			IdentifierFunction identifierFunction) {
+			IdentifierFunction<S> identifierFunction) {
 
 			_modelClass = modelClass;
 			_name = name;
@@ -179,7 +178,7 @@ public class ItemRoutes<T> {
 				a -> biFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path), a
+					_identifierFunction.apply(path), a
 				));
 
 			return this;
@@ -196,7 +195,7 @@ public class ItemRoutes<T> {
 				httpServletRequest -> path -> function.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path)
+					_identifierFunction.apply(path)
 				);
 
 			return this;
@@ -222,7 +221,7 @@ public class ItemRoutes<T> {
 				a -> b -> c -> d -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path), a, b, c, d
+					_identifierFunction.apply(path), a, b, c, d
 				));
 
 			return this;
@@ -246,7 +245,7 @@ public class ItemRoutes<T> {
 				a -> b -> c -> tetraFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path), a, b, c
+					_identifierFunction.apply(path), a, b, c
 				));
 
 			return this;
@@ -269,7 +268,7 @@ public class ItemRoutes<T> {
 				a -> b -> triFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path), a, b
+					_identifierFunction.apply(path), a, b
 				));
 
 			return this;
@@ -288,7 +287,7 @@ public class ItemRoutes<T> {
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
 				_provideFunction, httpServletRequest, aClass,
-				a -> biConsumer.accept(_getIdentifier(path), a));
+				a -> biConsumer.accept(_identifierFunction.apply(path), a));
 
 			return this;
 		}
@@ -301,7 +300,7 @@ public class ItemRoutes<T> {
 		 */
 		public Builder<T, S> addRemover(Consumer<S> consumer) {
 			_deleteItemConsumer = httpServletRequest -> path -> consumer.accept(
-				_getIdentifier(path));
+				_identifierFunction.apply(path));
 
 			return this;
 		}
@@ -328,7 +327,7 @@ public class ItemRoutes<T> {
 				_provideFunction, httpServletRequest, aClass, bClass, cClass,
 				dClass,
 				a -> b -> c -> d -> pentaConsumer.accept(
-					_getIdentifier(path), a, b, c, d));
+					_identifierFunction.apply(path), a, b, c, d));
 
 			return this;
 		}
@@ -352,7 +351,7 @@ public class ItemRoutes<T> {
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
 				_provideFunction, httpServletRequest, aClass, bClass, cClass,
 				a -> b -> c -> tetraConsumer.accept(
-					_getIdentifier(path), a, b, c));
+					_identifierFunction.apply(path), a, b, c));
 
 			return this;
 		}
@@ -373,7 +372,8 @@ public class ItemRoutes<T> {
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
 				_provideFunction, httpServletRequest, aClass, bClass,
-				a -> b -> triConsumer.accept(_getIdentifier(path), a, b));
+				a -> b -> triConsumer.accept(
+					_identifierFunction.apply(path), a, b));
 
 			return this;
 		}
@@ -396,7 +396,7 @@ public class ItemRoutes<T> {
 				httpServletRequest -> path -> body -> biFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path), (R)_form.get(body)
+					_identifierFunction.apply(path), (R)_form.get(body)
 				);
 
 			return this;
@@ -431,7 +431,8 @@ public class ItemRoutes<T> {
 				a -> b -> c -> d -> hexaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path), (R)_form.get(body), a, b, c, d
+					_identifierFunction.apply(path), (R)_form.get(body), a, b,
+					c, d
 				));
 
 			return this;
@@ -463,7 +464,7 @@ public class ItemRoutes<T> {
 				a -> b -> c -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path), (R)_form.get(body), a, b, c
+					_identifierFunction.apply(path), (R)_form.get(body), a, b, c
 				));
 
 			return this;
@@ -492,7 +493,7 @@ public class ItemRoutes<T> {
 				a -> b -> tetraFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path), (R)_form.get(body), a, b
+					_identifierFunction.apply(path), (R)_form.get(body), a, b
 				));
 
 			return this;
@@ -519,7 +520,7 @@ public class ItemRoutes<T> {
 				a -> triFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					_getIdentifier(path), (R)_form.get(body), a
+					_identifierFunction.apply(path), (R)_form.get(body), a
 				));
 
 			return this;
@@ -535,14 +536,9 @@ public class ItemRoutes<T> {
 			return new ItemRoutes<>(this);
 		}
 
-		@SuppressWarnings("unchecked")
-		private <V> V _getIdentifier(Path path) {
-			return (V)_identifierFunction.apply(path);
-		}
-
 		private DeleteItemConsumer _deleteItemConsumer;
 		private Form _form;
-		private final IdentifierFunction _identifierFunction;
+		private final IdentifierFunction<S> _identifierFunction;
 		private final Class<T> _modelClass;
 		private final String _name;
 		private final ProvideFunction _provideFunction;
