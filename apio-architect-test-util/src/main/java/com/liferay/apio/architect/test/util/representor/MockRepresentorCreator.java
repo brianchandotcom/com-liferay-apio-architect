@@ -24,7 +24,6 @@ import com.liferay.apio.architect.test.util.model.SecondEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
 
 import java.util.Date;
-import java.util.Optional;
 
 /**
  * Provides methods that create {@link Representor} objects for {@link
@@ -63,11 +62,9 @@ public class MockRepresentorCreator {
 		).addLink(
 			"link", "www.liferay.com"
 		).addLinkedModel(
-			"embedded", SecondEmbeddedModel.class,
-			__ -> Optional.of(() -> "first")
+			"embedded", SecondEmbeddedId.class, __ -> "first"
 		).addLinkedModel(
-			"linked", SecondEmbeddedModel.class,
-			__ -> Optional.of(() -> "second")
+			"linked", SecondEmbeddedId.class, __ -> "second"
 		).addLocalizedString(
 			"localizedString", (firstEmbeddedModel, language) -> "Translated"
 		).addNumber(
@@ -118,17 +115,13 @@ public class MockRepresentorCreator {
 			).addDate(
 				"date2", __ -> new Date(1491244560000L)
 			).addLinkedModel(
-				"embedded1", FirstEmbeddedModel.class,
-				__ -> Optional.of(() -> "first")
+				"embedded1", FirstEmbeddedId.class, __ -> "first"
 			).addLinkedModel(
-				"embedded2", FirstEmbeddedModel.class,
-				__ -> Optional.of(() -> "second")
+				"embedded2", FirstEmbeddedId.class, __ -> "second"
 			).addLinkedModel(
-				"linked1", FirstEmbeddedModel.class,
-				__ -> Optional.of(() -> "third")
+				"linked1", FirstEmbeddedId.class, __ -> "third"
 			).addLinkedModel(
-				"linked2", FirstEmbeddedModel.class,
-				__ -> Optional.of(() -> "fourth")
+				"linked2", FirstEmbeddedId.class, __ -> "fourth"
 			).addLink(
 				"link1", "www.liferay.com"
 			).addLink(
@@ -177,8 +170,7 @@ public class MockRepresentorCreator {
 				).addNumber(
 					"number1", __ -> 42
 				).addLinkedModel(
-					"linked3", ThirdEmbeddedModel.class,
-					__ -> Optional.of(() -> "fifth")
+					"linked3", ThirdEmbeddedId.class, __ -> "fifth"
 				).addRelatedCollection(
 					"relatedCollection3", ThirdEmbeddedModel.class,
 					SecondEmbeddedModel::getId
@@ -244,11 +236,9 @@ public class MockRepresentorCreator {
 		).addLink(
 			"link", "community.liferay.com"
 		).addLinkedModel(
-			"embedded", ThirdEmbeddedModel.class,
-			__ -> Optional.of(() -> "first")
+			"embedded", ThirdEmbeddedId.class, __ -> "first"
 		).addLinkedModel(
-			"linked", ThirdEmbeddedModel.class,
-			__ -> Optional.of(() -> "second")
+			"linked", ThirdEmbeddedId.class, __ -> "second"
 		).addNumber(
 			"number", __ -> 2017
 		).addNumberList(

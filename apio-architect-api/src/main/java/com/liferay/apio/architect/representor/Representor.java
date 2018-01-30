@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.date.DateTransformer.asString;
 
 import com.liferay.apio.architect.alias.BinaryFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
@@ -31,7 +32,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -299,28 +299,29 @@ public class Representor<T, S> {
 			 *
 			 * @param  key the relation's name in the resource
 			 * @param  relatedKey the relation's name in the related resource
-			 * @param  modelClass the related model's class
-			 * @param  modelFunction the function used to get the related model
-			 * @param  identifierFunction the function used to get the
-			 *         collection's identifier
+			 * @param  identifierClass the related resource identifier's class
+			 * @param  identifierFunction the function used to get the related
+			 *         resource's identifier
 			 * @return the builder's step
 			 */
 			@SuppressWarnings("unchecked")
 			public <S> FirstStep addBidirectionalModel(
-				String key, String relatedKey, Class<S> modelClass,
-				Function<T, Optional<S>> modelFunction,
-				Function<S, Object> identifierFunction) {
+				String key, String relatedKey,
+				Class<? extends Identifier<S>> identifierClass,
+				Function<T, S> identifierFunction,
+				Function<S, Object> collectionFunction) {
 
 				if (_representor._identifierFunction == null) {
 					return this;
 				}
 
 				_representor._relatedModels.add(
-					new RelatedModel<>(key, modelClass, modelFunction));
+					new RelatedModel<>(
+						key, identifierClass, identifierFunction));
 
 				_addRelatedCollectionTriConsumer.accept(
-					relatedKey, modelClass,
-					(Function<Object, Object>)identifierFunction);
+					relatedKey, identifierClass,
+					(Function<Object, Object>)collectionFunction);
 
 				return this;
 			}
@@ -411,19 +412,21 @@ public class Representor<T, S> {
 			}
 
 			/**
-			 * Adds information about an embeddable related model.
+			 * Adds information about an embeddable related resource.
 			 *
 			 * @param  key the relation's name
-			 * @param  modelClass the related model's class
-			 * @param  modelFunction the function used to get the related model
+			 * @param  identifierClass the related resource identifier's class
+			 * @param  identifierFunction the function used to get the related
+			 *         resource's identifier
 			 * @return the builder's step
 			 */
 			public <S> FirstStep addLinkedModel(
-				String key, Class<S> modelClass,
-				Function<T, Optional<S>> modelFunction) {
+				String key, Class<? extends Identifier<S>> identifierClass,
+				Function<T, S> identifierFunction) {
 
 				_representor._relatedModels.add(
-					new RelatedModel<>(key, modelClass, modelFunction));
+					new RelatedModel<>(
+						key, identifierClass, identifierFunction));
 
 				return this;
 			}
