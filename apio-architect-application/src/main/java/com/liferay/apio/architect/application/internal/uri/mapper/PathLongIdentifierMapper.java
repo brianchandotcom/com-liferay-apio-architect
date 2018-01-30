@@ -44,7 +44,7 @@ public class PathLongIdentifierMapper implements PathIdentifierMapper<Long> {
 	public Path map(Class<? extends Identifier<Long>> clazz, Long aLong) {
 		String className = clazz.getName();
 
-		Optional<String> optional = _nameManager.getNameOptional(className);
+		Optional<String> optional = nameManager.getNameOptional(className);
 
 		return optional.map(
 			name -> new Path(name, String.valueOf(aLong))
@@ -62,6 +62,6 @@ public class PathLongIdentifierMapper implements PathIdentifierMapper<Long> {
 	}
 
 	@Reference
-	private NameManager _nameManager;
+	protected NameManager nameManager;
 
 }

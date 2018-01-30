@@ -42,7 +42,7 @@ public class PathStringIdentifierMapper
 	public Path map(Class<? extends Identifier<String>> clazz, String string) {
 		String className = clazz.getName();
 
-		Optional<String> optional = _nameManager.getNameOptional(className);
+		Optional<String> optional = nameManager.getNameOptional(className);
 
 		String name = optional.orElseThrow(
 			() -> new UnresolvableURI(className));
@@ -56,6 +56,6 @@ public class PathStringIdentifierMapper
 	}
 
 	@Reference
-	private NameManager _nameManager;
+	protected NameManager nameManager;
 
 }
