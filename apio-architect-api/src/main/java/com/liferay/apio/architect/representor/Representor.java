@@ -178,9 +178,11 @@ public class Representor<T, S> {
 	 *
 	 * @return the related collections
 	 */
-	public Stream<RelatedCollection<T, ?>> getRelatedCollections() {
-		Stream<List<RelatedCollection<T, ?>>> stream = Stream.of(
-			_relatedCollections, _relatedCollectionsSupplier.get());
+	public Stream<RelatedCollection<T, ? extends Identifier, ?>>
+		getRelatedCollections() {
+
+		Stream<List<RelatedCollection<T, ? extends Identifier, ?>>> stream =
+			Stream.of(_relatedCollections, _relatedCollectionsSupplier.get());
 
 		return stream.filter(
 			Objects::nonNull
@@ -241,8 +243,8 @@ public class Representor<T, S> {
 		}
 
 		public Builder(Class<U> identifierClass) {
-			Supplier<List<RelatedCollection<T, ?>>> listSupplier =
-				Collections::emptyList;
+			Supplier<List<RelatedCollection<T, ? extends Identifier, ?>>>
+				listSupplier = Collections::emptyList;
 
 			_addRelatedCollectionTriConsumer = TriConsumer.empty();
 			_representor = new Representor<>(identifierClass, listSupplier);
@@ -250,10 +252,11 @@ public class Representor<T, S> {
 
 		public Builder(
 			Class<U> identifierClass,
-			TriConsumer<String, Class<?>, Function<Object, Object>>
+			TriConsumer<String, Class<? extends Identifier>, Function<?, U>>
 				addRelatedCollectionTriConsumer,
-			Supplier<List<RelatedCollection<T, ?>>>
-				relatedCollectionsSupplier) {
+			Supplier<List<RelatedCollection
+				<T, ? extends Identifier, ?>>>
+					relatedCollectionsSupplier) {
 
 			_addRelatedCollectionTriConsumer = addRelatedCollectionTriConsumer;
 			_representor = new Representor<>(
@@ -294,22 +297,23 @@ public class Representor<T, S> {
 
 			/**
 			 * Adds information about the bidirectional relation of a linked
-			 * model in the resource and a collection of items in the related
-			 * resource.
+			 * resource in the actual resource and a collection of items in the
+			 * related resource.
 			 *
 			 * @param  key the relation's name in the resource
 			 * @param  relatedKey the relation's name in the related resource
 			 * @param  identifierClass the related resource identifier's class
 			 * @param  identifierFunction the function used to get the related
 			 *         resource's identifier
+			 * @param  collectionIdentifierFunction the function used to get the
+			 *         actual resource collection's identifier
 			 * @return the builder's step
 			 */
-			@SuppressWarnings("unchecked")
 			public <S> FirstStep addBidirectionalModel(
 				String key, String relatedKey,
 				Class<? extends Identifier<S>> identifierClass,
 				Function<T, S> identifierFunction,
-				Function<S, Object> collectionFunction) {
+				Function<S, U> collectionIdentifierFunction) {
 
 				if (_representor._identifierFunction == null) {
 					return this;
@@ -320,8 +324,7 @@ public class Representor<T, S> {
 						key, identifierClass, identifierFunction));
 
 				_addRelatedCollectionTriConsumer.accept(
-					relatedKey, identifierClass,
-					(Function<Object, Object>)collectionFunction);
+					relatedKey, identifierClass, collectionIdentifierFunction);
 
 				return this;
 			}
@@ -525,18 +528,26 @@ public class Representor<T, S> {
 			 * Adds information about a related collection.
 			 *
 			 * @param  key the relation's name
-			 * @param  modelClass the class of the collection's related models
+			 * @param  itemIdentifierClass the class of the collection items'
+			 *         identifier
+			 * @param  collectionIdentifierClass the class of the collection's
+			 *         identifier
 			 * @param  identifierFunction the function used to get the
 			 *         collection's identifier
 			 * @return the builder's step
+			 * @review
 			 */
-			public <S> FirstStep addRelatedCollection(
-				String key, Class<S> modelClass,
-				Function<T, Object> identifierFunction) {
+			public <S extends Identifier, V> FirstStep addRelatedCollection(
+				String key, Class<S> itemIdentifierClass,
+				Class<? extends Identifier<V>> collectionIdentifierClass,
+				Function<T, V> identifierFunction) {
 
-				_representor._relatedCollections.add(
+				RelatedCollection<T, S, V> relatedCollection =
 					new RelatedCollection<>(
-						key, modelClass, identifierFunction));
+						key, itemIdentifierClass, collectionIdentifierClass,
+						identifierFunction);
+
+				_representor._relatedCollections.add(relatedCollection);
 
 				return this;
 			}
@@ -603,15 +614,16 @@ public class Representor<T, S> {
 
 		}
 
-		private final TriConsumer<String, Class<?>,
-			Function<Object, Object>> _addRelatedCollectionTriConsumer;
+		private final TriConsumer<String, Class<? extends Identifier>,
+			Function<?, U>> _addRelatedCollectionTriConsumer;
 		private final Representor<T, U> _representor;
 
 	}
 
 	private Representor(
 		Class<S> identifierClass,
-		Supplier<List<RelatedCollection<T, ?>>> relatedCollectionsSupplier) {
+		Supplier<List<RelatedCollection<T, ? extends Identifier, ?>>>
+			relatedCollectionsSupplier) {
 
 		_identifierClass = identifierClass;
 		_relatedCollectionsSupplier = relatedCollectionsSupplier;
@@ -634,9 +646,9 @@ public class Representor<T, S> {
 		new LinkedHashMap<>();
 	private Map<String, Function<T, List<Number>>> _numberListFunctions =
 		new LinkedHashMap<>();
-	private List<RelatedCollection<T, ?>> _relatedCollections =
-		new ArrayList<>();
-	private final Supplier<List<RelatedCollection<T, ?>>>
+	private List<RelatedCollection<T, ? extends Identifier, ?>>
+		_relatedCollections = new ArrayList<>();
+	private final Supplier<List<RelatedCollection<T, ? extends Identifier, ?>>>
 		_relatedCollectionsSupplier;
 	private List<RelatedModel<T, ?>> _relatedModels = new ArrayList<>();
 	private Map<String, Function<T, String>> _stringFunctions =
