@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 /**
  * Dummy class that can be used to {@link
@@ -35,31 +34,10 @@ import java.util.Optional;
  * @author Alejandro Hernández
  * @review
  */
-public class Dummy implements DummyIdentified {
+public class Dummy {
 
 	public Dummy(int id) {
-		_id = id;
-	}
-
-	public Optional<DummyLinked> getDummyLinked1Optional() {
-		return Optional.of(new DummyLinked(3));
-	}
-
-	public Optional<DummyLinked> getDummyLinked2Optional() {
-		return Optional.of(new DummyLinked(4));
-	}
-
-	public Optional<DummyParent> getDummyParent1Optional() {
-		return Optional.of(new DummyParent(1));
-	}
-
-	public Optional<DummyParent> getDummyParent2Optional() {
-		return Optional.of(new DummyParent(2));
-	}
-
-	@Override
-	public int getId() {
-		return _id;
+		this.id = id;
 	}
 
 	public String getLocalizedString1(Language language) {
@@ -88,6 +66,7 @@ public class Dummy implements DummyIdentified {
 	public List<Boolean> booleanList2 = asList(false, false, true, false);
 	public final Date date1 = new Date(1465981200000L);
 	public final Date date2 = new Date(1491244560000L);
+	public final int id;
 	public final InputStream inputStream1 = new ByteArrayInputStream(
 		"Input Stream 1".getBytes(UTF_8));
 	public final InputStream inputStream2 = new ByteArrayInputStream(
@@ -96,9 +75,11 @@ public class Dummy implements DummyIdentified {
 	public final Number number2 = 2L;
 	public List<Number> numberList1 = asList(1, 2, 3, 4, 5);
 	public List<Number> numberList2 = asList(6, 7, 8, 9, 10);
+	public final Integer relatedModelId1 = 1;
+	public final Integer relatedModelId2 = 2;
+	public final Integer relatedModelId3 = 3;
+	public final Integer relatedModelId4 = 4;
 	public List<String> stringList1 = asList("a", "b", "c", "d");
 	public List<String> stringList2 = asList("e", "f", "g", "h");
-
-	private final int _id;
 
 }

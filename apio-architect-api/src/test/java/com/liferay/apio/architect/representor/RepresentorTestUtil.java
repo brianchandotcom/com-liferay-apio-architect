@@ -20,14 +20,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.core.Is.is;
 
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.dummy.Dummy;
-import com.liferay.apio.architect.representor.dummy.DummyIdentified;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -120,27 +119,27 @@ public class RepresentorTestUtil {
 	 * @param  relatedModel the related model
 	 * @param  dummy the dummy instance
 	 * @param  key the key that the related model should have
-	 * @param  modelClass the model class that the related model should have
+	 * @param  identifierClass the identifier class that the related model
+	 *         should have
 	 * @param  value the value of the ID that the related model should have
 	 * @review
 	 */
 	public static void testRelatedModel(
 		RelatedModel<Dummy, ?> relatedModel, Dummy dummy, String key,
-		Class<? extends DummyIdentified> modelClass, Integer value) {
+		Class<? extends Identifier> identifierClass, Integer value) {
 
 		assertThat(relatedModel.getKey(), is(key));
-		assertThat(relatedModel.getIdentifierClass(), is(modelClass));
+		assertThat(relatedModel.getIdentifierClass(), is(identifierClass));
 
-		Function<Dummy, ? extends Optional<?>> function =
-			relatedModel.getIdentifierFunction();
+		Function<Dummy, ?> function = relatedModel.getIdentifierFunction();
 
-		DummyIdentified dummyIdentified = function.apply(
+		Integer id = function.andThen(
+			object -> (Integer)object
+		).apply(
 			dummy
-		).map(
-			object -> (DummyIdentified)object
-		).get();
+		);
 
-		assertThat(dummyIdentified.getId(), is(value));
+		assertThat(id, is(value));
 	}
 
 }
