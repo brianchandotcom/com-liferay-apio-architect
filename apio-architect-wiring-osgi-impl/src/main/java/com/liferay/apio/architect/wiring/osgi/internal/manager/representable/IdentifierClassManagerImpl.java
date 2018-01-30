@@ -16,8 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.router.NestedCollectionRouterManagerImpl;
-import com.liferay.apio.architect.wiring.osgi.manager.representable.ModelClassManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
 import java.util.Optional;
@@ -32,16 +31,17 @@ import org.osgi.service.component.annotations.Component;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class ModelClassManagerImpl
-	extends BaseManager<Representable, Class> implements ModelClassManager {
+public class IdentifierClassManagerImpl
+	extends BaseManager<Representable, Class>
+	implements IdentifierClassManager {
 
-	public ModelClassManagerImpl() {
+	public IdentifierClassManagerImpl() {
 		super(Representable.class);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> Optional<Class<T>> getModelClassOptional(String name) {
+	public <T> Optional<Class<T>> getIdentifierClassOptional(String name) {
 		Optional<Class> optional = getServiceOptional(name);
 
 		return optional.map(clazz -> (Class<T>)clazz);
@@ -53,7 +53,7 @@ public class ModelClassManagerImpl
 		Emitter<String> emitter) {
 
 		Bundle bundle = FrameworkUtil.getBundle(
-			NestedCollectionRouterManagerImpl.class);
+			IdentifierClassManagerImpl.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 

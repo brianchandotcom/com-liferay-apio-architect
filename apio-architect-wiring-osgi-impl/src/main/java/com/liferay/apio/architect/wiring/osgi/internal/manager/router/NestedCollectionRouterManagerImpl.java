@@ -28,7 +28,7 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.internal.service.reference.mapper.CustomServiceReferenceMapper;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
-import com.liferay.apio.architect.wiring.osgi.manager.representable.ModelClassManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
@@ -62,10 +62,10 @@ public class NestedCollectionRouterManagerImpl
 		getNestedCollectionRoutesOptional(String name, String nestedName) {
 
 		Optional<Class<T>> nameOptional =
-			_modelClassManager.getModelClassOptional(name);
+			_identifierClassManager.getIdentifierClassOptional(name);
 
 		Optional<Class<T>> nestedNameOptional =
-			_modelClassManager.getModelClassOptional(nestedName);
+			_identifierClassManager.getIdentifierClassOptional(nestedName);
 
 		return nameOptional.map(
 			Class::getName
@@ -87,7 +87,7 @@ public class NestedCollectionRouterManagerImpl
 		Class<T> modelClass, String parentClassName) {
 
 		Optional<Class<Object>> optional =
-			_modelClassManager.getModelClassOptional(parentClassName);
+			_identifierClassManager.getIdentifierClassOptional(parentClassName);
 
 		return optional.flatMap(
 			parentClass -> {
@@ -171,7 +171,7 @@ public class NestedCollectionRouterManagerImpl
 	}
 
 	@Reference
-	private ModelClassManager _modelClassManager;
+	private IdentifierClassManager _identifierClassManager;
 
 	@Reference
 	private NameManager _nameManager;

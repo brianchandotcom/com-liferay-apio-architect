@@ -19,22 +19,22 @@ import aQute.bnd.annotation.ProviderType;
 import java.util.Optional;
 
 /**
- * Provides methods to retrieve generic model class information provided by the
- * different {@link com.liferay.apio.architect.representor.Representable}
+ * Provides methods to retrieve generic identifier class information provided by
+ * the different {@link com.liferay.apio.architect.representor.Representable}
  * instances.
  *
  * @author Alejandro Hernández
  * @see    com.liferay.apio.architect.representor.Representable
  */
 @ProviderType
-public interface ModelClassManager {
+public interface IdentifierClassManager {
 
 	/**
-	 * Returns the resource name's model class.
+	 * Returns the resource name's identifier class.
 	 *
 	 * @param  name the resource name
-	 * @return the resource name's model class
+	 * @return the resource name's identifier class
 	 */
-	public <T> Optional<Class<T>> getModelClassOptional(String name);
+	public <T> Optional<Class<T>> getIdentifierClassOptional(String name);
 
 }

@@ -36,7 +36,7 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
-import com.liferay.apio.architect.wiring.osgi.manager.representable.ModelClassManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
@@ -376,8 +376,8 @@ public class RootEndpointImpl implements RootEndpoint {
 
 			String relatedClassName = relatedModelClass.getName();
 
-			Optional<Class<Object>> optional =
-				_modelClassManager.getModelClassOptional(nestedName);
+			Optional<Class<Identifier>> optional =
+				_identifierClassManager.getIdentifierClassOptional(nestedName);
 
 			return optional.map(
 				Class::getName
@@ -502,10 +502,10 @@ public class RootEndpointImpl implements RootEndpoint {
 	private HttpServletRequest _httpServletRequest;
 
 	@Reference
-	private ItemRouterManager _itemRouterManager;
+	private IdentifierClassManager _identifierClassManager;
 
 	@Reference
-	private ModelClassManager _modelClassManager;
+	private ItemRouterManager _itemRouterManager;
 
 	@Reference
 	private NestedCollectionRouterManager _nestedCollectionRouterManager;
