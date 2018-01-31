@@ -14,10 +14,11 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
+import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
@@ -50,10 +51,10 @@ public class ReusableNestedCollectionRouterManagerImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> Optional<NestedCollectionRoutes<T>>
+	public <T, S> Optional<NestedCollectionRoutes<T, S>>
 		getNestedCollectionRoutesOptional(String name) {
 
-		Optional<Class<T>> optional =
+		Optional<Class<Identifier>> optional =
 			_identifierClassManager.getIdentifierClassOptional(name);
 
 		return optional.map(
@@ -61,14 +62,14 @@ public class ReusableNestedCollectionRouterManagerImpl
 		).flatMap(
 			this::getServiceOptional
 		).map(
-			routes -> (NestedCollectionRoutes<T>)routes
+			routes -> (NestedCollectionRoutes<T, S>)routes
 		);
 	}
 
 	@Override
-	public <T> List<Operation> getOperations(Class<T> modelClass) {
-		Optional<NestedCollectionRoutes> optional = getServiceOptional(
-			modelClass);
+	public List<Operation> getOperations(String name) {
+		Optional<NestedCollectionRoutes<Object, Identifier>> optional =
+			getNestedCollectionRoutesOptional(name);
 
 		return optional.map(
 			NestedCollectionRoutes::getOperations
@@ -84,14 +85,9 @@ public class ReusableNestedCollectionRouterManagerImpl
 		ServiceReference<ReusableNestedCollectionRouter> serviceReference,
 		Class<?> clazz) {
 
-		Class<?> identifierClass = getTypeParamOrFail(
+		Class<?> modelClass = getTypeParamOrFail(
 			reusableNestedCollectionRouter,
-			ReusableNestedCollectionRouter.class, 1);
-
-		ProvideFunction provideFunction =
-			httpServletRequest -> provideClass ->
-				_providerManager.provideOptional(
-					provideClass, httpServletRequest);
+			ReusableNestedCollectionRouter.class, 0);
 
 		Optional<String> nameOptional = _nameManager.getNameOptional(
 			clazz.getName());
@@ -99,8 +95,18 @@ public class ReusableNestedCollectionRouterManagerImpl
 		String name = nameOptional.orElseThrow(
 			() -> new MustHaveValidGenericType(clazz));
 
-		Builder builder = new Builder<>(
-			clazz, "r", name, identifierClass, provideFunction);
+		return _getNestedCollectionRoutes(
+			reusableNestedCollectionRouter, modelClass, name);
+	}
+
+	private <T, S, U extends Identifier<S>> NestedCollectionRoutes<T, S>
+		_getNestedCollectionRoutes(
+			ReusableNestedCollectionRouter<T, S, U>
+				reusableNestedCollectionRouter,
+			Class<T> modelClass, String name) {
+
+		Builder<T, S> builder = new Builder<>(
+			modelClass, "r", name, curry(_providerManager::provideOptional));
 
 		return reusableNestedCollectionRouter.collectionRoutes(builder);
 	}
