@@ -14,12 +14,16 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
-import com.liferay.apio.architect.alias.ProvideFunction;
+import static com.liferay.apio.architect.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.MODEL_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
+
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.routes.CollectionRoutes;
-import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
@@ -54,7 +58,7 @@ public class CollectionRouterManagerImpl
 	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
 		String name) {
 
-		Optional<Class<T>> optional =
+		Optional<Class<Identifier>> optional =
 			_identifierClassManager.getIdentifierClassOptional(name);
 
 		return optional.map(
@@ -67,8 +71,9 @@ public class CollectionRouterManagerImpl
 	}
 
 	@Override
-	public <T> List<Operation> getOperations(Class<T> modelClass) {
-		Optional<CollectionRoutes> optional = getServiceOptional(modelClass);
+	public List<Operation> getOperations(String name) {
+		Optional<CollectionRoutes<Object>> optional =
+			getCollectionRoutesOptional(name);
 
 		return optional.map(
 			CollectionRoutes::getOperations
@@ -100,17 +105,26 @@ public class CollectionRouterManagerImpl
 		CollectionRouter collectionRouter,
 		ServiceReference<CollectionRouter> serviceReference, Class<?> clazz) {
 
-		ProvideFunction provideFunction =
-			httpServletRequest -> clazz -> _providerManager.provideOptional(
-				clazz, httpServletRequest);
+		Class<?> modelClass = getGenericClassFromPropertyOrElse(
+			serviceReference, MODEL_CLASS,
+			() -> getTypeParamOrFail(
+				collectionRouter, CollectionRouter.class, 0));
 
-		Optional<String> optional = _nameManager.getNameOptional(
-			clazz.getName());
+		return _getCollectionRoutes(collectionRouter, modelClass, (Class)clazz);
+	}
 
-		String name = optional.orElseThrow(
-			() -> new MustHaveValidGenericType(clazz));
+	private <T, S extends Identifier> CollectionRoutes<T> _getCollectionRoutes(
+		CollectionRouter<T, S> collectionRouter, Class<T> modelClass,
+		Class<? extends Identifier<S>> identifierClass) {
 
-		Builder builder = new Builder<>(clazz, name, provideFunction);
+		Optional<String> nameOptional = _nameManager.getNameOptional(
+			identifierClass.getName());
+
+		String name = nameOptional.orElseThrow(
+			() -> new MustHaveValidGenericType(identifierClass));
+
+		CollectionRoutes.Builder<T> builder = new CollectionRoutes.Builder<>(
+			modelClass, name, curry(_providerManager::provideOptional));
 
 		return collectionRouter.collectionRoutes(builder);
 	}
