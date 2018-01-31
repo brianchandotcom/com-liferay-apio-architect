@@ -40,7 +40,7 @@ public class ProviderManagerImpl
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> provideOptional(
-		Class<T> clazz, HttpServletRequest httpServletRequest) {
+		HttpServletRequest httpServletRequest, Class<T> clazz) {
 
 		Optional<Provider> optional = getServiceOptional(clazz);
 

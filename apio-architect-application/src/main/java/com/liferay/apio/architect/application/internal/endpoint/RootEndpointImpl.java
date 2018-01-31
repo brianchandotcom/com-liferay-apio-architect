@@ -77,12 +77,12 @@ public class RootEndpointImpl implements RootEndpoint {
 	public void activate() {
 		RequestFunction<Optional<APITitle>> apiTitleRequestFunction =
 			httpServletRequest -> _providerManager.provideOptional(
-				APITitle.class, httpServletRequest);
+				httpServletRequest, APITitle.class);
 
 		RequestFunction<Optional<APIDescription>>
 			apiDescriptionRequestFunction =
 				httpServletRequest -> _providerManager.provideOptional(
-					APIDescription.class, httpServletRequest);
+					httpServletRequest, APIDescription.class);
 
 		_documentation = new Documentation(
 			apiTitleRequestFunction, apiDescriptionRequestFunction);
@@ -255,7 +255,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			_collectionRouterManager.getResourceNames();
 
 		Optional<ServerURL> optional = _providerManager.provideOptional(
-			ServerURL.class, _httpServletRequest);
+			_httpServletRequest, ServerURL.class);
 
 		ServerURL serverURL = optional.orElseThrow(
 			() -> new ApioDeveloperError.MustHaveProvider(ServerURL.class));
