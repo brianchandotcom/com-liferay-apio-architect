@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.resource;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.ITEM_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.PARENT_MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.PRINCIPAL_TYPE_ARGUMENT;
@@ -62,8 +62,7 @@ public class NestedCollectionResourceManager {
 				Class<?> identifierClass = getTypeParamOrFail(
 					service, NestedCollectionResource.class, 1);
 
-				properties.put(
-					ITEM_IDENTIFIER_CLASS.getName(), identifierClass);
+				properties.put(MODEL_CLASS.getName(), identifierClass);
 
 				Class<?> parentClass = getTypeParamOrFail(
 					service, NestedCollectionResource.class, 2);

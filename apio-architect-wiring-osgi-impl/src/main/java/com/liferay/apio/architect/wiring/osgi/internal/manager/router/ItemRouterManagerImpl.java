@@ -14,13 +14,14 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.ITEM_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHavePathIdentifierMapper;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.ItemRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -67,8 +68,8 @@ public class ItemRouterManagerImpl
 	}
 
 	@Override
-	public <T> List<Operation> getOperations(Class<T> modelClass) {
-		Optional<ItemRoutes> optional = getServiceOptional(modelClass);
+	public List<Operation> getOperations(String name) {
+		Optional<ItemRoutes<Object>> optional = getItemRoutesOptional(name);
 
 		return optional.map(
 			ItemRoutes::getOperations
@@ -83,24 +84,32 @@ public class ItemRouterManagerImpl
 		ItemRouter itemRouter, ServiceReference<ItemRouter> serviceReference,
 		Class<?> clazz) {
 
-		ProvideFunction provideFunction =
-			httpServletRequest -> clazz -> _providerManager.provideOptional(
-				clazz, httpServletRequest);
+		Class<?> modelClass = getGenericClassFromPropertyOrElse(
+			serviceReference, MODEL_CLASS,
+			() -> getTypeParamOrFail(itemRouter, ItemRouter.class, 0));
 
-		Class<?> identifierClass = getGenericClassFromPropertyOrElse(
-			serviceReference, ITEM_IDENTIFIER_CLASS,
-			() -> getTypeParamOrFail(itemRouter, ItemRouter.class, 1));
+		return _getItemRoutes(itemRouter, modelClass, (Class)clazz);
+	}
+
+	private <T, S, U extends Identifier<S>> ItemRoutes<T> _getItemRoutes(
+		ItemRouter<T, S, U> itemRouter, Class<T> modelClass,
+		Class<U> identifierClass) {
+
+		ProvideFunction provideFunction =
+			httpServletRequest -> providedClass ->
+				_providerManager.provideOptional(
+					providedClass, httpServletRequest);
 
 		Optional<String> nameOptional = _nameManager.getNameOptional(
-			clazz.getName());
+			identifierClass.getName());
 
 		String name = nameOptional.orElseThrow(
-			() -> new MustHaveValidGenericType(clazz));
+			() -> new MustHaveValidGenericType(identifierClass));
 
-		Builder builder = new Builder<>(
-			clazz, name, provideFunction,
+		Builder<T, S> builder = new Builder<>(
+			modelClass, name, provideFunction,
 			path -> {
-				Optional<?> optional = _pathIdentifierMapperManager.map(
+				Optional<S> optional = _pathIdentifierMapperManager.map(
 					identifierClass, path);
 
 				return optional.orElseThrow(
