@@ -157,6 +157,44 @@ public class MockRepresentorCreator {
 				"stringList1", __ -> asList("a", "b", "c", "d", "e")
 			).addStringList(
 				"stringList2", __ -> asList("f", "g", "h", "i", "j")
+			).addNestedField(
+				"nestedField1", rootModel -> (FirstEmbeddedModel)() -> "id 1",
+				nestedBuilder -> nestedBuilder.nestedTypes(
+					"Type 3"
+				).addString(
+					"string1", FirstEmbeddedModel::getId
+				).addString(
+					"string2", __ -> "string2"
+				).addNumber(
+					"number1", __ -> 2017
+				).build()
+			).addNestedField(
+				"nestedField2", rootModel -> (SecondEmbeddedModel)() -> "id 2",
+				nestedBuilder -> nestedBuilder.nestedTypes(
+					"Type 4"
+				).addString(
+					"string1", SecondEmbeddedModel::getId
+				).addNumber(
+					"number1", __ -> 42
+				).addLinkedModel(
+					"linked3", ThirdEmbeddedModel.class,
+					__ -> Optional.of(() -> "fifth")
+				).addRelatedCollection(
+					"relatedCollection3", ThirdEmbeddedModel.class,
+					SecondEmbeddedModel::getId
+				).addBidirectionalModel(
+					"bidirectionalModel1", "relatedkey",
+					FirstEmbeddedModel.class, __ -> Optional.empty(), __ -> null
+				).addNestedField(
+					"nested3", __ -> () -> "id 3",
+					(Representor.Builder<ThirdEmbeddedModel, ?>
+						thirdEmbeddedModelBuilder) ->
+						thirdEmbeddedModelBuilder.nestedTypes(
+							"Type 5"
+						).addString(
+							"string1", ThirdEmbeddedModel::getId
+						).build()
+				).build()
 			);
 
 		if (activateNulls) {
