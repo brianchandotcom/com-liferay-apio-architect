@@ -585,8 +585,12 @@ public class PageWriter<T> {
 
 				nestedFields.forEach(
 					(key, value) -> {
+
+						Map<String, Function<U, ?>> nestedFieldFunctions =
+							_representor.getNestedFieldFunctions();
+
 						Function<U, ?> nestedFieldMapper =
-							_representor.getNestedFieldFunctions().get(key);
+							nestedFieldFunctions.get(key);
 
 						Object mappedModel = nestedFieldMapper.apply(
 							singleModel.getModel());

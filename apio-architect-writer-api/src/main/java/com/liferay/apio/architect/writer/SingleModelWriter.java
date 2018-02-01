@@ -517,8 +517,12 @@ public class SingleModelWriter<T> {
 
 				nestedFields.forEach(
 					(key, value) -> {
+
+						Map<String, Function<S, ?>> nestedFieldFunctions =
+							_representor.getNestedFieldFunctions();
+
 						Function<S, ?> nestedFieldMapper =
-							_representor.getNestedFieldFunctions().get(key);
+							nestedFieldFunctions.get(key);
 
 						Object mappedModel = nestedFieldMapper.apply(
 							singleModel.getModel());
