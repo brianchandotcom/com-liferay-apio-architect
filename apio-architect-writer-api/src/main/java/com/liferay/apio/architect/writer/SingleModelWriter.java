@@ -529,7 +529,7 @@ public class SingleModelWriter<T> {
 						writeEmbeddedModelFields(
 							new SingleModel<>(mappedModel, Object.class),
 							embeddedNestedPathElements,
-							clazz -> Optional.of(value));
+							__ -> Optional.of(value));
 					});
 			});
 	}

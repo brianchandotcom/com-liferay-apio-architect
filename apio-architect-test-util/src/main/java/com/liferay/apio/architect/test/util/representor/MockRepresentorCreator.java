@@ -158,7 +158,7 @@ public class MockRepresentorCreator {
 			).addStringList(
 				"stringList2", __ -> asList("f", "g", "h", "i", "j")
 			).addNestedField(
-				"nestedField1", rootModel -> (FirstEmbeddedModel)() -> "id 1",
+				"nestedField1", __ -> (FirstEmbeddedModel)() -> "id 1",
 				nestedBuilder -> nestedBuilder.nestedTypes(
 					"Type 3"
 				).addString(

@@ -597,7 +597,7 @@ public class PageWriter<T> {
 						_writeItemEmbeddedModelFields(
 							new SingleModel<>(mappedModel, Object.class),
 							embeddedNestedPathElements, itemJsonObjectBuilder,
-							clazz -> Optional.of(value), rootModel);
+							__ -> Optional.of(value), rootSingleModel);
 					});
 			});
 	}
