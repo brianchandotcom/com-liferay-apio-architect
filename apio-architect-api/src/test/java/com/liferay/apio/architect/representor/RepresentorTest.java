@@ -41,7 +41,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,19 +57,18 @@ public class RepresentorTest {
 	public void setUp() {
 		_keys = new ArrayList<>();
 		_classes = new ArrayList<>();
-		_identifierFunctions = new ArrayList<>();
+		_relatedCollectionsClasses = new ArrayList<>();
 
 		Builder<Dummy, Integer> builder = new Builder<>(
-			Integer.class,
-			(string, clazz, function) -> {
-				_keys.add(string);
+			IntegerIdentifier.class,
+			(clazz, relatedCollection) -> {
 				_classes.add(clazz);
-				_identifierFunctions.add((Function)function);
+				_keys.add(relatedCollection.getKey());
+				_relatedCollectionsClasses.add(
+					relatedCollection.getIdentifierClass());
 			},
 			() -> Collections.singletonList(
-				new RelatedCollection<>(
-					"extra", IntegerIdentifier.class, IntegerIdentifier.class,
-					__ -> 1)));
+				new RelatedCollection<>("extra", IntegerIdentifier.class)));
 
 		_representor = builder.types(
 			"Type 1", "Type 2", "Type 3"
@@ -82,10 +80,10 @@ public class RepresentorTest {
 			"binary2", dummy -> dummy.inputStream2
 		).addBidirectionalModel(
 			"bidirectional1", "dummy1", IntegerIdentifier.class,
-			dummy -> dummy.relatedModelId1, id -> id
+			dummy -> dummy.relatedModelId1
 		).addBidirectionalModel(
 			"bidirectional2", "dummy2", IntegerIdentifier.class,
-			dummy -> dummy.relatedModelId2, id -> id
+			dummy -> dummy.relatedModelId2
 		).addBoolean(
 			"boolean1", dummy -> dummy.boolean1
 		).addBoolean(
@@ -121,11 +119,9 @@ public class RepresentorTest {
 		).addNumberList(
 			"numberList2", dummy -> dummy.numberList2
 		).addRelatedCollection(
-			"relatedCollection", IntegerIdentifier.class,
-			IntegerIdentifier.class, dummy -> dummy.id
+			"relatedCollection", IntegerIdentifier.class
 		).addRelatedCollection(
-			"relatedCollection", IntegerIdentifier.class,
-			IntegerIdentifier.class, dummy -> dummy.id
+			"relatedCollection", IntegerIdentifier.class
 		).addString(
 			"string1", Dummy::getString1
 		).addString(
@@ -144,21 +140,9 @@ public class RepresentorTest {
 			_classes,
 			contains(IntegerIdentifier.class, IntegerIdentifier.class));
 
-		assertThat(_identifierFunctions, hasSize(2));
-
-		Function<Integer, Integer> dummyIdentifierFunction0 =
-			_identifierFunctions.get(0);
-
-		Integer integer0 = dummyIdentifierFunction0.apply(12);
-
-		assertThat(integer0, is(12));
-
-		Function<Integer, Integer> dummyIdentifierFunction1 =
-			_identifierFunctions.get(1);
-
-		Integer integer1 = dummyIdentifierFunction1.apply(24);
-
-		assertThat(integer1, is(24));
+		assertThat(
+			_relatedCollectionsClasses,
+			contains(IntegerIdentifier.class, IntegerIdentifier.class));
 	}
 
 	@Test
@@ -232,25 +216,21 @@ public class RepresentorTest {
 
 	@Test
 	public void testRelatedCollections() {
-		Stream<RelatedCollection<Dummy, ? extends Identifier, ?>>
-			relatedCollections = _representor.getRelatedCollections();
+		Stream<RelatedCollection<?>> relatedCollections =
+			_representor.getRelatedCollections();
 
-		List<?> identifiers = relatedCollections.filter(
+		List<?> list0 = relatedCollections.filter(
 			relatedCollection ->
-				relatedCollection.getCollectionIdentifierClass() ==
+				relatedCollection.getIdentifierClass() ==
 					IntegerIdentifier.class
 		).filter(
 			relatedCollection ->
 				relatedCollection.getKey().equals("relatedCollection")
-		).map(
-			RelatedCollection::getIdentifierFunction
-		).map(
-			function -> function.apply(_dummy)
 		).collect(
 			Collectors.toList()
 		);
 
-		assertThat(identifiers, contains(23, 23));
+		assertThat(list0, hasSize(2));
 	}
 
 	@Test
@@ -286,8 +266,8 @@ public class RepresentorTest {
 
 	private List<Class> _classes;
 	private final Dummy _dummy = new Dummy(23);
-	private List<Function<Integer, Integer>> _identifierFunctions;
 	private List<String> _keys;
+	private List<Class<?>> _relatedCollectionsClasses;
 	private Representor<Dummy, Integer> _representor;
 
 	private interface IntegerIdentifier extends Identifier<Integer> {

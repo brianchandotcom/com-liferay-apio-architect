@@ -16,30 +16,19 @@ package com.liferay.apio.architect.related;
 
 import com.liferay.apio.architect.identifier.Identifier;
 
-import java.util.function.Function;
-
 /**
  * Represents the relation between a resource and a collection.
  *
  * @author Alejandro Hernández
- * @param  <T> the model's type
- * @param  <S> the type of the related collection item's identifier (e.g.,
- *         {@code Long}, {@code String}, etc.)
- * @param  <U> the type of the related collection's identifier. It must be a
- *         subclass of {@code Identifier<S>}.
+ * @param  <T> the type of the resource's identifier. It must be a subclass of
+ *         {@code Identifier}.
  * @review
  */
-public class RelatedCollection<T, S extends Identifier, U> {
+public class RelatedCollection<T extends Identifier> {
 
-	public RelatedCollection(
-		String key, Class<S> itemIdentifierClass,
-		Class<? extends Identifier<U>> collectionIdentifierClass,
-		Function<T, U> identifierFunction) {
-
+	public RelatedCollection(String key, Class<T> identifierClass) {
 		_key = key;
-		_itemIdentifierClass = itemIdentifierClass;
-		_collectionIdentifierClass = collectionIdentifierClass;
-		_identifierFunction = identifierFunction;
+		_identifierClass = identifierClass;
 	}
 
 	/**
@@ -47,26 +36,8 @@ public class RelatedCollection<T, S extends Identifier, U> {
 	 *
 	 * @return the class of the collection items' identifier
 	 */
-	public Class<? extends Identifier<U>> getCollectionIdentifierClass() {
-		return _collectionIdentifierClass;
-	}
-
-	/**
-	 * Returns the function that calculates the related collection's identifier.
-	 *
-	 * @return the function that calculates the related collection's identifier
-	 */
-	public Function<T, U> getIdentifierFunction() {
-		return _identifierFunction;
-	}
-
-	/**
-	 * Returns the class of the collection items' identifier.
-	 *
-	 * @return the class of the collection items' identifier
-	 */
-	public Class<S> getItemIdentifierClass() {
-		return _itemIdentifierClass;
+	public Class<T> getIdentifierClass() {
+		return _identifierClass;
 	}
 
 	/**
@@ -78,9 +49,7 @@ public class RelatedCollection<T, S extends Identifier, U> {
 		return _key;
 	}
 
-	private final Class<? extends Identifier<U>> _collectionIdentifierClass;
-	private final Function<T, U> _identifierFunction;
-	private final Class<S> _itemIdentifierClass;
+	private final Class<T> _identifierClass;
 	private final String _key;
 
 }

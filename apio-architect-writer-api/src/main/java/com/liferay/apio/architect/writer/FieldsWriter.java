@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.writer.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createSingleURL;
 
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
@@ -277,8 +278,8 @@ public class FieldsWriter<T, S> {
 	 * @param biConsumer the {@code BiConsumer} that writes the related
 	 *        collection URL
 	 */
-	public <U> void writeRelatedCollection(
-		RelatedCollection<T, U> relatedCollection, String resourceName,
+	public <U extends Identifier> void writeRelatedCollection(
+		RelatedCollection<U> relatedCollection, String resourceName,
 		FunctionalList<String> parentEmbeddedPathElements,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
@@ -313,15 +314,16 @@ public class FieldsWriter<T, S> {
 		Function<String, Optional<String>> nameFunction,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
-		Stream<RelatedCollection<T, ?>> stream =
+		Stream<RelatedCollection<?>> stream =
 			_representor.getRelatedCollections();
 
 		stream.forEach(
 			relatedCollection -> {
-				Class<?> modelClass = relatedCollection.getModelClass();
+				Class<?> identifierClass =
+					relatedCollection.getIdentifierClass();
 
 				Optional<String> optional = nameFunction.apply(
-					modelClass.getName());
+					identifierClass.getName());
 
 				optional.ifPresent(
 					name -> writeRelatedCollection(

@@ -52,7 +52,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -368,11 +367,11 @@ public class RootEndpointImpl implements RootEndpoint {
 		);
 	}
 
-	private <T> Predicate<RelatedCollection<T, ?>>
+	private Predicate<RelatedCollection<?>>
 		_getFilterRelatedCollectionPredicate(String nestedName) {
 
 		return relatedCollection -> {
-			Class<?> relatedModelClass = relatedCollection.getModelClass();
+			Class<?> relatedModelClass = relatedCollection.getIdentifierClass();
 
 			String relatedClassName = relatedModelClass.getName();
 
@@ -399,15 +398,14 @@ public class RootEndpointImpl implements RootEndpoint {
 
 			return optional.map(
 				Representor::getRelatedCollections
+			).filter(
+				stream -> stream.anyMatch(
+					_getFilterRelatedCollectionPredicate(nestedName))
 			).flatMap(
-				(Stream<RelatedCollection<T, ?>> stream) -> stream.filter(
-					_getFilterRelatedCollectionPredicate(nestedName)
-				).findFirst(
-				).map(
-					RelatedCollection::getIdentifierFunction
-				).map(
-					function -> function.apply(parentSingleModel.getModel())
-				)
+				__ -> optional
+			).map(
+				representor -> representor.getIdentifier(
+					parentSingleModel.getModel())
 			);
 		};
 	}

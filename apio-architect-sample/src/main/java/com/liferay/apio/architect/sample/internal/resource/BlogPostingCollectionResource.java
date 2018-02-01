@@ -91,8 +91,7 @@ public class BlogPostingCollectionResource
 		).addLinkedModel(
 			"creator", PersonId.class, BlogPosting::getCreatorId
 		).addRelatedCollection(
-			"comments", BlogPostingCommentId.class, BlogPostingId.class,
-			BlogPosting::getBlogPostingId
+			"comments", BlogPostingCommentId.class
 		).addString(
 			"alternativeHeadline", BlogPosting::getSubtitle
 		).addString(

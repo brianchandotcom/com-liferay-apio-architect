@@ -17,7 +17,6 @@ package com.liferay.apio.architect.representor;
 import static com.liferay.apio.architect.date.DateTransformer.asString;
 
 import com.liferay.apio.architect.alias.BinaryFunction;
-import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.related.RelatedCollection;
@@ -32,6 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -97,7 +97,7 @@ public class Representor<T, S> {
 	 *
 	 * @return the identifier class
 	 */
-	public Class<S> getIdentifierClass() {
+	public Class<? extends Identifier<S>> getIdentifierClass() {
 		return _identifierClass;
 	}
 
@@ -178,10 +178,10 @@ public class Representor<T, S> {
 	 *
 	 * @return the related collections
 	 */
-	public Stream<RelatedCollection<T, ? extends Identifier, ?>>
+	public Stream<RelatedCollection<? extends Identifier>>
 		getRelatedCollections() {
 
-		Stream<List<RelatedCollection<T, ? extends Identifier, ?>>> stream =
+		Stream<List<RelatedCollection<? extends Identifier>>> stream =
 			Stream.of(_relatedCollections, _relatedCollectionsSupplier.get());
 
 		return stream.filter(
@@ -236,29 +236,25 @@ public class Representor<T, S> {
 	public static class Builder<T, U> {
 
 		public Builder() {
-			Supplier<List<RelatedCollection<T, ?>>> listSupplier =
-				Collections::emptyList;
-			_addRelatedCollectionTriConsumer = TriConsumer.empty();
-			_representor = new Representor<>(null, listSupplier);
+			this(null);
 		}
 
-		public Builder(Class<U> identifierClass) {
-			Supplier<List<RelatedCollection<T, ? extends Identifier, ?>>>
-				listSupplier = Collections::emptyList;
+		public Builder(Class<? extends Identifier<U>> identifierClass) {
+			Supplier<List<RelatedCollection<?>>> listSupplier =
+				Collections::emptyList;
 
-			_addRelatedCollectionTriConsumer = TriConsumer.empty();
+			_relatedCollectionBiConsumer = (clazz, relatedCollection) -> {
+			};
 			_representor = new Representor<>(identifierClass, listSupplier);
 		}
 
 		public Builder(
-			Class<U> identifierClass,
-			TriConsumer<String, Class<? extends Identifier>, Function<?, U>>
-				addRelatedCollectionTriConsumer,
-			Supplier<List<RelatedCollection
-				<T, ? extends Identifier, ?>>>
-					relatedCollectionsSupplier) {
+			Class<? extends Identifier<U>> identifierClass,
+			BiConsumer<Class<?>, RelatedCollection<?>>
+				relatedCollectionBiConsumer,
+			Supplier<List<RelatedCollection<?>>> relatedCollectionsSupplier) {
 
-			_addRelatedCollectionTriConsumer = addRelatedCollectionTriConsumer;
+			_relatedCollectionBiConsumer = relatedCollectionBiConsumer;
 			_representor = new Representor<>(
 				identifierClass, relatedCollectionsSupplier);
 		}
@@ -305,15 +301,12 @@ public class Representor<T, S> {
 			 * @param  identifierClass the related resource identifier's class
 			 * @param  identifierFunction the function used to get the related
 			 *         resource's identifier
-			 * @param  collectionIdentifierFunction the function used to get the
-			 *         actual resource collection's identifier
 			 * @return the builder's step
 			 */
 			public <S> FirstStep addBidirectionalModel(
 				String key, String relatedKey,
 				Class<? extends Identifier<S>> identifierClass,
-				Function<T, S> identifierFunction,
-				Function<S, U> collectionIdentifierFunction) {
+				Function<T, S> identifierFunction) {
 
 				if (_representor._identifierFunction == null) {
 					return this;
@@ -323,8 +316,12 @@ public class Representor<T, S> {
 					new RelatedModel<>(
 						key, identifierClass, identifierFunction));
 
-				_addRelatedCollectionTriConsumer.accept(
-					relatedKey, identifierClass, collectionIdentifierFunction);
+				RelatedCollection<?> relatedCollection =
+					new RelatedCollection<>(
+						relatedKey, _representor.getIdentifierClass());
+
+				_relatedCollectionBiConsumer.accept(
+					identifierClass, relatedCollection);
 
 				return this;
 			}
@@ -530,22 +527,14 @@ public class Representor<T, S> {
 			 * @param  key the relation's name
 			 * @param  itemIdentifierClass the class of the collection items'
 			 *         identifier
-			 * @param  collectionIdentifierClass the class of the collection's
-			 *         identifier
-			 * @param  identifierFunction the function used to get the
-			 *         collection's identifier
 			 * @return the builder's step
 			 * @review
 			 */
-			public <S extends Identifier, V> FirstStep addRelatedCollection(
-				String key, Class<S> itemIdentifierClass,
-				Class<? extends Identifier<V>> collectionIdentifierClass,
-				Function<T, V> identifierFunction) {
+			public <S extends Identifier> FirstStep addRelatedCollection(
+				String key, Class<S> itemIdentifierClass) {
 
-				RelatedCollection<T, S, V> relatedCollection =
-					new RelatedCollection<>(
-						key, itemIdentifierClass, collectionIdentifierClass,
-						identifierFunction);
+				RelatedCollection<S> relatedCollection =
+					new RelatedCollection<>(key, itemIdentifierClass);
 
 				_representor._relatedCollections.add(relatedCollection);
 
@@ -614,15 +603,15 @@ public class Representor<T, S> {
 
 		}
 
-		private final TriConsumer<String, Class<? extends Identifier>,
-			Function<?, U>> _addRelatedCollectionTriConsumer;
+		private final BiConsumer<Class<?>, RelatedCollection<?>>
+			_relatedCollectionBiConsumer;
 		private final Representor<T, U> _representor;
 
 	}
 
 	private Representor(
-		Class<S> identifierClass,
-		Supplier<List<RelatedCollection<T, ? extends Identifier, ?>>>
+		Class<? extends Identifier<S>> identifierClass,
+		Supplier<List<RelatedCollection<? extends Identifier>>>
 			relatedCollectionsSupplier) {
 
 		_identifierClass = identifierClass;
@@ -635,7 +624,7 @@ public class Representor<T, S> {
 		new LinkedHashMap<>();
 	private Map<String, Function<T, List<Boolean>>> _booleanListFunctions =
 		new LinkedHashMap<>();
-	private final Class<S> _identifierClass;
+	private final Class<? extends Identifier<S>> _identifierClass;
 	private Function<T, S> _identifierFunction;
 	private Map<String, String> _links = new LinkedHashMap<>();
 	private Map<String, BiFunction<T, Language, String>>
@@ -646,9 +635,9 @@ public class Representor<T, S> {
 		new LinkedHashMap<>();
 	private Map<String, Function<T, List<Number>>> _numberListFunctions =
 		new LinkedHashMap<>();
-	private List<RelatedCollection<T, ? extends Identifier, ?>>
-		_relatedCollections = new ArrayList<>();
-	private final Supplier<List<RelatedCollection<T, ? extends Identifier, ?>>>
+	private List<RelatedCollection<? extends Identifier>> _relatedCollections =
+		new ArrayList<>();
+	private final Supplier<List<RelatedCollection<?>>>
 		_relatedCollectionsSupplier;
 	private List<RelatedModel<T, ?>> _relatedModels = new ArrayList<>();
 	private Map<String, Function<T, String>> _stringFunctions =
