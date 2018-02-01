@@ -148,9 +148,7 @@ public class HALTestUtil {
 			"nestedField2", isAJsonObjectWithTheSecondNested(id)
 		).build();
 
-		Matcher<JsonElement> embedded1 = is(aJsonObjectWith(conditions));
-
-		return embedded1;
+		return is(aJsonObjectWith(conditions));
 	}
 
 	/**
@@ -267,8 +265,9 @@ public class HALTestUtil {
 
 		Conditions.Builder builder = new Conditions.Builder();
 
-		Conditions conditions2 = builder.where(
-			"nested3", isAJsonObjectWithTheThirdNested()).build();
+		Matcher<JsonElement> aNestedObjectMatcher = aJsonObjectWhere(
+			"nested3", aJsonObjectWhere(
+				"string1", is(aJsonString(equalTo("id 3")))));
 
 		Conditions firstEmbeddedLinkConditions = builder.where(
 			"linked3", isALinkTo("localhost/p/third-inner-model/fifth")
@@ -284,27 +283,10 @@ public class HALTestUtil {
 		).where(
 			"_links", aJsonObjectWith(firstEmbeddedLinkConditions)
 		).where(
-			"_embedded", aJsonObjectWith(conditions2)
+			"_embedded", aNestedObjectMatcher
 		).build();
 
 		return aJsonObjectWith(conditions);
-	}
-
-	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON object of
-	 * the third nested model.
-	 *
-	 * @return the matcher
-	 * @review
-	 */
-	public static Conditions isAJsonObjectWithTheThirdNested() {
-		Conditions.Builder builder = new Conditions.Builder();
-
-		Conditions conditions = builder.where(
-			"string1", is(aJsonString(equalTo("id 3")))
-		).build();
-
-		return conditions;
 	}
 
 	/**

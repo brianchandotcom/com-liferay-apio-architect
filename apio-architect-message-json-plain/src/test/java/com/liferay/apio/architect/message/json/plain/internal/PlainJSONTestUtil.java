@@ -16,6 +16,7 @@ package com.liferay.apio.architect.message.json.plain.internal;
 
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonBoolean;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonInt;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWhere;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWith;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.isAJsonArrayContaining;
@@ -239,23 +240,8 @@ public class PlainJSONTestUtil {
 			"relatedCollection3",
 			is(isALinkTo("localhost/p/model/" + id + "/models"))
 		).where(
-			"nested3", is(isAJsonObjectWithTheThirdNested())
-		).build();
-
-		return is(aJsonObjectWith(conditions));
-	}
-
-	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON object of
-	 * the third nested model.
-	 *
-	 * @return the matcher
-	 */
-	public static Matcher<JsonElement> isAJsonObjectWithTheThirdNested() {
-		Builder builder = new Builder();
-
-		Conditions conditions = builder.where(
-			"string1", is(aJsonString(equalTo("id 3")))
+			"nested3", aJsonObjectWhere(
+				"string1", is(aJsonString(equalTo("id 3"))))
 		).build();
 
 		return is(aJsonObjectWith(conditions));
