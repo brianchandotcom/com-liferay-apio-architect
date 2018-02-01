@@ -20,7 +20,9 @@ import com.liferay.apio.architect.supplier.ThrowableSupplier;
 
 import java.io.Closeable;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -254,6 +256,61 @@ public abstract class Try<T> {
 	 */
 	public abstract <S extends Exception, U extends Exception> Try<T>
 		mapFailMatching(Class<U> exceptionClass, Supplier<S> supplier);
+
+	/**
+	 * Returns the result of applying the mapping function to the {@code
+	 * Success} instance's value and unwrapping the resultant {@code Optional},
+	 * if the current {@code Try} instance is a {@code Success} and the {@code
+	 * Optional} is not {@code Optional#empty()}; otherwise returns the {@code
+	 * Failure}.
+	 *
+	 * @param  throwableFunction the mapping function
+	 * @return the result of the mapping function unwrapped if applied to the
+	 *         {@code Success} instance's value doesn't return {@code
+	 *         Optional#empty()}; the {@code Failure} instance otherwise
+	 * @review
+	 */
+	public <S> Try<S> mapOptional(
+		ThrowableFunction<? super T, ? extends Optional<S>> throwableFunction) {
+
+		Try<T> tTry = this;
+
+		return tTry.map(
+			throwableFunction
+		).map(
+			Optional::get
+		);
+	}
+
+	/**
+	 * Returns the result of applying the mapping function to the {@code
+	 * Success} instance's value and unwrapping the resultant {@code Optional},
+	 * if the current {@code Try} instance is a {@code Success} and the {@code
+	 * Optional} is not {@code Optional#empty()}; otherwise returns the {@code
+	 * Failure} instance populated with the provided exception.
+	 *
+	 * @param  throwableFunction the mapping function
+	 * @param  supplier the supplier for the exception in the case the obtained
+	 *         {@code Optional} is {@code Optional#empty()}
+	 * @return the result of the mapping function unwrapped if applied to the
+	 *         {@code Success} instance's value doesn't return {@code
+	 *         Optional#empty()}; the {@code Failure} instance otherwise
+	 * @review
+	 */
+	public <S> Try<S> mapOptional(
+		ThrowableFunction<? super T, ? extends Optional<S>> throwableFunction,
+		Supplier<? extends Exception> supplier) {
+
+		Try<T> tTry = this;
+
+		return tTry.map(
+			throwableFunction
+		).map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class, supplier
+		);
+	}
 
 	/**
 	 * Returns the {@code Success} instance'S value, if the current {@code Try}

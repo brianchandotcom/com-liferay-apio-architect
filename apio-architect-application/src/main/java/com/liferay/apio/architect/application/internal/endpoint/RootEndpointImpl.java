@@ -96,12 +96,8 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<CollectionRoutes<T>> collectionRoutesTry = _getCollectionRoutesTry(
 			name);
 
-		return collectionRoutesTry.map(
-			CollectionRoutes::getCreateItemFunctionOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class,
+		return collectionRoutesTry.mapOptional(
+			CollectionRoutes::getCreateItemFunctionOptional,
 			_getNotAllowedExceptionSupplier("POST", name)
 		).map(
 			function -> function.apply(_httpServletRequest)
@@ -134,12 +130,8 @@ public class RootEndpointImpl implements RootEndpoint {
 					optional -> optional.map(postFunction)
 				);
 			}
-		).map(
-			Optional::get
-		).map(
-			function -> function.apply(body)
-		).mapFailMatching(
-			NoSuchElementException.class,
+		).mapOptional(
+			optional -> optional.map(function -> function.apply(body)),
 			_getNotAllowedExceptionSupplier(
 				"POST", String.join("/", name, id, nestedName))
 		);
@@ -149,12 +141,8 @@ public class RootEndpointImpl implements RootEndpoint {
 	public Response deleteCollectionItem(String name, String id) {
 		Try<ItemRoutes<Object>> itemRoutesTry = _getItemRoutesTry(name);
 
-		itemRoutesTry.map(
-			ItemRoutes::getDeleteConsumerOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class,
+		itemRoutesTry.mapOptional(
+			ItemRoutes::getDeleteConsumerOptional,
 			_getNotAllowedExceptionSupplier("DELETE", name + "/" + id)
 		).getUnchecked(
 		).apply(
@@ -172,24 +160,15 @@ public class RootEndpointImpl implements RootEndpoint {
 	public Try<InputStream> getCollectionItemInputStreamTry(
 		String name, String id, String binaryId) {
 
-		Optional<Class<Object>> modelClassOptional =
-			_modelClassManager.getModelClassOptional(name);
+		Try<String> stringTry = Try.success(name);
 
-		Optional<BinaryFunction<Object>> binaryFunctionOptional =
-			modelClassOptional.flatMap(
-				_representableManager::getRepresentorOptional
-			).map(
-				Representor::getBinaryFunctions
-			).map(
-				binaryFunctions -> binaryFunctions.get(binaryId)
-			);
-
-		Try<BinaryFunction<Object>> binaryFunctionTry = Try.fromFallible(
-			binaryFunctionOptional::get);
-
-		return binaryFunctionTry.mapFailMatching(
-			NoSuchElementException.class,
+		return stringTry.mapOptional(
+			_representableManager::getRepresentorOptional,
 			_getNotFoundExceptionSupplier(String.join("/", name, id, binaryId))
+		).map(
+			Representor::getBinaryFunctions
+		).map(
+			binaryFunctions -> binaryFunctions.get(binaryId)
 		).flatMap(
 			binaryFunction -> _getInputStreamTry(name, id, binaryFunction)
 		);
@@ -201,12 +180,8 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		Try<ItemRoutes<T>> itemRoutesTry = _getItemRoutesTry(name);
 
-		return itemRoutesTry.map(
-			ItemRoutes::getItemFunctionOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class,
+		return itemRoutesTry.mapOptional(
+			ItemRoutes::getItemFunctionOptional,
 			_getNotFoundExceptionSupplier(name + "/" + id)
 		).map(
 			function -> function.apply(_httpServletRequest)
@@ -220,12 +195,9 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<CollectionRoutes<T>> collectionRoutesTry = _getCollectionRoutesTry(
 			name);
 
-		return collectionRoutesTry.map(
-			CollectionRoutes::getGetPageFunctionOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class, _getNotFoundExceptionSupplier(name)
+		return collectionRoutesTry.mapOptional(
+			CollectionRoutes::getGetPageFunctionOptional,
+			_getNotFoundExceptionSupplier(name)
 		).map(
 			function -> function.apply(_httpServletRequest)
 		);
@@ -236,13 +208,8 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<CollectionRoutes<Object>> collectionRoutesTry =
 			_getCollectionRoutesTry(name);
 
-		return collectionRoutesTry.map(
-			CollectionRoutes::getFormOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class, NotFoundException::new
-		);
+		return collectionRoutesTry.mapOptional(
+			CollectionRoutes::getFormOptional, NotFoundException::new);
 	}
 
 	@Override
@@ -312,26 +279,16 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<NestedCollectionRoutes<Object>> nestedCollectionRoutesTry =
 			_getNestedCollectionRoutesTry(name, nestedName);
 
-		return nestedCollectionRoutesTry.map(
-			NestedCollectionRoutes::getFormOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class, NotFoundException::new
-		);
+		return nestedCollectionRoutesTry.mapOptional(
+			NestedCollectionRoutes::getFormOptional, NotFoundException::new);
 	}
 
 	@Override
 	public Try<Form> getUpdaterFormTry(String name) {
 		Try<ItemRoutes<Object>> itemRoutesTry = _getItemRoutesTry(name);
 
-		return itemRoutesTry.map(
-			ItemRoutes::getFormOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class, NotFoundException::new
-		);
+		return itemRoutesTry.mapOptional(
+			ItemRoutes::getFormOptional, NotFoundException::new);
 	}
 
 	@Override
@@ -340,12 +297,8 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		Try<ItemRoutes<T>> itemRoutesTry = _getItemRoutesTry(name);
 
-		return itemRoutesTry.map(
-			ItemRoutes::getUpdateItemFunctionOptional
-		).map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class,
+		return itemRoutesTry.mapOptional(
+			ItemRoutes::getUpdateItemFunctionOptional,
 			_getNotAllowedExceptionSupplier("PUT", name + "/" + id)
 		).map(
 			function -> function.apply(_httpServletRequest)
@@ -357,15 +310,11 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	private <T> Try<CollectionRoutes<T>> _getCollectionRoutesTry(String name) {
-		Try<Optional<CollectionRoutes<T>>> optionalTry = Try.success(
-			_collectionRouterManager.getCollectionRoutesOptional(name));
+		Try<String> stringTry = Try.success(name);
 
-		return optionalTry.map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class,
-			() -> new NotFoundException("No resource found for path " + name)
-		);
+		return stringTry.mapOptional(
+			_collectionRouterManager::getCollectionRoutesOptional,
+			() -> new NotFoundException("No resource found for path " + name));
 	}
 
 	private Predicate<RelatedCollection<?>>
@@ -424,15 +373,11 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	private <T> Try<ItemRoutes<T>> _getItemRoutesTry(String name) {
-		Try<Optional<ItemRoutes<T>>> optionalTry = Try.success(
-			_itemRouterManager.getItemRoutesOptional(name));
+		Try<String> stringTry = Try.success(name);
 
-		return optionalTry.map(
-			Optional::get
-		).mapFailMatching(
-			NoSuchElementException.class,
-			() -> new NotFoundException("No resource found for path " + name)
-		);
+		return stringTry.mapOptional(
+			_itemRouterManager::getItemRoutesOptional,
+			() -> new NotFoundException("No resource found for path " + name));
 	}
 
 	private <T, S> ThrowableFunction<Function<Object, Page<S>>,
