@@ -20,6 +20,7 @@ import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
+import static com.liferay.apio.architect.writer.util.WriterUtil.getRepresentorOptional;
 
 import com.google.gson.JsonObject;
 
@@ -30,6 +31,7 @@ import com.liferay.apio.architect.message.json.PageMessageMapper;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageType;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
@@ -42,6 +44,7 @@ import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -83,9 +86,8 @@ public class PageWriter<T> {
 	/**
 	 * Writes the handled {@link Page} to a string. This method uses a {@link
 	 * FieldsWriter} to write the different fields of its items' {@link
-	 * com.liferay.apio.architect.representor.Representor}. If no {@code
-	 * Representor} or {@code Path} exist for the model, this method returns
-	 * {@code Optional#empty()}.
+	 * Representor}. If no {@code Representor} or {@code Path} exist for the
+	 * model, this method returns {@code Optional#empty()}.
 	 *
 	 * @return the representation of the {@code Page}, if the {@code
 	 *         Representor} and {@code Path} exist for the model; returns {@code
@@ -280,8 +282,7 @@ public class PageWriter<T> {
 
 			/**
 			 * Adds information to the builder about the function that gets a
-			 * class's {@link
-			 * com.liferay.apio.architect.representor.Representor}.
+			 * class's {@link Representor}.
 			 *
 			 * @param  representorFunction the function that gets a class's
 			 *         {@code Representor}
@@ -319,8 +320,7 @@ public class PageWriter<T> {
 
 			/**
 			 * Adds information to the builder about the function that gets the
-			 * name of a class's {@link
-			 * com.liferay.apio.architect.representor.Representor}.
+			 * name of a class's {@link Representor}.
 			 *
 			 * @param  resourceNameFunction the function that gets the name of a
 			 *         class's {@code Representor}
@@ -451,6 +451,10 @@ public class PageWriter<T> {
 					_jsonObjectBuilder, itemJsonObjectBuilder,
 					embeddedPathElements, url));
 
+		_writeNestedResources(
+			_representorFunction, singleModel, itemJsonObjectBuilder,
+			singleModel, null);
+
 		_pageMessageMapper.onFinishItem(
 			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel.getModel(),
 			singleModel.getModelClass(), _requestInfo.getHttpHeaders());
@@ -460,9 +464,19 @@ public class PageWriter<T> {
 		SingleModel<S> singleModel, FunctionalList<String> embeddedPathElements,
 		JSONObjectBuilder itemJsonObjectBuilder) {
 
+		_writeItemEmbeddedModelFields(
+			singleModel, embeddedPathElements, itemJsonObjectBuilder,
+			_representorFunction, singleModel);
+	}
+
+	private <S> void _writeItemEmbeddedModelFields(
+		SingleModel<S> singleModel, FunctionalList<String> embeddedPathElements,
+		JSONObjectBuilder itemJsonObjectBuilder,
+		RepresentorFunction representorFunction, SingleModel rootModel) {
+
 		Optional<FieldsWriter<S, ?>> optional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
-			_representorFunction);
+			representorFunction, _representorFunction, rootModel);
 
 		if (!optional.isPresent()) {
 			return;
@@ -549,6 +563,43 @@ public class PageWriter<T> {
 				_pageMessageMapper.mapItemLinkedResourceURL(
 					_jsonObjectBuilder, itemJsonObjectBuilder,
 					resourceEmbeddedPathElements, url));
+
+		_writeNestedResources(
+			representorFunction, singleModel, itemJsonObjectBuilder, rootModel,
+			embeddedPathElements);
+	}
+
+	private <U> void _writeNestedResources(
+		RepresentorFunction representorFunction, SingleModel<U> singleModel,
+		JSONObjectBuilder itemJsonObjectBuilder, SingleModel rootModel,
+		FunctionalList embeddedPathElements) {
+
+		Optional<Representor<U, ?>> representorOptional =
+			getRepresentorOptional(
+				singleModel.getModelClass(), representorFunction);
+
+		representorOptional.ifPresent(
+			_representor -> {
+				Map<String, Representor<?, ?>> nestedFields =
+					_representor.getNestedFields();
+
+				nestedFields.forEach(
+					(key, value) -> {
+						Function<U, ?> nestedFieldMapper =
+							_representor.getNestedFieldFunctions().get(key);
+
+						Object mappedModel = nestedFieldMapper.apply(
+							singleModel.getModel());
+
+						FunctionalList embeddedNestedPathElements =
+							new FunctionalList(embeddedPathElements, key);
+
+						_writeItemEmbeddedModelFields(
+							new SingleModel<>(mappedModel, Object.class),
+							embeddedNestedPathElements, itemJsonObjectBuilder,
+							clazz -> Optional.of(value), rootModel);
+					});
+			});
 	}
 
 	private void _writePageURLs() {
