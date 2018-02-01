@@ -14,14 +14,11 @@
 
 package com.liferay.apio.architect.routes;
 
-import com.liferay.apio.architect.alias.ProvideFunction;
-import com.liferay.apio.architect.error.ApioDeveloperError;
+import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Provides utility functions for routes builders.
@@ -39,7 +36,6 @@ public class RoutesBuilderUtil {
 	 * from the HTTP request to the {@code function}.
 	 *
 	 * @param  provideFunction the function used to provide the class instances
-	 * @param  httpServletRequest the HTTP request
 	 * @param  aClass the first class to provide
 	 * @param  bClass the second class to provide
 	 * @param  cClass the third class to provide
@@ -50,14 +46,13 @@ public class RoutesBuilderUtil {
 	 *         function}
 	 */
 	public static <A, B, C, D, E, R> R provide(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
-		Class<E> eClass,
+		Function<Class<?>, Optional<?>> provideFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass, Class<E> eClass,
 		Function<A, Function<B, Function<C, Function<D, Function<E, R>>>>>
 			function) {
 
 		return provide(
-			provideFunction, httpServletRequest, aClass, bClass, cClass, dClass,
+			provideFunction, aClass, bClass, cClass, dClass,
 			a -> b -> c -> d -> function.apply(
 				a
 			).apply(
@@ -67,7 +62,7 @@ public class RoutesBuilderUtil {
 			).apply(
 				d
 			).apply(
-				_provideClass(provideFunction, httpServletRequest, eClass)
+				_provideClass(provideFunction, eClass)
 			));
 	}
 
@@ -76,7 +71,6 @@ public class RoutesBuilderUtil {
 	 * from the HTTP request to the {@code function}.
 	 *
 	 * @param  provideFunction the function used to provide the class instances
-	 * @param  httpServletRequest the HTTP request
 	 * @param  aClass the first class to provide
 	 * @param  bClass the second class to provide
 	 * @param  cClass the third class to provide
@@ -86,12 +80,12 @@ public class RoutesBuilderUtil {
 	 *         function}
 	 */
 	public static <A, B, C, D, R> R provide(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+		Function<Class<?>, Optional<?>> provideFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Function<A, Function<B, Function<C, Function<D, R>>>> function) {
 
 		return provide(
-			provideFunction, httpServletRequest, aClass, bClass, cClass,
+			provideFunction, aClass, bClass, cClass,
 			a -> b -> c -> function.apply(
 				a
 			).apply(
@@ -99,7 +93,7 @@ public class RoutesBuilderUtil {
 			).apply(
 				c
 			).apply(
-				_provideClass(provideFunction, httpServletRequest, dClass)
+				_provideClass(provideFunction, dClass)
 			));
 	}
 
@@ -108,7 +102,6 @@ public class RoutesBuilderUtil {
 	 * from the HTTP request to the {@code function}.
 	 *
 	 * @param  provideFunction the function used to provide the class instances
-	 * @param  httpServletRequest the HTTP request
 	 * @param  aClass the first class to provide
 	 * @param  bClass the second class to provide
 	 * @param  cClass the third class to provide
@@ -117,18 +110,18 @@ public class RoutesBuilderUtil {
 	 *         function}
 	 */
 	public static <A, B, C, R> R provide(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass,
+		Function<Class<?>, Optional<?>> provideFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass,
 		Function<A, Function<B, Function<C, R>>> function) {
 
 		return provide(
-			provideFunction, httpServletRequest, aClass, bClass,
+			provideFunction, aClass, bClass,
 			a -> b -> function.apply(
 				a
 			).apply(
 				b
 			).apply(
-				_provideClass(provideFunction, httpServletRequest, cClass)
+				_provideClass(provideFunction, cClass)
 			));
 	}
 
@@ -137,7 +130,6 @@ public class RoutesBuilderUtil {
 	 * from the HTTP request to the {@code function}.
 	 *
 	 * @param  provideFunction the function used to provide the class instances
-	 * @param  httpServletRequest the HTTP request
 	 * @param  aClass the first class to provide
 	 * @param  bClass the second class to provide
 	 * @param  function the function that receives the class instances
@@ -145,16 +137,15 @@ public class RoutesBuilderUtil {
 	 *         function}
 	 */
 	public static <A, B, R> R provide(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<A> aClass, Class<B> bClass,
-		Function<A, Function<B, R>> function) {
+		Function<Class<?>, Optional<?>> provideFunction, Class<A> aClass,
+		Class<B> bClass, Function<A, Function<B, R>> function) {
 
 		return provide(
-			provideFunction, httpServletRequest, aClass,
+			provideFunction, aClass,
 			a -> function.apply(
 				a
 			).apply(
-				_provideClass(provideFunction, httpServletRequest, bClass)
+				_provideClass(provideFunction, bClass)
 			));
 	}
 
@@ -163,17 +154,15 @@ public class RoutesBuilderUtil {
 	 * the HTTP request to the {@code function}.
 	 *
 	 * @param  provideFunction the function used to provide the class instance
-	 * @param  httpServletRequest the HTTP request
 	 * @param  aClass the class to provide
 	 * @param  function the function that receives the class instance
 	 * @return the result of applying the class instance to the {@code function}
 	 */
 	public static <A, R> R provide(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<A> aClass, Function<A, R> function) {
+		Function<Class<?>, Optional<?>> provideFunction, Class<A> aClass,
+		Function<A, R> function) {
 
-		return function.apply(
-			_provideClass(provideFunction, httpServletRequest, aClass));
+		return function.apply(_provideClass(provideFunction, aClass));
 	}
 
 	/**
@@ -181,7 +170,6 @@ public class RoutesBuilderUtil {
 	 * to the {@code function}.
 	 *
 	 * @param provideFunction the function used to provide the class instances
-	 * @param httpServletRequest the HTTP request
 	 * @param aClass the first class to provide
 	 * @param bClass the second class to provide
 	 * @param cClass the third class to provide
@@ -189,12 +177,12 @@ public class RoutesBuilderUtil {
 	 * @param function the function that receives the class instances
 	 */
 	public static <A, B, C, D> void provideConsumer(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+		Function<Class<?>, Optional<?>> provideFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass, Class<D> dClass,
 		Function<A, Function<B, Function<C, Consumer<D>>>> function) {
 
 		provideConsumer(
-			provideFunction, httpServletRequest, aClass, bClass, cClass,
+			provideFunction, aClass, bClass, cClass,
 			a -> b -> c -> function.apply(
 				a
 			).apply(
@@ -202,7 +190,7 @@ public class RoutesBuilderUtil {
 			).apply(
 				c
 			).accept(
-				_provideClass(provideFunction, httpServletRequest, dClass)
+				_provideClass(provideFunction, dClass)
 			));
 	}
 
@@ -211,25 +199,24 @@ public class RoutesBuilderUtil {
 	 * request to the {@code function}.
 	 *
 	 * @param provideFunction the function used to provide the class instances
-	 * @param httpServletRequest the HTTP request
 	 * @param aClass the first class to provide
 	 * @param bClass the second class to provide
 	 * @param cClass the third class to provide
 	 * @param function the function that receives the class instances
 	 */
 	public static <A, B, C> void provideConsumer(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<A> aClass, Class<B> bClass, Class<C> cClass,
+		Function<Class<?>, Optional<?>> provideFunction, Class<A> aClass,
+		Class<B> bClass, Class<C> cClass,
 		Function<A, Function<B, Consumer<C>>> function) {
 
 		provideConsumer(
-			provideFunction, httpServletRequest, aClass, bClass,
+			provideFunction, aClass, bClass,
 			a -> b -> function.apply(
 				a
 			).apply(
 				b
 			).accept(
-				_provideClass(provideFunction, httpServletRequest, cClass)
+				_provideClass(provideFunction, cClass)
 			));
 	}
 
@@ -238,21 +225,20 @@ public class RoutesBuilderUtil {
 	 * to the {@code function}.
 	 *
 	 * @param provideFunction the function used to provide the class instances
-	 * @param httpServletRequest the HTTP request
 	 * @param aClass the first class to provide
 	 * @param bClass the second class to provide
 	 * @param function the function that receives the class instances
 	 */
 	public static <A, B> void provideConsumer(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<A> aClass, Class<B> bClass, Function<A, Consumer<B>> function) {
+		Function<Class<?>, Optional<?>> provideFunction, Class<A> aClass,
+		Class<B> bClass, Function<A, Consumer<B>> function) {
 
 		provideConsumer(
-			provideFunction, httpServletRequest, aClass,
+			provideFunction, aClass,
 			a -> function.apply(
 				a
 			).accept(
-				_provideClass(provideFunction, httpServletRequest, bClass)
+				_provideClass(provideFunction, bClass)
 			));
 	}
 
@@ -261,33 +247,26 @@ public class RoutesBuilderUtil {
 	 * consumer.
 	 *
 	 * @param provideFunction the function used to provide the class instance
-	 * @param httpServletRequest the HTTP request
 	 * @param aClass the class to provide
 	 * @param consumer the consumer
 	 */
 	public static <A> void provideConsumer(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<A> aClass, Consumer<A> consumer) {
+		Function<Class<?>, Optional<?>> provideFunction, Class<A> aClass,
+		Consumer<A> consumer) {
 
-		consumer.accept(
-			_provideClass(provideFunction, httpServletRequest, aClass));
+		consumer.accept(_provideClass(provideFunction, aClass));
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <V> V _provideClass(
-		ProvideFunction provideFunction, HttpServletRequest httpServletRequest,
-		Class<V> clazz) {
+	private static <T> T _provideClass(
+		Function<Class<?>, Optional<?>> provideFunction, Class<T> clazz) {
 
-		Optional<?> optional = provideFunction.apply(
-			httpServletRequest
-		).apply(
+		return provideFunction.apply(
 			clazz
-		);
-
-		return optional.map(
-			provided -> (V)provided
+		).map(
+			provided -> (T)provided
 		).orElseThrow(
-			() -> new ApioDeveloperError.MustHaveProvider(clazz)
+			() -> new MustHaveProvider(clazz)
 		);
 	}
 

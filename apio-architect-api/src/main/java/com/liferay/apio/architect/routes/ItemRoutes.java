@@ -174,7 +174,7 @@ public class ItemRoutes<T> {
 			BiFunction<S, A, T> biFunction, Class<A> aClass) {
 
 			_singleModelFunction = httpServletRequest -> path -> provide(
-				_provideFunction, httpServletRequest, aClass,
+				_provideFunction.apply(httpServletRequest), aClass,
 				a -> biFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -216,8 +216,8 @@ public class ItemRoutes<T> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
 			_singleModelFunction = httpServletRequest -> path -> provide(
-				_provideFunction, httpServletRequest, aClass, bClass, cClass,
-				dClass,
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass, dClass,
 				a -> b -> c -> d -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -241,7 +241,8 @@ public class ItemRoutes<T> {
 			Class<B> bClass, Class<C> cClass) {
 
 			_singleModelFunction = httpServletRequest -> path -> provide(
-				_provideFunction, httpServletRequest, aClass, bClass, cClass,
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass,
 				a -> b -> c -> tetraFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -264,7 +265,7 @@ public class ItemRoutes<T> {
 			Class<B> bClass) {
 
 			_singleModelFunction = httpServletRequest -> path -> provide(
-				_provideFunction, httpServletRequest, aClass, bClass,
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				a -> b -> triFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -286,7 +287,7 @@ public class ItemRoutes<T> {
 			BiConsumer<S, A> biConsumer, Class<A> aClass) {
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
-				_provideFunction, httpServletRequest, aClass,
+				_provideFunction.apply(httpServletRequest), aClass,
 				a -> biConsumer.accept(_identifierFunction.apply(path), a));
 
 			return this;
@@ -324,8 +325,8 @@ public class ItemRoutes<T> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
-				_provideFunction, httpServletRequest, aClass, bClass, cClass,
-				dClass,
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass, dClass,
 				a -> b -> c -> d -> pentaConsumer.accept(
 					_identifierFunction.apply(path), a, b, c, d));
 
@@ -349,7 +350,8 @@ public class ItemRoutes<T> {
 			Class<B> bClass, Class<C> cClass) {
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
-				_provideFunction, httpServletRequest, aClass, bClass, cClass,
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass,
 				a -> b -> c -> tetraConsumer.accept(
 					_identifierFunction.apply(path), a, b, c));
 
@@ -371,7 +373,7 @@ public class ItemRoutes<T> {
 			Class<B> bClass) {
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
-				_provideFunction, httpServletRequest, aClass, bClass,
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				a -> b -> triConsumer.accept(
 					_identifierFunction.apply(path), a, b));
 
@@ -426,8 +428,8 @@ public class ItemRoutes<T> {
 				new Form.Builder<>(Arrays.asList("u", _name)));
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
-				_provideFunction, httpServletRequest, aClass, bClass, cClass,
-				dClass,
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass, dClass,
 				a -> b -> c -> d -> hexaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -460,7 +462,8 @@ public class ItemRoutes<T> {
 				new Form.Builder<>(Arrays.asList("u", _name)));
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
-				_provideFunction, httpServletRequest, aClass, bClass, cClass,
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass,
 				a -> b -> c -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -489,7 +492,7 @@ public class ItemRoutes<T> {
 				new Form.Builder<>(Arrays.asList("u", _name)));
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
-				_provideFunction, httpServletRequest, aClass, bClass,
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				a -> b -> tetraFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
@@ -516,7 +519,7 @@ public class ItemRoutes<T> {
 				new Form.Builder<>(Arrays.asList("u", _name)));
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
-				_provideFunction, httpServletRequest, aClass,
+				_provideFunction.apply(httpServletRequest), aClass,
 				a -> triFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(

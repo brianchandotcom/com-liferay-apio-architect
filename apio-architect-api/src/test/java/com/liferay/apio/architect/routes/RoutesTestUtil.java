@@ -22,6 +22,7 @@ import com.liferay.apio.architect.pagination.Pagination;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Provides utilities for testing routes classes.
@@ -64,14 +65,14 @@ public class RoutesTestUtil {
 	public static final Pagination PAGINATION = new Pagination(4, 2);
 
 	/**
-	 * A {@code ProvideFunction} that is able to provide instances of {@code
-	 * String}, {@code Long}, {@code Integer}, {@code Boolean}, {@code Float}
-	 * and {@code Pagination}.
+	 * A function that is able to provide instances of {@code String}, {@code
+	 * Long}, {@code Integer}, {@code Boolean}, {@code Float} and {@code
+	 * Pagination}.
 	 *
 	 * @review
 	 */
-	public static final ProvideFunction PROVIDE_FUNCTION =
-		httpServletRequest -> aClass -> {
+	public static final Function<Class<?>, Optional<?>> PROVIDE_FUNCTION =
+		aClass -> {
 			if (aClass.equals(String.class)) {
 				return Optional.of("Apio");
 			}
@@ -94,5 +95,15 @@ public class RoutesTestUtil {
 				return Optional.empty();
 			}
 		};
+
+	/**
+	 * A {@code ProvideFunction} that is able to provide instances of {@code
+	 * String}, {@code Long}, {@code Integer}, {@code Boolean}, {@code Float}
+	 * and {@code Pagination}.
+	 *
+	 * @review
+	 */
+	public static final ProvideFunction REQUEST_PROVIDE_FUNCTION =
+		__ -> PROVIDE_FUNCTION;
 
 }
