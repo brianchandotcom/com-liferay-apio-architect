@@ -54,8 +54,10 @@ public class ItemRouterManagerImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> Optional<ItemRoutes<T>> getItemRoutesOptional(String name) {
-		Optional<Class<T>> optional =
+	public <T, S extends Identifier> Optional<ItemRoutes<T>>
+		getItemRoutesOptional(String name) {
+
+		Optional<Class<S>> optional =
 			_identifierClassManager.getIdentifierClassOptional(name);
 
 		return optional.map(

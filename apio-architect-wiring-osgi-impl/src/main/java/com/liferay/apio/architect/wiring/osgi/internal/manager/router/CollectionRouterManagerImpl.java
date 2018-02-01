@@ -55,10 +55,10 @@ public class CollectionRouterManagerImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
-		String name) {
+	public <T, S extends Identifier> Optional<CollectionRoutes<T>>
+		getCollectionRoutesOptional(String name) {
 
-		Optional<Class<Identifier>> optional =
+		Optional<Class<S>> optional =
 			_identifierClassManager.getIdentifierClassOptional(name);
 
 		return optional.map(

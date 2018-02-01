@@ -16,6 +16,8 @@ package com.liferay.apio.architect.wiring.osgi.manager.representable;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.apio.architect.identifier.Identifier;
+
 import java.util.Optional;
 
 /**
@@ -35,6 +37,7 @@ public interface IdentifierClassManager {
 	 * @param  name the resource name
 	 * @return the resource name's identifier class
 	 */
-	public <T> Optional<Class<T>> getIdentifierClassOptional(String name);
+	public <T extends Identifier> Optional<Class<T>> getIdentifierClassOptional(
+		String name);
 
 }

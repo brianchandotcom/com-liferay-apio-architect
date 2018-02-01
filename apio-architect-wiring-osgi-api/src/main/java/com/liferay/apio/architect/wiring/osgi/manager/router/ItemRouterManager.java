@@ -16,6 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.manager.router;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes;
 
@@ -38,7 +39,8 @@ public interface ItemRouterManager {
 	 * @param  name the item resource's name
 	 * @return the item routes
 	 */
-	public <T> Optional<ItemRoutes<T>> getItemRoutesOptional(String name);
+	public <T, S extends Identifier> Optional<ItemRoutes<T>>
+		getItemRoutesOptional(String name);
 
 	/**
 	 * Returns the operations for the item resource's name.

@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
@@ -41,7 +42,9 @@ public class IdentifierClassManagerImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> Optional<Class<T>> getIdentifierClassOptional(String name) {
+	public <T extends Identifier> Optional<Class<T>>
+		getIdentifierClassOptional(String name) {
+
 		Optional<Class> optional = getServiceOptional(name);
 
 		return optional.map(clazz -> (Class<T>)clazz);
