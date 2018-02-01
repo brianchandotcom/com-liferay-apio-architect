@@ -565,8 +565,8 @@ public class PageWriter<T> {
 					resourceEmbeddedPathElements, url));
 
 		_writeNestedResources(
-			representorFunction, singleModel, itemJsonObjectBuilder, rootSingleModel,
-			embeddedPathElements);
+			representorFunction, singleModel, itemJsonObjectBuilder,
+			rootSingleModel, embeddedPathElements);
 	}
 
 	private <U> void _writeNestedResources(
@@ -585,7 +585,6 @@ public class PageWriter<T> {
 
 				nestedFields.forEach(
 					(key, value) -> {
-
 						Map<String, Function<U, ?>> nestedFieldFunctions =
 							_representor.getNestedFieldFunctions();
 

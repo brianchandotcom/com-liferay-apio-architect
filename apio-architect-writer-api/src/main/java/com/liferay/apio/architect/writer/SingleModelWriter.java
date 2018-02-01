@@ -517,7 +517,6 @@ public class SingleModelWriter<T> {
 
 				nestedFields.forEach(
 					(key, value) -> {
-
 						Map<String, Function<S, ?>> nestedFieldFunctions =
 							_representor.getNestedFieldFunctions();
 

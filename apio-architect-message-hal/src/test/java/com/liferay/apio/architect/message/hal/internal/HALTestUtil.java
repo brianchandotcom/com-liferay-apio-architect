@@ -266,8 +266,8 @@ public class HALTestUtil {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Matcher<JsonElement> aNestedObjectMatcher = aJsonObjectWhere(
-			"nested3", aJsonObjectWhere(
-				"string1", is(aJsonString(equalTo("id 3")))));
+			"nested3",
+			aJsonObjectWhere("string1", is(aJsonString(equalTo("id 3")))));
 
 		Conditions firstEmbeddedLinkConditions = builder.where(
 			"linked3", isALinkTo("localhost/p/third-inner-model/fifth")

@@ -240,8 +240,8 @@ public class PlainJSONTestUtil {
 			"relatedCollection3",
 			is(isALinkTo("localhost/p/model/" + id + "/models"))
 		).where(
-			"nested3", aJsonObjectWhere(
-				"string1", is(aJsonString(equalTo("id 3"))))
+			"nested3",
+			aJsonObjectWhere("string1", is(aJsonString(equalTo("id 3"))))
 		).build();
 
 		return is(aJsonObjectWith(conditions));

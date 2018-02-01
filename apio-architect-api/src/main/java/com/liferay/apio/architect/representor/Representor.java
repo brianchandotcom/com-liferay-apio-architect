@@ -457,7 +457,8 @@ public class Representor<T, S> {
 				_representor._nestedFields.put(
 					key, nestedRepresentor.apply(new Builder()));
 
-				_representor._nestedFieldFunctions.put(key, Function.identity());
+				_representor._nestedFieldFunctions.put(
+					key, Function.identity());
 
 				return this;
 			}
