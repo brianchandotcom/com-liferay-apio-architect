@@ -14,12 +14,10 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.ITEM_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
@@ -31,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import org.osgi.framework.ServiceReference;
@@ -66,16 +64,21 @@ public class RepresentableManagerImpl
 		Representable representable,
 		ServiceReference<Representable> serviceReference, Class<?> clazz) {
 
-		Class<?> identifierClass = getGenericClassFromPropertyOrElse(
-			serviceReference, ITEM_IDENTIFIER_CLASS,
-			() -> getTypeParamOrFail(representable, Representable.class, 1));
-
-		Supplier<List<RelatedCollection<?, ?>>> relatedCollectionSupplier =
+		Supplier<List<RelatedCollection<?>>> relatedCollectionSupplier =
 			() -> _relatedCollections.get(clazz.getName());
 
-		Representor.Builder builder = new Representor.Builder(
-			identifierClass, _addRelatedCollectionTriConsumer(clazz),
-			relatedCollectionSupplier);
+		BiConsumer<Class<?>, RelatedCollection<?>> biConsumer =
+			(collectionIdentifierClass, relatedCollection) -> {
+				List<RelatedCollection<?>> relatedCollections =
+					_relatedCollections.computeIfAbsent(
+						collectionIdentifierClass.getName(),
+						className -> new ArrayList<>());
+
+				relatedCollections.add(relatedCollection);
+			};
+
+		Representor.Builder builder = new Representor.Builder<>(
+			(Class)clazz, biConsumer, relatedCollectionSupplier);
 
 		return representable.representor(builder);
 	}
@@ -85,34 +88,17 @@ public class RepresentableManagerImpl
 		ServiceReference<Representable> serviceReference,
 		Representor representor) {
 
-		Class<?> modelClass = getGenericClassFromPropertyOrElse(
+		Class<?> identifierClass = getGenericClassFromPropertyOrElse(
 			serviceReference, PRINCIPAL_TYPE_ARGUMENT,
-			() -> getTypeParamOrFail(representor, Representor.class, 0));
+			() -> getTypeParamOrFail(representor, Representor.class, 2));
 
 		_relatedCollections.forEach(
 			(className, relatedCollections) -> relatedCollections.removeIf(
-				relatedCollection -> {
-					Class<?> clazz = relatedCollection.getModelClass();
-
-					return clazz.equals(modelClass);
-				}));
+				relatedCollection -> identifierClass.equals(
+					relatedCollection.getIdentifierClass())));
 	}
 
-	private <T> TriConsumer<String, Class<?>, Function<?, ?>>
-		_addRelatedCollectionTriConsumer(Class<T> relatedModelClass) {
-
-		return (key, modelClass, identifierFunction) -> {
-			List<RelatedCollection<?, ?>> relatedCollections =
-				_relatedCollections.computeIfAbsent(
-					modelClass.getName(), className -> new ArrayList<>());
-
-			relatedCollections.add(
-				new RelatedCollection<>(
-					key, relatedModelClass, identifierFunction));
-		};
-	}
-
-	private final Map<String, List<RelatedCollection<?, ?>>>
-		_relatedCollections = new ConcurrentHashMap<>();
+	private final Map<String, List<RelatedCollection<?>>> _relatedCollections =
+		new ConcurrentHashMap<>();
 
 }
