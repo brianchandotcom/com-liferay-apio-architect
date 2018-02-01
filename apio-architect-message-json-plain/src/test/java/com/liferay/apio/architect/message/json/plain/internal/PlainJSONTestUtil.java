@@ -42,8 +42,8 @@ import org.hamcrest.Matcher;
 public class PlainJSONTestUtil {
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is the
-	 * JSON Object of a {@code RootElement} with the provided ID.
+	 * Returns a {@code Matcher} that checks if the field is the JSON Object of
+	 * a {@code RootElement} with the provided ID.
 	 *
 	 * @param  id the ID of the {@code RootElement}
 	 * @return the matcher
@@ -107,14 +107,18 @@ public class PlainJSONTestUtil {
 			"stringList1", isAJsonArrayContaining("a", "b", "c", "d", "e")
 		).where(
 			"stringList2", isAJsonArrayContaining("f", "g", "h", "i", "j")
+		).where(
+			"nestedField1", isAJsonObjectWithTheFirstNested()
+		).where(
+			"nestedField2", isAJsonObjectWithTheSecondNested(id)
 		).build();
 
 		return is(aJsonObjectWith(conditions));
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON
-	 * object of the first embedded model.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the first embedded model.
 	 *
 	 * @return the matcher
 	 */
@@ -154,8 +158,28 @@ public class PlainJSONTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON
-	 * object of the second embedded model.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the first nested model.
+	 *
+	 * @return the matcher
+	 */
+	public static Matcher<JsonElement> isAJsonObjectWithTheFirstNested() {
+		Builder builder = new Builder();
+
+		Conditions conditions = builder.where(
+			"number1", is(aJsonInt(equalTo(2017)))
+		).where(
+			"string1", is(aJsonString(equalTo("id 1")))
+		).where(
+			"string2", is(aJsonString(equalTo("string2")))
+		).build();
+
+		return is(aJsonObjectWith(conditions));
+	}
+
+	/**
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the second embedded model.
 	 *
 	 * @return the matcher
 	 */
@@ -193,8 +217,50 @@ public class PlainJSONTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a link
-	 * to the URL.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the second nested model.
+	 *
+	 * @return the matcher
+	 */
+	public static Matcher<JsonElement> isAJsonObjectWithTheSecondNested(
+		String id) {
+
+		Builder builder = new Builder();
+
+		Conditions conditions = builder.where(
+			"number1", is(aJsonInt(equalTo(42)))
+		).where(
+			"string1", is(aJsonString(equalTo("id 2")))
+		).where(
+			"linked3", is(isALinkTo("localhost/p/third-inner-model/fifth"))
+		).where(
+			"relatedCollection3",
+			is(isALinkTo("localhost/p/model/" + id + "/models"))
+		).where(
+			"nested3", is(isAJsonObjectWithTheThirdNested())
+		).build();
+
+		return is(aJsonObjectWith(conditions));
+	}
+
+	/**
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the third nested model.
+	 *
+	 * @return the matcher
+	 */
+	public static Matcher<JsonElement> isAJsonObjectWithTheThirdNested() {
+		Builder builder = new Builder();
+
+		Conditions conditions = builder.where(
+			"string1", is(aJsonString(equalTo("id 3")))
+		).build();
+
+		return is(aJsonObjectWith(conditions));
+	}
+
+	/**
+	 * Returns a {@code Matcher} that checks if the field is a link to the URL.
 	 *
 	 * @param  url the URL
 	 * @return the matcher

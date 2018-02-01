@@ -59,8 +59,8 @@ public class JSONLDTestUtil {
 		aJsonObjectWhere("@type", is(aJsonString(equalTo("@id")))));
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON
-	 * object of a {@code RootElement} that matches the provided ID.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of a
+	 * {@code RootElement} that matches the provided ID.
 	 *
 	 * @param  id the ID of the {@code RootElement}
 	 * @param  addVocab whether the {@code @vocab} check must be added
@@ -159,6 +159,10 @@ public class JSONLDTestUtil {
 			"stringList1", isAJsonArrayContaining("a", "b", "c", "d", "e")
 		).where(
 			"stringList2", isAJsonArrayContaining("f", "g", "h", "i", "j")
+		).where(
+			"nestedField1", isAJsonObjectWithTheFirstNested()
+		).where(
+			"nestedField2", isAJsonObjectWithTheSecondNested(id)
 		);
 
 		if (member) {
@@ -173,8 +177,8 @@ public class JSONLDTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field contains
-	 * the {@code RootModel} operations.
+	 * Returns a {@code Matcher} that checks if the field contains the {@code
+	 * RootModel} operations.
 	 *
 	 * @return the matcher
 	 */
@@ -210,8 +214,8 @@ public class JSONLDTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field contains
-	 * the provided types as a JSON Array.
+	 * Returns a {@code Matcher} that checks if the field contains the provided
+	 * types as a JSON Array.
 	 *
 	 * @param  types the types
 	 * @return the matcher
@@ -233,8 +237,8 @@ public class JSONLDTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON
-	 * object of the first embedded model.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the first embedded model.
 	 *
 	 * @param  member whether the {@code FirstEmbeddedModel} is added as a
 	 *         collection member
@@ -304,8 +308,31 @@ public class JSONLDTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON
-	 * object of the second embedded model.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the first nested model.
+	 *
+	 * @return the matcher
+	 * @review
+	 */
+	public static Matcher<JsonElement> isAJsonObjectWithTheFirstNested() {
+		Builder builder = new Builder();
+
+		Conditions conditions = builder.where(
+			"@type", containsTheTypes("Type 3")
+		).where(
+			"number1", is(aJsonInt(equalTo(2017)))
+		).where(
+			"string1", is(aJsonString(equalTo("id 1")))
+		).where(
+			"string2", is(aJsonString(equalTo("string2")))
+		).build();
+
+		return aJsonObjectWith(conditions);
+	}
+
+	/**
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the second embedded model.
 	 *
 	 * @return the matcher
 	 */
@@ -355,8 +382,64 @@ public class JSONLDTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a link
-	 * to the URL.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the second nested model.
+	 *
+	 * @return the matcher
+	 * @review
+	 */
+	public static Matcher<JsonElement> isAJsonObjectWithTheSecondNested(
+		String id) {
+
+		Builder builder = new Builder();
+
+		Conditions secondNestedContextConditions = builder.where(
+			"linked3", IS_A_TYPE_ID_JSON_OBJECT
+		).where(
+			"relatedCollection3", IS_A_TYPE_ID_JSON_OBJECT
+		).build();
+
+		Conditions secondNestedConditions = builder.where(
+			"@context", is(aJsonObjectWith(secondNestedContextConditions))
+		).where(
+			"@type", containsTheTypes("Type 4")
+		).where(
+			"linked3", isALinkTo("localhost/p/third-inner-model/fifth")
+		).where(
+			"nested3", isAJsonObjectWithTheThirdNested()
+		).where(
+			"number1", is(aJsonInt(equalTo(42)))
+		).where(
+			"relatedCollection3",
+			isALinkTo("localhost/p/model/" + id + "/models")
+		).where(
+			"string1", is(aJsonString(equalTo("id 2")))
+		).build();
+
+		return aJsonObjectWith(secondNestedConditions);
+	}
+
+	/**
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the third nested model.
+	 *
+	 * @return the matcher
+	 * @review
+	 */
+	public static Conditions isAJsonObjectWithTheThirdNested() {
+		Builder builder = new Builder();
+
+		Conditions conditions = builder.where(
+			"@type", containsTheTypes("Type 5")
+		).where(
+			"string1", is(aJsonString(equalTo("id 3")))
+		).build();
+
+		return conditions;
+	}
+
+	/**
+	 * Returns a {@code Matcher} that checks if the field is a link to the URL.
 	 *
 	 * @param  url the URL
 	 * @return the matcher

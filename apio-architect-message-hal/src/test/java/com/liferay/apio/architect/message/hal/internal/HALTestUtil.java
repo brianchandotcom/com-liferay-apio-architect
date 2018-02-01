@@ -42,8 +42,8 @@ import org.hamcrest.Matcher;
 public class HALTestUtil {
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON
-	 * object of a {@code RootElement} that matches the provided ID.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of a
+	 * {@code RootElement} that matches the provided ID.
 	 *
 	 * @param  id the ID of the {@code RootElement}
 	 * @return the matcher
@@ -52,7 +52,7 @@ public class HALTestUtil {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions conditions = builder.where(
-			"_embedded", isAJsonObjectWithTheFirstEmbedded()
+			"_embedded", isAJsonObjectWithTheFirstEmbedded(id)
 		).where(
 			"_links", isAJsonObjectWithTheLinks(id)
 		).where(
@@ -93,12 +93,15 @@ public class HALTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON
-	 * object of the first embedded model.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the first embedded model.
 	 *
+	 * @param  id
 	 * @return the matcher
 	 */
-	public static Matcher<JsonElement> isAJsonObjectWithTheFirstEmbedded() {
+	public static Matcher<JsonElement> isAJsonObjectWithTheFirstEmbedded(
+		String id) {
+
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions firstEmbeddedLinkConditions = builder.where(
@@ -137,15 +140,44 @@ public class HALTestUtil {
 			"stringList", isAJsonArrayContaining("a", "b")
 		).build();
 
-		return is(
-			aJsonObjectWhere(
-				"embedded1", is(aJsonObjectWith(firstEmbeddedConditions))));
+		Conditions conditions = builder.where(
+			"embedded1", is(aJsonObjectWith(firstEmbeddedConditions))
+		).where(
+			"nestedField1", isAJsonObjectWithTheFirstNested()
+		).where(
+			"nestedField2", isAJsonObjectWithTheSecondNested(id)
+		).build();
+
+		Matcher<JsonElement> embedded1 = is(aJsonObjectWith(conditions));
+
+		return embedded1;
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON
-	 * object containing the links of a {@code RootElement} that matches the
-	 * provided ID.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the first nested model.
+	 *
+	 * @return the matcher
+	 * @review
+	 */
+	public static Matcher<JsonElement> isAJsonObjectWithTheFirstNested() {
+		Conditions.Builder builder = new Conditions.Builder();
+
+		Conditions conditions = builder.where(
+			"number1", is(aJsonInt(equalTo(2017)))
+		).where(
+			"string1", is(aJsonString(equalTo("id 1")))
+		).where(
+			"string2", is(aJsonString(equalTo("string2")))
+		).build();
+
+		return aJsonObjectWith(conditions);
+	}
+
+	/**
+	 * Returns a {@code Matcher} that checks if the field is a JSON object
+	 * containing the links of a {@code RootElement} that matches the provided
+	 * ID.
 	 *
 	 * @param  id the ID of the {@code RootElement}
 	 * @return the matcher
@@ -181,8 +213,8 @@ public class HALTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a JSON
-	 * object of the second embedded model.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the second embedded model.
 	 *
 	 * @return the matcher
 	 */
@@ -224,8 +256,59 @@ public class HALTestUtil {
 	}
 
 	/**
-	 * Returns a {@code Matcher} that checks if the field is a link
-	 * to the URL.
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the second nested model.
+	 *
+	 * @return the matcher
+	 * @review
+	 */
+	public static Matcher<JsonElement> isAJsonObjectWithTheSecondNested(
+		String id) {
+
+		Conditions.Builder builder = new Conditions.Builder();
+
+		Conditions conditions2 = builder.where(
+			"nested3", isAJsonObjectWithTheThirdNested()).build();
+
+		Conditions firstEmbeddedLinkConditions = builder.where(
+			"linked3", isALinkTo("localhost/p/third-inner-model/fifth")
+		).where(
+			"relatedCollection3",
+			isALinkTo("localhost/p/model/" + id + "/models")
+		).build();
+
+		Conditions conditions = builder.where(
+			"number1", is(aJsonInt(equalTo(42)))
+		).where(
+			"string1", is(aJsonString(equalTo("id 2")))
+		).where(
+			"_links", aJsonObjectWith(firstEmbeddedLinkConditions)
+		).where(
+			"_embedded", aJsonObjectWith(conditions2)
+		).build();
+
+		return aJsonObjectWith(conditions);
+	}
+
+	/**
+	 * Returns a {@code Matcher} that checks if the field is a JSON object of
+	 * the third nested model.
+	 *
+	 * @return the matcher
+	 * @review
+	 */
+	public static Conditions isAJsonObjectWithTheThirdNested() {
+		Conditions.Builder builder = new Conditions.Builder();
+
+		Conditions conditions = builder.where(
+			"string1", is(aJsonString(equalTo("id 3")))
+		).build();
+
+		return conditions;
+	}
+
+	/**
+	 * Returns a {@code Matcher} that checks if the field is a link to the URL.
 	 *
 	 * @param  url the URL
 	 * @return the matcher
