@@ -57,8 +57,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", "nested", Long.class,
-			REQUEST_PROVIDE_FUNCTION);
+			String.class, "name", "nested", REQUEST_PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String, Long> nestedCollectionRoutes =
 			builder.build();
@@ -81,8 +80,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", "nested", Long.class,
-			REQUEST_PROVIDE_FUNCTION);
+			String.class, "name", "nested", REQUEST_PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -99,8 +97,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", "nested", Long.class,
-			REQUEST_PROVIDE_FUNCTION);
+			String.class, "name", "nested", REQUEST_PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -117,8 +114,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", "nested", Long.class,
-			REQUEST_PROVIDE_FUNCTION);
+			String.class, "name", "nested", REQUEST_PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -134,8 +130,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", "nested", Long.class,
-			REQUEST_PROVIDE_FUNCTION);
+			String.class, "name", "nested", REQUEST_PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -152,8 +147,7 @@ public class NestedCollectionRoutesTest {
 	@Test
 	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", "nested", Long.class,
-			REQUEST_PROVIDE_FUNCTION);
+			String.class, "name", "nested", REQUEST_PROVIDE_FUNCTION);
 
 		NestedCollectionRoutes<String, Long> nestedCollectionRoutes =
 			builder.addCreator(
