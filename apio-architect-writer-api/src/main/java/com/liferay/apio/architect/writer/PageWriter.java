@@ -472,11 +472,11 @@ public class PageWriter<T> {
 	private <S> void _writeItemEmbeddedModelFields(
 		SingleModel<S> singleModel, FunctionalList<String> embeddedPathElements,
 		JSONObjectBuilder itemJsonObjectBuilder,
-		RepresentorFunction representorFunction, SingleModel rootModel) {
+		RepresentorFunction representorFunction, SingleModel rootSingleModel) {
 
 		Optional<FieldsWriter<S, ?>> optional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
-			representorFunction, _representorFunction, rootModel);
+			representorFunction, _representorFunction, rootSingleModel);
 
 		if (!optional.isPresent()) {
 			return;
@@ -565,13 +565,13 @@ public class PageWriter<T> {
 					resourceEmbeddedPathElements, url));
 
 		_writeNestedResources(
-			representorFunction, singleModel, itemJsonObjectBuilder, rootModel,
+			representorFunction, singleModel, itemJsonObjectBuilder, rootSingleModel,
 			embeddedPathElements);
 	}
 
 	private <U> void _writeNestedResources(
 		RepresentorFunction representorFunction, SingleModel<U> singleModel,
-		JSONObjectBuilder itemJsonObjectBuilder, SingleModel rootModel,
+		JSONObjectBuilder itemJsonObjectBuilder, SingleModel rootSingleModel,
 		FunctionalList embeddedPathElements) {
 
 		Optional<Representor<U, ?>> representorOptional =
