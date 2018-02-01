@@ -14,11 +14,11 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
+import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHavePathIdentifierMapper;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
 import com.liferay.apio.architect.identifier.Identifier;
@@ -95,11 +95,6 @@ public class ItemRouterManagerImpl
 		ItemRouter<T, S, U> itemRouter, Class<T> modelClass,
 		Class<U> identifierClass) {
 
-		ProvideFunction provideFunction =
-			httpServletRequest -> providedClass ->
-				_providerManager.provideOptional(
-					providedClass, httpServletRequest);
-
 		Optional<String> nameOptional = _nameManager.getNameOptional(
 			identifierClass.getName());
 
@@ -107,7 +102,7 @@ public class ItemRouterManagerImpl
 			() -> new MustHaveValidGenericType(identifierClass));
 
 		Builder<T, S> builder = new Builder<>(
-			modelClass, name, provideFunction,
+			modelClass, name, curry(_providerManager::provideOptional),
 			path -> {
 				Optional<S> optional = _pathIdentifierMapperManager.map(
 					identifierClass, path);
