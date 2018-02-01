@@ -445,6 +445,25 @@ public class Representor<T, S> {
 
 			/**
 			 * @param  key the field's name
+			 * @param  nestedRepresentor the representation of the nested
+			 *         resource
+			 * @return the builder's step
+			 * @review
+			 */
+			public <W> FirstStep addNestedField(
+				String key,
+				Function<Builder<T, ?>, Representor<T, ?>> nestedRepresentor) {
+
+				_representor._nestedFields.put(
+					key, nestedRepresentor.apply(new Builder()));
+
+				_representor._nestedFieldFunctions.put(key, Function.identity());
+
+				return this;
+			}
+
+			/**
+			 * @param  key the field's name
 			 * @param  modelToNestedModelMapperFunction a function that receives
 			 *         an instance of T (the root model) and returns an instance
 			 *         of W, the nested resource model
