@@ -17,6 +17,7 @@ package com.liferay.apio.architect.writer;
 import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
+import static com.liferay.apio.architect.writer.util.WriterUtil.getRepresentorOptional;
 
 import com.google.gson.JsonObject;
 
@@ -25,6 +26,7 @@ import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.writer.alias.PathFunction;
@@ -33,6 +35,7 @@ import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
 import com.liferay.apio.architect.writer.alias.SingleModelOperationsFunction;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -74,9 +77,8 @@ public class SingleModelWriter<T> {
 	/**
 	 * Writes the handled {@link SingleModel} to a string. This method uses a
 	 * {@link FieldsWriter} to write the different fields of its {@link
-	 * com.liferay.apio.architect.representor.Representor}. If no {@code
-	 * Representor} or {@code Path} exists for the model, this method returns
-	 * {@code Optional#empty()}.
+	 * Representor}. If no {@code Representor} or {@code Path} exists for the
+	 * model, this method returns {@code Optional#empty()}.
 	 *
 	 * @return the string representation of the {@code SingleModel}, if the
 	 *         model's {@code Representor} and {@code Path} exist; returns
@@ -187,6 +189,8 @@ public class SingleModelWriter<T> {
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					_jsonObjectBuilder, embeddedPathElements, url));
 
+		_writeNestedResources(_representorFunction, _singleModel, null);
+
 		_singleModelMessageMapper.onFinish(
 			_jsonObjectBuilder, _singleModel.getModel(),
 			_singleModel.getModelClass(), _requestInfo.getHttpHeaders());
@@ -196,11 +200,17 @@ public class SingleModelWriter<T> {
 		return Optional.of(jsonObject.toString());
 	}
 
+	public void writeEmbeddedModelFields(
+		SingleModel singleModel, FunctionalList<String> embeddedPathElements) {
+
+		writeEmbeddedModelFields(
+			singleModel, embeddedPathElements, _representorFunction);
+	}
+
 	/**
 	 * Writes a related {@link SingleModel} with the {@code
 	 * SingleModelMessageMapper}. This method uses a {@link FieldsWriter} to
-	 * write the different fields of its {@link
-	 * com.liferay.apio.architect.representor.Representor}. If no {@code
+	 * write the different fields of its {@link Representor}. If no {@code
 	 * Representor} or {@code Path} exists for the model, this method doesn't
 	 * perform any action.
 	 *
@@ -210,12 +220,12 @@ public class SingleModelWriter<T> {
 	 * @review
 	 */
 	public <S> void writeEmbeddedModelFields(
-		SingleModel<S> singleModel,
-		FunctionalList<String> embeddedPathElements) {
+		SingleModel<S> singleModel, FunctionalList<String> embeddedPathElements,
+		RepresentorFunction representorFunction) {
 
 		Optional<FieldsWriter<S, ?>> optional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
-			_representorFunction);
+			representorFunction, _representorFunction, _singleModel);
 
 		if (!optional.isPresent()) {
 			return;
@@ -322,6 +332,9 @@ public class SingleModelWriter<T> {
 			(url, resourceEmbeddedPathElements) ->
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					_jsonObjectBuilder, resourceEmbeddedPathElements, url));
+
+		_writeNestedResources(
+			representorFunction, singleModel, embeddedPathElements);
 	}
 
 	/**
@@ -404,8 +417,7 @@ public class SingleModelWriter<T> {
 
 			/**
 			 * Adds information to the builder about the function that gets a
-			 * class's {@link
-			 * com.liferay.apio.architect.representor.Representor}.
+			 * class's {@link Representor}.
 			 *
 			 * @param  representorFunction the function that gets a class's
 			 *         {@code Representor}
@@ -487,6 +499,39 @@ public class SingleModelWriter<T> {
 		private SingleModelMessageMapper<T> _singleModelMessageMapper;
 		private SingleModelOperationsFunction _singleModelOperationsFunction;
 
+	}
+
+	private <S> void _writeNestedResources(
+		RepresentorFunction representorFunction, SingleModel<S> singleModel,
+		FunctionalList<String> embeddedPathElements)
+			{
+
+		Optional<Representor<S, ?>> representorOptional =
+			getRepresentorOptional(
+				singleModel.getModelClass(), representorFunction);
+
+		representorOptional.ifPresent(
+			_representor -> {
+				Map<String, Representor<?, ?>> nestedFields =
+					_representor.getNestedFields();
+
+				nestedFields.forEach(
+					(key, value) -> {
+						Function<S, ?> nestedFieldMapper =
+							_representor.getNestedFieldFunctions().get(key);
+
+						Object mappedModel = nestedFieldMapper.apply(
+							singleModel.getModel());
+
+						FunctionalList<String> embeddedNestedPathElements =
+							new FunctionalList<>(embeddedPathElements, key);
+
+						writeEmbeddedModelFields(
+							new SingleModel<>(mappedModel, Object.class),
+							embeddedNestedPathElements,
+							clazz -> Optional.of(value));
+					});
+			});
 	}
 
 	private final JSONObjectBuilder _jsonObjectBuilder;
