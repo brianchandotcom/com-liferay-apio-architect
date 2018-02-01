@@ -106,6 +106,7 @@ public class Representor<T, S> {
 	 * identifier from the model
 	 *
 	 * @return the model's identifier function
+	 * @review
 	 */
 	public Function<T, S> getIdentifierFunction() {
 		return _identifierFunction;
@@ -265,6 +266,7 @@ public class Representor<T, S> {
 		 *
 		 * @param  type the type name
 		 * @return the builder's step
+		 * @review
 		 */
 		public FirstStep nestedTypes(String type, String... types) {
 			_representor._types.add(type);

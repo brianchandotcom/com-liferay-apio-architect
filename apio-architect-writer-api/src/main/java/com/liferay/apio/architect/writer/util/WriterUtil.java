@@ -67,6 +67,7 @@ public class WriterUtil {
 	 *         Representor} of the parent model
 	 * @param  rootSingleModel the parent model
 	 * @return the {@code FieldsWriter} for the model
+	 * @review
 	 */
 	public static <T> Optional<FieldsWriter<T, ?>> getFieldsWriter(
 		SingleModel<T> singleModel, FunctionalList<String> embeddedPathElements,
@@ -124,6 +125,7 @@ public class WriterUtil {
 	 * @param  rootSingleModel the parent model
 	 * @return the model's {@code Path}, if the model's {@code Representor} and
 	 *         {@code Path} exist; returns {@code Optional#empty()} otherwise
+	 * @review
 	 */
 	public static <T> Optional<Path> getPathOptional(
 		SingleModel<T> singleModel, PathFunction pathFunction,
