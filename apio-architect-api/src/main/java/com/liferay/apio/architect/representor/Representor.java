@@ -93,15 +93,6 @@ public class Representor<T, S> {
 	}
 
 	/**
-	 * Returns the identifier class.
-	 *
-	 * @return the identifier class
-	 */
-	public Class<? extends Identifier<S>> getIdentifierClass() {
-		return _identifierClass;
-	}
-
-	/**
 	 * Returns the model's identifier function, the method that extracts the
 	 * identifier from the model
 	 *
@@ -318,7 +309,7 @@ public class Representor<T, S> {
 
 				RelatedCollection<?> relatedCollection =
 					new RelatedCollection<>(
-						relatedKey, _representor.getIdentifierClass());
+						relatedKey, _representor._identifierClass);
 
 				_relatedCollectionBiConsumer.accept(
 					identifierClass, relatedCollection);

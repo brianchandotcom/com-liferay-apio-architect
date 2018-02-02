@@ -157,8 +157,6 @@ public class RepresentorTest {
 
 	@Test
 	public void testIdentifier() {
-		assertThat(
-			_representor.getIdentifierClass(), is(IntegerIdentifier.class));
 		assertThat(_representor.getIdentifier(_dummy), is(23));
 	}
 
