@@ -16,10 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHavePathIdentifierMapper;
 import com.liferay.apio.architect.identifier.Identifier;
@@ -82,21 +79,16 @@ public class ItemRouterManagerImpl
 		ItemRouter itemRouter, ServiceReference<ItemRouter> serviceReference,
 		Class<?> clazz) {
 
-		Class<?> modelClass = getGenericClassFromPropertyOrElse(
-			serviceReference, MODEL_CLASS,
-			() -> getTypeParamOrFail(itemRouter, ItemRouter.class, 0));
-
 		String name = getNameOrFail(clazz, _nameManager);
 
-		return _getItemRoutes(unsafeCast(itemRouter), clazz, modelClass, name);
+		return _getItemRoutes(unsafeCast(itemRouter), clazz, name);
 	}
 
 	private <T, S, U extends Identifier<S>> ItemRoutes<T> _getItemRoutes(
-		ItemRouter<T, S, U> itemRouter, Class<?> clazz, Class<T> modelClass,
-		String name) {
+		ItemRouter<T, S, U> itemRouter, Class<?> clazz, String name) {
 
 		Builder<T, S> builder = new Builder<>(
-			modelClass, name, curry(_providerManager::provideOptional),
+			name, curry(_providerManager::provideOptional),
 			path -> {
 				Optional<S> optional =
 					_pathIdentifierMapperManager.mapToIdentifier(

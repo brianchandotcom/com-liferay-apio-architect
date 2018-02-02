@@ -122,10 +122,7 @@ public class CollectionRoutes<T> {
 	@SuppressWarnings("unused")
 	public static class Builder<T> {
 
-		public Builder(
-			Class<T> modelClass, String name, ProvideFunction provideFunction) {
-
-			_modelClass = modelClass;
+		public Builder(String name, ProvideFunction provideFunction) {
 			_name = name;
 			_provideFunction = provideFunction;
 		}
@@ -411,7 +408,6 @@ public class CollectionRoutes<T> {
 		private CreateItemFunction<T> _createItemFunction;
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
-		private final Class<T> _modelClass;
 		private final String _name;
 		private final ProvideFunction _provideFunction;
 

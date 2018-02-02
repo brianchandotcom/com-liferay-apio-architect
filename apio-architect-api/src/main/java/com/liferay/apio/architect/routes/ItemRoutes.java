@@ -155,10 +155,9 @@ public class ItemRoutes<T> {
 	public static class Builder<T, S> {
 
 		public Builder(
-			Class<T> modelClass, String name, ProvideFunction provideFunction,
+			String name, ProvideFunction provideFunction,
 			IdentifierFunction<S> identifierFunction) {
 
-			_modelClass = modelClass;
 			_name = name;
 			_provideFunction = provideFunction;
 			_identifierFunction = identifierFunction;
@@ -541,7 +540,6 @@ public class ItemRoutes<T> {
 		private DeleteItemConsumer _deleteItemConsumer;
 		private Form _form;
 		private final IdentifierFunction<S> _identifierFunction;
-		private final Class<T> _modelClass;
 		private final String _name;
 		private final ProvideFunction _provideFunction;
 		private GetItemFunction<T> _singleModelFunction;

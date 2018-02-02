@@ -16,10 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
@@ -104,23 +101,16 @@ public class CollectionRouterManagerImpl
 		CollectionRouter collectionRouter,
 		ServiceReference<CollectionRouter> serviceReference, Class<?> clazz) {
 
-		Class<?> modelClass = getGenericClassFromPropertyOrElse(
-			serviceReference, MODEL_CLASS,
-			() -> getTypeParamOrFail(
-				collectionRouter, CollectionRouter.class, 0));
-
 		String name = getNameOrFail(clazz, _nameManager);
 
-		return _getCollectionRoutes(
-			unsafeCast(collectionRouter), modelClass, name);
+		return _getCollectionRoutes(unsafeCast(collectionRouter), name);
 	}
 
 	private <T, S extends Identifier> CollectionRoutes<T> _getCollectionRoutes(
-		CollectionRouter<T, S> collectionRouter, Class<T> modelClass,
-		String name) {
+		CollectionRouter<T, S> collectionRouter, String name) {
 
 		Builder<T> builder = new Builder<>(
-			modelClass, name, curry(_providerManager::provideOptional));
+			name, curry(_providerManager::provideOptional));
 
 		return collectionRouter.collectionRoutes(builder);
 	}

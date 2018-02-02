@@ -53,8 +53,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", REQUEST_PROVIDE_FUNCTION,
-			IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
 		ItemRoutes<String> itemRoutes = builder.build();
 
@@ -81,8 +80,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", REQUEST_PROVIDE_FUNCTION,
-			IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
 		ItemRoutes<String> itemRoutes = builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
@@ -101,8 +99,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", REQUEST_PROVIDE_FUNCTION,
-			IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
 		ItemRoutes<String> itemRoutes = builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
@@ -121,8 +118,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", REQUEST_PROVIDE_FUNCTION,
-			IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
 		ItemRoutes<String> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
@@ -138,8 +134,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", REQUEST_PROVIDE_FUNCTION,
-			IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
 		ItemRoutes<String> itemRoutes = builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
@@ -157,8 +152,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			String.class, "name", REQUEST_PROVIDE_FUNCTION,
-			IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
 		ItemRoutes<String> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class

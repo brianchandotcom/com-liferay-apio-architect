@@ -17,7 +17,6 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
@@ -85,24 +84,19 @@ public class ReusableNestedCollectionRouterManagerImpl
 		ServiceReference<ReusableNestedCollectionRouter> serviceReference,
 		Class<?> clazz) {
 
-		Class<?> modelClass = getTypeParamOrFail(
-			reusableNestedCollectionRouter,
-			ReusableNestedCollectionRouter.class, 0);
-
 		String name = getNameOrFail(clazz, _nameManager);
 
 		return _getNestedCollectionRoutes(
-			unsafeCast(reusableNestedCollectionRouter), modelClass, name);
+			unsafeCast(reusableNestedCollectionRouter), name);
 	}
 
 	private <T, S, U extends Identifier<S>> NestedCollectionRoutes<T, S>
 		_getNestedCollectionRoutes(
 			ReusableNestedCollectionRouter<T, S, U>
-				reusableNestedCollectionRouter,
-			Class<T> modelClass, String name) {
+				reusableNestedCollectionRouter, String name) {
 
 		Builder<T, S> builder = new Builder<>(
-			modelClass, "r", name, curry(_providerManager::provideOptional));
+			"r", name, curry(_providerManager::provideOptional));
 
 		return reusableNestedCollectionRouter.collectionRoutes(builder);
 	}

@@ -138,10 +138,8 @@ public class NestedCollectionRoutes<T, S> {
 	public static class Builder<T, S> {
 
 		public Builder(
-			Class<T> modelClass, String name, String nestedName,
-			ProvideFunction provideFunction) {
+			String name, String nestedName, ProvideFunction provideFunction) {
 
-			_modelClass = modelClass;
 			_name = name;
 			_nestedName = nestedName;
 			_provideFunction = provideFunction;
@@ -442,7 +440,6 @@ public class NestedCollectionRoutes<T, S> {
 		}
 
 		private Form _form;
-		private final Class<T> _modelClass;
 		private final String _name;
 		private NestedCreateItemFunction<T, S> _nestedCreateItemFunction;
 		private NestedGetPageFunction<T, S> _nestedGetPageFunction;

@@ -16,7 +16,6 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
@@ -128,11 +127,6 @@ public class NestedCollectionRouterManagerImpl
 		ServiceReference<NestedCollectionRouter> serviceReference,
 		Class<?> clazz) {
 
-		Class<?> modelClass = getGenericClassFromPropertyOrElse(
-			serviceReference, MODEL_CLASS,
-			() -> getTypeParamOrFail(
-				nestedCollectionRouter, NestedCollectionRouter.class, 0));
-
 		Class<?> parentIdentifierClass = getGenericClassFromPropertyOrElse(
 			serviceReference, PARENT_IDENTIFIER_CLASS,
 			() -> getTypeParamOrFail(
@@ -143,17 +137,16 @@ public class NestedCollectionRouterManagerImpl
 		String nestedName = getNameOrFail(clazz, _nameManager);
 
 		return _getNestedCollectionRoutes(
-			unsafeCast(nestedCollectionRouter), modelClass, name, nestedName);
+			unsafeCast(nestedCollectionRouter), name, nestedName);
 	}
 
 	private <T, S, U extends Identifier<S>> NestedCollectionRoutes<T, S>
 		_getNestedCollectionRoutes(
 			NestedCollectionRouter<T, ?, S, U> nestedCollectionRouter,
-			Class<T> modelClass, String name, String nestedName) {
+			String name, String nestedName) {
 
 		Builder<T, S> builder = new Builder<>(
-			modelClass, name, nestedName,
-			curry(_providerManager::provideOptional));
+			name, nestedName, curry(_providerManager::provideOptional));
 
 		return nestedCollectionRouter.collectionRoutes(builder);
 	}
