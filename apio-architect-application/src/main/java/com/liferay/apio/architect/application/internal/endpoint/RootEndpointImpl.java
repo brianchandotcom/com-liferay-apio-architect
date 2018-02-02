@@ -26,6 +26,7 @@ import com.liferay.apio.architect.error.ApioDeveloperError;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representor;
@@ -110,7 +111,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	public <T> Try<SingleModel<T>> addNestedCollectionItem(
 		String name, String id, String nestedName, Map<String, Object> body) {
 
-		Try<NestedCollectionRoutes<T>> nestedCollectionRoutesTry =
+		Try<NestedCollectionRoutes<T, Object>> nestedCollectionRoutesTry =
 			_getNestedCollectionRoutesTry(name, nestedName);
 
 		return nestedCollectionRoutesTry.map(
@@ -125,7 +126,7 @@ public class RootEndpointImpl implements RootEndpoint {
 					getCollectionItemSingleModelTry(name, id);
 
 				return parentSingleModelTry.map(
-					_getIdentifierFunction(nestedName)
+					_getIdentifierFunction(name, nestedName)
 				).map(
 					optional -> optional.map(postFunction)
 				);
@@ -252,7 +253,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	public <T> Try<Page<T>> getNestedCollectionPageTry(
 		String name, String id, String nestedName) {
 
-		Try<NestedCollectionRoutes<T>> nestedCollectionRoutesTry =
+		Try<NestedCollectionRoutes<T, Object>> nestedCollectionRoutesTry =
 			_getNestedCollectionRoutesTry(name, nestedName);
 
 		return nestedCollectionRoutesTry.map(
@@ -276,7 +277,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public Try<Form> getNestedCreatorFormTry(String name, String nestedName) {
-		Try<NestedCollectionRoutes<Object>> nestedCollectionRoutesTry =
+		Try<NestedCollectionRoutes<Object, Object>> nestedCollectionRoutesTry =
 			_getNestedCollectionRoutesTry(name, nestedName);
 
 		return nestedCollectionRoutesTry.mapOptional(
@@ -339,7 +340,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	private <T> ThrowableFunction<SingleModel<T>, Optional<Object>>
-		_getIdentifierFunction(String nestedName) {
+		_getIdentifierFunction(String name, String nestedName) {
 
 		return parentSingleModel -> {
 			Optional<Representor<T, Object>> optional =
@@ -380,8 +381,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			() -> new NotFoundException("No resource found for path " + name));
 	}
 
-	private <T, S> ThrowableFunction<Function<Object, Page<S>>,
-		Try<Optional<Page<S>>>> _getNestedCollectionPageTryFunction(
+	private <T> ThrowableFunction<Function<Object, Page<T>>,
+		Try<Optional<Page<T>>>> _getNestedCollectionPageTryFunction(
 			String name, String id, String nestedName) {
 
 		return pageFunction -> {
@@ -389,27 +390,27 @@ public class RootEndpointImpl implements RootEndpoint {
 				getCollectionItemSingleModelTry(name, id);
 
 			return parentSingleModelTry.map(
-				_getIdentifierFunction(nestedName)
+				_getIdentifierFunction(name, nestedName)
 			).map(
 				optional -> optional.map(pageFunction)
 			);
 		};
 	}
 
-	private <T> Try<NestedCollectionRoutes<T>> _getNestedCollectionRoutesTry(
-		String name, String nestedName) {
+	private <T> Try<NestedCollectionRoutes<T, Object>>
+		_getNestedCollectionRoutesTry(String name, String nestedName) {
 
-		Try<Optional<NestedCollectionRoutes<T>>> optionalTry = Try.success(
-			_nestedCollectionRouterManager.getNestedCollectionRoutesOptional(
-				name, nestedName));
+		Try<NestedCollectionRouterManager> managerTry = Try.success(
+			_nestedCollectionRouterManager);
 
-		return optionalTry.map(
-			Optional::get
+		return managerTry.mapOptional(
+			manager -> manager.getNestedCollectionRoutesOptional(
+				name, nestedName),
+			() -> new NotFoundException("No resource found for path " + name)
 		).recoverWith(
 			__ -> _getReusableNestedCollectionRoutesTry(nestedName)
-		).mapFailMatching(
-			NoSuchElementException.class,
-			() -> new NotFoundException("No resource found for path " + name)
+		).map(
+			Unsafe::unsafeCast
 		);
 	}
 
@@ -426,8 +427,8 @@ public class RootEndpointImpl implements RootEndpoint {
 		return () -> new NotFoundException("No endpoint found at path " + name);
 	}
 
-	private <T> Try<NestedCollectionRoutes<T>>
-		_getReusableNestedCollectionRoutesTry(String name) {
+	private <T, S> Try<NestedCollectionRoutes<T, S>>
+		_getReusableNestedCollectionRoutesTry(String nestedName) {
 
 		Try<String> stringTry = Try.success(nestedName);
 
