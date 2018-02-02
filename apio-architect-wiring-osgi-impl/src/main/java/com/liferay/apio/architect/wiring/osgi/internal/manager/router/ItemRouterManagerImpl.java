@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
@@ -26,6 +27,7 @@ import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.ItemRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
@@ -53,7 +55,6 @@ public class ItemRouterManagerImpl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> Optional<ItemRoutes<T>> getItemRoutesOptional(String name) {
 		Optional<Class<Identifier>> optional =
 			_identifierClassManager.getIdentifierClassOptional(name);
@@ -61,7 +62,7 @@ public class ItemRouterManagerImpl
 		return optional.flatMap(
 			this::getServiceOptional
 		).map(
-			routes -> (ItemRoutes<T>)routes
+			Unsafe::unsafeCast
 		);
 	}
 
@@ -87,12 +88,19 @@ public class ItemRouterManagerImpl
 
 		String name = getNameOrFail(clazz, _nameManager);
 
-		Builder builder = new Builder<>(
+		return _getItemRoutes(unsafeCast(itemRouter), clazz, modelClass, name);
+	}
+
+	private <T, S, U extends Identifier<S>> ItemRoutes<T> _getItemRoutes(
+		ItemRouter<T, S, U> itemRouter, Class<?> clazz, Class<T> modelClass,
+		String name) {
+
+		Builder<T, S> builder = new Builder<>(
 			modelClass, name, curry(_providerManager::provideOptional),
 			path -> {
-				Optional<?> optional =
+				Optional<S> optional =
 					_pathIdentifierMapperManager.mapToIdentifier(
-						(Class)clazz, path);
+						unsafeCast(clazz), path);
 
 				return optional.orElseThrow(
 					() -> new MustHavePathIdentifierMapper(clazz));

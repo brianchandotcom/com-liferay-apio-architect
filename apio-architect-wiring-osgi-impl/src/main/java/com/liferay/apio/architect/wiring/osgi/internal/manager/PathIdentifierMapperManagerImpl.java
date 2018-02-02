@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
 
 import com.liferay.apio.architect.functional.Try;
@@ -56,22 +57,18 @@ public class PathIdentifierMapperManagerImpl
 				clazz, identifier));
 	}
 
-	@SuppressWarnings("unchecked")
 	private <T> Optional<PathIdentifierMapper<T>>
 		_getPathIdentifierMapperOptional(Class<? extends Identifier<T>> clazz) {
 
 		Try<Class<Object>> classTry = getGenericTypeArgumentTry(
 			clazz, Identifier.class, 0);
 
-		return classTry.map(
-			this::getServiceOptional
-		).map(
-			optional -> optional.map(
-				pathIdentifierMapper ->
-					(PathIdentifierMapper<T>)pathIdentifierMapper)
-		).orElseGet(
-			Optional::empty
-		);
+		return unsafeCast(
+			classTry.map(
+				this::getServiceOptional
+			).orElseGet(
+				Optional::empty
+			));
 	}
 
 }

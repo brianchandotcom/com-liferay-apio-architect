@@ -12,7 +12,12 @@
  * details.
  */
 
-package com.liferay.apio.architect.test.util.representor;
+package com.liferay.apio.architect.unsafe;
+
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -22,12 +27,11 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class MockRepresentorCreatorTest {
+public class UnsafeTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testConstructorThrowsException() throws Throwable {
-		Constructor<?> constructor =
-			MockRepresentorCreator.class.getDeclaredConstructors()[0];
+		Constructor<?> constructor = Unsafe.class.getDeclaredConstructors()[0];
 
 		constructor.setAccessible(true);
 
@@ -37,6 +41,24 @@ public class MockRepresentorCreatorTest {
 		catch (InvocationTargetException ite) {
 			throw ite.getTargetException();
 		}
+	}
+
+	@Test(expected = ClassCastException.class)
+	public void testUnsafeWithInvalidCastThrowsException() {
+		Integer integer = 42;
+
+		String string = unsafeCast(integer);
+
+		throw new AssertionError("Shouldn't be able to cast: " + string);
+	}
+
+	@Test
+	public void testUnsafeWithValidCastReturnsValidValue() {
+		Integer integer = 42;
+
+		Number number = unsafeCast(integer);
+
+		assertThat(number, is(42));
 	}
 
 }

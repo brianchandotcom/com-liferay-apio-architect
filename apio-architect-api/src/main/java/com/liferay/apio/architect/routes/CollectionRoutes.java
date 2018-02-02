@@ -16,6 +16,7 @@ package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -138,7 +139,6 @@ public class CollectionRoutes<T> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <A, R> Builder<T> addCreator(
 			BiFunction<R, A, T> biFunction, Class<A> aClass,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -151,7 +151,7 @@ public class CollectionRoutes<T> {
 				a -> biFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					(R)_form.get(body), a
+					unsafeCast(_form.get(body)), a
 				));
 
 			return this;
@@ -165,7 +165,6 @@ public class CollectionRoutes<T> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <R> Builder<T> addCreator(
 			Function<R, T> function,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -177,7 +176,7 @@ public class CollectionRoutes<T> {
 				function.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					(R)_form.get(body)
+					unsafeCast(_form.get(body))
 				);
 
 			return this;
@@ -196,7 +195,6 @@ public class CollectionRoutes<T> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <A, B, C, D, R> Builder<T> addCreator(
 			PentaFunction<R, A, B, C, D, T> pentaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
@@ -211,7 +209,7 @@ public class CollectionRoutes<T> {
 				a -> b -> c -> d -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					(R)_form.get(body), a, b, c, d
+					unsafeCast(_form.get(body)), a, b, c, d
 				));
 
 			return this;
@@ -229,7 +227,6 @@ public class CollectionRoutes<T> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <A, B, C, R> Builder<T> addCreator(
 			TetraFunction<R, A, B, C, T> pentaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass,
@@ -244,7 +241,7 @@ public class CollectionRoutes<T> {
 				a -> b -> c -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					(R)_form.get(body), a, b, c
+					unsafeCast(_form.get(body)), a, b, c
 				));
 
 			return this;
@@ -261,7 +258,6 @@ public class CollectionRoutes<T> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <A, B, R> Builder<T> addCreator(
 			TriFunction<R, A, B, T> triFunction, Class<A> aClass,
 			Class<B> bClass, FormBuilderFunction<R> formBuilderFunction) {
@@ -274,7 +270,7 @@ public class CollectionRoutes<T> {
 				a -> b -> triFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					(R)_form.get(body), a, b
+					unsafeCast(_form.get(body)), a, b
 				));
 
 			return this;

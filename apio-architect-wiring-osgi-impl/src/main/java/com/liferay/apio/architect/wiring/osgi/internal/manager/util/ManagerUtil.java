@@ -16,6 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.util;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.service.tracker.customizer.ServiceRegistrationServiceTrackerCustomizer;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
@@ -95,21 +96,21 @@ public class ManagerUtil {
 	 *         result of the provided {@code Supplier} otherwise.
 	 * @review
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> Class<T> getGenericClassFromPropertyOrElse(
 		ServiceReference serviceReference, String typeArgumentProperty,
 		Supplier<Class<T>> supplier) {
 
-		Try<Object> propertyTry = Try.success(
-			serviceReference.getProperty(typeArgumentProperty));
+		Try<String> propertyTry = Try.success(typeArgumentProperty);
 
-		return propertyTry.filter(
+		Try<Class<T>> classTry = propertyTry.map(
+			serviceReference::getProperty
+		).filter(
 			Objects::nonNull
 		).map(
-			property -> (Class<T>)property
-		).orElseGet(
-			supplier
+			Unsafe::unsafeCast
 		);
+
+		return classTry.orElseGet(supplier);
 	}
 
 	/**

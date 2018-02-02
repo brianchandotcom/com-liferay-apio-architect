@@ -204,13 +204,11 @@ public class JSONLDTestUtil {
 			"method", is(aJsonString(equalTo("UPDATE")))
 		).build();
 
-		Matcher<? super JsonElement> operation1 = is(
-			aJsonObjectWith(firstOperationConditions));
+		List<Matcher<? super JsonElement>> theOperations = Arrays.asList(
+			is(aJsonObjectWith(firstOperationConditions)),
+			is(aJsonObjectWith(secondOperationConditions)));
 
-		Matcher<? super JsonElement> operation2 = is(
-			aJsonObjectWith(secondOperationConditions));
-
-		return is(aJsonArrayThat(contains(operation1, operation2)));
+		return is(aJsonArrayThat(contains(theOperations)));
 	}
 
 	/**

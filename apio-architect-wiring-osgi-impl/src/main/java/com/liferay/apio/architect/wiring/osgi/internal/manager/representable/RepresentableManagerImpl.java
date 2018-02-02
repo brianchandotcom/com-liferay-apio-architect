@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
@@ -22,6 +23,8 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.representor.Representor.Builder;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
@@ -51,7 +54,6 @@ public class RepresentableManagerImpl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T, U> Optional<Representor<T, U>> getRepresentorOptional(
 		String name) {
 
@@ -61,33 +63,16 @@ public class RepresentableManagerImpl
 		return optional.flatMap(
 			this::getServiceOptional
 		).map(
-			representor -> (Representor<T, U>)representor
+			Unsafe::unsafeCast
 		);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	protected Representor map(
 		Representable representable,
 		ServiceReference<Representable> serviceReference, Class<?> clazz) {
 
-		Supplier<List<RelatedCollection<?>>> relatedCollectionSupplier =
-			() -> _relatedCollections.get(clazz.getName());
-
-		BiConsumer<Class<?>, RelatedCollection<?>> biConsumer =
-			(collectionIdentifierClass, relatedCollection) -> {
-				List<RelatedCollection<?>> relatedCollections =
-					_relatedCollections.computeIfAbsent(
-						collectionIdentifierClass.getName(),
-						className -> new ArrayList<>());
-
-				relatedCollections.add(relatedCollection);
-			};
-
-		Representor.Builder builder = new Representor.Builder<>(
-			(Class)clazz, biConsumer, relatedCollectionSupplier);
-
-		return representable.representor(builder);
+		return _getRepresentor(unsafeCast(representable), unsafeCast(clazz));
 	}
 
 	@Override
@@ -103,6 +88,28 @@ public class RepresentableManagerImpl
 			(className, relatedCollections) -> relatedCollections.removeIf(
 				relatedCollection -> identifierClass.equals(
 					relatedCollection.getIdentifierClass())));
+	}
+
+	private <T, S, U extends Identifier<S>> Representor<T, S> _getRepresentor(
+		Representable<T, S, U> representable, Class<U> clazz) {
+
+		Supplier<List<RelatedCollection<?>>> relatedCollectionSupplier =
+			() -> _relatedCollections.get(clazz.getName());
+
+		BiConsumer<Class<?>, RelatedCollection<?>> biConsumer =
+			(collectionIdentifierClass, relatedCollection) -> {
+				List<RelatedCollection<?>> relatedCollections =
+					_relatedCollections.computeIfAbsent(
+						collectionIdentifierClass.getName(),
+						className -> new ArrayList<>());
+
+				relatedCollections.add(relatedCollection);
+			};
+
+		Builder<T, S> builder = new Builder<>(
+			clazz, biConsumer, relatedCollectionSupplier);
+
+		return representable.representor(builder);
 	}
 
 	@Reference

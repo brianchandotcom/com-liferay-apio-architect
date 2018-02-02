@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
@@ -23,6 +24,7 @@ import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
@@ -50,7 +52,6 @@ public class ReusableNestedCollectionRouterManagerImpl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T, S> Optional<NestedCollectionRoutes<T, S>>
 		getNestedCollectionRoutesOptional(String name) {
 
@@ -62,7 +63,7 @@ public class ReusableNestedCollectionRouterManagerImpl
 		).flatMap(
 			this::getServiceOptional
 		).map(
-			routes -> (NestedCollectionRoutes<T, S>)routes
+			Unsafe::unsafeCast
 		);
 	}
 
@@ -79,7 +80,6 @@ public class ReusableNestedCollectionRouterManagerImpl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	protected NestedCollectionRoutes map(
 		ReusableNestedCollectionRouter reusableNestedCollectionRouter,
 		ServiceReference<ReusableNestedCollectionRouter> serviceReference,
@@ -91,7 +91,17 @@ public class ReusableNestedCollectionRouterManagerImpl
 
 		String name = getNameOrFail(clazz, _nameManager);
 
-		Builder builder = new Builder<>(
+		return _getNestedCollectionRoutes(
+			unsafeCast(reusableNestedCollectionRouter), modelClass, name);
+	}
+
+	private <T, S, U extends Identifier<S>> NestedCollectionRoutes<T, S>
+		_getNestedCollectionRoutes(
+			ReusableNestedCollectionRouter<T, S, U>
+				reusableNestedCollectionRouter,
+			Class<T> modelClass, String name) {
+
+		Builder<T, S> builder = new Builder<>(
 			modelClass, "r", name, curry(_providerManager::provideOptional));
 
 		return reusableNestedCollectionRouter.collectionRoutes(builder);

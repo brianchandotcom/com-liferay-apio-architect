@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
@@ -24,6 +25,8 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.routes.CollectionRoutes;
+import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
@@ -54,7 +57,6 @@ public class CollectionRouterManagerImpl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> Optional<CollectionRoutes<T>>
 		getCollectionRoutesOptional(String name) {
 
@@ -64,7 +66,7 @@ public class CollectionRouterManagerImpl
 		return optional.flatMap(
 			this::getServiceOptional
 		).map(
-			routes -> (CollectionRoutes<T>)routes
+			Unsafe::unsafeCast
 		);
 	}
 
@@ -98,7 +100,6 @@ public class CollectionRouterManagerImpl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	protected CollectionRoutes map(
 		CollectionRouter collectionRouter,
 		ServiceReference<CollectionRouter> serviceReference, Class<?> clazz) {
@@ -110,7 +111,15 @@ public class CollectionRouterManagerImpl
 
 		String name = getNameOrFail(clazz, _nameManager);
 
-		CollectionRoutes.Builder builder = new CollectionRoutes.Builder<>(
+		return _getCollectionRoutes(
+			unsafeCast(collectionRouter), modelClass, name);
+	}
+
+	private <T, S extends Identifier> CollectionRoutes<T> _getCollectionRoutes(
+		CollectionRouter<T, S> collectionRouter, Class<T> modelClass,
+		String name) {
+
+		Builder<T> builder = new Builder<>(
 			modelClass, name, curry(_providerManager::provideOptional));
 
 		return collectionRouter.collectionRoutes(builder);

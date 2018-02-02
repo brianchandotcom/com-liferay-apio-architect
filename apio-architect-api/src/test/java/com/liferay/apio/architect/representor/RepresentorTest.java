@@ -53,7 +53,6 @@ import org.junit.Test;
 public class RepresentorTest {
 
 	@Before
-	@SuppressWarnings("unchecked")
 	public void setUp() {
 		_keys = new ArrayList<>();
 		_classes = new ArrayList<>();

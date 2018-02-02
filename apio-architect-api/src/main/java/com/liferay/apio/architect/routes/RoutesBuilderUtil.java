@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.routes;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
+import com.liferay.apio.architect.unsafe.Unsafe;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -257,17 +258,16 @@ public class RoutesBuilderUtil {
 		consumer.accept(_provideClass(provideFunction, aClass));
 	}
 
-	@SuppressWarnings("unchecked")
 	private static <T> T _provideClass(
 		Function<Class<?>, Optional<?>> provideFunction, Class<T> clazz) {
 
-		return provideFunction.apply(
+		Optional<T> optional = provideFunction.apply(
 			clazz
 		).map(
-			provided -> (T)provided
-		).orElseThrow(
-			() -> new MustHaveProvider(clazz)
+			Unsafe::unsafeCast
 		);
+
+		return optional.orElseThrow(() -> new MustHaveProvider(clazz));
 	}
 
 	private RoutesBuilderUtil() {

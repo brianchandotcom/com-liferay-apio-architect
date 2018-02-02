@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
@@ -26,6 +27,7 @@ import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.NestedCollectionRouter;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.internal.service.reference.mapper.CustomServiceReferenceMapper;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
@@ -58,7 +60,6 @@ public class NestedCollectionRouterManagerImpl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T, S> Optional<NestedCollectionRoutes<T, S>>
 		getNestedCollectionRoutesOptional(String name, String nestedName) {
 
@@ -79,7 +80,7 @@ public class NestedCollectionRouterManagerImpl
 				this::getServiceOptional
 			)
 		).map(
-			routes -> (NestedCollectionRoutes<T, S>)routes
+			Unsafe::unsafeCast
 		);
 	}
 
@@ -122,7 +123,6 @@ public class NestedCollectionRouterManagerImpl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	protected NestedCollectionRoutes map(
 		NestedCollectionRouter nestedCollectionRouter,
 		ServiceReference<NestedCollectionRouter> serviceReference,
@@ -143,7 +143,7 @@ public class NestedCollectionRouterManagerImpl
 		String nestedName = getNameOrFail(clazz, _nameManager);
 
 		return _getNestedCollectionRoutes(
-			nestedCollectionRouter, modelClass, name, nestedName);
+			unsafeCast(nestedCollectionRouter), modelClass, name, nestedName);
 	}
 
 	private <T, S, U extends Identifier<S>> NestedCollectionRoutes<T, S>

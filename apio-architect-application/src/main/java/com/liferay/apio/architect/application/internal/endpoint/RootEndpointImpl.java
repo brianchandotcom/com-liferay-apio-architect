@@ -33,6 +33,7 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
@@ -483,11 +484,16 @@ public class RootEndpointImpl implements RootEndpoint {
 	private <T> Try<NestedCollectionRoutes<T>>
 		_getReusableNestedCollectionRoutesTry(String name) {
 
-		Try<Optional<NestedCollectionRoutes<T>>> optionalTry = Try.success(
-			_reusableNestedCollectionRouterManager.
-				getNestedCollectionRoutesOptional(name));
+		Try<String> stringTry = Try.success(nestedName);
 
-		return optionalTry.map(Optional::get);
+		return stringTry.map(
+			_reusableNestedCollectionRouterManager::
+				getNestedCollectionRoutesOptional
+		).map(
+			Optional::get
+		).map(
+			Unsafe::unsafeCast
+		);
 	}
 
 	@Reference

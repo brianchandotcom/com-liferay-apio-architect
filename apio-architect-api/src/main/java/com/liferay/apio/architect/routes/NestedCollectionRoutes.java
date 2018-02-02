@@ -16,6 +16,7 @@ package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
 import static java.lang.String.join;
 
@@ -154,7 +155,6 @@ public class NestedCollectionRoutes<T, S> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <R> Builder<T, S> addCreator(
 			BiFunction<S, R, T> biFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -166,7 +166,7 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> identifier -> body -> biFunction.andThen(
 					t -> new SingleModel<>(t, _modelClass)
 				).apply(
-					identifier, (R)_form.get(body)
+					identifier, unsafeCast(_form.get(body))
 				);
 
 			return this;
@@ -185,7 +185,6 @@ public class NestedCollectionRoutes<T, S> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <A, B, C, D, R> Builder<T, S> addCreator(
 			HexaFunction<S, R, A, B, C, D, T> hexaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
@@ -201,7 +200,7 @@ public class NestedCollectionRoutes<T, S> {
 					a -> b -> c -> d -> hexaFunction.andThen(
 						t -> new SingleModel<>(t, _modelClass)
 					).apply(
-						identifier, (R)_form.get(body), a, b, c, d
+						identifier, unsafeCast(_form.get(body)), a, b, c, d
 					));
 
 			return this;
@@ -219,7 +218,6 @@ public class NestedCollectionRoutes<T, S> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <A, B, C, R> Builder<T, S> addCreator(
 			PentaFunction<S, R, A, B, C, T> pentaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass,
@@ -235,7 +233,7 @@ public class NestedCollectionRoutes<T, S> {
 					a -> b -> c -> pentaFunction.andThen(
 						t -> new SingleModel<>(t, _modelClass)
 					).apply(
-						identifier, (R)_form.get(body), a, b, c
+						identifier, unsafeCast(_form.get(body)), a, b, c
 					));
 
 			return this;
@@ -252,7 +250,6 @@ public class NestedCollectionRoutes<T, S> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <A, B, R> Builder<T, S> addCreator(
 			TetraFunction<S, R, A, B, T> tetraFunction, Class<A> aClass,
 			Class<B> bClass, FormBuilderFunction<R> formBuilderFunction) {
@@ -266,7 +263,7 @@ public class NestedCollectionRoutes<T, S> {
 					a -> b -> tetraFunction.andThen(
 						t -> new SingleModel<>(t, _modelClass)
 					).apply(
-						identifier, (R)_form.get(body), a, b
+						identifier, unsafeCast(_form.get(body)), a, b
 					));
 
 			return this;
@@ -282,7 +279,6 @@ public class NestedCollectionRoutes<T, S> {
 		 *         this operation
 		 * @return the updated builder
 		 */
-		@SuppressWarnings("unchecked")
 		public <A, R> Builder<T, S> addCreator(
 			TriFunction<S, R, A, T> triFunction, Class<A> aClass,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -296,7 +292,7 @@ public class NestedCollectionRoutes<T, S> {
 					a -> triFunction.andThen(
 						t -> new SingleModel<>(t, _modelClass)
 					).apply(
-						identifier, (R)_form.get(body), a
+						identifier, unsafeCast(_form.get(body)), a
 					));
 
 			return this;
