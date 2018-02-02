@@ -149,7 +149,7 @@ public class CollectionRoutes<T> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
 				a -> biFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					unsafeCast(_form.get(body)), a
 				));
@@ -174,7 +174,7 @@ public class CollectionRoutes<T> {
 
 			_createItemFunction = httpServletRequest -> body ->
 				function.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					unsafeCast(_form.get(body))
 				);
@@ -207,7 +207,7 @@ public class CollectionRoutes<T> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass,
 				a -> b -> c -> d -> pentaFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					unsafeCast(_form.get(body)), a, b, c, d
 				));
@@ -239,7 +239,7 @@ public class CollectionRoutes<T> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass,
 				a -> b -> c -> pentaFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					unsafeCast(_form.get(body)), a, b, c
 				));
@@ -268,7 +268,7 @@ public class CollectionRoutes<T> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				a -> b -> triFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					unsafeCast(_form.get(body)), a, b
 				));
@@ -291,7 +291,7 @@ public class CollectionRoutes<T> {
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass,
 				pagination -> a -> biFunction.andThen(
-					items -> new Page<>(_modelClass, items, pagination)
+					items -> new Page<>(_name, items, pagination)
 				).apply(
 					pagination, a
 				));
@@ -312,7 +312,7 @@ public class CollectionRoutes<T> {
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				pagination -> function.andThen(
-					items -> new Page<>(_modelClass, items, pagination)
+					items -> new Page<>(_name, items, pagination)
 				).apply(
 					pagination
 				));
@@ -340,7 +340,7 @@ public class CollectionRoutes<T> {
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, cClass, dClass,
 				pagination -> a -> b -> c -> d -> pentaFunction.andThen(
-					items -> new Page<>(_modelClass, items, pagination)
+					items -> new Page<>(_name, items, pagination)
 				).apply(
 					pagination, a, b, c, d
 				));
@@ -366,7 +366,7 @@ public class CollectionRoutes<T> {
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, cClass,
 				pagination -> a -> b -> c -> tetraFunction.andThen(
-					items -> new Page<>(_modelClass, items, pagination)
+					items -> new Page<>(_name, items, pagination)
 				).apply(
 					pagination, a, b, c
 				));
@@ -390,7 +390,7 @@ public class CollectionRoutes<T> {
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass,
 				pagination -> a -> b -> triFunction.andThen(
-					items -> new Page<>(_modelClass, items, pagination)
+					items -> new Page<>(_name, items, pagination)
 				).apply(
 					pagination, a, b
 				));

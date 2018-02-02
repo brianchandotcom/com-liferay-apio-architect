@@ -88,15 +88,14 @@ public class FieldsWriterTest {
 		);
 
 		_fieldsWriter = new FieldsWriter<>(
-			new SingleModel<>(() -> "first", RootModel.class), _requestInfo,
+			new SingleModel<>(() -> "first", "root"), _requestInfo,
 			MockRepresentorCreator.createRootModelRepresentor(true),
 			new Path("name", "id"), new FunctionalList<>(null, "first"));
 	}
 
 	@Test
 	public void testGetSingleModel() {
-		SingleModel<Integer> parentSingleModel = new SingleModel<>(
-			3, Integer.class);
+		SingleModel<Integer> parentSingleModel = new SingleModel<>(3, "");
 
 		RelatedModel<Integer, String> relatedModel = new RelatedModel<>(
 			"key", RootModelId.class, String::valueOf);
@@ -108,7 +107,7 @@ public class FieldsWriterTest {
 
 		optional.ifPresent(
 			singleModel -> {
-				assertThat(singleModel.getModelClass(), is(String.class));
+				assertThat(singleModel.getResourceName(), is(String.class));
 
 				assertThat(singleModel.getModel(), is("3"));
 			});

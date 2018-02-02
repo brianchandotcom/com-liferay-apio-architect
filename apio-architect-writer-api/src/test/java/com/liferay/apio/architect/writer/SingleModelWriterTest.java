@@ -35,7 +35,7 @@ public class SingleModelWriterTest {
 	public void testWriterReturnsEmptyIfNoRepresentorOrPathIsFound() {
 		SingleModelWriter<String> singleModelWriter = SingleModelWriter.create(
 			builder -> builder.singleModel(
-				new SingleModel<>("Apio", String.class)
+				new SingleModel<>("Apio", "")
 			).modelMessageMapper(
 				() -> "mediaType"
 			).operationsFunction(

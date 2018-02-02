@@ -204,7 +204,7 @@ public class PageMessageBodyWriter<T>
 		).findFirst(
 		).orElseThrow(
 			() -> new MustHaveMessageMapper(
-				mediaTypeString, page.getModelClass())
+				mediaTypeString, page.getResourceName())
 		);
 	}
 

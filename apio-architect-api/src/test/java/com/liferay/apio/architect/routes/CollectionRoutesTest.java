@@ -260,7 +260,7 @@ public class CollectionRoutesTest {
 			_body
 		);
 
-		assertThat(singleModel.getModelClass(), is(String.class));
+		assertThat(singleModel.getResourceName(), is("name"));
 		assertThat(singleModel.getModel(), is("Apio"));
 
 		Optional<GetPageFunction<String>> getPageFunctionOptional =

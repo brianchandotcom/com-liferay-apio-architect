@@ -113,10 +113,10 @@ public class PageWriter<T> {
 			url -> _pageMessageMapper.mapCollectionURL(
 				_jsonObjectBuilder, url));
 
-		Class<T> modelClass = _page.getModelClass();
+		String resourceName = _page.getResourceName();
 
 		items.forEach(
-			model -> _writeItem(new SingleModel<>(model, modelClass)));
+			model -> _writeItem(new SingleModel<>(model, resourceName)));
 
 		Optional<Path> pathOptional = _page.getPathOptional();
 
@@ -598,7 +598,7 @@ public class PageWriter<T> {
 							new FunctionalList(embeddedPathElements, key);
 
 						_writeItemEmbeddedModelFields(
-							new SingleModel<>(mappedModel, Object.class),
+							new SingleModel<>(mappedModel, ""),
 							embeddedNestedPathElements, itemJsonObjectBuilder,
 							__ -> Optional.of(value), rootSingleModel);
 					});

@@ -34,6 +34,7 @@ import com.liferay.apio.architect.test.util.json.Conditions;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockPageWriter;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 
 import java.util.Optional;
@@ -61,12 +62,12 @@ public class HALPageMessageMapperTest implements RepresentableManager {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T, U> Optional<Representor<T, U>> getRepresentorOptional(
-		Class<T> modelClass) {
+		String name) {
 
 		Optional<Representor<?, ?>> optional =
-			MockWriterUtil.getRepresentorOptional(modelClass);
+			MockWriterUtil.getRepresentorOptional(name);
 
-		return optional.map(representor -> (Representor<T, U>)representor);
+		return optional.map(Unsafe::unsafeCast);
 	}
 
 	@Test

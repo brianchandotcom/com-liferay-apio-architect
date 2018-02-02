@@ -164,7 +164,7 @@ public class NestedCollectionRoutes<T, S> {
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> biFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _nestedName)
 				).apply(
 					identifier, unsafeCast(_form.get(body))
 				);
@@ -198,7 +198,7 @@ public class NestedCollectionRoutes<T, S> {
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass, dClass,
 					a -> b -> c -> d -> hexaFunction.andThen(
-						t -> new SingleModel<>(t, _modelClass)
+						t -> new SingleModel<>(t, _nestedName)
 					).apply(
 						identifier, unsafeCast(_form.get(body)), a, b, c, d
 					));
@@ -231,7 +231,7 @@ public class NestedCollectionRoutes<T, S> {
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass,
 					a -> b -> c -> pentaFunction.andThen(
-						t -> new SingleModel<>(t, _modelClass)
+						t -> new SingleModel<>(t, _nestedName)
 					).apply(
 						identifier, unsafeCast(_form.get(body)), a, b, c
 					));
@@ -261,7 +261,7 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					a -> b -> tetraFunction.andThen(
-						t -> new SingleModel<>(t, _modelClass)
+						t -> new SingleModel<>(t, _nestedName)
 					).apply(
 						identifier, unsafeCast(_form.get(body)), a, b
 					));
@@ -290,7 +290,7 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass,
 					a -> triFunction.andThen(
-						t -> new SingleModel<>(t, _modelClass)
+						t -> new SingleModel<>(t, _nestedName)
 					).apply(
 						identifier, unsafeCast(_form.get(body)), a
 					));
@@ -314,7 +314,7 @@ public class NestedCollectionRoutes<T, S> {
 					Pagination.class,
 					pagination -> biFunction.andThen(
 						items -> new Page<>(
-							_modelClass, items, pagination, path)
+							_nestedName, items, pagination, path)
 					).apply(
 						pagination, identifier
 					));
@@ -344,7 +344,7 @@ public class NestedCollectionRoutes<T, S> {
 					Pagination.class, aClass, bClass, cClass, dClass,
 					pagination -> a -> b -> c -> d -> hexaFunction.andThen(
 						items -> new Page<>(
-							_modelClass, items, pagination, path)
+							_nestedName, items, pagination, path)
 					).apply(
 						pagination, identifier, a, b, c, d
 					));
@@ -372,7 +372,7 @@ public class NestedCollectionRoutes<T, S> {
 					Pagination.class, aClass, bClass, cClass,
 					pagination -> a -> b -> c -> pentaFunction.andThen(
 						items -> new Page<>(
-							_modelClass, items, pagination, path)
+							_nestedName, items, pagination, path)
 					).apply(
 						pagination, identifier, a, b, c
 					));
@@ -398,7 +398,7 @@ public class NestedCollectionRoutes<T, S> {
 					Pagination.class, aClass, bClass,
 					pagination -> a -> b -> tetraFunction.andThen(
 						items -> new Page<>(
-							_modelClass, items, pagination, path)
+							_nestedName, items, pagination, path)
 					).apply(
 						pagination, identifier, a, b
 					));
@@ -423,7 +423,7 @@ public class NestedCollectionRoutes<T, S> {
 					Pagination.class, aClass,
 					pagination -> a -> triFunction.andThen(
 						items -> new Page<>(
-							_modelClass, items, pagination, path)
+							_nestedName, items, pagination, path)
 					).apply(
 						pagination, identifier, a
 					));

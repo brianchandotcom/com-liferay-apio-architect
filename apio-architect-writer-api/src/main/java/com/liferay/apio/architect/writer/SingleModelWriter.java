@@ -14,10 +14,10 @@
 
 package com.liferay.apio.architect.writer;
 
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
-import static com.liferay.apio.architect.writer.util.WriterUtil.getRepresentorOptional;
 
 import com.google.gson.JsonObject;
 
@@ -144,7 +144,7 @@ public class SingleModelWriter<T> {
 				_jsonObjectBuilder, url));
 
 		List<Operation> operations = _singleModelOperationsFunction.apply(
-			_singleModel.getModelClass());
+			_singleModel.getResourceName());
 
 		operations.forEach(
 			operation -> {
@@ -280,7 +280,7 @@ public class SingleModelWriter<T> {
 				_jsonObjectBuilder, embeddedPathElements, field, value));
 
 		List<Operation> operations = _singleModelOperationsFunction.apply(
-			singleModel.getModelClass());
+			singleModel.getResourceName());
 
 		operations.forEach(
 			operation -> {
@@ -528,7 +528,7 @@ public class SingleModelWriter<T> {
 							new FunctionalList<>(embeddedPathElements, key);
 
 						writeEmbeddedModelFields(
-							new SingleModel<>(mappedModel, Object.class),
+							new SingleModel<>(mappedModel, ""),
 							embeddedNestedPathElements,
 							__ -> Optional.of(value));
 					});

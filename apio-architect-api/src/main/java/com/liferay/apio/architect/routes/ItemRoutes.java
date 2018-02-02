@@ -177,7 +177,7 @@ public class ItemRoutes<T> {
 			_singleModelFunction = httpServletRequest -> path -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
 				a -> biFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path), a
 				));
@@ -194,7 +194,7 @@ public class ItemRoutes<T> {
 		public Builder<T, S> addGetter(Function<S, T> function) {
 			_singleModelFunction =
 				httpServletRequest -> path -> function.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path)
 				);
@@ -220,7 +220,7 @@ public class ItemRoutes<T> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass,
 				a -> b -> c -> d -> pentaFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path), a, b, c, d
 				));
@@ -245,7 +245,7 @@ public class ItemRoutes<T> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass,
 				a -> b -> c -> tetraFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path), a, b, c
 				));
@@ -268,7 +268,7 @@ public class ItemRoutes<T> {
 			_singleModelFunction = httpServletRequest -> path -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				a -> b -> triFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path), a, b
 				));
@@ -396,7 +396,7 @@ public class ItemRoutes<T> {
 
 			_updateItemFunction =
 				httpServletRequest -> path -> body -> biFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path), unsafeCast(_form.get(body))
 				);
@@ -430,7 +430,7 @@ public class ItemRoutes<T> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass,
 				a -> b -> c -> d -> hexaFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path),
 					unsafeCast(_form.get(body)), a, b, c, d
@@ -463,7 +463,7 @@ public class ItemRoutes<T> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass,
 				a -> b -> c -> pentaFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path),
 					unsafeCast(_form.get(body)), a, b, c
@@ -492,7 +492,7 @@ public class ItemRoutes<T> {
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				a -> b -> tetraFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path),
 					unsafeCast(_form.get(body)), a, b
@@ -519,7 +519,7 @@ public class ItemRoutes<T> {
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
 				a -> triFunction.andThen(
-					t -> new SingleModel<>(t, _modelClass)
+					t -> new SingleModel<>(t, _name)
 				).apply(
 					_identifierFunction.apply(path),
 					unsafeCast(_form.get(body)), a

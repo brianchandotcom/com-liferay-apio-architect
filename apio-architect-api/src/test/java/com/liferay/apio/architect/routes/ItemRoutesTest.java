@@ -306,7 +306,7 @@ public class ItemRoutesTest {
 			path
 		);
 
-		assertThat(singleModel.getModelClass(), is(String.class));
+		assertThat(singleModel.getResourceName(), is("name"));
 		assertThat(singleModel.getModel(), is("Apio"));
 
 		Optional<UpdateItemFunction<String>> updateItemFunctionOptional =
@@ -323,7 +323,7 @@ public class ItemRoutesTest {
 			_body
 		);
 
-		assertThat(updatedSingleModel.getModelClass(), is(String.class));
+		assertThat(updatedSingleModel.getResourceName(), is("name"));
 		assertThat(updatedSingleModel.getModel(), is("Updated"));
 
 		List<Operation> operations = itemRoutes.getOperations();

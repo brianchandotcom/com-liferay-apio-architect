@@ -72,10 +72,10 @@ public class ApioDeveloperError extends Error {
 	 */
 	public static class MustHaveMessageMapper extends ApioDeveloperError {
 
-		public MustHaveMessageMapper(String mediaType, Class<?> modelClass) {
+		public MustHaveMessageMapper(String mediaType, String name) {
 			super(
-				"Media type " + mediaType + " and model class " +
-					modelClass.getName() + " does not have a message mapper");
+				"Media type " + mediaType + " and name " + name + " does not " +
+					"have a message mapper");
 		}
 
 	}

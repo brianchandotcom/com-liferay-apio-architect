@@ -204,7 +204,7 @@ public class SingleModelMessageBodyWriter<T>
 		).findFirst(
 		).orElseThrow(
 			() -> new ApioDeveloperError.MustHaveMessageMapper(
-				mediaTypeString, singleModel.getModelClass())
+				mediaTypeString, singleModel.getResourceName())
 		);
 	}
 

@@ -144,7 +144,8 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 		HttpHeaders httpHeaders) {
 
 		Optional<Representor<T, Object>> optional =
-			representableManager.getRepresentorOptional(modelClass);
+			representableManager.getRepresentorOptional(
+				singleModel.getResourceName());
 
 		optional.map(
 			Representor::getTypes

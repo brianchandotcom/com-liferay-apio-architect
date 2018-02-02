@@ -278,7 +278,7 @@ public class NestedCollectionRoutesTest {
 			_body
 		);
 
-		assertThat(singleModel.getModelClass(), is(String.class));
+		assertThat(singleModel.getResourceName(), is("nested"));
 		assertThat(singleModel.getModel(), is("Apio"));
 
 		Optional<NestedGetPageFunction<String, Long>> optional2 =

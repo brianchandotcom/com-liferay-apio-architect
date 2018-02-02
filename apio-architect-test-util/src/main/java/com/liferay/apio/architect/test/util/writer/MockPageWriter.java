@@ -72,8 +72,7 @@ public class MockPageWriter {
 
 		Path path = new Path("name", "id");
 
-		Page<RootModel> page = new Page<>(
-			RootModel.class, pageItems, pagination, path);
+		Page<RootModel> page = new Page<>("root", pageItems, pagination, path);
 
 		PageWriter<RootModel> pageWriter = PageWriter.create(
 			builder -> builder.page(
