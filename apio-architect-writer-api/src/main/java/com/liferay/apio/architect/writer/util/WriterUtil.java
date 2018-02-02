@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.writer.util;
 
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
+
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
@@ -69,16 +71,15 @@ public class WriterUtil {
 	 * @return the {@code FieldsWriter} for the model
 	 * @review
 	 */
-	public static <T> Optional<FieldsWriter<T, ?>> getFieldsWriter(
+	public static <T, S> Optional<FieldsWriter<T, ?>> getFieldsWriter(
 		SingleModel<T> singleModel, FunctionalList<String> embeddedPathElements,
 		RequestInfo requestInfo, PathFunction pathFunction,
 		RepresentorFunction representorFunction,
 		RepresentorFunction rootRepresentorFunction,
-		SingleModel rootSingleModel) {
+		SingleModel<S> rootSingleModel) {
 
-		Optional<Representor<T, ?>> representorOptional =
-			getRepresentorOptional(
-				singleModel.getModelClass(), representorFunction);
+		Optional<Representor<T, ?>> representorOptional = unsafeCast(
+			representorFunction.apply(singleModel.getResourceName()));
 
 		Optional<Path> pathOptional = getPathOptional(
 			singleModel, pathFunction, representorFunction,
@@ -127,25 +128,25 @@ public class WriterUtil {
 	 *         {@code Path} exist; returns {@code Optional#empty()} otherwise
 	 * @review
 	 */
-	public static <T> Optional<Path> getPathOptional(
+	public static <T, S> Optional<Path> getPathOptional(
 		SingleModel<T> singleModel, PathFunction pathFunction,
 		RepresentorFunction representorFunction,
 		RepresentorFunction rootRepresentorFunction,
-		SingleModel<T> rootSingleModel) {
+		SingleModel<S> rootSingleModel) {
 
-		Optional<Representor<T, ?>> optional = getRepresentorOptional(
-			singleModel.getModelClass(), representorFunction);
+		Optional<Representor<T, ?>> optional = unsafeCast(
+			representorFunction.apply(singleModel.getResourceName()));
 
 		return optional.flatMap(
 			representor -> {
 				if (representor.getIdentifierFunction() == null) {
-					Optional<Representor<T, ?>> representorOptional =
-						getRepresentorOptional(
-							rootSingleModel.getModelClass(),
-							rootRepresentorFunction);
+					Optional<Representor<S, ?>> representorOptional =
+						unsafeCast(
+							rootRepresentorFunction.apply(
+								rootSingleModel.getResourceName()));
 
 					if (representorOptional.isPresent()) {
-						Representor<T, ?> rootRepresentor =
+						Representor<S, ?> rootRepresentor =
 							representorOptional.get();
 
 						return pathFunction.apply(

@@ -458,10 +458,11 @@ public class PageWriter<T> {
 			_representorFunction, singleModel);
 	}
 
-	private <S> void _writeItemEmbeddedModelFields(
+	private <S, U> void _writeItemEmbeddedModelFields(
 		SingleModel<S> singleModel, FunctionalList<String> embeddedPathElements,
 		JSONObjectBuilder itemJsonObjectBuilder,
-		RepresentorFunction representorFunction, SingleModel rootSingleModel) {
+		RepresentorFunction representorFunction,
+		SingleModel<U> rootSingleModel) {
 
 		Optional<FieldsWriter<S, ?>> optional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
@@ -558,14 +559,13 @@ public class PageWriter<T> {
 			rootSingleModel, embeddedPathElements);
 	}
 
-	private <U> void _writeNestedResources(
+	private <S, U> void _writeNestedResources(
 		RepresentorFunction representorFunction, SingleModel<U> singleModel,
-		JSONObjectBuilder itemJsonObjectBuilder, SingleModel rootSingleModel,
-		FunctionalList embeddedPathElements) {
+		JSONObjectBuilder itemJsonObjectBuilder, SingleModel<S> rootSingleModel,
+		FunctionalList<String> embeddedPathElements) {
 
-		Optional<Representor<U, ?>> representorOptional =
-			getRepresentorOptional(
-				singleModel.getModelClass(), representorFunction);
+		Optional<Representor<U, ?>> representorOptional = unsafeCast(
+			representorFunction.apply(singleModel.getResourceName()));
 
 		representorOptional.ifPresent(
 			_representor -> {
@@ -583,8 +583,8 @@ public class PageWriter<T> {
 						Object mappedModel = nestedFieldMapper.apply(
 							singleModel.getModel());
 
-						FunctionalList embeddedNestedPathElements =
-							new FunctionalList(embeddedPathElements, key);
+						FunctionalList<String> embeddedNestedPathElements =
+							new FunctionalList<>(embeddedPathElements, key);
 
 						_writeItemEmbeddedModelFields(
 							new SingleModel<>(mappedModel, ""),

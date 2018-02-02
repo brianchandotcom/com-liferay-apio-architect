@@ -198,8 +198,9 @@ public class SingleModelWriter<T> {
 		return Optional.of(jsonObject.toString());
 	}
 
-	public void writeEmbeddedModelFields(
-		SingleModel singleModel, FunctionalList<String> embeddedPathElements) {
+	public <S> void writeEmbeddedModelFields(
+		SingleModel<S> singleModel,
+		FunctionalList<String> embeddedPathElements) {
 
 		writeEmbeddedModelFields(
 			singleModel, embeddedPathElements, _representorFunction);
@@ -501,12 +502,10 @@ public class SingleModelWriter<T> {
 
 	private <S> void _writeNestedResources(
 		RepresentorFunction representorFunction, SingleModel<S> singleModel,
-		FunctionalList<String> embeddedPathElements)
-			{
+		FunctionalList<String> embeddedPathElements) {
 
-		Optional<Representor<S, ?>> representorOptional =
-			getRepresentorOptional(
-				singleModel.getModelClass(), representorFunction);
+		Optional<Representor<S, ?>> representorOptional = unsafeCast(
+			representorFunction.apply(singleModel.getResourceName()));
 
 		representorOptional.ifPresent(
 			_representor -> {

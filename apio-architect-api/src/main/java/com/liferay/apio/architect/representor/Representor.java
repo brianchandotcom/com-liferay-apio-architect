@@ -16,6 +16,8 @@ package com.liferay.apio.architect.representor;
 
 import static com.liferay.apio.architect.date.DateTransformer.asString;
 
+import static java.util.function.Function.identity;
+
 import com.liferay.apio.architect.alias.BinaryFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
@@ -438,44 +440,47 @@ public class Representor<T, S> {
 			}
 
 			/**
+			 * Provides information about a nested field.
+			 *
 			 * @param  key the field's name
-			 * @param  nestedRepresentor the representation of the nested
-			 *         resource
+			 * @param  representorFunction the function that creates the nested
+			 *         representor
 			 * @return the builder's step
 			 * @review
 			 */
-			public <W> FirstStep addNestedField(
+			public FirstStep addNestedField(
 				String key,
-				Function<Builder<T, ?>, Representor<T, ?>> nestedRepresentor) {
+				Function<Builder<T, ?>, Representor<T, ?>>
+					representorFunction) {
 
 				_representor._nestedFields.put(
-					key, nestedRepresentor.apply(new Builder()));
+					key, representorFunction.apply(new Builder<>()));
 
-				_representor._nestedFieldFunctions.put(
-					key, Function.identity());
+				_representor._nestedFieldFunctions.put(key, identity());
 
 				return this;
 			}
 
 			/**
+			 * Provides information about a nested field.
+			 *
 			 * @param  key the field's name
-			 * @param  modelToNestedModelMapperFunction a function that receives
-			 *         an instance of T (the root model) and returns an instance
-			 *         of W, the nested resource model
-			 * @param  nestedRepresentor the representation of the nested
-			 *         resource
+			 * @param  transformFunction the function that transforms the actual
+			 *         model into the model used inside the nested representor
+			 * @param  representorFunction the function that creates the nested
+			 *         representor
 			 * @return the builder's step
 			 * @review
 			 */
 			public <W> FirstStep addNestedField(
-				String key, Function<T, W> modelToNestedModelMapperFunction,
-				Function<Builder<W, ?>, Representor<W, ?>> nestedRepresentor) {
+				String key, Function<T, W> transformFunction,
+				Function<Builder<W, ?>, Representor<W, ?>>
+					representorFunction) {
 
 				_representor._nestedFields.put(
-					key, nestedRepresentor.apply(new Builder()));
+					key, representorFunction.apply(new Builder<>()));
 
-				_representor._nestedFieldFunctions.put(
-					key, modelToNestedModelMapperFunction);
+				_representor._nestedFieldFunctions.put(key, transformFunction);
 
 				return this;
 			}

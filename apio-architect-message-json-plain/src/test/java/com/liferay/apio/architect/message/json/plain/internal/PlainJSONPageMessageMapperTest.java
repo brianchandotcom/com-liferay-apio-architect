@@ -34,6 +34,9 @@ import com.liferay.apio.architect.test.util.json.Conditions.Builder;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockPageWriter;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.ws.rs.core.HttpHeaders;
 
 import org.hamcrest.Matcher;
@@ -101,10 +104,12 @@ public class PlainJSONPageMessageMapperTest {
 
 		_isAJsonObjectWithThePages = is(aJsonObjectWith(pagesConditions));
 
-		_containsTheElements = contains(
+		List<Matcher<? super JsonElement>> theElements = Arrays.asList(
 			aRootElementJsonObjectWithId("1"),
 			aRootElementJsonObjectWithId("2"),
 			aRootElementJsonObjectWithId("3"));
+
+		_containsTheElements = contains(theElements);
 	}
 
 	private final PageMessageMapper<RootModel> _pageMessageMapper =
