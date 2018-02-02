@@ -138,6 +138,10 @@ public class JSONLDTestUtil {
 		).where(
 			"localizedString2", is(aJsonString(equalTo("Translated 2")))
 		).where(
+			"nested1", isAJsonObjectWithTheFirstNested()
+		).where(
+			"nested2", isAJsonObjectWithTheSecondNested(id)
+		).where(
 			"number1", is(aJsonInt(equalTo(2017)))
 		).where(
 			"number2", is(aJsonInt(equalTo(42)))
@@ -159,10 +163,6 @@ public class JSONLDTestUtil {
 			"stringList1", isAJsonArrayContaining("a", "b", "c", "d", "e")
 		).where(
 			"stringList2", isAJsonArrayContaining("f", "g", "h", "i", "j")
-		).where(
-			"nested1", isAJsonObjectWithTheFirstNested()
-		).where(
-			"nested2", isAJsonObjectWithTheSecondNested(id)
 		);
 
 		if (member) {
