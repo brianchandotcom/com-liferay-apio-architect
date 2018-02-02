@@ -14,12 +14,15 @@
 
 package com.liferay.apio.architect.jaxrs.json.internal.writer;
 
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
+
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveMessageMapper;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
 import com.liferay.apio.architect.operation.Operation;
@@ -30,6 +33,7 @@ import com.liferay.apio.architect.response.control.Fields;
 import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
@@ -154,24 +158,35 @@ public class PageMessageBodyWriter<T>
 			).pageOperationsFunction(
 				_collectionRouterManager::getOperations
 			).nestedPageOperationsFunction(
-				modelClass -> parentName -> {
+				name -> nestedName -> {
 					List<Operation> operations =
 						_nestedCollectionRouterManager.getOperations(
-							modelClass, parentName);
+							name, nestedName);
 
 					if (!operations.isEmpty()) {
 						return operations;
 					}
 
 					return _reusableNestedCollectionRouterManager.getOperations(
-						modelClass);
+						nestedName);
 				}
 			).pathFunction(
-				_pathIdentifierMapperManager::map
+				(resourceName, identifier) -> {
+					Optional<Class<Identifier>> optional =
+						_identifierClassManager.getIdentifierClassOptional(
+							resourceName);
+
+					return optional.flatMap(
+						identifierClass ->
+							_pathIdentifierMapperManager.mapToPath(
+								unsafeCast(identifierClass),
+								unsafeCast(identifier)));
+				}
 			).resourceNameFunction(
 				_nameManager::getNameOptional
 			).representorFunction(
-				_representableManager::getRepresentorOptional
+				name -> unsafeCast(
+					_representableManager.getRepresentorOptional(name))
 			).requestInfo(
 				requestInfo
 			).build());
@@ -230,6 +245,9 @@ public class PageMessageBodyWriter<T>
 
 	@Context
 	private HttpServletRequest _httpServletRequest;
+
+	@Reference
+	private IdentifierClassManager _identifierClassManager;
 
 	@Reference
 	private NameManager _nameManager;
