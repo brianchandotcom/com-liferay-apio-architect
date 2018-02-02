@@ -106,8 +106,9 @@ public class ItemRouterManagerImpl
 		Builder<T, S> builder = new Builder<>(
 			modelClass, name, curry(_providerManager::provideOptional),
 			path -> {
-				Optional<S> optional = _pathIdentifierMapperManager.map(
-					identifierClass, path);
+				Optional<S> optional =
+					_pathIdentifierMapperManager.mapToIdentifier(
+						identifierClass, path);
 
 				return optional.orElseThrow(
 					() -> new MustHavePathIdentifierMapper(identifierClass));

@@ -40,7 +40,7 @@ public class PathIdentifierMapperManagerImpl
 	}
 
 	@Override
-	public <T> Optional<T> map(
+	public <T> Optional<T> mapToIdentifier(
 		Class<? extends Identifier<T>> clazz, Path path) {
 
 		return _getPathIdentifierMapperOptional(clazz).map(
@@ -48,7 +48,7 @@ public class PathIdentifierMapperManagerImpl
 	}
 
 	@Override
-	public <T> Optional<Path> map(
+	public <T> Optional<Path> mapToPath(
 		Class<? extends Identifier<T>> clazz, T identifier) {
 
 		return _getPathIdentifierMapperOptional(clazz).map(

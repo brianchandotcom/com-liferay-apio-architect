@@ -40,7 +40,8 @@ public interface PathIdentifierMapperManager {
 	 * @return the identifier, if a valid {@code PathIdentifierMapper} is
 	 *         present; {@code Optional#empty()} otherwise
 	 */
-	public <T> Optional<T> map(Class<? extends Identifier<T>> clazz, Path path);
+	public <T> Optional<T> mapToIdentifier(
+		Class<? extends Identifier<T>> clazz, Path path);
 
 	/**
 	 * Converts an identifier to its equivalent {@code Path}, if a valid {@code
@@ -52,7 +53,7 @@ public interface PathIdentifierMapperManager {
 	 * @return the {@code Path}, if a valid {@code PathIdentifierMapper} is
 	 *         present; {@code Optional#empty()} otherwise
 	 */
-	public <T> Optional<Path> map(
+	public <T> Optional<Path> mapToPath(
 		Class<? extends Identifier<T>> clazz, T identifier);
 
 }
