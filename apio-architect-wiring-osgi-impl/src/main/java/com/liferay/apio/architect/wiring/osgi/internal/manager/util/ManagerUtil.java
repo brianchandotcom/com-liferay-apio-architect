@@ -17,11 +17,13 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.util;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.wiring.osgi.internal.service.tracker.customizer.ServiceRegistrationServiceTrackerCustomizer;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
@@ -108,6 +110,24 @@ public class ManagerUtil {
 		).orElseGet(
 			supplier
 		);
+	}
+
+	/**
+	 * Returns the name of a resource identified by a certain class.
+	 *
+	 * @param  clazz the class that identifies the resource
+	 * @param  nameManager an instance of a {@code NameManager}
+	 * @return the name of the resource
+	 * @review
+	 */
+	public static String getNameOrFail(
+		Class<?> clazz, NameManager nameManager) {
+
+		Optional<String> nameOptional = nameManager.getNameOptional(
+			clazz.getName());
+
+		return nameOptional.orElseThrow(
+			() -> new MustHaveValidGenericType(clazz));
 	}
 
 	/**

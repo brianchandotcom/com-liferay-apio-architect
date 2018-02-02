@@ -393,8 +393,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		return parentSingleModel -> {
 			Optional<Representor<T, Object>> optional =
-				_representableManager.getRepresentorOptional(
-					parentSingleModel.getModelClass());
+				_representableManager.getRepresentorOptional(name);
 
 			return optional.map(
 				Representor::getRelatedCollections

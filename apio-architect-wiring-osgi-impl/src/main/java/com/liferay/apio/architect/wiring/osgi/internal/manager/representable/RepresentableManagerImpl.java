@@ -18,10 +18,12 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgume
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
+import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ import java.util.function.Supplier;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
@@ -49,13 +52,17 @@ public class RepresentableManagerImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T, U> Optional<Representor<T, U>>
-		getRepresentorOptional(Class<T> modelClass) {
+	public <T, U> Optional<Representor<T, U>> getRepresentorOptional(
+		String name) {
 
-		Optional<Representor> optional = getServiceOptional(
-			modelClass.getName());
+		Optional<Class<Identifier>> optional =
+			_identifierClassManager.getIdentifierClassOptional(name);
 
-		return optional.map(representor -> (Representor<T, U>)representor);
+		return optional.flatMap(
+			this::getServiceOptional
+		).map(
+			representor -> (Representor<T, U>)representor
+		);
 	}
 
 	@Override
@@ -97,6 +104,9 @@ public class RepresentableManagerImpl
 				relatedCollection -> identifierClass.equals(
 					relatedCollection.getIdentifierClass())));
 	}
+
+	@Reference
+	private IdentifierClassManager _identifierClassManager;
 
 	private final Map<String, List<RelatedCollection<?>>> _relatedCollections =
 		new ConcurrentHashMap<>();

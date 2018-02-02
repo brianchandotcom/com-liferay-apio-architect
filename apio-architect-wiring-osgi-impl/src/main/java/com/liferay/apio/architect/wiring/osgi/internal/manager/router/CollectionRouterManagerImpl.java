@@ -17,9 +17,9 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.CollectionRouter;
@@ -55,15 +55,13 @@ public class CollectionRouterManagerImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T, S extends Identifier> Optional<CollectionRoutes<T>>
+	public <T> Optional<CollectionRoutes<T>>
 		getCollectionRoutesOptional(String name) {
 
-		Optional<Class<S>> optional =
+		Optional<Class<Identifier>> optional =
 			_identifierClassManager.getIdentifierClassOptional(name);
 
-		return optional.map(
-			Class::getName
-		).flatMap(
+		return optional.flatMap(
 			this::getServiceOptional
 		).map(
 			routes -> (CollectionRoutes<T>)routes
@@ -110,20 +108,9 @@ public class CollectionRouterManagerImpl
 			() -> getTypeParamOrFail(
 				collectionRouter, CollectionRouter.class, 0));
 
-		return _getCollectionRoutes(collectionRouter, modelClass, (Class)clazz);
-	}
+		String name = getNameOrFail(clazz, _nameManager);
 
-	private <T, S extends Identifier> CollectionRoutes<T> _getCollectionRoutes(
-		CollectionRouter<T, S> collectionRouter, Class<T> modelClass,
-		Class<? extends Identifier<S>> identifierClass) {
-
-		Optional<String> nameOptional = _nameManager.getNameOptional(
-			identifierClass.getName());
-
-		String name = nameOptional.orElseThrow(
-			() -> new MustHaveValidGenericType(identifierClass));
-
-		CollectionRoutes.Builder<T> builder = new CollectionRoutes.Builder<>(
+		CollectionRoutes.Builder builder = new CollectionRoutes.Builder<>(
 			modelClass, name, curry(_providerManager::provideOptional));
 
 		return collectionRouter.collectionRoutes(builder);

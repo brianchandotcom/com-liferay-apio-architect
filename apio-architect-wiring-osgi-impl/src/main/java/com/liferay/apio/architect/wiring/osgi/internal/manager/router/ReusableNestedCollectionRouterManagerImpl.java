@@ -15,9 +15,9 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
@@ -89,23 +89,9 @@ public class ReusableNestedCollectionRouterManagerImpl
 			reusableNestedCollectionRouter,
 			ReusableNestedCollectionRouter.class, 0);
 
-		Optional<String> nameOptional = _nameManager.getNameOptional(
-			clazz.getName());
+		String name = getNameOrFail(clazz, _nameManager);
 
-		String name = nameOptional.orElseThrow(
-			() -> new MustHaveValidGenericType(clazz));
-
-		return _getNestedCollectionRoutes(
-			reusableNestedCollectionRouter, modelClass, name);
-	}
-
-	private <T, S, U extends Identifier<S>> NestedCollectionRoutes<T, S>
-		_getNestedCollectionRoutes(
-			ReusableNestedCollectionRouter<T, S, U>
-				reusableNestedCollectionRouter,
-			Class<T> modelClass, String name) {
-
-		Builder<T, S> builder = new Builder<>(
+		Builder builder = new Builder<>(
 			modelClass, "r", name, curry(_providerManager::provideOptional));
 
 		return reusableNestedCollectionRouter.collectionRoutes(builder);

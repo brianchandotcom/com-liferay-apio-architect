@@ -18,9 +18,9 @@ import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.NestedCollectionRouter;
@@ -63,10 +63,10 @@ public class NestedCollectionRouterManagerImpl
 		getNestedCollectionRoutesOptional(String name, String nestedName) {
 
 		Optional<Class<Identifier>> optional1 =
-			_identifierClassManager.getIdentifierClassOptional(nestedName);
+			_identifierClassManager.getIdentifierClassOptional(name);
 
 		Optional<Class<Identifier>> optional2 =
-			_identifierClassManager.getIdentifierClassOptional(name);
+			_identifierClassManager.getIdentifierClassOptional(nestedName);
 
 		return optional1.map(
 			Class::getName
@@ -118,7 +118,7 @@ public class NestedCollectionRouterManagerImpl
 				nestedCollectionRouter, NestedCollectionRouter.class, 3));
 
 		customServiceReferenceMapper.map(
-			serviceReference, key -> emitter.emit(key + "-" + clazz.getName()));
+			serviceReference, key -> emitter.emit(clazz.getName() + "-" + key));
 	}
 
 	@Override
@@ -138,17 +138,9 @@ public class NestedCollectionRouterManagerImpl
 			() -> getTypeParamOrFail(
 				nestedCollectionRouter, NestedCollectionRouter.class, 3));
 
-		Optional<String> nameOptional = _nameManager.getNameOptional(
-			clazz.getName());
+		String name = getNameOrFail(parentIdentifierClass, _nameManager);
 
-		String name = nameOptional.orElseThrow(
-			() -> new MustHaveValidGenericType(clazz));
-
-		Optional<String> nestedNameOptional = _nameManager.getNameOptional(
-			parentIdentifierClass.getName());
-
-		String nestedName = nestedNameOptional.orElseThrow(
-			() -> new MustHaveValidGenericType(clazz));
+		String nestedName = getNameOrFail(clazz, _nameManager);
 
 		return _getNestedCollectionRoutes(
 			nestedCollectionRouter, modelClass, name, nestedName);
