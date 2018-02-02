@@ -381,8 +381,8 @@ public class PageWriter<T> {
 		JSONObjectBuilder itemJsonObjectBuilder = new JSONObjectBuilder();
 
 		_pageMessageMapper.onStartItem(
-			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel.getModel(),
-			singleModel.getModelClass(), _requestInfo.getHttpHeaders());
+			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel,
+			_requestInfo.getHttpHeaders());
 
 		fieldsWriter.writeBooleanFields(
 			(field, value) -> _pageMessageMapper.mapItemBooleanField(
@@ -456,8 +456,8 @@ public class PageWriter<T> {
 			singleModel, null);
 
 		_pageMessageMapper.onFinishItem(
-			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel.getModel(),
-			singleModel.getModelClass(), _requestInfo.getHttpHeaders());
+			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel,
+			_requestInfo.getHttpHeaders());
 	}
 
 	private <S> void _writeItemEmbeddedModelFields(

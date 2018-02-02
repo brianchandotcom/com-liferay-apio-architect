@@ -97,8 +97,7 @@ public class SingleModelWriter<T> {
 		FieldsWriter<T, ?> fieldsWriter = optional.get();
 
 		_singleModelMessageMapper.onStart(
-			_jsonObjectBuilder, _singleModel.getModel(),
-			_singleModel.getModelClass(), _requestInfo.getHttpHeaders());
+			_jsonObjectBuilder, _singleModel, _requestInfo.getHttpHeaders());
 
 		fieldsWriter.writeBooleanFields(
 			(field, value) -> _singleModelMessageMapper.mapBooleanField(
@@ -192,8 +191,7 @@ public class SingleModelWriter<T> {
 		_writeNestedResources(_representorFunction, _singleModel, null);
 
 		_singleModelMessageMapper.onFinish(
-			_jsonObjectBuilder, _singleModel.getModel(),
-			_singleModel.getModelClass(), _requestInfo.getHttpHeaders());
+			_jsonObjectBuilder, _singleModel, _requestInfo.getHttpHeaders());
 
 		JsonObject jsonObject = _jsonObjectBuilder.build();
 
