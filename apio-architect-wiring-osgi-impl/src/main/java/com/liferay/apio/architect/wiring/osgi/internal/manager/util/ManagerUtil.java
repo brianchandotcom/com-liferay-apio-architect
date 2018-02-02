@@ -16,7 +16,6 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.util;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveValidGenericType;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.resource.ResourceClass;
 import com.liferay.apio.architect.wiring.osgi.internal.service.tracker.customizer.ServiceRegistrationServiceTrackerCustomizer;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 
@@ -86,7 +85,7 @@ public class ManagerUtil {
 	 * result of the provided {@code Supplier} otherwise.
 	 *
 	 * @param  serviceReference the service reference
-	 * @param  resourceClass the resource class to retrieve
+	 * @param  typeArgumentProperty the type argument position
 	 * @param  supplier the supplier to call if the property is not found or is
 	 *         not a {@code Class}
 	 * @return the generic class stored inside the properties of a {@code
@@ -96,11 +95,11 @@ public class ManagerUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> Class<T> getGenericClassFromPropertyOrElse(
-		ServiceReference serviceReference, ResourceClass resourceClass,
+		ServiceReference serviceReference, String typeArgumentProperty,
 		Supplier<Class<T>> supplier) {
 
 		Try<Object> propertyTry = Try.success(
-			serviceReference.getProperty(resourceClass.getName()));
+			serviceReference.getProperty(typeArgumentProperty));
 
 		return propertyTry.filter(
 			Objects::nonNull
