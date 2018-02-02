@@ -14,13 +14,13 @@
 
 package com.liferay.apio.architect.writer;
 
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionPageURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
-import static com.liferay.apio.architect.writer.util.WriterUtil.getRepresentorOptional;
 
 import com.google.gson.JsonObject;
 
@@ -35,7 +35,6 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.writer.alias.NestedPageOperationsFunction;
 import com.liferay.apio.architect.writer.alias.PageOperationsFunction;
 import com.liferay.apio.architect.writer.alias.PathFunction;
@@ -107,11 +106,9 @@ public class PageWriter<T> {
 
 		_writePageURLs();
 
-		Optional<String> optional = _getCollectionURLOptional();
+		String url = _getCollectionURL();
 
-		optional.ifPresent(
-			url -> _pageMessageMapper.mapCollectionURL(
-				_jsonObjectBuilder, url));
+		_pageMessageMapper.mapCollectionURL(_jsonObjectBuilder, url);
 
 		String resourceName = _page.getResourceName();
 
@@ -122,12 +119,12 @@ public class PageWriter<T> {
 
 		List<Operation> operations = pathOptional.map(
 			path -> _nestedPageOperationsFunction.apply(
-				modelClass
-			).apply(
 				path.getName()
+			).apply(
+				resourceName
 			)
 		).orElseGet(
-			() -> _pageOperationsFunction.apply(modelClass)
+			() -> _pageOperationsFunction.apply(resourceName)
 		);
 
 		operations.forEach(
@@ -143,8 +140,8 @@ public class PageWriter<T> {
 				formOptional.map(
 					form -> createFormURL(_requestInfo.getServerURL(), form)
 				).ifPresent(
-					url -> _pageMessageMapper.mapOperationFormURL(
-						_jsonObjectBuilder, operationJSONObjectBuilder, url)
+					formURL -> _pageMessageMapper.mapOperationFormURL(
+						_jsonObjectBuilder, operationJSONObjectBuilder, formURL)
 				);
 
 				_pageMessageMapper.mapOperationMethod(
@@ -347,24 +344,16 @@ public class PageWriter<T> {
 
 	}
 
-	private Optional<String> _getCollectionURLOptional() {
-		Class<T> modelClass = _page.getModelClass();
-
-		Optional<String> optional = _resourceNameFunction.apply(
-			modelClass.getName());
+	private String _getCollectionURL() {
+		Optional<Path> optional = _page.getPathOptional();
 
 		return optional.map(
-			name -> {
-				Optional<Path> pathOptional = _page.getPathOptional();
-
-				ServerURL serverURL = _requestInfo.getServerURL();
-
-				return pathOptional.map(
-					path -> createNestedCollectionURL(serverURL, path, name)
-				).orElseGet(
-					() -> createCollectionURL(serverURL, name)
-				);
-			});
+			path -> createNestedCollectionURL(
+				_requestInfo.getServerURL(), path, _page.getResourceName())
+		).orElseGet(
+			() -> createCollectionURL(
+				_requestInfo.getServerURL(), _page.getResourceName())
+		);
 	}
 
 	private void _writeItem(SingleModel<T> singleModel) {
@@ -606,34 +595,31 @@ public class PageWriter<T> {
 	}
 
 	private void _writePageURLs() {
-		Optional<String> optional = _getCollectionURLOptional();
+		String url = _getCollectionURL();
 
-		optional.ifPresent(
-			url -> {
-				_pageMessageMapper.mapCurrentPageURL(
-					_jsonObjectBuilder,
-					createCollectionPageURL(url, _page, PageType.CURRENT));
+		_pageMessageMapper.mapCurrentPageURL(
+			_jsonObjectBuilder,
+			createCollectionPageURL(url, _page, PageType.CURRENT));
 
-				_pageMessageMapper.mapFirstPageURL(
-					_jsonObjectBuilder,
-					createCollectionPageURL(url, _page, PageType.FIRST));
+		_pageMessageMapper.mapFirstPageURL(
+			_jsonObjectBuilder,
+			createCollectionPageURL(url, _page, PageType.FIRST));
 
-				_pageMessageMapper.mapLastPageURL(
-					_jsonObjectBuilder,
-					createCollectionPageURL(url, _page, PageType.LAST));
+		_pageMessageMapper.mapLastPageURL(
+			_jsonObjectBuilder,
+			createCollectionPageURL(url, _page, PageType.LAST));
 
-				if (_page.hasNext()) {
-					_pageMessageMapper.mapNextPageURL(
-						_jsonObjectBuilder,
-						createCollectionPageURL(url, _page, PageType.NEXT));
-				}
+		if (_page.hasNext()) {
+			_pageMessageMapper.mapNextPageURL(
+				_jsonObjectBuilder,
+				createCollectionPageURL(url, _page, PageType.NEXT));
+		}
 
-				if (_page.hasPrevious()) {
-					_pageMessageMapper.mapPreviousPageURL(
-						_jsonObjectBuilder,
-						createCollectionPageURL(url, _page, PageType.PREVIOUS));
-				}
-			});
+		if (_page.hasPrevious()) {
+			_pageMessageMapper.mapPreviousPageURL(
+				_jsonObjectBuilder,
+				createCollectionPageURL(url, _page, PageType.PREVIOUS));
+		}
 	}
 
 	private final JSONObjectBuilder _jsonObjectBuilder;

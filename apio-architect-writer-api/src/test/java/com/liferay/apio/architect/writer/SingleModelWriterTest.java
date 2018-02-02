@@ -41,7 +41,7 @@ public class SingleModelWriterTest {
 			).operationsFunction(
 				__ -> Collections.emptyList()
 			).pathFunction(
-				(identifier, identifierClass, modelClass) -> Optional.empty()
+				(resourceName, identifier) -> Optional.empty()
 			).resourceNameFunction(
 				__ -> Optional.empty()
 			).representorFunction(

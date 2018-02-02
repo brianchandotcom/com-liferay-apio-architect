@@ -149,38 +149,16 @@ public class WriterUtil {
 							representorOptional.get();
 
 						return pathFunction.apply(
+							rootSingleModel.getResourceName(),
 							rootRepresentor.getIdentifier(
-								rootSingleModel.getModel()),
-							rootRepresentor.getIdentifierClass(),
-							rootSingleModel.getModelClass());
+								rootSingleModel.getModel()));
 					}
 				}
 
 				return pathFunction.apply(
-					representor.getIdentifier(singleModel.getModel()),
-					representor.getIdentifierClass(),
-					singleModel.getModelClass());
+					singleModel.getResourceName(),
+					representor.getIdentifier(singleModel.getModel()));
 			});
-	}
-
-	/**
-	 * Returns a model's {@link Representor}, if it exists. Otherwise, this
-	 * method returns {@code Optional#empty()}.
-	 *
-	 * @param  modelClass the model's class
-	 * @param  representorFunction the function that gets the {@code
-	 *         Representor}
-	 * @return the model's {@code Representor}, if it exists; returns {@code
-	 *         Optional#empty()} otherwise
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> Optional<Representor<T, ?>> getRepresentorOptional(
-		Class<T> modelClass, RepresentorFunction representorFunction) {
-
-		Optional<? extends Representor<?, ?>> optional =
-			representorFunction.apply(modelClass);
-
-		return optional.map(representor -> (Representor<T, ?>)representor);
 	}
 
 	private WriterUtil() {
