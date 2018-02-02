@@ -595,18 +595,17 @@ public class PageWriter<T> {
 
 		representorOptional.ifPresent(
 			_representor -> {
-				Map<String, Representor<?, ?>> nestedFields =
-					_representor.getNestedFields();
+				Map<String, Representor<?, ?>> nested =
+					_representor.getNested();
 
-				nestedFields.forEach(
+				nested.forEach(
 					(key, value) -> {
-						Map<String, Function<U, ?>> nestedFieldFunctions =
-							_representor.getNestedFieldFunctions();
+						Map<String, Function<U, ?>> nestedFunctions =
+							_representor.getNestedFunctions();
 
-						Function<U, ?> nestedFieldMapper =
-							nestedFieldFunctions.get(key);
+						Function<U, ?> nestedMapper = nestedFunctions.get(key);
 
-						Object mappedModel = nestedFieldMapper.apply(
+						Object mappedModel = nestedMapper.apply(
 							singleModel.getModel());
 
 						FunctionalList<String> embeddedNestedPathElements =

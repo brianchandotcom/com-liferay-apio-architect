@@ -535,18 +535,17 @@ public class SingleModelWriter<T> {
 
 		representorOptional.ifPresent(
 			_representor -> {
-				Map<String, Representor<?, ?>> nestedFields =
-					_representor.getNestedFields();
+				Map<String, Representor<?, ?>> nested =
+					_representor.getNested();
 
-				nestedFields.forEach(
+				nested.forEach(
 					(key, value) -> {
-						Map<String, Function<S, ?>> nestedFieldFunctions =
-							_representor.getNestedFieldFunctions();
+						Map<String, Function<S, ?>> nestedFunctions =
+							_representor.getNestedFunctions();
 
-						Function<S, ?> nestedFieldMapper =
-							nestedFieldFunctions.get(key);
+						Function<S, ?> nestedMapper = nestedFunctions.get(key);
 
-						Object mappedModel = nestedFieldMapper.apply(
+						Object mappedModel = nestedMapper.apply(
 							singleModel.getModel());
 
 						FunctionalList<String> embeddedNestedPathElements =

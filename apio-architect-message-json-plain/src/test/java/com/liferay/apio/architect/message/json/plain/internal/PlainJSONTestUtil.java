@@ -109,9 +109,9 @@ public class PlainJSONTestUtil {
 		).where(
 			"stringList2", isAJsonArrayContaining("f", "g", "h", "i", "j")
 		).where(
-			"nestedField1", isAJsonObjectWithTheFirstNested()
+			"nested1", isAJsonObjectWithTheFirstNested()
 		).where(
-			"nestedField2", isAJsonObjectWithTheSecondNested(id)
+			"nested2", isAJsonObjectWithTheSecondNested(id)
 		).build();
 
 		return is(aJsonObjectWith(conditions));

@@ -127,23 +127,23 @@ public class Representor<T, S> {
 	}
 
 	/**
-	 * Returns the mappers between the resource and the subresource
-	 *
-	 * @return the function used to transform a resource into its subresource
-	 * @review
-	 */
-	public Map<String, Function<T, ?>> getNestedFieldFunctions() {
-		return _nestedFieldFunctions;
-	}
-
-	/**
 	 * Returns the representors used to render the subresources
 	 *
 	 * @return the representors that model the subresources
 	 * @review
 	 */
-	public Map<String, Representor<?, ?>> getNestedFields() {
-		return _nestedFields;
+	public Map<String, Representor<?, ?>> getNested() {
+		return _nested;
+	}
+
+	/**
+	 * Returns the mappers between the resource and the subresource
+	 *
+	 * @return the function used to transform a resource into its subresource
+	 * @review
+	 */
+	public Map<String, Function<T, ?>> getNestedFunctions() {
+		return _nestedFunctions;
 	}
 
 	/**
@@ -448,15 +448,15 @@ public class Representor<T, S> {
 			 * @return the builder's step
 			 * @review
 			 */
-			public FirstStep addNestedField(
+			public <W> FirstStep addNested(
 				String key,
 				Function<Builder<T, ?>, Representor<T, ?>>
 					representorFunction) {
 
-				_representor._nestedFields.put(
-					key, representorFunction.apply(new Builder<>()));
+				_representor._nested.put(
+					key, representorFunction.apply(new Builder()));
 
-				_representor._nestedFieldFunctions.put(key, identity());
+				_representor._nestedFunctions.put(key, Function.identity());
 
 				return this;
 			}
@@ -472,15 +472,15 @@ public class Representor<T, S> {
 			 * @return the builder's step
 			 * @review
 			 */
-			public <W> FirstStep addNestedField(
+			public <W> FirstStep addNested(
 				String key, Function<T, W> transformFunction,
-				Function<Builder<W, ?>, Representor<W, ?>>
-					representorFunction) {
+				Function<Builder<W, ?>, Representor<W, ?>> representorFunction) {
 
-				_representor._nestedFields.put(
-					key, representorFunction.apply(new Builder<>()));
+				_representor._nested.put(
+					key, representorFunction.apply(new Builder()));
 
-				_representor._nestedFieldFunctions.put(key, transformFunction);
+				_representor._nestedFunctions.put(
+					key, transformFunction);
 
 				return this;
 			}
@@ -625,11 +625,9 @@ public class Representor<T, S> {
 	private final Map<String, String> _links = new LinkedHashMap<>();
 	private final Map<String, BiFunction<T, Language, String>>
 		_localizedStringFunctions = new LinkedHashMap<>();
-	private final Map<String, Function<T, ?>> _nestedFieldFunctions =
-		new HashMap<>();
-	private final Map<String, Representor<?, ?>> _nestedFields =
-		new HashMap<>();
-	private final Map<String, Function<T, Number>> _numberFunctions =
+	private Map<String, Representor<?, ?>> _nested = new HashMap<>();
+	private Map<String, Function<T, ?>> _nestedFunctions = new HashMap<>();
+	private Map<String, Function<T, Number>> _numberFunctions =
 		new LinkedHashMap<>();
 	private final Map<String, Function<T, List<Number>>> _numberListFunctions =
 		new LinkedHashMap<>();

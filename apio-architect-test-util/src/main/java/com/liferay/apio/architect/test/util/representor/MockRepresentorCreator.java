@@ -28,6 +28,8 @@ import com.liferay.apio.architect.test.util.model.SecondEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
 
 import java.util.Date;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Provides methods that create {@link Representor} objects for {@link
@@ -153,8 +155,8 @@ public class MockRepresentorCreator {
 				"stringList1", __ -> asList("a", "b", "c", "d", "e")
 			).addStringList(
 				"stringList2", __ -> asList("f", "g", "h", "i", "j")
-			).addNestedField(
-				"nestedField1", __ -> (FirstEmbeddedModel)() -> "id 1",
+			).addNested(
+				"nested1", __ -> (FirstEmbeddedModel)() -> "id 1",
 				nestedBuilder -> nestedBuilder.nestedTypes(
 					"Type 3"
 				).addString(
@@ -164,8 +166,8 @@ public class MockRepresentorCreator {
 				).addNumber(
 					"number1", __ -> 2017
 				).build()
-			).addNestedField(
-				"nestedField2", rootModel -> (SecondEmbeddedModel)() -> "id 2",
+			).addNested(
+				"nested2", rootModel -> (SecondEmbeddedModel)() -> "id 2",
 				nestedBuilder -> nestedBuilder.nestedTypes(
 					"Type 4"
 				).addString(
@@ -178,8 +180,8 @@ public class MockRepresentorCreator {
 					"relatedCollection3", ThirdEmbeddedId.class
 				).addBidirectionalModel(
 					"bidirectionalModel1", "relatedkey", FirstEmbeddedId.class,
-					__ -> null
-				).addNestedField(
+					(Function<SecondEmbeddedModel, String>) SecondEmbeddedModel::getId
+				).addNested(
 					"nested3", __ -> () -> "id 3",
 					(Representor.Builder<ThirdEmbeddedModel, ?>
 						thirdEmbeddedModelBuilder) ->

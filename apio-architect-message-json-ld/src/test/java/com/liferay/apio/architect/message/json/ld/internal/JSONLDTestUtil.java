@@ -160,9 +160,9 @@ public class JSONLDTestUtil {
 		).where(
 			"stringList2", isAJsonArrayContaining("f", "g", "h", "i", "j")
 		).where(
-			"nestedField1", isAJsonObjectWithTheFirstNested()
+			"nested1", isAJsonObjectWithTheFirstNested()
 		).where(
-			"nestedField2", isAJsonObjectWithTheSecondNested(id)
+			"nested2", isAJsonObjectWithTheSecondNested(id)
 		);
 
 		if (member) {

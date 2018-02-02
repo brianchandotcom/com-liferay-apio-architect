@@ -143,9 +143,9 @@ public class HALTestUtil {
 		Conditions conditions = builder.where(
 			"embedded1", is(aJsonObjectWith(firstEmbeddedConditions))
 		).where(
-			"nestedField1", isAJsonObjectWithTheFirstNested()
+			"nested1", isAJsonObjectWithTheFirstNested()
 		).where(
-			"nestedField2", isAJsonObjectWithTheSecondNested(id)
+			"nested2", isAJsonObjectWithTheSecondNested(id)
 		).build();
 
 		return is(aJsonObjectWith(conditions));
