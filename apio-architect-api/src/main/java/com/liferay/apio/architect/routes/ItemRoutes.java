@@ -114,16 +114,10 @@ public class ItemRoutes<T> {
 	public List<Operation> getOperations() {
 		List<Operation> operations = new ArrayList<>();
 
-		Optional<DeleteItemConsumer> deleteConsumerOptional =
-			getDeleteConsumerOptional();
+		getDeleteConsumerOptional().ifPresent(
+			__ -> operations.add(new Operation(DELETE, _name + "/delete")));
 
-		if (deleteConsumerOptional.isPresent()) {
-			operations.add(new Operation(DELETE, _name + "/delete"));
-		}
-
-		Optional<Form> formOptional = getFormOptional();
-
-		formOptional.ifPresent(
+		getFormOptional().ifPresent(
 			form -> operations.add(
 				new Operation(form, UPDATE, _name + "/update")));
 

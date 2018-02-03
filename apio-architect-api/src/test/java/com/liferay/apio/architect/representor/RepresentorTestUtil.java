@@ -134,7 +134,7 @@ public class RepresentorTestUtil {
 		Function<Dummy, ?> function = relatedModel.getIdentifierFunction();
 
 		Integer id = function.andThen(
-			object -> (Integer)object
+			Integer.class::cast
 		).apply(
 			dummy
 		);

@@ -33,6 +33,7 @@ public class Unsafe {
 	 * @return the casted object
 	 * @review
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T, S> S unsafeCast(T t) {
 		return (S)t;
 	}

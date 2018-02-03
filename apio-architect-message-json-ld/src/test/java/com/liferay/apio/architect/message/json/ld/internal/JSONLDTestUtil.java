@@ -427,13 +427,11 @@ public class JSONLDTestUtil {
 	public static Conditions isAJsonObjectWithTheThirdNested() {
 		Builder builder = new Builder();
 
-		Conditions conditions = builder.where(
+		return builder.where(
 			"@type", containsTheTypes("Type 5")
 		).where(
 			"string1", is(aJsonString(equalTo("id 3")))
 		).build();
-
-		return conditions;
 	}
 
 	/**
