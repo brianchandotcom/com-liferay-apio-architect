@@ -614,32 +614,34 @@ public class Representor<T, S> {
 		_relatedCollectionsSupplier = relatedCollectionsSupplier;
 	}
 
-	private Map<String, BinaryFunction<T>> _binaryFunctions =
+	private final Map<String, BinaryFunction<T>> _binaryFunctions =
 		new LinkedHashMap<>();
-	private Map<String, Function<T, Boolean>> _booleanFunctions =
+	private final Map<String, Function<T, Boolean>> _booleanFunctions =
 		new LinkedHashMap<>();
-	private Map<String, Function<T, List<Boolean>>> _booleanListFunctions =
-		new LinkedHashMap<>();
+	private final Map<String, Function<T, List<Boolean>>>
+		_booleanListFunctions = new LinkedHashMap<>();
 	private final Class<? extends Identifier<S>> _identifierClass;
 	private Function<T, S> _identifierFunction;
-	private Map<String, String> _links = new LinkedHashMap<>();
-	private Map<String, BiFunction<T, Language, String>>
+	private final Map<String, String> _links = new LinkedHashMap<>();
+	private final Map<String, BiFunction<T, Language, String>>
 		_localizedStringFunctions = new LinkedHashMap<>();
-	private Map<String, Function<T, ?>> _nestedFieldFunctions = new HashMap<>();
-	private Map<String, Representor<?, ?>> _nestedFields = new HashMap<>();
-	private Map<String, Function<T, Number>> _numberFunctions =
+	private final Map<String, Function<T, ?>> _nestedFieldFunctions =
+		new HashMap<>();
+	private final Map<String, Representor<?, ?>> _nestedFields =
+		new HashMap<>();
+	private final Map<String, Function<T, Number>> _numberFunctions =
 		new LinkedHashMap<>();
-	private Map<String, Function<T, List<Number>>> _numberListFunctions =
+	private final Map<String, Function<T, List<Number>>> _numberListFunctions =
 		new LinkedHashMap<>();
-	private List<RelatedCollection<? extends Identifier>> _relatedCollections =
-		new ArrayList<>();
+	private final List<RelatedCollection<? extends Identifier>>
+		_relatedCollections = new ArrayList<>();
 	private final Supplier<List<RelatedCollection<?>>>
 		_relatedCollectionsSupplier;
-	private List<RelatedModel<T, ?>> _relatedModels = new ArrayList<>();
-	private Map<String, Function<T, String>> _stringFunctions =
+	private final List<RelatedModel<T, ?>> _relatedModels = new ArrayList<>();
+	private final Map<String, Function<T, String>> _stringFunctions =
 		new LinkedHashMap<>();
-	private Map<String, Function<T, List<String>>> _stringListFunctions =
+	private final Map<String, Function<T, List<String>>> _stringListFunctions =
 		new LinkedHashMap<>();
-	private List<String> _types = new ArrayList<>();
+	private final List<String> _types = new ArrayList<>();
 
 }

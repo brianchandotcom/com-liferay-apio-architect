@@ -547,10 +547,10 @@ public class ItemRoutes<T> {
 
 	}
 
-	private DeleteItemConsumer _deleteItemConsumer;
-	private Form _form;
+	private final DeleteItemConsumer _deleteItemConsumer;
+	private final Form _form;
 	private final String _name;
-	private GetItemFunction<T> _singleModelFunction;
-	private UpdateItemFunction<T> _updateItemFunction;
+	private final GetItemFunction<T> _singleModelFunction;
+	private final UpdateItemFunction<T> _updateItemFunction;
 
 }

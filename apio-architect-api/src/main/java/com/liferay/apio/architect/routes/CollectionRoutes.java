@@ -413,10 +413,9 @@ public class CollectionRoutes<T> {
 
 	}
 
-	private CreateItemFunction<T> _createItemFunction;
-
+	private final CreateItemFunction<T> _createItemFunction;
 	private final Form _form;
-	private GetPageFunction<T> _getPageFunction;
+	private final GetPageFunction<T> _getPageFunction;
 	private final String _name;
 
 }

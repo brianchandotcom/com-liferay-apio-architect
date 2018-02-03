@@ -60,10 +60,10 @@ public class Dummy {
 		return "String 2";
 	}
 
-	public Boolean boolean1 = true;
-	public Boolean boolean2 = false;
-	public List<Boolean> booleanList1 = asList(true, false, false, true);
-	public List<Boolean> booleanList2 = asList(false, false, true, false);
+	public final Boolean boolean1 = true;
+	public final Boolean boolean2 = false;
+	public final List<Boolean> booleanList1 = asList(true, false, false, true);
+	public final List<Boolean> booleanList2 = asList(false, false, true, false);
 	public final Date date1 = new Date(1465981200000L);
 	public final Date date2 = new Date(1491244560000L);
 	public final int id;
@@ -73,13 +73,13 @@ public class Dummy {
 		"Input Stream 2".getBytes(UTF_8));
 	public final Number number1 = 1L;
 	public final Number number2 = 2L;
-	public List<Number> numberList1 = asList(1, 2, 3, 4, 5);
-	public List<Number> numberList2 = asList(6, 7, 8, 9, 10);
+	public final List<Number> numberList1 = asList(1, 2, 3, 4, 5);
+	public final List<Number> numberList2 = asList(6, 7, 8, 9, 10);
 	public final Integer relatedModelId1 = 1;
 	public final Integer relatedModelId2 = 2;
 	public final Integer relatedModelId3 = 3;
 	public final Integer relatedModelId4 = 4;
-	public List<String> stringList1 = asList("a", "b", "c", "d");
-	public List<String> stringList2 = asList("e", "f", "g", "h");
+	public final List<String> stringList1 = asList("a", "b", "c", "d");
+	public final List<String> stringList2 = asList("e", "f", "g", "h");
 
 }
