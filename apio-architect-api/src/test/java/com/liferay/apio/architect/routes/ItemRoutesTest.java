@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.operation.Method.DELETE;
-import static com.liferay.apio.architect.operation.Method.UPDATE;
+import static com.liferay.apio.architect.operation.Method.PUT;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
@@ -333,7 +333,7 @@ public class ItemRoutesTest {
 		Operation secondOperation = operations.get(1);
 
 		assertThat(secondOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(secondOperation.method, is(UPDATE));
+		assertThat(secondOperation.method, is(PUT));
 		assertThat(secondOperation.name, is("name/update"));
 	}
 

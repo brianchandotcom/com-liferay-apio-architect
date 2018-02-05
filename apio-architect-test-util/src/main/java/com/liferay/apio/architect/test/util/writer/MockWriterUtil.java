@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.test.util.writer;
 
 import static com.liferay.apio.architect.operation.Method.DELETE;
-import static com.liferay.apio.architect.operation.Method.UPDATE;
+import static com.liferay.apio.architect.operation.Method.PUT;
 import static com.liferay.apio.architect.test.util.form.MockFormCreator.createForm;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createFirstEmbeddedModelRepresentor;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createRootModelRepresentor;
@@ -58,7 +58,7 @@ public class MockWriterUtil {
 			Operation deleteOperation = new Operation(
 				DELETE, "delete-operation");
 			Operation putOperation = new Operation(
-				createForm("u", "r"), UPDATE, "update-operation");
+				createForm("u", "r"), PUT, "update-operation");
 
 			return Arrays.asList(deleteOperation, putOperation);
 		}

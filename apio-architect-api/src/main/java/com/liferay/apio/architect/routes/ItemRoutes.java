@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.operation.Method.DELETE;
-import static com.liferay.apio.architect.operation.Method.UPDATE;
+import static com.liferay.apio.architect.operation.Method.PUT;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideConsumer;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
@@ -119,7 +119,7 @@ public class ItemRoutes<T> {
 
 		getFormOptional().ifPresent(
 			form -> operations.add(
-				new Operation(form, UPDATE, _name + "/update")));
+				new Operation(form, PUT, _name + "/update")));
 
 		return operations;
 	}

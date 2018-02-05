@@ -201,7 +201,7 @@ public class JSONLDTestUtil {
 		).where(
 			"expects", is(aJsonString(equalTo("localhost/f/u/r")))
 		).where(
-			"method", is(aJsonString(equalTo("UPDATE")))
+			"method", is(aJsonString(equalTo("PUT")))
 		).build();
 
 		List<Matcher<? super JsonElement>> theOperations = Arrays.asList(
