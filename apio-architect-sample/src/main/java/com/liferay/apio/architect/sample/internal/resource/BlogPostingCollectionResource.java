@@ -23,9 +23,9 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingForm;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentId;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingId;
-import com.liferay.apio.architect.sample.internal.identifier.PersonId;
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentModelId;
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingModelId;
+import com.liferay.apio.architect.sample.internal.identifier.PersonModelId;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingModel;
 
 import java.util.List;
@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(immediate = true)
 public class BlogPostingCollectionResource
-	implements CollectionResource<BlogPostingModel, Long, BlogPostingId> {
+	implements CollectionResource<BlogPostingModel, Long, BlogPostingModelId> {
 
 	@Override
 	public CollectionRoutes<BlogPostingModel> collectionRoutes(
@@ -90,9 +90,9 @@ public class BlogPostingCollectionResource
 		).addDate(
 			"dateModified", BlogPostingModel::getModifiedDate
 		).addLinkedModel(
-			"creator", PersonId.class, BlogPostingModel::getCreatorId
+			"creator", PersonModelId.class, BlogPostingModel::getCreatorId
 		).addRelatedCollection(
-			"comments", BlogPostingCommentId.class
+			"comments", BlogPostingCommentModelId.class
 		).addString(
 			"alternativeHeadline", BlogPostingModel::getSubtitle
 		).addString(

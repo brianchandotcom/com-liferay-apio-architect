@@ -23,7 +23,7 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.form.PersonForm;
-import com.liferay.apio.architect.sample.internal.identifier.PersonId;
+import com.liferay.apio.architect.sample.internal.identifier.PersonModelId;
 import com.liferay.apio.architect.sample.internal.model.PersonModel;
 
 import java.util.List;
@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(immediate = true)
 public class PersonCollectionResource
-	implements CollectionResource<PersonModel, Long, PersonId> {
+	implements CollectionResource<PersonModel, Long, PersonModelId> {
 
 	@Override
 	public CollectionRoutes<PersonModel> collectionRoutes(
