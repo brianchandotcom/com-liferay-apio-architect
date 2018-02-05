@@ -394,6 +394,8 @@ public class JSONLDTestUtil {
 		Conditions secondNestedContextConditions = builder.where(
 			"linked3", IS_A_TYPE_ID_JSON_OBJECT
 		).where(
+			"bidirectionalModel3", IS_A_TYPE_ID_JSON_OBJECT
+		).where(
 			"relatedCollection3", IS_A_TYPE_ID_JSON_OBJECT
 		).build();
 
@@ -401,6 +403,9 @@ public class JSONLDTestUtil {
 			"@context", is(aJsonObjectWith(secondNestedContextConditions))
 		).where(
 			"@type", containsTheTypes("Type 4")
+		).where(
+			"bidirectionalModel3",
+			isALinkTo("localhost/p/first-inner-model/bidirectional_id")
 		).where(
 			"linked3", isALinkTo("localhost/p/third-inner-model/fifth")
 		).where(

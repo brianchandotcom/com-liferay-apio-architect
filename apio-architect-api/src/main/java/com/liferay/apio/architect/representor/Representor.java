@@ -301,10 +301,6 @@ public class Representor<T, S> {
 				Class<? extends Identifier<S>> identifierClass,
 				Function<T, S> identifierFunction) {
 
-				if (_representor._identifierFunction == null) {
-					return this;
-				}
-
 				_representor._relatedModels.add(
 					new RelatedModel<>(
 						key, identifierClass, identifierFunction));

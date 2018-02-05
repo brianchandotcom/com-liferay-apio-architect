@@ -231,17 +231,20 @@ public class PlainJSONTestUtil {
 		Builder builder = new Builder();
 
 		Conditions conditions = builder.where(
-			"number1", is(aJsonInt(equalTo(42)))
-		).where(
-			"string1", is(aJsonString(equalTo("id 2")))
+			"bidirectionalModel3",
+			isALinkTo("localhost/p/first-inner-model/bidirectional_id")
 		).where(
 			"linked3", is(isALinkTo("localhost/p/third-inner-model/fifth"))
+		).where(
+			"nested3",
+			aJsonObjectWhere("string1", is(aJsonString(equalTo("id 3"))))
+		).where(
+			"number1", is(aJsonInt(equalTo(42)))
 		).where(
 			"relatedCollection3",
 			is(isALinkTo("localhost/p/model/" + id + "/models"))
 		).where(
-			"nested3",
-			aJsonObjectWhere("string1", is(aJsonString(equalTo("id 3"))))
+			"string1", is(aJsonString(equalTo("id 2")))
 		).build();
 
 		return is(aJsonObjectWith(conditions));

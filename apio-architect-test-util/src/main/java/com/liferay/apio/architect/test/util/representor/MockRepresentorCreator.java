@@ -170,6 +170,9 @@ public class MockRepresentorCreator {
 				"nested2", rootModel -> (SecondEmbeddedModel)() -> "id 2",
 				nestedBuilder -> nestedBuilder.nestedTypes(
 					"Type 4"
+				).addBidirectionalModel(
+					"bidirectionalModel3", "bidirectionalKey", FirstEmbeddedId.class,
+					(Function<SecondEmbeddedModel, String>) SecondEmbeddedModel::getId
 				).addString(
 					"string1", SecondEmbeddedModel::getId
 				).addNumber(
@@ -178,9 +181,6 @@ public class MockRepresentorCreator {
 					"linked3", ThirdEmbeddedId.class, __ -> "fifth"
 				).addRelatedCollection(
 					"relatedCollection3", ThirdEmbeddedId.class
-				).addBidirectionalModel(
-					"bidirectionalModel1", "relatedkey", FirstEmbeddedId.class,
-					(Function<SecondEmbeddedModel, String>) SecondEmbeddedModel::getId
 				).addNested(
 					"nested3", __ -> () -> "id 3",
 					(Representor.Builder<ThirdEmbeddedModel, ?>
