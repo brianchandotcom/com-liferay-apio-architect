@@ -116,17 +116,17 @@ public class HALPageMessageMapperTest implements RepresentableManager {
 				"Type 1", is(aJsonArrayThat(containsTheEmbedded))));
 
 		Conditions linkConditions = builder.where(
-			"collection", isALinkTo("localhost/p/name/id/models")
+			"collection", isALinkTo("localhost/p/name/id/root")
 		).where(
-			"first", isALinkTo("localhost/p/name/id/models?page=1&per_page=3")
+			"first", isALinkTo("localhost/p/name/id/root?page=1&per_page=3")
 		).where(
-			"last", isALinkTo("localhost/p/name/id/models?page=3&per_page=3")
+			"last", isALinkTo("localhost/p/name/id/root?page=3&per_page=3")
 		).where(
-			"next", isALinkTo("localhost/p/name/id/models?page=3&per_page=3")
+			"next", isALinkTo("localhost/p/name/id/root?page=3&per_page=3")
 		).where(
-			"prev", isALinkTo("localhost/p/name/id/models?page=1&per_page=3")
+			"prev", isALinkTo("localhost/p/name/id/root?page=1&per_page=3")
 		).where(
-			"self", isALinkTo("localhost/p/name/id/models?page=2&per_page=3")
+			"self", isALinkTo("localhost/p/name/id/root?page=2&per_page=3")
 		).build();
 
 		_isAJsonObjectWithTheLinks = is(aJsonObjectWith(linkConditions));

@@ -68,7 +68,7 @@ public class PlainJSONPageMessageMapperTest {
 		Builder builder = new Builder();
 
 		Conditions conditions = builder.where(
-			"collection", isALinkTo("localhost/p/name/id/models")
+			"collection", isALinkTo("localhost/p/name/id/root")
 		).where(
 			"elements", is(aJsonArrayThat(_containsTheElements))
 		).where(
@@ -76,7 +76,7 @@ public class PlainJSONPageMessageMapperTest {
 		).where(
 			"pages", _isAJsonObjectWithThePages
 		).where(
-			"self", isALinkTo("localhost/p/name/id/models?page=2&per_page=3")
+			"self", isALinkTo("localhost/p/name/id/root?page=2&per_page=3")
 		).where(
 			"totalNumberOfItems", is(aJsonInt(equalTo(9)))
 		).build();
@@ -93,13 +93,13 @@ public class PlainJSONPageMessageMapperTest {
 		Builder builder = new Builder();
 
 		Conditions pagesConditions = builder.where(
-			"first", isALinkTo("localhost/p/name/id/models?page=1&per_page=3")
+			"first", isALinkTo("localhost/p/name/id/root?page=1&per_page=3")
 		).where(
-			"last", isALinkTo("localhost/p/name/id/models?page=3&per_page=3")
+			"last", isALinkTo("localhost/p/name/id/root?page=3&per_page=3")
 		).where(
-			"next", isALinkTo("localhost/p/name/id/models?page=3&per_page=3")
+			"next", isALinkTo("localhost/p/name/id/root?page=3&per_page=3")
 		).where(
-			"prev", isALinkTo("localhost/p/name/id/models?page=1&per_page=3")
+			"prev", isALinkTo("localhost/p/name/id/root?page=1&per_page=3")
 		).build();
 
 		_isAJsonObjectWithThePages = is(aJsonObjectWith(pagesConditions));

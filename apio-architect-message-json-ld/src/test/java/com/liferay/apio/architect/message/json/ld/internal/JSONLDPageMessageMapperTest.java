@@ -65,7 +65,7 @@ public class JSONLDPageMessageMapperTest {
 		Conditions conditions = builder.where(
 			"@context", _isAJsonObjectWithTheContext
 		).where(
-			"@id", isALinkTo("localhost/p/name/id/models")
+			"@id", isALinkTo("localhost/p/name/id/root")
 		).where(
 			"@type", containsTheTypes("Collection")
 		).where(
@@ -103,16 +103,15 @@ public class JSONLDPageMessageMapperTest {
 		Conditions viewConditions = builder.where(
 			"@type", containsTheTypes("PartialCollectionView")
 		).where(
-			"@id", isALinkTo("localhost/p/name/id/models?page=2&per_page=3")
+			"@id", isALinkTo("localhost/p/name/id/root?page=2&per_page=3")
 		).where(
-			"first", isALinkTo("localhost/p/name/id/models?page=1&per_page=3")
+			"first", isALinkTo("localhost/p/name/id/root?page=1&per_page=3")
 		).where(
-			"last", isALinkTo("localhost/p/name/id/models?page=3&per_page=3")
+			"last", isALinkTo("localhost/p/name/id/root?page=3&per_page=3")
 		).where(
-			"next", isALinkTo("localhost/p/name/id/models?page=3&per_page=3")
+			"next", isALinkTo("localhost/p/name/id/root?page=3&per_page=3")
 		).where(
-			"previous",
-			isALinkTo("localhost/p/name/id/models?page=1&per_page=3")
+			"previous", isALinkTo("localhost/p/name/id/root?page=1&per_page=3")
 		).build();
 
 		_isAJsonObjectWithTheView = is(aJsonObjectWith(viewConditions));
