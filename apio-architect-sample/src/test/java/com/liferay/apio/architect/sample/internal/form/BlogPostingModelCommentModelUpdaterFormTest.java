@@ -26,7 +26,7 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class BlogPostingCommentUpdaterFormTest {
+public class BlogPostingModelCommentModelUpdaterFormTest {
 
 	@Test
 	public void test() {

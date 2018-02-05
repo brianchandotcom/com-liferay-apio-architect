@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  *
  * @author Alejandro Hernández
  */
-public class BlogPosting {
+public class BlogPostingModel {
 
 	/**
 	 * Adds a new blog posting to the database.
@@ -49,18 +49,18 @@ public class BlogPosting {
 	 * @param  title the blog posting's title
 	 * @return the new blog posting
 	 */
-	public static BlogPosting addBlogPosting(
+	public static BlogPostingModel addBlogPosting(
 		String content, long creatorId, String subtitle, String title) {
 
 		long blogPostingId = _count.incrementAndGet();
 
-		BlogPosting blogPosting = new BlogPosting(
+		BlogPostingModel blogPostingModel = new BlogPostingModel(
 			blogPostingId, content, new Date(), creatorId, new Date(), subtitle,
 			title);
 
-		_blogPostings.put(blogPostingId, blogPosting);
+		_blogPostings.put(blogPostingId, blogPostingModel);
 
-		return blogPosting;
+		return blogPostingModel;
 	}
 
 	/**
@@ -79,10 +79,12 @@ public class BlogPosting {
 	 * @param  blogPostingId the blog posting's ID
 	 * @return the blog posting, if present; {@code Optional#empty()} otherwise
 	 */
-	public static Optional<BlogPosting> getBlogPosting(long blogPostingId) {
-		BlogPosting blogPosting = _blogPostings.get(blogPostingId);
+	public static Optional<BlogPostingModel> getBlogPosting(
+		long blogPostingId) {
 
-		return Optional.ofNullable(blogPosting);
+		BlogPostingModel blogPostingModel = _blogPostings.get(blogPostingId);
+
+		return Optional.ofNullable(blogPostingModel);
 	}
 
 	/**
@@ -102,10 +104,10 @@ public class BlogPosting {
 	 * @param  end the page's end position
 	 * @return the page of blog postings
 	 */
-	public static List<BlogPosting> getBlogPostings(int start, int end) {
-		Collection<BlogPosting> blogPostings = _blogPostings.values();
+	public static List<BlogPostingModel> getBlogPostings(int start, int end) {
+		Collection<BlogPostingModel> blogPostingModels = _blogPostings.values();
 
-		Stream<BlogPosting> stream = blogPostings.stream();
+		Stream<BlogPostingModel> stream = blogPostingModels.stream();
 
 		return stream.skip(
 			start
@@ -128,25 +130,25 @@ public class BlogPosting {
 	 * @return the updated blog posting, if present; {@code Optional#empty()}
 	 *         otherwise
 	 */
-	public static Optional<BlogPosting> updateBlogPosting(
+	public static Optional<BlogPostingModel> updateBlogPosting(
 		long blogPostingId, String content, long creatorId, String subtitle,
 		String title) {
 
-		BlogPosting blogPosting = _blogPostings.get(blogPostingId);
+		BlogPostingModel blogPostingModel = _blogPostings.get(blogPostingId);
 
-		if (blogPosting == null) {
+		if (blogPostingModel == null) {
 			return Optional.empty();
 		}
 
-		Date createDate = blogPosting.getCreateDate();
+		Date createDate = blogPostingModel.getCreateDate();
 
-		blogPosting = new BlogPosting(
+		blogPostingModel = new BlogPostingModel(
 			blogPostingId, content, createDate, creatorId, new Date(), subtitle,
 			title);
 
-		_blogPostings.put(blogPostingId, blogPosting);
+		_blogPostings.put(blogPostingId, blogPostingModel);
 
-		return Optional.of(blogPosting);
+		return Optional.of(blogPostingModel);
 	}
 
 	/**
@@ -212,7 +214,7 @@ public class BlogPosting {
 		return _title;
 	}
 
-	private BlogPosting(
+	private BlogPostingModel(
 		long blogPostingId, String content, Date createDate, long creatorId,
 		Date modifiedDate, String subtitle, String title) {
 
@@ -225,7 +227,7 @@ public class BlogPosting {
 		_title = title;
 	}
 
-	private static final Map<Long, BlogPosting> _blogPostings = new HashMap<>();
+	private static final Map<Long, BlogPostingModel> _blogPostings = new HashMap<>();
 	private static final AtomicLong _count = new AtomicLong(30);
 
 	static {
@@ -248,17 +250,17 @@ public class BlogPosting {
 
 			RandomService randomService = faker.random();
 
-			int creatorId = randomService.nextInt(Person.getPeopleCount());
+			int creatorId = randomService.nextInt(PersonModel.getPeopleCount());
 
 			DateAndTime dateAndTime = faker.date();
 
 			Date date = dateAndTime.past(400, TimeUnit.DAYS);
 
-			BlogPosting blogPosting = new BlogPosting(
+			BlogPostingModel blogPostingModel = new BlogPostingModel(
 				blogPostingId, content, date, creatorId, date, lorem.sentence(),
 				book.title());
 
-			_blogPostings.put(blogPostingId, blogPosting);
+			_blogPostings.put(blogPostingId, blogPostingModel);
 		}
 	}
 

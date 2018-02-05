@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  *
  * @author Alejandro Hernández
  */
-public class Person {
+public class PersonModel {
 
 	/**
 	 * Adds a new person.
@@ -53,19 +53,19 @@ public class Person {
 	 * @param  lastName the person's last name
 	 * @return the new person
 	 */
-	public static Person addPerson(
+	public static PersonModel addPerson(
 		String address, String avatar, Date birthDate, String email,
 		String firstName, String jobTitle, String lastName) {
 
 		long personId = _count.incrementAndGet();
 
-		Person person = new Person(
+		PersonModel personModel = new PersonModel(
 			address, avatar, birthDate, email, firstName, jobTitle, lastName,
 			personId);
 
-		_persons.put(personId, person);
+		_persons.put(personId, personModel);
 
-		return person;
+		return personModel;
 	}
 
 	/**
@@ -85,10 +85,10 @@ public class Person {
 	 * @param  end the page's end position
 	 * @return the page of persons
 	 */
-	public static List<Person> getPeople(int start, int end) {
-		Collection<Person> persons = _persons.values();
+	public static List<PersonModel> getPeople(int start, int end) {
+		Collection<PersonModel> personModels = _persons.values();
 
-		Stream<Person> stream = persons.stream();
+		Stream<PersonModel> stream = personModels.stream();
 
 		return stream.skip(
 			start
@@ -115,10 +115,10 @@ public class Person {
 	 * @param  personId the person's ID
 	 * @return the person, if present; {@code Optional#empty()} otherwise
 	 */
-	public static Optional<Person> getPerson(long personId) {
-		Person person = _persons.get(personId);
+	public static Optional<PersonModel> getPerson(long personId) {
+		PersonModel personModel = _persons.get(personId);
 
-		return Optional.ofNullable(person);
+		return Optional.ofNullable(personModel);
 	}
 
 	/**
@@ -136,23 +136,23 @@ public class Person {
 	 * @return the updated person, if present; {@code Optional#empty()}
 	 *         otherwise
 	 */
-	public static Optional<Person> updatePerson(
+	public static Optional<PersonModel> updatePerson(
 		String address, String avatar, Date birthDate, String email,
 		String firstName, String jobTitle, String lastName, long personId) {
 
-		Person person = _persons.get(personId);
+		PersonModel personModel = _persons.get(personId);
 
-		if (person == null) {
+		if (personModel == null) {
 			return Optional.empty();
 		}
 
-		person = new Person(
+		personModel = new PersonModel(
 			avatar, address, birthDate, email, firstName, jobTitle, lastName,
 			personId);
 
-		_persons.put(personId, person);
+		_persons.put(personId, personModel);
 
-		return Optional.of(person);
+		return Optional.of(personModel);
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class Person {
 		return _personId;
 	}
 
-	private Person(
+	private PersonModel(
 		String address, String avatar, Date birthDate, String email,
 		String firstName, String jobTitle, String lastName, long personId) {
 
@@ -251,7 +251,7 @@ public class Person {
 	}
 
 	private static final AtomicLong _count = new AtomicLong(10);
-	private static final Map<Long, Person> _persons = new HashMap<>();
+	private static final Map<Long, PersonModel> _persons = new HashMap<>();
 
 	static {
 		for (long personId = 0; personId < 10; personId++) {
@@ -272,12 +272,12 @@ public class Person {
 
 			Name name = faker.name();
 
-			Person person = new Person(
+			PersonModel personModel = new PersonModel(
 				address.fullAddress(), internet.avatar(), birthDate,
 				internet.safeEmailAddress(), name.firstName(), name.title(),
 				name.lastName(), personId);
 
-			_persons.put(personId, person);
+			_persons.put(personId, personModel);
 		}
 	}
 

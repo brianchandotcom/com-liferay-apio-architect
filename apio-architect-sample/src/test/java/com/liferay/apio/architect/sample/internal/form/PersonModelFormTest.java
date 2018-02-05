@@ -15,30 +15,45 @@
 package com.liferay.apio.architect.sample.internal.form;
 
 import static com.liferay.apio.architect.form.Form.Builder.empty;
-import static com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm.buildForm;
+import static com.liferay.apio.architect.sample.internal.form.PersonForm.buildForm;
 import static com.liferay.apio.architect.test.util.form.FormMatchers.isAFormWithConditions;
 import static com.liferay.apio.architect.test.util.form.FormMatchers.isReturnedIn;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.liferay.apio.architect.form.Form;
+
+import org.hamcrest.Matcher;
 
 import org.junit.Test;
 
 /**
  * @author Alejandro Hernández
  */
-public class BlogPostingCommentCreatorFormTest {
+public class PersonModelFormTest {
 
 	@Test
 	public void test() {
-		assertThat(
-			buildForm(empty()),
-			isAFormWithConditions(
-				builder -> builder.whereLong(
-					"author",
-					isReturnedIn(BlogPostingCommentCreatorForm::getAuthor)
-				).whereString(
-					"text", isReturnedIn(BlogPostingCommentCreatorForm::getText)
-				).build()));
+		Form<PersonForm> form = buildForm(empty());
+
+		Matcher<Form<PersonForm>> isAFormWithConditions = isAFormWithConditions(
+			builder -> builder.whereDate(
+				"birthDate", isReturnedIn(PersonForm::getBirthDate)
+			).whereString(
+				"address", isReturnedIn(PersonForm::getAddress)
+			).whereString(
+				"email", isReturnedIn(PersonForm::getEmail)
+			).whereString(
+				"familyName", isReturnedIn(PersonForm::getFamilyName)
+			).whereString(
+				"givenName", isReturnedIn(PersonForm::getGivenName)
+			).whereString(
+				"image", isReturnedIn(PersonForm::getImage)
+			).whereString(
+				"jobTitle", isReturnedIn(PersonForm::getJobTitle)
+			).build());
+
+		assertThat(form, isAFormWithConditions);
 	}
 
 }

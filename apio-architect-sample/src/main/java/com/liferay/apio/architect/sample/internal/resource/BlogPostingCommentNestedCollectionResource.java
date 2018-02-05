@@ -24,10 +24,6 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentUpdaterForm;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentId;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingId;
-import com.liferay.apio.architect.sample.internal.identifier.PersonId;
-import com.liferay.apio.architect.sample.internal.model.BlogPostingComment;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,23 +31,28 @@ import java.util.Optional;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentId;
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingId;
+import com.liferay.apio.architect.sample.internal.identifier.PersonId;
+import com.liferay.apio.architect.sample.internal.model.BlogPostingCommentModel;
 import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides all the information necessary to expose <a
  * href="http://schema.org/Comment">Comment </a> resources through a web API.
- * The resources are mapped from the internal {@link BlogPostingComment} model.
+ * The resources are mapped from the internal {@link BlogPostingCommentModel}
+ * model.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
 public class BlogPostingCommentNestedCollectionResource implements
 	NestedCollectionResource
-		<BlogPostingComment, Long, BlogPostingCommentId, Long, BlogPostingId> {
+		<BlogPostingCommentModel, Long, BlogPostingCommentId, Long, BlogPostingId> {
 
 	@Override
-	public NestedCollectionRoutes<BlogPostingComment, Long> collectionRoutes(
-		NestedCollectionRoutes.Builder<BlogPostingComment, Long> builder) {
+	public NestedCollectionRoutes<BlogPostingCommentModel, Long> collectionRoutes(
+		NestedCollectionRoutes.Builder<BlogPostingCommentModel, Long> builder) {
 
 		return builder.addGetter(
 			this::_getPageItems
@@ -67,8 +68,8 @@ public class BlogPostingCommentNestedCollectionResource implements
 	}
 
 	@Override
-	public ItemRoutes<BlogPostingComment> itemRoutes(
-		ItemRoutes.Builder<BlogPostingComment, Long> builder) {
+	public ItemRoutes<BlogPostingCommentModel> itemRoutes(
+		ItemRoutes.Builder<BlogPostingCommentModel, Long> builder) {
 
 		return builder.addGetter(
 			this::_getBlogPostingComment
@@ -81,25 +82,25 @@ public class BlogPostingCommentNestedCollectionResource implements
 	}
 
 	@Override
-	public Representor<BlogPostingComment, Long> representor(
-		Representor.Builder<BlogPostingComment, Long> builder) {
+	public Representor<BlogPostingCommentModel, Long> representor(
+		Representor.Builder<BlogPostingCommentModel, Long> builder) {
 
 		return builder.types(
 			"Comment"
 		).identifier(
-			BlogPostingComment::getBlogPostingCommentId
+			BlogPostingCommentModel::getBlogPostingCommentId
 		).addDate(
-			"dateCreated", BlogPostingComment::getCreateDate
+			"dateCreated", BlogPostingCommentModel::getCreateDate
 		).addDate(
-			"dateModified", BlogPostingComment::getModifiedDate
+			"dateModified", BlogPostingCommentModel::getModifiedDate
 		).addLinkedModel(
-			"author", PersonId.class, BlogPostingComment::getAuthorId
+			"author", PersonId.class, BlogPostingCommentModel::getAuthorId
 		).addString(
-			"text", BlogPostingComment::getContent
+			"text", BlogPostingCommentModel::getContent
 		).build();
 	}
 
-	private BlogPostingComment _addBlogPostingComment(
+	private BlogPostingCommentModel _addBlogPostingComment(
 		Long blogPostingId,
 		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm) {
 
@@ -107,7 +108,7 @@ public class BlogPostingCommentNestedCollectionResource implements
 			throw new ForbiddenException();
 		}
 
-		return BlogPostingComment.addBlogPostingComment(
+		return BlogPostingCommentModel.addBlogPostingComment(
 			blogPostingCommentCreatorForm.getAuthor(), blogPostingId,
 			blogPostingCommentCreatorForm.getText());
 	}
@@ -117,14 +118,14 @@ public class BlogPostingCommentNestedCollectionResource implements
 			throw new ForbiddenException();
 		}
 
-		BlogPostingComment.deleteBlogPostingComment(blogPostingCommentId);
+		BlogPostingCommentModel.deleteBlogPostingComment(blogPostingCommentId);
 	}
 
-	private BlogPostingComment _getBlogPostingComment(
+	private BlogPostingCommentModel _getBlogPostingComment(
 		Long blogPostingCommentId) {
 
-		Optional<BlogPostingComment> optional =
-			BlogPostingComment.getBlogPostingCommentOptional(
+		Optional<BlogPostingCommentModel> optional =
+			BlogPostingCommentModel.getBlogPostingCommentOptional(
 				blogPostingCommentId);
 
 		return optional.orElseThrow(
@@ -132,20 +133,20 @@ public class BlogPostingCommentNestedCollectionResource implements
 				"Unable to get blog posting comment " + blogPostingCommentId));
 	}
 
-	private PageItems<BlogPostingComment> _getPageItems(
+	private PageItems<BlogPostingCommentModel> _getPageItems(
 		Pagination pagination, Long blogPostingId) {
 
-		List<BlogPostingComment> blogsEntries =
-			BlogPostingComment.getBlogPostingComments(
+		List<BlogPostingCommentModel> blogsEntries =
+			BlogPostingCommentModel.getBlogPostingComments(
 				blogPostingId, pagination.getStartPosition(),
 				pagination.getEndPosition());
-		int count = BlogPostingComment.getBlogPostingCommentsCount(
+		int count = BlogPostingCommentModel.getBlogPostingCommentsCount(
 			blogPostingId);
 
 		return new PageItems<>(blogsEntries, count);
 	}
 
-	private BlogPostingComment _updateBlogPostingComment(
+	private BlogPostingCommentModel _updateBlogPostingComment(
 		Long blogPostingCommentId,
 		BlogPostingCommentUpdaterForm blogPostingCommentUpdaterForm) {
 
@@ -153,8 +154,8 @@ public class BlogPostingCommentNestedCollectionResource implements
 			throw new ForbiddenException();
 		}
 
-		Optional<BlogPostingComment> optional =
-			BlogPostingComment.updateBlogPostingComment(
+		Optional<BlogPostingCommentModel> optional =
+			BlogPostingCommentModel.updateBlogPostingComment(
 				blogPostingCommentId, blogPostingCommentUpdaterForm.getText());
 
 		return optional.orElseThrow(
