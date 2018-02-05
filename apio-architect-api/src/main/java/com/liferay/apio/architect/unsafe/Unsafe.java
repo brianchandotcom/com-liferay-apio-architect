@@ -38,7 +38,7 @@ public class Unsafe {
 		return (S)t;
 	}
 
-	public Unsafe() {
+	private Unsafe() {
 		throw new UnsupportedOperationException();
 	}
 
