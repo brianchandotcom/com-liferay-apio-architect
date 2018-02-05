@@ -470,13 +470,13 @@ public class Representor<T, S> {
 			 */
 			public <W> FirstStep addNested(
 				String key, Function<T, W> transformFunction,
-				Function<Builder<W, ?>, Representor<W, ?>> representorFunction) {
+				Function<Builder<W, ?>, Representor<W, ?>>
+					representorFunction) {
 
 				_representor._nested.put(
 					key, representorFunction.apply(new Builder()));
 
-				_representor._nestedFunctions.put(
-					key, transformFunction);
+				_representor._nestedFunctions.put(key, transformFunction);
 
 				return this;
 			}
