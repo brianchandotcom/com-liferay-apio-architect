@@ -34,7 +34,6 @@ import com.liferay.apio.architect.endpoint.FormEndpoint;
 import com.liferay.apio.architect.endpoint.PageEndpoint;
 import com.liferay.apio.architect.endpoint.RootEndpoint;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
@@ -128,39 +127,10 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public FormEndpoint formEndpoint() {
-		return new FormEndpoint() {
-
-			@Override
-			public Try<Form> getCreatorFormTry(String name) {
-				return _getCollectionRoutesTry(
-					name
-				).mapOptional(
-					CollectionRoutes::getFormOptional, notFound(name)
-				);
-			}
-
-			@Override
-			public Try<Form> getNestedCreatorFormTry(
-				String name, String nestedName) {
-
-				return _getNestedCollectionRoutesTry(
-					name, nestedName
-				).mapOptional(
-					NestedCollectionRoutes::getFormOptional,
-					notFound(name, nestedName)
-				);
-			}
-
-			@Override
-			public Try<Form> getUpdaterFormTry(String name) {
-				return _getItemRoutesTry(
-					name
-				).mapOptional(
-					ItemRoutes::getFormOptional, notFound(name)
-				);
-			}
-
-		};
+		return new FormEndpoint(
+			_collectionRouterManager::getCollectionRoutesOptional,
+			_itemRouterManager::getItemRoutesOptional,
+			_nestedCollectionRouterManager::getNestedCollectionRoutesOptional);
 	}
 
 	@Override

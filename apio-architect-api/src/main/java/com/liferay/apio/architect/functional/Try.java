@@ -109,6 +109,38 @@ public abstract class Try<T> {
 	}
 
 	/**
+	 * Creates a new {@code Try} instance by executing a fallible lambda that
+	 * returns an {@code Optional} in a {@link ThrowableSupplier}. If this
+	 * throws an exception a {@code Failure} instance is created. If the
+	 * returned {@code Optional} is empty, a {@code Failure} containing the
+	 * value of the exception supplier is returned. Otherwise, a {@code Success}
+	 * instance with the lambda's {@code Optional} result is created.
+	 *
+	 * @param  throwableSupplier the throwable supplier that contains the
+	 *         fallible lambda that returns an {@code Optional}
+	 * @param  supplier the supplier for the exception in the case the obtained
+	 *         {@code Optional} is {@code Optional#empty()}
+	 * @return {@code Failure} if the throwable supplier throws an exception, or
+	 *         the {@code Optional} is empty; {@code Success} otherwise
+	 * @review
+	 */
+	public static <T> Try<T> fromOptional(
+		ThrowableSupplier<Optional<T>> throwableSupplier,
+		Supplier<? extends Exception> supplier) {
+
+		Objects.requireNonNull(throwableSupplier);
+		Objects.requireNonNull(supplier);
+
+		Try<Optional<T>> optionalTry = fromFallible(throwableSupplier);
+
+		return optionalTry.map(
+			Optional::get
+		).mapFailMatching(
+			NoSuchElementException.class, supplier
+		);
+	}
+
+	/**
 	 * Creates a new {@code Try} instance from an object. This method creates
 	 * the instance as a {@code Success} object.
 	 *
