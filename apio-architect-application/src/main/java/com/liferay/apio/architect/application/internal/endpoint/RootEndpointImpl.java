@@ -95,29 +95,9 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public BinaryEndpoint binaryEndpoint() {
-		return (name, id, binaryId) -> {
-			Try<String> stringTry = Try.success(name);
-
-			return stringTry.mapOptional(
-				_representableManager::getRepresentorOptional,
-				notFound(name, id, binaryId)
-			).map(
-				Representor::getBinaryFunctions
-			).map(
-				binaryFunctions -> binaryFunctions.get(binaryId)
-			).flatMap(
-				binaryFunction -> {
-					Try<SingleModel<Object>> singleModelTry =
-						_getSingleModelTry(name, id);
-
-					return singleModelTry.map(
-						SingleModel::getModel
-					).map(
-						binaryFunction::apply
-					);
-				}
-			);
-		};
+		return new BinaryEndpoint(
+			_representableManager::getRepresentorOptional,
+			this::_getSingleModelTry);
 	}
 
 	@Override

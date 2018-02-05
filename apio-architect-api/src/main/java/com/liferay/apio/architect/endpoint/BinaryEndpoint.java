@@ -14,9 +14,17 @@
 
 package com.liferay.apio.architect.endpoint;
 
+import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notFound;
+
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.io.InputStream;
+
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,7 +36,17 @@ import javax.ws.rs.PathParam;
  * @author Alejandro Hernández
  * @review
  */
-public interface BinaryEndpoint {
+public class BinaryEndpoint {
+
+	public BinaryEndpoint(
+		Function<String, Optional<Representor<Object, Object>>>
+			representorFunction,
+		BiFunction<String, String, Try<SingleModel<Object>>>
+			singleModelFunction) {
+
+		_representorFunction = representorFunction;
+		_singleModelFunction = singleModelFunction;
+	}
 
 	/**
 	 * Returns the {@code InputStream} for the specified resource.
@@ -43,6 +61,29 @@ public interface BinaryEndpoint {
 	@Path("{name}/{id}/{binaryId}")
 	public Try<InputStream> getCollectionItemInputStreamTry(
 		@PathParam("name") String name, @PathParam("id") String id,
-		@PathParam("binaryId") String binaryId);
+		@PathParam("binaryId") String binaryId) {
+
+		return _singleModelFunction.apply(
+			name, id
+		).map(
+			SingleModel::getModel
+		).mapOptional(
+			model -> _representorFunction.apply(
+				name
+			).map(
+				Representor::getBinaryFunctions
+			).map(
+				binaryFunctions -> binaryFunctions.get(binaryId)
+			).map(
+				binaryFunction -> binaryFunction.apply(model)
+			),
+			notFound(name, id, binaryId)
+		);
+	}
+
+	private final Function<String, Optional<Representor<Object, Object>>>
+		_representorFunction;
+	private final BiFunction<String, String, Try<SingleModel<Object>>>
+		_singleModelFunction;
 
 }
