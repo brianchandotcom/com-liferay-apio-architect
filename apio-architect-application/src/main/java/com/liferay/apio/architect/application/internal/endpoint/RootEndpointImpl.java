@@ -14,15 +14,23 @@
 
 package com.liferay.apio.architect.application.internal.endpoint;
 
+import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notAllowed;
+import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notFound;
+import static com.liferay.apio.architect.operation.Method.DELETE;
+import static com.liferay.apio.architect.operation.Method.POST;
+import static com.liferay.apio.architect.operation.Method.PUT;
+
+import static javax.ws.rs.core.Response.noContent;
+
 import com.google.gson.JsonObject;
 
-import com.liferay.apio.architect.alias.BinaryFunction;
 import com.liferay.apio.architect.alias.RequestFunction;
+import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.endpoint.RootEndpoint;
-import com.liferay.apio.architect.error.ApioDeveloperError;
+import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
@@ -51,17 +59,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
-import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -99,7 +103,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		return collectionRoutesTry.mapOptional(
 			CollectionRoutes::getCreateItemFunctionOptional,
-			_getNotAllowedExceptionSupplier("POST", name)
+			notAllowed(POST, name)
 		).map(
 			function -> function.apply(_httpServletRequest)
 		).map(
@@ -114,37 +118,24 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<NestedCollectionRoutes<T, Object>> nestedCollectionRoutesTry =
 			_getNestedCollectionRoutesTry(name, nestedName);
 
-		return nestedCollectionRoutesTry.map(
+		return nestedCollectionRoutesTry.mapOptional(
 			NestedCollectionRoutes::getNestedCreateItemFunctionOptional
-		).map(
-			Optional::get
-		).map(
-			function -> function.apply(_httpServletRequest)
 		).flatMap(
-			postFunction -> {
-				Try<SingleModel<T>> parentSingleModelTry =
-					getCollectionItemSingleModelTry(name, id);
-
-				return parentSingleModelTry.map(
-					_getIdentifierFunction(name, nestedName)
-				).map(
-					optional -> optional.map(postFunction)
-				);
-			}
-		).mapOptional(
-			optional -> optional.map(function -> function.apply(body)),
-			_getNotAllowedExceptionSupplier(
-				"POST", String.join("/", name, id, nestedName))
+			nestedCreateItemFunction -> _createNestedSingleModel(
+				name, id, nestedName, body, nestedCreateItemFunction)
+		).mapFailMatching(
+			NoSuchElementException.class, notAllowed(POST, name, id, nestedName)
 		);
 	}
 
 	@Override
 	public Response deleteCollectionItem(String name, String id) {
-		Try<ItemRoutes<Object>> itemRoutesTry = _getItemRoutesTry(name);
+		Try<String> stringTry = Try.success(name);
 
-		itemRoutesTry.mapOptional(
-			ItemRoutes::getDeleteConsumerOptional,
-			_getNotAllowedExceptionSupplier("DELETE", name + "/" + id)
+		stringTry.flatMap(
+			this::_getItemRoutesTry
+		).mapOptional(
+			ItemRoutes::getDeleteConsumerOptional, notAllowed(DELETE, name, id)
 		).getUnchecked(
 		).apply(
 			_httpServletRequest
@@ -152,9 +143,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			new Path(name, id)
 		);
 
-		ResponseBuilder responseBuilder = Response.noContent();
-
-		return responseBuilder.build();
+		return noContent().build();
 	}
 
 	@Override
@@ -165,13 +154,22 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		return stringTry.mapOptional(
 			_representableManager::getRepresentorOptional,
-			_getNotFoundExceptionSupplier(String.join("/", name, id, binaryId))
+			notFound(name, id, binaryId)
 		).map(
 			Representor::getBinaryFunctions
 		).map(
 			binaryFunctions -> binaryFunctions.get(binaryId)
 		).flatMap(
-			binaryFunction -> _getInputStreamTry(name, id, binaryFunction)
+			binaryFunction -> {
+				Try<SingleModel<Object>> singleModelTry =
+					getCollectionItemSingleModelTry(name, id);
+
+				return singleModelTry.map(
+					SingleModel::getModel
+				).map(
+					binaryFunction::apply
+				);
+			}
 		);
 	}
 
@@ -182,8 +180,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<ItemRoutes<T>> itemRoutesTry = _getItemRoutesTry(name);
 
 		return itemRoutesTry.mapOptional(
-			ItemRoutes::getItemFunctionOptional,
-			_getNotFoundExceptionSupplier(name + "/" + id)
+			ItemRoutes::getItemFunctionOptional, notFound(name, id)
 		).map(
 			function -> function.apply(_httpServletRequest)
 		).map(
@@ -197,8 +194,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			name);
 
 		return collectionRoutesTry.mapOptional(
-			CollectionRoutes::getGetPageFunctionOptional,
-			_getNotFoundExceptionSupplier(name)
+			CollectionRoutes::getGetPageFunctionOptional, notFound(name)
 		).map(
 			function -> function.apply(_httpServletRequest)
 		);
@@ -210,7 +206,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			_getCollectionRoutesTry(name);
 
 		return collectionRoutesTry.mapOptional(
-			CollectionRoutes::getFormOptional, NotFoundException::new);
+			CollectionRoutes::getFormOptional, notFound());
 	}
 
 	@Override
@@ -227,7 +223,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			_httpServletRequest, ServerURL.class);
 
 		ServerURL serverURL = optional.orElseThrow(
-			() -> new ApioDeveloperError.MustHaveProvider(ServerURL.class));
+			() -> new MustHaveProvider(ServerURL.class));
 
 		JsonObject resourcesJsonObject = new JsonObject();
 
@@ -265,13 +261,20 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			function -> function.apply(new Path(name, id))
 		).flatMap(
-			_getNestedCollectionPageTryFunction(name, id, nestedName)
+			pageFunction -> {
+				Try<SingleModel<T>> parentSingleModelTry =
+					getCollectionItemSingleModelTry(name, id);
+
+				return parentSingleModelTry.map(
+					_getIdentifierFunction(name, nestedName)
+				).map(
+					optional -> optional.map(pageFunction)
+				);
+			}
 		).map(
 			Optional::get
 		).mapFailMatching(
-			NoSuchElementException.class,
-			_getNotFoundExceptionSupplier(
-				String.join("/", name, id, nestedName))
+			NoSuchElementException.class, notFound(name, id, nestedName)
 		);
 	}
 
@@ -299,14 +302,33 @@ public class RootEndpointImpl implements RootEndpoint {
 		Try<ItemRoutes<T>> itemRoutesTry = _getItemRoutesTry(name);
 
 		return itemRoutesTry.mapOptional(
-			ItemRoutes::getUpdateItemFunctionOptional,
-			_getNotAllowedExceptionSupplier("PUT", name + "/" + id)
+			ItemRoutes::getUpdateItemFunctionOptional, notAllowed(PUT, name, id)
 		).map(
 			function -> function.apply(_httpServletRequest)
 		).map(
 			function -> function.apply(new Path(name, id))
 		).map(
 			function -> function.apply(body)
+		);
+	}
+
+	private <T> Try<SingleModel<T>> _createNestedSingleModel(
+		String name, String id, String nestedName, Map<String, Object> body,
+		NestedCreateItemFunction<T, Object> nestedCreateItemFunction) {
+
+		Try<SingleModel<T>> singleModelTry = getCollectionItemSingleModelTry(
+			name, id);
+
+		return singleModelTry.mapOptional(
+			_getIdentifierFunction(name, nestedName)
+		).map(
+			identifier -> nestedCreateItemFunction.apply(
+				_httpServletRequest
+			).apply(
+				identifier
+			).apply(
+				body
+			)
 		);
 	}
 
@@ -322,9 +344,10 @@ public class RootEndpointImpl implements RootEndpoint {
 		_getFilterRelatedCollectionPredicate(String nestedName) {
 
 		return relatedCollection -> {
-			Class<?> relatedModelClass = relatedCollection.getIdentifierClass();
+			Class<?> relatedIdentifierClass =
+				relatedCollection.getIdentifierClass();
 
-			String relatedClassName = relatedModelClass.getName();
+			String className = relatedIdentifierClass.getName();
 
 			Optional<Class<Identifier>> optional =
 				_identifierClassManager.getIdentifierClassOptional(nestedName);
@@ -332,7 +355,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			return optional.map(
 				Class::getName
 			).map(
-				relatedClassName::equals
+				className::equals
 			).orElse(
 				false
 			);
@@ -360,41 +383,12 @@ public class RootEndpointImpl implements RootEndpoint {
 		};
 	}
 
-	private <T> Try<InputStream> _getInputStreamTry(
-		String name, String id, BinaryFunction<T> binaryFunction) {
-
-		Try<SingleModel<T>> singleModelTry = getCollectionItemSingleModelTry(
-			name, id);
-
-		return singleModelTry.map(
-			SingleModel::getModel
-		).map(
-			binaryFunction::apply
-		);
-	}
-
 	private <T> Try<ItemRoutes<T>> _getItemRoutesTry(String name) {
 		Try<String> stringTry = Try.success(name);
 
 		return stringTry.mapOptional(
 			_itemRouterManager::getItemRoutesOptional,
 			() -> new NotFoundException("No resource found for path " + name));
-	}
-
-	private <T> ThrowableFunction<Function<Object, Page<T>>,
-		Try<Optional<Page<T>>>> _getNestedCollectionPageTryFunction(
-			String name, String id, String nestedName) {
-
-		return pageFunction -> {
-			Try<SingleModel<T>> parentSingleModelTry =
-				getCollectionItemSingleModelTry(name, id);
-
-			return parentSingleModelTry.map(
-				_getIdentifierFunction(name, nestedName)
-			).map(
-				optional -> optional.map(pageFunction)
-			);
-		};
 	}
 
 	private <T> Try<NestedCollectionRoutes<T, Object>>
@@ -412,19 +406,6 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			Unsafe::unsafeCast
 		);
-	}
-
-	private Supplier<NotAllowedException> _getNotAllowedExceptionSupplier(
-		String method, String path) {
-
-		return () -> new NotAllowedException(
-			method + " method is not allowed for path " + path);
-	}
-
-	private Supplier<NotFoundException> _getNotFoundExceptionSupplier(
-		String name) {
-
-		return () -> new NotFoundException("No endpoint found at path " + name);
 	}
 
 	private <T, S> Try<NestedCollectionRoutes<T, S>>
