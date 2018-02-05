@@ -273,7 +273,7 @@ public class HALTestUtil {
 			"linked3", isALinkTo("localhost/p/third-inner-model/fifth")
 		).where(
 			"bidirectionalModel3",
-			isALinkTo("localhost/p/first-inner-model/bidirectional_id")
+			isALinkTo("localhost/p/first-inner-model/" + id)
 		).where(
 			"relatedCollection3",
 			isALinkTo("localhost/p/model/" + id + "/models")
@@ -282,7 +282,7 @@ public class HALTestUtil {
 		Conditions conditions = builder.where(
 			"number1", is(aJsonInt(equalTo(42)))
 		).where(
-			"string1", is(aJsonString(equalTo("id 2")))
+			"string1", is(aJsonString(equalTo(id)))
 		).where(
 			"_links", aJsonObjectWith(firstEmbeddedLinkConditions)
 		).where(

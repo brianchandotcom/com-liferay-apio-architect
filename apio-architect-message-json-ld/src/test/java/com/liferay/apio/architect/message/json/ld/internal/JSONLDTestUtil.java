@@ -405,7 +405,7 @@ public class JSONLDTestUtil {
 			"@type", containsTheTypes("Type 4")
 		).where(
 			"bidirectionalModel3",
-			isALinkTo("localhost/p/first-inner-model/bidirectional_id")
+			isALinkTo("localhost/p/first-inner-model/" + id)
 		).where(
 			"linked3", isALinkTo("localhost/p/third-inner-model/fifth")
 		).where(
@@ -416,7 +416,7 @@ public class JSONLDTestUtil {
 			"relatedCollection3",
 			isALinkTo("localhost/p/model/" + id + "/models")
 		).where(
-			"string1", is(aJsonString(equalTo("id 2")))
+			"string1", is(aJsonString(equalTo(id)))
 		).build();
 
 		return aJsonObjectWith(secondNestedConditions);
