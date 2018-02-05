@@ -253,16 +253,18 @@ public class PageMessageBodyWriter<T>
 			unsafeCast(identifierClass), identifier);
 
 		return nameOptional.flatMap(
-			name -> _itemRouterManager.getItemRoutesOptional(
-				name
-			).flatMap(
-				ItemRoutes::getItemFunctionOptional
-			).map(
-				function -> function.apply(_httpServletRequest)
-			).flatMap(
-				pathOptional::map
-			)
-		);
+			name -> {
+				Optional<ItemRoutes<Object>> itemRoutesOptional =
+					_itemRouterManager.getItemRoutesOptional(name);
+
+				return itemRoutesOptional.flatMap(
+					ItemRoutes::getItemFunctionOptional
+				).map(
+					function -> function.apply(_httpServletRequest)
+				).flatMap(
+					pathOptional::map
+				);
+			});
 	}
 
 	@Reference
