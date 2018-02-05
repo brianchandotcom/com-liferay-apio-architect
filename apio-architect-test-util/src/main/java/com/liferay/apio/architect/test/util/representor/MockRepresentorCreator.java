@@ -159,12 +159,12 @@ public class MockRepresentorCreator {
 				"nested1", __ -> (FirstEmbeddedModel)() -> "id 1",
 				nestedBuilder -> nestedBuilder.nestedTypes(
 					"Type 3"
+				).addNumber(
+					"number1", __ -> 2017
 				).addString(
 					"string1", FirstEmbeddedModel::getId
 				).addString(
 					"string2", __ -> "string2"
-				).addNumber(
-					"number1", __ -> 2017
 				).build()
 			).addNested(
 				"nested2", rootModel -> (SecondEmbeddedModel)() -> "id 2",
@@ -179,8 +179,6 @@ public class MockRepresentorCreator {
 					"number1", __ -> 42
 				).addLinkedModel(
 					"linked3", ThirdEmbeddedId.class, __ -> "fifth"
-				).addRelatedCollection(
-					"relatedCollection3", ThirdEmbeddedId.class
 				).addNested(
 					"nested3", __ -> () -> "id 3",
 					(Representor.Builder<ThirdEmbeddedModel, ?>
@@ -190,6 +188,12 @@ public class MockRepresentorCreator {
 						).addString(
 							"string1", ThirdEmbeddedModel::getId
 						).build()
+				).addNumber(
+					"number1", __ -> 42
+				).addRelatedCollection(
+					"relatedCollection3", ThirdEmbeddedId.class
+				).addString(
+					"string1", SecondEmbeddedModel::getId
 				).build()
 			);
 
