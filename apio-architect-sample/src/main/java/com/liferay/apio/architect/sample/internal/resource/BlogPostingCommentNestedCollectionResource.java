@@ -24,6 +24,10 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentUpdaterForm;
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentId;
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingId;
+import com.liferay.apio.architect.sample.internal.identifier.PersonId;
+import com.liferay.apio.architect.sample.internal.model.BlogPostingCommentModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +35,6 @@ import java.util.Optional;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentId;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingId;
-import com.liferay.apio.architect.sample.internal.identifier.PersonId;
-import com.liferay.apio.architect.sample.internal.model.BlogPostingCommentModel;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -48,11 +48,14 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true)
 public class BlogPostingCommentNestedCollectionResource implements
 	NestedCollectionResource
-		<BlogPostingCommentModel, Long, BlogPostingCommentId, Long, BlogPostingId> {
+		<BlogPostingCommentModel, Long, BlogPostingCommentId, Long,
+			BlogPostingId> {
 
 	@Override
-	public NestedCollectionRoutes<BlogPostingCommentModel, Long> collectionRoutes(
-		NestedCollectionRoutes.Builder<BlogPostingCommentModel, Long> builder) {
+	public NestedCollectionRoutes<BlogPostingCommentModel, Long>
+		collectionRoutes(
+			NestedCollectionRoutes.Builder<BlogPostingCommentModel, Long>
+				builder) {
 
 		return builder.addGetter(
 			this::_getPageItems

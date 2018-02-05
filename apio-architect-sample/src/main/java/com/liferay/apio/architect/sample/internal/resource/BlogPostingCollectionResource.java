@@ -26,9 +26,7 @@ import com.liferay.apio.architect.sample.internal.form.BlogPostingForm;
 import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentId;
 import com.liferay.apio.architect.sample.internal.identifier.BlogPostingId;
 import com.liferay.apio.architect.sample.internal.identifier.PersonId;
-import com.liferay.apio.architect.sample.internal.model.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingModel;
-import com.liferay.apio.architect.sample.internal.model.PersonModel;
 
 import java.util.List;
 import java.util.Optional;

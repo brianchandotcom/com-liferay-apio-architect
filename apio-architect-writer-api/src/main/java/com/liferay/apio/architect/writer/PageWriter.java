@@ -343,7 +343,8 @@ public class PageWriter<T> {
 			 * Adds information to the builder about the function that gets the
 			 * {@code SingleModel} from a class using its identifier.
 			 *
-			 * @param  singleModelFunction the function that gets the {@code SingleModel} of a class
+			 * @param  singleModelFunction the function that gets the {@code
+			 *         SingleModel} of a class
 			 * @return the updated builder
 			 */
 			public BuildStep singleModelFunction(

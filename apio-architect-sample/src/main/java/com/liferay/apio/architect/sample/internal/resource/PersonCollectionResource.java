@@ -23,6 +23,8 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.form.PersonForm;
+import com.liferay.apio.architect.sample.internal.identifier.PersonId;
+import com.liferay.apio.architect.sample.internal.model.PersonModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +32,6 @@ import java.util.Optional;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
-import com.liferay.apio.architect.sample.internal.identifier.PersonId;
-import com.liferay.apio.architect.sample.internal.model.PersonModel;
 import org.osgi.service.component.annotations.Component;
 
 /**

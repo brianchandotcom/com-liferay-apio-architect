@@ -227,7 +227,8 @@ public class BlogPostingModel {
 		_title = title;
 	}
 
-	private static final Map<Long, BlogPostingModel> _blogPostings = new HashMap<>();
+	private static final Map<Long, BlogPostingModel> _blogPostings =
+		new HashMap<>();
 	private static final AtomicLong _count = new AtomicLong(30);
 
 	static {
