@@ -27,7 +27,9 @@ import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.response.control.Embedded;
 import com.liferay.apio.architect.response.control.Fields;
+import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
@@ -172,6 +174,8 @@ public class SingleModelMessageBodyWriter<T>
 					_representableManager.getRepresentorOptional(name))
 			).requestInfo(
 				requestInfo
+			).singleModelFunction(
+				this::_getSingleModelOptional
 			).build());
 
 		Optional<String> resultOptional = singleModelWriter.write();
@@ -220,6 +224,28 @@ public class SingleModelMessageBodyWriter<T>
 		).orElseThrow(
 			() -> new ApioDeveloperError.MustHaveMessageMapper(
 				mediaTypeString, singleModel.getResourceName())
+		);
+	}
+
+	private Optional<SingleModel> _getSingleModelOptional(
+		Object identifier, Class<? extends Identifier> identifierClass) {
+
+		Optional<String> nameOptional = _nameManager.getNameOptional(
+			identifierClass.getName());
+
+		Optional<Path> pathOptional = _pathIdentifierMapperManager.mapToPath(
+			unsafeCast(identifierClass), identifier);
+
+		return nameOptional.flatMap(
+			name -> _itemRouterManager.getItemRoutesOptional(
+				name
+			).flatMap(
+				ItemRoutes::getItemFunctionOptional
+			).map(
+				function -> function.apply(_httpServletRequest)
+			).flatMap(
+				pathOptional::map
+			)
 		);
 	}
 

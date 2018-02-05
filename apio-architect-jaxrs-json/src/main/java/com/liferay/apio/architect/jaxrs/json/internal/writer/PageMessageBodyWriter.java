@@ -30,6 +30,9 @@ import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.response.control.Embedded;
 import com.liferay.apio.architect.response.control.Fields;
+import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
@@ -37,6 +40,7 @@ import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierCl
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
+import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
@@ -189,6 +193,8 @@ public class PageMessageBodyWriter<T>
 					_representableManager.getRepresentorOptional(name))
 			).requestInfo(
 				requestInfo
+			).singleModelFunction(
+				this::_getSingleModelOptional
 			).build());
 
 		printWriter.println(pageWriter.write());
@@ -237,6 +243,28 @@ public class PageMessageBodyWriter<T>
 			() -> new MustHaveProvider(ServerURL.class));
 	}
 
+	private Optional<SingleModel> _getSingleModelOptional(
+		Object identifier, Class<? extends Identifier> identifierClass) {
+
+		Optional<String> nameOptional = _nameManager.getNameOptional(
+			identifierClass.getName());
+
+		Optional<Path> pathOptional = _pathIdentifierMapperManager.mapToPath(
+			unsafeCast(identifierClass), identifier);
+
+		return nameOptional.flatMap(
+			name -> _itemRouterManager.getItemRoutesOptional(
+				name
+			).flatMap(
+				ItemRoutes::getItemFunctionOptional
+			).map(
+				function -> function.apply(_httpServletRequest)
+			).flatMap(
+				pathOptional::map
+			)
+		);
+	}
+
 	@Reference
 	private CollectionRouterManager _collectionRouterManager;
 
@@ -248,6 +276,9 @@ public class PageMessageBodyWriter<T>
 
 	@Reference
 	private IdentifierClassManager _identifierClassManager;
+
+	@Reference
+	private ItemRouterManager _itemRouterManager;
 
 	@Reference
 	private NameManager _nameManager;

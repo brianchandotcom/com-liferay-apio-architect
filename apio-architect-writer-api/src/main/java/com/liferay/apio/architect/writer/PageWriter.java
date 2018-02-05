@@ -40,6 +40,7 @@ import com.liferay.apio.architect.writer.alias.PageOperationsFunction;
 import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
+import com.liferay.apio.architect.writer.alias.SingleModelFunction;
 
 import java.util.Collection;
 import java.util.List;
@@ -78,6 +79,7 @@ public class PageWriter<T> {
 		_representorFunction = builder._representorFunction;
 		_requestInfo = builder._requestInfo;
 		_resourceNameFunction = builder._resourceNameFunction;
+		_singleModelFunction = builder._singleModelFunction;
 
 		_jsonObjectBuilder = new JSONObjectBuilder();
 	}
@@ -305,10 +307,12 @@ public class PageWriter<T> {
 			 *         RequestInfo.Builder}
 			 * @return the updated builder
 			 */
-			public BuildStep requestInfo(RequestInfo requestInfo) {
+			public SingleModelFunctionStep requestInfo(
+				RequestInfo requestInfo) {
+
 				_requestInfo = requestInfo;
 
-				return new BuildStep();
+				return new SingleModelFunctionStep();
 			}
 
 		}
@@ -333,6 +337,25 @@ public class PageWriter<T> {
 
 		}
 
+		public class SingleModelFunctionStep {
+
+			/**
+			 * Adds information to the builder about the function that gets the
+			 * {@code SingleModel} from a class using its identifier.
+			 *
+			 * @param  singleModelFunction the function that gets the {@code SingleModel} of a class
+			 * @return the updated builder
+			 */
+			public BuildStep singleModelFunction(
+				SingleModelFunction singleModelFunction) {
+
+				_singleModelFunction = singleModelFunction;
+
+				return new BuildStep();
+			}
+
+		}
+
 		private NestedPageOperationsFunction _nestedPageOperationsFunction;
 		private Page<T> _page;
 		private PageMessageMapper<T> _pageMessageMapper;
@@ -341,6 +364,7 @@ public class PageWriter<T> {
 		private RepresentorFunction _representorFunction;
 		private RequestInfo _requestInfo;
 		private ResourceNameFunction _resourceNameFunction;
+		private SingleModelFunction _singleModelFunction;
 
 	}
 
@@ -359,7 +383,7 @@ public class PageWriter<T> {
 	private void _writeItem(SingleModel<T> singleModel) {
 		Optional<FieldsWriter<T, ?>> optional = getFieldsWriter(
 			singleModel, null, _requestInfo, _pathFunction,
-			_representorFunction);
+			_representorFunction, _singleModelFunction);
 
 		if (!optional.isPresent()) {
 			return;
@@ -466,7 +490,8 @@ public class PageWriter<T> {
 
 		Optional<FieldsWriter<S, ?>> optional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
-			representorFunction, _representorFunction, rootSingleModel);
+			representorFunction, _representorFunction, _singleModelFunction,
+			rootSingleModel);
 
 		if (!optional.isPresent()) {
 			return;
@@ -631,5 +656,6 @@ public class PageWriter<T> {
 	private final RepresentorFunction _representorFunction;
 	private final RequestInfo _requestInfo;
 	private final ResourceNameFunction _resourceNameFunction;
+	private SingleModelFunction _singleModelFunction;
 
 }

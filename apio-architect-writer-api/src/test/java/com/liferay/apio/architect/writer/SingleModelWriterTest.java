@@ -48,6 +48,8 @@ public class SingleModelWriterTest {
 				__ -> Optional.empty()
 			).requestInfo(
 				null
+			).singleModelFunction(
+				(o, aClass) -> Optional.empty()
 			).build());
 
 		Optional<String> optional = singleModelWriter.write();

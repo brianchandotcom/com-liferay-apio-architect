@@ -32,6 +32,7 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
+import com.liferay.apio.architect.writer.alias.SingleModelFunction;
 import com.liferay.apio.architect.writer.alias.SingleModelOperationsFunction;
 
 import java.util.List;
@@ -70,6 +71,7 @@ public class SingleModelWriter<T> {
 		_resourceNameFunction = builder._resourceNameFunction;
 		_singleModel = builder._singleModel;
 		_singleModelMessageMapper = builder._singleModelMessageMapper;
+		_singleModelFunction = builder._singleModelFunction;
 
 		_jsonObjectBuilder = new JSONObjectBuilder();
 	}
@@ -88,7 +90,7 @@ public class SingleModelWriter<T> {
 	public Optional<String> write() {
 		Optional<FieldsWriter<T, ?>> optional = getFieldsWriter(
 			_singleModel, null, _requestInfo, _pathFunction,
-			_representorFunction);
+			_representorFunction, _singleModelFunction);
 
 		if (!optional.isPresent()) {
 			return Optional.empty();
@@ -224,7 +226,8 @@ public class SingleModelWriter<T> {
 
 		Optional<FieldsWriter<S, ?>> optional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
-			representorFunction, _representorFunction, _singleModel);
+			representorFunction, _representorFunction, _singleModelFunction,
+			_singleModel);
 
 		if (!optional.isPresent()) {
 			return;
@@ -441,10 +444,12 @@ public class SingleModelWriter<T> {
 			 *         created by using a {@link RequestInfo.Builder}
 			 * @return the updated builder
 			 */
-			public BuildStep requestInfo(RequestInfo requestInfo) {
+			public SingleModelFunctionStep requestInfo(
+				RequestInfo requestInfo) {
+
 				_requestInfo = requestInfo;
 
-				return new BuildStep();
+				return new SingleModelFunctionStep();
 			}
 
 		}
@@ -466,6 +471,25 @@ public class SingleModelWriter<T> {
 				_resourceNameFunction = resourceNameFunction;
 
 				return new RepresentorFunctionStep();
+			}
+
+		}
+
+		public class SingleModelFunctionStep {
+
+			/**
+			 * Adds information to the builder about the function that gets the
+			 * {@code SingleModel} from a class using its identifier.
+			 *
+			 * @param  singleModelFunction the function that gets the {@code SingleModel} of a class
+			 * @return the updated builder
+			 */
+			public BuildStep singleModelFunction(
+				SingleModelFunction singleModelFunction) {
+
+				_singleModelFunction = singleModelFunction;
+
+				return new BuildStep();
 			}
 
 		}
@@ -495,6 +519,7 @@ public class SingleModelWriter<T> {
 		private RequestInfo _requestInfo;
 		private ResourceNameFunction _resourceNameFunction;
 		private SingleModel<T> _singleModel;
+		private SingleModelFunction _singleModelFunction;
 		private SingleModelMessageMapper<T> _singleModelMessageMapper;
 		private SingleModelOperationsFunction _singleModelOperationsFunction;
 
@@ -540,6 +565,7 @@ public class SingleModelWriter<T> {
 	private final RequestInfo _requestInfo;
 	private final ResourceNameFunction _resourceNameFunction;
 	private final SingleModel<T> _singleModel;
+	private final SingleModelFunction _singleModelFunction;
 	private final SingleModelMessageMapper<T> _singleModelMessageMapper;
 	private final SingleModelOperationsFunction _singleModelOperationsFunction;
 

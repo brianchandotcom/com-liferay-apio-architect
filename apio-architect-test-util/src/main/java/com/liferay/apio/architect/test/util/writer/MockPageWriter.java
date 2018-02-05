@@ -93,6 +93,8 @@ public class MockPageWriter {
 				MockWriterUtil::getRepresentorOptional
 			).requestInfo(
 				requestInfo
+			).singleModelFunction(
+				MockWriterUtil::getSingleModel
 			).build());
 
 		return new Gson().fromJson(pageWriter.write(), JsonObject.class);

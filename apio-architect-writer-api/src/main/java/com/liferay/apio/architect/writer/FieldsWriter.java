@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.writer;
 
+import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.writer.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createSingleURL;
@@ -26,7 +27,9 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.response.control.Fields;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.writer.alias.SingleModelFunction;
 
 import java.util.List;
 import java.util.Map;
@@ -57,30 +60,34 @@ public class FieldsWriter<T, S> {
 	 * @param  parentSingleModel the related model's parent single model
 	 * @return the single model version of the related model
 	 */
-	public static <T, S> Optional<SingleModel<S>> getSingleModel(
-		RelatedModel<T, S> relatedModel, SingleModel<T> parentSingleModel) {
+	public static <T, S, U> Optional<SingleModel<U>> getSingleModel(
+		RelatedModel<T, S> relatedModel, SingleModel<T> parentSingleModel,
+		SingleModelFunction singleModelFunction) {
 
-		Function<T, Optional<S>> modelFunction =
-			relatedModel.getModelFunction();
+		Function<T, S> identifierFunction =
+			relatedModel.getIdentifierFunction();
 
-		Optional<S> optional = modelFunction.apply(
-			parentSingleModel.getModel());
-
-		Class<S> modelClass = relatedModel.getModelClass();
-
-		return optional.map(model -> new SingleModel<>(model, modelClass));
+		return identifierFunction.andThen(
+			s -> singleModelFunction.apply(s, relatedModel.getIdentifierClass())
+		).apply(
+			parentSingleModel.getModel()
+		).map(
+			Unsafe::unsafeCast
+		);
 	}
 
 	public FieldsWriter(
 		SingleModel<T> singleModel, RequestInfo requestInfo,
 		Representor<T, S> representor, Path path,
-		FunctionalList<String> embeddedPathElements) {
+		FunctionalList<String> embeddedPathElements,
+		SingleModelFunction singleModelFunction) {
 
 		_singleModel = singleModel;
 		_requestInfo = requestInfo;
 		_representor = representor;
 		_path = path;
 		_embeddedPathElements = embeddedPathElements;
+		_singleModelFunction = singleModelFunction;
 	}
 
 	/**
@@ -359,7 +366,8 @@ public class FieldsWriter<T, S> {
 			relatedModel, pathFunction,
 			(url, embeddedPathElements) -> {
 				Optional<SingleModel<U>> singleModelOptional = getSingleModel(
-					relatedModel, _singleModel);
+					relatedModel, _singleModel,
+					unsafeCast(_singleModelFunction));
 
 				if (!singleModelOptional.isPresent()) {
 					return;
@@ -411,7 +419,7 @@ public class FieldsWriter<T, S> {
 		}
 
 		Optional<SingleModel<U>> optional = getSingleModel(
-			relatedModel, _singleModel);
+			relatedModel, _singleModel, unsafeCast(_singleModelFunction));
 
 		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
 			_embeddedPathElements, key);
@@ -509,5 +517,6 @@ public class FieldsWriter<T, S> {
 	private final Representor<T, S> _representor;
 	private final RequestInfo _requestInfo;
 	private final SingleModel<T> _singleModel;
+	private final SingleModelFunction _singleModelFunction;
 
 }

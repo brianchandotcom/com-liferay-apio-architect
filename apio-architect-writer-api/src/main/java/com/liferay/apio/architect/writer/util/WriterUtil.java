@@ -24,6 +24,7 @@ import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.writer.FieldsWriter;
 import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
+import com.liferay.apio.architect.writer.alias.SingleModelFunction;
 
 import java.util.Optional;
 
@@ -45,26 +46,6 @@ public class WriterUtil {
 	 * @param  embeddedPathElements the embedded path element list
 	 * @param  requestInfo the current request's information
 	 * @param  pathFunction the function to get the {@link Path}
-	 * @param  representorFunction the function to get the {@link Representor}
-	 * @return the {@code FieldsWriter} for the model
-	 */
-	public static <T> Optional<FieldsWriter<T, ?>> getFieldsWriter(
-		SingleModel<T> singleModel, FunctionalList<String> embeddedPathElements,
-		RequestInfo requestInfo, PathFunction pathFunction,
-		RepresentorFunction representorFunction) {
-
-		return getFieldsWriter(
-			singleModel, embeddedPathElements, requestInfo, pathFunction,
-			representorFunction, null, null);
-	}
-
-	/**
-	 * Returns the {@link FieldsWriter} for a given model.
-	 *
-	 * @param  singleModel the single model
-	 * @param  embeddedPathElements the embedded path element list
-	 * @param  requestInfo the current request's information
-	 * @param  pathFunction the function to get the {@link Path}
 	 * @param  rootRepresentorFunction the function to get the {@link
 	 *         Representor} of the parent model
 	 * @param  rootSingleModel the parent model
@@ -76,6 +57,7 @@ public class WriterUtil {
 		RequestInfo requestInfo, PathFunction pathFunction,
 		RepresentorFunction representorFunction,
 		RepresentorFunction rootRepresentorFunction,
+		SingleModelFunction singleModelFunction,
 		SingleModel<S> rootSingleModel) {
 
 		Optional<Representor<T, ?>> representorOptional = unsafeCast(
@@ -89,7 +71,28 @@ public class WriterUtil {
 			representor -> pathOptional.map(
 				path -> new FieldsWriter<>(
 					singleModel, requestInfo, representor, path,
-					embeddedPathElements)));
+					embeddedPathElements, singleModelFunction)));
+	}
+
+	/**
+	 * Returns the {@link FieldsWriter} for a given model.
+	 *
+	 * @param  singleModel the single model
+	 * @param  embeddedPathElements the embedded path element list
+	 * @param  requestInfo the current request's information
+	 * @param  pathFunction the function to get the {@link Path}
+	 * @param  representorFunction the function to get the {@link Representor}
+	 * @return the {@code FieldsWriter} for the model
+	 */
+	public static <T> Optional<FieldsWriter<T, ?>> getFieldsWriter(
+		SingleModel<T> singleModel, FunctionalList<String> embeddedPathElements,
+		RequestInfo requestInfo, PathFunction pathFunction,
+		RepresentorFunction representorFunction,
+		SingleModelFunction singleModelFunction) {
+
+		return getFieldsWriter(
+			singleModel, embeddedPathElements, requestInfo, pathFunction,
+			representorFunction, null, singleModelFunction, null);
 	}
 
 	/**
