@@ -36,8 +36,8 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides all the information necessary to expose <a
- * href="http://schema.org/Person">PersonModel </a> resources through a web API.
- * The resources are mapped from the internal {@link PersonModel} model.
+ * href="http://schema.org/Person">Person</a> resources through a web API. The
+ * resources are mapped from the internal {@link PersonModel} model.
  *
  * @author Alejandro Hernández
  */
