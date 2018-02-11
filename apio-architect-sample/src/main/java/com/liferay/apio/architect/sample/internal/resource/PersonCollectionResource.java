@@ -68,7 +68,7 @@ public class PersonCollectionResource
 		return builder.addGetter(
 			this::_getPerson
 		).addRemover(
-			this::_deletePerson
+			this::_deletePerson, (auth, personId) -> hasPermission()
 		).addUpdater(
 			this::_updatePerson, PersonForm::buildForm
 		).build();

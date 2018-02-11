@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.operation.Method.DELETE;
 import static com.liferay.apio.architect.operation.Method.PUT;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
+import static com.liferay.apio.architect.routes.RoutesTestUtil.ITEM_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
@@ -30,6 +31,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
+import com.liferay.apio.architect.alias.auth.ItemPermissionFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
@@ -87,7 +89,7 @@ public class ItemRoutesTest {
 			Long.class, Boolean.class, Integer.class
 		).addRemover(
 			this::_testFourParameterRemoverRoute, String.class, Long.class,
-			Boolean.class, Integer.class
+			Boolean.class, Integer.class, ITEM_PERMISSION_FUNCTION
 		).addUpdater(
 			this::_testAndReturnFourParameterUpdaterRoute, String.class,
 			Long.class, Boolean.class, Integer.class, FORM_BUILDER_FUNCTION
@@ -106,7 +108,7 @@ public class ItemRoutesTest {
 			Long.class, Boolean.class
 		).addRemover(
 			this::_testThreeParameterRemoverRoute, String.class, Long.class,
-			Boolean.class
+			Boolean.class, ITEM_PERMISSION_FUNCTION
 		).addUpdater(
 			this::_testAndReturnThreeParameterUpdaterRoute, String.class,
 			Long.class, Boolean.class, FORM_BUILDER_FUNCTION
@@ -123,7 +125,8 @@ public class ItemRoutesTest {
 		ItemRoutes<String> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
 		).addRemover(
-			this::_testAndReturnNoParameterRemoverRoute
+			this::_testAndReturnNoParameterRemoverRoute,
+			ITEM_PERMISSION_FUNCTION
 		).addUpdater(
 			this::_testAndReturnNoParameterUpdaterRoute, FORM_BUILDER_FUNCTION
 		).build();
@@ -140,7 +143,8 @@ public class ItemRoutesTest {
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
 			Long.class
 		).addRemover(
-			this::_testTwoParameterRemoverRoute, String.class, Long.class
+			this::_testTwoParameterRemoverRoute, String.class, Long.class,
+			ITEM_PERMISSION_FUNCTION
 		).addUpdater(
 			this::_testAndReturnTwoParameterUpdaterRoute, String.class,
 			Long.class, FORM_BUILDER_FUNCTION
@@ -157,7 +161,8 @@ public class ItemRoutesTest {
 		ItemRoutes<String> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
 		).addRemover(
-			this::_testOneParameterRemoverRoute, String.class
+			this::_testOneParameterRemoverRoute, String.class,
+			ITEM_PERMISSION_FUNCTION
 		).addUpdater(
 			this::_testAndReturnOneParameterUpdaterRoute, String.class,
 			FORM_BUILDER_FUNCTION
@@ -288,6 +293,20 @@ public class ItemRoutesTest {
 		).accept(
 			path
 		);
+
+		Optional<ItemPermissionFunction> deleteItemPermissionFunctionOptional =
+			itemRoutes.getDeleteItemPermissionFunctionOptional();
+
+		ItemPermissionFunction itemPermissionFunction =
+			deleteItemPermissionFunctionOptional.get();
+
+		Boolean canDelete = itemPermissionFunction.apply(
+			null
+		).apply(
+			path
+		);
+
+		assertThat(canDelete, is(true));
 
 		Optional<GetItemFunction<String>> getItemFunctionOptional =
 			itemRoutes.getItemFunctionOptional();

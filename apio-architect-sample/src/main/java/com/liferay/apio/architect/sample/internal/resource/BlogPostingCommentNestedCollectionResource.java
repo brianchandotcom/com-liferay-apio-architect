@@ -76,7 +76,8 @@ public class BlogPostingCommentNestedCollectionResource implements
 		return builder.addGetter(
 			this::_getBlogPostingComment
 		).addRemover(
-			this::_deleteBlogPostingComment
+			this::_deleteBlogPostingComment,
+			(auth, blogPostingCommentId) -> hasPermission()
 		).addUpdater(
 			this::_updateBlogPostingComment,
 			BlogPostingCommentUpdaterForm::buildForm

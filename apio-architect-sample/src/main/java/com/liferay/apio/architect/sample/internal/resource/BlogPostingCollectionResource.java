@@ -71,7 +71,7 @@ public class BlogPostingCollectionResource
 		return builder.addGetter(
 			this::_getBlogPosting
 		).addRemover(
-			this::_deleteBlogPosting
+			this::_deleteBlogPosting, (auth, blogPostingId) -> hasPermission()
 		).addUpdater(
 			this::_updateBlogPosting, BlogPostingForm::buildForm
 		).build();

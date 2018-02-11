@@ -22,10 +22,12 @@ import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.ProvideFunction;
+import com.liferay.apio.architect.alias.auth.ItemPermissionFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
+import com.liferay.apio.architect.auth.Auth;
 import com.liferay.apio.architect.consumer.PentaConsumer;
 import com.liferay.apio.architect.consumer.TetraConsumer;
 import com.liferay.apio.architect.consumer.TriConsumer;
@@ -64,6 +66,7 @@ public class ItemRoutes<T> {
 
 	public ItemRoutes(Builder<T, ?> builder) {
 		_deleteItemConsumer = builder._deleteItemConsumer;
+		_deleteItemPermissionFunction = builder._deleteItemPermissionFunction;
 		_form = builder._form;
 		_name = builder._name;
 		_singleModelFunction = builder._singleModelFunction;
@@ -80,6 +83,21 @@ public class ItemRoutes<T> {
 	 */
 	public Optional<DeleteItemConsumer> getDeleteConsumerOptional() {
 		return Optional.ofNullable(_deleteItemConsumer);
+	}
+
+	/**
+	 * Returns the function used to check if an item can be deleted, if the
+	 * endpoint was added through the {@link Builder} and the function therefore
+	 * exists. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the function used to check if an item can be deleted, if the
+	 *         function exists; {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<ItemPermissionFunction>
+		getDeleteItemPermissionFunctionOptional() {
+
+		return Optional.ofNullable(_deleteItemPermissionFunction);
 	}
 
 	/**
@@ -275,10 +293,19 @@ public class ItemRoutes<T> {
 		 * @param  biConsumer the remover function that removes the item
 		 * @param  aClass the class of the item remover function's second
 		 *         parameter
+		 * @param  permissionBiFunction the permission function for this route
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A> Builder<T, S> addRemover(
-			BiConsumer<S, A> biConsumer, Class<A> aClass) {
+			BiConsumer<S, A> biConsumer, Class<A> aClass,
+			BiFunction<Auth, S, Boolean> permissionBiFunction) {
+
+			_deleteItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
 				_provideFunction.apply(httpServletRequest), aClass,
@@ -291,9 +318,20 @@ public class ItemRoutes<T> {
 		 * Adds a route to a remover function with none extra parameters.
 		 *
 		 * @param  consumer the remover function that removes the item
+		 * @param  permissionBiFunction the permission function for this route
 		 * @return the updated builder
+		 * @review
 		 */
-		public Builder<T, S> addRemover(Consumer<S> consumer) {
+		public Builder<T, S> addRemover(
+			Consumer<S> consumer,
+			BiFunction<Auth, S, Boolean> permissionBiFunction) {
+
+			_deleteItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
+
 			_deleteItemConsumer = httpServletRequest -> path -> consumer.accept(
 				_identifierFunction.apply(path));
 
@@ -312,11 +350,20 @@ public class ItemRoutes<T> {
 		 *         parameter
 		 * @param  dClass the class of the item remover function's fifth
 		 *         parameter
+		 * @param  permissionBiFunction the permission function for this route
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C, D> Builder<T, S> addRemover(
 			PentaConsumer<S, A, B, C, D> pentaConsumer, Class<A> aClass,
-			Class<B> bClass, Class<C> cClass, Class<D> dClass) {
+			Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			BiFunction<Auth, S, Boolean> permissionBiFunction) {
+
+			_deleteItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -337,11 +384,20 @@ public class ItemRoutes<T> {
 		 *         parameter
 		 * @param  cClass the class of the item remover function's fourth
 		 *         parameter
+		 * @param  permissionBiFunction the permission function for this route
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C> Builder<T, S> addRemover(
 			TetraConsumer<S, A, B, C> tetraConsumer, Class<A> aClass,
-			Class<B> bClass, Class<C> cClass) {
+			Class<B> bClass, Class<C> cClass,
+			BiFunction<Auth, S, Boolean> permissionBiFunction) {
+
+			_deleteItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -360,11 +416,19 @@ public class ItemRoutes<T> {
 		 *         parameter
 		 * @param  bClass the class of the item remover function's third
 		 *         parameter
+		 * @param  permissionBiFunction the permission function for this route
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B> Builder<T, S> addRemover(
-			TriConsumer<S, A, B> triConsumer, Class<A> aClass,
-			Class<B> bClass) {
+			TriConsumer<S, A, B> triConsumer, Class<A> aClass, Class<B> bClass,
+			BiFunction<Auth, S, Boolean> permissionBiFunction) {
+
+			_deleteItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
 
 			_deleteItemConsumer = httpServletRequest -> path -> provideConsumer(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -532,6 +596,7 @@ public class ItemRoutes<T> {
 		}
 
 		private DeleteItemConsumer _deleteItemConsumer;
+		private ItemPermissionFunction _deleteItemPermissionFunction;
 		private Form _form;
 		private final IdentifierFunction<S> _identifierFunction;
 		private final String _name;
@@ -542,6 +607,7 @@ public class ItemRoutes<T> {
 	}
 
 	private final DeleteItemConsumer _deleteItemConsumer;
+	private final ItemPermissionFunction _deleteItemPermissionFunction;
 	private final Form _form;
 	private final String _name;
 	private final GetItemFunction<T> _singleModelFunction;
