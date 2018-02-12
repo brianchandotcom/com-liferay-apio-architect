@@ -66,6 +66,7 @@ public class ItemRoutes<T> {
 
 	public ItemRoutes(Builder<T, ?> builder) {
 		_deleteItemConsumer = builder._deleteItemConsumer;
+		_updateItemPermissionFunction = builder._updateItemPermissionFunction;
 		_deleteItemPermissionFunction = builder._deleteItemPermissionFunction;
 		_form = builder._form;
 		_name = builder._name;
@@ -152,6 +153,21 @@ public class ItemRoutes<T> {
 	 */
 	public Optional<UpdateItemFunction<T>> getUpdateItemFunctionOptional() {
 		return Optional.ofNullable(_updateItemFunction);
+	}
+
+	/**
+	 * Returns the function used to check if an item can be updated, if the
+	 * endpoint was added through the {@link Builder} and the function therefore
+	 * exists. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the function used to check if an item can be updated, if the
+	 *         function exists; {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<ItemPermissionFunction>
+		getUpdateItemPermissionFunctionOptional() {
+
+		return Optional.ofNullable(_updateItemPermissionFunction);
 	}
 
 	/**
@@ -442,11 +458,22 @@ public class ItemRoutes<T> {
 		 * Adds a route to a updater function with none extra parameters.
 		 *
 		 * @param  biFunction the updater function that removes the item
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <R> Builder<T, S> addUpdater(
 			BiFunction<S, R, T> biFunction,
+			BiFunction<Auth, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_updateItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
@@ -473,12 +500,23 @@ public class ItemRoutes<T> {
 		 *         parameter
 		 * @param  dClass the class of the item updater function's sixth
 		 *         parameter
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C, D, R> Builder<T, S> addUpdater(
 			HexaFunction<S, R, A, B, C, D, T> hexaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			BiFunction<Auth, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_updateItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
@@ -506,12 +544,23 @@ public class ItemRoutes<T> {
 		 *         parameter
 		 * @param  cClass the class of the item updater function's fifth
 		 *         parameter
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C, R> Builder<T, S> addUpdater(
 			PentaFunction<S, R, A, B, C, T> pentaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass,
+			BiFunction<Auth, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_updateItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
@@ -537,11 +586,22 @@ public class ItemRoutes<T> {
 		 *         parameter
 		 * @param  bClass the class of the item updater function's fourth
 		 *         parameter
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, R> Builder<T, S> addUpdater(
 			TetraFunction<S, R, A, B, T> tetraFunction, Class<A> aClass,
-			Class<B> bClass, FormBuilderFunction<R> formBuilderFunction) {
+			Class<B> bClass, BiFunction<Auth, S, Boolean> permissionBiFunction,
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			_updateItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
@@ -564,11 +624,22 @@ public class ItemRoutes<T> {
 		 * @param  triFunction the updater function that removes the item
 		 * @param  aClass the class of the item updater function's third
 		 *         parameter
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, R> Builder<T, S> addUpdater(
 			TriFunction<S, R, A, T> triFunction, Class<A> aClass,
+			BiFunction<Auth, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_updateItemPermissionFunction = httpServletRequest -> path ->
+				provide(
+					_provideFunction.apply(httpServletRequest), Auth.class,
+					auth -> permissionBiFunction.apply(
+						auth, _identifierFunction.apply(path)));
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
@@ -603,6 +674,7 @@ public class ItemRoutes<T> {
 		private final ProvideFunction _provideFunction;
 		private GetItemFunction<T> _singleModelFunction;
 		private UpdateItemFunction<T> _updateItemFunction;
+		private ItemPermissionFunction _updateItemPermissionFunction;
 
 	}
 
@@ -612,5 +684,6 @@ public class ItemRoutes<T> {
 	private final String _name;
 	private final GetItemFunction<T> _singleModelFunction;
 	private final UpdateItemFunction<T> _updateItemFunction;
+	private final ItemPermissionFunction _updateItemPermissionFunction;
 
 }

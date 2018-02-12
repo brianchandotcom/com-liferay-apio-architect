@@ -80,6 +80,7 @@ public class BlogPostingCommentNestedCollectionResource implements
 			(auth, blogPostingCommentId) -> hasPermission()
 		).addUpdater(
 			this::_updateBlogPostingComment,
+			(auth, blogPostingCommentId) -> hasPermission(),
 			BlogPostingCommentUpdaterForm::buildForm
 		).build();
 	}

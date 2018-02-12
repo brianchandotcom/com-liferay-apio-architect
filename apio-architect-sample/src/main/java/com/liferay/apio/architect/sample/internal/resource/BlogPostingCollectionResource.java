@@ -73,7 +73,8 @@ public class BlogPostingCollectionResource
 		).addRemover(
 			this::_deleteBlogPosting, (auth, blogPostingId) -> hasPermission()
 		).addUpdater(
-			this::_updateBlogPosting, BlogPostingForm::buildForm
+			this::_updateBlogPosting, (auth, blogPostingId) -> hasPermission(),
+			BlogPostingForm::buildForm
 		).build();
 	}
 

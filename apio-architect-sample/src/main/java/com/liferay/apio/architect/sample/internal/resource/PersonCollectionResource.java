@@ -70,7 +70,8 @@ public class PersonCollectionResource
 		).addRemover(
 			this::_deletePerson, (auth, personId) -> hasPermission()
 		).addUpdater(
-			this::_updatePerson, PersonForm::buildForm
+			this::_updatePerson, (auth, blogPostingId) -> hasPermission(),
+			PersonForm::buildForm
 		).build();
 	}
 

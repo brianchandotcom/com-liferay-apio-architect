@@ -92,7 +92,8 @@ public class ItemRoutesTest {
 			Boolean.class, Integer.class, ITEM_PERMISSION_FUNCTION
 		).addUpdater(
 			this::_testAndReturnFourParameterUpdaterRoute, String.class,
-			Long.class, Boolean.class, Integer.class, FORM_BUILDER_FUNCTION
+			Long.class, Boolean.class, Integer.class, ITEM_PERMISSION_FUNCTION,
+			FORM_BUILDER_FUNCTION
 		).build();
 
 		_testItemRoutes(itemRoutes);
@@ -111,7 +112,8 @@ public class ItemRoutesTest {
 			Boolean.class, ITEM_PERMISSION_FUNCTION
 		).addUpdater(
 			this::_testAndReturnThreeParameterUpdaterRoute, String.class,
-			Long.class, Boolean.class, FORM_BUILDER_FUNCTION
+			Long.class, Boolean.class, ITEM_PERMISSION_FUNCTION,
+			FORM_BUILDER_FUNCTION
 		).build();
 
 		_testItemRoutes(itemRoutes);
@@ -128,7 +130,8 @@ public class ItemRoutesTest {
 			this::_testAndReturnNoParameterRemoverRoute,
 			ITEM_PERMISSION_FUNCTION
 		).addUpdater(
-			this::_testAndReturnNoParameterUpdaterRoute, FORM_BUILDER_FUNCTION
+			this::_testAndReturnNoParameterUpdaterRoute,
+			ITEM_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 
 		_testItemRoutes(itemRoutes);
@@ -147,7 +150,7 @@ public class ItemRoutesTest {
 			ITEM_PERMISSION_FUNCTION
 		).addUpdater(
 			this::_testAndReturnTwoParameterUpdaterRoute, String.class,
-			Long.class, FORM_BUILDER_FUNCTION
+			Long.class, ITEM_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 
 		_testItemRoutes(itemRoutes);
@@ -165,7 +168,7 @@ public class ItemRoutesTest {
 			ITEM_PERMISSION_FUNCTION
 		).addUpdater(
 			this::_testAndReturnOneParameterUpdaterRoute, String.class,
-			FORM_BUILDER_FUNCTION
+			ITEM_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 
 		_testItemRoutes(itemRoutes);
@@ -297,10 +300,10 @@ public class ItemRoutesTest {
 		Optional<ItemPermissionFunction> deleteItemPermissionFunctionOptional =
 			itemRoutes.getDeleteItemPermissionFunctionOptional();
 
-		ItemPermissionFunction itemPermissionFunction =
+		ItemPermissionFunction deleteItemPermissionFunction =
 			deleteItemPermissionFunctionOptional.get();
 
-		Boolean canDelete = itemPermissionFunction.apply(
+		Boolean canDelete = deleteItemPermissionFunction.apply(
 			null
 		).apply(
 			path
@@ -338,6 +341,20 @@ public class ItemRoutesTest {
 
 		assertThat(updatedSingleModel.getResourceName(), is("name"));
 		assertThat(updatedSingleModel.getModel(), is("Updated"));
+
+		Optional<ItemPermissionFunction> updateItemPermissionFunctionOptional =
+			itemRoutes.getUpdateItemPermissionFunctionOptional();
+
+		ItemPermissionFunction updateItemPermissionFunction =
+			updateItemPermissionFunctionOptional.get();
+
+		Boolean canUpdate = updateItemPermissionFunction.apply(
+			null
+		).apply(
+			path
+		);
+
+		assertThat(canUpdate, is(true));
 
 		List<Operation> operations = itemRoutes.getOperations();
 
