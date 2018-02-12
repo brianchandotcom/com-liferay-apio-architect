@@ -143,7 +143,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		jsonObjectBuilder.nestedField(
 			"@context", "Collection"
 		).stringValue(
-			"http://www.w3.org/ns/hydra/pagination.jsonld"
+			"https://www.w3.org/ns/hydra/core"
 		);
 
 		jsonObjectBuilder.nestedField(

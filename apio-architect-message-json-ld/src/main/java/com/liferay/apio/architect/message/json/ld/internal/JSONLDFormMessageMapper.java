@@ -128,7 +128,7 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 		jsonObjectBuilder.field(
 			"@context"
 		).stringValue(
-			"http://www.w3.org/ns/hydra/context.jsonld"
+			"https://www.w3.org/ns/hydra/core"
 		);
 	}
 
