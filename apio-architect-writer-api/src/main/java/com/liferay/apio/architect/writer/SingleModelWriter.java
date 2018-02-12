@@ -35,6 +35,7 @@ import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
 import com.liferay.apio.architect.writer.alias.SingleModelFunction;
 import com.liferay.apio.architect.writer.alias.SingleModelOperationsFunction;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -145,8 +146,7 @@ public class SingleModelWriter<T> {
 			url -> _singleModelMessageMapper.mapSelfURL(
 				_jsonObjectBuilder, url));
 
-		List<Operation> operations = _singleModelOperationsFunction.apply(
-			_singleModel.getResourceName());
+		List<Operation> operations = _singleModel.getOperations();
 
 		operations.forEach(
 			operation -> {
@@ -283,8 +283,7 @@ public class SingleModelWriter<T> {
 			(field, value) -> _singleModelMessageMapper.mapEmbeddedResourceLink(
 				_jsonObjectBuilder, embeddedPathElements, field, value));
 
-		List<Operation> operations = _singleModelOperationsFunction.apply(
-			singleModel.getResourceName());
+		List<Operation> operations = singleModel.getOperations();
 
 		operations.forEach(
 			operation -> {
@@ -552,7 +551,8 @@ public class SingleModelWriter<T> {
 							new FunctionalList<>(embeddedPathElements, key);
 
 						writeEmbeddedModelFields(
-							new SingleModel<>(mappedModel, ""),
+							new SingleModel<>(
+								mappedModel, "", Collections.emptyList()),
 							embeddedNestedPathElements,
 							__ -> Optional.of(value));
 					});

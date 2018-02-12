@@ -41,6 +41,7 @@ import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
 import com.liferay.apio.architect.writer.alias.SingleModelFunction;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -111,7 +112,9 @@ public class PageWriter<T> {
 		String resourceName = _page.getResourceName();
 
 		items.forEach(
-			model -> _writeItem(new SingleModel<>(model, resourceName)));
+			model -> _writeItem(
+				new SingleModel<>(
+					model, resourceName, Collections.emptyList())));
 
 		List<Operation> operations = _page.getOperations();
 
@@ -554,7 +557,8 @@ public class PageWriter<T> {
 							new FunctionalList<>(embeddedPathElements, key);
 
 						_writeItemEmbeddedModelFields(
-							new SingleModel<>(mappedModel, ""),
+							new SingleModel<>(
+								mappedModel, "", Collections.emptyList()),
 							embeddedNestedPathElements, itemJsonObjectBuilder,
 							__ -> Optional.of(value), rootSingleModel);
 					});

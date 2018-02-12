@@ -147,21 +147,27 @@ public class MockWriterUtil {
 		}
 
 		if (identifierClass.equals(FirstEmbeddedId.class)) {
+			List<Operation> operations = Collections.singletonList(
+				new Operation(DELETE, "delete-operation"));
+
 			return Optional.of(
 				new SingleModel<>(
-					(FirstEmbeddedModel)() -> (String)identifier, "first"));
+					(FirstEmbeddedModel)() -> (String)identifier, "first",
+					operations));
 		}
 
 		if (identifierClass.equals(SecondEmbeddedId.class)) {
 			return Optional.of(
 				new SingleModel<>(
-					(SecondEmbeddedModel)() -> (String)identifier, "second"));
+					(SecondEmbeddedModel)() -> (String)identifier, "second",
+					Collections.emptyList()));
 		}
 
 		if (identifierClass.equals(ThirdEmbeddedId.class)) {
 			return Optional.of(
 				new SingleModel<>(
-					(ThirdEmbeddedModel)() -> (String)identifier, "third"));
+					(ThirdEmbeddedModel)() -> (String)identifier, "third",
+					Collections.emptyList()));
 		}
 
 		return Optional.empty();

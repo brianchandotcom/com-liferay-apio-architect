@@ -147,7 +147,8 @@ public class NestedCollectionRoutes<T, S> {
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> biFunction.andThen(
-					t -> new SingleModel<>(t, _nestedName)
+					t -> new SingleModel<>(
+						t, _nestedName, Collections.emptyList())
 				).apply(
 					identifier, unsafeCast(_form.get(body))
 				);
@@ -185,7 +186,8 @@ public class NestedCollectionRoutes<T, S> {
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass, dClass,
 					a -> b -> c -> d -> hexaFunction.andThen(
-						t -> new SingleModel<>(t, _nestedName)
+						t -> new SingleModel<>(
+							t, _nestedName, Collections.emptyList())
 					).apply(
 						identifier, unsafeCast(_form.get(body)), a, b, c, d
 					));
@@ -222,7 +224,8 @@ public class NestedCollectionRoutes<T, S> {
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass,
 					a -> b -> c -> pentaFunction.andThen(
-						t -> new SingleModel<>(t, _nestedName)
+						t -> new SingleModel<>(
+							t, _nestedName, Collections.emptyList())
 					).apply(
 						identifier, unsafeCast(_form.get(body)), a, b, c
 					));
@@ -256,7 +259,8 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					a -> b -> tetraFunction.andThen(
-						t -> new SingleModel<>(t, _nestedName)
+						t -> new SingleModel<>(
+							t, _nestedName, Collections.emptyList())
 					).apply(
 						identifier, unsafeCast(_form.get(body)), a, b
 					));
@@ -289,7 +293,8 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass,
 					a -> triFunction.andThen(
-						t -> new SingleModel<>(t, _nestedName)
+						t -> new SingleModel<>(
+							t, _nestedName, Collections.emptyList())
 					).apply(
 						identifier, unsafeCast(_form.get(body)), a
 					));

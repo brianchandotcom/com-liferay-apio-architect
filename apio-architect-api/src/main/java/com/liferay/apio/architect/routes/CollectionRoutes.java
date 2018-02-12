@@ -134,7 +134,7 @@ public class CollectionRoutes<T> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
 				a -> biFunction.andThen(
-					t -> new SingleModel<>(t, _name)
+					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
 					unsafeCast(_form.get(body)), a
 				));
@@ -163,7 +163,7 @@ public class CollectionRoutes<T> {
 
 			_createItemFunction = httpServletRequest -> body ->
 				function.andThen(
-					t -> new SingleModel<>(t, _name)
+					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
 					unsafeCast(_form.get(body))
 				);
@@ -201,7 +201,7 @@ public class CollectionRoutes<T> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass,
 				a -> b -> c -> d -> pentaFunction.andThen(
-					t -> new SingleModel<>(t, _name)
+					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
 					unsafeCast(_form.get(body)), a, b, c, d
 				));
@@ -238,7 +238,7 @@ public class CollectionRoutes<T> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass,
 				a -> b -> c -> pentaFunction.andThen(
-					t -> new SingleModel<>(t, _name)
+					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
 					unsafeCast(_form.get(body)), a, b, c
 				));
@@ -272,7 +272,7 @@ public class CollectionRoutes<T> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				a -> b -> triFunction.andThen(
-					t -> new SingleModel<>(t, _name)
+					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
 					unsafeCast(_form.get(body)), a, b
 				));

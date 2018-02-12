@@ -27,7 +27,6 @@ import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 import static java.util.Collections.singletonMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
@@ -71,10 +70,6 @@ public class ItemRoutesTest {
 			itemRoutes.getUpdateItemFunctionOptional();
 
 		assertThat(updateItemFunctionOptional, is(emptyOptional()));
-
-		List<Operation> operations = itemRoutes.getOperations();
-
-		assertThat(operations, is(empty()));
 	}
 
 	@Test
@@ -296,17 +291,6 @@ public class ItemRoutesTest {
 			path
 		);
 
-		Boolean canDelete = optional.flatMap(
-			ItemRoutes::getDeleteItemPermissionFunctionOptional
-		).get(
-		).apply(
-			null
-		).apply(
-			path
-		);
-
-		assertThat(canDelete, is(true));
-
 		SingleModel<String> updatedSingleModel = optional.flatMap(
 			ItemRoutes::getUpdateItemFunctionOptional
 		).get(
@@ -321,18 +305,7 @@ public class ItemRoutesTest {
 		assertThat(updatedSingleModel.getResourceName(), is("name"));
 		assertThat(updatedSingleModel.getModel(), is("Updated"));
 
-		Boolean canUpdate = optional.flatMap(
-			ItemRoutes::getUpdateItemPermissionFunctionOptional
-		).get(
-		).apply(
-			null
-		).apply(
-			path
-		);
-
-		assertThat(canUpdate, is(true));
-
-		List<Operation> operations = itemRoutes.getOperations();
+		List<Operation> operations = updatedSingleModel.getOperations();
 
 		assertThat(operations, hasSize(2));
 
