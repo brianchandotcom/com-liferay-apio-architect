@@ -56,7 +56,7 @@ public class JSONLDFormMessageMapperTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions conditions = builder.where(
-			"@context", _isALinkTo("http://www.w3.org/ns/hydra/context.jsonld")
+			"@context", _isALinkTo("https://www.w3.org/ns/hydra/core")
 		).where(
 			"@id", _isALinkTo("localhost/f/f/s")
 		).where(

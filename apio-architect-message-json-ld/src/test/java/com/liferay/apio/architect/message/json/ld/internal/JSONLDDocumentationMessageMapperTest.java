@@ -51,7 +51,7 @@ public class JSONLDDocumentationMessageMapperTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Matcher<JsonElement> isAJsonStringWithTheContext = is(
-			aJsonString(equalTo("http://www.w3.org/ns/hydra/context.jsonld")));
+			aJsonString(equalTo("https://www.w3.org/ns/hydra/core")));
 
 		Conditions conditions = builder.where(
 			"@context", isAJsonStringWithTheContext

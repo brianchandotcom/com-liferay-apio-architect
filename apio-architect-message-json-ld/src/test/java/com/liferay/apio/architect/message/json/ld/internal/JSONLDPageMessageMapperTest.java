@@ -120,7 +120,7 @@ public class JSONLDPageMessageMapperTest {
 			"@vocab", isALinkTo("http://schema.org/")
 		).where(
 			"Collection",
-			isALinkTo("http://www.w3.org/ns/hydra/pagination.jsonld")
+			isALinkTo("https://www.w3.org/ns/hydra/core")
 		).build();
 
 		_isAJsonObjectWithTheContext = is(aJsonObjectWith(contextConditions));
