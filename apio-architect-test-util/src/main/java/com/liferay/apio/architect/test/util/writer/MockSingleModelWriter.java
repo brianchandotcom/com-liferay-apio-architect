@@ -73,8 +73,6 @@ public class MockSingleModelWriter {
 					singleModel
 				).modelMessageMapper(
 					singleModelMessageMapper
-				).operationsFunction(
-					MockWriterUtil::getOperations
 				).pathFunction(
 					MockWriterUtil::identifierToPath
 				).resourceNameFunction(

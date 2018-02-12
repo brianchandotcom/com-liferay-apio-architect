@@ -33,7 +33,6 @@ import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
 import com.liferay.apio.architect.writer.alias.ResourceNameFunction;
 import com.liferay.apio.architect.writer.alias.SingleModelFunction;
-import com.liferay.apio.architect.writer.alias.SingleModelOperationsFunction;
 
 import java.util.Collections;
 import java.util.List;
@@ -66,7 +65,6 @@ public class SingleModelWriter<T> {
 
 	public SingleModelWriter(Builder<T> builder) {
 		_pathFunction = builder._pathFunction;
-		_singleModelOperationsFunction = builder._singleModelOperationsFunction;
 		_representorFunction = builder._representorFunction;
 		_requestInfo = builder._requestInfo;
 		_resourceNameFunction = builder._resourceNameFunction;
@@ -374,26 +372,6 @@ public class SingleModelWriter<T> {
 
 		}
 
-		public class OperationsFunctionStep {
-
-			/**
-			 * Adds information to the builder about the function that gets the
-			 * operations of single model class.
-			 *
-			 * @param  singleModelOperationsFunction the function that gets the
-			 *         operations of a single model class
-			 * @return the updated builder
-			 */
-			public PathFunctionStep operationsFunction(
-				SingleModelOperationsFunction singleModelOperationsFunction) {
-
-				_singleModelOperationsFunction = singleModelOperationsFunction;
-
-				return new PathFunctionStep();
-			}
-
-		}
-
 		public class PathFunctionStep {
 
 			/**
@@ -504,12 +482,12 @@ public class SingleModelWriter<T> {
 			 *         SingleModelMessageMapper} headers
 			 * @return the updated builder
 			 */
-			public OperationsFunctionStep modelMessageMapper(
+			public PathFunctionStep modelMessageMapper(
 				SingleModelMessageMapper<T> singleModelMessageMapper) {
 
 				_singleModelMessageMapper = singleModelMessageMapper;
 
-				return new OperationsFunctionStep();
+				return new PathFunctionStep();
 			}
 
 		}
@@ -521,7 +499,6 @@ public class SingleModelWriter<T> {
 		private SingleModel<T> _singleModel;
 		private SingleModelFunction _singleModelFunction;
 		private SingleModelMessageMapper<T> _singleModelMessageMapper;
-		private SingleModelOperationsFunction _singleModelOperationsFunction;
 
 	}
 
@@ -567,6 +544,5 @@ public class SingleModelWriter<T> {
 	private final SingleModel<T> _singleModel;
 	private final SingleModelFunction _singleModelFunction;
 	private final SingleModelMessageMapper<T> _singleModelMessageMapper;
-	private final SingleModelOperationsFunction _singleModelOperationsFunction;
 
 }

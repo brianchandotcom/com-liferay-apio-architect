@@ -38,8 +38,6 @@ public class SingleModelWriterTest {
 				new SingleModel<>("Apio", "", Collections.emptyList())
 			).modelMessageMapper(
 				() -> "mediaType"
-			).operationsFunction(
-				__ -> Collections.emptyList()
 			).pathFunction(
 				(resourceName, identifier) -> Optional.empty()
 			).resourceNameFunction(

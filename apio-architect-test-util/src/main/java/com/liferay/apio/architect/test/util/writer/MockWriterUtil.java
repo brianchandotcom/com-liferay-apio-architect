@@ -15,8 +15,6 @@
 package com.liferay.apio.architect.test.util.writer;
 
 import static com.liferay.apio.architect.operation.Method.DELETE;
-import static com.liferay.apio.architect.operation.Method.PUT;
-import static com.liferay.apio.architect.test.util.form.MockFormCreator.createForm;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createFirstEmbeddedModelRepresentor;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createRootModelRepresentor;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createSecondEmbeddedModelRepresentor;
@@ -54,31 +52,6 @@ import javax.ws.rs.core.HttpHeaders;
  * @author Alejandro Hernández
  */
 public class MockWriterUtil {
-
-	/**
-	 * Returns a model class's {@code Operations}.
-	 *
-	 * @param  resourceName the model class
-	 * @return the model class's {@code Operations}
-	 */
-	public static List<Operation> getOperations(String resourceName) {
-		if ("root".equals(resourceName)) {
-			Operation deleteOperation = new Operation(
-				DELETE, "delete-operation");
-			Operation putOperation = new Operation(
-				createForm("u", "r"), PUT, "update-operation");
-
-			return Arrays.asList(deleteOperation, putOperation);
-		}
-
-		if ("first".equals(resourceName)) {
-			Operation operation = new Operation(DELETE, "delete-operation");
-
-			return Collections.singletonList(operation);
-		}
-
-		return Collections.emptyList();
-	}
 
 	/**
 	 * Returns a model class's {@link Representor}.
