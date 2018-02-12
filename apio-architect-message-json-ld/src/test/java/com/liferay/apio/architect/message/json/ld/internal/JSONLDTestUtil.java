@@ -187,7 +187,7 @@ public class JSONLDTestUtil {
 		Builder builder = new Builder();
 
 		Conditions firstOperationConditions = builder.where(
-			"@id", is(aJsonString(equalTo("delete-operation")))
+			"@id", is(aJsonString(equalTo("_:delete-operation")))
 		).where(
 			"@type", is(aJsonString(equalTo("Operation")))
 		).where(
@@ -195,7 +195,7 @@ public class JSONLDTestUtil {
 		).build();
 
 		Conditions secondOperationConditions = builder.where(
-			"@id", is(aJsonString(equalTo("update-operation")))
+			"@id", is(aJsonString(equalTo("_:update-operation")))
 		).where(
 			"@type", is(aJsonString(equalTo("Operation")))
 		).where(
@@ -291,7 +291,7 @@ public class JSONLDTestUtil {
 		}
 
 		Matcher<? super JsonElement> anOperation = builder.where(
-			"@id", is(aJsonString(equalTo("delete-operation")))
+			"@id", is(aJsonString(equalTo("_:delete-operation")))
 		).where(
 			"@type", is(aJsonString(equalTo("Operation")))
 		).where(

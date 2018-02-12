@@ -131,7 +131,7 @@ public class JSONLDPageMessageMapperTest {
 			aRootElementJsonObjectWithId("3", false, true));
 
 		Conditions operationConditions = builder.where(
-			"@id", is(aJsonString(equalTo("create-operation")))
+			"@id", is(aJsonString(equalTo("_:create-operation")))
 		).where(
 			"@type", is(aJsonString(equalTo("Operation")))
 		).where(
