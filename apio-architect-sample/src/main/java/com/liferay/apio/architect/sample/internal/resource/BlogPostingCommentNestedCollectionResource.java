@@ -16,6 +16,7 @@ package com.liferay.apio.architect.sample.internal.resource;
 
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 
+import com.liferay.apio.architect.auth.Auth;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.representor.Representor;
@@ -59,8 +60,8 @@ public class BlogPostingCommentNestedCollectionResource implements
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addBlogPostingComment,
-			(auth, blogPostingId) -> hasPermission(),
+			this::_addBlogPostingComment, Auth.class,
+			(auth, blogPostingId) -> hasPermission(auth),
 			BlogPostingCommentCreatorForm::buildForm
 		).build();
 	}
@@ -77,11 +78,11 @@ public class BlogPostingCommentNestedCollectionResource implements
 		return builder.addGetter(
 			this::_getBlogPostingComment
 		).addRemover(
-			this::_deleteBlogPostingComment,
-			(auth, blogPostingCommentId) -> hasPermission()
+			this::_deleteBlogPostingComment, Auth.class,
+			(auth, blogPostingCommentId) -> hasPermission(auth)
 		).addUpdater(
-			this::_updateBlogPostingComment,
-			(auth, blogPostingCommentId) -> hasPermission(),
+			this::_updateBlogPostingComment, Auth.class,
+			(auth, blogPostingCommentId) -> hasPermission(auth),
 			BlogPostingCommentUpdaterForm::buildForm
 		).build();
 	}
@@ -107,9 +108,10 @@ public class BlogPostingCommentNestedCollectionResource implements
 
 	private BlogPostingCommentModel _addBlogPostingComment(
 		Long blogPostingId,
-		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm) {
+		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm,
+		Auth auth) {
 
-		if (!hasPermission()) {
+		if (!hasPermission(auth)) {
 			throw new ForbiddenException();
 		}
 
@@ -118,8 +120,10 @@ public class BlogPostingCommentNestedCollectionResource implements
 			blogPostingCommentCreatorForm.getText());
 	}
 
-	private void _deleteBlogPostingComment(Long blogPostingCommentId) {
-		if (!hasPermission()) {
+	private void _deleteBlogPostingComment(
+		Long blogPostingCommentId, Auth auth) {
+
+		if (!hasPermission(auth)) {
 			throw new ForbiddenException();
 		}
 
@@ -153,9 +157,10 @@ public class BlogPostingCommentNestedCollectionResource implements
 
 	private BlogPostingCommentModel _updateBlogPostingComment(
 		Long blogPostingCommentId,
-		BlogPostingCommentUpdaterForm blogPostingCommentUpdaterForm) {
+		BlogPostingCommentUpdaterForm blogPostingCommentUpdaterForm,
+		Auth auth) {
 
-		if (!hasPermission()) {
+		if (!hasPermission(auth)) {
 			throw new ForbiddenException();
 		}
 

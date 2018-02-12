@@ -16,12 +16,14 @@ package com.liferay.apio.architect.sample.internal.resource;
 
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 
+import com.liferay.apio.architect.auth.Auth;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
 import com.liferay.apio.architect.sample.internal.form.PersonForm;
 import com.liferay.apio.architect.sample.internal.identifier.PersonModelId;
 import com.liferay.apio.architect.sample.internal.model.PersonModel;
@@ -52,7 +54,8 @@ public class PersonCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addPerson, __ -> hasPermission(), PersonForm::buildForm
+			this::_addPerson, Auth.class, PermissionChecker::hasPermission,
+			PersonForm::buildForm
 		).build();
 	}
 
@@ -68,10 +71,11 @@ public class PersonCollectionResource
 		return builder.addGetter(
 			this::_getPerson
 		).addRemover(
-			this::_deletePerson, (auth, personId) -> hasPermission()
+			this::_deletePerson, Auth.class,
+			(auth, personId) -> hasPermission(auth)
 		).addUpdater(
-			this::_updatePerson, (auth, blogPostingId) -> hasPermission(),
-			PersonForm::buildForm
+			this::_updatePerson, Auth.class,
+			(auth, blogPostingId) -> hasPermission(auth), PersonForm::buildForm
 		).build();
 	}
 
@@ -102,8 +106,8 @@ public class PersonCollectionResource
 		).build();
 	}
 
-	private PersonModel _addPerson(PersonForm personForm) {
-		if (!hasPermission()) {
+	private PersonModel _addPerson(PersonForm personForm, Auth auth) {
+		if (!hasPermission(auth)) {
 			throw new ForbiddenException();
 		}
 
@@ -114,8 +118,8 @@ public class PersonCollectionResource
 			personForm.getFamilyName());
 	}
 
-	private void _deletePerson(Long personId) {
-		if (!hasPermission()) {
+	private void _deletePerson(Long personId, Auth auth) {
+		if (!hasPermission(auth)) {
 			throw new ForbiddenException();
 		}
 
@@ -137,8 +141,10 @@ public class PersonCollectionResource
 			() -> new NotFoundException("Unable to get person " + personId));
 	}
 
-	private PersonModel _updatePerson(Long personId, PersonForm personForm) {
-		if (!hasPermission()) {
+	private PersonModel _updatePerson(
+		Long personId, PersonForm personForm, Auth auth) {
+
+		if (!hasPermission(auth)) {
 			throw new ForbiddenException();
 		}
 
