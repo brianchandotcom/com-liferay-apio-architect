@@ -119,8 +119,7 @@ public class JSONLDPageMessageMapperTest {
 		Conditions contextConditions = builder.where(
 			"@vocab", isALinkTo("http://schema.org/")
 		).where(
-			"Collection",
-			isALinkTo("https://www.w3.org/ns/hydra/core")
+			"Collection", isALinkTo("https://www.w3.org/ns/hydra/core")
 		).build();
 
 		_isAJsonObjectWithTheContext = is(aJsonObjectWith(contextConditions));
