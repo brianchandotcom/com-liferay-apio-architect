@@ -34,7 +34,6 @@ import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedGetPageFunction;
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -259,23 +258,25 @@ public class NestedCollectionRoutesTest {
 	private void _testNestedCollectionRoutes(
 		NestedCollectionRoutes<String, Long> nestedCollectionRoutes) {
 
-		Optional<Form> optional = nestedCollectionRoutes.getFormOptional();
+		Optional<NestedCollectionRoutes<String, Long>> optional = Optional.of(
+			nestedCollectionRoutes);
 
-		Form form = optional.get();
+		Map body = optional.flatMap(
+			NestedCollectionRoutes::getFormOptional
+		).map(
+			form -> {
+				assertThat(form.id, is("c/name/nested"));
 
-		assertThat(form.id, is("c/name/nested"));
-
-		Map body = (Map)form.get(_body);
+				return (Map)form.get(_body);
+			}
+		).get();
 
 		assertThat(body, is(_body));
 
-		Optional<NestedCreateItemFunction<String, Long>> optional1 =
-			nestedCollectionRoutes.getNestedCreateItemFunctionOptional();
-
-		NestedCreateItemFunction<String, Long> nestedCreateItemFunction =
-			optional1.get();
-
-		SingleModel<String> singleModel = nestedCreateItemFunction.apply(
+		SingleModel<String> singleModel = optional.flatMap(
+			NestedCollectionRoutes::getNestedCreateItemFunctionOptional
+		).get(
+		).apply(
 			null
 		).apply(
 			42L
@@ -286,15 +287,12 @@ public class NestedCollectionRoutesTest {
 		assertThat(singleModel.getResourceName(), is("nested"));
 		assertThat(singleModel.getModel(), is("Apio"));
 
-		Optional<NestedGetPageFunction<String, Long>> optional2 =
-			nestedCollectionRoutes.getNestedGetPageFunctionOptional();
-
-		NestedGetPageFunction<String, Long> nestedGetPageFunction =
-			optional2.get();
-
 		Path path = new Path("name", "42");
 
-		Page<String> page = nestedGetPageFunction.apply(
+		Page<String> page = optional.flatMap(
+			NestedCollectionRoutes::getNestedGetPageFunctionOptional
+		).get(
+		).apply(
 			null
 		).apply(
 			path

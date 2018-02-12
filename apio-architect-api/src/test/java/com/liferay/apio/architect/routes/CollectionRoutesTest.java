@@ -33,7 +33,6 @@ import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -242,23 +241,25 @@ public class CollectionRoutesTest {
 	private void _testCollectionRoutes(
 		CollectionRoutes<String> collectionRoutes) {
 
-		Optional<Form> optional = collectionRoutes.getFormOptional();
+		Optional<CollectionRoutes<String>> optional = Optional.of(
+			collectionRoutes);
 
-		Form form = optional.get();
+		Map body = optional.flatMap(
+			CollectionRoutes::getFormOptional
+		).map(
+			form -> {
+				assertThat(form.id, is("c/name"));
 
-		assertThat(form.id, is("c/name"));
-
-		Map body = (Map)form.get(_body);
+				return (Map)form.get(_body);
+			}
+		).get();
 
 		assertThat(body, is(_body));
 
-		Optional<CreateItemFunction<String>> createItemFunctionOptional =
-			collectionRoutes.getCreateItemFunctionOptional();
-
-		CreateItemFunction<String> createItemFunction =
-			createItemFunctionOptional.get();
-
-		SingleModel<String> singleModel = createItemFunction.apply(
+		SingleModel<String> singleModel = optional.flatMap(
+			CollectionRoutes::getCreateItemFunctionOptional
+		).get(
+		).apply(
 			null
 		).apply(
 			_body
@@ -267,12 +268,12 @@ public class CollectionRoutesTest {
 		assertThat(singleModel.getResourceName(), is("name"));
 		assertThat(singleModel.getModel(), is("Apio"));
 
-		Optional<GetPageFunction<String>> getPageFunctionOptional =
-			collectionRoutes.getGetPageFunctionOptional();
-
-		GetPageFunction<String> getPageFunction = getPageFunctionOptional.get();
-
-		Page<String> page = getPageFunction.apply(null);
+		Page<String> page = optional.flatMap(
+			CollectionRoutes::getGetPageFunctionOptional
+		).get(
+		).apply(
+			null
+		);
 
 		assertThat(page.getItems(), hasSize(1));
 		assertThat(page.getItems(), hasItem("Apio"));

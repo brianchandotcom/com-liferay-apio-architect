@@ -31,11 +31,9 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
-import com.liferay.apio.architect.alias.auth.ItemPermissionFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
@@ -273,37 +271,35 @@ public class ItemRoutesTest {
 	}
 
 	private void _testItemRoutes(ItemRoutes<String> itemRoutes) {
-		Optional<Form> optional = itemRoutes.getFormOptional();
+		Optional<ItemRoutes<String>> optional = Optional.of(itemRoutes);
 
-		Form form = optional.get();
+		Map body = optional.flatMap(
+			ItemRoutes::getFormOptional
+		).map(
+			form -> {
+				assertThat(form.id, is("u/name"));
 
-		assertThat(form.id, is("u/name"));
-
-		Map body = (Map)form.get(_body);
+				return (Map)form.get(_body);
+			}
+		).get();
 
 		assertThat(body, is(_body));
 
 		Path path = new Path("name", "42");
 
-		Optional<DeleteItemConsumer> deleteItemConsumerOptional =
-			itemRoutes.getDeleteConsumerOptional();
-
-		DeleteItemConsumer deleteItemConsumer =
-			deleteItemConsumerOptional.get();
-
-		deleteItemConsumer.apply(
+		optional.flatMap(
+			ItemRoutes::getDeleteConsumerOptional
+		).get(
+		).apply(
 			null
 		).accept(
 			path
 		);
 
-		Optional<ItemPermissionFunction> deleteItemPermissionFunctionOptional =
-			itemRoutes.getDeleteItemPermissionFunctionOptional();
-
-		ItemPermissionFunction deleteItemPermissionFunction =
-			deleteItemPermissionFunctionOptional.get();
-
-		Boolean canDelete = deleteItemPermissionFunction.apply(
+		Boolean canDelete = optional.flatMap(
+			ItemRoutes::getDeleteItemPermissionFunctionOptional
+		).get(
+		).apply(
 			null
 		).apply(
 			path
@@ -311,27 +307,10 @@ public class ItemRoutesTest {
 
 		assertThat(canDelete, is(true));
 
-		Optional<GetItemFunction<String>> getItemFunctionOptional =
-			itemRoutes.getItemFunctionOptional();
-
-		GetItemFunction<String> getItemFunction = getItemFunctionOptional.get();
-
-		SingleModel<String> singleModel = getItemFunction.apply(
-			null
+		SingleModel<String> updatedSingleModel = optional.flatMap(
+			ItemRoutes::getUpdateItemFunctionOptional
+		).get(
 		).apply(
-			path
-		);
-
-		assertThat(singleModel.getResourceName(), is("name"));
-		assertThat(singleModel.getModel(), is("Apio"));
-
-		Optional<UpdateItemFunction<String>> updateItemFunctionOptional =
-			itemRoutes.getUpdateItemFunctionOptional();
-
-		UpdateItemFunction<String> updateItemFunction =
-			updateItemFunctionOptional.get();
-
-		SingleModel<String> updatedSingleModel = updateItemFunction.apply(
 			null
 		).apply(
 			path
@@ -342,13 +321,10 @@ public class ItemRoutesTest {
 		assertThat(updatedSingleModel.getResourceName(), is("name"));
 		assertThat(updatedSingleModel.getModel(), is("Updated"));
 
-		Optional<ItemPermissionFunction> updateItemPermissionFunctionOptional =
-			itemRoutes.getUpdateItemPermissionFunctionOptional();
-
-		ItemPermissionFunction updateItemPermissionFunction =
-			updateItemPermissionFunctionOptional.get();
-
-		Boolean canUpdate = updateItemPermissionFunction.apply(
+		Boolean canUpdate = optional.flatMap(
+			ItemRoutes::getUpdateItemPermissionFunctionOptional
+		).get(
+		).apply(
 			null
 		).apply(
 			path
