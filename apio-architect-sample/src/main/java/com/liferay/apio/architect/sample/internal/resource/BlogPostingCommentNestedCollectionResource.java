@@ -60,6 +60,7 @@ public class BlogPostingCommentNestedCollectionResource implements
 			this::_getPageItems
 		).addCreator(
 			this::_addBlogPostingComment,
+			(auth, blogPostingId) -> hasPermission(),
 			BlogPostingCommentCreatorForm::buildForm
 		).build();
 	}

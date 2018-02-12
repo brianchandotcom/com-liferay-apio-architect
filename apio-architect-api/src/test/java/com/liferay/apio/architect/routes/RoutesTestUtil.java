@@ -127,4 +127,16 @@ public class RoutesTestUtil {
 	public static final ProvideFunction REQUEST_PROVIDE_FUNCTION =
 		__ -> PROVIDE_FUNCTION;
 
+	/**
+	 * Returns a nested collection permission function that always returns
+	 * {@code true}.
+	 *
+	 * @review
+	 */
+	public static <S> BiFunction<Auth, S, Boolean>
+		getNestedCollectionPermissionFunction() {
+
+		return (auth, s) -> true;
+	}
+
 }
