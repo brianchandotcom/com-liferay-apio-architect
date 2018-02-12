@@ -164,16 +164,28 @@ public class PageMessageBodyWriter<T>
 				name -> _collectionRouterManager.getOperations(name, getAuth())
 			).nestedPageOperationsFunction(
 				name -> nestedName -> {
+					Optional<Path> optional1 = page.getPathOptional();
+
+					Optional<Class<Identifier>> optional2 =
+						_identifierClassManager.getIdentifierClassOptional(
+							name);
+
+					Optional<Object> optional3 =
+						_pathIdentifierMapperManager.mapToIdentifier(
+							unsafeCast(optional2.get()), optional1.get());
+
+					Object identifier = optional3.get();
+
 					List<Operation> operations =
 						_nestedCollectionRouterManager.getOperations(
-							name, nestedName);
+							name, nestedName, getAuth(), identifier);
 
 					if (!operations.isEmpty()) {
 						return operations;
 					}
 
 					return _reusableNestedCollectionRouterManager.getOperations(
-						nestedName);
+						nestedName, getAuth(), identifier);
 				}
 			).pathFunction(
 				(resourceName, identifier) -> {

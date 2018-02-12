@@ -16,6 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.manager.router;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.apio.architect.auth.Auth;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
@@ -47,9 +48,12 @@ public interface ReusableNestedCollectionRouterManager {
 	 * Returns the operations for the page resource's class.
 	 *
 	 * @param  name the reusable nested collection resource's name
+	 * @param  auth the actual HTTP authentication information
+	 * @param  identifier the collection resource identifier
 	 * @return the list of operations
 	 * @review
 	 */
-	public List<Operation> getOperations(String name);
+	public <S> List<Operation> getOperations(
+		String name, Auth auth, S identifier);
 
 }

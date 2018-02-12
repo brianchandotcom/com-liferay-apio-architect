@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
 
+import com.liferay.apio.architect.auth.Auth;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
@@ -67,12 +68,15 @@ public class ReusableNestedCollectionRouterManagerImpl
 	}
 
 	@Override
-	public List<Operation> getOperations(String name) {
-		Optional<NestedCollectionRoutes<Object, Identifier>> optional =
+	public <S> List<Operation> getOperations(
+		String name, Auth auth, S identifier) {
+
+		Optional<NestedCollectionRoutes<Object, S>> optional =
 			getNestedCollectionRoutesOptional(name);
 
 		return optional.map(
-			NestedCollectionRoutes::getOperations
+			nestedCollectionRoutes -> nestedCollectionRoutes.getOperations(
+				auth, identifier)
 		).orElseGet(
 			Collections::emptyList
 		);
