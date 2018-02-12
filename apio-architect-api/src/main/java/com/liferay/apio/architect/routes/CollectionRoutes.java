@@ -58,10 +58,8 @@ public class CollectionRoutes<T> {
 
 	public CollectionRoutes(Builder<T> builder) {
 		_createItemFunction = builder._createItemFunction;
-		_collectionPermissionFunction = builder._collectionPermissionFunction;
 		_form = builder._form;
 		_getPageFunction = builder._getPageFunction;
-		_name = builder._name;
 	}
 
 	/**
@@ -98,27 +96,6 @@ public class CollectionRoutes<T> {
 	 */
 	public Optional<GetPageFunction<T>> getGetPageFunctionOptional() {
 		return Optional.ofNullable(_getPageFunction);
-	}
-
-	/**
-	 * Returns the list of operations for the single item resource.
-	 *
-	 * @param  auth the actual HTTP authentication information
-	 * @return the list of operations
-	 * @review
-	 */
-	public List<Operation> getOperations(Auth auth) {
-		Optional<Form> optional = getFormOptional();
-
-		return optional.filter(
-			__ -> _collectionPermissionFunction.apply(auth)
-		).map(
-			form -> new Operation(form, POST, _name + "/create")
-		).map(
-			Collections::singletonList
-		).orElseGet(
-			Collections::emptyList
-		);
 	}
 
 	/**
@@ -316,9 +293,10 @@ public class CollectionRoutes<T> {
 
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
-				aClass,
-				pagination -> a -> biFunction.andThen(
-					items -> new Page<>(_name, items, pagination)
+				aClass, Auth.class,
+				pagination -> a -> auth -> biFunction.andThen(
+					items -> new Page<>(
+						_name, items, pagination, _getOperations(auth))
 				).apply(
 					pagination, a
 				));
@@ -338,8 +316,10 @@ public class CollectionRoutes<T> {
 
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
-				pagination -> function.andThen(
-					items -> new Page<>(_name, items, pagination)
+				Auth.class,
+				pagination -> auth -> function.andThen(
+					items -> new Page<>(
+						_name, items, pagination, _getOperations(auth))
 				).apply(
 					pagination
 				));
@@ -365,9 +345,10 @@ public class CollectionRoutes<T> {
 
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
-				aClass, bClass, cClass, dClass,
-				pagination -> a -> b -> c -> d -> pentaFunction.andThen(
-					items -> new Page<>(_name, items, pagination)
+				aClass, bClass, cClass, dClass, Auth.class,
+				pagination -> a -> b -> c -> d -> auth -> pentaFunction.andThen(
+					items -> new Page<>(
+						_name, items, pagination, _getOperations(auth))
 				).apply(
 					pagination, a, b, c, d
 				));
@@ -391,9 +372,10 @@ public class CollectionRoutes<T> {
 
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
-				aClass, bClass, cClass,
-				pagination -> a -> b -> c -> tetraFunction.andThen(
-					items -> new Page<>(_name, items, pagination)
+				aClass, bClass, cClass, Auth.class,
+				pagination -> a -> b -> c -> auth -> tetraFunction.andThen(
+					items -> new Page<>(
+						_name, items, pagination, _getOperations(auth))
 				).apply(
 					pagination, a, b, c
 				));
@@ -415,9 +397,10 @@ public class CollectionRoutes<T> {
 
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
-				aClass, bClass,
-				pagination -> a -> b -> triFunction.andThen(
-					items -> new Page<>(_name, items, pagination)
+				aClass, bClass, Auth.class,
+				pagination -> a -> b -> auth -> triFunction.andThen(
+					items -> new Page<>(
+						_name, items, pagination, _getOperations(auth))
 				).apply(
 					pagination, a, b
 				));
@@ -435,6 +418,20 @@ public class CollectionRoutes<T> {
 			return new CollectionRoutes<>(this);
 		}
 
+		private List<Operation> _getOperations(Auth auth) {
+			Optional<Form> optional = Optional.ofNullable(_form);
+
+			return optional.filter(
+				__ -> _collectionPermissionFunction.apply(auth)
+			).map(
+				form -> new Operation(form, POST, _name + "/create")
+			).map(
+				Collections::singletonList
+			).orElseGet(
+				Collections::emptyList
+			);
+		}
+
 		private Function<Auth, Boolean> _collectionPermissionFunction;
 		private CreateItemFunction<T> _createItemFunction;
 		private Form _form;
@@ -444,10 +441,8 @@ public class CollectionRoutes<T> {
 
 	}
 
-	private final Function<Auth, Boolean> _collectionPermissionFunction;
 	private final CreateItemFunction<T> _createItemFunction;
 	private final Form _form;
 	private final GetPageFunction<T> _getPageFunction;
-	private final String _name;
 
 }

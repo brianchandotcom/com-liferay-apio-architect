@@ -117,17 +117,7 @@ public class PageWriter<T> {
 		items.forEach(
 			model -> _writeItem(new SingleModel<>(model, resourceName)));
 
-		Optional<Path> pathOptional = _page.getPathOptional();
-
-		List<Operation> operations = pathOptional.map(
-			path -> _nestedPageOperationsFunction.apply(
-				path.getName()
-			).apply(
-				resourceName
-			)
-		).orElseGet(
-			() -> _pageOperationsFunction.apply(resourceName)
-		);
+		List<Operation> operations = _page.getOperations();
 
 		operations.forEach(
 			operation -> {

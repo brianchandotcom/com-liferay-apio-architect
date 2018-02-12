@@ -27,7 +27,6 @@ import static java.util.Collections.singletonMap;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
@@ -68,10 +67,6 @@ public class CollectionRoutesTest {
 			collectionRoutes.getGetPageFunctionOptional();
 
 		assertThat(getPageFunctionOptional, is(emptyOptional()));
-
-		List<Operation> operations = collectionRoutes.getOperations(null);
-
-		assertThat(operations, is(empty()));
 	}
 
 	@Test
@@ -279,15 +274,15 @@ public class CollectionRoutesTest {
 		assertThat(page.getItems(), hasItem("Apio"));
 		assertThat(page.getTotalCount(), is(1));
 
-		List<Operation> operations = collectionRoutes.getOperations(null);
+		List<Operation> operations = page.getOperations();
 
 		assertThat(operations, hasSize(1));
 
-		Operation secondOperation = operations.get(0);
+		Operation operation = operations.get(0);
 
-		assertThat(secondOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(secondOperation.method, is(POST));
-		assertThat(secondOperation.name, is("name/create"));
+		assertThat(operation.getFormOptional(), is(optionalWithValue()));
+		assertThat(operation.method, is(POST));
+		assertThat(operation.name, is("name/create"));
 	}
 
 	private final Map<String, Object> _body = singletonMap("key", "value");

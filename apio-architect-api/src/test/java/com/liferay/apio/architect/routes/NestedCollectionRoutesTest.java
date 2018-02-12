@@ -305,8 +305,7 @@ public class NestedCollectionRoutesTest {
 		assertThat(page.getPathOptional(), optionalWithValue(equalTo(path)));
 		assertThat(page.getTotalCount(), is(1));
 
-		List<Operation> operations = nestedCollectionRoutes.getOperations(
-			null, 42L);
+		List<Operation> operations = page.getOperations();
 
 		assertThat(operations, hasSize(1));
 
