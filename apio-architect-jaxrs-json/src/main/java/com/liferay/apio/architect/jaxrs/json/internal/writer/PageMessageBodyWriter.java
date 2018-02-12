@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.liferay.apio.architect.auth.Auth;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveMessageMapper;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
 import com.liferay.apio.architect.functional.Try;
@@ -160,7 +161,7 @@ public class PageMessageBodyWriter<T>
 			).pageMessageMapper(
 				getPageMessageMapper(mediaType, page)
 			).pageOperationsFunction(
-				_collectionRouterManager::getOperations
+				name -> _collectionRouterManager.getOperations(name, getAuth())
 			).nestedPageOperationsFunction(
 				name -> nestedName -> {
 					List<Operation> operations =
@@ -200,6 +201,19 @@ public class PageMessageBodyWriter<T>
 		printWriter.println(pageWriter.write());
 
 		printWriter.close();
+	}
+
+	/**
+	 * Returns the actual HTTP authentication information, or throws a {@link
+	 * MustHaveProvider} developer error.
+	 *
+	 * @return the HTTP authentication information
+	 */
+	protected Auth getAuth() {
+		Optional<Auth> optional = _providerManager.provideOptional(
+			_httpServletRequest, Auth.class);
+
+		return optional.orElseThrow(() -> new MustHaveProvider(Auth.class));
 	}
 
 	/**

@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
 
+import com.liferay.apio.architect.auth.Auth;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.router.CollectionRouter;
@@ -68,12 +69,12 @@ public class CollectionRouterManagerImpl
 	}
 
 	@Override
-	public List<Operation> getOperations(String name) {
+	public List<Operation> getOperations(String name, Auth auth) {
 		Optional<CollectionRoutes<Object>> optional =
 			getCollectionRoutesOptional(name);
 
 		return optional.map(
-			CollectionRoutes::getOperations
+			collectionRoutes -> collectionRoutes.getOperations(auth)
 		).orElseGet(
 			Collections::emptyList
 		);
