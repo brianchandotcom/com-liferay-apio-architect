@@ -19,14 +19,12 @@ import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
-import com.liferay.apio.architect.auth.Auth;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveMessageMapper;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.response.control.Embedded;
@@ -40,10 +38,7 @@ import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
-import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
-import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
-import com.liferay.apio.architect.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 import com.liferay.apio.architect.writer.PageWriter;
 
@@ -160,33 +155,6 @@ public class PageMessageBodyWriter<T>
 				page
 			).pageMessageMapper(
 				getPageMessageMapper(mediaType, page)
-			).pageOperationsFunction(
-				name -> _collectionRouterManager.getOperations(name, getAuth())
-			).nestedPageOperationsFunction(
-				name -> nestedName -> {
-					Optional<Path> optional1 = page.getPathOptional();
-
-					Optional<Class<Identifier>> optional2 =
-						_identifierClassManager.getIdentifierClassOptional(
-							name);
-
-					Optional<Object> optional3 =
-						_pathIdentifierMapperManager.mapToIdentifier(
-							unsafeCast(optional2.get()), optional1.get());
-
-					Object identifier = optional3.get();
-
-					List<Operation> operations =
-						_nestedCollectionRouterManager.getOperations(
-							name, nestedName, getAuth(), identifier);
-
-					if (!operations.isEmpty()) {
-						return operations;
-					}
-
-					return _reusableNestedCollectionRouterManager.getOperations(
-						nestedName, getAuth(), identifier);
-				}
 			).pathFunction(
 				(resourceName, identifier) -> {
 					Optional<Class<Identifier>> optional =
@@ -213,19 +181,6 @@ public class PageMessageBodyWriter<T>
 		printWriter.println(pageWriter.write());
 
 		printWriter.close();
-	}
-
-	/**
-	 * Returns the actual HTTP authentication information, or throws a {@link
-	 * MustHaveProvider} developer error.
-	 *
-	 * @return the HTTP authentication information
-	 */
-	protected Auth getAuth() {
-		Optional<Auth> optional = _providerManager.provideOptional(
-			_httpServletRequest, Auth.class);
-
-		return optional.orElseThrow(() -> new MustHaveProvider(Auth.class));
 	}
 
 	/**
@@ -293,9 +248,6 @@ public class PageMessageBodyWriter<T>
 			});
 	}
 
-	@Reference
-	private CollectionRouterManager _collectionRouterManager;
-
 	@Context
 	private HttpHeaders _httpHeaders;
 
@@ -311,9 +263,6 @@ public class PageMessageBodyWriter<T>
 	@Reference
 	private NameManager _nameManager;
 
-	@Reference
-	private NestedCollectionRouterManager _nestedCollectionRouterManager;
-
 	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
 	private List<PageMessageMapper<T>> _pageMessageMappers;
 
@@ -325,9 +274,5 @@ public class PageMessageBodyWriter<T>
 
 	@Reference
 	private RepresentableManager _representableManager;
-
-	@Reference
-	private ReusableNestedCollectionRouterManager
-		_reusableNestedCollectionRouterManager;
 
 }

@@ -28,7 +28,6 @@ import static java.util.Collections.singletonMap;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
@@ -71,11 +70,6 @@ public class NestedCollectionRoutesTest {
 			nestedCollectionRoutes.getNestedGetPageFunctionOptional();
 
 		assertThat(optional2, is(emptyOptional()));
-
-		List<Operation> operations = nestedCollectionRoutes.getOperations(
-			null, 42L);
-
-		assertThat(operations, is(empty()));
 	}
 
 	@Test

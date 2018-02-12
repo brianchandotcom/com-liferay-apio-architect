@@ -84,12 +84,6 @@ public class MockPageWriter {
 				page
 			).pageMessageMapper(
 				pageMessageMapper
-			).pageOperationsFunction(
-				__ -> Collections.emptyList()
-			).nestedPageOperationsFunction(
-				modelClass -> parentName -> Collections.singletonList(
-					new Operation(
-						createForm("c", "p"), POST, "create-operation"))
 			).pathFunction(
 				MockWriterUtil::identifierToPath
 			).resourceNameFunction(
