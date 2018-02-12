@@ -66,8 +66,8 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, Documentation documentation,
 		HttpHeaders httpHeaders) {
 
-		jsonObjectBuilder.field(
-			"@context"
+		jsonObjectBuilder.nestedField(
+			"@context", "hydra"
 		).stringValue(
 			"https://www.w3.org/ns/hydra/core"
 		);
@@ -81,7 +81,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			"@type"
 		).stringValue(
-			"ApiDocumentation"
+			"hydra:ApiDocumentation"
 		);
 	}
 
