@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.operation.Method.POST;
+import static com.liferay.apio.architect.routes.RoutesTestUtil.COLLECTION_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.PAGINATION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
@@ -69,7 +70,7 @@ public class CollectionRoutesTest {
 
 		assertThat(getPageFunctionOptional, is(emptyOptional()));
 
-		List<Operation> operations = collectionRoutes.getOperations();
+		List<Operation> operations = collectionRoutes.getOperations(null);
 
 		assertThat(operations, is(empty()));
 	}
@@ -81,7 +82,8 @@ public class CollectionRoutesTest {
 
 		CollectionRoutes<String> collectionRoutes = builder.addCreator(
 			this::_testAndReturnFourParameterCreatorRoute, String.class,
-			Long.class, Boolean.class, Integer.class, FORM_BUILDER_FUNCTION
+			Long.class, Boolean.class, Integer.class,
+			COLLECTION_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
 			Long.class, Boolean.class, Integer.class
@@ -97,7 +99,8 @@ public class CollectionRoutesTest {
 
 		CollectionRoutes<String> collectionRoutes = builder.addCreator(
 			this::_testAndReturnThreeParameterCreatorRoute, String.class,
-			Long.class, Boolean.class, FORM_BUILDER_FUNCTION
+			Long.class, Boolean.class, COLLECTION_PERMISSION_FUNCTION,
+			FORM_BUILDER_FUNCTION
 		).addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
 			Long.class, Boolean.class
@@ -112,7 +115,8 @@ public class CollectionRoutesTest {
 			"name", REQUEST_PROVIDE_FUNCTION);
 
 		CollectionRoutes<String> collectionRoutes = builder.addCreator(
-			this::_testAndReturnNoParameterCreatorRoute, FORM_BUILDER_FUNCTION
+			this::_testAndReturnNoParameterCreatorRoute,
+			COLLECTION_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
 			this::_testAndReturnNoParameterGetterRoute
 		).build();
@@ -127,7 +131,7 @@ public class CollectionRoutesTest {
 
 		CollectionRoutes<String> collectionRoutes = builder.addCreator(
 			this::_testAndReturnTwoParameterCreatorRoute, String.class,
-			Long.class, FORM_BUILDER_FUNCTION
+			Long.class, COLLECTION_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
 			Long.class
@@ -143,7 +147,7 @@ public class CollectionRoutesTest {
 
 		CollectionRoutes<String> collectionRoutes = builder.addCreator(
 			this::_testAndReturnOneParameterCreatorRoute, String.class,
-			FORM_BUILDER_FUNCTION
+			COLLECTION_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
 		).build();
@@ -274,7 +278,7 @@ public class CollectionRoutesTest {
 		assertThat(page.getItems(), hasItem("Apio"));
 		assertThat(page.getTotalCount(), is(1));
 
-		List<Operation> operations = collectionRoutes.getOperations();
+		List<Operation> operations = collectionRoutes.getOperations(null);
 
 		assertThat(operations, hasSize(1));
 

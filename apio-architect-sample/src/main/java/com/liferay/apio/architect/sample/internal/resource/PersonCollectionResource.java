@@ -52,7 +52,7 @@ public class PersonCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addPerson, PersonForm::buildForm
+			this::_addPerson, __ -> hasPermission(), PersonForm::buildForm
 		).build();
 	}
 

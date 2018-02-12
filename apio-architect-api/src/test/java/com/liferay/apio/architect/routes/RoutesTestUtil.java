@@ -34,6 +34,14 @@ import java.util.function.Function;
 public class RoutesTestUtil {
 
 	/**
+	 * A collection permission function that always returns {@code true}.
+	 *
+	 * @review
+	 */
+	public static final Function<Auth, Boolean> COLLECTION_PERMISSION_FUNCTION =
+		__ -> true;
+
+	/**
 	 * A {@code FormBuilderFunction} that creates a {@code Map<String, Object>}
 	 * {@code Form}.
 	 *

@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.endpoint;
 
+import static com.liferay.apio.architect.routes.RoutesTestUtil.COLLECTION_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.ITEM_PERMISSION_FUNCTION;
@@ -152,7 +153,7 @@ public class FormEndpointTest {
 			"name", REQUEST_PROVIDE_FUNCTION);
 
 		return builder.addCreator(
-			__ -> null, FORM_BUILDER_FUNCTION
+			__ -> null, COLLECTION_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 	}
 

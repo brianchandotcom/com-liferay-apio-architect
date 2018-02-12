@@ -22,6 +22,7 @@ import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
+import com.liferay.apio.architect.auth.Auth;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.PentaFunction;
 import com.liferay.apio.architect.function.TetraFunction;
@@ -32,8 +33,8 @@ import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -57,6 +58,7 @@ public class CollectionRoutes<T> {
 
 	public CollectionRoutes(Builder<T> builder) {
 		_createItemFunction = builder._createItemFunction;
+		_collectionPermissionFunction = builder._collectionPermissionFunction;
 		_form = builder._form;
 		_getPageFunction = builder._getPageFunction;
 		_name = builder._name;
@@ -101,18 +103,22 @@ public class CollectionRoutes<T> {
 	/**
 	 * Returns the list of operations for the single item resource.
 	 *
+	 * @param  auth the actual HTTP authentication information
 	 * @return the list of operations
+	 * @review
 	 */
-	public List<Operation> getOperations() {
-		List<Operation> operations = new ArrayList<>();
+	public List<Operation> getOperations(Auth auth) {
+		Optional<Form> optional = getFormOptional();
 
-		Optional<Form> formOptional = getFormOptional();
-
-		formOptional.ifPresent(
-			form -> operations.add(
-				new Operation(form, POST, _name + "/create")));
-
-		return operations;
+		return optional.filter(
+			__ -> _collectionPermissionFunction.apply(auth)
+		).map(
+			form -> new Operation(form, POST, _name + "/create")
+		).map(
+			Collections::singletonList
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -132,13 +138,18 @@ public class CollectionRoutes<T> {
 		 *
 		 * @param  biFunction the creator function that adds the collection item
 		 * @param  aClass the class of the creator function's second parameter
+		 * @param  permissionFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, R> Builder<T> addCreator(
 			BiFunction<R, A, T> biFunction, Class<A> aClass,
+			Function<Auth, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_collectionPermissionFunction = permissionFunction;
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
@@ -158,13 +169,17 @@ public class CollectionRoutes<T> {
 		 * Adds a route to a creator function that has no extra parameters.
 		 *
 		 * @param  function the creator function that adds the collection item
+		 * @param  permissionFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <R> Builder<T> addCreator(
-			Function<R, T> function,
+			Function<R, T> function, Function<Auth, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_collectionPermissionFunction = permissionFunction;
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
@@ -188,14 +203,19 @@ public class CollectionRoutes<T> {
 		 * @param  bClass the class of the creator function's third parameter
 		 * @param  cClass the class of the creator function's fourth parameter
 		 * @param  dClass the class of the creator function's fifth parameter
+		 * @param  permissionFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C, D, R> Builder<T> addCreator(
 			PentaFunction<R, A, B, C, D, T> pentaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Function<Auth, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_collectionPermissionFunction = permissionFunction;
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
@@ -220,14 +240,19 @@ public class CollectionRoutes<T> {
 		 * @param  aClass the class of the creator function's second parameter
 		 * @param  bClass the class of the creator function's third parameter
 		 * @param  cClass the class of the creator function's fourth parameter
+		 * @param  permissionFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C, R> Builder<T> addCreator(
 			TetraFunction<R, A, B, C, T> pentaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass,
+			Function<Auth, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_collectionPermissionFunction = permissionFunction;
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
@@ -251,13 +276,18 @@ public class CollectionRoutes<T> {
 		 *         item
 		 * @param  aClass the class of the creator function's second parameter
 		 * @param  bClass the class of the creator function's third parameter
+		 * @param  permissionFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, R> Builder<T> addCreator(
 			TriFunction<R, A, B, T> triFunction, Class<A> aClass,
-			Class<B> bClass, FormBuilderFunction<R> formBuilderFunction) {
+			Class<B> bClass, Function<Auth, Boolean> permissionFunction,
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			_collectionPermissionFunction = permissionFunction;
 
 			_form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
@@ -405,6 +435,7 @@ public class CollectionRoutes<T> {
 			return new CollectionRoutes<>(this);
 		}
 
+		private Function<Auth, Boolean> _collectionPermissionFunction;
 		private CreateItemFunction<T> _createItemFunction;
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
@@ -413,6 +444,7 @@ public class CollectionRoutes<T> {
 
 	}
 
+	private final Function<Auth, Boolean> _collectionPermissionFunction;
 	private final CreateItemFunction<T> _createItemFunction;
 	private final Form _form;
 	private final GetPageFunction<T> _getPageFunction;

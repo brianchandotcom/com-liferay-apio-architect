@@ -55,7 +55,8 @@ public class BlogPostingCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addBlogPosting, BlogPostingForm::buildForm
+			this::_addBlogPosting, __ -> hasPermission(),
+			BlogPostingForm::buildForm
 		).build();
 	}
 
