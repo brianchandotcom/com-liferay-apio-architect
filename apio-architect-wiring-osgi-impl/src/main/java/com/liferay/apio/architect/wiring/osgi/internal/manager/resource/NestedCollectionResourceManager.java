@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.resource;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.IDENTIFIER_CLASS;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.createServiceTracker;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
@@ -53,11 +52,6 @@ public class NestedCollectionResourceManager {
 		_serviceTracker = createServiceTracker(
 			bundleContext, NestedCollectionResource.class, classes,
 			(properties, service) -> {
-				Class<?> modelClass = getTypeParamOrFail(
-					service, NestedCollectionResource.class, 0);
-
-				properties.put(MODEL_CLASS, modelClass);
-
 				Class<?> identifierClass = getTypeParamOrFail(
 					service, NestedCollectionResource.class, 2);
 

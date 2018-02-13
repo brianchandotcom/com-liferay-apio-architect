@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.resource;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.IDENTIFIER_CLASS;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.MODEL_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.createServiceTracker;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
@@ -48,11 +47,6 @@ public class ItemResourceManager {
 		_serviceTracker = createServiceTracker(
 			bundleContext, ItemResource.class, classes,
 			(properties, service) -> {
-				Class<?> modelClass = getTypeParamOrFail(
-					service, ItemResource.class, 0);
-
-				properties.put(MODEL_CLASS, modelClass);
-
 				Class<?> identifierClass = getTypeParamOrFail(
 					service, ItemResource.class, 2);
 

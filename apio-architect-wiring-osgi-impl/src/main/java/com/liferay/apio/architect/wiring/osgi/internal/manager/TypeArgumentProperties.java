@@ -32,13 +32,6 @@ public class TypeArgumentProperties {
 		"apio.architect.principal.type.argument";
 
 	/**
-	 * Represents the class of a resource's model.
-	 *
-	 * @review
-	 */
-	public static final String MODEL_CLASS = "apio.architect.model.class";
-
-	/**
 	 * Represents the class of a resource parent's identifier.
 	 *
 	 * @review
