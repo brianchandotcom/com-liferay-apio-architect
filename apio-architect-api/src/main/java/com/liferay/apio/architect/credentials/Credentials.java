@@ -12,16 +12,16 @@
  * details.
  */
 
-package com.liferay.apio.architect.auth;
+package com.liferay.apio.architect.credentials;
 
 import java.util.function.Supplier;
 
 /**
- * Represents the authentication of the current request. Each implementation can
+ * Represents the credentials of the current request. Each implementation can
  * decide what to include in it, it may be a token, user ID, etc.
  *
  * @author Alejandro Hernández
  * @review
  */
-public interface Auth extends Supplier<String> {
+public interface Credentials extends Supplier<String> {
 }
