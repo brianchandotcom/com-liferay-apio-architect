@@ -1,3 +1,4 @@
+Bundle-Activator: com.liferay.apio.architect.internal.WebsphereApiSupport
 Bundle-Name: Liferay Apio Architect API
 Bundle-SymbolicName: com.liferay.apio.architect.api
 Bundle-Version: 1.0.0
@@ -39,3 +40,5 @@ Export-Package:\
 	com.liferay.apio.architect.uri,\
 	com.liferay.apio.architect.uri.mapper,\
 	com.liferay.apio.architect.url
+
+-includeresource: dependencies/javax.annotation-api.jar=javax.annotation-api-*.jar
