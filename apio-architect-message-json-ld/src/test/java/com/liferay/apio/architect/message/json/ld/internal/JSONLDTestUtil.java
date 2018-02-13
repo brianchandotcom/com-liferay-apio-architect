@@ -58,7 +58,7 @@ public class JSONLDTestUtil {
 	 * @review
 	 */
 	public static final Matcher<JsonElement> IS_A_LINK_TO_HYDRA_PROFILE =
-		isALinkTo("https://www.w3.org/ns/hydra/core");
+		isALinkTo("https://www.w3.org/ns/hydra/core#");
 
 	/**
 	 * A {@link Matcher} that checks if a field is a {@code {"@type" = " ID"}}

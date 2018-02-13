@@ -70,7 +70,7 @@ public class JSONLDPageMessageMapperTest {
 		).where(
 			"@type", containsTheTypes("hydra:Collection")
 		).where(
-			"members", is(aJsonArrayThat(contains(_theMembers)))
+			"member", is(aJsonArrayThat(contains(_theMembers)))
 		).where(
 			"numberOfItems", is(aJsonInt(equalTo(3)))
 		).where(
