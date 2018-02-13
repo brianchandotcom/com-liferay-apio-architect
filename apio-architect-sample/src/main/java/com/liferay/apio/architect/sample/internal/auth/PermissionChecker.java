@@ -37,7 +37,7 @@ public class PermissionChecker {
 	 * @review
 	 */
 	public static boolean hasPermission(Credentials credentials) {
-		String authorization = System.getenv("APIO_AUTH");
+		String authorization = System.getenv("LIFERAY_APIO_AUTH");
 
 		if ((authorization == null) || (credentials == null)) {
 			return false;
