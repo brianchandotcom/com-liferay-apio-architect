@@ -185,9 +185,9 @@ task runDocker(type: Exec) {
 	def liferayApioAuth = System.getenv('LIFERAY_APIO_AUTH')
 
 	commandLine 'docker', 'run',
-	'-e', "LIFERAY_APIO_AUTH=${liferayApioAuth}",
 	'-e', "JACOCO_DIR=${rootDir}/build/jacoco",
 	'-e', "JAVA_OPTS=$javaOpts",
+	'-e', "LIFERAY_APIO_AUTH=${liferayApioAuth}",
 	'-e', "ROOT_DIR=${rootDir}",
 	'-p', '5005:5005',
 	'-p', '8080:8080',
