@@ -59,7 +59,8 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		Supplier<Optional<Representor<T, Object>>> representorSupplier,
 		Supplier<Optional<ItemRoutes<T, S>>> itemRoutesSupplier,
 		Function<String, Optional<NestedCollectionRoutes<T, Object>>>
-			nestedCollectionRoutesFunction) {
+			nestedCollectionRoutesFunction,
+		Function<Path, S> identifierFunction) {
 
 		_name = name;
 		_httpServletRequest = httpServletRequest;
@@ -69,6 +70,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		_representorSupplier = representorSupplier;
 		_itemRoutesSupplier = itemRoutesSupplier;
 		_nestedCollectionRoutesFunction = nestedCollectionRoutesFunction;
+		_identifierFunction = identifierFunction;
 	}
 
 	@Override
@@ -127,11 +129,12 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 		itemRoutesTry.mapOptional(
 			ItemRoutes::getDeleteConsumerOptional, notAllowed(DELETE, _name, id)
-		).getUnchecked(
-		).apply(
-			_httpServletRequest
-		).accept(
-			new Path(_name, id)
+		).ifSuccess(
+			function -> function.apply(
+				_httpServletRequest
+			).accept(
+				_identifierFunction.apply(new Path(_name, id))
+			)
 		);
 
 		return noContent().build();
@@ -200,11 +203,15 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 			ItemRoutes::getUpdateItemFunctionOptional,
 			notAllowed(PUT, _name, id)
 		).map(
-			function -> function.apply(_httpServletRequest)
-		).map(
-			function -> function.apply(new Path(_name, id))
-		).map(
-			function -> function.apply(body)
+			function -> function.apply(
+				_httpServletRequest
+			).compose(
+				_identifierFunction
+			).apply(
+				new Path(_name, id)
+			).apply(
+				body
+			)
 		);
 	}
 
@@ -256,6 +263,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	private final HttpServletRequest _httpServletRequest;
 	private final Function<String, Optional<Class<Identifier>>>
 		_identifierClassFunction;
+	private final Function<Path, S> _identifierFunction;
 	private final Supplier<Optional<ItemRoutes<T, S>>> _itemRoutesSupplier;
 	private final String _name;
 	private final Function<String, Optional<NestedCollectionRoutes<T, Object>>>

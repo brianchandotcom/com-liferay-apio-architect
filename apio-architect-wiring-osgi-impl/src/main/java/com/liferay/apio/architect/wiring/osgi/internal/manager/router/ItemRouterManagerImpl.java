@@ -18,14 +18,12 @@ import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
 
-import com.liferay.apio.architect.error.ApioDeveloperError.MustHavePathIdentifierMapper;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.router.ItemRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
-import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -69,21 +67,14 @@ public class ItemRouterManagerImpl
 
 		String name = getNameOrFail(clazz, _nameManager);
 
-		return _getItemRoutes(unsafeCast(itemRouter), clazz, name);
+		return _getItemRoutes(unsafeCast(itemRouter), name);
 	}
 
-		ItemRouter<T, S, U> itemRouter, Class<?> clazz, String name) {
 	private <T, S, U extends Identifier<S>> ItemRoutes<T, S> _getItemRoutes(
+		ItemRouter<T, S, U> itemRouter, String name) {
 
 		Builder<T, S> builder = new Builder<>(
-			name, curry(_providerManager::provideOptional),
-			path -> {
-				Optional<S> optional =
-					_pathIdentifierMapperManager.mapToIdentifier(path);
-
-				return optional.orElseThrow(
-					() -> new MustHavePathIdentifierMapper(clazz));
-			});
+			name, curry(_providerManager::provideOptional));
 
 		return itemRouter.itemRoutes(builder);
 	}
@@ -93,9 +84,6 @@ public class ItemRouterManagerImpl
 
 	@Reference
 	private NameManager _nameManager;
-
-	@Reference
-	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 	@Reference
 	private ProviderManager _providerManager;

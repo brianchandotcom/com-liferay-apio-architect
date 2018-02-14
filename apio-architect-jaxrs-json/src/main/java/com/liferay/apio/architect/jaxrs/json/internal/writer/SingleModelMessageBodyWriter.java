@@ -29,7 +29,7 @@ import com.liferay.apio.architect.response.control.Embedded;
 import com.liferay.apio.architect.response.control.Fields;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
-import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
@@ -222,21 +222,16 @@ public class SingleModelMessageBodyWriter<T>
 			identifierClass.getName());
 
 		return nameOptional.flatMap(
-			name -> {
-				Optional<Path> pathOptional =
-					_pathIdentifierMapperManager.mapToPath(name, identifier);
-
-				Optional<ItemRoutes<Object, Object>> itemRoutesOptional =
-					_itemRouterManager.getItemRoutesOptional(name);
-
-				return itemRoutesOptional.flatMap(
-					ItemRoutes::getItemFunctionOptional
-				).map(
-					function -> function.apply(_httpServletRequest)
-				).flatMap(
-					pathOptional::map
-				);
-			});
+			_itemRouterManager::getItemRoutesOptional
+		).flatMap(
+			ItemRoutes::getItemFunctionOptional
+		).map(
+			function -> function.apply(_httpServletRequest)
+		).map(
+			function -> function.apply(identifier)
+		).map(
+			Unsafe::unsafeCast
+		);
 	}
 
 	@Context

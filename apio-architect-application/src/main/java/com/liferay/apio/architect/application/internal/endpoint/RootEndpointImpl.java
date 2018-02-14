@@ -32,6 +32,7 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
@@ -134,7 +135,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			() -> _collectionRouterManager.getCollectionRoutesOptional(name),
 			() -> _representableManager.getRepresentorOptional(name),
 			() -> _itemRouterManager.getItemRoutesOptional(name),
-			nestedName -> _getNestedCollectionRoutesOptional(name, nestedName));
+			nestedName -> _getNestedCollectionRoutesOptional(name, nestedName),
+			_pathIdentifierMapperManager::mapToIdentifierOrFail);
 	}
 
 	private <T> Optional<NestedCollectionRoutes<T, Object>>
@@ -162,9 +164,12 @@ public class RootEndpointImpl implements RootEndpoint {
 		).mapOptional(
 			ItemRoutes::getItemFunctionOptional, notFound(name, id)
 		).map(
-			function -> function.apply(_httpServletRequest)
-		).map(
-			function -> function.apply(new Path(name, id))
+			function -> function.apply(
+				_httpServletRequest
+			).apply(
+				_pathIdentifierMapperManager.mapToIdentifierOrFail(
+					new Path(name, id))
+			)
 		);
 	}
 
@@ -184,6 +189,9 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Reference
 	private NestedCollectionRouterManager _nestedCollectionRouterManager;
+
+	@Reference
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 	@Reference
 	private ProviderManager _providerManager;

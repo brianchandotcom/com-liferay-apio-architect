@@ -16,8 +16,6 @@ package com.liferay.apio.architect.endpoint;
 
 import static com.liferay.apio.architect.routes.RoutesTestUtil.COLLECTION_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.ITEM_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.getNestedCollectionPermissionFunction;
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aFailTry;
@@ -167,8 +165,7 @@ public class FormEndpointTest {
 	private static <T, S> ItemRoutes<T, S> _emptyItemRoutes() {
 		return new ItemRoutes<>(
 			new ItemRoutes.Builder<>(
-				"", httpServletRequest -> aClass -> Optional.empty(),
-				__ -> null));
+				"", httpServletRequest -> aClass -> Optional.empty()));
 	}
 
 	private static <T, S> NestedCollectionRoutes<T, S>
@@ -179,9 +176,9 @@ public class FormEndpointTest {
 				"", "", httpServletRequest -> aClass -> Optional.empty()));
 	}
 
-			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
 		ItemRoutes.Builder<T, S> builder = new ItemRoutes.Builder<>(
+			"name", REQUEST_PROVIDE_FUNCTION);
 
 		return builder.addUpdater(
 			(aLong, body) -> null, (credentials, s) -> true,

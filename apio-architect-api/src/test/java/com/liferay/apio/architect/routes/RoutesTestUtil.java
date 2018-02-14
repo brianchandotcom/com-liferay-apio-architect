@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.routes;
 
-import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.credentials.Credentials;
@@ -57,15 +56,6 @@ public class RoutesTestUtil {
 		).addRequiredString(
 			"key", (map, value) -> map.put("key", value)
 		).build();
-
-	/**
-	 * An {@code IdentifierFunction} that returns the {@code Path} ID long's
-	 * value.
-	 *
-	 * @review
-	 */
-	public static final IdentifierFunction<Long> IDENTIFIER_FUNCTION =
-		path -> Long.valueOf(path.getId());
 
 	/**
 	 * An item permission function that always returns {@code true}.

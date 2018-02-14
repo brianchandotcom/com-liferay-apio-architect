@@ -17,7 +17,6 @@ package com.liferay.apio.architect.routes;
 import static com.liferay.apio.architect.operation.Method.DELETE;
 import static com.liferay.apio.architect.operation.Method.PUT;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.ITEM_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 
@@ -36,7 +35,6 @@ import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
-import com.liferay.apio.architect.uri.Path;
 
 import java.util.List;
 import java.util.Map;
@@ -52,21 +50,21 @@ public class ItemRoutesTest {
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.build();
 
-		Optional<DeleteItemConsumer> deleteItemConsumerOptional =
+		Optional<DeleteItemConsumer<Long>> deleteItemConsumerOptional =
 			itemRoutes.getDeleteConsumerOptional();
 
 		assertThat(deleteItemConsumerOptional, is(emptyOptional()));
 
-		Optional<GetItemFunction<String>> getItemFunctionOptional =
+		Optional<GetItemFunction<String, Long>> getItemFunctionOptional =
 			itemRoutes.getItemFunctionOptional();
 
 		assertThat(getItemFunctionOptional, is(emptyOptional()));
 
-		Optional<UpdateItemFunction<String>> updateItemFunctionOptional =
+		Optional<UpdateItemFunction<String, Long>> updateItemFunctionOptional =
 			itemRoutes.getUpdateItemFunctionOptional();
 
 		assertThat(updateItemFunctionOptional, is(emptyOptional()));
@@ -75,7 +73,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
@@ -95,7 +93,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
@@ -115,7 +113,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
@@ -133,7 +131,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
@@ -152,7 +150,7 @@ public class ItemRoutesTest {
 	@Test
 	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
@@ -280,15 +278,13 @@ public class ItemRoutesTest {
 
 		assertThat(body, is(_body));
 
-		Path path = new Path("name", "42");
-
 		optional.flatMap(
 			ItemRoutes::getDeleteConsumerOptional
 		).get(
 		).apply(
 			null
 		).accept(
-			path
+			42L
 		);
 
 		SingleModel<String> updatedSingleModel = optional.flatMap(
@@ -297,7 +293,7 @@ public class ItemRoutesTest {
 		).apply(
 			null
 		).apply(
-			path
+			42L
 		).apply(
 			_body
 		);
