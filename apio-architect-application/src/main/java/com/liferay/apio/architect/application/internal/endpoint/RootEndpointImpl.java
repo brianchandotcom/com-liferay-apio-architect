@@ -24,7 +24,6 @@ import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.endpoint.BinaryEndpoint;
 import com.liferay.apio.architect.endpoint.FormEndpoint;
-import com.liferay.apio.architect.endpoint.PageEndpoint;
 import com.liferay.apio.architect.endpoint.RootEndpoint;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
 import com.liferay.apio.architect.functional.Try;
@@ -127,15 +126,15 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	@Override
-	public PageEndpoint pageEndpoint() {
-		return new PageEndpoint<>(
-			_httpServletRequest,
+	public PageEndpointImpl pageEndpoint(String name) {
+		return new PageEndpointImpl<>(
+			name, _httpServletRequest,
 			_identifierClassManager::getIdentifierClassOptional,
-			this::_getSingleModelTry,
-			_collectionRouterManager::getCollectionRoutesOptional,
-			_representableManager::getRepresentorOptional,
-			_itemRouterManager::getItemRoutesOptional,
-			this::_getNestedCollectionRoutesOptional);
+			id -> _getSingleModelTry(name, id),
+			() -> _collectionRouterManager.getCollectionRoutesOptional(name),
+			() -> _representableManager.getRepresentorOptional(name),
+			() -> _itemRouterManager.getItemRoutesOptional(name),
+			nestedName -> _getNestedCollectionRoutesOptional(name, nestedName));
 	}
 
 	private <T> Optional<NestedCollectionRoutes<T, Object>>
