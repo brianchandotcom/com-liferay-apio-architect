@@ -77,8 +77,7 @@ public class ItemRouterManagerImpl
 			name, curry(_providerManager::provideOptional),
 			path -> {
 				Optional<S> optional =
-					_pathIdentifierMapperManager.mapToIdentifier(
-						unsafeCast(clazz), path);
+					_pathIdentifierMapperManager.mapToIdentifier(path);
 
 				return optional.orElseThrow(
 					() -> new MustHavePathIdentifierMapper(clazz));

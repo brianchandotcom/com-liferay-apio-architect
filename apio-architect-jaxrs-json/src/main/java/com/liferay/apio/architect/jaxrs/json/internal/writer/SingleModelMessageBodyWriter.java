@@ -154,17 +154,7 @@ public class SingleModelMessageBodyWriter<T>
 			).modelMessageMapper(
 				getSingleModelMessageMapper(mediaType, singleModel)
 			).pathFunction(
-				(resourceName, identifier) -> {
-					Optional<Class<Identifier>> optional =
-						_identifierClassManager.getIdentifierClassOptional(
-							resourceName);
-
-					return optional.flatMap(
-						identifierClass ->
-							_pathIdentifierMapperManager.mapToPath(
-								unsafeCast(identifierClass),
-								unsafeCast(identifier)));
-				}
+				_pathIdentifierMapperManager::mapToPath
 			).resourceNameFunction(
 				_nameManager::getNameOptional
 			).representorFunction(
@@ -231,11 +221,11 @@ public class SingleModelMessageBodyWriter<T>
 		Optional<String> nameOptional = _nameManager.getNameOptional(
 			identifierClass.getName());
 
-		Optional<Path> pathOptional = _pathIdentifierMapperManager.mapToPath(
-			unsafeCast(identifierClass), identifier);
-
 		return nameOptional.flatMap(
 			name -> {
+				Optional<Path> pathOptional =
+					_pathIdentifierMapperManager.mapToPath(name, identifier);
+
 				Optional<ItemRoutes<Object>> itemRoutesOptional =
 					_itemRouterManager.getItemRoutesOptional(name);
 
