@@ -16,6 +16,8 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
 import static com.liferay.apio.architect.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
 
+import com.liferay.apio.architect.error.ApioDeveloperError.MustHavePathIdentifierMapper;
+import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
@@ -42,37 +44,39 @@ public class PathIdentifierMapperManagerImpl
 	}
 
 	@Override
-	public <T> Optional<T> mapToIdentifier(Path path) {
-		Optional<PathIdentifierMapper<T>> optional =
-			_getPathIdentifierMapperOptional(path.getName());
+	public <T> T mapToIdentifierOrFail(Path path) {
+		Try<String> stringTry = Try.success(path.getName());
 
-		return optional.map(
-			pathIdentifierMapper -> pathIdentifierMapper.map(path));
+		return stringTry.mapOptional(
+			_identifierClassManager::getIdentifierClassOptional
+		).flatMap(
+			clazz -> getGenericTypeArgumentTry(clazz, Identifier.class, 0)
+		).mapOptional(
+			this::getServiceOptional
+		).map(
+			service -> service.map(path)
+		).<T>map(
+			Unsafe::unsafeCast
+		).orElseThrow(
+			() -> new MustHavePathIdentifierMapper(path)
+		);
 	}
 
 	@Override
 	public <T> Optional<Path> mapToPath(String name, T identifier) {
-		return _getPathIdentifierMapperOptional(name).map(
-			pathIdentifierMapper -> pathIdentifierMapper.map(name, identifier));
-	}
+		Try<String> stringTry = Try.success(name);
 
-	private <T> Optional<PathIdentifierMapper<T>>
-		_getPathIdentifierMapperOptional(String name) {
-
-		Optional<Class<Identifier>> optional =
-			_identifierClassManager.getIdentifierClassOptional(name);
-
-		return optional.map(
-			clazz -> getGenericTypeArgumentTry(clazz, Identifier.class, 0)
+		return stringTry.mapOptional(
+			_identifierClassManager::getIdentifierClassOptional
 		).flatMap(
-			classTry -> classTry.map(
-				this::getServiceOptional
-			).orElseGet(
-				Optional::empty
-			)
-		).map(
+			clazz -> getGenericTypeArgumentTry(clazz, Identifier.class, 0)
+		).mapOptional(
+			this::getServiceOptional
+		).<PathIdentifierMapper<T>>map(
 			Unsafe::unsafeCast
-		);
+		).map(
+			service -> service.map(name, identifier)
+		).toOptional();
 	}
 
 	@Reference

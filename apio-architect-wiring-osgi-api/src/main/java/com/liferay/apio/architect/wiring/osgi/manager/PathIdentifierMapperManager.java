@@ -32,13 +32,13 @@ public interface PathIdentifierMapperManager {
 	 * Converts a {@code Path} to its equivalent identifier of type {@code T},
 	 * if a valid {@link
 	 * com.liferay.apio.architect.uri.mapper.PathIdentifierMapper} can be found.
-	 * Returns {@code Optional#empty()} otherwise.
+	 * Throws a {@code MustHavePathIdentifierMapper} exception otherwise.
 	 *
 	 * @param  path the {@code Path}
-	 * @return the identifier, if a valid {@code PathIdentifierMapper} is
-	 *         present; {@code Optional#empty()} otherwise
+	 * @return the identifier
+	 * @review
 	 */
-	public <T> Optional<T> mapToIdentifier(Path path);
+	public <T> T mapToIdentifierOrFail(Path path);
 
 	/**
 	 * Converts an identifier to its equivalent {@code Path}, if a valid {@code

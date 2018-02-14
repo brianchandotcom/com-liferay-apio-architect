@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.error;
 
+import com.liferay.apio.architect.uri.Path;
+
 /**
  * Represents the errors that can occur while using Apio. Each error is a nested
  * error subclass.
@@ -87,8 +89,8 @@ public class ApioDeveloperError extends Error {
 	public static class MustHavePathIdentifierMapper
 		extends ApioDeveloperError {
 
-		public MustHavePathIdentifierMapper(Class<?> identifier) {
-			super(identifier + " identifier does not have a path mapper");
+		public MustHavePathIdentifierMapper(Path path) {
+			super(path.asURI() + " path does not have a valid path mapper");
 		}
 
 	}
