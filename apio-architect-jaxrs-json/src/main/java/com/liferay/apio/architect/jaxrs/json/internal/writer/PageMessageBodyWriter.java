@@ -225,7 +225,7 @@ public class PageMessageBodyWriter<T>
 				Optional<Path> pathOptional =
 					_pathIdentifierMapperManager.mapToPath(name, identifier);
 
-				Optional<ItemRoutes<Object>> itemRoutesOptional =
+				Optional<ItemRoutes<Object, Object>> itemRoutesOptional =
 					_itemRouterManager.getItemRoutesOptional(name);
 
 				return itemRoutesOptional.flatMap(

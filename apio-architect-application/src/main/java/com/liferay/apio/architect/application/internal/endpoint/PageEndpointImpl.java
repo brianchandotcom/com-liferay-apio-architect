@@ -49,7 +49,7 @@ import javax.ws.rs.core.Response;
 /**
  * @author Alejandro Hernández
  */
-public class PageEndpointImpl<T> implements PageEndpoint<T> {
+public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 	public PageEndpointImpl(
 		String name, HttpServletRequest httpServletRequest,
@@ -57,7 +57,7 @@ public class PageEndpointImpl<T> implements PageEndpoint<T> {
 		Function<String, Try<SingleModel<T>>> singleModelFunction,
 		Supplier<Optional<CollectionRoutes<T>>> collectionRoutesSupplier,
 		Supplier<Optional<Representor<T, Object>>> representorSupplier,
-		Supplier<Optional<ItemRoutes<T>>> itemRoutesSupplier,
+		Supplier<Optional<ItemRoutes<T, S>>> itemRoutesSupplier,
 		Function<String, Optional<NestedCollectionRoutes<T, Object>>>
 			nestedCollectionRoutesFunction) {
 
@@ -122,7 +122,7 @@ public class PageEndpointImpl<T> implements PageEndpoint<T> {
 
 	@Override
 	public Response deleteCollectionItem(String id) {
-		Try<ItemRoutes<T>> itemRoutesTry = Try.fromOptional(
+		Try<ItemRoutes<T, S>> itemRoutesTry = Try.fromOptional(
 			_itemRoutesSupplier::get, notFound(_name));
 
 		itemRoutesTry.mapOptional(
@@ -193,7 +193,7 @@ public class PageEndpointImpl<T> implements PageEndpoint<T> {
 	public Try<SingleModel<T>> updateCollectionItem(
 		String id, Map<String, Object> body) {
 
-		Try<ItemRoutes<T>> itemRoutesTry = Try.fromOptional(
+		Try<ItemRoutes<T, S>> itemRoutesTry = Try.fromOptional(
 			_itemRoutesSupplier::get, notFound(_name, id));
 
 		return itemRoutesTry.mapOptional(
@@ -256,7 +256,7 @@ public class PageEndpointImpl<T> implements PageEndpoint<T> {
 	private final HttpServletRequest _httpServletRequest;
 	private final Function<String, Optional<Class<Identifier>>>
 		_identifierClassFunction;
-	private final Supplier<Optional<ItemRoutes<T>>> _itemRoutesSupplier;
+	private final Supplier<Optional<ItemRoutes<T, S>>> _itemRoutesSupplier;
 	private final String _name;
 	private final Function<String, Optional<NestedCollectionRoutes<T, Object>>>
 		_nestedCollectionRoutesFunction;

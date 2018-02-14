@@ -49,7 +49,9 @@ public class ItemRouterManagerImpl
 	}
 
 	@Override
-	public <T> Optional<ItemRoutes<T>> getItemRoutesOptional(String name) {
+	public <T, S> Optional<ItemRoutes<T, S>> getItemRoutesOptional(
+		String name) {
+
 		Optional<Class<Identifier>> optional =
 			_identifierClassManager.getIdentifierClassOptional(name);
 
@@ -70,8 +72,8 @@ public class ItemRouterManagerImpl
 		return _getItemRoutes(unsafeCast(itemRouter), clazz, name);
 	}
 
-	private <T, S, U extends Identifier<S>> ItemRoutes<T> _getItemRoutes(
 		ItemRouter<T, S, U> itemRouter, Class<?> clazz, String name) {
+	private <T, S, U extends Identifier<S>> ItemRoutes<T, S> _getItemRoutes(
 
 		Builder<T, S> builder = new Builder<>(
 			name, curry(_providerManager::provideOptional),

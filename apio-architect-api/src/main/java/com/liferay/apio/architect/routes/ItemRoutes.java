@@ -59,11 +59,13 @@ import java.util.function.Function;
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
+ * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code
+ *         String}, etc.)
  * @see    Builder
  */
-public class ItemRoutes<T> {
+public class ItemRoutes<T, S> {
 
-	public ItemRoutes(Builder<T, ?> builder) {
+	public ItemRoutes(Builder<T, S> builder) {
 		_deleteItemConsumer = builder._deleteItemConsumer;
 		_form = builder._form;
 		_singleModelFunction = builder._singleModelFunction;
@@ -593,7 +595,7 @@ public class ItemRoutes<T> {
 		 *
 		 * @return the {@code Routes} instance
 		 */
-		public ItemRoutes<T> build() {
+		public ItemRoutes<T, S> build() {
 			return new ItemRoutes<>(this);
 		}
 

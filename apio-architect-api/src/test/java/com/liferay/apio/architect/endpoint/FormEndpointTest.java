@@ -164,7 +164,7 @@ public class FormEndpointTest {
 				"", httpServletRequest -> aClass -> Optional.empty()));
 	}
 
-	private static <T> ItemRoutes<T> _emptyItemRoutes() {
+	private static <T, S> ItemRoutes<T, S> _emptyItemRoutes() {
 		return new ItemRoutes<>(
 			new ItemRoutes.Builder<>(
 				"", httpServletRequest -> aClass -> Optional.empty(),
@@ -179,12 +179,12 @@ public class FormEndpointTest {
 				"", "", httpServletRequest -> aClass -> Optional.empty()));
 	}
 
-	private static <T> ItemRoutes<T> _itemRoutes() {
-		ItemRoutes.Builder<T, Long> builder = new ItemRoutes.Builder<>(
 			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
+	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
+		ItemRoutes.Builder<T, S> builder = new ItemRoutes.Builder<>(
 
 		return builder.addUpdater(
-			(aLong, body) -> null, ITEM_PERMISSION_FUNCTION,
+			(aLong, body) -> null, (credentials, s) -> true,
 			FORM_BUILDER_FUNCTION
 		).build();
 	}

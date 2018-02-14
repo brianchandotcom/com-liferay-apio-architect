@@ -54,7 +54,7 @@ public class ItemRoutesTest {
 		Builder<String, Long> builder = new Builder<>(
 			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
-		ItemRoutes<String> itemRoutes = builder.build();
+		ItemRoutes<String, Long> itemRoutes = builder.build();
 
 		Optional<DeleteItemConsumer> deleteItemConsumerOptional =
 			itemRoutes.getDeleteConsumerOptional();
@@ -77,7 +77,7 @@ public class ItemRoutesTest {
 		Builder<String, Long> builder = new Builder<>(
 			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
-		ItemRoutes<String> itemRoutes = builder.addGetter(
+		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
 			Long.class, Boolean.class, Integer.class
 		).addRemover(
@@ -97,7 +97,7 @@ public class ItemRoutesTest {
 		Builder<String, Long> builder = new Builder<>(
 			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
-		ItemRoutes<String> itemRoutes = builder.addGetter(
+		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
 			Long.class, Boolean.class
 		).addRemover(
@@ -117,7 +117,7 @@ public class ItemRoutesTest {
 		Builder<String, Long> builder = new Builder<>(
 			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
-		ItemRoutes<String> itemRoutes = builder.addGetter(
+		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
 		).addRemover(
 			this::_testAndReturnNoParameterRemoverRoute,
@@ -135,7 +135,7 @@ public class ItemRoutesTest {
 		Builder<String, Long> builder = new Builder<>(
 			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
-		ItemRoutes<String> itemRoutes = builder.addGetter(
+		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
 			Long.class
 		).addRemover(
@@ -154,7 +154,7 @@ public class ItemRoutesTest {
 		Builder<String, Long> builder = new Builder<>(
 			"name", REQUEST_PROVIDE_FUNCTION, IDENTIFIER_FUNCTION);
 
-		ItemRoutes<String> itemRoutes = builder.addGetter(
+		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
 		).addRemover(
 			this::_testOneParameterRemoverRoute, String.class,
@@ -265,8 +265,8 @@ public class ItemRoutesTest {
 		_testThreeParameterRemoverRoute(identifier, string, aLong, aBoolean);
 	}
 
-	private void _testItemRoutes(ItemRoutes<String> itemRoutes) {
-		Optional<ItemRoutes<String>> optional = Optional.of(itemRoutes);
+	private void _testItemRoutes(ItemRoutes<String, Long> itemRoutes) {
+		Optional<ItemRoutes<String, Long>> optional = Optional.of(itemRoutes);
 
 		Map body = optional.flatMap(
 			ItemRoutes::getFormOptional
