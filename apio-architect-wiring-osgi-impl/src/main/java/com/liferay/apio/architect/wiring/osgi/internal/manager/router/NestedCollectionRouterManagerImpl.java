@@ -17,6 +17,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PARENT_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getNameOrFail;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
@@ -26,7 +27,7 @@ import com.liferay.apio.architect.router.NestedCollectionRouter;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
 import com.liferay.apio.architect.unsafe.Unsafe;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
 import com.liferay.apio.architect.wiring.osgi.internal.service.reference.mapper.CustomServiceReferenceMapper;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
@@ -34,7 +35,9 @@ import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -48,7 +51,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class NestedCollectionRouterManagerImpl
-	extends BaseManager<NestedCollectionRouter, NestedCollectionRoutes>
+	extends SimpleBaseManager<NestedCollectionRouter>
 	implements NestedCollectionRouterManager {
 
 	public NestedCollectionRouterManagerImpl() {
@@ -65,16 +68,11 @@ public class NestedCollectionRouterManagerImpl
 		Optional<Class<Identifier>> optional2 =
 			_identifierClassManager.getIdentifierClassOptional(nestedName);
 
-		return optional1.map(
-			Class::getName
-		).flatMap(
-			className1 -> optional2.map(
-				Class::getName
-			).map(
-				className2 -> className1 + "-" + className2
-			).flatMap(
-				this::getServiceOptional
-			)
+		return optional1.flatMap(
+			class1 -> optional2.map(
+				class2 -> _nestedCollectionRoutes.computeIfAbsent(
+					_getKey(class1, class2),
+					key -> _computeNestedCollectionRoutes(class1, class2, key)))
 		).map(
 			Unsafe::unsafeCast
 		);
@@ -97,32 +95,53 @@ public class NestedCollectionRouterManagerImpl
 		NestedCollectionRouter nestedCollectionRouter =
 			bundleContext.getService(serviceReference);
 
-		Class<?> clazz = getGenericClassFromPropertyOrElse(
-			serviceReference, KEY_PARENT_IDENTIFIER_CLASS,
-			() -> getTypeParamOrFail(
-				nestedCollectionRouter, NestedCollectionRouter.class, 3));
+		Class<?> clazz = _getParentIdentifierClass(
+			serviceReference, nestedCollectionRouter);
 
 		customServiceReferenceMapper.map(
 			serviceReference, key -> emitter.emit(clazz.getName() + "-" + key));
 	}
 
 	@Override
-	protected NestedCollectionRoutes map(
-		NestedCollectionRouter nestedCollectionRouter,
+	protected void onRemovedService(
 		ServiceReference<NestedCollectionRouter> serviceReference,
-		Class<?> clazz) {
+		NestedCollectionRouter nestedCollectionRouter) {
 
-		Class<?> parentIdentifierClass = getGenericClassFromPropertyOrElse(
-			serviceReference, KEY_PARENT_IDENTIFIER_CLASS,
+		Class<?> identifierClass = getGenericClassFromPropertyOrElse(
+			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT,
 			() -> getTypeParamOrFail(
-				nestedCollectionRouter, NestedCollectionRouter.class, 3));
+				nestedCollectionRouter, NestedCollectionRouter.class, 1));
 
-		String name = getNameOrFail(parentIdentifierClass, _nameManager);
+		Class<?> parentIdentifierClass = _getParentIdentifierClass(
+			serviceReference, nestedCollectionRouter);
 
-		String nestedName = getNameOrFail(clazz, _nameManager);
+		_nestedCollectionRoutes.remove(
+			_getKey(identifierClass, parentIdentifierClass));
+	}
 
-		return _getNestedCollectionRoutes(
-			unsafeCast(nestedCollectionRouter), name, nestedName);
+	private static String _getKey(
+		Class<?> identifierClass, Class<?> parentIdentifierClass) {
+
+		return identifierClass.getName() + "-" +
+			parentIdentifierClass.getName();
+	}
+
+	private NestedCollectionRoutes _computeNestedCollectionRoutes(
+		Class<Identifier> parentClass, Class<Identifier> nestedClass,
+		String key) {
+
+		Optional<NestedCollectionRouter> optional = getServiceOptional(key);
+
+		String name = getNameOrFail(parentClass, _nameManager);
+
+		String nestedName = getNameOrFail(nestedClass, _nameManager);
+
+		return optional.map(
+			nestedCollectionRouter -> _getNestedCollectionRoutes(
+				unsafeCast(nestedCollectionRouter), name, nestedName)
+		).orElse(
+			null
+		);
 	}
 
 	private <T, S, U extends Identifier<S>> NestedCollectionRoutes<T, S>
@@ -136,11 +155,24 @@ public class NestedCollectionRouterManagerImpl
 		return nestedCollectionRouter.collectionRoutes(builder);
 	}
 
+	private Class<?> _getParentIdentifierClass(
+		ServiceReference<NestedCollectionRouter> serviceReference,
+		NestedCollectionRouter nestedCollectionRouter) {
+
+		return getGenericClassFromPropertyOrElse(
+			serviceReference, KEY_PARENT_IDENTIFIER_CLASS,
+			() -> getTypeParamOrFail(
+				nestedCollectionRouter, NestedCollectionRouter.class, 3));
+	}
+
 	@Reference
 	private IdentifierClassManager _identifierClassManager;
 
 	@Reference
 	private NameManager _nameManager;
+
+	private Map<String, NestedCollectionRoutes<?, ?>> _nestedCollectionRoutes =
+		new ConcurrentHashMap<>();
 
 	@Reference
 	private ProviderManager _providerManager;
