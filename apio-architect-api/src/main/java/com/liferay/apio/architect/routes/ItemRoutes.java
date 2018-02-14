@@ -18,7 +18,6 @@ import static com.liferay.apio.architect.operation.Method.DELETE;
 import static com.liferay.apio.architect.operation.Method.PUT;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideConsumer;
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.ProvideFunction;
@@ -408,8 +407,10 @@ public class ItemRoutes<T> {
 
 			_updateItemPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
+
+			_form = form;
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction.apply(httpServletRequest), Credentials.class,
@@ -417,7 +418,7 @@ public class ItemRoutes<T> {
 					t -> new SingleModel<>(
 						t, _name, _getOperations(credentials, path))
 				).apply(
-					_identifierFunction.apply(path), unsafeCast(_form.get(body))
+					_identifierFunction.apply(path), form.get(body)
 				));
 
 			return this;
@@ -449,8 +450,10 @@ public class ItemRoutes<T> {
 
 			_updateItemPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
+
+			_form = form;
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -459,8 +462,7 @@ public class ItemRoutes<T> {
 					t -> new SingleModel<>(
 						t, _name, _getOperations(credentials, path))
 				).apply(
-					_identifierFunction.apply(path),
-					unsafeCast(_form.get(body)), a, b, c, d
+					_identifierFunction.apply(path), form.get(body), a, b, c, d
 				));
 
 			return this;
@@ -490,8 +492,10 @@ public class ItemRoutes<T> {
 
 			_updateItemPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
+
+			_form = form;
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -500,8 +504,7 @@ public class ItemRoutes<T> {
 					t -> new SingleModel<>(
 						t, _name, _getOperations(credentials, path))
 				).apply(
-					_identifierFunction.apply(path),
-					unsafeCast(_form.get(body)), a, b, c
+					_identifierFunction.apply(path), form.get(body), a, b, c
 				));
 
 			return this;
@@ -529,8 +532,10 @@ public class ItemRoutes<T> {
 
 			_updateItemPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
+
+			_form = form;
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -539,8 +544,7 @@ public class ItemRoutes<T> {
 					t -> new SingleModel<>(
 						t, _name, _getOperations(credentials, path))
 				).apply(
-					_identifierFunction.apply(path),
-					unsafeCast(_form.get(body)), a, b
+					_identifierFunction.apply(path), form.get(body), a, b
 				));
 
 			return this;
@@ -565,8 +569,10 @@ public class ItemRoutes<T> {
 
 			_updateItemPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("u", _name)));
+
+			_form = form;
 
 			_updateItemFunction = httpServletRequest -> path -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
@@ -575,8 +581,7 @@ public class ItemRoutes<T> {
 					t -> new SingleModel<>(
 						t, _name, _getOperations(credentials, path))
 				).apply(
-					_identifierFunction.apply(path),
-					unsafeCast(_form.get(body)), a
+					_identifierFunction.apply(path), form.get(body), a
 				));
 
 			return this;

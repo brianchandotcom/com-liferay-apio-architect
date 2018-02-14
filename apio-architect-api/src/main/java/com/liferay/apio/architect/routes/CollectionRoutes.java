@@ -16,7 +16,6 @@ package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -128,15 +127,17 @@ public class CollectionRoutes<T> {
 
 			_collectionPermissionFunction = permissionFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
+
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
 				a -> biFunction.andThen(
 					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
-					unsafeCast(_form.get(body)), a
+					form.get(body), a
 				));
 
 			return this;
@@ -159,14 +160,16 @@ public class CollectionRoutes<T> {
 
 			_collectionPermissionFunction = permissionFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
+
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body ->
 				function.andThen(
 					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
-					unsafeCast(_form.get(body))
+					form.get(body)
 				);
 
 			return this;
@@ -195,8 +198,10 @@ public class CollectionRoutes<T> {
 
 			_collectionPermissionFunction = permissionFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
+
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -204,7 +209,7 @@ public class CollectionRoutes<T> {
 				a -> b -> c -> d -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
-					unsafeCast(_form.get(body)), a, b, c, d
+					form.get(body), a, b, c, d
 				));
 
 			return this;
@@ -232,8 +237,10 @@ public class CollectionRoutes<T> {
 
 			_collectionPermissionFunction = permissionFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
+
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -241,7 +248,7 @@ public class CollectionRoutes<T> {
 				a -> b -> c -> pentaFunction.andThen(
 					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
-					unsafeCast(_form.get(body)), a, b, c
+					form.get(body), a, b, c
 				));
 
 			return this;
@@ -267,15 +274,17 @@ public class CollectionRoutes<T> {
 
 			_collectionPermissionFunction = permissionFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name)));
+
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				a -> b -> triFunction.andThen(
 					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
-					unsafeCast(_form.get(body)), a, b
+					form.get(body), a, b
 				));
 
 			return this;

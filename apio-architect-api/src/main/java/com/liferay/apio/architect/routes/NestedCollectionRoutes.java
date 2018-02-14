@@ -16,7 +16,6 @@ package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
 import static java.lang.String.join;
 
@@ -142,15 +141,17 @@ public class NestedCollectionRoutes<T, S> {
 
 			_nestedCollectionPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+
+			_form = form;
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> biFunction.andThen(
 					t -> new SingleModel<>(
 						t, _nestedName, Collections.emptyList())
 				).apply(
-					identifier, unsafeCast(_form.get(body))
+					identifier, form.get(body)
 				);
 
 			return this;
@@ -178,8 +179,10 @@ public class NestedCollectionRoutes<T, S> {
 
 			_nestedCollectionPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+
+			_form = form;
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
@@ -189,7 +192,7 @@ public class NestedCollectionRoutes<T, S> {
 						t -> new SingleModel<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
-						identifier, unsafeCast(_form.get(body)), a, b, c, d
+						identifier, form.get(body), a, b, c, d
 					));
 
 			return this;
@@ -216,8 +219,10 @@ public class NestedCollectionRoutes<T, S> {
 
 			_nestedCollectionPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+
+			_form = form;
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
@@ -227,7 +232,7 @@ public class NestedCollectionRoutes<T, S> {
 						t -> new SingleModel<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
-						identifier, unsafeCast(_form.get(body)), a, b, c
+						identifier, form.get(body), a, b, c
 					));
 
 			return this;
@@ -253,8 +258,10 @@ public class NestedCollectionRoutes<T, S> {
 
 			_nestedCollectionPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+
+			_form = form;
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
@@ -263,7 +270,7 @@ public class NestedCollectionRoutes<T, S> {
 						t -> new SingleModel<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
-						identifier, unsafeCast(_form.get(body)), a, b
+						identifier, form.get(body), a, b
 					));
 
 			return this;
@@ -287,8 +294,10 @@ public class NestedCollectionRoutes<T, S> {
 
 			_nestedCollectionPermissionFunction = permissionBiFunction;
 
-			_form = formBuilderFunction.apply(
+			Form<R> form = formBuilderFunction.apply(
 				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+
+			_form = form;
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
@@ -297,7 +306,7 @@ public class NestedCollectionRoutes<T, S> {
 						t -> new SingleModel<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
-						identifier, unsafeCast(_form.get(body)), a
+						identifier, form.get(body), a
 					));
 
 			return this;
