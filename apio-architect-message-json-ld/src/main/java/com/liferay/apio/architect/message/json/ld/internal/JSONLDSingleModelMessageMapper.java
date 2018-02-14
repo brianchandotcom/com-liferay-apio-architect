@@ -448,13 +448,13 @@ public class JSONLDSingleModelMessageMapper<T>
 		operationJSONObjectBuilder.field(
 			TYPE
 		).stringValue(
-			HYDRA_OPERATION
+			OPERATION
 		);
 
 		singleModelJSONObjectBuilder.nestedField(
 			head, tail
 		).field(
-			OPERATION
+			HYDRA_OPERATION
 		).arrayValue(
 		).add(
 			operationJSONObjectBuilder
@@ -475,11 +475,11 @@ public class JSONLDSingleModelMessageMapper<T>
 		operationJSONObjectBuilder.field(
 			TYPE
 		).stringValue(
-			HYDRA_OPERATION
+			OPERATION
 		);
 
 		singleModelJSONObjectBuilder.field(
-			OPERATION
+			HYDRA_OPERATION
 		).arrayValue(
 		).add(
 			operationJSONObjectBuilder

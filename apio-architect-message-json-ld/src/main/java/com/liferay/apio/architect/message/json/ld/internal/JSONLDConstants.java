@@ -84,11 +84,11 @@ public class JSONLDConstants {
 	public static final String HYDRA_COLLECTION = hydra("Collection");
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#Operation">Operation</a>.
+	 * Hydra <a href="https://www.w3.org/ns/hydra/core#operation">operation</a>.
 	 *
 	 * @review
 	 */
-	public static final String HYDRA_OPERATION = hydra("Operation");
+	public static final String HYDRA_OPERATION = hydra("operation");
 
 	/**
 	 * Hydra <a href="https://www.w3.org/ns/hydra/core#PartialCollectionView">
@@ -171,11 +171,11 @@ public class JSONLDConstants {
 	public static final String NUMBER_OF_ITEMS = "numberOfItems";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#operation">operation</a>.
+	 * Hydra <a href="https://www.w3.org/ns/hydra/core#Operation">Operation</a>.
 	 *
 	 * @review
 	 */
-	public static final String OPERATION = "operation";
+	public static final String OPERATION = "Operation";
 
 	/**
 	 * Hydra <a href="https://www.w3.org/ns/hydra/core#previous">previous</a>.
