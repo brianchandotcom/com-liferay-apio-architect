@@ -34,11 +34,10 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
 
 /**
- * Manages services that have a generic type. Stores the services transformed
- * with the {@link #map(Object, ServiceReference, Class)} function.
+ * Manages services that have a generic type. This class stores the services
+ * transformed with the function {@link #map(Object, ServiceReference, Class)}.
  *
  * @author Alejandro Hernández
- * @review
  */
 public abstract class BaseManager<T, U>
 	extends TransformServiceTrackerCustomizer<T, U> {
@@ -72,11 +71,10 @@ public abstract class BaseManager<T, U>
 	}
 
 	/**
-	 * Emits a the key of a service using an {@link Emitter<String>}.
+	 * Emits a service's key using an {@code Emitter<String>}.
 	 *
 	 * @param  serviceReference the service reference
 	 * @param  emitter the emitter
-	 * @review
 	 */
 	protected void emit(
 		ServiceReference<T> serviceReference, Emitter<String> emitter) {

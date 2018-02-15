@@ -26,11 +26,10 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
- * Instances of this class represent a {@code ServiceTrackerCustomizer} that
- * transforms the service to another type.
+ * Represents a {@code ServiceTrackerCustomizer} that transforms the service to
+ * another type.
  *
  * @author Alejandro Hernández
- * @review
  */
 public abstract class TransformServiceTrackerCustomizer<T, U>
 	implements ServiceTrackerCustomizer<T, U> {
@@ -61,10 +60,9 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	}
 
 	/**
-	 * Returns the position of the principal type param.
+	 * Returns the principal type parameter's position.
 	 *
 	 * @return the position
-	 * @review
 	 */
 	public Integer getPrincipalTypeParamPosition() {
 		return 2;
@@ -90,20 +88,18 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	 * Returns the managed class.
 	 *
 	 * @return the managed class
-	 * @review
 	 */
 	protected Class<T> getManagedClass() {
 		return _managedClass;
 	}
 
 	/**
-	 * Transforms a service of type {@link T} into a {@link U}.
+	 * Transforms a service of type {@code T} into a {@code U}.
 	 *
 	 * @param  t the service to transform
 	 * @param  serviceReference the service reference
 	 * @param  clazz the generic class
-	 * @return the service transformed to a {@link U}
-	 * @review
+	 * @return the transformed service
 	 */
 	protected abstract U map(
 		T t, ServiceReference<T> serviceReference, Class<?> clazz);
@@ -124,7 +120,6 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	 *
 	 * @param  serviceReference the service reference being removed
 	 * @param  u the service being removed
-	 * @review
 	 */
 	protected void onRemovedService(ServiceReference<T> serviceReference, U u) {
 		INSTANCE.clear();
