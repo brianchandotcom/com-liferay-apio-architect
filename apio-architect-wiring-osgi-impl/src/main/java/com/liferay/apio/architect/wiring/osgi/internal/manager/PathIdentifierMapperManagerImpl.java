@@ -45,18 +45,11 @@ public class PathIdentifierMapperManagerImpl
 
 	@Override
 	public <T> T mapToIdentifierOrFail(Path path) {
-		Try<String> stringTry = Try.success(path.getName());
+		Try<PathIdentifierMapper<T>> pathIdentifierMapperTry =
+			_getPathIdentifierMapperTry(path.getName());
 
-		return stringTry.mapOptional(
-			_identifierClassManager::getIdentifierClassOptional
-		).flatMap(
-			clazz -> getGenericTypeArgumentTry(clazz, Identifier.class, 0)
-		).mapOptional(
-			this::getServiceOptional
-		).map(
+		return pathIdentifierMapperTry.map(
 			service -> service.map(path)
-		).<T>map(
-			Unsafe::unsafeCast
 		).orElseThrow(
 			() -> new MustHavePathIdentifierMapper(path)
 		);
@@ -64,6 +57,17 @@ public class PathIdentifierMapperManagerImpl
 
 	@Override
 	public <T> Optional<Path> mapToPath(String name, T identifier) {
+		Try<PathIdentifierMapper<T>> pathIdentifierMapperTry =
+			_getPathIdentifierMapperTry(name);
+
+		return pathIdentifierMapperTry.map(
+			service -> service.map(name, identifier)
+		).toOptional();
+	}
+
+	private <T> Try<PathIdentifierMapper<T>> _getPathIdentifierMapperTry(
+		String name) {
+
 		Try<String> stringTry = Try.success(name);
 
 		return stringTry.mapOptional(
@@ -72,11 +76,9 @@ public class PathIdentifierMapperManagerImpl
 			clazz -> getGenericTypeArgumentTry(clazz, Identifier.class, 0)
 		).mapOptional(
 			this::getServiceOptional
-		).<PathIdentifierMapper<T>>map(
-			Unsafe::unsafeCast
 		).map(
-			service -> service.map(name, identifier)
-		).toOptional();
+			Unsafe::unsafeCast
+		);
 	}
 
 	@Reference
