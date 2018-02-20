@@ -46,22 +46,15 @@ public abstract class BaseManager<T, U>
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
-		_serviceTrackerMap = openSingleValueMap(
+		serviceTrackerMap = openSingleValueMap(
 			bundleContext, getManagedClass(), null, this::emit, this);
 	}
 
 	@Deactivate
 	public void deactivate() {
-		_serviceTrackerMap.close();
+		serviceTrackerMap.close();
 	}
 
-	/**
-	 * Returns the {@code ServiceTrackerMap}.
-	 *
-	 * @return the service tracker map
-	 */
-	public ServiceTrackerMap<String, U> getServiceTrackerMap() {
-		return _serviceTrackerMap;
 	}
 
 	/**
@@ -106,9 +99,9 @@ public abstract class BaseManager<T, U>
 	 * @return the service, if present; {@code Optional#empty()} otherwise
 	 */
 	protected Optional<U> getServiceOptional(String className) {
-		return Optional.ofNullable(_serviceTrackerMap.getService(className));
+		return Optional.ofNullable(serviceTrackerMap.getService(className));
 	}
 
-	private ServiceTrackerMap<String, U> _serviceTrackerMap;
+	protected ServiceTrackerMap<String, U> serviceTrackerMap;
 
 }
