@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
+import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 
 import java.util.List;
@@ -46,8 +48,11 @@ public class ManagerCache {
 	 * @review
 	 */
 	public void clear() {
-		_rootResourceNames = null;
 		_collectionRoutes = null;
+		_identifierClasses = null;
+		_names = null;
+		_representors = null;
+		_rootResourceNames = null;
 	}
 
 	/**
@@ -55,13 +60,45 @@ public class ManagerCache {
 	 * Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the map containing the collection routes if they have been set;
-	 *         {@code Optional#empty()} otherwise
+	 *         returns {@code Optional#empty()} otherwise
 	 * @review
 	 */
 	public Optional<Map<String, CollectionRoutes>>
 		getCollectionRoutesOptional() {
 
 		return Optional.ofNullable(_collectionRoutes);
+	}
+
+	/**
+	 * Returns the map containing the classes for the different resource names
+	 * if they have been set. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the map containing the classes for the different resource names
+	 *         if they have been set; returns {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<Map<String, Class<Identifier>>>
+		getIdentifierClassesOptional() {
+
+		return Optional.ofNullable(_identifierClasses);
+	}
+
+	/**
+	 * Returns the map containing the names for the different resource
+	 * identifier classes if they have been set. Returns {@code
+	 * Optional#empty()} otherwise.
+	 *
+	 * @return the map containing the names for the different resource
+	 *         identifier classes if they have been set; returns {@code
+	 *         Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<Map<String, String>> getNamesOptional() {
+		return Optional.ofNullable(_names);
+	}
+
+	public Optional<Map<String, Representor>> getRepresentorsOptional() {
+		return Optional.ofNullable(_representors);
 	}
 
 	/**
@@ -84,6 +121,49 @@ public class ManagerCache {
 	 */
 	public boolean hasCollectionRoutes() {
 		if (_collectionRoutes != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns {@code true} if the identifier classes have been set in the
+	 * cache.
+	 *
+	 * @return {@code true} if the identifier classes have been set
+	 * @review
+	 */
+	public boolean hasIdentifierClasses() {
+		if (_identifierClasses != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns {@code true} if the resource names have been set in the cache.
+	 *
+	 * @return {@code true} if the resource names have been set
+	 * @review
+	 */
+	public boolean hasNames() {
+		if (_names != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns {@code true} if the representors have been set in the cache.
+	 *
+	 * @return {@code true} if the representors have been set
+	 * @review
+	 */
+	public boolean hasRepresentors() {
+		if (_representors != null) {
 			return true;
 		}
 
@@ -118,6 +198,38 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Sets the identifier classes
+	 *
+	 * @param  identifierClasses the identifier classes
+	 * @review
+	 */
+	public void setIdentifierClasses(
+		Map<String, Class<Identifier>> identifierClasses) {
+
+		_identifierClasses = identifierClasses;
+	}
+
+	/**
+	 * Sets the resource names
+	 *
+	 * @param  names the resource names
+	 * @review
+	 */
+	public void setNames(Map<String, String> names) {
+		_names = names;
+	}
+
+	/**
+	 * Sets the representors
+	 *
+	 * @param  representors the representors
+	 * @review
+	 */
+	public void setRepresentors(Map<String, Representor> representors) {
+		_representors = representors;
+	}
+
+	/**
 	 * Sets the root resource names
 	 *
 	 * @param  rootResourceNames the root resource names
@@ -131,6 +243,9 @@ public class ManagerCache {
 	}
 
 	private Map<String, CollectionRoutes> _collectionRoutes;
+	private Map<String, Class<Identifier>> _identifierClasses;
+	private Map<String, String> _names;
+	private Map<String, Representor> _representors;
 	private List<String> _rootResourceNames;
 
 }

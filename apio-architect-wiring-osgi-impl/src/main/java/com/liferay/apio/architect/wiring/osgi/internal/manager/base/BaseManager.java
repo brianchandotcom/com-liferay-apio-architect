@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.base;
 
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerCache.INSTANCE;
 import static com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory.openSingleValueMap;
 
 import com.liferay.apio.architect.wiring.osgi.internal.service.reference.mapper.CustomServiceReferenceMapper;
@@ -55,6 +56,7 @@ public abstract class BaseManager<T, U>
 	@Deactivate
 	public void deactivate() {
 		serviceTrackerMap.close();
+		INSTANCE.clear();
 	}
 
 	/**
