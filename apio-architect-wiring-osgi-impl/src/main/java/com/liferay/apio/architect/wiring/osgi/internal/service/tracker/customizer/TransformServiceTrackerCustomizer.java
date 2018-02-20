@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.service.tracker.customizer;
 
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
@@ -115,6 +116,7 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	 * @review
 	 */
 	protected void onAddedService(ServiceReference<T> serviceReference, U u) {
+		INSTANCE.clear();
 	}
 
 	/**
@@ -125,6 +127,7 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	 * @review
 	 */
 	protected void onRemovedService(ServiceReference<T> serviceReference, U u) {
+		INSTANCE.clear();
 	}
 
 	private final Class<T> _managedClass;

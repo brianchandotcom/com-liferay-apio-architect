@@ -117,6 +117,8 @@ public class NestedCollectionRouterManagerImpl
 
 		_nestedCollectionRoutes.remove(
 			_getKey(identifierClass, parentIdentifierClass));
+
+		super.onRemovedService(serviceReference, nestedCollectionRouter);
 	}
 
 	private static String _getKey(
