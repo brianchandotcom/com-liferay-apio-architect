@@ -149,7 +149,9 @@ public class FormEndpointTest {
 
 	private static <T> CollectionRoutes<T> _collectionRoutes() {
 		CollectionRoutes.Builder<T> builder = new CollectionRoutes.Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION,
+			__ -> {
+			});
 
 		return builder.addCreator(
 			__ -> null, COLLECTION_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
@@ -159,7 +161,9 @@ public class FormEndpointTest {
 	private static <T> CollectionRoutes<T> _emptyCollectionRoutes() {
 		return new CollectionRoutes<>(
 			new CollectionRoutes.Builder<>(
-				"", httpServletRequest -> aClass -> Optional.empty()));
+				"", httpServletRequest -> aClass -> Optional.empty(),
+				__ -> {
+				}));
 	}
 
 	private static <T, S> ItemRoutes<T, S> _emptyItemRoutes() {

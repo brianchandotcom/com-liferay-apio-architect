@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -104,9 +105,13 @@ public class CollectionRoutes<T> {
 	@SuppressWarnings("unused")
 	public static class Builder<T> {
 
-		public Builder(String name, ProvideFunction provideFunction) {
+		public Builder(
+			String name, ProvideFunction provideFunction,
+			Consumer<String> neededProviderConsumer) {
+
 			_name = name;
 			_provideFunction = provideFunction;
+			_neededProviderConsumer = neededProviderConsumer;
 		}
 
 		/**
@@ -124,6 +129,8 @@ public class CollectionRoutes<T> {
 			BiFunction<R, A, T> biFunction, Class<A> aClass,
 			Function<Credentials, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
 
 			_collectionPermissionFunction = permissionFunction;
 
@@ -196,6 +203,11 @@ public class CollectionRoutes<T> {
 			Function<Credentials, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+			_neededProviderConsumer.accept(dClass.getName());
+
 			_collectionPermissionFunction = permissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -235,6 +247,10 @@ public class CollectionRoutes<T> {
 			Function<Credentials, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+
 			_collectionPermissionFunction = permissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -272,6 +288,9 @@ public class CollectionRoutes<T> {
 			Class<B> bClass, Function<Credentials, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+
 			_collectionPermissionFunction = permissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -300,6 +319,8 @@ public class CollectionRoutes<T> {
 		public <A> Builder<T> addGetter(
 			BiFunction<Pagination, A, PageItems<T>> biFunction,
 			Class<A> aClass) {
+
+			_neededProviderConsumer.accept(aClass.getName());
 
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
@@ -353,6 +374,11 @@ public class CollectionRoutes<T> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+			_neededProviderConsumer.accept(dClass.getName());
+
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, cClass, dClass, Credentials.class,
@@ -382,6 +408,10 @@ public class CollectionRoutes<T> {
 			TetraFunction<Pagination, A, B, C, PageItems<T>> tetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, cClass, Credentials.class,
@@ -408,6 +438,9 @@ public class CollectionRoutes<T> {
 		public <A, B> Builder<T> addGetter(
 			TriFunction<Pagination, A, B, PageItems<T>> triFunction,
 			Class<A> aClass, Class<B> bClass) {
+
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
 
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
@@ -451,6 +484,7 @@ public class CollectionRoutes<T> {
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private final String _name;
+		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;
 
 	}
