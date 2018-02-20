@@ -18,6 +18,7 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
 import java.util.List;
 import java.util.Map;
@@ -112,6 +113,20 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Returns the map containing the nested collection routes if they have been
+	 * set. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the map containing the nested collection routes if they have been
+	 *         set; returns {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<Map<String, NestedCollectionRoutes>>
+		getNestedCollectionRoutesOptional() {
+
+		return Optional.ofNullable(_nestedCollectionRoutes);
+	}
+
+	/**
 	 * Returns the map containing the representors for the different resource
 	 * names if they have been set. Returns {@code Optional#empty()} otherwise.
 	 *
@@ -194,6 +209,21 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Returns {@code true} if the nested collection routes have been set in the
+	 * cache.
+	 *
+	 * @return {@code true} if the nested collection routes have been set
+	 * @review
+	 */
+	public boolean hasNestedCollectionRoutes() {
+		if (_nestedCollectionRoutes != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Returns {@code true} if the representors have been set in the cache.
 	 *
 	 * @return {@code true} if the representors have been set
@@ -267,6 +297,18 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Sets the nested collection routes
+	 *
+	 * @param  nestedCollectionRoutes the nested collection routes
+	 * @review
+	 */
+	public void setNestedCollectionRoutes(
+		Map<String, NestedCollectionRoutes> nestedCollectionRoutes) {
+
+		_nestedCollectionRoutes = nestedCollectionRoutes;
+	}
+
+	/**
 	 * Sets the representors
 	 *
 	 * @param  representors the representors
@@ -293,6 +335,7 @@ public class ManagerCache {
 	private Map<String, Class<Identifier>> _identifierClasses;
 	private Map<String, ItemRoutes> _itemRoutes;
 	private Map<String, String> _names;
+	private Map<String, NestedCollectionRoutes> _nestedCollectionRoutes;
 	private Map<String, Representor> _representors;
 	private List<String> _rootResourceNames;
 
