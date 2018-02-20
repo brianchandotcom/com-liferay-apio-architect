@@ -116,7 +116,7 @@ public class CollectionRouterManagerImpl
 				Set<String> neededProviders = new TreeSet<>();
 
 				Builder<Object> builder = new Builder<>(
-					name, curry(_providerManager::provideOptional),
+					name, curry(_providerManager::provideMandatory),
 					neededProviders::add);
 
 				List<String> missingProviders =

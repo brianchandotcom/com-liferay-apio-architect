@@ -44,6 +44,19 @@ public interface ProviderManager {
 
 	/**
 	 * Returns the instance of type {@code T} if a valid {@code Provider} can be
+	 * found. Throws a {@code NotFoundException} otherwise.
+	 *
+	 * @param  httpServletRequest the current request
+	 * @param  clazz the class type {@code T}
+	 * @return the instance of {@code T}, if a valid {@code Provider} is
+	 *         present; throws {@code NotFoundException} otherwise
+	 * @review
+	 */
+	public <T> T provideMandatory(
+		HttpServletRequest httpServletRequest, Class<T> clazz);
+
+	/**
+	 * Returns the instance of type {@code T} if a valid {@code Provider} can be
 	 * found. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @param  httpServletRequest the current request

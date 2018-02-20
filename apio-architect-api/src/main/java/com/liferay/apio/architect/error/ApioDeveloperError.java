@@ -111,20 +111,6 @@ public class ApioDeveloperError extends Error {
 	}
 
 	/**
-	 * Represents the error the developer should throw when a provider is
-	 * missing.
-	 */
-	public static class MustHaveProvider extends ApioDeveloperError {
-
-		public MustHaveProvider(Class<?> modelClass) {
-			super(
-				"Model class " + modelClass.getName() +
-					" does not have a provider");
-		}
-
-	}
-
-	/**
 	 * Represents the error the developer should throw when a generic container
 	 * has an invalid generic type.
 	 */
@@ -133,18 +119,6 @@ public class ApioDeveloperError extends Error {
 		public MustHaveValidGenericType(Class clazz) {
 			super(
 				"Class " + clazz.getName() + " must have a valid generic type");
-		}
-
-	}
-
-	/**
-	 * Represents the error the developer should throw when a URI can't be
-	 * resolved.
-	 */
-	public static class UnresolvableURI extends ApioDeveloperError {
-
-		public UnresolvableURI(String className) {
-			super("Unable to resolve URI for model class " + className);
 		}
 
 	}

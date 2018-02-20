@@ -74,7 +74,7 @@ public class ItemRouterManagerImpl
 		ItemRouter<T, S, U> itemRouter, String name) {
 
 		Builder<T, S> builder = new Builder<>(
-			name, curry(_providerManager::provideOptional));
+			name, curry(_providerManager::provideMandatory));
 
 		return itemRouter.itemRoutes(builder);
 	}

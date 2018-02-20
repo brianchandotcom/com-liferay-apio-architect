@@ -25,7 +25,6 @@ import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.endpoint.BinaryEndpoint;
 import com.liferay.apio.architect.endpoint.FormEndpoint;
 import com.liferay.apio.architect.endpoint.RootEndpoint;
-import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
@@ -100,11 +99,8 @@ public class RootEndpointImpl implements RootEndpoint {
 		List<String> resourceNames =
 			_collectionRouterManager.getResourceNames();
 
-		Optional<ServerURL> optional = _providerManager.provideOptional(
+		ServerURL serverURL = _providerManager.provideMandatory(
 			_httpServletRequest, ServerURL.class);
-
-		ServerURL serverURL = optional.orElseThrow(
-			() -> new MustHaveProvider(ServerURL.class));
 
 		JsonObject resourcesJsonObject = new JsonObject();
 

@@ -20,7 +20,6 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEA
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveMessageMapper;
-import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveProvider;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
@@ -129,7 +128,8 @@ public class PageMessageBodyWriter<T>
 			).httpServletRequest(
 				_httpServletRequest
 			).serverURL(
-				getServerURL()
+				_providerManager.provideMandatory(
+					_httpServletRequest, ServerURL.class)
 			).embedded(
 				_providerManager.provideOptional(
 					_httpServletRequest, Embedded.class
@@ -198,20 +198,6 @@ public class PageMessageBodyWriter<T>
 			() -> new MustHaveMessageMapper(
 				mediaTypeString, page.getResourceName())
 		);
-	}
-
-	/**
-	 * Returns the server URL, or throws a {@link MustHaveProvider} developer
-	 * error.
-	 *
-	 * @return the server URL
-	 */
-	protected ServerURL getServerURL() {
-		Optional<ServerURL> optional = _providerManager.provideOptional(
-			_httpServletRequest, ServerURL.class);
-
-		return optional.orElseThrow(
-			() -> new MustHaveProvider(ServerURL.class));
 	}
 
 	private Optional<SingleModel> _getSingleModelOptional(

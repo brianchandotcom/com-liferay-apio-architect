@@ -127,7 +127,8 @@ public class SingleModelMessageBodyWriter<T>
 			).httpServletRequest(
 				_httpServletRequest
 			).serverURL(
-				getServerURL()
+				_providerManager.provideMandatory(
+					_httpServletRequest, ServerURL.class)
 			).embedded(
 				_providerManager.provideOptional(
 					_httpServletRequest, Embedded.class
@@ -171,20 +172,6 @@ public class SingleModelMessageBodyWriter<T>
 		resultOptional.ifPresent(printWriter::write);
 
 		printWriter.close();
-	}
-
-	/**
-	 * Returns the server URL, or throws a {@link
-	 * ApioDeveloperError.MustHaveProvider} developer error.
-	 *
-	 * @return the server URL
-	 */
-	protected ServerURL getServerURL() {
-		Optional<ServerURL> optional = _providerManager.provideOptional(
-			_httpServletRequest, ServerURL.class);
-
-		return optional.orElseThrow(
-			() -> new ApioDeveloperError.MustHaveProvider(ServerURL.class));
 	}
 
 	/**

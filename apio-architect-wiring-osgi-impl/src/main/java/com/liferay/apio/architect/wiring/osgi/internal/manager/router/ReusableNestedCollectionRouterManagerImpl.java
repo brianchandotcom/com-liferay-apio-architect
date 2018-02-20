@@ -81,7 +81,7 @@ public class ReusableNestedCollectionRouterManagerImpl
 				reusableNestedCollectionRouter, String name) {
 
 		Builder<T, S> builder = new Builder<>(
-			"r", name, curry(_providerManager::provideOptional));
+			"r", name, curry(_providerManager::provideMandatory));
 
 		return reusableNestedCollectionRouter.collectionRoutes(builder);
 	}

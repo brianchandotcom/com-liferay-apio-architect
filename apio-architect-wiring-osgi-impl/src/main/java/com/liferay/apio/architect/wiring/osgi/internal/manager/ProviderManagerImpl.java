@@ -16,6 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
+import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.provider.Provider;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
@@ -28,7 +29,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.ws.rs.NotFoundException;
+
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
@@ -57,6 +61,21 @@ public class ProviderManagerImpl
 	}
 
 	@Override
+	public <T> T provideMandatory(
+		HttpServletRequest httpServletRequest, Class<T> clazz) {
+
+		Optional<T> optional = provideOptional(httpServletRequest, clazz);
+
+		return optional.orElseGet(
+			() -> {
+				_apioLogger.warning(
+					"Missing provider for mandatory class: " + clazz);
+
+				throw new NotFoundException();
+			});
+	}
+
+	@Override
 	public <T> Optional<T> provideOptional(
 		HttpServletRequest httpServletRequest, Class<T> clazz) {
 
@@ -65,5 +84,8 @@ public class ProviderManagerImpl
 		return optional.map(
 			provider -> provider.createContext(httpServletRequest));
 	}
+
+	@Reference
+	private ApioLogger _apioLogger;
 
 }

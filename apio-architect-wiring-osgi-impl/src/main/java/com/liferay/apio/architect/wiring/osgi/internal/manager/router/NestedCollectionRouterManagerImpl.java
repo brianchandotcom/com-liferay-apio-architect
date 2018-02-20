@@ -152,7 +152,7 @@ public class NestedCollectionRouterManagerImpl
 			String name, String nestedName) {
 
 		Builder<T, S> builder = new Builder<>(
-			name, nestedName, curry(_providerManager::provideOptional));
+			name, nestedName, curry(_providerManager::provideMandatory));
 
 		return nestedCollectionRouter.collectionRoutes(builder);
 	}
