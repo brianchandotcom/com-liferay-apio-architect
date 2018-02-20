@@ -52,7 +52,11 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 			() -> getTypeParamOrFail(
 				t, _managedClass, getPrincipalTypeParamPosition()));
 
-		return map(t, serviceReference, clazz);
+		U u = map(t, serviceReference, clazz);
+
+		onAddedService(serviceReference, u);
+
+		return u;
 	}
 
 	/**
@@ -102,6 +106,16 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	 */
 	protected abstract U map(
 		T t, ServiceReference<T> serviceReference, Class<?> clazz);
+
+	/**
+	 * Called when the service is being added.
+	 *
+	 * @param  serviceReference the service reference being added
+	 * @param  u the service being added
+	 * @review
+	 */
+	protected void onAddedService(ServiceReference<T> serviceReference, U u) {
+	}
 
 	/**
 	 * Called when the service is being removed.
