@@ -16,6 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.manager;
 
 import aQute.bnd.annotation.ProviderType;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 @ProviderType
 public interface ProviderManager {
+
+	/**
+	 * Returns the list of missing mandatory providers class names.
+	 *
+	 * @return the list of missing mandatory providers class names.
+	 * @review
+	 */
+	public List<String> getMissingMandatoryProviders();
 
 	/**
 	 * Returns the instance of type {@code T} if a valid {@code Provider} can be
