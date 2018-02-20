@@ -73,8 +73,8 @@ public abstract class BaseManager<T, U>
 	/**
 	 * Emits a service's key using an {@code Emitter<String>}.
 	 *
-	 * @param  serviceReference the service reference
-	 * @param  emitter the emitter
+	 * @param serviceReference the service reference
+	 * @param emitter the emitter
 	 */
 	protected void emit(
 		ServiceReference<T> serviceReference, Emitter<String> emitter) {

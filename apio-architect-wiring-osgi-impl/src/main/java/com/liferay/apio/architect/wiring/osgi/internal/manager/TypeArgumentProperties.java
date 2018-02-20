@@ -24,21 +24,18 @@ public class TypeArgumentProperties {
 
 	/**
 	 * Represents the class of a resource's identifier.
-	 *
 	 */
 	public static final String KEY_IDENTIFIER_CLASS =
 		"apio.architect.principal.type.argument";
 
 	/**
 	 * Represents the class of a parent resource's identifier.
-	 *
 	 */
 	public static final String KEY_PARENT_IDENTIFIER_CLASS =
 		"apio.architect.parent.identifier.class";
 
 	/**
 	 * Represents a managed interface's principal type argument.
-	 *
 	 */
 	public static final String KEY_PRINCIPAL_TYPE_ARGUMENT =
 		"apio.architect.principal.type.argument";

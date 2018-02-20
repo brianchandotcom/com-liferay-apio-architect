@@ -118,8 +118,8 @@ public abstract class TransformServiceTrackerCustomizer<T, U>
 	/**
 	 * Called when the service is being removed.
 	 *
-	 * @param  serviceReference the service reference being removed
-	 * @param  u the service being removed
+	 * @param serviceReference the service reference being removed
+	 * @param u the service being removed
 	 */
 	protected void onRemovedService(ServiceReference<T> serviceReference, U u) {
 		INSTANCE.clear();
