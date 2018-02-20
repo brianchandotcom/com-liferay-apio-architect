@@ -22,11 +22,13 @@ import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
+import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
+import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -129,6 +131,16 @@ public class CollectionRouterManagerImpl
 					return;
 				}
 
+				Optional<ItemRoutes<Object, Object>> optional =
+					_itemRouterManager.getItemRoutesOptional(name);
+
+				if (!optional.isPresent()) {
+					_apioLogger.warning(
+						"Missing item router for resource with name " + name);
+
+					return;
+				}
+
 				resourceNames.add(name);
 				collectionRoutes.put(
 					name, collectionRouter.collectionRoutes(builder));
@@ -140,6 +152,9 @@ public class CollectionRouterManagerImpl
 
 	@Reference
 	private ApioLogger _apioLogger;
+
+	@Reference
+	private ItemRouterManager _itemRouterManager;
 
 	@Reference
 	private NameManager _nameManager;
