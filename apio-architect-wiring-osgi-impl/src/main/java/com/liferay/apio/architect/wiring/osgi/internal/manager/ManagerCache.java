@@ -54,7 +54,9 @@ public class ManagerCache {
 		_identifierClasses = null;
 		_itemRoutes = null;
 		_names = null;
+		_nestedCollectionRoutes = null;
 		_representors = null;
+		_reusableNestedCollectionRoutes = null;
 		_rootResourceNames = null;
 	}
 
