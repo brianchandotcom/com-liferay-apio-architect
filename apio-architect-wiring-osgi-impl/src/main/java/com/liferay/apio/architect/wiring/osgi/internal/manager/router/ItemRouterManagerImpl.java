@@ -24,8 +24,8 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
+import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
-import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 
@@ -108,6 +108,17 @@ public class ItemRouterManagerImpl
 					return;
 				}
 
+				boolean hasPathIdentifierMapper =
+					_pathIdentifierMapperManager.hasPathIdentifierMapper(name);
+
+				if (!hasPathIdentifierMapper) {
+					_apioLogger.warning(
+						"Missing path identifier mapper for resource with " +
+							"name " + name);
+
+					return;
+				}
+
 				itemRoutes.put(name, itemRouter.itemRoutes(builder));
 			});
 
@@ -118,10 +129,10 @@ public class ItemRouterManagerImpl
 	private ApioLogger _apioLogger;
 
 	@Reference
-	private IdentifierClassManager _identifierClassManager;
+	private NameManager _nameManager;
 
 	@Reference
-	private NameManager _nameManager;
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 	@Reference
 	private ProviderManager _providerManager;
