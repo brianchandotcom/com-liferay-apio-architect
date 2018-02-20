@@ -17,6 +17,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
+import com.liferay.apio.architect.routes.ItemRoutes;
 
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ public class ManagerCache {
 	public void clear() {
 		_collectionRoutes = null;
 		_identifierClasses = null;
+		_itemRoutes = null;
 		_names = null;
 		_representors = null;
 		_rootResourceNames = null;
@@ -84,6 +86,18 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Returns the map containing the item routes if they have been set. Returns
+	 * {@code Optional#empty()} otherwise.
+	 *
+	 * @return the map containing the item routes if they have been set; returns
+	 *         {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<Map<String, ItemRoutes>> getItemRoutesOptional() {
+		return Optional.ofNullable(_itemRoutes);
+	}
+
+	/**
 	 * Returns the map containing the names for the different resource
 	 * identifier classes if they have been set. Returns {@code
 	 * Optional#empty()} otherwise.
@@ -97,6 +111,15 @@ public class ManagerCache {
 		return Optional.ofNullable(_names);
 	}
 
+	/**
+	 * Returns the map containing the representors for the different resource
+	 * names if they have been set. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the map containing the representors for the different resource
+	 *         names if they have been set; returns {@code Optional#empty()}
+	 *         otherwise
+	 * @review
+	 */
 	public Optional<Map<String, Representor>> getRepresentorsOptional() {
 		return Optional.ofNullable(_representors);
 	}
@@ -136,6 +159,20 @@ public class ManagerCache {
 	 */
 	public boolean hasIdentifierClasses() {
 		if (_identifierClasses != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns {@code true} if the item routes have been set in the cache.
+	 *
+	 * @return {@code true} if the item routes have been set
+	 * @review
+	 */
+	public boolean hasItemRoutes() {
+		if (_itemRoutes != null) {
 			return true;
 		}
 
@@ -210,6 +247,16 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Sets the item routes
+	 *
+	 * @param  itemRoutes the item routes
+	 * @review
+	 */
+	public void setItemRoutes(Map<String, ItemRoutes> itemRoutes) {
+		_itemRoutes = itemRoutes;
+	}
+
+	/**
 	 * Sets the resource names
 	 *
 	 * @param  names the resource names
@@ -244,6 +291,7 @@ public class ManagerCache {
 
 	private Map<String, CollectionRoutes> _collectionRoutes;
 	private Map<String, Class<Identifier>> _identifierClasses;
+	private Map<String, ItemRoutes> _itemRoutes;
 	private Map<String, String> _names;
 	private Map<String, Representor> _representors;
 	private List<String> _rootResourceNames;

@@ -169,7 +169,9 @@ public class FormEndpointTest {
 	private static <T, S> ItemRoutes<T, S> _emptyItemRoutes() {
 		return new ItemRoutes<>(
 			new ItemRoutes.Builder<>(
-				"", httpServletRequest -> aClass -> Optional.empty()));
+				"", httpServletRequest -> aClass -> Optional.empty(),
+				__ -> {
+				}));
 	}
 
 	private static <T, S> NestedCollectionRoutes<T, S>
@@ -182,7 +184,9 @@ public class FormEndpointTest {
 
 	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
 		ItemRoutes.Builder<T, S> builder = new ItemRoutes.Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION,
+			__ -> {
+			});
 
 		return builder.addUpdater(
 			(aLong, body) -> null, (credentials, s) -> true,

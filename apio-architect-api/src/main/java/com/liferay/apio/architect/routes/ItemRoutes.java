@@ -130,9 +130,13 @@ public class ItemRoutes<T, S> {
 	@SuppressWarnings("unused")
 	public static class Builder<T, S> {
 
-		public Builder(String name, ProvideFunction provideFunction) {
+		public Builder(
+			String name, ProvideFunction provideFunction,
+			Consumer<String> neededProviderConsumer) {
+
 			_name = name;
 			_provideFunction = provideFunction;
+			_neededProviderConsumer = neededProviderConsumer;
 		}
 
 		/**
@@ -144,6 +148,8 @@ public class ItemRoutes<T, S> {
 		 */
 		public <A> Builder<T, S> addGetter(
 			BiFunction<S, A, T> biFunction, Class<A> aClass) {
+
+			_neededProviderConsumer.accept(aClass.getName());
 
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
@@ -191,6 +197,11 @@ public class ItemRoutes<T, S> {
 			PentaFunction<S, A, B, C, D, T> pentaFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+			_neededProviderConsumer.accept(dClass.getName());
+
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass, Credentials.class,
@@ -217,6 +228,10 @@ public class ItemRoutes<T, S> {
 			TetraFunction<S, A, B, C, T> tetraFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, Credentials.class,
@@ -241,6 +256,9 @@ public class ItemRoutes<T, S> {
 		public <A, B> Builder<T, S> addGetter(
 			TriFunction<S, A, B, T> triFunction, Class<A> aClass,
 			Class<B> bClass) {
+
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
 
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -268,6 +286,8 @@ public class ItemRoutes<T, S> {
 		public <A> Builder<T, S> addRemover(
 			BiConsumer<S, A> biConsumer, Class<A> aClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
 
 			_deleteItemPermissionFunction = permissionBiFunction;
 
@@ -318,6 +338,11 @@ public class ItemRoutes<T, S> {
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+			_neededProviderConsumer.accept(dClass.getName());
+
 			_deleteItemPermissionFunction = permissionBiFunction;
 
 			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
@@ -347,6 +372,10 @@ public class ItemRoutes<T, S> {
 			Class<B> bClass, Class<C> cClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+
 			_deleteItemPermissionFunction = permissionBiFunction;
 
 			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
@@ -371,6 +400,9 @@ public class ItemRoutes<T, S> {
 		public <A, B> Builder<T, S> addRemover(
 			TriConsumer<S, A, B> triConsumer, Class<A> aClass, Class<B> bClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
 
 			_deleteItemPermissionFunction = permissionBiFunction;
 
@@ -439,6 +471,11 @@ public class ItemRoutes<T, S> {
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+			_neededProviderConsumer.accept(dClass.getName());
+
 			_updateItemPermissionFunction = permissionBiFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -481,6 +518,10 @@ public class ItemRoutes<T, S> {
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+
 			_updateItemPermissionFunction = permissionBiFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -521,6 +562,9 @@ public class ItemRoutes<T, S> {
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+
 			_updateItemPermissionFunction = permissionBiFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -557,6 +601,8 @@ public class ItemRoutes<T, S> {
 			TriFunction<S, R, A, T> triFunction, Class<A> aClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
 
 			_updateItemPermissionFunction = permissionBiFunction;
 
@@ -620,6 +666,7 @@ public class ItemRoutes<T, S> {
 			_deleteItemPermissionFunction;
 		private Form _form;
 		private final String _name;
+		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;
 		private GetItemFunction<T, S> _singleModelFunction;
 		private UpdateItemFunction<T, S> _updateItemFunction;

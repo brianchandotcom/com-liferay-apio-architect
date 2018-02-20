@@ -26,6 +26,7 @@ import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 import static java.util.Collections.singletonMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
@@ -39,6 +40,8 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.Test;
 
@@ -50,7 +53,9 @@ public class ItemRoutesTest {
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION,
+			__ -> {
+			});
 
 		ItemRoutes<String, Long> itemRoutes = builder.build();
 
@@ -72,8 +77,10 @@ public class ItemRoutesTest {
 
 	@Test
 	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
@@ -87,13 +94,21 @@ public class ItemRoutesTest {
 			FORM_BUILDER_FUNCTION
 		).build();
 
+		assertThat(
+			neededProviders,
+			contains(
+				Boolean.class.getName(), Integer.class.getName(),
+				Long.class.getName(), String.class.getName()));
+
 		_testItemRoutes(itemRoutes);
 	}
 
 	@Test
 	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
@@ -107,13 +122,21 @@ public class ItemRoutesTest {
 			FORM_BUILDER_FUNCTION
 		).build();
 
+		assertThat(
+			neededProviders,
+			contains(
+				Boolean.class.getName(), Long.class.getName(),
+				String.class.getName()));
+
 		_testItemRoutes(itemRoutes);
 	}
 
 	@Test
 	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
@@ -125,13 +148,17 @@ public class ItemRoutesTest {
 			ITEM_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 
+		assertThat(neededProviders.size(), is(0));
+
 		_testItemRoutes(itemRoutes);
 	}
 
 	@Test
 	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
@@ -144,13 +171,19 @@ public class ItemRoutesTest {
 			Long.class, ITEM_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 
+		assertThat(
+			neededProviders,
+			contains(Long.class.getName(), String.class.getName()));
+
 		_testItemRoutes(itemRoutes);
 	}
 
 	@Test
 	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
@@ -161,6 +194,8 @@ public class ItemRoutesTest {
 			this::_testAndReturnOneParameterUpdaterRoute, String.class,
 			ITEM_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
+
+		assertThat(neededProviders, contains(String.class.getName()));
 
 		_testItemRoutes(itemRoutes);
 	}
