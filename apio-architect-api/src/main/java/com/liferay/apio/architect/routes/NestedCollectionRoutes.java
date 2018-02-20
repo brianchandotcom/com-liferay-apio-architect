@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 /**
  * Holds information about the routes supported for a {@link
@@ -118,11 +119,13 @@ public class NestedCollectionRoutes<T, S> {
 	public static class Builder<T, S> {
 
 		public Builder(
-			String name, String nestedName, ProvideFunction provideFunction) {
+			String name, String nestedName, ProvideFunction provideFunction,
+			Consumer<String> neededProviderConsumer) {
 
 			_name = name;
 			_nestedName = nestedName;
 			_provideFunction = provideFunction;
+			_neededProviderConsumer = neededProviderConsumer;
 		}
 
 		/**
@@ -177,6 +180,11 @@ public class NestedCollectionRoutes<T, S> {
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+			_neededProviderConsumer.accept(dClass.getName());
+
 			_nestedCollectionPermissionFunction = permissionBiFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -217,6 +225,10 @@ public class NestedCollectionRoutes<T, S> {
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+
 			_nestedCollectionPermissionFunction = permissionBiFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -256,6 +268,9 @@ public class NestedCollectionRoutes<T, S> {
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+
 			_nestedCollectionPermissionFunction = permissionBiFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -291,6 +306,8 @@ public class NestedCollectionRoutes<T, S> {
 			TriFunction<S, R, A, T> triFunction, Class<A> aClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
 
 			_nestedCollectionPermissionFunction = permissionBiFunction;
 
@@ -353,6 +370,11 @@ public class NestedCollectionRoutes<T, S> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+			_neededProviderConsumer.accept(dClass.getName());
+
 			_nestedGetPageFunction =
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
@@ -384,6 +406,10 @@ public class NestedCollectionRoutes<T, S> {
 			PentaFunction<Pagination, S, A, B, C, PageItems<T>> pentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+
 			_nestedGetPageFunction =
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
@@ -412,6 +438,9 @@ public class NestedCollectionRoutes<T, S> {
 			TetraFunction<Pagination, S, A, B, PageItems<T>> tetraFunction,
 			Class<A> aClass, Class<B> bClass) {
 
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+
 			_nestedGetPageFunction =
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
@@ -438,6 +467,8 @@ public class NestedCollectionRoutes<T, S> {
 		public <A> Builder<T, S> addGetter(
 			TriFunction<Pagination, S, A, PageItems<T>> triFunction,
 			Class<A> aClass) {
+
+			_neededProviderConsumer.accept(aClass.getName());
 
 			_nestedGetPageFunction =
 				httpServletRequest -> path -> identifier -> provide(
@@ -484,6 +515,7 @@ public class NestedCollectionRoutes<T, S> {
 
 		private Form _form;
 		private final String _name;
+		private final Consumer<String> _neededProviderConsumer;
 		private BiFunction<Credentials, S, Boolean>
 			_nestedCollectionPermissionFunction;
 		private NestedCreateItemFunction<T, S> _nestedCreateItemFunction;

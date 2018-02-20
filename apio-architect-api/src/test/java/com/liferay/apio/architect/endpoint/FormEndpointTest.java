@@ -179,7 +179,9 @@ public class FormEndpointTest {
 
 		return new NestedCollectionRoutes<>(
 			new NestedCollectionRoutes.Builder<>(
-				"", "", httpServletRequest -> aClass -> Optional.empty()));
+				"", "", httpServletRequest -> aClass -> Optional.empty(),
+				__ -> {
+				}));
 	}
 
 	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
@@ -199,7 +201,9 @@ public class FormEndpointTest {
 
 		NestedCollectionRoutes.Builder<T, S> builder =
 			new NestedCollectionRoutes.Builder<>(
-				"name", "nestedName", REQUEST_PROVIDE_FUNCTION);
+				"name", "nestedName", REQUEST_PROVIDE_FUNCTION,
+				__ -> {
+				});
 
 		return builder.addCreator(
 			(s, body) -> null, getNestedCollectionPermissionFunction(),
