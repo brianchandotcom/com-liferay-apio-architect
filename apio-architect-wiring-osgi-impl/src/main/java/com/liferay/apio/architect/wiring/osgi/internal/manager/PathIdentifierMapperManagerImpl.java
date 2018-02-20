@@ -44,6 +44,11 @@ public class PathIdentifierMapperManagerImpl
 	}
 
 	@Override
+	public boolean hasPathIdentifierMapper(String name) {
+		return _getPathIdentifierMapperTry(name).isSuccess();
+	}
+
+	@Override
 	public <T> T mapToIdentifierOrFail(Path path) {
 		Try<PathIdentifierMapper<T>> pathIdentifierMapperTry =
 			_getPathIdentifierMapperTry(path.getName());

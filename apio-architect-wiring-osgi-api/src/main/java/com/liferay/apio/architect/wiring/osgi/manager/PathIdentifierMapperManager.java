@@ -29,6 +29,17 @@ import java.util.Optional;
 public interface PathIdentifierMapperManager {
 
 	/**
+	 * Checks if a {@code PathIdentifierMapper} for a resource has been
+	 * published.
+	 *
+	 * @param  name the name of the resource
+	 * @return {@code true} if a {@code PathIdentifierMapper} for a resource is
+	 *         present
+	 * @review
+	 */
+	public boolean hasPathIdentifierMapper(String name);
+
+	/**
 	 * Converts a {@code Path} to its equivalent identifier of type {@code T},
 	 * if a valid {@link
 	 * com.liferay.apio.architect.uri.mapper.PathIdentifierMapper} can be found.
