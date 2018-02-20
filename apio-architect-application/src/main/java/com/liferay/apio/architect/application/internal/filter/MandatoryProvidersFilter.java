@@ -14,11 +14,15 @@
 
 package com.liferay.apio.architect.application.internal.filter;
 
+import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.logger.ApioLogger;
+import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 
 import java.io.IOException;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.NotFoundException;
@@ -41,12 +45,16 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class MandatoryProvidersFilter implements ContainerRequestFilter {
 
+	public static final List<String> mandatoryClassNames = Arrays.asList(
+		Credentials.class.getName(), ServerURL.class.getName(),
+		Pagination.class.getName());
+
 	@Override
 	public void filter(ContainerRequestContext containerRequestContext)
 		throws IOException {
 
 		List<String> missingMandatoryProviders =
-			_providerManager.getMissingMandatoryProviders();
+			_providerManager.getMissingProviders(mandatoryClassNames);
 
 		if (!missingMandatoryProviders.isEmpty()) {
 			_apioLogger.warning(

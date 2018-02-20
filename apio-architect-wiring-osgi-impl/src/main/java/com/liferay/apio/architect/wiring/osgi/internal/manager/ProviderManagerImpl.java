@@ -16,15 +16,12 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager;
 
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
-import com.liferay.apio.architect.credentials.Credentials;
-import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.provider.Provider;
-import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -42,19 +39,17 @@ import org.osgi.service.component.annotations.Component;
 public class ProviderManagerImpl
 	extends SimpleBaseManager<Provider> implements ProviderManager {
 
-	public static final List<String> mandatoryClassNames = Arrays.asList(
-		Credentials.class.getName(), ServerURL.class.getName(),
-		Pagination.class.getName());
-
 	public ProviderManagerImpl() {
 		super(Provider.class);
 	}
 
 	@Override
-	public List<String> getMissingMandatoryProviders() {
+	public List<String> getMissingProviders(
+		Collection<String> neededProviders) {
+
 		Set<String> providedClassNames = serviceTrackerMap.keySet();
 
-		List<String> list = new ArrayList<>(mandatoryClassNames);
+		List<String> list = new ArrayList<>(neededProviders);
 
 		list.removeAll(providedClassNames);
 
