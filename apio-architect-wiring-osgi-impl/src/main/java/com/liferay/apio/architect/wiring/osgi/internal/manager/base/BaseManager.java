@@ -22,6 +22,8 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.E
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -55,6 +57,16 @@ public abstract class BaseManager<T, U>
 		serviceTrackerMap.close();
 	}
 
+	/**
+	 * Returns the service tracker key stream.
+	 *
+	 * @return the service tracker key stream
+	 * @review
+	 */
+	public Stream<String> getKeyStream() {
+		Set<String> keys = serviceTrackerMap.keySet();
+
+		return keys.stream();
 	}
 
 	/**
