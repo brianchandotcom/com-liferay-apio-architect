@@ -140,6 +140,20 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Returns the map containing the reusable nested collection routes if they
+	 * have been set. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the map containing the reusable nested collection routes if they
+	 *         have been set; returns {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<Map<String, NestedCollectionRoutes>>
+		getReusableNestedCollectionRoutesOptional() {
+
+		return Optional.ofNullable(_reusableNestedCollectionRoutes);
+	}
+
+	/**
 	 * Returns the list of root resource names if they have been set. Returns
 	 * {@code Optional#empty()} otherwise.
 	 *
@@ -238,6 +252,22 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Returns {@code true} if the reusable nested collection routes have been
+	 * set in the cache.
+	 *
+	 * @return {@code true} if the reusable nested collection routes have been
+	 *         set
+	 * @review
+	 */
+	public boolean hasReusableNestedCollectionRoutes() {
+		if (_reusableNestedCollectionRoutes != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Returns {@code true} if the root resource names have been set in the
 	 * cache.
 	 *
@@ -319,6 +349,19 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Sets the reusable nested collection routes
+	 *
+	 * @param  reusableNestedCollectionRoutes the reusable nested collection
+	 *         routes
+	 * @review
+	 */
+	public void setReusableNestedCollectionRoutes(
+		Map<String, NestedCollectionRoutes> reusableNestedCollectionRoutes) {
+
+		_reusableNestedCollectionRoutes = reusableNestedCollectionRoutes;
+	}
+
+	/**
 	 * Sets the root resource names
 	 *
 	 * @param  rootResourceNames the root resource names
@@ -337,6 +380,7 @@ public class ManagerCache {
 	private Map<String, String> _names;
 	private Map<String, NestedCollectionRoutes> _nestedCollectionRoutes;
 	private Map<String, Representor> _representors;
+	private Map<String, NestedCollectionRoutes> _reusableNestedCollectionRoutes;
 	private List<String> _rootResourceNames;
 
 }
