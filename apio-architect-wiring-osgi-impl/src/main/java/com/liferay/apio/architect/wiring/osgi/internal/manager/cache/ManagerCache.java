@@ -20,6 +20,8 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -285,92 +287,132 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Sets the collection routes
+	 * Adds a collection routes
 	 *
+	 * @param  key the key
 	 * @param  collectionRoutes the collection routes
 	 * @review
 	 */
-	public void setCollectionRoutes(
-		Map<String, CollectionRoutes> collectionRoutes) {
+	public void putCollectionRoutes(
+		String key, CollectionRoutes collectionRoutes) {
 
-		_collectionRoutes = collectionRoutes;
+		if (_collectionRoutes == null) {
+			_collectionRoutes = new HashMap<>();
+		}
+
+		_collectionRoutes.put(key, collectionRoutes);
 	}
 
 	/**
-	 * Sets the identifier classes
+	 * Adds an identifier class
 	 *
-	 * @param  identifierClasses the identifier classes
+	 * @param  key the key
+	 * @param  identifierClass the identifier class
 	 * @review
 	 */
-	public void setIdentifierClasses(
-		Map<String, Class<Identifier>> identifierClasses) {
+	public void putIdentifierClass(
+		String key, Class<Identifier> identifierClass) {
 
-		_identifierClasses = identifierClasses;
+		if (_identifierClasses == null) {
+			_identifierClasses = new HashMap<>();
+		}
+
+		_identifierClasses.put(key, identifierClass);
 	}
 
 	/**
-	 * Sets the item routes
+	 * Adds an item routes
 	 *
+	 * @param  key the key
 	 * @param  itemRoutes the item routes
 	 * @review
 	 */
-	public void setItemRoutes(Map<String, ItemRoutes> itemRoutes) {
-		_itemRoutes = itemRoutes;
+	public void putItemRoutes(String key, ItemRoutes itemRoutes) {
+		if (_itemRoutes == null) {
+			_itemRoutes = new HashMap<>();
+		}
+
+		_itemRoutes.put(key, itemRoutes);
 	}
 
 	/**
-	 * Sets the resource names
+	 * Adds a resource name
 	 *
-	 * @param  names the resource names
+	 * @param  key the key
+	 * @param  name the resource name
 	 * @review
 	 */
-	public void setNames(Map<String, String> names) {
-		_names = names;
+	public void putName(String key, String name) {
+		if (_names == null) {
+			_names = new HashMap<>();
+		}
+
+		_names.put(key, name);
 	}
 
 	/**
-	 * Sets the nested collection routes
+	 * Adds a nested collection routes
 	 *
+	 * @param  key the key
 	 * @param  nestedCollectionRoutes the nested collection routes
 	 * @review
 	 */
-	public void setNestedCollectionRoutes(
-		Map<String, NestedCollectionRoutes> nestedCollectionRoutes) {
+	public void putNestedCollectionRoutes(
+		String key, NestedCollectionRoutes nestedCollectionRoutes) {
 
-		_nestedCollectionRoutes = nestedCollectionRoutes;
+		if (_nestedCollectionRoutes == null) {
+			_nestedCollectionRoutes = new HashMap<>();
+		}
+
+		_nestedCollectionRoutes.put(key, nestedCollectionRoutes);
 	}
 
 	/**
-	 * Sets the representors
+	 * Adds a representors
 	 *
-	 * @param  representors the representors
+	 * @param  key the key
+	 * @param  representor the representor
 	 * @review
 	 */
-	public void setRepresentors(Map<String, Representor> representors) {
-		_representors = representors;
+	public void putRepresentor(String key, Representor representor) {
+		if (_representors == null) {
+			_representors = new HashMap<>();
+		}
+
+		_representors.put(key, representor);
 	}
 
 	/**
-	 * Sets the reusable nested collection routes
+	 * Adds a reusable nested collection routes
 	 *
+	 * @param  key the key
 	 * @param  reusableNestedCollectionRoutes the reusable nested collection
 	 *         routes
 	 * @review
 	 */
-	public void setReusableNestedCollectionRoutes(
-		Map<String, NestedCollectionRoutes> reusableNestedCollectionRoutes) {
+	public void putReusableNestedCollectionRoutes(
+		String key, NestedCollectionRoutes reusableNestedCollectionRoutes) {
 
-		_reusableNestedCollectionRoutes = reusableNestedCollectionRoutes;
+		if (_reusableNestedCollectionRoutes == null) {
+			_reusableNestedCollectionRoutes = new HashMap<>();
+		}
+
+		_reusableNestedCollectionRoutes.put(
+			key, reusableNestedCollectionRoutes);
 	}
 
 	/**
-	 * Sets the root resource names
+	 * Adds a root resource name
 	 *
-	 * @param  rootResourceNames the root resource names
+	 * @param  rootResourceName the root resource name
 	 * @review
 	 */
-	public void setRootResourceNames(List<String> rootResourceNames) {
-		_rootResourceNames = rootResourceNames;
+	public void putRootResourceNames(String rootResourceName) {
+		if (_rootResourceNames == null) {
+			_rootResourceNames = new ArrayList<>();
+		}
+
+		_rootResourceNames.add(rootResourceName);
 	}
 
 	private ManagerCache() {

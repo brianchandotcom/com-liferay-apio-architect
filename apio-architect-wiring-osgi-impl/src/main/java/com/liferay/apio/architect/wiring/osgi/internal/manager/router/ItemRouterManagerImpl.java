@@ -29,7 +29,6 @@ import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -71,8 +70,6 @@ public class ItemRouterManagerImpl
 
 	private void _generateItemRoutes() {
 		Stream<String> stream = getKeyStream();
-
-		Map<String, ItemRoutes> itemRoutes = new HashMap<>();
 
 		stream.forEach(
 			className -> {
@@ -119,10 +116,8 @@ public class ItemRouterManagerImpl
 					return;
 				}
 
-				itemRoutes.put(name, itemRouter.itemRoutes(builder));
+				INSTANCE.putItemRoutes(name, itemRouter.itemRoutes(builder));
 			});
-
-		INSTANCE.setItemRoutes(itemRoutes);
 	}
 
 	@Reference

@@ -16,9 +16,9 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
@@ -35,7 +35,6 @@ import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -100,9 +99,6 @@ public class NestedCollectionRouterManagerImpl
 
 	private void _generateNestedCollectionRoutes() {
 		Stream<String> stream = getKeyStream();
-
-		Map<String, NestedCollectionRoutes> nestedCollectionRoutes =
-			new HashMap<>();
 
 		stream.forEach(
 			key -> {
@@ -182,12 +178,10 @@ public class NestedCollectionRouterManagerImpl
 					return;
 				}
 
-				nestedCollectionRoutes.put(
+				INSTANCE.putNestedCollectionRoutes(
 					name + "-" + nestedName,
 					nestedCollectionRouter.collectionRoutes(builder));
 			});
-
-		INSTANCE.setNestedCollectionRoutes(nestedCollectionRoutes);
 	}
 
 	@Reference

@@ -30,9 +30,7 @@ import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -88,10 +86,6 @@ public class CollectionRouterManagerImpl
 	private void _generateCollectionRoutes() {
 		Stream<String> stream = getKeyStream();
 
-		List<String> resourceNames = new ArrayList<>();
-
-		Map<String, CollectionRoutes> collectionRoutes = new HashMap<>();
-
 		stream.forEach(
 			className -> {
 				Optional<String> nameOptional = _nameManager.getNameOptional(
@@ -136,13 +130,10 @@ public class CollectionRouterManagerImpl
 					return;
 				}
 
-				resourceNames.add(name);
-				collectionRoutes.put(
+				INSTANCE.putRootResourceNames(name);
+				INSTANCE.putCollectionRoutes(
 					name, collectionRouter.collectionRoutes(builder));
 			});
-
-		INSTANCE.setRootResourceNames(resourceNames);
-		INSTANCE.setCollectionRoutes(collectionRoutes);
 	}
 
 	@Reference

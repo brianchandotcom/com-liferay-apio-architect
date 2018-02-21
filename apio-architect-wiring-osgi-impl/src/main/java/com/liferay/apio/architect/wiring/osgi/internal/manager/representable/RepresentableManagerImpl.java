@@ -15,8 +15,8 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
@@ -34,13 +34,13 @@ import com.liferay.apio.architect.wiring.osgi.manager.representable.Representabl
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -124,50 +124,49 @@ public class RepresentableManagerImpl
 	}
 
 	private void _computeRepresentables() {
-		Map<String, Class<Identifier>> identifierClasses = new HashMap<>();
-		Map<String, String> names = new HashMap<>();
 		Map<String, List<RelatedCollection<?>>> relatedCollections =
 			new HashMap<>();
-		Map<String, Representor> representors = new HashMap<>();
 
-		Stream<Class<Identifier>> stream = getKeyStream();
+		Stream<Class<Identifier>> keyStream = getKeyStream();
 
-		stream.forEach(
+		keyStream.forEach(
 			clazz -> {
 				Representable representable = serviceTrackerMap.getService(
 					clazz);
 
 				String name = representable.getName();
 
-				Set<Entry<String, String>> entries = names.entrySet();
+				Optional<Map<String, String>> optional =
+					INSTANCE.getNamesOptional();
 
-				Stream<Entry<String, String>> entryStream = entries.stream();
-
-				Optional<String> optional = entryStream.filter(
-					entry -> Objects.equals(entry.getValue(), name)
+				Optional<String> classNameOptional = optional.map(
+					Map::entrySet
 				).map(
-					Entry::getKey
-				).findFirst();
+					Collection::stream
+				).flatMap(
+					stream -> stream.filter(
+						entry -> Objects.equals(entry.getValue(), name)
+					).map(
+						Entry::getKey
+					).findFirst()
+				);
 
 				if (optional.isPresent()) {
 					_apioLogger.warning(
-						_getDuplicateErrorMessage(clazz, name, optional.get()));
+						_getDuplicateErrorMessage(
+							clazz, name, classNameOptional.get()));
 
 					return;
 				}
 
-				names.put(clazz.getName(), name);
-				identifierClasses.put(name, clazz);
-				representors.put(
+				INSTANCE.putName(clazz.getName(), name);
+				INSTANCE.putIdentifierClass(name, clazz);
+				INSTANCE.putRepresentor(
 					name,
 					_getRepresentor(
 						unsafeCast(representable), unsafeCast(clazz),
 						relatedCollections));
 			});
-
-		INSTANCE.setIdentifierClasses(identifierClasses);
-		INSTANCE.setNames(names);
-		INSTANCE.setRepresentors(representors);
 	}
 
 	private String _getDuplicateErrorMessage(

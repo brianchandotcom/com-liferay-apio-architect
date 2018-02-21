@@ -30,7 +30,6 @@ import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -73,9 +72,6 @@ public class ReusableNestedCollectionRouterManagerImpl
 
 	private void _generateNestedCollectionRoutes() {
 		Stream<String> stream = getKeyStream();
-
-		Map<String, NestedCollectionRoutes> nestedCollectionRoutes =
-			new HashMap<>();
 
 		stream.forEach(
 			className -> {
@@ -122,12 +118,10 @@ public class ReusableNestedCollectionRouterManagerImpl
 					return;
 				}
 
-				nestedCollectionRoutes.put(
+				INSTANCE.putReusableNestedCollectionRoutes(
 					name,
 					reusableNestedCollectionRouter.collectionRoutes(builder));
 			});
-
-		INSTANCE.setReusableNestedCollectionRoutes(nestedCollectionRoutes);
 	}
 
 	@Reference
