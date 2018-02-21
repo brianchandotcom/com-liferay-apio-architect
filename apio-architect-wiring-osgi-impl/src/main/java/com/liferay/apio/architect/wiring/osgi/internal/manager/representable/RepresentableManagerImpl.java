@@ -20,9 +20,6 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgume
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.related.RelatedCollection;
@@ -30,26 +27,26 @@ import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
 import com.liferay.apio.architect.unsafe.Unsafe;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
-import com.liferay.osgi.service.tracker.collections.ServiceReferenceServiceTuple;
+import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -57,11 +54,11 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class RepresentableManagerImpl
+	extends BaseManager<Representable, Class<Identifier>>
 	implements NameManager, IdentifierClassManager, RepresentableManager {
 
-	@Deactivate
-	public void deactivate() {
-		INSTANCE.clear();
+	public RepresentableManagerImpl() {
+		super(Representable.class);
 	}
 
 	@Override
@@ -111,25 +108,19 @@ public class RepresentableManagerImpl
 		);
 	}
 
-	@Reference(cardinality = MULTIPLE, policyOption = GREEDY, unbind = "-")
-	protected void setServiceReference(
+	@Override
+	protected void emit(
 		ServiceReference<Representable> serviceReference,
-		Representable representable) {
+		Emitter<Class<Identifier>> emitter) {
 
-		Class<Identifier> clazz = getGenericClassFromPropertyOrElse(
+		Representable representable = bundleContext.getService(
+			serviceReference);
+
+		Class<Identifier> genericClass = getGenericClassFromPropertyOrElse(
 			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT,
 			() -> getTypeParamOrFail(representable, Representable.class, 2));
 
-		TreeSet<ServiceReferenceServiceTuple<Representable, Representable>>
-			serviceReferenceServiceTuples =
-				_serviceReferenceServiceTuples.computeIfAbsent(
-					clazz, name -> new TreeSet<>());
-
-		ServiceReferenceServiceTuple<Representable, Representable>
-			serviceReferenceServiceTuple = new ServiceReferenceServiceTuple<>(
-				serviceReference, representable);
-
-		serviceReferenceServiceTuples.add(serviceReferenceServiceTuple);
+		emitter.emit(genericClass);
 	}
 
 	private void _computeRepresentables() {
@@ -139,20 +130,23 @@ public class RepresentableManagerImpl
 			new HashMap<>();
 		Map<String, Representor> representors = new HashMap<>();
 
-		_serviceReferenceServiceTuples.forEach(
-			(clazz, treeSet) -> {
-				Representable representable = _getRepresentable(treeSet);
+		Stream<Class<Identifier>> stream = getKeyStream();
+
+		stream.forEach(
+			clazz -> {
+				Representable representable = serviceTrackerMap.getService(
+					clazz);
 
 				String name = representable.getName();
 
-				Set<Map.Entry<String, String>> entries = names.entrySet();
+				Set<Entry<String, String>> entries = names.entrySet();
 
-				Stream<Map.Entry<String, String>> stream = entries.stream();
+				Stream<Entry<String, String>> entryStream = entries.stream();
 
-				Optional<String> optional = stream.filter(
+				Optional<String> optional = entryStream.filter(
 					entry -> Objects.equals(entry.getValue(), name)
 				).map(
-					Map.Entry::getKey
+					Entry::getKey
 				).findFirst();
 
 				if (optional.isPresent()) {
@@ -198,16 +192,6 @@ public class RepresentableManagerImpl
 		).toString();
 	}
 
-	private Representable _getRepresentable(
-		TreeSet<ServiceReferenceServiceTuple<Representable, Representable>>
-			treeSet) {
-
-		ServiceReferenceServiceTuple<Representable, Representable>
-			serviceReferenceServiceTuple = treeSet.first();
-
-		return serviceReferenceServiceTuple.getService();
-	}
-
 	private <T, S, U extends Identifier<S>> Representor<T, S> _getRepresentor(
 		Representable<T, S, U> representable, Class<U> clazz,
 		Map<String, List<RelatedCollection<?>>> relatedCollections) {
@@ -232,9 +216,5 @@ public class RepresentableManagerImpl
 
 	@Reference
 	private ApioLogger _apioLogger;
-
-	private final Map<Class<Identifier>, TreeSet<ServiceReferenceServiceTuple
-		<Representable, Representable>>> _serviceReferenceServiceTuples =
-			new HashMap<>();
 
 }
