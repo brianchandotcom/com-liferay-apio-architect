@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.manager;
+package com.liferay.apio.architect.wiring.osgi.internal.manager.cache;
 
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.representor.Representor;

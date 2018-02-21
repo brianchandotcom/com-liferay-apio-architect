@@ -16,7 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerCache.INSTANCE;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
 import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.router.ItemRouter;

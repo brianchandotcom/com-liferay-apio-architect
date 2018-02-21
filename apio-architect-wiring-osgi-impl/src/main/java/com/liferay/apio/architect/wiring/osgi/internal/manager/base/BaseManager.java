@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.base;
 
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerCache.INSTANCE;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
 import com.liferay.apio.architect.wiring.osgi.internal.service.tracker.map.listener.ClearCacheServiceTrackerMapListener;
 import com.liferay.osgi.service.tracker.collections.internal.DefaultServiceTrackerCustomizer;
