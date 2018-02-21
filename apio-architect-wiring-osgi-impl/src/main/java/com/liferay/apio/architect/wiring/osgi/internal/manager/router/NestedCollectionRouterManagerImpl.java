@@ -27,8 +27,8 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
 import com.liferay.apio.architect.unsafe.Unsafe;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
 import com.liferay.apio.architect.wiring.osgi.internal.service.reference.mapper.CustomServiceReferenceMapper;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
@@ -55,7 +55,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class NestedCollectionRouterManagerImpl
-	extends SimpleBaseManager<NestedCollectionRouter>
+	extends BaseManager<NestedCollectionRouter>
 	implements NestedCollectionRouterManager {
 
 	public NestedCollectionRouterManagerImpl() {

@@ -24,7 +24,7 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.unsafe.Unsafe;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.base.SimpleBaseManager;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
@@ -48,8 +48,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class CollectionRouterManagerImpl
-	extends SimpleBaseManager<CollectionRouter>
-	implements CollectionRouterManager {
+	extends BaseManager<CollectionRouter> implements CollectionRouterManager {
 
 	public CollectionRouterManagerImpl() {
 		super(CollectionRouter.class);
