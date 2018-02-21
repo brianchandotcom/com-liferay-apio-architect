@@ -34,7 +34,7 @@ public class ExceptionConverterManagerImpl
 	implements ExceptionConverterManager {
 
 	public ExceptionConverterManagerImpl() {
-		super(ExceptionConverter.class);
+		super(ExceptionConverter.class, 0);
 	}
 
 	@Override

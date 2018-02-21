@@ -40,7 +40,7 @@ public class PathIdentifierMapperManagerImpl
 	implements PathIdentifierMapperManager {
 
 	public PathIdentifierMapperManagerImpl() {
-		super(PathIdentifierMapper.class);
+		super(PathIdentifierMapper.class, 0);
 	}
 
 	@Override

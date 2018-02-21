@@ -48,7 +48,7 @@ public class ItemRouterManagerImpl
 	extends BaseManager<ItemRouter> implements ItemRouterManager {
 
 	public ItemRouterManagerImpl() {
-		super(ItemRouter.class);
+		super(ItemRouter.class, 2);
 	}
 
 	@Override

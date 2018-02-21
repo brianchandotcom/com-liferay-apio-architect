@@ -51,7 +51,7 @@ public class CollectionRouterManagerImpl
 	extends BaseManager<CollectionRouter> implements CollectionRouterManager {
 
 	public CollectionRouterManagerImpl() {
-		super(CollectionRouter.class);
+		super(CollectionRouter.class, 1);
 	}
 
 	@Override
@@ -70,11 +70,6 @@ public class CollectionRouterManagerImpl
 		).map(
 			Unsafe::unsafeCast
 		);
-	}
-
-	@Override
-	public Integer getPrincipalTypeParamPosition() {
-		return 1;
 	}
 
 	@Override

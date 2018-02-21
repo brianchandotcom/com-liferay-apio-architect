@@ -56,7 +56,7 @@ public class NestedCollectionRouterManagerImpl
 	implements NestedCollectionRouterManager {
 
 	public NestedCollectionRouterManagerImpl() {
-		super(NestedCollectionRouter.class);
+		super(NestedCollectionRouter.class, 1);
 	}
 
 	@Override

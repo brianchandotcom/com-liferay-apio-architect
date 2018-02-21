@@ -44,7 +44,7 @@ public class ProviderManagerImpl
 	extends BaseManager<Provider> implements ProviderManager {
 
 	public ProviderManagerImpl() {
-		super(Provider.class);
+		super(Provider.class, 0);
 	}
 
 	@Override

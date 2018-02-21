@@ -42,8 +42,11 @@ import org.osgi.service.component.annotations.Deactivate;
  */
 public abstract class BaseManager<T> {
 
-	public BaseManager(Class<T> managedClass) {
+	public BaseManager(
+		Class<T> managedClass, Integer principalTypeParamPosition) {
+
 		_managedClass = managedClass;
+		_principalTypeParamPosition = principalTypeParamPosition;
 	}
 
 	@Activate
@@ -80,15 +83,6 @@ public abstract class BaseManager<T> {
 	}
 
 	/**
-	 * Returns the principal type parameter's position.
-	 *
-	 * @return the position
-	 */
-	public Integer getPrincipalTypeParamPosition() {
-		return 0;
-	}
-
-	/**
 	 * Emits a service's key using an {@code Emitter<String>}.
 	 *
 	 * @param serviceReference the service reference
@@ -102,7 +96,7 @@ public abstract class BaseManager<T> {
 		Class<?> genericClass = getGenericClassFromPropertyOrElse(
 			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT,
 			() -> getTypeParamOrFail(
-				t, _managedClass, getPrincipalTypeParamPosition()));
+				t, _managedClass, _principalTypeParamPosition));
 
 		emitter.emit(genericClass.getName());
 	}
@@ -123,5 +117,6 @@ public abstract class BaseManager<T> {
 	protected ServiceTrackerMap<String, T> serviceTrackerMap;
 
 	private final Class<T> _managedClass;
+	private final Integer _principalTypeParamPosition;
 
 }

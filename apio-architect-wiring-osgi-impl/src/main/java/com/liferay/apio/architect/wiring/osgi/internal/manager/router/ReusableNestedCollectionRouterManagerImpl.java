@@ -50,7 +50,7 @@ public class ReusableNestedCollectionRouterManagerImpl
 	implements ReusableNestedCollectionRouterManager {
 
 	public ReusableNestedCollectionRouterManagerImpl() {
-		super(ReusableNestedCollectionRouter.class);
+		super(ReusableNestedCollectionRouter.class, 2);
 	}
 
 	@Override
