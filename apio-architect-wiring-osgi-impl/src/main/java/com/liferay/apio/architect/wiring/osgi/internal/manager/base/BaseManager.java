@@ -97,16 +97,14 @@ public abstract class BaseManager<T> {
 	protected void emit(
 		ServiceReference<T> serviceReference, Emitter<String> emitter) {
 
-		Bundle bundle = FrameworkUtil.getBundle(BaseManager.class);
+		T t = bundleContext.getService(serviceReference);
 
-		BundleContext bundleContext = bundle.getBundleContext();
+		Class<?> genericClass = getGenericClassFromPropertyOrElse(
+			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT,
+			() -> getTypeParamOrFail(
+				t, _managedClass, getPrincipalTypeParamPosition()));
 
-		CustomServiceReferenceMapper<T> customServiceReferenceMapper =
-			new CustomServiceReferenceMapper<>(
-				bundleContext, getManagedClass(),
-				getPrincipalTypeParamPosition());
-
-		customServiceReferenceMapper.map(serviceReference, emitter);
+		emitter.emit(genericClass.getName());
 	}
 
 	/**
