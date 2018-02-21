@@ -26,7 +26,6 @@ import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
-import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -65,47 +64,22 @@ public class RepresentableManagerImpl
 	public <T extends Identifier> Optional<Class<T>> getIdentifierClassOptional(
 		String name) {
 
-		if (!INSTANCE.hasIdentifierClasses()) {
-			_computeRepresentables();
-		}
-
-		Optional<Map<String, Class<Identifier>>> optional =
-			INSTANCE.getIdentifierClassesOptional();
-
-		return optional.map(
-			map -> map.get(name)
-		).map(
-			Unsafe::unsafeCast
-		);
+		return INSTANCE.getIdentifierClassOptional(
+			name, this::_computeRepresentables);
 	}
 
 	@Override
 	public Optional<String> getNameOptional(String className) {
-		if (!INSTANCE.hasNames()) {
-			_computeRepresentables();
-		}
-
-		Optional<Map<String, String>> optional = INSTANCE.getNamesOptional();
-
-		return optional.map(map -> map.get(className));
+		return INSTANCE.getNameOptional(
+			className, this::_computeRepresentables);
 	}
 
 	@Override
 	public <T, U> Optional<Representor<T, U>> getRepresentorOptional(
 		String name) {
 
-		if (!INSTANCE.hasRepresentors()) {
-			_computeRepresentables();
-		}
-
-		Optional<Map<String, Representor>> optional =
-			INSTANCE.getRepresentorsOptional();
-
-		return optional.map(
-			map -> map.get(name)
-		).map(
-			Unsafe::unsafeCast
-		);
+		return INSTANCE.getRepresentorOptional(
+			name, this::_computeRepresentables);
 	}
 
 	@Override

@@ -23,16 +23,13 @@ import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.routes.ItemRoutes;
-import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -57,33 +54,16 @@ public class CollectionRouterManagerImpl
 	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
 		String name) {
 
-		if (!INSTANCE.hasCollectionRoutes()) {
-			_generateCollectionRoutes();
-		}
-
-		Optional<Map<String, CollectionRoutes>> optional =
-			INSTANCE.getCollectionRoutesOptional();
-
-		return optional.map(
-			map -> map.get(name)
-		).map(
-			Unsafe::unsafeCast
-		);
+		return INSTANCE.getCollectionRoutesOptional(
+			name, this::_computeCollectionRoutes);
 	}
 
 	@Override
 	public List<String> getResourceNames() {
-		if (!INSTANCE.hasRootResourceNames()) {
-			_generateCollectionRoutes();
-		}
-
-		Optional<List<String>> optional =
-			INSTANCE.getRootResourceNamesOptional();
-
-		return optional.orElseGet(Collections::emptyList);
+		return INSTANCE.getRootResourceNames(this::_computeCollectionRoutes);
 	}
 
-	private void _generateCollectionRoutes() {
+	private void _computeCollectionRoutes() {
 		Stream<String> stream = getKeyStream();
 
 		stream.forEach(
@@ -130,7 +110,7 @@ public class CollectionRouterManagerImpl
 					return;
 				}
 
-				INSTANCE.putRootResourceNames(name);
+				INSTANCE.putRootResourceName(name);
 				INSTANCE.putCollectionRoutes(
 					name, collectionRouter.collectionRoutes(builder));
 			});

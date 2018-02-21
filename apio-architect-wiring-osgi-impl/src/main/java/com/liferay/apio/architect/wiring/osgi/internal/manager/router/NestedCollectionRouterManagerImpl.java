@@ -27,7 +27,6 @@ import com.liferay.apio.architect.router.NestedCollectionRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
-import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -36,7 +35,6 @@ import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRou
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -62,18 +60,8 @@ public class NestedCollectionRouterManagerImpl
 	public <T, S> Optional<NestedCollectionRoutes<T, S>>
 		getNestedCollectionRoutesOptional(String name, String nestedName) {
 
-		if (!INSTANCE.hasNestedCollectionRoutes()) {
-			_generateNestedCollectionRoutes();
-		}
-
-		Optional<Map<String, NestedCollectionRoutes>> optional =
-			INSTANCE.getNestedCollectionRoutesOptional();
-
-		return optional.map(
-			map -> map.get(name + "-" + nestedName)
-		).map(
-			Unsafe::unsafeCast
-		);
+		return INSTANCE.getNestedCollectionRoutesOptional(
+			name, nestedName, this::_computeNestedCollectionRoutes);
 	}
 
 	protected void emit(
@@ -97,7 +85,7 @@ public class NestedCollectionRouterManagerImpl
 			parentIdentifierClass.getName() + "-" + identifierClass.getName());
 	}
 
-	private void _generateNestedCollectionRoutes() {
+	private void _computeNestedCollectionRoutes() {
 		Stream<String> stream = getKeyStream();
 
 		stream.forEach(

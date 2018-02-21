@@ -22,7 +22,6 @@ import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.router.ItemRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
-import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
@@ -30,7 +29,6 @@ import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -54,21 +52,10 @@ public class ItemRouterManagerImpl
 	public <T, S> Optional<ItemRoutes<T, S>> getItemRoutesOptional(
 		String name) {
 
-		if (!INSTANCE.hasItemRoutes()) {
-			_generateItemRoutes();
-		}
-
-		Optional<Map<String, ItemRoutes>> optional =
-			INSTANCE.getItemRoutesOptional();
-
-		return optional.map(
-			map -> map.get(name)
-		).map(
-			Unsafe::unsafeCast
-		);
+		return INSTANCE.getItemRoutesOptional(name, this::_computeItemRoutes);
 	}
 
-	private void _generateItemRoutes() {
+	private void _computeItemRoutes() {
 		Stream<String> stream = getKeyStream();
 
 		stream.forEach(

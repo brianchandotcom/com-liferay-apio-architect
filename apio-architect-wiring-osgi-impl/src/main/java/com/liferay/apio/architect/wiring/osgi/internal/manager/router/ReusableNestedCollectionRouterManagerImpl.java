@@ -23,7 +23,6 @@ import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
-import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -31,7 +30,6 @@ import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -56,21 +54,11 @@ public class ReusableNestedCollectionRouterManagerImpl
 	public <T, S> Optional<NestedCollectionRoutes<T, S>>
 		getNestedCollectionRoutesOptional(String name) {
 
-		if (!INSTANCE.hasReusableNestedCollectionRoutes()) {
-			_generateNestedCollectionRoutes();
-		}
-
-		Optional<Map<String, NestedCollectionRoutes>> optional =
-			INSTANCE.getReusableNestedCollectionRoutesOptional();
-
-		return optional.map(
-			map -> map.get(name)
-		).map(
-			Unsafe::unsafeCast
-		);
+		return INSTANCE.getReusableNestedCollectionRoutesOptional(
+			name, this::_computeNestedCollectionRoutes);
 	}
 
-	private void _generateNestedCollectionRoutes() {
+	private void _computeNestedCollectionRoutes() {
 		Stream<String> stream = getKeyStream();
 
 		stream.forEach(

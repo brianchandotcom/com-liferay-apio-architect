@@ -19,8 +19,11 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
+import com.liferay.apio.architect.unsafe.Unsafe;
+import com.liferay.apio.architect.wiring.osgi.internal.alias.EmptyFunction;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,43 +66,101 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the map containing the collection routes if they have been set.
-	 * Returns {@code Optional#empty()} otherwise.
+	 * Returns the collection routes for the collection resource's name.
 	 *
-	 * @return the map containing the collection routes if they have been set;
-	 *         returns {@code Optional#empty()} otherwise
+	 * @param  name the collection resource's name
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the collection routes
 	 * @review
 	 */
-	public Optional<Map<String, CollectionRoutes>>
-		getCollectionRoutesOptional() {
+	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
+		String name, EmptyFunction computeEmptyFunction) {
 
-		return Optional.ofNullable(_collectionRoutes);
+		if (_collectionRoutes == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<Map<String, CollectionRoutes>> optional = Optional.ofNullable(
+			INSTANCE._collectionRoutes);
+
+		return optional.map(
+			map -> map.get(name)
+		).map(
+			Unsafe::unsafeCast
+		);
 	}
 
 	/**
-	 * Returns the map containing the classes for the different resource names
-	 * if they have been set. Returns {@code Optional#empty()} otherwise.
+	 * Returns the resource name's identifier class.
 	 *
-	 * @return the map containing the classes for the different resource names
-	 *         if they have been set; returns {@code Optional#empty()} otherwise
-	 * @review
+	 * @param  name the resource name
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the resource name's identifier class
 	 */
-	public Optional<Map<String, Class<Identifier>>>
-		getIdentifierClassesOptional() {
+	public <T extends Identifier> Optional<Class<T>> getIdentifierClassOptional(
+		String name, EmptyFunction computeEmptyFunction) {
 
-		return Optional.ofNullable(_identifierClasses);
+		if (_identifierClasses == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<Map<String, Class<Identifier>>> optional = Optional.ofNullable(
+			_identifierClasses);
+
+		return optional.map(
+			map -> map.get(name)
+		).map(
+			Unsafe::unsafeCast
+		);
 	}
 
 	/**
-	 * Returns the map containing the item routes if they have been set. Returns
-	 * {@code Optional#empty()} otherwise.
+	 * Returns the item routes for the item resource's name.
 	 *
-	 * @return the map containing the item routes if they have been set; returns
-	 *         {@code Optional#empty()} otherwise
+	 * @param  name the item resource's name
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the item routes
 	 * @review
 	 */
-	public Optional<Map<String, ItemRoutes>> getItemRoutesOptional() {
-		return Optional.ofNullable(_itemRoutes);
+	public <T, S> Optional<ItemRoutes<T, S>> getItemRoutesOptional(
+		String name, EmptyFunction computeEmptyFunction) {
+
+		if (_itemRoutes == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<Map<String, ItemRoutes>> optional = Optional.ofNullable(
+			_itemRoutes);
+
+		return optional.map(
+			map -> map.get(name)
+		).map(
+			Unsafe::unsafeCast
+		);
+	}
+
+	/**
+	 * Returns the name of a collection resource that matches the specified
+	 * class name.
+	 *
+	 * @param  className the collection resource's class name
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the collection resource's name
+	 */
+	public Optional<String> getNameOptional(
+		String className, EmptyFunction computeEmptyFunction) {
+
+		if (_names == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<Map<String, String>> optional = INSTANCE.getNamesOptional();
+
+		return optional.map(map -> map.get(className));
 	}
 
 	/**
@@ -117,173 +178,108 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the map containing the nested collection routes if they have been
-	 * set. Returns {@code Optional#empty()} otherwise.
+	 * Returns the nested collection routes for the nested collection resource's
+	 * name.
 	 *
-	 * @return the map containing the nested collection routes if they have been
-	 *         set; returns {@code Optional#empty()} otherwise
+	 * @param  name the parent resource's name
+	 * @param  nestedName the nested collection resource's name
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the nested collection routes
 	 * @review
 	 */
-	public Optional<Map<String, NestedCollectionRoutes>>
-		getNestedCollectionRoutesOptional() {
+	public <S, T> Optional<NestedCollectionRoutes<T, S>>
+		getNestedCollectionRoutesOptional(
+			String name, String nestedName,
+			EmptyFunction computeEmptyFunction) {
 
-		return Optional.ofNullable(_nestedCollectionRoutes);
+		if (_nestedCollectionRoutes == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<Map<String, NestedCollectionRoutes>> optional =
+			Optional.ofNullable(_nestedCollectionRoutes);
+
+		return optional.map(
+			map -> map.get(name + "-" + nestedName)
+		).map(
+			Unsafe::unsafeCast
+		);
 	}
 
 	/**
-	 * Returns the map containing the representors for the different resource
-	 * names if they have been set. Returns {@code Optional#empty()} otherwise.
+	 * Returns the representor of the collection resource's model class, if that
+	 * representor exists. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the map containing the representors for the different resource
-	 *         names if they have been set; returns {@code Optional#empty()}
-	 *         otherwise
-	 * @review
-	 */
-	public Optional<Map<String, Representor>> getRepresentorsOptional() {
-		return Optional.ofNullable(_representors);
-	}
-
-	/**
-	 * Returns the map containing the reusable nested collection routes if they
-	 * have been set. Returns {@code Optional#empty()} otherwise.
-	 *
-	 * @return the map containing the reusable nested collection routes if they
-	 *         have been set; returns {@code Optional#empty()} otherwise
-	 * @review
-	 */
-	public Optional<Map<String, NestedCollectionRoutes>>
-		getReusableNestedCollectionRoutesOptional() {
-
-		return Optional.ofNullable(_reusableNestedCollectionRoutes);
-	}
-
-	/**
-	 * Returns the list of root resource names if they have been set. Returns
-	 * {@code Optional#empty()} otherwise.
-	 *
-	 * @return the list of root resource names if they have been set; {@code
+	 * @param  name the representor's name
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the model class's representor, if present; {@code
 	 *         Optional#empty()} otherwise
-	 * @review
 	 */
-	public Optional<List<String>> getRootResourceNamesOptional() {
-		return Optional.ofNullable(_rootResourceNames);
+	public <U, T> Optional<Representor<T, U>> getRepresentorOptional(
+		String name, EmptyFunction computeEmptyFunction) {
+
+		if (_representors == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<Map<String, Representor>> optional = Optional.ofNullable(
+			_representors);
+
+		return optional.map(
+			map -> map.get(name)
+		).map(
+			Unsafe::unsafeCast
+		);
 	}
 
 	/**
-	 * Returns {@code true} if the collection routes have been set in the cache.
+	 * Returns the nested collection routes for the reusable nested collection
+	 * resource's name.
 	 *
-	 * @return {@code true} if the collection routes have been set
-	 * @review
+	 * @param  name the reusable nested collection resource's name
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the nested collection routes
 	 */
-	public boolean hasCollectionRoutes() {
-		if (_collectionRoutes != null) {
-			return true;
+	public <S, T> Optional<NestedCollectionRoutes<T, S>>
+		getReusableNestedCollectionRoutesOptional(
+			String name, EmptyFunction computeEmptyFunction) {
+
+		if (_reusableNestedCollectionRoutes == null) {
+			computeEmptyFunction.invoke();
 		}
 
-		return false;
+		Optional<Map<String, NestedCollectionRoutes>> optional =
+			Optional.ofNullable(_reusableNestedCollectionRoutes);
+
+		return optional.map(
+			map -> map.get(name)
+		).map(
+			Unsafe::unsafeCast
+		);
 	}
 
 	/**
-	 * Returns {@code true} if the identifier classes have been set in the
-	 * cache.
+	 * Returns a list containing the names of the root resources with routes.
 	 *
-	 * @return {@code true} if the identifier classes have been set
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return a list containing the names of the root resources with routes.
 	 * @review
 	 */
-	public boolean hasIdentifierClasses() {
-		if (_identifierClasses != null) {
-			return true;
+	public List<String> getRootResourceNames(
+		EmptyFunction computeEmptyFunction) {
+
+		if (_rootResourceNames == null) {
+			computeEmptyFunction.invoke();
 		}
 
-		return false;
-	}
+		Optional<List<String>> optional = Optional.ofNullable(
+			_rootResourceNames);
 
-	/**
-	 * Returns {@code true} if the item routes have been set in the cache.
-	 *
-	 * @return {@code true} if the item routes have been set
-	 * @review
-	 */
-	public boolean hasItemRoutes() {
-		if (_itemRoutes != null) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns {@code true} if the resource names have been set in the cache.
-	 *
-	 * @return {@code true} if the resource names have been set
-	 * @review
-	 */
-	public boolean hasNames() {
-		if (_names != null) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns {@code true} if the nested collection routes have been set in the
-	 * cache.
-	 *
-	 * @return {@code true} if the nested collection routes have been set
-	 * @review
-	 */
-	public boolean hasNestedCollectionRoutes() {
-		if (_nestedCollectionRoutes != null) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns {@code true} if the representors have been set in the cache.
-	 *
-	 * @return {@code true} if the representors have been set
-	 * @review
-	 */
-	public boolean hasRepresentors() {
-		if (_representors != null) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns {@code true} if the reusable nested collection routes have been
-	 * set in the cache.
-	 *
-	 * @return {@code true} if the reusable nested collection routes have been
-	 *         set
-	 * @review
-	 */
-	public boolean hasReusableNestedCollectionRoutes() {
-		if (_reusableNestedCollectionRoutes != null) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns {@code true} if the root resource names have been set in the
-	 * cache.
-	 *
-	 * @return {@code true} if the root resource names have been set
-	 * @review
-	 */
-	public boolean hasRootResourceNames() {
-		if (_rootResourceNames != null) {
-			return true;
-		}
-
-		return false;
+		return optional.orElseGet(Collections::emptyList);
 	}
 
 	/**
@@ -407,7 +403,7 @@ public class ManagerCache {
 	 * @param  rootResourceName the root resource name
 	 * @review
 	 */
-	public void putRootResourceNames(String rootResourceName) {
+	public void putRootResourceName(String rootResourceName) {
 		if (_rootResourceNames == null) {
 			_rootResourceNames = new ArrayList<>();
 		}
