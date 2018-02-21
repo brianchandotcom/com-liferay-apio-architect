@@ -26,19 +26,19 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapListene
  * @author Alejandro Hernández
  * @review
  */
-public class ClearCacheServiceTrackerMapListener<T>
-	implements ServiceTrackerMapListener<String, T, T> {
+public class ClearCacheServiceTrackerMapListener<T, U>
+	implements ServiceTrackerMapListener<U, T, T> {
 
 	@Override
 	public void keyEmitted(
-		ServiceTrackerMap<String, T> serviceTrackerMap, String s, T t1, T t2) {
+		ServiceTrackerMap<U, T> serviceTrackerMap, U s, T t1, T t2) {
 
 		INSTANCE.clear();
 	}
 
 	@Override
 	public void keyRemoved(
-		ServiceTrackerMap<String, T> serviceTrackerMap, String s, T t1, T t2) {
+		ServiceTrackerMap<U, T> serviceTrackerMap, U s, T t1, T t2) {
 
 		INSTANCE.clear();
 	}

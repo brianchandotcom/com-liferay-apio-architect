@@ -15,9 +15,6 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.base;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.ManagerCache.INSTANCE;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
 import com.liferay.apio.architect.wiring.osgi.internal.service.tracker.map.listener.ClearCacheServiceTrackerMapListener;
 import com.liferay.osgi.service.tracker.collections.internal.DefaultServiceTrackerCustomizer;
@@ -26,7 +23,6 @@ import com.liferay.osgi.service.tracker.collections.internal.map.SingleValueServ
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -40,13 +36,10 @@ import org.osgi.service.component.annotations.Deactivate;
  *
  * @author Alejandro Hernández
  */
-public abstract class BaseManager<T> {
+public abstract class BaseManager<T, U> {
 
-	public BaseManager(
-		Class<T> managedClass, Integer principalTypeParamPosition) {
-
+	public BaseManager(Class<T> managedClass) {
 		_managedClass = managedClass;
-		_principalTypeParamPosition = principalTypeParamPosition;
 	}
 
 	@Activate
@@ -76,8 +69,8 @@ public abstract class BaseManager<T> {
 	 * @return the service tracker key stream
 	 * @review
 	 */
-	public Stream<String> getKeyStream() {
-		Set<String> keys = serviceTrackerMap.keySet();
+	public Stream<U> getKeyStream() {
+		Set<U> keys = serviceTrackerMap.keySet();
 
 		return keys.stream();
 	}
@@ -88,35 +81,12 @@ public abstract class BaseManager<T> {
 	 * @param serviceReference the service reference
 	 * @param emitter the emitter
 	 */
-	protected void emit(
-		ServiceReference<T> serviceReference, Emitter<String> emitter) {
-
-		T t = bundleContext.getService(serviceReference);
-
-		Class<?> genericClass = getGenericClassFromPropertyOrElse(
-			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT,
-			() -> getTypeParamOrFail(
-				t, _managedClass, _principalTypeParamPosition));
-
-		emitter.emit(genericClass.getName());
-	}
-
-	/**
-	 * Returns a service from the inner map based on the service's generic inner
-	 * class, if the service exists. Returns {@code Optional#empty()} otherwise.
-	 *
-	 * @param  clazz the generic inner class
-	 * @return the service, if present; {@code Optional#empty()} otherwise
-	 */
-	protected <U> Optional<T> getServiceOptional(Class<U> clazz) {
-		return Optional.ofNullable(
-			serviceTrackerMap.getService(clazz.getName()));
-	}
+	protected abstract void emit(
+		ServiceReference<T> serviceReference, Emitter<U> emitter);
 
 	protected BundleContext bundleContext;
-	protected ServiceTrackerMap<String, T> serviceTrackerMap;
+	protected ServiceTrackerMap<U, T> serviceTrackerMap;
 
 	private final Class<T> _managedClass;
-	private final Integer _principalTypeParamPosition;
 
 }

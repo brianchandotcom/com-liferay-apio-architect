@@ -18,7 +18,7 @@ import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.converter.ExceptionConverter;
 import com.liferay.apio.architect.error.APIError;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ExceptionConverterManager;
 
 import java.util.Optional;
@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(immediate = true)
 public class ExceptionConverterManagerImpl
-	extends BaseManager<ExceptionConverter>
+	extends ClassNameBaseManager<ExceptionConverter>
 	implements ExceptionConverterManager {
 
 	public ExceptionConverterManagerImpl() {

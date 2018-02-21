@@ -18,7 +18,7 @@ import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.provider.Provider;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class ProviderManagerImpl
-	extends BaseManager<Provider> implements ProviderManager {
+	extends ClassNameBaseManager<Provider> implements ProviderManager {
 
 	public ProviderManagerImpl() {
 		super(Provider.class, 0);
