@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * This class acts as a central cache for most of the managers.
+ * Acts as a central cache for most of the managers.
  *
  * <p>
  * There should only be one instance of this class, accessible through {@link
@@ -38,21 +38,16 @@ import java.util.Optional;
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public class ManagerCache {
 
 	/**
 	 * The {@link ManagerCache} instance.
-	 *
-	 * @review
 	 */
 	public static final ManagerCache INSTANCE = new ManagerCache();
 
 	/**
 	 * Clears the cache.
-	 *
-	 * @review
 	 */
 	public void clear() {
 		_collectionRoutes = null;
@@ -72,7 +67,6 @@ public class ManagerCache {
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
 	 * @return the collection routes
-	 * @review
 	 */
 	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
 		String name, EmptyFunction computeEmptyFunction) {
@@ -123,7 +117,6 @@ public class ManagerCache {
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
 	 * @return the item routes
-	 * @review
 	 */
 	public <T, S> Optional<ItemRoutes<T, S>> getItemRoutesOptional(
 		String name, EmptyFunction computeEmptyFunction) {
@@ -165,13 +158,12 @@ public class ManagerCache {
 
 	/**
 	 * Returns the map containing the names for the different resource
-	 * identifier classes if they have been set. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * identifier classes, if they've been set; returns {@code Optional#empty()}
+	 * otherwise.
 	 *
 	 * @return the map containing the names for the different resource
-	 *         identifier classes if they have been set; returns {@code
+	 *         identifier classes, if they've been set; returns {@code
 	 *         Optional#empty()} otherwise
-	 * @review
 	 */
 	public Optional<Map<String, String>> getNamesOptional() {
 		return Optional.ofNullable(_names);
@@ -186,7 +178,6 @@ public class ManagerCache {
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
 	 * @return the nested collection routes
-	 * @review
 	 */
 	public <S, T> Optional<NestedCollectionRoutes<T, S>>
 		getNestedCollectionRoutesOptional(
@@ -266,8 +257,7 @@ public class ManagerCache {
 	 *
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
-	 * @return a list containing the names of the root resources with routes.
-	 * @review
+	 * @return the list of root resources
 	 */
 	public List<String> getRootResourceNames(
 		EmptyFunction computeEmptyFunction) {
@@ -283,11 +273,10 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds a collection routes
+	 * Adds collection routes.
 	 *
-	 * @param  key the key
-	 * @param  collectionRoutes the collection routes
-	 * @review
+	 * @param key the key
+	 * @param collectionRoutes the collection routes
 	 */
 	public void putCollectionRoutes(
 		String key, CollectionRoutes collectionRoutes) {
@@ -300,11 +289,10 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds an identifier class
+	 * Adds an identifier class.
 	 *
-	 * @param  key the key
-	 * @param  identifierClass the identifier class
-	 * @review
+	 * @param key the key
+	 * @param identifierClass the identifier class
 	 */
 	public void putIdentifierClass(
 		String key, Class<Identifier> identifierClass) {
@@ -317,11 +305,10 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds an item routes
+	 * Adds item routes.
 	 *
-	 * @param  key the key
-	 * @param  itemRoutes the item routes
-	 * @review
+	 * @param key the key
+	 * @param itemRoutes the item routes
 	 */
 	public void putItemRoutes(String key, ItemRoutes itemRoutes) {
 		if (_itemRoutes == null) {
@@ -332,11 +319,10 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds a resource name
+	 * Adds a resource name.
 	 *
-	 * @param  key the key
-	 * @param  name the resource name
-	 * @review
+	 * @param key the key
+	 * @param name the resource name
 	 */
 	public void putName(String key, String name) {
 		if (_names == null) {
@@ -347,11 +333,10 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds a nested collection routes
+	 * Adds nested collection routes.
 	 *
-	 * @param  key the key
-	 * @param  nestedCollectionRoutes the nested collection routes
-	 * @review
+	 * @param key the key
+	 * @param nestedCollectionRoutes the nested collection routes
 	 */
 	public void putNestedCollectionRoutes(
 		String key, NestedCollectionRoutes nestedCollectionRoutes) {
@@ -364,11 +349,10 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds a representors
+	 * Adds a representor.
 	 *
-	 * @param  key the key
-	 * @param  representor the representor
-	 * @review
+	 * @param key the key
+	 * @param representor the representor
 	 */
 	public void putRepresentor(String key, Representor representor) {
 		if (_representors == null) {
@@ -379,12 +363,11 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds a reusable nested collection routes
+	 * Adds reusable nested collection routes.
 	 *
-	 * @param  key the key
-	 * @param  reusableNestedCollectionRoutes the reusable nested collection
-	 *         routes
-	 * @review
+	 * @param key the key
+	 * @param reusableNestedCollectionRoutes the reusable nested collection
+	 *        routes
 	 */
 	public void putReusableNestedCollectionRoutes(
 		String key, NestedCollectionRoutes reusableNestedCollectionRoutes) {
@@ -398,10 +381,9 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds a root resource name
+	 * Adds a root resource name.
 	 *
-	 * @param  rootResourceName the root resource name
-	 * @review
+	 * @param rootResourceName the root resource name
 	 */
 	public void putRootResourceName(String rootResourceName) {
 		if (_rootResourceNames == null) {

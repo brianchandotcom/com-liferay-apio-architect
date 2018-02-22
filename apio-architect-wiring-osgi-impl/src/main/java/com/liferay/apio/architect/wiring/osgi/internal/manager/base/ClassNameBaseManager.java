@@ -25,11 +25,10 @@ import java.util.Optional;
 import org.osgi.framework.ServiceReference;
 
 /**
- * Manages services that have a generic type using the class name of the generic
- * type as key.
+ * Manages services that have a generic type using the generic type's class name
+ * as key.
  *
  * @author Alejandro Hernández
- * @review
  */
 public abstract class ClassNameBaseManager<T> extends BaseManager<T, String> {
 
