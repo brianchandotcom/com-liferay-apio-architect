@@ -68,7 +68,8 @@ public class ReusableNestedCollectionRouterManagerImpl
 
 				if (!nameOptional.isPresent()) {
 					_apioLogger.warning(
-						"Unable to find a name for class name " + className);
+						"Unable to find a Representable for class name " +
+							className);
 
 					return;
 				}
