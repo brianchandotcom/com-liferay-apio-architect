@@ -20,7 +20,6 @@ import com.liferay.apio.architect.identifier.Identifier;
  * Represent the identifier for a {@code BlogPostingComment} resource.
  *
  * @author Alejandro Hernández
- * @review
  */
 public interface BlogPostingCommentId extends Identifier<Long> {
 }

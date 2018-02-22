@@ -40,14 +40,11 @@ import java.util.stream.Stream;
  * an in-memory database with fake data.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class PersonModel {
 
 	/**
-	 * Compute the fake data for this model class.
-	 *
-	 * @review
+	 * Computes the fake data for this model class.
 	 */
 	public static void compute() {
 		if (!_personModels.isEmpty()) {
@@ -91,7 +88,6 @@ public class PersonModel {
 	 * @param  jobTitle the person's job title
 	 * @param  lastName the person's last name
 	 * @return the new person
-	 * @review
 	 */
 	public static PersonModel create(
 		String address, String avatar, Date birthDate, String email,
@@ -107,12 +103,11 @@ public class PersonModel {
 	}
 
 	/**
-	 * Returns the person that matches the specified ID, if that person exists.
-	 * Returns {@code Optional#empty()} otherwise.
+	 * Returns the person that matches the specified ID, if that person exists;
+	 * returns {@code Optional#empty()} otherwise.
 	 *
 	 * @param  id the person's ID
 	 * @return the person, if present; {@code Optional#empty()} otherwise
-	 * @review
 	 */
 	public static Optional<PersonModel> get(long id) {
 		PersonModel personModel = _personModels.get(id);
@@ -124,20 +119,18 @@ public class PersonModel {
 	 * Returns the total number of persons.
 	 *
 	 * @return the total number of persons
-	 * @review
 	 */
 	public static int getCount() {
 		return _personModels.size();
 	}
 
 	/**
-	 * Returns the page of persons, as specified by the page's start and end
+	 * Returns a page of persons, as specified by the page's start and end
 	 * positions.
 	 *
 	 * @param  start the page's start position
 	 * @param  end the page's end position
 	 * @return the page of persons
-	 * @review
 	 */
 	public static List<PersonModel> getPage(int start, int end) {
 		Collection<PersonModel> personModels = _personModels.values();
@@ -156,16 +149,15 @@ public class PersonModel {
 	/**
 	 * Deletes a person that matches the specified ID.
 	 *
-	 * @param  id the person's ID
-	 * @review
+	 * @param id the person's ID
 	 */
 	public static void remove(long id) {
 		_personModels.remove(id);
 	}
 
 	/**
-	 * Updates the person that matches the specified ID, if that person exists.
-	 * Returns {@code Optional#empty()} otherwise.
+	 * Updates the person that matches the specified ID, if that person exists;
+	 * returns {@code Optional#empty()} otherwise.
 	 *
 	 * @param  address the person's address
 	 * @param  avatar the person's avatar
@@ -177,7 +169,6 @@ public class PersonModel {
 	 * @param  id the person's ID
 	 * @return the updated person, if present; {@code Optional#empty()}
 	 *         otherwise
-	 * @review
 	 */
 	public static Optional<PersonModel> update(
 		String address, String avatar, Date birthDate, String email,
@@ -202,7 +193,6 @@ public class PersonModel {
 	 * Returns the person's address.
 	 *
 	 * @return the person's address
-	 * @review
 	 */
 	public String getAddress() {
 		return _address;
@@ -212,7 +202,6 @@ public class PersonModel {
 	 * Returns the person's avatar.
 	 *
 	 * @return the person's avatar
-	 * @review
 	 */
 	public String getAvatar() {
 		return _avatar;
@@ -222,7 +211,6 @@ public class PersonModel {
 	 * Returns the person's birth date.
 	 *
 	 * @return the person's birth date
-	 * @review
 	 */
 	public Date getBirthDate() {
 		return new Date(_birthDate.getTime());
@@ -232,7 +220,6 @@ public class PersonModel {
 	 * Returns the person's email.
 	 *
 	 * @return the person's email
-	 * @review
 	 */
 	public String getEmail() {
 		return _email;
@@ -242,7 +229,6 @@ public class PersonModel {
 	 * Returns the person's first name.
 	 *
 	 * @return the person's first name
-	 * @review
 	 */
 	public String getFirstName() {
 		return _firstName;
@@ -252,7 +238,6 @@ public class PersonModel {
 	 * Returns the person's full name.
 	 *
 	 * @return the person's full name
-	 * @review
 	 */
 	public String getFullName() {
 		return _firstName + " " + _lastName;
@@ -262,7 +247,6 @@ public class PersonModel {
 	 * Returns the person's ID.
 	 *
 	 * @return the person's ID
-	 * @review
 	 */
 	public long getId() {
 		return _id;
@@ -272,7 +256,6 @@ public class PersonModel {
 	 * Returns the person's job title.
 	 *
 	 * @return the person's job title
-	 * @review
 	 */
 	public String getJobTitle() {
 		return _jobTitle;
@@ -282,7 +265,6 @@ public class PersonModel {
 	 * Returns the person's last name.
 	 *
 	 * @return the person's last name
-	 * @review
 	 */
 	public String getLastName() {
 		return _lastName;

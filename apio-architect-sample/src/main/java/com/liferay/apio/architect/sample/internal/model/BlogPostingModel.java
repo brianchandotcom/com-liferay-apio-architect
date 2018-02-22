@@ -38,14 +38,11 @@ import java.util.stream.Stream;
  * in an in-memory database with fake data.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class BlogPostingModel {
 
 	/**
-	 * Compute the fake data for this model class.
-	 *
-	 * @review
+	 * Computes the fake data for this model class.
 	 */
 	public static void compute() {
 		if (!_blogPostings.isEmpty()) {
@@ -93,7 +90,6 @@ public class BlogPostingModel {
 	 * @param  subtitle the blog posting's subtitle
 	 * @param  title the blog posting's title
 	 * @return the new blog posting
-	 * @review
 	 */
 	public static BlogPostingModel create(
 		String content, long creatorId, String subtitle, String title) {
@@ -109,11 +105,10 @@ public class BlogPostingModel {
 
 	/**
 	 * Returns the blog posting that matches the specified ID, if that blog
-	 * posting exists. Returns {@code Optional#empty()} otherwise.
+	 * posting exists; returns {@code Optional#empty()} otherwise.
 	 *
 	 * @param  id the blog posting's ID
 	 * @return the blog posting, if present; {@code Optional#empty()} otherwise
-	 * @review
 	 */
 	public static Optional<BlogPostingModel> get(long id) {
 		BlogPostingModel blogPostingModel = _blogPostings.get(id);
@@ -125,7 +120,6 @@ public class BlogPostingModel {
 	 * Returns the total number of blog postings.
 	 *
 	 * @return the total number of blog postings
-	 * @review
 	 */
 	public static int getCount() {
 		return _blogPostings.size();
@@ -138,7 +132,6 @@ public class BlogPostingModel {
 	 * @param  start the page's start position
 	 * @param  end the page's end position
 	 * @return the page of blog postings
-	 * @review
 	 */
 	public static List<BlogPostingModel> getPage(int start, int end) {
 		Collection<BlogPostingModel> blogPostingModels = _blogPostings.values();
@@ -157,8 +150,7 @@ public class BlogPostingModel {
 	/**
 	 * Deletes the blog posting that matches the specified ID.
 	 *
-	 * @param  id the blog posting's ID
-	 * @review
+	 * @param id the blog posting's ID
 	 */
 	public static void remove(long id) {
 		_blogPostings.remove(id);
@@ -166,7 +158,7 @@ public class BlogPostingModel {
 
 	/**
 	 * Updates the blog posting that matches the specified ID, if that blog
-	 * posting exists. Returns {@code Optional#empty()} otherwise.
+	 * posting exists; returns {@code Optional#empty()} otherwise.
 	 *
 	 * @param  id the blog posting's ID
 	 * @param  content the blog posting's new content
@@ -175,7 +167,6 @@ public class BlogPostingModel {
 	 * @param  title the blog posting's new title
 	 * @return the updated blog posting, if present; {@code Optional#empty()}
 	 *         otherwise
-	 * @review
 	 */
 	public static Optional<BlogPostingModel> update(
 		long id, String content, long creatorId, String subtitle,
@@ -201,7 +192,6 @@ public class BlogPostingModel {
 	 * Returns the current blog posting's content.
 	 *
 	 * @return the current blog posting's content
-	 * @review
 	 */
 	public String getContent() {
 		return _content;
@@ -211,7 +201,6 @@ public class BlogPostingModel {
 	 * Returns the date that the current blog posting was created.
 	 *
 	 * @return the current blog posting's creation date
-	 * @review
 	 */
 	public Date getCreateDate() {
 		return new Date(_createDate.getTime());
@@ -221,7 +210,6 @@ public class BlogPostingModel {
 	 * Returns the ID of the current blog posting's creator.
 	 *
 	 * @return the ID of the current blog posting's creator
-	 * @review
 	 */
 	public long getCreatorId() {
 		return _creatorId;
@@ -231,7 +219,6 @@ public class BlogPostingModel {
 	 * Returns the current blog posting's ID.
 	 *
 	 * @return the current blog posting's ID
-	 * @review
 	 */
 	public long getId() {
 		return _id;
@@ -241,7 +228,6 @@ public class BlogPostingModel {
 	 * Returns the date that the current blog posting was modified.
 	 *
 	 * @return the current blog posting's modification date
-	 * @review
 	 */
 	public Date getModifiedDate() {
 		return new Date(_modifiedDate.getTime());
@@ -251,7 +237,6 @@ public class BlogPostingModel {
 	 * Returns the current blog posting's subtitle.
 	 *
 	 * @return the current blog posting's subtitle
-	 * @review
 	 */
 	public String getSubtitle() {
 		return _subtitle;
@@ -261,7 +246,6 @@ public class BlogPostingModel {
 	 * Returns the current blog posting's title.
 	 *
 	 * @return the current blog posting's title
-	 * @review
 	 */
 	public String getTitle() {
 		return _title;

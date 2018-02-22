@@ -39,14 +39,11 @@ import java.util.stream.Stream;
  * and deleting blog post comments in an in-memory database with fake data.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class BlogPostingCommentModel {
 
 	/**
-	 * Compute the fake data for this model class.
-	 *
-	 * @review
+	 * Computes the fake data for this model class.
 	 */
 	public static void compute() {
 		if (!_blogPostingCommentModels.isEmpty()) {
@@ -87,9 +84,8 @@ public class BlogPostingCommentModel {
 	 *
 	 * @param  authorId the ID of the blog posting comment's author
 	 * @param  blogPostingModelId the blog posting comment's ID
-	 * @param  content the the blog posting comment's content
+	 * @param  content the blog posting comment's content
 	 * @return the new blog posting comment
-	 * @review
 	 */
 	public static BlogPostingCommentModel create(
 		long authorId, long blogPostingModelId, String content) {
@@ -111,12 +107,11 @@ public class BlogPostingCommentModel {
 
 	/**
 	 * Returns the blog posting comment that matches the specified ID, if that
-	 * comment exists. Returns {@code Optional#empty()} otherwise.
+	 * comment exists; returns {@code Optional#empty()} otherwise.
 	 *
 	 * @param  id the blog posting comment's ID
 	 * @return the blog posting comment, if present; {@code Optional#empty()}
 	 *         otherwise
-	 * @review
 	 */
 	public static Optional<BlogPostingCommentModel> get(long id) {
 		Collection<Map<Long, BlogPostingCommentModel>>
@@ -137,11 +132,10 @@ public class BlogPostingCommentModel {
 	}
 
 	/**
-	 * Returns the total number of blog posting comments for a blog posting.
+	 * Returns the total number of comments for a blog posting.
 	 *
 	 * @param  blogPostingModelId the blog posting's ID
-	 * @return the total number of blog posting comments for a blog posting
-	 * @review
+	 * @return the total number of comments
 	 */
 	public static int getCount(long blogPostingModelId) {
 		Optional<Long> optional = Optional.of(blogPostingModelId);
@@ -156,14 +150,13 @@ public class BlogPostingCommentModel {
 	}
 
 	/**
-	 * Returns the page of blog posting comments for a blog posting, as
-	 * specified by the page's start and end positions.
+	 * Returns the page of comments for a blog posting, as specified by the
+	 * page's start and end positions.
 	 *
 	 * @param  blogPostingModelId the blog posting's ID
 	 * @param  start the page's start position
 	 * @param  end the page's end position
 	 * @return the page of blog posting comments
-	 * @review
 	 */
 	public static List<BlogPostingCommentModel> getPage(
 		long blogPostingModelId, int start, int end) {
@@ -190,8 +183,7 @@ public class BlogPostingCommentModel {
 	/**
 	 * Deletes the blog posting comment that matches the specified ID.
 	 *
-	 * @param  id the blog posting comment's ID
-	 * @review
+	 * @param id the blog posting comment's ID
 	 */
 	public static void remove(long id) {
 		_blogPostingCommentModels.remove(id);
@@ -199,13 +191,12 @@ public class BlogPostingCommentModel {
 
 	/**
 	 * Updates the blog posting comment that matches the specified ID, if that
-	 * blog posting comment exists. Returns {@code Optional#empty()} otherwise.
+	 * blog posting comment exists; returns {@code Optional#empty()} otherwise.
 	 *
 	 * @param  id the blog posting comment's ID
 	 * @param  content the blog posting comment's new content
 	 * @return the updated blog posting comment, if present; {@code
 	 *         Optional#empty()} otherwise
-	 * @review
 	 */
 	public static Optional<BlogPostingCommentModel> update(
 		long id, String content) {
@@ -237,17 +228,15 @@ public class BlogPostingCommentModel {
 	 * Returns the ID of the current blog posting comment's author.
 	 *
 	 * @return the ID of the current blog posting comment's author
-	 * @review
 	 */
 	public long getAuthorId() {
 		return _authorId;
 	}
 
 	/**
-	 * Returns the ID of the current blog posting comment's blog posting.
+	 * Returns the ID of the current comment's blog posting.
 	 *
-	 * @return the ID of the current blog posting comment's blog posting
-	 * @review
+	 * @return the blog posting ID
 	 */
 	public long getBlogPostingModelId() {
 		return _blogPostingModelId;
@@ -257,7 +246,6 @@ public class BlogPostingCommentModel {
 	 * Returns the current blog posting comment's content.
 	 *
 	 * @return the current blog posting comment's content
-	 * @review
 	 */
 	public String getContent() {
 		return _content;
@@ -267,7 +255,6 @@ public class BlogPostingCommentModel {
 	 * Returns the current blog posting comment's creation date.
 	 *
 	 * @return the current blog posting comment's creation date
-	 * @review
 	 */
 	public Date getCreateDate() {
 		return new Date(_createDate.getTime());
@@ -277,7 +264,6 @@ public class BlogPostingCommentModel {
 	 * Returns the current blog posting comment's ID.
 	 *
 	 * @return the current blog posting comment's ID
-	 * @review
 	 */
 	public long getId() {
 		return _id;
@@ -287,7 +273,6 @@ public class BlogPostingCommentModel {
 	 * Returns the current blog posting comment's modification date.
 	 *
 	 * @return the current blog posting comment's modification date
-	 * @review
 	 */
 	public Date getModifiedDate() {
 		return new Date(_modifiedDate.getTime());
