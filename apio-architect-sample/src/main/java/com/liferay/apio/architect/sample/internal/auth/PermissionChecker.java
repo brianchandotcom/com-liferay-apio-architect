@@ -30,7 +30,7 @@ public class PermissionChecker {
 
 	/**
 	 * Checks if the "Authorization" HTTP header matches the system environment
-	 * variable {@code APIO_AUTH}.
+	 * variable {@code LIFERAY_APIO_AUTH}.
 	 *
 	 * @return {@code true} if both the HTTP header and the env. var. are equal;
 	 *         {@code false} otherwise
