@@ -117,15 +117,15 @@ public class RepresentableManagerImpl
 					Map::entrySet
 				).map(
 					Collection::stream
-				).flatMap(
-					stream -> stream.filter(
-						entry -> Objects.equals(entry.getValue(), name)
-					).map(
-						Entry::getKey
-					).findFirst()
-				);
+				).orElseGet(
+					Stream::empty
+				).filter(
+					entry -> Objects.equals(entry.getValue(), name)
+				).map(
+					Entry::getKey
+				).findFirst();
 
-				if (optional.isPresent()) {
+				if (classNameOptional.isPresent()) {
 					_apioLogger.warning(
 						_getDuplicateErrorMessage(
 							clazz, name, classNameOptional.get()));
