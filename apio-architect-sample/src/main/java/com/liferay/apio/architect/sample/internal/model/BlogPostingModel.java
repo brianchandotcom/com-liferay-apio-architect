@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.sample.internal.model;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+
 import com.github.javafaker.Book;
 import com.github.javafaker.DateAndTime;
 import com.github.javafaker.Faker;
@@ -26,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,43 +38,21 @@ import java.util.stream.Stream;
  * in an in-memory database with fake data.
  *
  * @author Alejandro Hernández
+ * @review
  */
 public class BlogPostingModel {
-
-	/**
-	 * Adds a new blog posting to the database.
-	 *
-	 * @param  content the blog posting's content
-	 * @param  creatorId the ID of the blog posting's creator
-	 * @param  subtitle the blog posting's subtitle
-	 * @param  title the blog posting's title
-	 * @return the new blog posting
-	 */
-	public static BlogPostingModel addBlogPosting(
-		String content, long creatorId, String subtitle, String title) {
-
-		long blogPostingId = _count.incrementAndGet();
-
-		BlogPostingModel blogPostingModel = new BlogPostingModel(
-			blogPostingId, content, new Date(), creatorId, new Date(), subtitle,
-			title);
-
-		_blogPostings.put(blogPostingId, blogPostingModel);
-
-		return blogPostingModel;
-	}
 
 	/**
 	 * Compute the fake data for this model class.
 	 *
 	 * @review
 	 */
-	public static void computeBlogPostingModels() {
+	public static void compute() {
 		if (!_blogPostings.isEmpty()) {
 			return;
 		}
 
-		for (long blogPostingId = 0; blogPostingId < 42; blogPostingId++) {
+		for (long id = 0; id < 42; id++) {
 			Faker faker = new Faker();
 
 			Book book = faker.book();
@@ -92,40 +71,53 @@ public class BlogPostingModel {
 
 			RandomService randomService = faker.random();
 
-			int creatorId = randomService.nextInt(PersonModel.getPeopleCount());
+			int creatorId = randomService.nextInt(PersonModel.getCount());
 
 			DateAndTime dateAndTime = faker.date();
 
-			Date date = dateAndTime.past(400, TimeUnit.DAYS);
+			Date date = dateAndTime.past(400, DAYS);
 
 			BlogPostingModel blogPostingModel = new BlogPostingModel(
-				blogPostingId, content, date, creatorId, date, lorem.sentence(),
+				id, content, date, creatorId, date, lorem.sentence(),
 				book.title());
 
-			_blogPostings.put(blogPostingId, blogPostingModel);
+			_blogPostings.put(id, blogPostingModel);
 		}
 	}
 
 	/**
-	 * Deletes the blog posting that matches the specified ID.
+	 * Adds a new blog posting to the database.
 	 *
-	 * @param blogPostingId the blog posting's ID
+	 * @param  content the blog posting's content
+	 * @param  creatorId the ID of the blog posting's creator
+	 * @param  subtitle the blog posting's subtitle
+	 * @param  title the blog posting's title
+	 * @return the new blog posting
+	 * @review
 	 */
-	public static void deleteBlogPosting(long blogPostingId) {
-		_blogPostings.remove(blogPostingId);
+	public static BlogPostingModel create(
+		String content, long creatorId, String subtitle, String title) {
+
+		long id = _count.incrementAndGet();
+
+		BlogPostingModel blogPostingModel = new BlogPostingModel(
+			id, content, new Date(), creatorId, new Date(), subtitle, title);
+
+		_blogPostings.put(id, blogPostingModel);
+
+		return blogPostingModel;
 	}
 
 	/**
 	 * Returns the blog posting that matches the specified ID, if that blog
 	 * posting exists. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @param  blogPostingId the blog posting's ID
+	 * @param  id the blog posting's ID
 	 * @return the blog posting, if present; {@code Optional#empty()} otherwise
+	 * @review
 	 */
-	public static Optional<BlogPostingModel> getBlogPosting(
-		long blogPostingId) {
-
-		BlogPostingModel blogPostingModel = _blogPostings.get(blogPostingId);
+	public static Optional<BlogPostingModel> get(long id) {
+		BlogPostingModel blogPostingModel = _blogPostings.get(id);
 
 		return Optional.ofNullable(blogPostingModel);
 	}
@@ -134,8 +126,9 @@ public class BlogPostingModel {
 	 * Returns the total number of blog postings.
 	 *
 	 * @return the total number of blog postings
+	 * @review
 	 */
-	public static int getBlogPostingCount() {
+	public static int getCount() {
 		return _blogPostings.size();
 	}
 
@@ -146,8 +139,9 @@ public class BlogPostingModel {
 	 * @param  start the page's start position
 	 * @param  end the page's end position
 	 * @return the page of blog postings
+	 * @review
 	 */
-	public static List<BlogPostingModel> getBlogPostings(int start, int end) {
+	public static List<BlogPostingModel> getPage(int start, int end) {
 		Collection<BlogPostingModel> blogPostingModels = _blogPostings.values();
 
 		Stream<BlogPostingModel> stream = blogPostingModels.stream();
@@ -162,22 +156,33 @@ public class BlogPostingModel {
 	}
 
 	/**
+	 * Deletes the blog posting that matches the specified ID.
+	 *
+	 * @param  id the blog posting's ID
+	 * @review
+	 */
+	public static void remove(long id) {
+		_blogPostings.remove(id);
+	}
+
+	/**
 	 * Updates the blog posting that matches the specified ID, if that blog
 	 * posting exists. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @param  blogPostingId the blog posting's ID
+	 * @param  id the blog posting's ID
 	 * @param  content the blog posting's new content
 	 * @param  creatorId the ID of the user updating the blog posting
 	 * @param  subtitle the blog posting's new subtitle
 	 * @param  title the blog posting's new title
 	 * @return the updated blog posting, if present; {@code Optional#empty()}
 	 *         otherwise
+	 * @review
 	 */
-	public static Optional<BlogPostingModel> updateBlogPosting(
-		long blogPostingId, String content, long creatorId, String subtitle,
+	public static Optional<BlogPostingModel> update(
+		long id, String content, long creatorId, String subtitle,
 		String title) {
 
-		BlogPostingModel blogPostingModel = _blogPostings.get(blogPostingId);
+		BlogPostingModel blogPostingModel = _blogPostings.get(id);
 
 		if (blogPostingModel == null) {
 			return Optional.empty();
@@ -186,27 +191,18 @@ public class BlogPostingModel {
 		Date createDate = blogPostingModel.getCreateDate();
 
 		blogPostingModel = new BlogPostingModel(
-			blogPostingId, content, createDate, creatorId, new Date(), subtitle,
-			title);
+			id, content, createDate, creatorId, new Date(), subtitle, title);
 
-		_blogPostings.put(blogPostingId, blogPostingModel);
+		_blogPostings.put(id, blogPostingModel);
 
 		return Optional.of(blogPostingModel);
-	}
-
-	/**
-	 * Returns the current blog posting's ID.
-	 *
-	 * @return the current blog posting's ID
-	 */
-	public long getBlogPostingId() {
-		return _blogPostingId;
 	}
 
 	/**
 	 * Returns the current blog posting's content.
 	 *
 	 * @return the current blog posting's content
+	 * @review
 	 */
 	public String getContent() {
 		return _content;
@@ -216,6 +212,7 @@ public class BlogPostingModel {
 	 * Returns the date that the current blog posting was created.
 	 *
 	 * @return the current blog posting's creation date
+	 * @review
 	 */
 	public Date getCreateDate() {
 		return new Date(_createDate.getTime());
@@ -225,15 +222,27 @@ public class BlogPostingModel {
 	 * Returns the ID of the current blog posting's creator.
 	 *
 	 * @return the ID of the current blog posting's creator
+	 * @review
 	 */
 	public long getCreatorId() {
 		return _creatorId;
 	}
 
 	/**
+	 * Returns the current blog posting's ID.
+	 *
+	 * @return the current blog posting's ID
+	 * @review
+	 */
+	public long getId() {
+		return _id;
+	}
+
+	/**
 	 * Returns the date that the current blog posting was modified.
 	 *
 	 * @return the current blog posting's modification date
+	 * @review
 	 */
 	public Date getModifiedDate() {
 		return new Date(_modifiedDate.getTime());
@@ -243,6 +252,7 @@ public class BlogPostingModel {
 	 * Returns the current blog posting's subtitle.
 	 *
 	 * @return the current blog posting's subtitle
+	 * @review
 	 */
 	public String getSubtitle() {
 		return _subtitle;
@@ -252,16 +262,17 @@ public class BlogPostingModel {
 	 * Returns the current blog posting's title.
 	 *
 	 * @return the current blog posting's title
+	 * @review
 	 */
 	public String getTitle() {
 		return _title;
 	}
 
 	private BlogPostingModel(
-		long blogPostingId, String content, Date createDate, long creatorId,
+		long id, String content, Date createDate, long creatorId,
 		Date modifiedDate, String subtitle, String title) {
 
-		_blogPostingId = blogPostingId;
+		_id = id;
 		_content = content;
 		_createDate = createDate;
 		_creatorId = creatorId;
@@ -274,10 +285,10 @@ public class BlogPostingModel {
 		new ConcurrentHashMap<>();
 	private static final AtomicLong _count = new AtomicLong(29);
 
-	private final long _blogPostingId;
 	private final String _content;
 	private final Date _createDate;
 	private final long _creatorId;
+	private final long _id;
 	private final Date _modifiedDate;
 	private final String _subtitle;
 	private final String _title;
