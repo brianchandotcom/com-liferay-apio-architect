@@ -17,10 +17,10 @@ package com.liferay.apio.architect.sample.internal.identifier;
 import com.liferay.apio.architect.identifier.Identifier;
 
 /**
- * Holds information about a {@code BlogPosting} identifier.
+ * Represent the identifier for a {@code BlogPostingComment} resource.
  *
  * @author Alejandro Hernández
  * @review
  */
-public interface BlogPostingModelId extends Identifier<Long> {
+public interface BlogPostingCommentId extends Identifier<Long> {
 }

@@ -25,9 +25,9 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentUpdaterForm;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentModelId;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingModelId;
-import com.liferay.apio.architect.sample.internal.identifier.PersonModelId;
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentId;
+import com.liferay.apio.architect.sample.internal.identifier.BlogPostingId;
+import com.liferay.apio.architect.sample.internal.identifier.PersonId;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingCommentModel;
 
 import java.util.List;
@@ -48,8 +48,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true)
 public class BlogPostingCommentNestedCollectionResource implements
 	NestedCollectionResource
-		<BlogPostingCommentModel, Long, BlogPostingCommentModelId, Long,
-			BlogPostingModelId> {
+		<BlogPostingCommentModel, Long, BlogPostingCommentId, Long,
+			BlogPostingId> {
 
 	@Override
 	public NestedCollectionRoutes<BlogPostingCommentModel, Long>
@@ -100,7 +100,7 @@ public class BlogPostingCommentNestedCollectionResource implements
 		).addDate(
 			"dateModified", BlogPostingCommentModel::getModifiedDate
 		).addLinkedModel(
-			"author", PersonModelId.class, BlogPostingCommentModel::getAuthorId
+			"author", PersonId.class, BlogPostingCommentModel::getAuthorId
 		).addString(
 			"text", BlogPostingCommentModel::getContent
 		).build();
