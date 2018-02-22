@@ -62,7 +62,9 @@ public class ApioApplicationRegistrar {
 			Application.class, application, properties);
 
 		PersonModel.computePersonModels();
+
 		BlogPostingModel.computeBlogPostingModels();
+
 		BlogPostingCommentModel.computeBlogPostingCommentModels();
 	}
 
