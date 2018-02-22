@@ -72,6 +72,10 @@ public class BlogPostingCommentModel {
 	 * @review
 	 */
 	public static void computeBlogPostingCommentModels() {
+		if (!_blogPostingComments.isEmpty()) {
+			return;
+		}
+
 		for (long blogPostingId = 0;
 			 blogPostingId < BlogPostingModel.getBlogPostingCount();
 			 blogPostingId++) {

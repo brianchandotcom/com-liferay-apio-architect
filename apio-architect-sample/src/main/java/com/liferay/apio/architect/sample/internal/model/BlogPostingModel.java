@@ -69,6 +69,10 @@ public class BlogPostingModel {
 	 * @review
 	 */
 	public static void computeBlogPostingModels() {
+		if (!_blogPostings.isEmpty()) {
+			return;
+		}
+
 		for (long blogPostingId = 0; blogPostingId < 42; blogPostingId++) {
 			Faker faker = new Faker();
 

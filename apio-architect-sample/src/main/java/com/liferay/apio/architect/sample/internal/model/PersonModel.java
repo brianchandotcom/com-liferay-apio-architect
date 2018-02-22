@@ -74,6 +74,10 @@ public class PersonModel {
 	 * @review
 	 */
 	public static void computePersonModels() {
+		if (!_persons.isEmpty()) {
+			return;
+		}
+
 		for (long personId = 0; personId < 10; personId++) {
 			Faker faker = new Faker();
 
