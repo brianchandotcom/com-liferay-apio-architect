@@ -52,7 +52,7 @@ public class BlogPostingModel {
 			return;
 		}
 
-		for (long id = 0; id < 42; id++) {
+		for (long index = 0; index < 42; index++) {
 			Faker faker = new Faker();
 
 			Book book = faker.book();
@@ -78,10 +78,10 @@ public class BlogPostingModel {
 			Date date = dateAndTime.past(400, DAYS);
 
 			BlogPostingModel blogPostingModel = new BlogPostingModel(
-				id, content, date, creatorId, date, lorem.sentence(),
+				_count.get(), content, date, creatorId, date, lorem.sentence(),
 				book.title());
 
-			_blogPostings.put(id, blogPostingModel);
+			_blogPostings.put(_count.getAndIncrement(), blogPostingModel);
 		}
 	}
 
@@ -98,12 +98,11 @@ public class BlogPostingModel {
 	public static BlogPostingModel create(
 		String content, long creatorId, String subtitle, String title) {
 
-		long id = _count.incrementAndGet();
-
 		BlogPostingModel blogPostingModel = new BlogPostingModel(
-			id, content, new Date(), creatorId, new Date(), subtitle, title);
+			_count.get(), content, new Date(), creatorId, new Date(), subtitle,
+			title);
 
-		_blogPostings.put(id, blogPostingModel);
+		_blogPostings.put(_count.getAndIncrement(), blogPostingModel);
 
 		return blogPostingModel;
 	}
@@ -283,7 +282,7 @@ public class BlogPostingModel {
 
 	private static final Map<Long, BlogPostingModel> _blogPostings =
 		new ConcurrentHashMap<>();
-	private static final AtomicLong _count = new AtomicLong(29);
+	private static final AtomicLong _count = new AtomicLong(0);
 
 	private final String _content;
 	private final Date _createDate;

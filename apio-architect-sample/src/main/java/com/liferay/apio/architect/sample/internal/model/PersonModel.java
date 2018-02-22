@@ -54,7 +54,7 @@ public class PersonModel {
 			return;
 		}
 
-		for (long id = 0; id < 10; id++) {
+		for (long index = 0; index < 10; index++) {
 			Faker faker = new Faker();
 
 			Address address = faker.address();
@@ -74,9 +74,9 @@ public class PersonModel {
 			PersonModel personModel = new PersonModel(
 				address.fullAddress(), internet.avatar(), birthDate,
 				internet.safeEmailAddress(), name.firstName(), name.title(),
-				name.lastName(), id);
+				name.lastName(), _count.get());
 
-			_personModels.put(id, personModel);
+			_personModels.put(_count.getAndIncrement(), personModel);
 		}
 	}
 
@@ -97,13 +97,11 @@ public class PersonModel {
 		String address, String avatar, Date birthDate, String email,
 		String firstName, String jobTitle, String lastName) {
 
-		long id = _count.incrementAndGet();
-
 		PersonModel personModel = new PersonModel(
 			address, avatar, birthDate, email, firstName, jobTitle, lastName,
-			id);
+			_count.get());
 
-		_personModels.put(id, personModel);
+		_personModels.put(_count.getAndIncrement(), personModel);
 
 		return personModel;
 	}
@@ -304,7 +302,7 @@ public class PersonModel {
 		_id = id;
 	}
 
-	private static final AtomicLong _count = new AtomicLong(9);
+	private static final AtomicLong _count = new AtomicLong(0);
 	private static final Map<Long, PersonModel> _personModels =
 		new ConcurrentHashMap<>();
 

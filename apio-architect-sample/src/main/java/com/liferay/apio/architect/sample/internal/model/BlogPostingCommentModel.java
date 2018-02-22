@@ -53,10 +53,7 @@ public class BlogPostingCommentModel {
 			return;
 		}
 
-		for (long blogPostingModelId = 0;
-			 blogPostingModelId < BlogPostingModel.getCount();
-			 blogPostingModelId++) {
-
+		for (long index = 0; index < BlogPostingModel.getCount(); index++) {
 			Map<Long, BlogPostingCommentModel> blogPostingCommentModels =
 				new HashMap<>();
 			Random random = new Random();
@@ -74,15 +71,14 @@ public class BlogPostingCommentModel {
 
 				BlogPostingCommentModel blogPostingCommentModel =
 					new BlogPostingCommentModel(
-						authorId, _count.get(), blogPostingModelId,
+						authorId, _count.get(), index,
 						shakespeare.hamletQuote(), date, date);
 
 				blogPostingCommentModels.put(
 					_count.getAndIncrement(), blogPostingCommentModel);
 			}
 
-			_blogPostingCommentModels.put(
-				blogPostingModelId, blogPostingCommentModels);
+			_blogPostingCommentModels.put(index, blogPostingCommentModels);
 		}
 	}
 
