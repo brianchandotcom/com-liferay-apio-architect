@@ -46,7 +46,9 @@ public class WebsphereApiSupport implements BundleActivator {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		try {
-			_internalBundle.uninstall();
+			if (_internalBundle != null) {
+				_internalBundle.uninstall();
+			}
 		}
 		catch (BundleException be) {
 			be.printStackTrace();
