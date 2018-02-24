@@ -22,7 +22,6 @@ import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.language.Language;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 import java.util.Date;
 import java.util.List;
@@ -61,9 +60,11 @@ public class Dummy {
 	}
 
 	public final BinaryFile binaryFile1 = new BinaryFile(
-		inputStream1, "application/octet-stream");
+		new ByteArrayInputStream("Input Stream 1".getBytes(UTF_8)),
+		"application/octet-stream");
 	public final BinaryFile binaryFile2 = new BinaryFile(
-		inputStream2, "application/octet-stream");
+		new ByteArrayInputStream("Input Stream 2".getBytes(UTF_8)),
+		"application/octet-stream");
 	public final Boolean boolean1 = true;
 	public final Boolean boolean2 = false;
 	public final List<Boolean> booleanList1 = asList(true, false, false, true);
@@ -71,10 +72,6 @@ public class Dummy {
 	public final Date date1 = new Date(1465981200000L);
 	public final Date date2 = new Date(1491244560000L);
 	public final int id;
-	public final InputStream inputStream1 = new ByteArrayInputStream(
-		"Input Stream 1".getBytes(UTF_8));
-	public final InputStream inputStream2 = new ByteArrayInputStream(
-		"Input Stream 2".getBytes(UTF_8));
 	public final Number number1 = 1L;
 	public final Number number2 = 2L;
 	public final List<Number> numberList1 = asList(1, 2, 3, 4, 5);
