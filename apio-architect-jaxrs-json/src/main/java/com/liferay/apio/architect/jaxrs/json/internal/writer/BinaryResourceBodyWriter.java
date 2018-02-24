@@ -78,8 +78,15 @@ public class BinaryResourceBodyWriter
 			OutputStream outputStream)
 		throws IOException, WebApplicationException {
 
+		BinaryFile file = success.getValue();
+
+		List<Object> mimeTypes = Collections.singletonList(file.getMimeType());
+
+		multivaluedMap.put(HttpHeaders.CONTENT_TYPE, mimeTypes);
+
 		byte[] bytes = new byte[1024];
-		InputStream inputStream = success.getValue();
+
+		InputStream inputStream = file.getInputStream();
 		int value = -1;
 
 		while ((value = inputStream.read(bytes)) != -1) {
