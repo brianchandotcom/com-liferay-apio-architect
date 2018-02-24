@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 
+import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
@@ -50,7 +51,7 @@ public class BinaryEndpointTest {
 	public void testBinaryEndpointWithEmptyRepresentorReturnsFailure() {
 		BinaryEndpoint binaryEndpoint = _getBinaryEndpoint(null);
 
-		Try<InputStream> inputStreamTry =
+		Try<BinaryFile> inputStreamTry =
 			binaryEndpoint.getCollectionItemInputStreamTry("", "", "");
 
 		assertThat(inputStreamTry, is(aFailTry()));
@@ -62,7 +63,7 @@ public class BinaryEndpointTest {
 			__ -> Optional.of(_representor()),
 			(name, id) -> Try.fail(new IllegalArgumentException()));
 
-		Try<InputStream> inputStreamTry =
+		Try<BinaryFile> inputStreamTry =
 			binaryEndpoint.getCollectionItemInputStreamTry("", "", "");
 
 		assertThat(inputStreamTry, is(aFailTry()));
@@ -72,7 +73,7 @@ public class BinaryEndpointTest {
 	public void testBinaryEndpointWithNoPresentIdReturnFailure() {
 		BinaryEndpoint binaryEndpoint = _getBinaryEndpoint(_representor());
 
-		Try<InputStream> inputStreamTry =
+		Try<BinaryFile> inputStreamTry =
 			binaryEndpoint.getCollectionItemInputStreamTry("", "", "");
 
 		assertThat(inputStreamTry, is(aFailTry()));
@@ -82,12 +83,14 @@ public class BinaryEndpointTest {
 	public void testBinaryEndpointWithValidFunctionsReturnInputStream() {
 		BinaryEndpoint binaryEndpoint = _getBinaryEndpoint(_representor());
 
-		Try<InputStream> inputStreamTry =
+		Try<BinaryFile> inputStreamTry =
 			binaryEndpoint.getCollectionItemInputStreamTry("", "", "binary");
 
 		assertThat(inputStreamTry, is(aSuccessTry()));
 
-		InputStream inputStream = inputStreamTry.getUnchecked();
+		BinaryFile unchecked = inputStreamTry.getUnchecked();
+
+		InputStream inputStream = unchecked.getInputStream();
 
 		String result = Try.fromFallibleWithResources(
 			() -> new BufferedReader(new InputStreamReader(inputStream)),
@@ -136,7 +139,9 @@ public class BinaryEndpointTest {
 		).identifier(
 			Function.identity()
 		).addBinary(
-			"binary", __ -> new ByteArrayInputStream("Apio".getBytes(UTF_8))
+			"binary",
+			__ -> new BinaryFile(
+				new ByteArrayInputStream("Apio".getBytes(UTF_8)), "image/png")
 		).build();
 	}
 

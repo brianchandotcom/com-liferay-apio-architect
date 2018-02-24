@@ -18,6 +18,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import static java.util.Arrays.asList;
 
+import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.language.Language;
 
 import java.io.ByteArrayInputStream;
@@ -59,6 +60,10 @@ public class Dummy {
 		return "String 2";
 	}
 
+	public final BinaryFile binaryFile1 = new BinaryFile(
+		inputStream1, "application/octet-stream");
+	public final BinaryFile binaryFile2 = new BinaryFile(
+		inputStream2, "application/octet-stream");
 	public final Boolean boolean1 = true;
 	public final Boolean boolean2 = false;
 	public final List<Boolean> booleanList1 = asList(true, false, false, true);
