@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.jaxrs.json.internal.writer;
 
+import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 
@@ -24,7 +25,11 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
@@ -43,10 +48,10 @@ import org.osgi.service.component.annotations.Component;
 )
 @Provider
 public class BinaryResourceBodyWriter
-	implements MessageBodyWriter<Try.Success<InputStream>> {
+	implements MessageBodyWriter<Try.Success<BinaryFile>> {
 
 	public long getSize(
-		Try.Success<InputStream> singleModelSuccess, Class<?> aClass, Type type,
+		Try.Success<BinaryFile> singleModelSuccess, Class<?> aClass, Type type,
 		Annotation[] annotations, MediaType mediaType) {
 
 		return -1;
@@ -67,7 +72,7 @@ public class BinaryResourceBodyWriter
 
 	@Override
 	public void writeTo(
-			Try.Success<InputStream> success, Class<?> aClass, Type type,
+			Try.Success<BinaryFile> success, Class<?> aClass, Type type,
 			Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> multivaluedMap,
 			OutputStream outputStream)
