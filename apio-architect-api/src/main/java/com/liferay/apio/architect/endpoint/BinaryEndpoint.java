@@ -57,7 +57,7 @@ public class BinaryEndpoint {
 	 */
 	@GET
 	@Path("{name}/{id}/{binaryId}")
-	public Try<BinaryFile> getCollectionItemInputStreamTry(
+	public Try<BinaryFile> getCollectionItemBinaryFileTry(
 		@PathParam("name") String name, @PathParam("id") String id,
 		@PathParam("binaryId") String binaryId) {
 

@@ -51,10 +51,10 @@ public class BinaryEndpointTest {
 	public void testBinaryEndpointWithEmptyRepresentorReturnsFailure() {
 		BinaryEndpoint binaryEndpoint = _getBinaryEndpoint(null);
 
-		Try<BinaryFile> inputStreamTry =
-			binaryEndpoint.getCollectionItemInputStreamTry("", "", "");
+		Try<BinaryFile> binaryFileTry =
+			binaryEndpoint.getCollectionItemBinaryFileTry("", "", "");
 
-		assertThat(inputStreamTry, is(aFailTry()));
+		assertThat(binaryFileTry, is(aFailTry()));
 	}
 
 	@Test
@@ -63,32 +63,32 @@ public class BinaryEndpointTest {
 			__ -> Optional.of(_representor()),
 			(name, id) -> Try.fail(new IllegalArgumentException()));
 
-		Try<BinaryFile> inputStreamTry =
-			binaryEndpoint.getCollectionItemInputStreamTry("", "", "");
+		Try<BinaryFile> binaryFileTry =
+			binaryEndpoint.getCollectionItemBinaryFileTry("", "", "");
 
-		assertThat(inputStreamTry, is(aFailTry()));
+		assertThat(binaryFileTry, is(aFailTry()));
 	}
 
 	@Test
 	public void testBinaryEndpointWithNoPresentIdReturnFailure() {
 		BinaryEndpoint binaryEndpoint = _getBinaryEndpoint(_representor());
 
-		Try<BinaryFile> inputStreamTry =
-			binaryEndpoint.getCollectionItemInputStreamTry("", "", "");
+		Try<BinaryFile> binaryFileTry =
+			binaryEndpoint.getCollectionItemBinaryFileTry("", "", "");
 
-		assertThat(inputStreamTry, is(aFailTry()));
+		assertThat(binaryFileTry, is(aFailTry()));
 	}
 
 	@Test
 	public void testBinaryEndpointWithValidFunctionsReturnInputStream() {
 		BinaryEndpoint binaryEndpoint = _getBinaryEndpoint(_representor());
 
-		Try<BinaryFile> inputStreamTry =
-			binaryEndpoint.getCollectionItemInputStreamTry("", "", "binary");
+		Try<BinaryFile> binaryFileTry =
+			binaryEndpoint.getCollectionItemBinaryFileTry("", "", "binary");
 
-		assertThat(inputStreamTry, is(aSuccessTry()));
+		assertThat(binaryFileTry, is(aSuccessTry()));
 
-		BinaryFile unchecked = inputStreamTry.getUnchecked();
+		BinaryFile unchecked = binaryFileTry.getUnchecked();
 
 		InputStream inputStream = unchecked.getInputStream();
 
@@ -117,7 +117,7 @@ public class BinaryEndpointTest {
 					new SingleModel<>("apio", name, Collections.emptyList()));
 			});
 
-		binaryEndpoint.getCollectionItemInputStreamTry("a", "b", "binaryId");
+		binaryEndpoint.getCollectionItemBinaryFileTry("a", "b", "binaryId");
 
 		assertThat(names, contains("a", "b", "a"));
 	}
