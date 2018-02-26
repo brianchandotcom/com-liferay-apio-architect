@@ -41,4 +41,4 @@ Export-Package:\
 	com.liferay.apio.architect.uri.mapper,\
 	com.liferay.apio.architect.url
 
--includeresource: dependencies/javax.annotation-api.jar=javax.annotation-api-*.jar
+-includeresource: dependencies/javax.annotation-api.jar

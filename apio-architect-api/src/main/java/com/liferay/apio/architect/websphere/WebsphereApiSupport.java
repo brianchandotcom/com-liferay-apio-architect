@@ -33,8 +33,7 @@ public class WebsphereApiSupport implements BundleActivator {
 		if (_isWebSphere()) {
 			Bundle bundle = context.getBundle();
 
-			URL resource = bundle.getResource(
-				"/dependencies/javax.annotation-api.jar");
+			URL resource = bundle.getResource("javax.annotation-api.jar");
 
 			try (InputStream input = resource.openStream()) {
 				_internalBundle = context.installBundle(
