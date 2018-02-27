@@ -23,7 +23,7 @@ import static com.liferay.apio.architect.operation.Method.PUT;
 import static javax.ws.rs.core.Response.noContent;
 
 import com.liferay.apio.architect.endpoint.PageEndpoint;
-import com.liferay.apio.architect.function.ThrowableFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.pagination.Page;

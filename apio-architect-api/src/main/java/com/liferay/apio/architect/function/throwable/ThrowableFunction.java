@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.function;
+package com.liferay.apio.architect.function.throwable;
 
 import java.util.Objects;
 
@@ -35,7 +35,6 @@ public interface ThrowableFunction<A, R> {
 	 * @param  throwableFunction the function to apply after applying the
 	 *         current {@code ThrowableFunction} instance
 	 * @return the composed function
-	 * @see    #compose(ThrowableFunction)
 	 */
 	public default <V> ThrowableFunction<A, V> andThen(
 		ThrowableFunction<? super R, ? extends V> throwableFunction) {
@@ -54,23 +53,5 @@ public interface ThrowableFunction<A, R> {
 	 *         instance to the argument
 	 */
 	public R apply(A a) throws Exception;
-
-	/**
-	 * Returns a composed function that first applies the {@code
-	 * throwableFunction} to its input, and then applies the current {@code
-	 * ThrowableFunction} instance to the result.
-	 *
-	 * @param  throwableFunction the function to apply before applying the
-	 *         current {@code ThrowableFunction}  instance
-	 * @return the composed function
-	 * @see    #andThen(ThrowableFunction)
-	 */
-	public default <V> ThrowableFunction<V, R> compose(
-		ThrowableFunction<? super V, ? extends A> throwableFunction) {
-
-		Objects.requireNonNull(throwableFunction);
-
-		return (V v) -> apply(throwableFunction.apply(v));
-	}
 
 }

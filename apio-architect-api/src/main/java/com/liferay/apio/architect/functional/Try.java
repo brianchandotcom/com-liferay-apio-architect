@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.functional;
 
 import com.liferay.apio.architect.exception.FalsePredicateException;
-import com.liferay.apio.architect.function.ThrowableFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.supplier.ThrowableSupplier;
 
 import java.io.Closeable;

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.functional;
+package com.liferay.apio.architect.function.throwable;
 
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aTryWithValueThat;
 
@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import com.liferay.apio.architect.function.ThrowableFunction;
+import com.liferay.apio.architect.functional.Try;
 
 import org.junit.Test;
 
@@ -42,20 +42,6 @@ public class ThrowableFunctionTest {
 		assertThat(
 			stringTry.map(firstFunction.andThen(secondFunction)),
 			is(aTryWithValueThat(equalTo("Live long and prosper"))));
-	}
-
-	@Test
-	public void testOnInvokingComposeShouldExecuteBothFunctions() {
-		Try<String> stringTry = Try.success("3");
-
-		ThrowableFunction<String, Integer> firstFunction = Integer::parseInt;
-
-		ThrowableFunction<Integer, Integer> secondFunction =
-			integer -> integer + 3;
-
-		assertThat(
-			stringTry.map(secondFunction.compose(firstFunction)),
-			is(aTryWithValueThat(equalTo(6))));
 	}
 
 }
