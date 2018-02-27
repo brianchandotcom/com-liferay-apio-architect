@@ -18,6 +18,9 @@ import static com.liferay.apio.architect.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+
 import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.router.ItemRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -63,7 +66,7 @@ public class ItemRouterManagerImpl
 				Optional<String> nameOptional = _nameManager.getNameOptional(
 					className);
 
-				if (!nameOptional.isPresent()) {
+				if (!nameOptional.isPresent() && (_apioLogger != null)) {
 					_apioLogger.warning(
 						"Unable to find a Representable for class name " +
 							className);
@@ -88,7 +91,7 @@ public class ItemRouterManagerImpl
 				List<String> missingProviders =
 					_providerManager.getMissingProviders(neededProviders);
 
-				if (!missingProviders.isEmpty()) {
+				if (!missingProviders.isEmpty() && (_apioLogger != null)) {
 					_apioLogger.warning(
 						"Missing providers for classes: " + missingProviders);
 
@@ -98,7 +101,7 @@ public class ItemRouterManagerImpl
 				boolean hasPathIdentifierMapper =
 					_pathIdentifierMapperManager.hasPathIdentifierMapper(name);
 
-				if (!hasPathIdentifierMapper) {
+				if (!hasPathIdentifierMapper && (_apioLogger != null)) {
 					_apioLogger.warning(
 						"Missing path identifier mapper for resource with " +
 							"name " + name);
@@ -110,7 +113,7 @@ public class ItemRouterManagerImpl
 			});
 	}
 
-	@Reference
+	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
 
 	@Reference

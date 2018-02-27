@@ -14,6 +14,9 @@
 
 package com.liferay.apio.architect.jaxrs.json.internal.filter;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveExceptionConverter;
 import com.liferay.apio.architect.functional.Try;
@@ -36,7 +39,6 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
  * Filters and converts a {@link Try.Failure} entity to its corresponding {@link
@@ -91,7 +93,7 @@ public class FailureFilter implements ContainerResponseFilter {
 		}
 	}
 
-	@Reference(cardinality = ReferenceCardinality.OPTIONAL)
+	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
 
 	@Reference

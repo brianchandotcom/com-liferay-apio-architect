@@ -14,6 +14,9 @@
 
 package com.liferay.apio.architect.application.internal.filter;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -56,7 +59,7 @@ public class MandatoryProvidersFilter implements ContainerRequestFilter {
 		List<String> missingMandatoryProviders =
 			_providerManager.getMissingProviders(mandatoryClassNames);
 
-		if (!missingMandatoryProviders.isEmpty()) {
+		if (!missingMandatoryProviders.isEmpty() && (_apioLogger != null)) {
 			_apioLogger.warning(
 				"Missing providers for mandatory classes: " +
 					missingMandatoryProviders);
@@ -65,7 +68,7 @@ public class MandatoryProvidersFilter implements ContainerRequestFilter {
 		}
 	}
 
-	@Reference
+	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
 
 	@Reference

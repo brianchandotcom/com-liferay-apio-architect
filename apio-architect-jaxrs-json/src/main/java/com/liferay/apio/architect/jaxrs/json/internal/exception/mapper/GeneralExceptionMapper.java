@@ -14,6 +14,9 @@
 
 package com.liferay.apio.architect.jaxrs.json.internal.exception.mapper;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.error.ApioDeveloperError.MustHaveExceptionConverter;
 import com.liferay.apio.architect.logger.ApioLogger;
@@ -31,7 +34,6 @@ import javax.ws.rs.ext.ExceptionMapper;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
  * Captures and converts an exception to its corresponding {@link APIError}, and
@@ -70,7 +72,7 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
 		).build();
 	}
 
-	@Reference(cardinality = ReferenceCardinality.OPTIONAL)
+	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
 
 	@Reference
