@@ -44,8 +44,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Writes the different fields declared on a {@link
- * Representor}.
+ * Writes the different fields declared on a {@link Representor}.
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type

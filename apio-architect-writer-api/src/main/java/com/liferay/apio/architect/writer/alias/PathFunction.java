@@ -21,8 +21,7 @@ import java.util.function.BiFunction;
 
 /**
  * Defines a type alias for a function that receives the resource name and the
- * identifier. The function returns an optional {@link
- * Path} for the resource.
+ * identifier. The function returns an optional {@link Path} for the resource.
  *
  * @author Alejandro Hernández
  */

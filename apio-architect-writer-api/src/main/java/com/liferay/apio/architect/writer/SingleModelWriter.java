@@ -206,11 +206,9 @@ public class SingleModelWriter<T> {
 	}
 
 	/**
-	 * Writes a related {@link
-	 * SingleModel} with the {@link
-	 * SingleModelMessageMapper}. This
-	 * method uses a {@link FieldsWriter} to write the different fields of its
-	 * {@link Representor}. If no {@code
+	 * Writes a related {@link SingleModel} with the {@link
+	 * SingleModelMessageMapper}. This method uses a {@link FieldsWriter} to
+	 * write the different fields of its {@link Representor}. If no {@code
 	 * Representor} or {@link com.liferay.apio.architect.uri.Path} exists for
 	 * the model, this method doesn't do anything.
 	 *

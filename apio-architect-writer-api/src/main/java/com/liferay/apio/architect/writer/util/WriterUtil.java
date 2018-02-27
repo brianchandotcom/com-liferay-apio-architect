@@ -40,8 +40,7 @@ import java.util.Optional;
 public class WriterUtil {
 
 	/**
-	 * Returns the {@link FieldsWriter} for a
-	 * given model.
+	 * Returns the {@link FieldsWriter} for a given model.
 	 *
 	 * @param  singleModel the single model
 	 * @param  embeddedPathElements the embedded path element list
