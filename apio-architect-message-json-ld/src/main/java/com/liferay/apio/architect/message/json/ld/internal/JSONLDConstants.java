@@ -15,272 +15,230 @@
 package com.liferay.apio.architect.message.json.ld.internal;
 
 /**
- * Constants for JSON-LD message mappers with the reserved types and fields
- * names.
+ * Defines constants for JSON-LD message mappers with the reserved type and
+ * field names.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class JSONLDConstants {
 
 	/**
-	 * JSON-LD <a href="https://json-ld.org/spec/latest/json-ld/#the-context">
-	 * Context </a>.
-	 *
-	 * @review
+	 * The JSON-LD <a
+	 * href="https://json-ld.org/spec/latest/json-ld/#the-context">context </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_CONTEXT = "@context";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#description">
-	 * description</a>.
-	 *
-	 * @review
+	 * The Hydra <a
+	 * href="https://www.w3.org/ns/hydra/core#description">description </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_DESCRIPTION = "description";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#expects">expects</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#expects">expects </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_EXPECTS = "expects";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#first">first</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#first">first </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_FIRST = "first";
 
 	/**
-	 * Hydra qualifier.
-	 *
-	 * @review
+	 * The Hydra qualifier.
 	 */
 	public static final String FIELD_NAME_HYDRA = "hydra";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#operation">operation</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#operation">operation
+	 * </a> property.
 	 */
 	public static final String FIELD_NAME_HYDRA_OPERATION = hydra("operation");
 
 	/**
-	 * JSON-LD <a href="
-	 * https://json-ld.org/spec/latest/json-ld/#node-identifiers">
-	 * Identifier</a>.
-	 *
-	 * @review
+	 * The JSON-LD <a
+	 * href="https://json-ld.org/spec/latest/json-ld/#node-identifiers">
+	 * identifier </a> property.
 	 */
 	public static final String FIELD_NAME_ID = "@id";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#last">last</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#last">last </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_LAST = "last";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#member">member</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#member">member </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_MEMBER = "member";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#method">method</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#method">method </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_METHOD = "method";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#next">next</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#next">next </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_NEXT = "next";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#numberOfItems">
-	 * numberOfItems</a>.
-	 *
-	 * @review
+	 * The Hydra <a
+	 * href="https://www.w3.org/ns/hydra/core#numberOfItems">numberOfItems </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_NUMBER_OF_ITEMS = "numberOfItems";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#previous">previous</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#previous">previous
+	 * </a> property.
 	 */
 	public static final String FIELD_NAME_PREVIOUS = "previous";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#property">property</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#property">property
+	 * </a>.
 	 */
 	public static final String FIELD_NAME_PROPERTY = "property";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#readable">readable</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#readable">readable
+	 * </a> property.
 	 */
 	public static final String FIELD_NAME_READABLE = "readable";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#required">required</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#required">required
+	 * </a> property.
 	 */
 	public static final String FIELD_NAME_REQUIRED = "required";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#statusCode">
-	 * statusCode</a>.
-	 *
-	 * @review
+	 * The Hydra <a
+	 * href="https://www.w3.org/ns/hydra/core#statusCode">statusCode </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_STATUS_CODE = "statusCode";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#supportedProperty">
-	 * supportedProperty</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#supportedProperty">
+	 * supportedProperty </a>.
 	 */
 	public static final String FIELD_NAME_SUPPORTED_PROPERTY =
 		"supportedProperty";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#title">title</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#title">title </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_TITLE = "title";
 
 	/**
-	 * Hydra <a
-	 * href="https://www.w3.org/ns/hydra/core#totalItems">totalItems</a>.
-	 *
-	 * @review
+	 * The Hydra <a
+	 * href="https://www.w3.org/ns/hydra/core#totalItems">totalItems </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_TOTAL_ITEMS = "totalItems";
 
 	/**
-	 * JSON-LD <a href="
-	 * https://json-ld.org/spec/latest/json-ld/#specifying-the-type">Type</a>.
-	 *
-	 * @review
+	 * The JSON-LD <a
+	 * href="https://json-ld.org/spec/latest/json-ld/#specifying-the-type">type
+	 * </a> property.
 	 */
 	public static final String FIELD_NAME_TYPE = "@type";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#view">view</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#view">view </a>
+	 * property.
 	 */
 	public static final String FIELD_NAME_VIEW = "view";
 
 	/**
-	 * JSON-LD <a href="
-	 * https://json-ld.org/spec/latest/json-ld/#default-vocabulary">Vocab</a>.
-	 *
-	 * @review
+	 * The JSON-LD <a
+	 * href="https://json-ld.org/spec/latest/json-ld/#default-vocabulary">vocab
+	 * </a> property.
 	 */
 	public static final String FIELD_NAME_VOCAB = "@vocab";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#writeable">writeable</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#writeable">writeable
+	 * </a> property.
 	 */
 	public static final String FIELD_NAME_WRITEABLE = "writeable";
 
 	/**
-	 * JSON-LD <a href="
-	 * https://json-ld.org/spec/latest/json-ld/#application-ld-json">Media
-	 * Type</a>.
-	 *
-	 * @review
+	 * The JSON-LD <a
+	 * href="https://json-ld.org/spec/latest/json-ld/#application-ld-json">media
+	 * type </a> property.
 	 */
 	public static final String MEDIA_TYPE = "application/ld+json";
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#ApiDocumentation">
-	 * ApiDocumentation</a>.
-	 *
-	 * @review
+	 * The Hydra <a
+	 * href="https://www.w3.org/ns/hydra/core#ApiDocumentation">ApiDocumentation
+	 * </a> property.
 	 */
 	public static final String TYPE_API_DOCUMENTATION = hydra(
 		"ApiDocumentation");
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#Class">Class</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#Class">Class </a>
+	 * property.
 	 */
 	public static final String TYPE_HYDRA_CLASS = hydra("Class");
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#Collection">
-	 * Collection</a>.
-	 *
-	 * @review
+	 * The Hydra <a
+	 * href="https://www.w3.org/ns/hydra/core#Collection">Collection </a>
+	 * property.
 	 */
 	public static final String TYPE_HYDRA_COLLECTION = hydra("Collection");
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#PartialCollectionView">
-	 * PartialCollectionView</a>.
-	 *
-	 * @review
+	 * The Hydra <a
+	 * href="https://www.w3.org/ns/hydra/core#PartialCollectionView">
+	 * PartialCollectionView </a> property.
 	 */
 	public static final String TYPE_HYDRA_PARTIAL_COLLECTION_VIEW = hydra(
 		"PartialCollectionView");
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#SupportedProperty">
-	 * SupportedProperty</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#SupportedProperty">
+	 * SupportedProperty </a> property.
 	 */
 	public static final String TYPE_HYDRA_SUPPORTED_PROPERTY = hydra(
 		"SupportedProperty");
 
 	/**
-	 * Hydra <a href="https://www.w3.org/ns/hydra/core#Operation">Operation</a>.
-	 *
-	 * @review
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#Operation">Operation
+	 * </a> property.
 	 */
 	public static final String TYPE_OPERATION = "Operation";
 
 	/**
-	 * Hydra profile URL.
-	 *
-	 * @review
+	 * The Hydra profile URL.
 	 */
 	public static final String URL_HYDRA_PROFILE =
 		"https://www.w3.org/ns/hydra/core#";
 
 	/**
-	 * schema.org URL.
-	 *
-	 * @review
+	 * The schema.org URL.
 	 */
 	public static final String URL_SCHEMA_ORG = "http://schema.org/";
 
 	/**
-	 * Prefixes a type with the Hydra qualifier
+	 * Prefixes a type with the Hydra qualifier.
 	 *
 	 * @param  type the type to prefix
-	 * @return the type prefixed with the Hydra qualifier
-	 * @review
+	 * @return the prefixed type
 	 */
 	public static String hydra(String type) {
 		return FIELD_NAME_HYDRA + ":" + type;

@@ -52,10 +52,8 @@ import org.hamcrest.Matcher;
 public class JSONLDTestUtil {
 
 	/**
-	 * A {@link Matcher} that checks if a {@link JsonElement} is a link to
-	 * Hydra's profile.
-	 *
-	 * @review
+	 * A {@code Matcher} that checks if a {@code JsonElement} is
+	 * a link to Hydra's profile.
 	 */
 	public static final Matcher<JsonElement> IS_A_LINK_TO_HYDRA_PROFILE =
 		isALinkTo("https://www.w3.org/ns/hydra/core#");
@@ -321,7 +319,6 @@ public class JSONLDTestUtil {
 	 * the first nested model.
 	 *
 	 * @return the matcher
-	 * @review
 	 */
 	public static Matcher<JsonElement> isAJsonObjectWithTheFirstNested() {
 		Builder builder = new Builder();
@@ -395,7 +392,6 @@ public class JSONLDTestUtil {
 	 * the second nested model.
 	 *
 	 * @return the matcher
-	 * @review
 	 */
 	public static Matcher<JsonElement> isAJsonObjectWithTheSecondNested(
 		String id) {
@@ -438,7 +434,6 @@ public class JSONLDTestUtil {
 	 * the third nested model.
 	 *
 	 * @return the matcher
-	 * @review
 	 */
 	public static Conditions isAJsonObjectWithTheThirdNested() {
 		Builder builder = new Builder();
