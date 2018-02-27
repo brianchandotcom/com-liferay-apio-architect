@@ -17,7 +17,7 @@ package com.liferay.apio.architect.message.json;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import com.liferay.apio.architect.test.util.result.MockAPIError;
+import com.liferay.apio.architect.error.APIError;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -36,7 +36,9 @@ public class ErrorMessageMapperTest {
 
 		HttpHeaders httpHeaders = Mockito.mock(HttpHeaders.class);
 
-		MockAPIError apiError = new MockAPIError();
+		APIError apiError = new APIError(
+			new IllegalArgumentException("A description"), "A title", "A type",
+			404);
 
 		assertThat(
 			errorMessageMapper.supports(apiError, httpHeaders), is(true));
