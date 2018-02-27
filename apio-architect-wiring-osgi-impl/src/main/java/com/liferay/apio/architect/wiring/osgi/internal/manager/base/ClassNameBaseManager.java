@@ -36,6 +36,7 @@ public abstract class ClassNameBaseManager<T> extends BaseManager<T, String> {
 		Class<T> managedClass, Integer principalTypeParamPosition) {
 
 		super(managedClass);
+
 		_managedClass = managedClass;
 		_principalTypeParamPosition = principalTypeParamPosition;
 	}
