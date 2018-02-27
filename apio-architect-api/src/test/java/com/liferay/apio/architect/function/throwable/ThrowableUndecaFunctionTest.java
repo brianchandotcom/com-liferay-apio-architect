@@ -22,13 +22,20 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class ThrowableFunctionTest {
+public class ThrowableUndecaFunctionTest {
 
 	@Test
 	public void testOnInvokingAndThenShouldExecuteBothFunctions()
 		throws Exception {
 
-		ThrowableFunction<String, String> firstFunction = string1 -> string1;
+		ThrowableUndecaFunction
+			<String, String, String, String, String, String, String, String,
+				String, String, String, String> firstFunction = (
+					string1, string2, string3, string4, string5, string6,
+					string7, string8, string9, string10, string11) ->
+						string1 + string2 + string3 + string4 + string5 +
+							string6 + string7 + string8 + string9 + string10 +
+								string11;
 
 		ThrowableFunction<String, String> secondFunction =
 			string -> string + "prosper";
@@ -36,7 +43,7 @@ public class ThrowableFunctionTest {
 		String string = firstFunction.andThen(
 			secondFunction
 		).apply(
-			"Live long and "
+			"L", "i", "v", "e", " ", "lo", "ng", " ", "an", "d", " "
 		);
 
 		assertThat(string, is("Live long and prosper"));
@@ -44,7 +51,14 @@ public class ThrowableFunctionTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
-		ThrowableFunction<String, String> firstFunction = string1 -> string1;
+		ThrowableUndecaFunction
+			<String, String, String, String, String, String, String, String,
+				String, String, String, String> firstFunction = (
+					string1, string2, string3, string4, string5, string6,
+					string7, string8, string9, string10, string11) ->
+						string1 + string2 + string3 + string4 + string5 +
+							string6 + string7 + string8 + string9 + string10 +
+								string11;
 
 		firstFunction.andThen(null);
 	}

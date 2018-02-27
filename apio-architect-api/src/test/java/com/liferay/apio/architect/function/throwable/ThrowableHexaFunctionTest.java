@@ -22,13 +22,16 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class ThrowableFunctionTest {
+public class ThrowableHexaFunctionTest {
 
 	@Test
 	public void testOnInvokingAndThenShouldExecuteBothFunctions()
 		throws Exception {
 
-		ThrowableFunction<String, String> firstFunction = string1 -> string1;
+		ThrowableHexaFunction<String, String, String, String, String, String,
+			String> firstFunction =
+				(string1, string2, string3, string4, string5, string6) ->
+					string1 + string2 + string3 + string4 + string5 + string6;
 
 		ThrowableFunction<String, String> secondFunction =
 			string -> string + "prosper";
@@ -36,7 +39,7 @@ public class ThrowableFunctionTest {
 		String string = firstFunction.andThen(
 			secondFunction
 		).apply(
-			"Live long and "
+			"Live", " ", "long", " ", "and", " "
 		);
 
 		assertThat(string, is("Live long and prosper"));
@@ -44,7 +47,10 @@ public class ThrowableFunctionTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
-		ThrowableFunction<String, String> firstFunction = string1 -> string1;
+		ThrowableHexaFunction<String, String, String, String, String, String,
+			String> firstFunction = (
+				string1, string2, string3, string4, string5, string6) ->
+					string1 + string2 + string3 + string4 + string5 + string6;
 
 		firstFunction.andThen(null);
 	}

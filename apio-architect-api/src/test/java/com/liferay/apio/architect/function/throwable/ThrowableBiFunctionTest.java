@@ -22,13 +22,14 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class ThrowableFunctionTest {
+public class ThrowableBiFunctionTest {
 
 	@Test
 	public void testOnInvokingAndThenShouldExecuteBothFunctions()
 		throws Exception {
 
-		ThrowableFunction<String, String> firstFunction = string1 -> string1;
+		ThrowableBiFunction<String, String, String> firstFunction =
+			(string1, string2) -> string1 + string2;
 
 		ThrowableFunction<String, String> secondFunction =
 			string -> string + "prosper";
@@ -36,7 +37,7 @@ public class ThrowableFunctionTest {
 		String string = firstFunction.andThen(
 			secondFunction
 		).apply(
-			"Live long and "
+			"Live ", "long and "
 		);
 
 		assertThat(string, is("Live long and prosper"));
@@ -44,7 +45,8 @@ public class ThrowableFunctionTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
-		ThrowableFunction<String, String> firstFunction = string1 -> string1;
+		ThrowableBiFunction<String, String, String> firstFunction =
+			(string1, string2) -> string1 + string2;
 
 		firstFunction.andThen(null);
 	}
