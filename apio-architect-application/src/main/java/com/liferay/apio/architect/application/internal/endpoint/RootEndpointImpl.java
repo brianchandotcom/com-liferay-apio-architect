@@ -159,7 +159,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			_itemRouterManager::getItemRoutesOptional
 		).mapOptional(
 			ItemRoutes::getItemFunctionOptional, notFound(name, id)
-		).map(
+		).flatMap(
 			function -> function.apply(
 				_httpServletRequest
 			).apply(

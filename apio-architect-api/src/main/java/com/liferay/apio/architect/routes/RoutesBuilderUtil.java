@@ -16,6 +16,9 @@ package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
+import com.liferay.apio.architect.function.throwable.ThrowableFunction;
+import com.liferay.apio.architect.functional.Try;
+
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -290,6 +293,180 @@ public class RoutesBuilderUtil {
 		Consumer<A> consumer) {
 
 		consumer.accept(_provideClass(provideFunction, aClass));
+	}
+
+	/**
+	 * Returns the result of applying instances of the six classes requested
+	 * from the HTTP request to the {@code function}.
+	 *
+	 * @param  provideFunction the function used to provide the class instances
+	 * @param  aClass the first class to provide
+	 * @param  bClass the second class to provide
+	 * @param  cClass the third class to provide
+	 * @param  dClass the fourth class to provide
+	 * @param  eClass the fifth class to provide
+	 * @param  fClass the sixth class to provide
+	 * @param  function the function that receives the class instances
+	 * @return the result of applying the class instances to the {@code
+	 *         function}
+	 */
+	public static <A, B, C, D, E, F, R> Try<R> provideThrowable(
+		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
+		Function<A, Function<B, Function<C, Function<D, Function<E,
+			ThrowableFunction<F, R>>>>>> function) {
+
+		return provideThrowable(
+			provideFunction, aClass, bClass, cClass, dClass, eClass,
+			a -> b -> c -> d -> e -> function.apply(
+				a
+			).apply(
+				b
+			).apply(
+				c
+			).apply(
+				d
+			).apply(
+				e
+			).apply(
+				_provideClass(provideFunction, fClass)
+			));
+	}
+
+	/**
+	 * Returns the result of applying instances of the five classes requested
+	 * from the HTTP request to the {@code function}.
+	 *
+	 * @param  provideFunction the function used to provide the class instances
+	 * @param  aClass the first class to provide
+	 * @param  bClass the second class to provide
+	 * @param  cClass the third class to provide
+	 * @param  dClass the fourth class to provide
+	 * @param  eClass the fifth class to provide
+	 * @param  function the function that receives the class instances
+	 * @return the result of applying the class instances to the {@code
+	 *         function}
+	 */
+	public static <A, B, C, D, E, R> Try<R> provideThrowable(
+		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass, Class<D> dClass, Class<E> eClass,
+		Function<A, Function<B, Function<C, Function<D,
+			ThrowableFunction<E, R>>>>> function) {
+
+		return provideThrowable(
+			provideFunction, aClass, bClass, cClass, dClass,
+			a -> b -> c -> d -> function.apply(
+				a
+			).apply(
+				b
+			).apply(
+				c
+			).apply(
+				d
+			).apply(
+				_provideClass(provideFunction, eClass)
+			));
+	}
+
+	/**
+	 * Returns the result of applying instances of the four classes requested
+	 * from the HTTP request to the {@code function}.
+	 *
+	 * @param  provideFunction the function used to provide the class instances
+	 * @param  aClass the first class to provide
+	 * @param  bClass the second class to provide
+	 * @param  cClass the third class to provide
+	 * @param  dClass the fourth class to provide
+	 * @param  function the function that receives the class instances
+	 * @return the result of applying the class instances to the {@code
+	 *         function}
+	 */
+	public static <A, B, C, D, R> Try<R> provideThrowable(
+		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass, Class<D> dClass,
+		Function<A, Function<B, Function<C, ThrowableFunction<D, R>>>>
+			function) {
+
+		return provideThrowable(
+			provideFunction, aClass, bClass, cClass,
+			a -> b -> c -> function.apply(
+				a
+			).apply(
+				b
+			).apply(
+				c
+			).apply(
+				_provideClass(provideFunction, dClass)
+			));
+	}
+
+	/**
+	 * Returns the result of applying instances of the three classes requested
+	 * from the HTTP request to the {@code function}.
+	 *
+	 * @param  provideFunction the function used to provide the class instances
+	 * @param  aClass the first class to provide
+	 * @param  bClass the second class to provide
+	 * @param  cClass the third class to provide
+	 * @param  function the function that receives the class instances
+	 * @return the result of applying the class instances to the {@code
+	 *         function}
+	 */
+	public static <A, B, C, R> Try<R> provideThrowable(
+		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
+		Class<C> cClass,
+		Function<A, Function<B, ThrowableFunction<C, R>>> function) {
+
+		return provideThrowable(
+			provideFunction, aClass, bClass,
+			a -> b -> function.apply(
+				a
+			).apply(
+				b
+			).apply(
+				_provideClass(provideFunction, cClass)
+			));
+	}
+
+	/**
+	 * Returns the result of applying instances of the two classes requested
+	 * from the HTTP request to the {@code function}.
+	 *
+	 * @param  provideFunction the function used to provide the class instances
+	 * @param  aClass the first class to provide
+	 * @param  bClass the second class to provide
+	 * @param  function the function that receives the class instances
+	 * @return the result of applying the class instances to the {@code
+	 *         function}
+	 */
+	public static <A, B, R> Try<R> provideThrowable(
+		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
+		Function<A, ThrowableFunction<B, R>> function) {
+
+		return provideThrowable(
+			provideFunction, aClass,
+			a -> function.apply(
+				a
+			).apply(
+				_provideClass(provideFunction, bClass)
+			));
+	}
+
+	/**
+	 * Returns the result of applying an instance of the class requested from
+	 * the HTTP request to the {@code function}.
+	 *
+	 * @param  provideFunction the function used to provide the class instance
+	 * @param  aClass the class to provide
+	 * @param  function the function that receives the class instance
+	 * @return the result of applying the class instance to the {@code function}
+	 */
+	public static <A, R> Try<R> provideThrowable(
+		Function<Class<?>, ?> provideFunction, Class<A> aClass,
+		ThrowableFunction<A, R> function) {
+
+		return Try.fromFallible(
+			() -> function.apply(_provideClass(provideFunction, aClass)));
 	}
 
 	private static <T> T _provideClass(

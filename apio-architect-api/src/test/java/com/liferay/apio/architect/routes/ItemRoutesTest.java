@@ -313,6 +313,18 @@ public class ItemRoutesTest {
 
 		assertThat(body, is(_body));
 
+		SingleModel<String> singleModel = optional.flatMap(
+			ItemRoutes::getItemFunctionOptional
+		).get(
+		).apply(
+			null
+		).apply(
+			42L
+		).getUnchecked();
+
+		assertThat(singleModel.getResourceName(), is("name"));
+		assertThat(singleModel.getModel(), is("Apio"));
+
 		optional.flatMap(
 			ItemRoutes::getDeleteConsumerOptional
 		).get(

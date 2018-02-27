@@ -214,6 +214,8 @@ public class PageMessageBodyWriter<T>
 			function -> function.apply(_httpServletRequest)
 		).map(
 			function -> function.apply(identifier)
+		).flatMap(
+			Try::toOptional
 		).map(
 			Unsafe::unsafeCast
 		);

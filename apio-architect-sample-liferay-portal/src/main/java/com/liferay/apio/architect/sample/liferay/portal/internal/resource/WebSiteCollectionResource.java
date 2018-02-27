@@ -21,17 +21,12 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.internal.identifier.WebSiteIdentifier;
-import com.liferay.portal.kernel.exception.NoSuchGroupException;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
 
 import java.util.List;
-
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.ServerErrorException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -67,7 +62,7 @@ public class WebSiteCollectionResource
 		ItemRoutes.Builder<Group, Long> builder) {
 
 		return builder.addGetter(
-			this::_getGroup
+			_groupLocalService::getGroup
 		).build();
 	}
 
@@ -87,18 +82,6 @@ public class WebSiteCollectionResource
 			"name",
 			(group, language) -> group.getName(language.getPreferredLocale())
 		).build();
-	}
-
-	private Group _getGroup(Long groupId) {
-		try {
-			return _groupLocalService.getGroup(groupId);
-		}
-		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException("Unable to get group " + groupId, nsge);
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
 	}
 
 	private PageItems<Group> _getPageItems(

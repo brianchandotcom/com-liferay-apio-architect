@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.operation.Method.DELETE;
 import static com.liferay.apio.architect.operation.Method.PUT;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideConsumer;
+import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideThrowable;
 
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -33,6 +34,11 @@ import com.liferay.apio.architect.function.HexaFunction;
 import com.liferay.apio.architect.function.PentaFunction;
 import com.liferay.apio.architect.function.TetraFunction;
 import com.liferay.apio.architect.function.TriFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableFunction;
+import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
 
@@ -43,7 +49,6 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Holds information about the routes supported for an {@link
@@ -141,19 +146,19 @@ public class ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with one extra parameter.
 		 *
-		 * @param  biFunction the function that calculates the item
+		 * @param  throwableBiFunction the function that calculates the item
 		 * @param  aClass the class of the item function's second parameter
 		 * @return the updated builder
 		 */
 		public <A> Builder<T, S> addGetter(
-			BiFunction<S, A, T> biFunction, Class<A> aClass) {
+			ThrowableBiFunction<S, A, T> throwableBiFunction, Class<A> aClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 
-			_singleModelFunction = httpServletRequest -> s -> provide(
+			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
 				_provideFunction.apply(httpServletRequest), aClass,
 				Credentials.class,
-				a -> credentials -> biFunction.andThen(
+				a -> credentials -> throwableBiFunction.andThen(
 					t -> new SingleModel<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -166,13 +171,15 @@ public class ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with none extra parameters.
 		 *
-		 * @param  function the function that calculates the item
+		 * @param  throwableFunction the function that calculates the item
 		 * @return the updated builder
 		 */
-		public Builder<T, S> addGetter(Function<S, T> function) {
-			_singleModelFunction = httpServletRequest -> s -> provide(
+		public Builder<T, S> addGetter(
+			ThrowableFunction<S, T> throwableFunction) {
+
+			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
 				_provideFunction.apply(httpServletRequest), Credentials.class,
-				credentials -> function.andThen(
+				credentials -> throwableFunction.andThen(
 					t -> new SingleModel<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -185,7 +192,7 @@ public class ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with four extra parameters.
 		 *
-		 * @param  pentaFunction the function that calculates the item
+		 * @param  throwablePentaFunction the function that calculates the item
 		 * @param  aClass the class of the item function's second parameter
 		 * @param  bClass the class of the item function's third parameter
 		 * @param  cClass the class of the item function's fourth parameter
@@ -193,23 +200,25 @@ public class ItemRoutes<T, S> {
 		 * @return the updated builder
 		 */
 		public <A, B, C, D> Builder<T, S> addGetter(
-			PentaFunction<S, A, B, C, D, T> pentaFunction, Class<A> aClass,
-			Class<B> bClass, Class<C> cClass, Class<D> dClass) {
+			ThrowablePentaFunction<S, A, B, C, D, T> throwablePentaFunction,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass,
+			Class<D> dClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 			_neededProviderConsumer.accept(cClass.getName());
 			_neededProviderConsumer.accept(dClass.getName());
 
-			_singleModelFunction = httpServletRequest -> s -> provide(
+			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass, Credentials.class,
-				a -> b -> c -> d -> credentials -> pentaFunction.andThen(
-					t -> new SingleModel<>(
-						t, _name, _getOperations(credentials, s))
-				).apply(
-					s, a, b, c, d
-				));
+				a -> b -> c -> d -> credentials ->
+					throwablePentaFunction.andThen(
+						t -> new SingleModel<>(
+							t, _name, _getOperations(credentials, s))
+					).apply(
+						s, a, b, c, d
+					));
 
 			return this;
 		}
@@ -217,24 +226,24 @@ public class ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with three extra parameters.
 		 *
-		 * @param  tetraFunction the function that calculates the item
+		 * @param  throwableTetraFunction the function that calculates the item
 		 * @param  aClass the class of the item function's second parameter
 		 * @param  bClass the class of the item function's third parameter
 		 * @param  cClass the class of the item function's fourth parameter
 		 * @return the updated builder
 		 */
 		public <A, B, C> Builder<T, S> addGetter(
-			TetraFunction<S, A, B, C, T> tetraFunction, Class<A> aClass,
-			Class<B> bClass, Class<C> cClass) {
+			ThrowableTetraFunction<S, A, B, C, T> throwableTetraFunction,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 			_neededProviderConsumer.accept(cClass.getName());
 
-			_singleModelFunction = httpServletRequest -> s -> provide(
+			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, Credentials.class,
-				a -> b -> c -> credentials -> tetraFunction.andThen(
+				a -> b -> c -> credentials -> throwableTetraFunction.andThen(
 					t -> new SingleModel<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -247,22 +256,22 @@ public class ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with two extra parameters.
 		 *
-		 * @param  triFunction the function that calculates the item
+		 * @param  throwableTriFunction the function that calculates the item
 		 * @param  aClass the class of the item function's second parameter
 		 * @param  bClass the class of the item function's third parameter
 		 * @return the updated builder
 		 */
 		public <A, B> Builder<T, S> addGetter(
-			TriFunction<S, A, B, T> triFunction, Class<A> aClass,
-			Class<B> bClass) {
+			ThrowableTriFunction<S, A, B, T> throwableTriFunction,
+			Class<A> aClass, Class<B> bClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 
-			_singleModelFunction = httpServletRequest -> s -> provide(
+			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				Credentials.class,
-				a -> b -> credentials -> triFunction.andThen(
+				a -> b -> credentials -> throwableTriFunction.andThen(
 					t -> new SingleModel<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
