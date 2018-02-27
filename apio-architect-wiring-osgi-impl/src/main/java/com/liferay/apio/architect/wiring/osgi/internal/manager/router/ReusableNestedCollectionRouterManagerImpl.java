@@ -86,6 +86,9 @@ public class ReusableNestedCollectionRouterManagerImpl
 					"r", name, curry(_providerManager::provideMandatory),
 					neededProviders::add);
 
+				NestedCollectionRoutes<Object, Object> nestedCollectionRoutes =
+					reusableNestedCollectionRouter.collectionRoutes(builder);
+
 				List<String> missingProviders =
 					_providerManager.getMissingProviders(neededProviders);
 
@@ -107,8 +110,7 @@ public class ReusableNestedCollectionRouterManagerImpl
 				}
 
 				INSTANCE.putReusableNestedCollectionRoutes(
-					name,
-					reusableNestedCollectionRouter.collectionRoutes(builder));
+					name, nestedCollectionRoutes);
 			});
 	}
 

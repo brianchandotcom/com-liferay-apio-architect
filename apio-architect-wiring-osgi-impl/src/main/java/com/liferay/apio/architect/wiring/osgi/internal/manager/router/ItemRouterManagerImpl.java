@@ -82,6 +82,9 @@ public class ItemRouterManagerImpl
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add);
 
+				ItemRoutes<Object, Object> itemRoutes = itemRouter.itemRoutes(
+					builder);
+
 				List<String> missingProviders =
 					_providerManager.getMissingProviders(neededProviders);
 
@@ -103,7 +106,7 @@ public class ItemRouterManagerImpl
 					return;
 				}
 
-				INSTANCE.putItemRoutes(name, itemRouter.itemRoutes(builder));
+				INSTANCE.putItemRoutes(name, itemRoutes);
 			});
 	}
 

@@ -90,6 +90,9 @@ public class CollectionRouterManagerImpl
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add);
 
+				CollectionRoutes<Object> collectionRoutes =
+					collectionRouter.collectionRoutes(builder);
+
 				List<String> missingProviders =
 					_providerManager.getMissingProviders(neededProviders);
 
@@ -111,8 +114,7 @@ public class CollectionRouterManagerImpl
 				}
 
 				INSTANCE.putRootResourceName(name);
-				INSTANCE.putCollectionRoutes(
-					name, collectionRouter.collectionRoutes(builder));
+				INSTANCE.putCollectionRoutes(name, collectionRoutes);
 			});
 	}
 
