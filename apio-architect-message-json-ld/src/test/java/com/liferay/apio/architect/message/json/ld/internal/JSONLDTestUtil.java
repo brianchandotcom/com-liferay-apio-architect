@@ -52,8 +52,8 @@ import org.hamcrest.Matcher;
 public class JSONLDTestUtil {
 
 	/**
-	 * A {@code Matcher} that checks if a {@code JsonElement} is
-	 * a link to Hydra's profile.
+	 * A {@code Matcher} that checks if a {@code JsonElement} is a link to
+	 * Hydra's profile.
 	 */
 	public static final Matcher<JsonElement> IS_A_LINK_TO_HYDRA_PROFILE =
 		isALinkTo("https://www.w3.org/ns/hydra/core#");
