@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 
+import static com.liferay.apio.architect.sample.liferay.portal.internal.idempotent.Idempotent.idempotent;
+
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -31,8 +33,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.ServiceContext;
 
 import java.util.List;
-
-import javax.ws.rs.ServerErrorException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -75,7 +75,7 @@ public class BlogPostingNestedCollectionResource
 		return builder.addGetter(
 			_blogsService::getEntry
 		).addRemover(
-			this::_deleteBlogsEntry, (credentials, id) -> true
+			idempotent(_blogsService::deleteEntry), (credentials, id) -> true
 		).addUpdater(
 			this::_updateBlogsEntry, (credentials, id) -> true,
 			BlogPostingForm::buildForm
@@ -139,15 +139,6 @@ public class BlogPostingNestedCollectionResource
 				null, null, null, serviceContext));
 
 		return blogsEntryTry.getUnchecked();
-	}
-
-	private void _deleteBlogsEntry(Long blogsEntryId) {
-		try {
-			_blogsService.deleteEntry(blogsEntryId);
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
 	}
 
 	private PageItems<BlogsEntry> _getPageItems(
