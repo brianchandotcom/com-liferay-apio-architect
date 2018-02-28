@@ -18,6 +18,7 @@ import java.io.InputStream;
 
 /**
  * @author Javier Gamarra
+ * @review
  */
 public class BinaryFile {
 
