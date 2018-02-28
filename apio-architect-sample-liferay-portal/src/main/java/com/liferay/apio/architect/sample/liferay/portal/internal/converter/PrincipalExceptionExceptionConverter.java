@@ -23,10 +23,9 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts {@code PrincipalException} to its {@link APIError} representation.
+ * Converts a {@code PrincipalException} to its {@link APIError} representation.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component(immediate = true)
 public class PrincipalExceptionExceptionConverter

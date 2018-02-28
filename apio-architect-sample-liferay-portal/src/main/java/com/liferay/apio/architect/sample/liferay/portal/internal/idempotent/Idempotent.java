@@ -18,20 +18,18 @@ import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.portal.kernel.exception.NoSuchModelException;
 
 /**
- * Util class with methods for performing idempotent operations by discarding
- * exceptions thrown by the Liferay services.
+ * Provides methods for performing idempotent operations by discarding
+ * exceptions thrown by Liferay services.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class Idempotent {
 
 	/**
-	 * Calls the received consumer ignoring all {@code NoSuchModelException}.
+	 * Calls the received consumer, ignoring all {@code NoSuchModelException}.
 	 *
 	 * @param  throwableConsumer the throwable consumer
 	 * @return the new idempotent throwable consumer
-	 * @review
 	 */
 	public static <T> ThrowableConsumer<T> idempotent(
 		ThrowableConsumer<T> throwableConsumer) {

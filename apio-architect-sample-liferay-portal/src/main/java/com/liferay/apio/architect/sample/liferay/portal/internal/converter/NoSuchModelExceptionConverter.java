@@ -23,10 +23,10 @@ import com.liferay.portal.kernel.exception.NoSuchModelException;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts {@code NoSuchModelException} to its {@link APIError} representation.
+ * Converts a {@code NoSuchModelException} to its {@link APIError}
+ * representation.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component(immediate = true)
 public class NoSuchModelExceptionConverter

@@ -21,21 +21,19 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Instances of this class represent the values extracted from a blog posting
- * form.
+ * Represents the values extracted from a blog posting form.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class BlogPostingForm {
 
 	/**
-	 * Builds a {@code Form} that generates {@code BlogPostingForm} depending on
-	 * the HTTP body.
+	 * Builds and returns a {@link Form} that generates a {@link
+	 * com.liferay.apio.architect.sample.internal.form.BlogPostingForm} that
+	 * depends on the HTTP body.
 	 *
 	 * @param  formBuilder the {@code Form} builder
-	 * @return a blog posting form
-	 * @review
+	 * @return the {@code BlogPostingForm}
 	 */
 	public static Form<BlogPostingForm> buildForm(
 		Builder<BlogPostingForm> formBuilder) {
@@ -60,90 +58,81 @@ public class BlogPostingForm {
 	}
 
 	/**
-	 * Returns the blog posting's alternative headline
+	 * Returns the blog posting's alternative headline.
 	 *
 	 * @return the blog posting's alternative headline
-	 * @review
 	 */
 	public String getAlternativeHeadline() {
 		return _alternativeHeadline;
 	}
 
 	/**
-	 * Returns the blog posting's body
+	 * Returns the blog posting's body.
 	 *
 	 * @return the blog posting's body
-	 * @review
 	 */
 	public String getArticleBody() {
 		return _articleBody;
 	}
 
 	/**
-	 * Returns the blog posting's description
+	 * Returns the blog posting's description.
 	 *
 	 * @return the blog posting's description
-	 * @review
 	 */
 	public String getDescription() {
 		return _description;
 	}
 
 	/**
-	 * Returns the blog posting's display date day
+	 * Returns the blog posting's display date.
 	 *
-	 * @return the blog posting's display date day
-	 * @review
+	 * @return the blog posting's display date
 	 */
 	public int getDisplayDateDay() {
 		return _displayDateDay;
 	}
 
 	/**
-	 * Returns the blog posting's display date hour
+	 * Returns the blog posting's display hour.
 	 *
-	 * @return the blog posting's display date hour
-	 * @review
+	 * @return the blog posting's display hour
 	 */
 	public int getDisplayDateHour() {
 		return _displayDateHour;
 	}
 
 	/**
-	 * Returns the blog posting's display date minute
+	 * Returns the blog posting's display minute.
 	 *
-	 * @return the blog posting's display date minute
-	 * @review
+	 * @return the blog posting's display minute
 	 */
 	public int getDisplayDateMinute() {
 		return _displayDateMinute;
 	}
 
 	/**
-	 * Returns the blog posting's display date month
+	 * Returns the blog posting's display month.
 	 *
-	 * @return the blog posting's display date month
-	 * @review
+	 * @return the blog posting's display month
 	 */
 	public int getDisplayDateMonth() {
 		return _displayDateMonth;
 	}
 
 	/**
-	 * Returns the blog posting's display date year
+	 * Returns the blog posting's display year.
 	 *
-	 * @return the blog posting's display date year
-	 * @review
+	 * @return the blog posting's display year
 	 */
 	public int getDisplayDateYear() {
 		return _displayDateYear;
 	}
 
 	/**
-	 * Returns the blog posting's headline
+	 * Returns the blog posting's headline.
 	 *
 	 * @return the blog posting's headline
-	 * @review
 	 */
 	public String getHeadline() {
 		return _headline;
