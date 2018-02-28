@@ -24,17 +24,14 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.liferay.portal.internal.form.BlogPostingForm;
 import com.liferay.apio.architect.sample.liferay.portal.internal.identifier.BlogPostingIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.internal.identifier.WebSiteIdentifier;
-import com.liferay.blogs.kernel.exception.NoSuchEntryException;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
 import com.liferay.blogs.kernel.service.BlogsEntryService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.ServiceContext;
 
 import java.util.List;
 
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServerErrorException;
 
 import org.osgi.service.component.annotations.Component;
@@ -165,25 +162,15 @@ public class BlogPostingNestedCollectionResource
 	}
 
 	private BlogsEntry _updateBlogsEntry(
-		Long blogsEntryId, BlogPostingForm blogPostingForm) {
+			Long blogsEntryId, BlogPostingForm blogPostingForm)
+		throws PortalException {
 
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
 
-		BlogsEntry blogsEntry = null;
-
-		try {
-			blogsEntry = _blogsService.getEntry(blogsEntryId);
-		}
-		catch (NoSuchEntryException | PrincipalException e) {
-			throw new NotFoundException(
-				"Unable to get blogs entry " + blogsEntryId, e);
-		}
-		catch (PortalException pe) {
-			throw new ServerErrorException(500, pe);
-		}
+		BlogsEntry blogsEntry = _blogsService.getEntry(blogsEntryId);
 
 		serviceContext.setScopeGroupId(blogsEntry.getGroupId());
 
