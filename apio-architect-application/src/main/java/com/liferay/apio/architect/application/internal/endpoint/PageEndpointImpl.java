@@ -84,7 +84,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 			notAllowed(POST, _name)
 		).map(
 			function -> function.apply(_httpServletRequest)
-		).map(
+		).flatMap(
 			function -> function.apply(body)
 		);
 	}
@@ -153,7 +153,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 		return collectionRoutesTry.mapOptional(
 			CollectionRoutes::getGetPageFunctionOptional, notFound(_name)
-		).map(
+		).flatMap(
 			function -> function.apply(_httpServletRequest)
 		);
 	}

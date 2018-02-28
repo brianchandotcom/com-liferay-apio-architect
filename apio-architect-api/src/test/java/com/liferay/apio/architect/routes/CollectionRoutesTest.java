@@ -293,7 +293,7 @@ public class CollectionRoutesTest {
 			null
 		).apply(
 			_body
-		);
+		).getUnchecked();
 
 		assertThat(singleModel.getResourceName(), is("name"));
 		assertThat(singleModel.getModel(), is("Apio"));
@@ -303,7 +303,7 @@ public class CollectionRoutesTest {
 		).get(
 		).apply(
 			null
-		);
+		).getUnchecked();
 
 		assertThat(page.getItems(), hasSize(1));
 		assertThat(page.getItems(), hasItem("Apio"));

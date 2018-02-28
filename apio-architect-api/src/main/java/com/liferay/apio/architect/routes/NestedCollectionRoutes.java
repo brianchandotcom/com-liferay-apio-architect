@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.operation.Method.POST;
-import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideThrowable;
+import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 
 import static java.lang.String.join;
 
@@ -196,7 +196,7 @@ public class NestedCollectionRoutes<T, S> {
 			_form = form;
 
 			_nestedCreateItemFunction =
-				httpServletRequest -> identifier -> body -> provideThrowable(
+				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass, dClass,
 					a -> b -> c -> d -> throwableHexaFunction.andThen(
@@ -240,7 +240,7 @@ public class NestedCollectionRoutes<T, S> {
 			_form = form;
 
 			_nestedCreateItemFunction =
-				httpServletRequest -> identifier -> body -> provideThrowable(
+				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass,
 					a -> b -> c -> throwablePentaFunction.andThen(
@@ -282,7 +282,7 @@ public class NestedCollectionRoutes<T, S> {
 			_form = form;
 
 			_nestedCreateItemFunction =
-				httpServletRequest -> identifier -> body -> provideThrowable(
+				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					a -> b -> throwableTetraFunction.andThen(
 						t -> new SingleModel<>(
@@ -321,7 +321,7 @@ public class NestedCollectionRoutes<T, S> {
 			_form = form;
 
 			_nestedCreateItemFunction =
-				httpServletRequest -> identifier -> body -> provideThrowable(
+				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass,
 					a -> throwableTriFunction.andThen(
 						t -> new SingleModel<>(
@@ -344,7 +344,7 @@ public class NestedCollectionRoutes<T, S> {
 			ThrowableBiFunction<Pagination, S, PageItems<T>> biFunction) {
 
 			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provideThrowable(
+				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, Credentials.class,
 					pagination -> credentials -> biFunction.andThen(
@@ -381,7 +381,7 @@ public class NestedCollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(dClass.getName());
 
 			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provideThrowable(
+				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, cClass, dClass,
 					Credentials.class,
@@ -417,7 +417,7 @@ public class NestedCollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(cClass.getName());
 
 			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provideThrowable(
+				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, cClass, Credentials.class,
 					pagination -> a -> b -> c -> credentials ->
@@ -449,7 +449,7 @@ public class NestedCollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(bClass.getName());
 
 			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provideThrowable(
+				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, Credentials.class,
 					pagination -> a -> b -> credentials ->
@@ -478,7 +478,7 @@ public class NestedCollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(aClass.getName());
 
 			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provideThrowable(
+				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, Credentials.class,
 					pagination -> a -> credentials -> triFunction.andThen(

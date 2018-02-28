@@ -16,8 +16,8 @@ package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.operation.Method.DELETE;
 import static com.liferay.apio.architect.operation.Method.PUT;
+import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideConsumer;
-import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideThrowable;
 
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -152,7 +152,7 @@ public class ItemRoutes<T, S> {
 
 			_neededProviderConsumer.accept(aClass.getName());
 
-			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
+			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
 				Credentials.class,
 				a -> credentials -> throwableBiFunction.andThen(
@@ -174,7 +174,7 @@ public class ItemRoutes<T, S> {
 		public Builder<T, S> addGetter(
 			ThrowableFunction<S, T> throwableFunction) {
 
-			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
+			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), Credentials.class,
 				credentials -> throwableFunction.andThen(
 					t -> new SingleModel<>(
@@ -206,7 +206,7 @@ public class ItemRoutes<T, S> {
 			_neededProviderConsumer.accept(cClass.getName());
 			_neededProviderConsumer.accept(dClass.getName());
 
-			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
+			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass, Credentials.class,
 				a -> b -> c -> d -> credentials ->
@@ -237,7 +237,7 @@ public class ItemRoutes<T, S> {
 			_neededProviderConsumer.accept(bClass.getName());
 			_neededProviderConsumer.accept(cClass.getName());
 
-			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
+			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, Credentials.class,
 				a -> b -> c -> credentials -> throwableTetraFunction.andThen(
@@ -265,7 +265,7 @@ public class ItemRoutes<T, S> {
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 
-			_singleModelFunction = httpServletRequest -> s -> provideThrowable(
+			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				Credentials.class,
 				a -> b -> credentials -> throwableTriFunction.andThen(
@@ -435,16 +435,14 @@ public class ItemRoutes<T, S> {
 
 			_form = form;
 
-			_updateItemFunction = httpServletRequest -> s -> body ->
-				provideThrowable(
-					_provideFunction.apply(httpServletRequest),
-					Credentials.class,
-					credentials -> throwableBiFunction.andThen(
-						t -> new SingleModel<>(
-							t, _name, _getOperations(credentials, s))
-					).apply(
-						s, form.get(body)
-					));
+			_updateItemFunction = httpServletRequest -> s -> body -> provide(
+				_provideFunction.apply(httpServletRequest), Credentials.class,
+				credentials -> throwableBiFunction.andThen(
+					t -> new SingleModel<>(
+						t, _name, _getOperations(credentials, s))
+				).apply(
+					s, form.get(body)
+				));
 
 			return this;
 		}
@@ -480,17 +478,16 @@ public class ItemRoutes<T, S> {
 
 			_form = form;
 
-			_updateItemFunction = httpServletRequest -> s -> body ->
-				provideThrowable(
-					_provideFunction.apply(httpServletRequest), aClass, bClass,
-					cClass, dClass, Credentials.class,
-					a -> b -> c -> d -> credentials ->
-						throwableHexaFunction.andThen(
-							t -> new SingleModel<>(
-								t, _name, _getOperations(credentials, s))
-						).apply(
-							s, form.get(body), a, b, c, d
-						));
+			_updateItemFunction = httpServletRequest -> s -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass, dClass, Credentials.class,
+				a -> b -> c -> d -> credentials ->
+					throwableHexaFunction.andThen(
+						t -> new SingleModel<>(
+							t, _name, _getOperations(credentials, s))
+					).apply(
+						s, form.get(body), a, b, c, d
+					));
 
 			return this;
 		}
@@ -525,17 +522,15 @@ public class ItemRoutes<T, S> {
 
 			_form = form;
 
-			_updateItemFunction = httpServletRequest -> s -> body ->
-				provideThrowable(
-					_provideFunction.apply(httpServletRequest), aClass, bClass,
-					cClass, Credentials.class,
-					a -> b -> c -> credentials ->
-						throwablePentaFunction.andThen(
-							t -> new SingleModel<>(
-								t, _name, _getOperations(credentials, s))
-						).apply(
-							s, form.get(body), a, b, c
-						));
+			_updateItemFunction = httpServletRequest -> s -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass, Credentials.class,
+				a -> b -> c -> credentials -> throwablePentaFunction.andThen(
+					t -> new SingleModel<>(
+						t, _name, _getOperations(credentials, s))
+				).apply(
+					s, form.get(body), a, b, c
+				));
 
 			return this;
 		}
@@ -567,16 +562,15 @@ public class ItemRoutes<T, S> {
 
 			_form = form;
 
-			_updateItemFunction = httpServletRequest -> s -> body ->
-				provideThrowable(
-					_provideFunction.apply(httpServletRequest), aClass, bClass,
-					Credentials.class,
-					a -> b -> credentials -> throwableTetraFunction.andThen(
-						t -> new SingleModel<>(
-							t, _name, _getOperations(credentials, s))
-					).apply(
-						s, form.get(body), a, b
-					));
+			_updateItemFunction = httpServletRequest -> s -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				Credentials.class,
+				a -> b -> credentials -> throwableTetraFunction.andThen(
+					t -> new SingleModel<>(
+						t, _name, _getOperations(credentials, s))
+				).apply(
+					s, form.get(body), a, b
+				));
 
 			return this;
 		}
@@ -607,16 +601,15 @@ public class ItemRoutes<T, S> {
 
 			_form = form;
 
-			_updateItemFunction = httpServletRequest -> s -> body ->
-				provideThrowable(
-					_provideFunction.apply(httpServletRequest), aClass,
-					Credentials.class,
-					a -> credentials -> throwableTriFunction.andThen(
-						t -> new SingleModel<>(
-							t, _name, _getOperations(credentials, s))
-					).apply(
-						s, form.get(body), a
-					));
+			_updateItemFunction = httpServletRequest -> s -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass,
+				Credentials.class,
+				a -> credentials -> throwableTriFunction.andThen(
+					t -> new SingleModel<>(
+						t, _name, _getOperations(credentials, s))
+				).apply(
+					s, form.get(body), a
+				));
 
 			return this;
 		}

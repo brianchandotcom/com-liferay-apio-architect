@@ -17,10 +17,12 @@ package com.liferay.apio.architect.routes;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideConsumer;
 import static com.liferay.apio.architect.routes.RoutesTestUtil.PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.test.util.result.TryMatchers.aTryWithValueThat;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.language.Language;
 
 import java.lang.reflect.Constructor;
@@ -74,7 +76,7 @@ public class RoutesBuilderUtilTest {
 
 	@Test
 	public void testFiveParameterProvideMethodProvides() {
-		String result = provide(
+		Try<String> result = provide(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
 			Boolean.class, Float.class,
 			string -> aLong -> integer -> aBoolean -> aFloat -> {
@@ -87,7 +89,7 @@ public class RoutesBuilderUtilTest {
 				return "The result";
 			});
 
-		assertThat(result, is("The result"));
+		assertThat(result, is(aTryWithValueThat(is("The result"))));
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -129,7 +131,7 @@ public class RoutesBuilderUtilTest {
 
 	@Test
 	public void testFourParameterProvideMethodProvides() {
-		String result = provide(
+		Try<String> result = provide(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
 			Boolean.class,
 			string -> aLong -> integer -> aBoolean -> {
@@ -141,7 +143,7 @@ public class RoutesBuilderUtilTest {
 				return "The result";
 			});
 
-		assertThat(result, is("The result"));
+		assertThat(result, is(aTryWithValueThat(is("The result"))));
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -175,7 +177,7 @@ public class RoutesBuilderUtilTest {
 
 	@Test
 	public void testOneParameterProvideMethodProvides() {
-		String result = provide(
+		Try<String> result = provide(
 			PROVIDE_FUNCTION, String.class,
 			string -> {
 				assertThat(string, is("Apio"));
@@ -183,7 +185,7 @@ public class RoutesBuilderUtilTest {
 				return "The result";
 			});
 
-		assertThat(result, is("The result"));
+		assertThat(result, is(aTryWithValueThat(is("The result"))));
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -221,7 +223,7 @@ public class RoutesBuilderUtilTest {
 
 	@Test
 	public void testThreeParameterProvideMethodProvides() {
-		String result = provide(
+		Try<String> result = provide(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
 			string -> aLong -> integer -> {
 				assertThat(string, is("Apio"));
@@ -231,7 +233,7 @@ public class RoutesBuilderUtilTest {
 				return "The result";
 			});
 
-		assertThat(result, is("The result"));
+		assertThat(result, is(aTryWithValueThat(is("The result"))));
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -268,7 +270,7 @@ public class RoutesBuilderUtilTest {
 
 	@Test
 	public void testTwoParameterProvideMethodProvides() {
-		String result = provide(
+		Try<String> result = provide(
 			PROVIDE_FUNCTION, String.class, Long.class,
 			string -> aLong -> {
 				assertThat(string, is("Apio"));
@@ -277,7 +279,7 @@ public class RoutesBuilderUtilTest {
 				return "The result";
 			});
 
-		assertThat(result, is("The result"));
+		assertThat(result, is(aTryWithValueThat(is("The result"))));
 	}
 
 }
