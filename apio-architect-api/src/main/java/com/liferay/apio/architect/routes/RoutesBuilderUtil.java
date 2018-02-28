@@ -16,10 +16,10 @@ package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
+import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -216,9 +216,11 @@ public class RoutesBuilderUtil {
 	 * @param function the function that receives the class instances
 	 */
 	public static <A, B, C, D> void provideConsumer(
-		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Class<D> dClass,
-		Function<A, Function<B, Function<C, Consumer<D>>>> function) {
+			Function<Class<?>, ?> provideFunction, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			Function<A, Function<B, Function<C, ThrowableConsumer<D>>>>
+				function)
+		throws Exception {
 
 		provideConsumer(
 			provideFunction, aClass, bClass, cClass,
@@ -244,8 +246,10 @@ public class RoutesBuilderUtil {
 	 * @param function the function that receives the class instances
 	 */
 	public static <A, B, C> void provideConsumer(
-		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass, Function<A, Function<B, Consumer<C>>> function) {
+			Function<Class<?>, ?> provideFunction, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass,
+			Function<A, Function<B, ThrowableConsumer<C>>> function)
+		throws Exception {
 
 		provideConsumer(
 			provideFunction, aClass, bClass,
@@ -268,8 +272,9 @@ public class RoutesBuilderUtil {
 	 * @param function the function that receives the class instances
 	 */
 	public static <A, B> void provideConsumer(
-		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
-		Function<A, Consumer<B>> function) {
+			Function<Class<?>, ?> provideFunction, Class<A> aClass,
+			Class<B> bClass, Function<A, ThrowableConsumer<B>> function)
+		throws Exception {
 
 		provideConsumer(
 			provideFunction, aClass,
@@ -289,8 +294,9 @@ public class RoutesBuilderUtil {
 	 * @param consumer the consumer
 	 */
 	public static <A> void provideConsumer(
-		Function<Class<?>, ?> provideFunction, Class<A> aClass,
-		Consumer<A> consumer) {
+			Function<Class<?>, ?> provideFunction, Class<A> aClass,
+			ThrowableConsumer<A> consumer)
+		throws Exception {
 
 		consumer.accept(_provideClass(provideFunction, aClass));
 	}

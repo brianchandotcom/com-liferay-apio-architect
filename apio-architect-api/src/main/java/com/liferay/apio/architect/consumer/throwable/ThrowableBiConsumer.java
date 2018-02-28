@@ -43,8 +43,8 @@ public interface ThrowableBiConsumer<A, B> {
 	}
 
 	/**
-	 * Operates with two parameters and returns {@code void}. This function
-	 * can be implemented explicitly or with a lambda.
+	 * Operates with two parameters and returns {@code void}. This function can
+	 * be implemented explicitly or with a lambda.
 	 *
 	 * @param a the first function argument
 	 * @param b the second function argument

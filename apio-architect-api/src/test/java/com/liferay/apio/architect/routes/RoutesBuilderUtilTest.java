@@ -51,7 +51,9 @@ public class RoutesBuilderUtilTest {
 	}
 
 	@Test(expected = NotFoundException.class)
-	public void testFiveParameterProvideConsumerMethodFailsIfNoProvider() {
+	public void testFiveParameterProvideConsumerMethodFailsIfNoProvider()
+		throws Exception {
+
 		provideConsumer(
 			PROVIDE_FUNCTION, Language.class, Long.class, Integer.class,
 			Boolean.class,
@@ -89,7 +91,9 @@ public class RoutesBuilderUtilTest {
 	}
 
 	@Test(expected = NotFoundException.class)
-	public void testFourParameterProvideConsumerMethodFailsIfNoProvider() {
+	public void testFourParameterProvideConsumerMethodFailsIfNoProvider()
+		throws Exception {
+
 		provideConsumer(
 			PROVIDE_FUNCTION, Language.class, Long.class, Integer.class,
 			Boolean.class,
@@ -99,7 +103,9 @@ public class RoutesBuilderUtilTest {
 	}
 
 	@Test
-	public void testFourParameterProvideConsumerMethodProvides() {
+	public void testFourParameterProvideConsumerMethodProvides()
+		throws Exception {
+
 		provideConsumer(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
 			Boolean.class,
@@ -139,7 +145,9 @@ public class RoutesBuilderUtilTest {
 	}
 
 	@Test(expected = NotFoundException.class)
-	public void testOneParameterProvideConsumerMethodFailsIfNoProvider() {
+	public void testOneParameterProvideConsumerMethodFailsIfNoProvider()
+		throws Exception {
+
 		provideConsumer(
 			PROVIDE_FUNCTION, Language.class,
 			string -> {
@@ -148,7 +156,9 @@ public class RoutesBuilderUtilTest {
 	}
 
 	@Test
-	public void testOneParameterProvideConsumerMethodProvides() {
+	public void testOneParameterProvideConsumerMethodProvides()
+		throws Exception {
+
 		provideConsumer(
 			PROVIDE_FUNCTION, String.class,
 			string -> assertThat(string, is("Apio")));
@@ -177,7 +187,9 @@ public class RoutesBuilderUtilTest {
 	}
 
 	@Test(expected = NotFoundException.class)
-	public void testThreeParameterProvideConsumerMethodFailsIfNoProvider() {
+	public void testThreeParameterProvideConsumerMethodFailsIfNoProvider()
+		throws Exception {
+
 		provideConsumer(
 			PROVIDE_FUNCTION, Language.class, Long.class, Integer.class,
 			string -> aLong -> integer -> {
@@ -186,7 +198,9 @@ public class RoutesBuilderUtilTest {
 	}
 
 	@Test
-	public void testThreeParameterProvideConsumerMethodProvides() {
+	public void testThreeParameterProvideConsumerMethodProvides()
+		throws Exception {
+
 		provideConsumer(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
 			string -> aLong -> integer -> {
@@ -221,7 +235,9 @@ public class RoutesBuilderUtilTest {
 	}
 
 	@Test(expected = NotFoundException.class)
-	public void testTwoParameterProvideConsumerMethodFailsIfNoProvider() {
+	public void testTwoParameterProvideConsumerMethodFailsIfNoProvider()
+		throws Exception {
+
 		provideConsumer(
 			PROVIDE_FUNCTION, Language.class, Long.class,
 			string -> aLong -> {
@@ -230,7 +246,9 @@ public class RoutesBuilderUtilTest {
 	}
 
 	@Test
-	public void testTwoParameterProvideConsumerMethodProvides() {
+	public void testTwoParameterProvideConsumerMethodProvides()
+		throws Exception {
+
 		provideConsumer(
 			PROVIDE_FUNCTION, String.class, Long.class,
 			string -> aLong -> {

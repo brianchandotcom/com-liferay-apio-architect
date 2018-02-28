@@ -76,7 +76,9 @@ public class ItemRoutesTest {
 	}
 
 	@Test
-	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
+	public void testFiveParameterBuilderMethodsCreatesValidRoutes()
+		throws Exception {
+
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
@@ -104,7 +106,9 @@ public class ItemRoutesTest {
 	}
 
 	@Test
-	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
+	public void testFourParameterBuilderMethodsCreatesValidRoutes()
+		throws Exception {
+
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
@@ -132,7 +136,9 @@ public class ItemRoutesTest {
 	}
 
 	@Test
-	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
+	public void testOneParameterBuilderMethodsCreatesValidRoutes()
+		throws Exception {
+
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
@@ -154,7 +160,9 @@ public class ItemRoutesTest {
 	}
 
 	@Test
-	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
+	public void testThreeParameterBuilderMethodsCreatesValidRoutes()
+		throws Exception {
+
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
@@ -179,7 +187,9 @@ public class ItemRoutesTest {
 	}
 
 	@Test
-	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
+	public void testTwoParameterBuilderMethodsCreatesValidRoutes()
+		throws Exception {
+
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
@@ -298,7 +308,9 @@ public class ItemRoutesTest {
 		_testThreeParameterRemoverRoute(identifier, string, aLong, aBoolean);
 	}
 
-	private void _testItemRoutes(ItemRoutes<String, Long> itemRoutes) {
+	private void _testItemRoutes(ItemRoutes<String, Long> itemRoutes)
+		throws Exception {
+
 		Optional<ItemRoutes<String, Long>> optional = Optional.of(itemRoutes);
 
 		Map body = optional.flatMap(

@@ -42,8 +42,8 @@ public interface ThrowableConsumer<A> {
 	}
 
 	/**
-	 * Operates with one parameter and returns {@code void}. This function
-	 * can be implemented explicitly or with a lambda.
+	 * Operates with one parameter and returns {@code void}. This function can
+	 * be implemented explicitly or with a lambda.
 	 *
 	 * @param a the first function argument
 	 */
@@ -51,11 +51,11 @@ public interface ThrowableConsumer<A> {
 
 	/**
 	 * Returns the {@code ThrowableConsumer} function that first executes the
-	 * current {@code ThrowableConsumer} instance's {@code accept} method,
-	 * then executes the {@code after} parameter's {@code accept} method.
+	 * current {@code ThrowableConsumer} instance's {@code accept} method, then
+	 * executes the {@code after} parameter's {@code accept} method.
 	 *
-	 * @param  after the {@code ThrowableConsumer} instance to execute after
-	 *         the current instance
+	 * @param  after the {@code ThrowableConsumer} instance to execute after the
+	 *         current instance
 	 * @return the {@code ThrowableConsumer} that executes the current
 	 *         instance's {@code accept} method, as well as that of {@code
 	 *         after}

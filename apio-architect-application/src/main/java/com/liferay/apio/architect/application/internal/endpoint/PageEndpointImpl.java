@@ -22,6 +22,7 @@ import static com.liferay.apio.architect.operation.Method.PUT;
 
 import static javax.ws.rs.core.Response.noContent;
 
+import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.endpoint.PageEndpoint;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
@@ -123,19 +124,19 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	}
 
 	@Override
-	public Response deleteCollectionItem(String id) {
+	public Response deleteCollectionItem(String id) throws Exception {
 		Try<ItemRoutes<T, S>> itemRoutesTry = Try.fromOptional(
 			_itemRoutesSupplier::get, notFound(_name));
 
-		itemRoutesTry.mapOptional(
+		ThrowableConsumer<S> throwableConsumer = itemRoutesTry.mapOptional(
 			ItemRoutes::getDeleteConsumerOptional, notAllowed(DELETE, _name, id)
-		).ifSuccess(
-			function -> function.apply(
-				_httpServletRequest
-			).accept(
-				_identifierFunction.apply(new Path(_name, id))
-			)
-		);
+		).map(
+			function -> function.apply(_httpServletRequest)
+		).getUnchecked();
+
+		Path path = new Path(_name, id);
+
+		throwableConsumer.accept(_identifierFunction.apply(path));
 
 		return noContent().build();
 	}

@@ -24,9 +24,11 @@ import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
-import com.liferay.apio.architect.consumer.PentaConsumer;
-import com.liferay.apio.architect.consumer.TetraConsumer;
-import com.liferay.apio.architect.consumer.TriConsumer;
+import com.liferay.apio.architect.consumer.throwable.ThrowableBiConsumer;
+import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
+import com.liferay.apio.architect.consumer.throwable.ThrowablePentaConsumer;
+import com.liferay.apio.architect.consumer.throwable.ThrowableTetraConsumer;
+import com.liferay.apio.architect.consumer.throwable.ThrowableTriConsumer;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
@@ -42,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -287,7 +288,7 @@ public class ItemRoutes<T, S> {
 		 * @return the updated builder
 		 */
 		public <A> Builder<T, S> addRemover(
-			BiConsumer<S, A> biConsumer, Class<A> aClass,
+			ThrowableBiConsumer<S, A> biConsumer, Class<A> aClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -309,7 +310,7 @@ public class ItemRoutes<T, S> {
 		 * @return the updated builder
 		 */
 		public Builder<T, S> addRemover(
-			Consumer<S> consumer,
+			ThrowableConsumer<S> consumer,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction) {
 
 			_deleteItemPermissionFunction = permissionBiFunction;
@@ -335,8 +336,8 @@ public class ItemRoutes<T, S> {
 		 * @return the updated builder
 		 */
 		public <A, B, C, D> Builder<T, S> addRemover(
-			PentaConsumer<S, A, B, C, D> pentaConsumer, Class<A> aClass,
-			Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			ThrowablePentaConsumer<S, A, B, C, D> pentaConsumer,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -368,7 +369,7 @@ public class ItemRoutes<T, S> {
 		 * @return the updated builder
 		 */
 		public <A, B, C> Builder<T, S> addRemover(
-			TetraConsumer<S, A, B, C> tetraConsumer, Class<A> aClass,
+			ThrowableTetraConsumer<S, A, B, C> tetraConsumer, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction) {
 
@@ -397,7 +398,8 @@ public class ItemRoutes<T, S> {
 		 * @return the updated builder
 		 */
 		public <A, B> Builder<T, S> addRemover(
-			TriConsumer<S, A, B> triConsumer, Class<A> aClass, Class<B> bClass,
+			ThrowableTriConsumer<S, A, B> triConsumer, Class<A> aClass,
+			Class<B> bClass,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());

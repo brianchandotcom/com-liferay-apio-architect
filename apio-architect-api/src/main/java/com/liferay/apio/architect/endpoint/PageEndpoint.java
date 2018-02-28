@@ -75,7 +75,8 @@ public interface PageEndpoint<T> {
 	 */
 	@DELETE
 	@Path("{id}")
-	public Response deleteCollectionItem(@PathParam("id") String id);
+	public Response deleteCollectionItem(@PathParam("id") String id)
+		throws Exception;
 
 	/**
 	 * Returns the {@link SingleModel} for the specified resource.
