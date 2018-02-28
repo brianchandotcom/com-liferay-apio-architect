@@ -16,7 +16,6 @@ package com.liferay.apio.architect.sample.liferay.portal.internal.resource;
 
 import static com.liferay.apio.architect.sample.liferay.portal.internal.idempotent.Idempotent.idempotent;
 
-import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.representor.Representor;
@@ -117,7 +116,8 @@ public class BlogPostingNestedCollectionResource
 	}
 
 	private BlogsEntry _addBlogsEntry(
-		Long classNameClassPK, BlogPostingForm blogPostingForm) {
+			Long classNameClassPK, BlogPostingForm blogPostingForm)
+		throws PortalException {
 
 		ServiceContext serviceContext = new ServiceContext();
 
@@ -125,20 +125,16 @@ public class BlogPostingNestedCollectionResource
 		serviceContext.setAddGuestPermissions(true);
 		serviceContext.setScopeGroupId(classNameClassPK);
 
-		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
-			() -> _blogsService.addEntry(
-				blogPostingForm.getHeadline(),
-				blogPostingForm.getAlternativeHeadline(),
-				blogPostingForm.getDescription(),
-				blogPostingForm.getArticleBody(),
-				blogPostingForm.getDisplayDateMonth(),
-				blogPostingForm.getDisplayDateDay(),
-				blogPostingForm.getDisplayDateYear(),
-				blogPostingForm.getDisplayDateHour(),
-				blogPostingForm.getDisplayDateMinute(), false, false, null,
-				null, null, null, serviceContext));
-
-		return blogsEntryTry.getUnchecked();
+		return _blogsService.addEntry(
+			blogPostingForm.getHeadline(),
+			blogPostingForm.getAlternativeHeadline(),
+			blogPostingForm.getDescription(), blogPostingForm.getArticleBody(),
+			blogPostingForm.getDisplayDateMonth(),
+			blogPostingForm.getDisplayDateDay(),
+			blogPostingForm.getDisplayDateYear(),
+			blogPostingForm.getDisplayDateHour(),
+			blogPostingForm.getDisplayDateMinute(), false, false, null, null,
+			null, null, serviceContext);
 	}
 
 	private PageItems<BlogsEntry> _getPageItems(
@@ -165,20 +161,16 @@ public class BlogPostingNestedCollectionResource
 
 		serviceContext.setScopeGroupId(blogsEntry.getGroupId());
 
-		Try<BlogsEntry> blogsEntryTry = Try.fromFallible(
-			() -> _blogsService.updateEntry(
-				blogsEntryId, blogPostingForm.getHeadline(),
-				blogPostingForm.getAlternativeHeadline(),
-				blogPostingForm.getDescription(),
-				blogPostingForm.getArticleBody(),
-				blogPostingForm.getDisplayDateMonth(),
-				blogPostingForm.getDisplayDateDay(),
-				blogPostingForm.getDisplayDateYear(),
-				blogPostingForm.getDisplayDateHour(),
-				blogPostingForm.getDisplayDateMinute(), false, false, null,
-				null, null, null, serviceContext));
-
-		return blogsEntryTry.getUnchecked();
+		return _blogsService.updateEntry(
+			blogsEntryId, blogPostingForm.getHeadline(),
+			blogPostingForm.getAlternativeHeadline(),
+			blogPostingForm.getDescription(), blogPostingForm.getArticleBody(),
+			blogPostingForm.getDisplayDateMonth(),
+			blogPostingForm.getDisplayDateDay(),
+			blogPostingForm.getDisplayDateYear(),
+			blogPostingForm.getDisplayDateHour(),
+			blogPostingForm.getDisplayDateMinute(), false, false, null, null,
+			null, null, serviceContext);
 	}
 
 	@Reference
