@@ -311,7 +311,7 @@ public class NestedCollectionRoutesTest {
 			42L
 		).apply(
 			_body
-		);
+		).getUnchecked();
 
 		assertThat(singleModel.getResourceName(), is("nested"));
 		assertThat(singleModel.getModel(), is("Apio"));
@@ -327,7 +327,7 @@ public class NestedCollectionRoutesTest {
 			path
 		).apply(
 			42L
-		);
+		).getUnchecked();
 
 		assertThat(page.getItems(), hasSize(1));
 		assertThat(page.getItems(), hasItem("Apio"));

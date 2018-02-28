@@ -107,7 +107,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 				return singleModelTry.mapOptional(
 					_getIdentifierFunction(nestedName)
-				).map(
+				).flatMap(
 					identifier -> function.apply(
 						_httpServletRequest
 					).apply(
@@ -186,7 +186,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 					optional -> optional.map(pageFunction)
 				);
 			}
-		).map(
+		).flatMap(
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class, notFound(id, nestedName)
