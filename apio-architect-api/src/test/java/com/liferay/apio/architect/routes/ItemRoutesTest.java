@@ -343,7 +343,7 @@ public class ItemRoutesTest {
 			42L
 		).apply(
 			_body
-		);
+		).getUnchecked();
 
 		assertThat(updatedSingleModel.getResourceName(), is("name"));
 		assertThat(updatedSingleModel.getModel(), is("Updated"));

@@ -202,7 +202,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		return itemRoutesTry.mapOptional(
 			ItemRoutes::getUpdateItemFunctionOptional,
 			notAllowed(PUT, _name, id)
-		).map(
+		).flatMap(
 			function -> function.apply(
 				_httpServletRequest
 			).compose(
