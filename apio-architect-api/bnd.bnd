@@ -16,6 +16,7 @@ Export-Package:\
 	com.liferay.apio.architect.endpoint,\
 	com.liferay.apio.architect.error,\
 	com.liferay.apio.architect.exception,\
+	com.liferay.apio.architect.file,\
 	com.liferay.apio.architect.form,\
 	com.liferay.apio.architect.function,\
 	com.liferay.apio.architect.functional,\
