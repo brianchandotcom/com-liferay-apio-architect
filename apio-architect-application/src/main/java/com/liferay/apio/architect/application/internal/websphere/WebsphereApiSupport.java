@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.websphere;
+package com.liferay.apio.architect.application.internal.websphere;
+
+import com.liferay.apio.architect.functional.Try;
 
 import java.io.InputStream;
 
@@ -24,29 +26,36 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 /**
+ * Add support for some Websphere versions where the {@code
+ * javax.annotation-api.jar} is not correctly provided.
+ *
  * @author Carlos Sierra Andrés
+ * @review
  */
 public class WebsphereApiSupport implements BundleActivator {
 
+	public static final String WEBSPHERE_CLASS =
+		"/com/ibm/websphere/product/VersionInfo.class";
+
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(BundleContext bundleContext) throws Exception {
 		if (_isWebSphere()) {
-			Bundle bundle = context.getBundle();
+			Bundle bundle = bundleContext.getBundle();
 
-			URL resource = bundle.getResource("javax.annotation-api.jar");
+			URL url = bundle.getResource("javax.annotation-api.jar");
 
-			try (InputStream input = resource.openStream()) {
-				_internalBundle = context.installBundle(
-					"javax.annotation API", input);
+			try (InputStream inputStream = url.openStream()) {
+				_bundle = bundleContext.installBundle(
+					"javax.annotation API", inputStream);
 			}
 		}
 	}
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext bundleContext) throws Exception {
 		try {
-			if (_internalBundle != null) {
-				_internalBundle.uninstall();
+			if (_bundle != null) {
+				_bundle.uninstall();
 			}
 		}
 		catch (BundleException be) {
@@ -55,19 +64,14 @@ public class WebsphereApiSupport implements BundleActivator {
 	}
 
 	private boolean _isWebSphere() {
-		ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+		Try<ClassLoader> aTry = Try.fromFallible(
+			ClassLoader::getSystemClassLoader);
 
-		try {
-			systemClassLoader.loadClass(
-				"/com/ibm/websphere/product/VersionInfo.class");
-		}
-		catch (ClassNotFoundException cnfe) {
-			return false;
-		}
-
-		return true;
+		return aTry.map(
+			classLoader -> classLoader.loadClass(WEBSPHERE_CLASS)
+		).isSuccess();
 	}
 
-	private Bundle _internalBundle;
+	private Bundle _bundle;
 
 }
