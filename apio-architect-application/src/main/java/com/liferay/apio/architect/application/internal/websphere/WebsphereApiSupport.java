@@ -67,9 +67,15 @@ public class WebsphereApiSupport implements BundleActivator {
 		Try<ClassLoader> aTry = Try.fromFallible(
 			ClassLoader::getSystemClassLoader);
 
-		return aTry.map(
-			classLoader -> classLoader.loadClass(WEBSPHERE_CLASS)
+		boolean success = aTry.map(
+			classLoader -> classLoader.loadClass(WEBSPHERE_CLASS) != null
+		).recoverWith(
+			e -> Try.fromFallible(
+				() -> WebsphereApiSupport.class.getResource(WEBSPHERE_CLASS) !=
+					null)
 		).isSuccess();
+
+		return success;
 	}
 
 	private Bundle _bundle;
