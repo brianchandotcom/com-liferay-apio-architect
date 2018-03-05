@@ -62,7 +62,7 @@ public class JSONLDFormMessageMapperTest {
 		).where(
 			"@id", isALinkTo("localhost/f/f/s")
 		).where(
-			"@type", is(aJsonString(equalTo("hydra:Class")))
+			"@type", is(aJsonString(equalTo("Class")))
 		).where(
 			"description", is(aJsonString(equalTo("description")))
 		).where(
@@ -87,7 +87,7 @@ public class JSONLDFormMessageMapperTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		return builder.where(
-			"@type", is(aJsonString(equalTo("hydra:SupportedProperty")))
+			"@type", is(aJsonString(equalTo("SupportedProperty")))
 		).where(
 			"property", is(aJsonString(equalTo("#" + name)))
 		).where(
