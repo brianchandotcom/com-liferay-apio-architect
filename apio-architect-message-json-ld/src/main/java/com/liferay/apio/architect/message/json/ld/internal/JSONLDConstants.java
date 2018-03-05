@@ -49,17 +49,6 @@ public class JSONLDConstants {
 	public static final String FIELD_NAME_FIRST = "first";
 
 	/**
-	 * The Hydra qualifier.
-	 */
-	public static final String FIELD_NAME_HYDRA = "hydra";
-
-	/**
-	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#operation">operation
-	 * </a> property.
-	 */
-	public static final String FIELD_NAME_HYDRA_OPERATION = hydra("operation");
-
-	/**
 	 * The JSON-LD <a
 	 * href="https://json-ld.org/spec/latest/json-ld/#node-identifiers">
 	 * identifier </a> property.
@@ -96,6 +85,12 @@ public class JSONLDConstants {
 	 * property.
 	 */
 	public static final String FIELD_NAME_NUMBER_OF_ITEMS = "numberOfItems";
+
+	/**
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#operation">operation
+	 * </a> property.
+	 */
+	public static final String FIELD_NAME_OPERATION = "operation";
 
 	/**
 	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#previous">previous
@@ -186,42 +181,40 @@ public class JSONLDConstants {
 	 * href="https://www.w3.org/ns/hydra/core#ApiDocumentation">ApiDocumentation
 	 * </a> property.
 	 */
-	public static final String TYPE_API_DOCUMENTATION = hydra(
-		"ApiDocumentation");
+	public static final String TYPE_API_DOCUMENTATION = "ApiDocumentation";
 
 	/**
 	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#Class">Class </a>
 	 * property.
 	 */
-	public static final String TYPE_HYDRA_CLASS = hydra("Class");
+	public static final String TYPE_CLASS = "Class";
 
 	/**
 	 * The Hydra <a
 	 * href="https://www.w3.org/ns/hydra/core#Collection">Collection </a>
 	 * property.
 	 */
-	public static final String TYPE_HYDRA_COLLECTION = hydra("Collection");
-
-	/**
-	 * The Hydra <a
-	 * href="https://www.w3.org/ns/hydra/core#PartialCollectionView">
-	 * PartialCollectionView </a> property.
-	 */
-	public static final String TYPE_HYDRA_PARTIAL_COLLECTION_VIEW = hydra(
-		"PartialCollectionView");
-
-	/**
-	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#SupportedProperty">
-	 * SupportedProperty </a> property.
-	 */
-	public static final String TYPE_HYDRA_SUPPORTED_PROPERTY = hydra(
-		"SupportedProperty");
+	public static final String TYPE_COLLECTION = "Collection";
 
 	/**
 	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#Operation">Operation
 	 * </a> property.
 	 */
 	public static final String TYPE_OPERATION = "Operation";
+
+	/**
+	 * The Hydra <a
+	 * href="https://www.w3.org/ns/hydra/core#PartialCollectionView">
+	 * PartialCollectionView </a> property.
+	 */
+	public static final String TYPE_PARTIAL_COLLECTION_VIEW =
+		"PartialCollectionView";
+
+	/**
+	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#SupportedProperty">
+	 * SupportedProperty </a> property.
+	 */
+	public static final String TYPE_SUPPORTED_PROPERTY = "SupportedProperty";
 
 	/**
 	 * The Hydra profile URL.
@@ -233,15 +226,5 @@ public class JSONLDConstants {
 	 * The schema.org URL.
 	 */
 	public static final String URL_SCHEMA_ORG = "http://schema.org/";
-
-	/**
-	 * Prefixes a type with the Hydra qualifier.
-	 *
-	 * @param  type the type to prefix
-	 * @return the prefixed type
-	 */
-	public static String hydra(String type) {
-		return FIELD_NAME_HYDRA + ":" + type;
-	}
 
 }

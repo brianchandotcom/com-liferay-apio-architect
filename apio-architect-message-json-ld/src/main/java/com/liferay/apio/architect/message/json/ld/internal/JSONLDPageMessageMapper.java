@@ -16,7 +16,6 @@ package com.liferay.apio.architect.message.json.ld.internal;
 
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_CONTEXT;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_FIRST;
-import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_HYDRA;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_ID;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_LAST;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_MEMBER;
@@ -28,8 +27,8 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstant
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_VIEW;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_VOCAB;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.MEDIA_TYPE;
-import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_HYDRA_COLLECTION;
-import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_HYDRA_PARTIAL_COLLECTION_VIEW;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_COLLECTION;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_PARTIAL_COLLECTION_VIEW;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_HYDRA_PROFILE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_SCHEMA_ORG;
 
@@ -159,30 +158,36 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
 		HttpHeaders httpHeaders) {
 
-		jsonObjectBuilder.nestedField(
-			FIELD_NAME_CONTEXT, FIELD_NAME_HYDRA
-		).stringValue(
-			URL_HYDRA_PROFILE
+		jsonObjectBuilder.field(
+			FIELD_NAME_CONTEXT
+		).arrayValue(
+		).add(
+			builder -> builder.field(
+				FIELD_NAME_VOCAB
+			).stringValue(
+				URL_SCHEMA_ORG
+			)
 		);
 
-		jsonObjectBuilder.nestedField(
-			FIELD_NAME_CONTEXT, FIELD_NAME_VOCAB
-		).stringValue(
-			URL_SCHEMA_ORG
+		jsonObjectBuilder.field(
+			FIELD_NAME_CONTEXT
+		).arrayValue(
+		).addString(
+			URL_HYDRA_PROFILE
 		);
 
 		jsonObjectBuilder.nestedField(
 			FIELD_NAME_VIEW, FIELD_NAME_TYPE
 		).arrayValue(
 		).addString(
-			TYPE_HYDRA_PARTIAL_COLLECTION_VIEW
+			TYPE_PARTIAL_COLLECTION_VIEW
 		);
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
 		).arrayValue(
 		).addString(
-			TYPE_HYDRA_COLLECTION
+			TYPE_COLLECTION
 		);
 	}
 

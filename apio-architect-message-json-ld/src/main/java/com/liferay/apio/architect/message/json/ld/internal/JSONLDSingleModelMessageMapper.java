@@ -16,10 +16,9 @@ package com.liferay.apio.architect.message.json.ld.internal;
 
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_CONTEXT;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_EXPECTS;
-import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_HYDRA;
-import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_HYDRA_OPERATION;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_ID;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_METHOD;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_OPERATION;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_TYPE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_VOCAB;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.MEDIA_TYPE;
@@ -302,19 +301,36 @@ public class JSONLDSingleModelMessageMapper<T>
 
 		Optional<String> optional = embeddedPathElements.lastOptional();
 
-		jsonObjectBuilder.ifElseCondition(
-			optional.isPresent(),
-			builder -> builder.nestedField(
+		if (optional.isPresent()) {
+			jsonObjectBuilder.nestedField(
 				head, middle
-			).nestedField(
-				FIELD_NAME_CONTEXT, optional.get()
-			),
-			builder -> builder.nestedField(FIELD_NAME_CONTEXT, head)
-		).field(
-			FIELD_NAME_TYPE
-		).stringValue(
-			FIELD_NAME_ID
-		);
+			).field(
+				FIELD_NAME_CONTEXT
+			).arrayValue(
+			).add(
+				builder -> builder.field(
+					optional.get()
+				).field(
+					FIELD_NAME_TYPE
+				).stringValue(
+					FIELD_NAME_ID
+				)
+			);
+		}
+		else {
+			jsonObjectBuilder.field(
+				FIELD_NAME_CONTEXT
+			).arrayValue(
+			).add(
+				builder -> builder.field(
+					head
+				).field(
+					FIELD_NAME_TYPE
+				).stringValue(
+					FIELD_NAME_ID
+				)
+			);
+		}
 	}
 
 	@Override
@@ -415,16 +431,22 @@ public class JSONLDSingleModelMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder, SingleModel<T> singleModel,
 		HttpHeaders httpHeaders) {
 
-		jsonObjectBuilder.nestedField(
-			FIELD_NAME_CONTEXT, FIELD_NAME_HYDRA
-		).stringValue(
-			URL_HYDRA_PROFILE
+		jsonObjectBuilder.field(
+			FIELD_NAME_CONTEXT
+		).arrayValue(
+		).add(
+			builder -> builder.field(
+				FIELD_NAME_VOCAB
+			).stringValue(
+				URL_SCHEMA_ORG
+			)
 		);
 
-		jsonObjectBuilder.nestedField(
-			FIELD_NAME_CONTEXT, FIELD_NAME_VOCAB
-		).stringValue(
-			URL_SCHEMA_ORG
+		jsonObjectBuilder.field(
+			FIELD_NAME_CONTEXT
+		).arrayValue(
+		).addString(
+			URL_HYDRA_PROFILE
 		);
 	}
 
@@ -454,7 +476,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		singleModelJSONObjectBuilder.nestedField(
 			head, tail
 		).field(
-			FIELD_NAME_HYDRA_OPERATION
+			FIELD_NAME_OPERATION
 		).arrayValue(
 		).add(
 			operationJSONObjectBuilder
@@ -479,7 +501,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		);
 
 		singleModelJSONObjectBuilder.field(
-			FIELD_NAME_HYDRA_OPERATION
+			FIELD_NAME_OPERATION
 		).arrayValue(
 		).add(
 			operationJSONObjectBuilder

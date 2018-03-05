@@ -25,8 +25,8 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstant
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_TYPE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_WRITEABLE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.MEDIA_TYPE;
-import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_HYDRA_CLASS;
-import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_HYDRA_SUPPORTED_PROPERTY;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_CLASS;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_SUPPORTED_PROPERTY;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_HYDRA_PROFILE;
 
 import com.liferay.apio.architect.form.Form;
@@ -79,7 +79,7 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 				builder.field(
 					FIELD_NAME_TYPE
 				).stringValue(
-					TYPE_HYDRA_SUPPORTED_PROPERTY
+					TYPE_SUPPORTED_PROPERTY
 				);
 
 				builder.field(
@@ -137,7 +137,7 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
 		).stringValue(
-			TYPE_HYDRA_CLASS
+			TYPE_CLASS
 		);
 
 		jsonObjectBuilder.field(
