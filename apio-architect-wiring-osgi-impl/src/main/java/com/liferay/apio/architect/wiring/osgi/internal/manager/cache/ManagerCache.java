@@ -76,7 +76,7 @@ public class ManagerCache {
 		}
 
 		Optional<Map<String, CollectionRoutes>> optional = Optional.ofNullable(
-			INSTANCE._collectionRoutes);
+			_collectionRoutes);
 
 		return optional.map(
 			map -> map.get(name)
@@ -151,7 +151,7 @@ public class ManagerCache {
 			computeEmptyFunction.invoke();
 		}
 
-		Optional<Map<String, String>> optional = INSTANCE.getNamesOptional();
+		Optional<Map<String, String>> optional = getNamesOptional();
 
 		return optional.map(map -> map.get(className));
 	}
