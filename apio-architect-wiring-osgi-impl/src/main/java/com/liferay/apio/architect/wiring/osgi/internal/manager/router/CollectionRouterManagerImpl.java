@@ -21,17 +21,21 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.Mana
 import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
+import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.logger.ApioLogger;
+import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -67,6 +71,19 @@ public class CollectionRouterManagerImpl
 	}
 
 	private void _computeCollectionRoutes() {
+		List<String> missingMandatoryProviders =
+			_providerManager.getMissingProviders(_mandatoryClassNames);
+
+		if (!missingMandatoryProviders.isEmpty()) {
+			if (_apioLogger != null) {
+				_apioLogger.warning(
+					"Missing providers for mandatory classes: " +
+						missingMandatoryProviders);
+			}
+
+			return;
+		}
+
 		Stream<String> stream = getKeyStream();
 
 		stream.forEach(
@@ -128,6 +145,10 @@ public class CollectionRouterManagerImpl
 				INSTANCE.putCollectionRoutes(name, collectionRoutes);
 			});
 	}
+
+	private static final List<String> _mandatoryClassNames = Arrays.asList(
+		Credentials.class.getName(), ServerURL.class.getName(),
+		Pagination.class.getName());
 
 	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
