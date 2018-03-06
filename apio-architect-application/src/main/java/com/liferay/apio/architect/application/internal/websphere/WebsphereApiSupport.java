@@ -14,8 +14,6 @@
 
 package com.liferay.apio.architect.application.internal.websphere;
 
-import com.liferay.apio.architect.functional.Try;
-
 import java.io.InputStream;
 
 import java.net.URL;
