@@ -59,10 +59,12 @@ public class MandatoryProvidersFilter implements ContainerRequestFilter {
 		List<String> missingMandatoryProviders =
 			_providerManager.getMissingProviders(mandatoryClassNames);
 
-		if (!missingMandatoryProviders.isEmpty() && (_apioLogger != null)) {
-			_apioLogger.warning(
-				"Missing providers for mandatory classes: " +
-					missingMandatoryProviders);
+		if (!missingMandatoryProviders.isEmpty()) {
+			if (_apioLogger != null) {
+				_apioLogger.warning(
+					"Missing providers for mandatory classes: " +
+						missingMandatoryProviders);
+			}
 
 			throw new NotFoundException();
 		}

@@ -66,10 +66,12 @@ public class ItemRouterManagerImpl
 				Optional<String> nameOptional = _nameManager.getNameOptional(
 					className);
 
-				if (!nameOptional.isPresent() && (_apioLogger != null)) {
-					_apioLogger.warning(
-						"Unable to find a Representable for class name " +
-							className);
+				if (!nameOptional.isPresent()) {
+					if (_apioLogger != null) {
+						_apioLogger.warning(
+							"Unable to find a Representable for class name " +
+								className);
+					}
 
 					return;
 				}
@@ -91,9 +93,12 @@ public class ItemRouterManagerImpl
 				List<String> missingProviders =
 					_providerManager.getMissingProviders(neededProviders);
 
-				if (!missingProviders.isEmpty() && (_apioLogger != null)) {
-					_apioLogger.warning(
-						"Missing providers for classes: " + missingProviders);
+				if (!missingProviders.isEmpty()) {
+					if (_apioLogger != null) {
+						_apioLogger.warning(
+							"Missing providers for classes: " +
+								missingProviders);
+					}
 
 					return;
 				}
@@ -101,10 +106,12 @@ public class ItemRouterManagerImpl
 				boolean hasPathIdentifierMapper =
 					_pathIdentifierMapperManager.hasPathIdentifierMapper(name);
 
-				if (!hasPathIdentifierMapper && (_apioLogger != null)) {
-					_apioLogger.warning(
-						"Missing path identifier mapper for resource with " +
-							"name " + name);
+				if (!hasPathIdentifierMapper) {
+					if (_apioLogger != null) {
+						_apioLogger.warning(
+							"Missing path identifier mapper for resource " +
+								"with name " + name);
+					}
 
 					return;
 				}

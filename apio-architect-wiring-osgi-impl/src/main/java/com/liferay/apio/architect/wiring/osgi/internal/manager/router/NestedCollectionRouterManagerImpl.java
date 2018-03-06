@@ -105,10 +105,12 @@ public class NestedCollectionRouterManagerImpl
 				Optional<String> nameOptional = _nameManager.getNameOptional(
 					parentClassName);
 
-				if (!nameOptional.isPresent() && (_apioLogger != null)) {
-					_apioLogger.warning(
-						"Unable to find a Representable for parent class " +
-							"name " + parentClassName);
+				if (!nameOptional.isPresent()) {
+					if (_apioLogger != null) {
+						_apioLogger.warning(
+							"Unable to find a Representable for parent class " +
+								"name " + parentClassName);
+					}
 
 					return;
 				}
@@ -118,10 +120,12 @@ public class NestedCollectionRouterManagerImpl
 				Optional<String> nestedNameOptional =
 					_nameManager.getNameOptional(nestedClassName);
 
-				if (!nestedNameOptional.isPresent() && (_apioLogger != null)) {
-					_apioLogger.warning(
-						"Unable to find a Representable for nested class " +
-							"name " + nestedClassName);
+				if (!nestedNameOptional.isPresent()) {
+					if (_apioLogger != null) {
+						_apioLogger.warning(
+							"Unable to find a Representable for nested class " +
+								"name " + nestedClassName);
+					}
 
 					return;
 				}
@@ -144,9 +148,12 @@ public class NestedCollectionRouterManagerImpl
 				List<String> missingProviders =
 					_providerManager.getMissingProviders(neededProviders);
 
-				if (!missingProviders.isEmpty() && (_apioLogger != null)) {
-					_apioLogger.warning(
-						"Missing providers for classes: " + missingProviders);
+				if (!missingProviders.isEmpty()) {
+					if (_apioLogger != null) {
+						_apioLogger.warning(
+							"Missing providers for classes: " +
+								missingProviders);
+					}
 
 					return;
 				}
@@ -154,10 +161,12 @@ public class NestedCollectionRouterManagerImpl
 				Optional<ItemRoutes<Object, Object>> nestedItemRoutes =
 					_itemRouterManager.getItemRoutesOptional(nestedName);
 
-				if (!nestedItemRoutes.isPresent() && (_apioLogger != null)) {
-					_apioLogger.warning(
-						"Missing item router for resource with name " +
-							nestedName);
+				if (!nestedItemRoutes.isPresent()) {
+					if (_apioLogger != null) {
+						_apioLogger.warning(
+							"Missing item router for resource with name " +
+								nestedName);
+					}
 
 					return;
 				}
@@ -165,9 +174,12 @@ public class NestedCollectionRouterManagerImpl
 				Optional<ItemRoutes<Object, Object>> parentItemRoutes =
 					_itemRouterManager.getItemRoutesOptional(name);
 
-				if (!parentItemRoutes.isPresent() && (_apioLogger != null)) {
-					_apioLogger.warning(
-						"Missing item router for resource with name " + name);
+				if (!parentItemRoutes.isPresent()) {
+					if (_apioLogger != null) {
+						_apioLogger.warning(
+							"Missing item router for resource with name " +
+								name);
+					}
 
 					return;
 				}

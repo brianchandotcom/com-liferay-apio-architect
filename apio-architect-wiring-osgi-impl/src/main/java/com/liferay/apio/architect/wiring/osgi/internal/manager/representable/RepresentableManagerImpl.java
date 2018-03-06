@@ -128,10 +128,12 @@ public class RepresentableManagerImpl
 					Entry::getKey
 				).findFirst();
 
-				if (classNameOptional.isPresent() && (_apioLogger != null)) {
-					_apioLogger.warning(
-						_getDuplicateErrorMessage(
-							clazz, name, classNameOptional.get()));
+				if (classNameOptional.isPresent()) {
+					if (_apioLogger != null) {
+						_apioLogger.warning(
+							_getDuplicateErrorMessage(
+								clazz, name, classNameOptional.get()));
+					}
 
 					return;
 				}
