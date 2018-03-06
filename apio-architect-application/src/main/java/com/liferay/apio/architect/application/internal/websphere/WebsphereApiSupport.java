@@ -75,7 +75,19 @@ public class WebsphereApiSupport implements BundleActivator {
 					null)
 		).isSuccess();
 
-		return success;
+
+		boolean serverNameFound = false;
+		try {
+			Class<?> aClass =
+				Class.forName("com.ibm.websphere.runtime.ServerName");
+			serverNameFound = aClass != null;
+
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return success || serverNameFound;
 	}
 
 	private Bundle _bundle;
