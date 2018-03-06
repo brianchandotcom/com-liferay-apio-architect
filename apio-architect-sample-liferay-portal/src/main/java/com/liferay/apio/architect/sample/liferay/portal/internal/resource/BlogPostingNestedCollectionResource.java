@@ -90,7 +90,7 @@ public class BlogPostingNestedCollectionResource
 		).identifier(
 			BlogsEntry::getEntryId
 		).addBidirectionalModel(
-			"webSite", "blogs", WebSiteIdentifier.class,
+			"interactionService", "blogPosts", WebSiteIdentifier.class,
 			BlogsEntryModel::getGroupId
 		).addDate(
 			"createDate", BlogsEntry::getCreateDate
