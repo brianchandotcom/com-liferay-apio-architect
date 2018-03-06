@@ -18,3 +18,9 @@ dependencies {
 	testCompile group: "org.hamcrest", name: "java-hamcrest", version: "2.0.0.0"
 	testCompile project(":apps:foundation:apio-architect:apio-architect-test-util")
 }
+
+liferay {
+	if (!project.hasProperty('sample-whiteboard')) {
+		deployDir = file("${liferayHome}/osgi/test")
+	}
+}
