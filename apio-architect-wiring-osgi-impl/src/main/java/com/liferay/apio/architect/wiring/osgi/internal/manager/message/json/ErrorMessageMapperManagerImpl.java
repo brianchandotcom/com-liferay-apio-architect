@@ -35,9 +35,7 @@ public class ErrorMessageMapperManagerImpl
 	implements ErrorMessageMapperManager {
 
 	public ErrorMessageMapperManagerImpl() {
-		super(
-			ErrorMessageMapper.class, ErrorMessageMapper::getMediaType,
-			INSTANCE::putErrorMessageMapper);
+		super(ErrorMessageMapper.class, INSTANCE::putErrorMessageMapper);
 	}
 
 	@Override

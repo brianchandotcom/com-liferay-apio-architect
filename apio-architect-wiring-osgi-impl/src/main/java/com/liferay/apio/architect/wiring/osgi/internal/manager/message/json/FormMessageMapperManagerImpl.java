@@ -35,9 +35,7 @@ public class FormMessageMapperManagerImpl
 	implements FormMessageMapperManager {
 
 	public FormMessageMapperManagerImpl() {
-		super(
-			FormMessageMapper.class, FormMessageMapper::getMediaType,
-			INSTANCE::putFormMessageMapper);
+		super(FormMessageMapper.class, INSTANCE::putFormMessageMapper);
 	}
 
 	@Override

@@ -18,10 +18,10 @@ import static org.osgi.service.component.annotations.ReferenceCardinality.OPTION
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.logger.ApioLogger;
+import com.liferay.apio.architect.message.json.MessageMapper;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper;
 
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.ws.rs.core.MediaType;
@@ -36,16 +36,14 @@ import org.osgi.service.component.annotations.Reference;
  * @param  <T> the type of message mapper
  * @review
  */
-public abstract class MessageMapperBaseManager<T>
+public abstract class MessageMapperBaseManager<T extends MessageMapper>
 	extends BaseManager<T, String> {
 
 	public MessageMapperBaseManager(
-		Class<T> managedClass, Function<T, String> emitFunction,
-		BiConsumer<MediaType, T> storeBiConsumer) {
+		Class<T> managedClass, BiConsumer<MediaType, T> storeBiConsumer) {
 
 		super(managedClass);
 
-		_emitFunction = emitFunction;
 		_storeBiConsumer = storeBiConsumer;
 	}
 
@@ -83,13 +81,12 @@ public abstract class MessageMapperBaseManager<T>
 
 		T t = bundleContext.getService(serviceReference);
 
-		emitter.emit(_emitFunction.apply(t));
+		emitter.emit(t.getMediaType());
 	}
 
 	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
 
-	private final Function<T, String> _emitFunction;
 	private final BiConsumer<MediaType, T> _storeBiConsumer;
 
 }

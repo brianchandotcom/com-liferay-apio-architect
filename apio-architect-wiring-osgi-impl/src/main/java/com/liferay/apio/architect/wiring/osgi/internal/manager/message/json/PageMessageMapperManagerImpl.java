@@ -35,9 +35,7 @@ public class PageMessageMapperManagerImpl
 	implements PageMessageMapperManager {
 
 	public PageMessageMapperManagerImpl() {
-		super(
-			PageMessageMapper.class, PageMessageMapper::getMediaType,
-			INSTANCE::putPageMessageMapper);
+		super(PageMessageMapper.class, INSTANCE::putPageMessageMapper);
 	}
 
 	@Override

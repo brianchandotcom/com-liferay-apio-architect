@@ -37,7 +37,6 @@ public class SingleModelMessageMapperManagerImpl
 	public SingleModelMessageMapperManagerImpl() {
 		super(
 			SingleModelMessageMapper.class,
-			SingleModelMessageMapper::getMediaType,
 			INSTANCE::putSingleModelMessageMapper);
 	}
 

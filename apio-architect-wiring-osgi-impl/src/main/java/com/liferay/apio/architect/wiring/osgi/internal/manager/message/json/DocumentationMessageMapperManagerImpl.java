@@ -37,7 +37,6 @@ public class DocumentationMessageMapperManagerImpl
 	public DocumentationMessageMapperManagerImpl() {
 		super(
 			DocumentationMessageMapper.class,
-			DocumentationMessageMapper::getMediaType,
 			INSTANCE::putDocumentationMessageMapper);
 	}
 
