@@ -17,6 +17,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.cache;
 import static javax.ws.rs.core.Variant.VariantListBuilder.newInstance;
 
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.message.json.PageMessageMapper;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
@@ -64,6 +65,7 @@ public class ManagerCache {
 		_itemRoutes = null;
 		_names = null;
 		_nestedCollectionRoutes = null;
+		_pageMessageMappers = null;
 		_representors = null;
 		_reusableNestedCollectionRoutes = null;
 		_rootResourceNames = null;
@@ -209,6 +211,30 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Returns the page message mapper for the current request, if present or
+	 * {@code Optional#empty()} if none can be found.
+	 *
+	 * @param  request the current request
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the page message mapper, if present; returns {@code
+	 *         Optional#empty()} otherwise
+	 * @review
+	 */
+	public <T> Optional<PageMessageMapper<T>> getPageMessageMapperOptional(
+		Request request, EmptyFunction computeEmptyFunction) {
+
+		if (_pageMessageMappers == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<PageMessageMapper> optional = _getMessageMapperOptional(
+			request, _pageMessageMappers);
+
+		return optional.map(Unsafe::unsafeCast);
+	}
+
+	/**
 	 * Returns the representor of the collection resource's model class, if that
 	 * representor exists. Returns {@code Optional#empty()} otherwise.
 	 *
@@ -301,31 +327,10 @@ public class ManagerCache {
 			computeEmptyFunction.invoke();
 		}
 
-		VariantListBuilder variantListBuilder = newInstance();
+		Optional<SingleModelMessageMapper> optional = _getMessageMapperOptional(
+			request, _singleModelMessageMappers);
 
-		Optional<Map<MediaType, SingleModelMessageMapper>> optional =
-			Optional.ofNullable(_singleModelMessageMappers);
-
-		return optional.map(
-			Map::keySet
-		).map(
-			Set::stream
-		).map(
-			stream -> stream.toArray(MediaType[]::new)
-		).map(
-			mediaTypes -> variantListBuilder.mediaTypes(
-				mediaTypes
-			).add(
-			).build()
-		).map(
-			request::selectVariant
-		).map(
-			Variant::getMediaType
-		).flatMap(
-			mediaType -> optional.map(map -> map.get(mediaType))
-		).map(
-			Unsafe::unsafeCast
-		);
+		return optional.map(Unsafe::unsafeCast);
 	}
 
 	/**
@@ -405,6 +410,23 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Adds a page message mapper.
+	 *
+	 * @param  mediaType the media type
+	 * @param  pageMessageMapper the page message mapper
+	 * @review
+	 */
+	public void putPageMessageMapper(
+		MediaType mediaType, PageMessageMapper pageMessageMapper) {
+
+		if (_pageMessageMappers == null) {
+			_pageMessageMappers = new HashMap<>();
+		}
+
+		_pageMessageMappers.put(mediaType, pageMessageMapper);
+	}
+
+	/**
 	 * Adds a representor.
 	 *
 	 * @param key the key
@@ -470,11 +492,39 @@ public class ManagerCache {
 	private ManagerCache() {
 	}
 
+	private <T> Optional<T> _getMessageMapperOptional(
+		Request request, Map<MediaType, T> messageMappers) {
+
+		Optional<Map<MediaType, T>> optional = Optional.ofNullable(
+			messageMappers);
+
+		VariantListBuilder variantListBuilder = newInstance();
+
+		return optional.map(
+			Map::keySet
+		).map(
+			Set::stream
+		).map(
+			stream -> stream.toArray(MediaType[]::new)
+		).map(
+			variantListBuilder::mediaTypes
+		).map(
+			VariantListBuilder::build
+		).map(
+			request::selectVariant
+		).map(
+			Variant::getMediaType
+		).flatMap(
+			mediaType -> optional.map(map -> map.get(mediaType))
+		);
+	}
+
 	private Map<String, CollectionRoutes> _collectionRoutes;
 	private Map<String, Class<Identifier>> _identifierClasses;
 	private Map<String, ItemRoutes> _itemRoutes;
 	private Map<String, String> _names;
 	private Map<String, NestedCollectionRoutes> _nestedCollectionRoutes;
+	private Map<MediaType, PageMessageMapper> _pageMessageMappers;
 	private Map<String, Representor> _representors;
 	private Map<String, NestedCollectionRoutes> _reusableNestedCollectionRoutes;
 	private List<String> _rootResourceNames;
