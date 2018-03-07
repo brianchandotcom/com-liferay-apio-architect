@@ -18,9 +18,6 @@ import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
@@ -36,7 +33,6 @@ import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.PageMessageMapperManager;
-import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
@@ -54,7 +50,6 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -215,9 +210,6 @@ public class PageMessageBodyWriter<T>
 	private HttpServletRequest _httpServletRequest;
 
 	@Reference
-	private IdentifierClassManager _identifierClassManager;
-
-	@Reference
 	private ItemRouterManager _itemRouterManager;
 
 	@Reference
@@ -225,9 +217,6 @@ public class PageMessageBodyWriter<T>
 
 	@Reference
 	private PageMessageMapperManager _pageMessageMapperManager;
-
-	@Reference(cardinality = AT_LEAST_ONE, policyOption = GREEDY)
-	private List<PageMessageMapper<T>> _pageMessageMappers;
 
 	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;

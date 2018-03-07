@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.jaxrs.json.internal.writer;
 
+import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
+
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
@@ -26,10 +28,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import java.util.Collections;
-import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
@@ -80,10 +80,8 @@ public class BinaryResourceBodyWriter
 
 		BinaryFile binaryFile = success.getValue();
 
-		List<Object> mimeTypes = Collections.singletonList(
-			binaryFile.getMimeType());
-
-		multivaluedMap.put(HttpHeaders.CONTENT_TYPE, mimeTypes);
+		multivaluedMap.put(
+			CONTENT_TYPE, Collections.singletonList(binaryFile.getMimeType()));
 
 		byte[] bytes = new byte[1024];
 
