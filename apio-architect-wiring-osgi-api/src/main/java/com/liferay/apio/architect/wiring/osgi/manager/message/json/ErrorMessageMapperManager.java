@@ -12,37 +12,37 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.manager;
+package com.liferay.apio.architect.wiring.osgi.manager.message.json;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.message.json.ErrorMessageMapper;
 
-import javax.ws.rs.core.HttpHeaders;
+import java.util.Optional;
+
+import javax.ws.rs.core.Request;
 
 /**
  * Provides methods to get the {@link ErrorMessageMapper} that corresponds to
- * the {@link APIError} and {@code HttpHeaders}.
+ * the current request.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @ProviderType
 public interface ErrorMessageMapperManager {
 
 	/**
-	 * Returns the {@code ErrorMessageMapper} that corresponds to the {@code
-	 * APIError} and {@code HttpHeaders}. If no acceptable media type is found
-	 * in the current request, or no mapper is found for that request's {@code
-	 * Accept} type, this method returns a mapper for the {@code
-	 * application/problem+json} media type.
+	 * Returns the {@code ErrorMessageMapper} that corresponds to the current
+	 * request. Returns {@code Optional#empty()} if no message mapper can be
+	 * found.
 	 *
-	 * @param  apiError the {@code APIError}
-	 * @param  httpHeaders the current request's HTTP headers
-	 * @return the {@code ErrorMessageMapper} that corresponds to the {@code
-	 *         APIError} and {@code HttpHeaders}
+	 * @param  request the current request
+	 * @return the {@code ErrorMessageMapper} that corresponds to the request,
+	 *         if present; {@code Optional#empty()} otherwise.
+	 * @review
 	 */
-	public ErrorMessageMapper getErrorMessageMapper(
-		APIError apiError, HttpHeaders httpHeaders);
+	public Optional<ErrorMessageMapper> getErrorMessageMapperOptional(
+		Request request);
 
 }

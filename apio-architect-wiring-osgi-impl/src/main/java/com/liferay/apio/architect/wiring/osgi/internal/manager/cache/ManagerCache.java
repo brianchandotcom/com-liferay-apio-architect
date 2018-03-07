@@ -18,6 +18,7 @@ import static javax.ws.rs.core.Variant.VariantListBuilder.newInstance;
 
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.message.json.ErrorMessageMapper;
 import com.liferay.apio.architect.message.json.FormMessageMapper;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
@@ -65,6 +66,7 @@ public class ManagerCache {
 	public void clear() {
 		_collectionRoutes = null;
 		_documentationMessageMappers = null;
+		_errorMessageMappers = null;
 		_formMessageMappers = null;
 		_identifierClasses = null;
 		_itemRoutes = null;
@@ -103,8 +105,8 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the documentation message mapper for the current request, if present or
-	 * {@code Optional#empty()} if none can be found.
+	 * Returns the documentation message mapper for the current request, if
+	 * present or {@code Optional#empty()} if none can be found.
 	 *
 	 * @param  request the current request
 	 * @param  computeEmptyFunction the function that can be called to compute
@@ -123,6 +125,30 @@ public class ManagerCache {
 
 		Optional<DocumentationMessageMapper> optional =
 			_getMessageMapperOptional(request, _documentationMessageMappers);
+
+		return optional.map(Unsafe::unsafeCast);
+	}
+
+	/**
+	 * Returns the error message mapper for the current request, if present or
+	 * {@code Optional#empty()} if none can be found.
+	 *
+	 * @param  request the current request
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the error message mapper, if present; returns {@code
+	 *         Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<ErrorMessageMapper> getErrorMessageMapperOptional(
+		Request request, EmptyFunction computeEmptyFunction) {
+
+		if (_errorMessageMappers == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<ErrorMessageMapper> optional = _getMessageMapperOptional(
+			request, _errorMessageMappers);
 
 		return optional.map(Unsafe::unsafeCast);
 	}
@@ -422,6 +448,23 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Adds an error message mapper.
+	 *
+	 * @param  mediaType the media type
+	 * @param  errorMessageMapper the error message mapper
+	 * @review
+	 */
+	public void putErrorMessageMapper(
+		MediaType mediaType, ErrorMessageMapper errorMessageMapper) {
+
+		if (_errorMessageMappers == null) {
+			_errorMessageMappers = new HashMap<>();
+		}
+
+		_errorMessageMappers.put(mediaType, errorMessageMapper);
+	}
+
+	/**
 	 * Adds a form message mapper.
 	 *
 	 * @param  mediaType the media type
@@ -629,6 +672,7 @@ public class ManagerCache {
 	private Map<String, CollectionRoutes> _collectionRoutes;
 	private Map<MediaType, DocumentationMessageMapper>
 		_documentationMessageMappers;
+	private Map<MediaType, ErrorMessageMapper> _errorMessageMappers;
 	private Map<MediaType, FormMessageMapper> _formMessageMappers;
 	private Map<String, Class<Identifier>> _identifierClasses;
 	private Map<String, ItemRoutes> _itemRoutes;
