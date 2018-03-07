@@ -69,20 +69,6 @@ public class ApioDeveloperError extends Error {
 	}
 
 	/**
-	 * Represents the error the developer should throw when a message mapper is
-	 * missing.
-	 */
-	public static class MustHaveMessageMapper extends ApioDeveloperError {
-
-		public MustHaveMessageMapper(String mediaType, String name) {
-			super(
-				"Media type " + mediaType + " and name " + name + " does not " +
-					"have a message mapper");
-		}
-
-	}
-
-	/**
 	 * Represents the error the developer should throw when an identifier's path
 	 * mapper is missing.
 	 */
