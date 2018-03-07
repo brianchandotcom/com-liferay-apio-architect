@@ -16,35 +16,29 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.message.json;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
-import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.MessageMapperBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.SingleModelMessageMapperManager;
-import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
 public class SingleModelMessageMapperManagerImpl
-	extends BaseManager<SingleModelMessageMapper, String>
+	extends MessageMapperBaseManager<SingleModelMessageMapper>
 	implements SingleModelMessageMapperManager {
 
 	public SingleModelMessageMapperManagerImpl() {
-		super(SingleModelMessageMapper.class);
+		super(
+			SingleModelMessageMapper.class,
+			SingleModelMessageMapper::getMediaType,
+			INSTANCE::putSingleModelMessageMapper);
 	}
 
 	@Override
@@ -52,44 +46,7 @@ public class SingleModelMessageMapperManagerImpl
 		getSingleModelMessageMapperOptional(Request request) {
 
 		return INSTANCE.getSingleModelMessageMapperOptional(
-			request, this::_computeSingleModelMessageMappers);
+			request, this::computeMessageMappers);
 	}
-
-	@Override
-	protected void emit(
-		ServiceReference<SingleModelMessageMapper> serviceReference,
-		Emitter<String> emitter) {
-
-		SingleModelMessageMapper singleModelMessageMapper =
-			bundleContext.getService(serviceReference);
-
-		emitter.emit(singleModelMessageMapper.getMediaType());
-	}
-
-	private void _computeSingleModelMessageMappers() {
-		Stream<String> stream = getKeyStream();
-
-		stream.forEach(
-			key -> {
-				SingleModelMessageMapper singleModelMessageMapper =
-					serviceTrackerMap.getService(key);
-
-				try {
-					MediaType mediaType = MediaType.valueOf(key);
-
-					INSTANCE.putSingleModelMessageMapper(
-						mediaType, singleModelMessageMapper);
-				}
-				catch (IllegalArgumentException iae) {
-					if (_apioLogger != null) {
-						_apioLogger.warning(
-							"Message mapper has invalid media type: " + key);
-					}
-				}
-			});
-	}
-
-	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
-	private ApioLogger _apioLogger;
 
 }

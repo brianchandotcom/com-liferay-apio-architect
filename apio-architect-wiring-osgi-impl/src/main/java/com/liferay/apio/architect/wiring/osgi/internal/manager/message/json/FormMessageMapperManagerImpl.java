@@ -16,35 +16,28 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.message.json;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
-import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.message.json.FormMessageMapper;
-import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
+import com.liferay.apio.architect.wiring.osgi.internal.manager.base.MessageMapperBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.FormMessageMapperManager;
-import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
 public class FormMessageMapperManagerImpl
-	extends BaseManager<FormMessageMapper, String>
+	extends MessageMapperBaseManager<FormMessageMapper>
 	implements FormMessageMapperManager {
 
 	public FormMessageMapperManagerImpl() {
-		super(FormMessageMapper.class);
+		super(
+			FormMessageMapper.class, FormMessageMapper::getMediaType,
+			INSTANCE::putFormMessageMapper);
 	}
 
 	@Override
@@ -52,43 +45,7 @@ public class FormMessageMapperManagerImpl
 		Request request) {
 
 		return INSTANCE.getFormMessageMapperOptional(
-			request, this::_computeFormMessageMappers);
+			request, this::computeMessageMappers);
 	}
-
-	@Override
-	protected void emit(
-		ServiceReference<FormMessageMapper> serviceReference,
-		Emitter<String> emitter) {
-
-		FormMessageMapper formMessageMapper = bundleContext.getService(
-			serviceReference);
-
-		emitter.emit(formMessageMapper.getMediaType());
-	}
-
-	private void _computeFormMessageMappers() {
-		Stream<String> stream = getKeyStream();
-
-		stream.forEach(
-			key -> {
-				FormMessageMapper formMessageMapper =
-					serviceTrackerMap.getService(key);
-
-				try {
-					MediaType mediaType = MediaType.valueOf(key);
-
-					INSTANCE.putFormMessageMapper(mediaType, formMessageMapper);
-				}
-				catch (IllegalArgumentException iae) {
-					if (_apioLogger != null) {
-						_apioLogger.warning(
-							"Message mapper has invalid media type: " + key);
-					}
-				}
-			});
-	}
-
-	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
-	private ApioLogger _apioLogger;
 
 }
