@@ -17,6 +17,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.cache;
 import static javax.ws.rs.core.Variant.VariantListBuilder.newInstance;
 
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.message.json.FormMessageMapper;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
@@ -63,6 +64,7 @@ public class ManagerCache {
 	 */
 	public void clear() {
 		_collectionRoutes = null;
+		_documentationMessageMappers = null;
 		_formMessageMappers = null;
 		_identifierClasses = null;
 		_itemRoutes = null;
@@ -98,6 +100,31 @@ public class ManagerCache {
 		).map(
 			Unsafe::unsafeCast
 		);
+	}
+
+	/**
+	 * Returns the documentation message mapper for the current request, if present or
+	 * {@code Optional#empty()} if none can be found.
+	 *
+	 * @param  request the current request
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the documentation message mapper, if present; returns {@code
+	 *         Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<DocumentationMessageMapper>
+		getDocumentationMessageMapperOptional(
+			Request request, EmptyFunction computeEmptyFunction) {
+
+		if (_documentationMessageMappers == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<DocumentationMessageMapper> optional =
+			_getMessageMapperOptional(request, _documentationMessageMappers);
+
+		return optional.map(Unsafe::unsafeCast);
 	}
 
 	/**
@@ -377,6 +404,24 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Adds a documentation message mapper.
+	 *
+	 * @param  mediaType the media type
+	 * @param  documentationMessageMapper the documentation message mapper
+	 * @review
+	 */
+	public void putDocumentationMessageMapper(
+		MediaType mediaType,
+		DocumentationMessageMapper documentationMessageMapper) {
+
+		if (_documentationMessageMappers == null) {
+			_documentationMessageMappers = new HashMap<>();
+		}
+
+		_documentationMessageMappers.put(mediaType, documentationMessageMapper);
+	}
+
+	/**
 	 * Adds a form message mapper.
 	 *
 	 * @param  mediaType the media type
@@ -582,6 +627,8 @@ public class ManagerCache {
 		"application/ld+json");
 
 	private Map<String, CollectionRoutes> _collectionRoutes;
+	private Map<MediaType, DocumentationMessageMapper>
+		_documentationMessageMappers;
 	private Map<MediaType, FormMessageMapper> _formMessageMappers;
 	private Map<String, Class<Identifier>> _identifierClasses;
 	private Map<String, ItemRoutes> _itemRoutes;
