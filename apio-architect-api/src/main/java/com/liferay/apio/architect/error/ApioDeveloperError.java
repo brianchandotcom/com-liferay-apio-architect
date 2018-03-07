@@ -26,21 +26,6 @@ import com.liferay.apio.architect.uri.Path;
 public class ApioDeveloperError extends Error {
 
 	/**
-	 * Represents the error the developer should throw when a documentation
-	 * message mapper is missing.
-	 */
-	public static class MustHaveDocumentationMessageMapper
-		extends ApioDeveloperError {
-
-		public MustHaveDocumentationMessageMapper(String mediaType) {
-			super(
-				"Documentation media type " + mediaType +
-					" does not have a message mapper");
-		}
-
-	}
-
-	/**
 	 * Represents the error the developer should throw when an exception
 	 * converter is missing.
 	 */
