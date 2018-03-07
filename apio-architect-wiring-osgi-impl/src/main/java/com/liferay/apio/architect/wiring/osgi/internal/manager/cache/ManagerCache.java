@@ -27,6 +27,7 @@ import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.alias.EmptyFunction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -498,8 +499,6 @@ public class ManagerCache {
 		Optional<Map<MediaType, T>> optional = Optional.ofNullable(
 			messageMappers);
 
-		VariantListBuilder variantListBuilder = newInstance();
-
 		return optional.map(
 			Map::keySet
 		).map(
@@ -507,7 +506,7 @@ public class ManagerCache {
 		).map(
 			stream -> stream.toArray(MediaType[]::new)
 		).map(
-			variantListBuilder::mediaTypes
+			this::_getVariantListBuilder
 		).map(
 			VariantListBuilder::build
 		).map(
@@ -518,6 +517,26 @@ public class ManagerCache {
 			mediaType -> optional.map(map -> map.get(mediaType))
 		);
 	}
+
+	private VariantListBuilder _getVariantListBuilder(MediaType[] mediaTypes) {
+		VariantListBuilder variantListBuilder = newInstance();
+
+		List<MediaType> list = Arrays.asList(mediaTypes);
+
+		if (list.contains(_DEFAULT_MEDIA_TYPE)) {
+			return variantListBuilder.mediaTypes(
+				_DEFAULT_MEDIA_TYPE
+			).add(
+			).mediaTypes(
+				mediaTypes
+			);
+		}
+
+		return variantListBuilder.mediaTypes(mediaTypes);
+	}
+
+	private static final MediaType _DEFAULT_MEDIA_TYPE = MediaType.valueOf(
+		"application/ld+json");
 
 	private Map<String, CollectionRoutes> _collectionRoutes;
 	private Map<String, Class<Identifier>> _identifierClasses;
