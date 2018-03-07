@@ -56,16 +56,6 @@ public class BlogPostingModel {
 
 			Lorem lorem = faker.lorem();
 
-			List<String> paragraphs = lorem.paragraphs(5);
-
-			Stream<String> stream = paragraphs.stream();
-
-			String content = stream.map(
-				paragraph -> "<p>" + paragraph + "</p>"
-			).collect(
-				Collectors.joining()
-			);
-
 			RandomService randomService = faker.random();
 
 			int creatorId = randomService.nextInt(PersonModel.getCount());
@@ -75,8 +65,8 @@ public class BlogPostingModel {
 			Date date = dateAndTime.past(400, DAYS);
 
 			BlogPostingModel blogPostingModel = new BlogPostingModel(
-				_count.get(), content, date, creatorId, date, lorem.sentence(),
-				book.title());
+				_count.get(), lorem.paragraph(), date, creatorId, date,
+				lorem.sentence(), book.title());
 
 			_blogPostings.put(_count.getAndIncrement(), blogPostingModel);
 		}
