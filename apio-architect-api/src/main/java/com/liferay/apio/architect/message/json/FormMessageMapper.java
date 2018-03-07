@@ -114,17 +114,4 @@ public interface FormMessageMapper {
 		HttpHeaders httpHeaders) {
 	}
 
-	/**
-	 * Returns {@code true} if the mapper can map all things related to the
-	 * current request.
-	 *
-	 * @param  form the form
-	 * @param  httpHeaders the current request's HTTP headers
-	 * @return {@code true} if the mapper can map the request; {@code false}
-	 *         otherwise
-	 */
-	public default boolean supports(Form form, HttpHeaders httpHeaders) {
-		return true;
-	}
-
 }

@@ -94,19 +94,4 @@ public interface DocumentationMessageMapper {
 		HttpHeaders httpHeaders) {
 	}
 
-	/**
-	 * Returns {@code true} if the mapper can map all things related to the
-	 * current request.
-	 *
-	 * @param  documentation the documentation
-	 * @param  httpHeaders the current request's HTTP headers
-	 * @return {@code true} if the mapper can map the request; {@code false}
-	 *         otherwise
-	 */
-	public default boolean supports(
-		Documentation documentation, HttpHeaders httpHeaders) {
-
-		return true;
-	}
-
 }

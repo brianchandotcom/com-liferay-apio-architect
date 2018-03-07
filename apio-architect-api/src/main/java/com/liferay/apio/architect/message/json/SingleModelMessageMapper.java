@@ -438,19 +438,4 @@ public interface SingleModelMessageMapper<T> {
 		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
 	}
 
-	/**
-	 * Returns {@code true} if the mapper can map all things related to the
-	 * current request.
-	 *
-	 * @param  singleModel the single model
-	 * @param  httpHeaders the HTTP headers of the current request
-	 * @return {@code true} if the mapper can map the request; {@code false}
-	 *         otherwise
-	 */
-	public default boolean supports(
-		SingleModel<T> singleModel, HttpHeaders httpHeaders) {
-
-		return true;
-	}
-
 }
