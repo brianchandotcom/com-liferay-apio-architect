@@ -14,7 +14,10 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.cache;
 
+import static javax.ws.rs.core.Variant.VariantListBuilder.newInstance;
+
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -28,6 +31,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Variant;
+import javax.ws.rs.core.Variant.VariantListBuilder;
 
 /**
  * Acts as a central cache for most of the managers.
@@ -58,6 +67,7 @@ public class ManagerCache {
 		_representors = null;
 		_reusableNestedCollectionRoutes = null;
 		_rootResourceNames = null;
+		_singleModelMessageMappers = null;
 	}
 
 	/**
@@ -273,6 +283,52 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Returns the single model message mapper for the current request, if
+	 * present or {@code Optional#empty()} if none can be found.
+	 *
+	 * @param  request the current request
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the single model message mapper, if present; returns {@code
+	 *         Optional#empty()} otherwise
+	 * @review
+	 */
+	public <T> Optional<SingleModelMessageMapper<T>>
+		getSingleModelMessageMapperOptional(
+			Request request, EmptyFunction computeEmptyFunction) {
+
+		if (_singleModelMessageMappers == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		VariantListBuilder variantListBuilder = newInstance();
+
+		Optional<Map<MediaType, SingleModelMessageMapper>> optional =
+			Optional.ofNullable(_singleModelMessageMappers);
+
+		return optional.map(
+			Map::keySet
+		).map(
+			Set::stream
+		).map(
+			stream -> stream.toArray(MediaType[]::new)
+		).map(
+			mediaTypes -> variantListBuilder.mediaTypes(
+				mediaTypes
+			).add(
+			).build()
+		).map(
+			request::selectVariant
+		).map(
+			Variant::getMediaType
+		).flatMap(
+			mediaType -> optional.map(map -> map.get(mediaType))
+		).map(
+			Unsafe::unsafeCast
+		);
+	}
+
+	/**
 	 * Adds collection routes.
 	 *
 	 * @param key the key
@@ -393,6 +449,24 @@ public class ManagerCache {
 		_rootResourceNames.add(rootResourceName);
 	}
 
+	/**
+	 * Adds a single model message mapper.
+	 *
+	 * @param  mediaType the media type
+	 * @param  singleModelMessageMapper the single model message mapper
+	 * @review
+	 */
+	public void putSingleModelMessageMapper(
+		MediaType mediaType,
+		SingleModelMessageMapper singleModelMessageMapper) {
+
+		if (_singleModelMessageMappers == null) {
+			_singleModelMessageMappers = new HashMap<>();
+		}
+
+		_singleModelMessageMappers.put(mediaType, singleModelMessageMapper);
+	}
+
 	private ManagerCache() {
 	}
 
@@ -404,5 +478,6 @@ public class ManagerCache {
 	private Map<String, Representor> _representors;
 	private Map<String, NestedCollectionRoutes> _reusableNestedCollectionRoutes;
 	private List<String> _rootResourceNames;
+	private Map<MediaType, SingleModelMessageMapper> _singleModelMessageMappers;
 
 }
