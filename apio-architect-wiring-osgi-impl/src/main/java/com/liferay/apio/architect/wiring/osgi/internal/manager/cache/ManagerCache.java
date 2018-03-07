@@ -17,6 +17,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.cache;
 import static javax.ws.rs.core.Variant.VariantListBuilder.newInstance;
 
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.message.json.FormMessageMapper;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.representor.Representor;
@@ -62,6 +63,7 @@ public class ManagerCache {
 	 */
 	public void clear() {
 		_collectionRoutes = null;
+		_formMessageMappers = null;
 		_identifierClasses = null;
 		_itemRoutes = null;
 		_names = null;
@@ -96,6 +98,30 @@ public class ManagerCache {
 		).map(
 			Unsafe::unsafeCast
 		);
+	}
+
+	/**
+	 * Returns the form message mapper for the current request, if present or
+	 * {@code Optional#empty()} if none can be found.
+	 *
+	 * @param  request the current request
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the form message mapper, if present; returns {@code
+	 *         Optional#empty()} otherwise
+	 * @review
+	 */
+	public Optional<FormMessageMapper> getFormMessageMapperOptional(
+		Request request, EmptyFunction computeEmptyFunction) {
+
+		if (_formMessageMappers == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<FormMessageMapper> optional = _getMessageMapperOptional(
+			request, _formMessageMappers);
+
+		return optional.map(Unsafe::unsafeCast);
 	}
 
 	/**
@@ -351,6 +377,23 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Adds a form message mapper.
+	 *
+	 * @param  mediaType the media type
+	 * @param  formMessageMapper the form message mapper
+	 * @review
+	 */
+	public void putFormMessageMapper(
+		MediaType mediaType, FormMessageMapper formMessageMapper) {
+
+		if (_formMessageMappers == null) {
+			_formMessageMappers = new HashMap<>();
+		}
+
+		_formMessageMappers.put(mediaType, formMessageMapper);
+	}
+
+	/**
 	 * Adds an identifier class.
 	 *
 	 * @param key the key
@@ -539,6 +582,7 @@ public class ManagerCache {
 		"application/ld+json");
 
 	private Map<String, CollectionRoutes> _collectionRoutes;
+	private Map<MediaType, FormMessageMapper> _formMessageMappers;
 	private Map<String, Class<Identifier>> _identifierClasses;
 	private Map<String, ItemRoutes> _itemRoutes;
 	private Map<String, String> _names;
