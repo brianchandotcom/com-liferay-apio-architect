@@ -55,20 +55,6 @@ public class ApioDeveloperError extends Error {
 	}
 
 	/**
-	 * Represents the error the developer should throw when a form message
-	 * mapper is missing.
-	 */
-	public static class MustHaveFormMessageMapper extends ApioDeveloperError {
-
-		public MustHaveFormMessageMapper(String mediaType) {
-			super(
-				"Form media type " + mediaType +
-					" does not have a message mapper");
-		}
-
-	}
-
-	/**
 	 * Represents the error the developer should throw when an identifier's path
 	 * mapper is missing.
 	 */
