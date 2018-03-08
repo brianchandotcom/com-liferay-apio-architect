@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDTestUtil
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDTestUtil.isALinkTo;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonArrayThat;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonBoolean;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWhere;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWith;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString;
 
@@ -58,7 +59,7 @@ public class JSONLDFormMessageMapperTest {
 		Conditions.Builder builder = new Conditions.Builder();
 
 		Conditions conditions = builder.where(
-			"@context", IS_A_LINK_TO_HYDRA_PROFILE
+			"@context", is(aJsonArrayThat(contains(_theContext)))
 		).where(
 			"@id", isALinkTo("localhost/f/f/s")
 		).where(
@@ -89,7 +90,7 @@ public class JSONLDFormMessageMapperTest {
 		return builder.where(
 			"@type", is(aJsonString(equalTo("SupportedProperty")))
 		).where(
-			"property", is(aJsonString(equalTo("#" + name)))
+			"property", is(aJsonString(equalTo(name)))
 		).where(
 			"readable", is(aJsonBoolean(false))
 		).where(
@@ -99,6 +100,11 @@ public class JSONLDFormMessageMapperTest {
 		).build();
 	}
 
+	private static final List<Matcher<? super JsonElement>> _theContext =
+		Arrays.asList(
+			aJsonObjectWhere(
+				"@vocab", is(aJsonString(equalTo("http://schema.org/")))),
+			IS_A_LINK_TO_HYDRA_PROFILE);
 	private static final List<Matcher<? super JsonElement>> _theProperties =
 		Arrays.asList(
 			aJsonObjectWith(_conditionsForField("boolean1", false)),
