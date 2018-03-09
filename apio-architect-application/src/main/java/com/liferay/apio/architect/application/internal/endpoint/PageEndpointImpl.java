@@ -24,6 +24,7 @@ import static javax.ws.rs.core.Response.noContent;
 
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.endpoint.PageEndpoint;
+import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
@@ -36,7 +37,6 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
@@ -75,7 +75,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	}
 
 	@Override
-	public Try<SingleModel<T>> addCollectionItem(Map<String, Object> body) {
+	public Try<SingleModel<T>> addCollectionItem(Body body) {
 		Try<CollectionRoutes<T>> collectionRoutesTry = Try.fromOptional(
 			_collectionRoutesSupplier::get, notFound(_name));
 
@@ -91,7 +91,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 	@Override
 	public Try<SingleModel<T>> addNestedCollectionItem(
-		String id, String nestedName, Map<String, Object> body) {
+		String id, String nestedName, Body body) {
 
 		Try<NestedCollectionRoutes<T, Object>> nestedCollectionRoutesTry =
 			Try.fromOptional(
@@ -194,9 +194,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	}
 
 	@Override
-	public Try<SingleModel<T>> updateCollectionItem(
-		String id, Map<String, Object> body) {
-
+	public Try<SingleModel<T>> updateCollectionItem(String id, Body body) {
 		Try<ItemRoutes<T, S>> itemRoutesTry = Try.fromOptional(
 			_itemRoutesSupplier::get, notFound(_name, id));
 

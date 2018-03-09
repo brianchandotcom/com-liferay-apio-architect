@@ -16,11 +16,10 @@ package com.liferay.apio.architect.endpoint;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.single.model.SingleModel;
-
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -48,7 +47,7 @@ public interface PageEndpoint<T> {
 	@Consumes(APPLICATION_JSON)
 	@Path("/")
 	@POST
-	public Try<SingleModel<T>> addCollectionItem(Map<String, Object> body);
+	public Try<SingleModel<T>> addCollectionItem(Body body);
 
 	/**
 	 * Adds a new {@link SingleModel} to the nested resource specified. This
@@ -64,7 +63,7 @@ public interface PageEndpoint<T> {
 	@POST
 	public Try<SingleModel<T>> addNestedCollectionItem(
 		@PathParam("id") String id, @PathParam("nestedName") String nestedName,
-		Map<String, Object> body);
+		Body body);
 
 	/**
 	 * Deletes the collection item specified by {@code name}.
@@ -124,6 +123,6 @@ public interface PageEndpoint<T> {
 	@Path("{id}")
 	@PUT
 	public Try<SingleModel<T>> updateCollectionItem(
-		@PathParam("id") String id, Map<String, Object> body);
+		@PathParam("id") String id, Body body);
 
 }
