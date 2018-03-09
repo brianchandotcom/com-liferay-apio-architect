@@ -15,7 +15,9 @@
 package com.liferay.apio.architect.jaxrs.json.internal.reader;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.functional.Try;
 
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import java.util.Map;
+import java.util.Optional;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
@@ -47,8 +50,7 @@ import org.osgi.service.component.annotations.Component;
 )
 @Consumes(MediaType.APPLICATION_JSON)
 @Provider
-public class MapMessageBodyReader
-	implements MessageBodyReader<Map<String, Object>> {
+public class MapMessageBodyReader implements MessageBodyReader<Body> {
 
 	@Override
 	public boolean isReadable(
@@ -59,21 +61,25 @@ public class MapMessageBodyReader
 	}
 
 	@Override
-	public Map<String, Object> readFrom(
-			Class<Map<String, Object>> type, Type genericType,
-			Annotation[] annotations, MediaType mediaType,
-			MultivaluedMap<String, String> httpHeaders,
+	public Body readFrom(
+			Class<Body> type, Type genericType, Annotation[] annotations,
+			MediaType mediaType, MultivaluedMap<String, String> httpHeaders,
 			InputStream entityStream)
 		throws IOException {
 
 		Gson gson = new Gson();
 
-		Try<Map<String, Object>> mapTry = Try.fromFallibleWithResources(
-			() -> new InputStreamReader(entityStream, "UTF-8"),
-			streamReader -> gson.fromJson(streamReader, genericType));
+		TypeToken<Map<String, String>> typeToken =
+			new TypeToken<Map<String, String>>() {};
 
-		return mapTry.orElseThrow(
+		Try<Map<String, String>> mapTry = Try.fromFallibleWithResources(
+			() -> new InputStreamReader(entityStream, "UTF-8"),
+			streamReader -> gson.fromJson(streamReader, typeToken.getType()));
+
+		Map<String, String> map = mapTry.orElseThrow(
 			() -> new BadRequestException("Body is not a valid JSON"));
+
+		return key -> Optional.ofNullable(map.get(key));
 	}
 
 }
