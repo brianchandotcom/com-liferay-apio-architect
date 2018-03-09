@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.ws.rs.BadRequestException;
 
@@ -168,23 +169,6 @@ public class FormTest {
 	}
 
 	@Test(expected = BadRequestException.class)
-	public void testFormFailsIfOptionalBooleanIsNotBoolean() {
-		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
-
-		Form<Map<String, Object>> form = builder.title(
-			__ -> "title"
-		).description(
-			__ -> "description"
-		).constructor(
-			HashMap::new
-		).addOptionalBoolean(
-			"long1", (map, string) -> map.put("l1", string)
-		).build();
-
-		form.get(_body);
-	}
-
-	@Test(expected = BadRequestException.class)
 	public void testFormFailsIfOptionalDateIsNotDate() {
 		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
 
@@ -230,40 +214,6 @@ public class FormTest {
 			HashMap::new
 		).addOptionalLong(
 			"string1", (map, string) -> map.put("s1", string)
-		).build();
-
-		form.get(_body);
-	}
-
-	@Test(expected = BadRequestException.class)
-	public void testFormFailsIfOptionalStringIsNotString() {
-		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
-
-		Form<Map<String, Object>> form = builder.title(
-			__ -> "title"
-		).description(
-			__ -> "description"
-		).constructor(
-			HashMap::new
-		).addOptionalString(
-			"long1", (map, string) -> map.put("l1", string)
-		).build();
-
-		form.get(_body);
-	}
-
-	@Test(expected = BadRequestException.class)
-	public void testFormFailsIfRequiredBooleanIsNotBoolean() {
-		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
-
-		Form<Map<String, Object>> form = builder.title(
-			__ -> "title"
-		).description(
-			__ -> "description"
-		).constructor(
-			HashMap::new
-		).addRequiredBoolean(
-			"long1", (map, string) -> map.put("l1", string)
 		).build();
 
 		form.get(_body);
@@ -339,36 +289,25 @@ public class FormTest {
 		form.get(_body);
 	}
 
-	@Test(expected = BadRequestException.class)
-	public void testFormFailsIfRequiredStringIsNotString() {
-		Builder<Map<String, Object>> builder = new Builder<>(emptyList());
+	private static final Body _body;
 
-		Form<Map<String, Object>> form = builder.title(
-			__ -> "title"
-		).description(
-			__ -> "description"
-		).constructor(
-			HashMap::new
-		).addRequiredString(
-			"long1", (map, string) -> map.put("l1", string)
-		).build();
+	static {
+		Map<String, String> map = new HashMap<String, String>() {
+			{
+				put("boolean1", "true");
+				put("boolean2", "false");
+				put("date1", "2016-06-15T09:00Z");
+				put("date2", "2017-04-03T18:36Z");
+				put("double1", "3.5");
+				put("double2", "25.2");
+				put("long1", "42");
+				put("long2", "2017");
+				put("string1", "Apio");
+				put("string2", "Hypermedia");
+			}
+		};
 
-		form.get(_body);
+		_body = key -> Optional.ofNullable(map.get(key));
 	}
-
-	private final Map<String, Object> _body = new HashMap<String, Object>() {
-		{
-			put("boolean1", true);
-			put("boolean2", false);
-			put("date1", "2016-06-15T09:00Z");
-			put("date2", "2017-04-03T18:36Z");
-			put("double1", 3.5D);
-			put("double2", 25.2D);
-			put("long1", 42L);
-			put("long2", 2017L);
-			put("string1", "Apio");
-			put("string2", "Hypermedia");
-		}
-	};
 
 }

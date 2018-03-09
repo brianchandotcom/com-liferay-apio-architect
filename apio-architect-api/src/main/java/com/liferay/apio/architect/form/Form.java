@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Holds information about an operation's form. The {@link #get(Map)} method
+ * Holds information about an operation's form. The {@link #get(Body)} method
  * method uses the HTTP request body to extract the form values as detailed in
  * the {@link Builder}.
  *
@@ -68,7 +68,7 @@ public class Form<T> {
 	 * @param  body the HTTP request body
 	 * @return the form's information in a class of type {@code T}
 	 */
-	public T get(Map<String, Object> body) {
+	public T get(Body body) {
 		T t = _supplier.get();
 
 		_optionalBooleans.forEach(getOptionalBoolean(body, t));
