@@ -105,15 +105,14 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the documentation message mapper for the current request, if
-	 * present or {@code Optional#empty()} if none can be found.
+	 * Returns the documentation message mapper, if present, for the current
+	 * request; {@code Optional#empty()} otherwise.
 	 *
 	 * @param  request the current request
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
-	 * @return the documentation message mapper, if present; returns {@code
+	 * @return the documentation message mapper, if present; {@code
 	 *         Optional#empty()} otherwise
-	 * @review
 	 */
 	public Optional<DocumentationMessageMapper>
 		getDocumentationMessageMapperOptional(
@@ -130,15 +129,14 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the error message mapper for the current request, if present or
-	 * {@code Optional#empty()} if none can be found.
+	 * Returns the error message mapper, if present, for the current request;
+	 * {@code Optional#empty()} otherwise.
 	 *
 	 * @param  request the current request
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
-	 * @return the error message mapper, if present; returns {@code
-	 *         Optional#empty()} otherwise
-	 * @review
+	 * @return the error message mapper, if present; {@code Optional#empty()}
+	 *         otherwise
 	 */
 	public Optional<ErrorMessageMapper> getErrorMessageMapperOptional(
 		Request request, EmptyFunction computeEmptyFunction) {
@@ -154,15 +152,14 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the form message mapper for the current request, if present or
-	 * {@code Optional#empty()} if none can be found.
+	 * Returns the form message mapper, if present, for the current request;
+	 * {@code Optional#empty()} otherwise.
 	 *
 	 * @param  request the current request
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
-	 * @return the form message mapper, if present; returns {@code
-	 *         Optional#empty()} otherwise
-	 * @review
+	 * @return the form message mapper, if present; {@code Optional#empty()}
+	 *         otherwise
 	 */
 	public Optional<FormMessageMapper> getFormMessageMapperOptional(
 		Request request, EmptyFunction computeEmptyFunction) {
@@ -291,15 +288,14 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the page message mapper for the current request, if present or
-	 * {@code Optional#empty()} if none can be found.
+	 * Returns the page message mapper, if present, for the current request;
+	 * {@code Optional#empty()} otherwise.
 	 *
 	 * @param  request the current request
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
-	 * @return the page message mapper, if present; returns {@code
-	 *         Optional#empty()} otherwise
-	 * @review
+	 * @return the page message mapper, if present; {@code Optional#empty()}
+	 *         otherwise
 	 */
 	public <T> Optional<PageMessageMapper<T>> getPageMessageMapperOptional(
 		Request request, EmptyFunction computeEmptyFunction) {
@@ -315,14 +311,13 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the representor of the collection resource's model class, if that
-	 * representor exists. Returns {@code Optional#empty()} otherwise.
+	 * Returns the representor, if present, of the collection resource's model
+	 * class; {@code Optional#empty()} otherwise.
 	 *
 	 * @param  name the representor's name
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
-	 * @return the model class's representor, if present; {@code
-	 *         Optional#empty()} otherwise
+	 * @return the representor, if present; {@code Optional#empty()} otherwise
 	 */
 	public <U, T> Optional<Representor<T, U>> getRepresentorOptional(
 		String name, EmptyFunction computeEmptyFunction) {
@@ -389,15 +384,14 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the single model message mapper for the current request, if
-	 * present or {@code Optional#empty()} if none can be found.
+	 * Returns the single model message mapper, if present, for the current
+	 * request; {@code Optional#empty()} otherwise.
 	 *
 	 * @param  request the current request
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
-	 * @return the single model message mapper, if present; returns {@code
+	 * @return the single model message mapper, if present; {@code
 	 *         Optional#empty()} otherwise
-	 * @review
 	 */
 	public <T> Optional<SingleModelMessageMapper<T>>
 		getSingleModelMessageMapperOptional(
@@ -432,9 +426,8 @@ public class ManagerCache {
 	/**
 	 * Adds a documentation message mapper.
 	 *
-	 * @param  mediaType the media type
-	 * @param  documentationMessageMapper the documentation message mapper
-	 * @review
+	 * @param mediaType the media type
+	 * @param documentationMessageMapper the documentation message mapper
 	 */
 	public void putDocumentationMessageMapper(
 		MediaType mediaType,
@@ -450,9 +443,8 @@ public class ManagerCache {
 	/**
 	 * Adds an error message mapper.
 	 *
-	 * @param  mediaType the media type
-	 * @param  errorMessageMapper the error message mapper
-	 * @review
+	 * @param mediaType the media type
+	 * @param errorMessageMapper the error message mapper
 	 */
 	public void putErrorMessageMapper(
 		MediaType mediaType, ErrorMessageMapper errorMessageMapper) {
@@ -467,9 +459,8 @@ public class ManagerCache {
 	/**
 	 * Adds a form message mapper.
 	 *
-	 * @param  mediaType the media type
-	 * @param  formMessageMapper the form message mapper
-	 * @review
+	 * @param mediaType the media type
+	 * @param formMessageMapper the form message mapper
 	 */
 	public void putFormMessageMapper(
 		MediaType mediaType, FormMessageMapper formMessageMapper) {
@@ -544,9 +535,8 @@ public class ManagerCache {
 	/**
 	 * Adds a page message mapper.
 	 *
-	 * @param  mediaType the media type
-	 * @param  pageMessageMapper the page message mapper
-	 * @review
+	 * @param mediaType the media type
+	 * @param pageMessageMapper the page message mapper
 	 */
 	public void putPageMessageMapper(
 		MediaType mediaType, PageMessageMapper pageMessageMapper) {
@@ -606,9 +596,8 @@ public class ManagerCache {
 	/**
 	 * Adds a single model message mapper.
 	 *
-	 * @param  mediaType the media type
-	 * @param  singleModelMessageMapper the single model message mapper
-	 * @review
+	 * @param mediaType the media type
+	 * @param singleModelMessageMapper the single model message mapper
 	 */
 	public void putSingleModelMessageMapper(
 		MediaType mediaType,

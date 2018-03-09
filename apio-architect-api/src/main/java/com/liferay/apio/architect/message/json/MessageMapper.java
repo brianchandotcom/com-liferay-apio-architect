@@ -20,15 +20,14 @@ import javax.ws.rs.core.HttpHeaders;
 
 /**
  * Maps message data to its representation in a JSON object. Instances of this
- * interface work like events. The {@code javax.ws.rs.ext.MessageBodyWriter} of
- * the accorded message calls the {@code MessageMapper} methods. In each method,
- * developers should only map the provided part of the resource to its
- * representation in a JSON object. To enable this, each method receives a
- * {@link JSONObjectBuilder}.
+ * interface work like events. The message's {@code
+ * javax.ws.rs.ext.MessageBodyWriter} calls the {@code MessageMapper} methods.
+ * In each method, developers should only map the provided part of the resource
+ * to its representation in a JSON object. To enable this, each method receives
+ * a {@link JSONObjectBuilder}.
  *
  * @author Alejandro Hernández
  * @param  <T> The type of message this mapper handles
- * @review
  */
 @ConsumerType
 public interface MessageMapper<T> {

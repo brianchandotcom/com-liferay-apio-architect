@@ -27,20 +27,17 @@ import javax.ws.rs.core.Request;
  * current request.
  *
  * @author Alejandro Hernández
- * @review
  */
 @ProviderType
 public interface FormMessageMapperManager {
 
 	/**
-	 * Returns the {@code FormMessageMapper} that corresponds to the current
-	 * request. Returns {@code Optional#empty()} if no message mapper can be
-	 * found.
+	 * Returns the {@code FormMessageMapper}, if present, that corresponds to
+	 * the current request; {@code Optional#empty()} otherwise.
 	 *
 	 * @param  request the current request
-	 * @return the {@code FormMessageMapper} that corresponds to the request, if
-	 *         present; {@code Optional#empty()} otherwise.
-	 * @review
+	 * @return the {@code FormMessageMapper}, if present; {@code
+	 *         Optional#empty()} otherwise
 	 */
 	public Optional<FormMessageMapper> getFormMessageMapperOptional(
 		Request request);

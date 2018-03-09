@@ -30,8 +30,7 @@ import org.osgi.framework.ServiceReference;
  * Manages message mappers.
  *
  * @author Alejandro Hernández
- * @param  <T> the type of message mapper
- * @review
+ * @param  <T> the message mapper's type
  */
 public abstract class MessageMapperBaseManager<T extends MessageMapper>
 	extends BaseManager<T, String> {
@@ -45,10 +44,8 @@ public abstract class MessageMapperBaseManager<T extends MessageMapper>
 	}
 
 	/**
-	 * Computes the list of managed message mappers and stores them using the
-	 * provided consumer.
-	 *
-	 * @review
+	 * Computes the list of managed message mappers and uses the provided
+	 * consumer to store them.
 	 */
 	protected void computeMessageMappers() {
 		Stream<String> stream = getKeyStream();
@@ -83,12 +80,10 @@ public abstract class MessageMapperBaseManager<T extends MessageMapper>
 	}
 
 	/**
-	 * Returns the logger used by this mapper, if present. Returns {@code
+	 * Returns the logger, if present, that this mapper uses; {@code
 	 * Optional#empty()} otherwise.
 	 *
-	 * @return the logger used by this mapper, if present; {@code
-	 *         Optional#empty()} otherwise
-	 * @review
+	 * @return the logger, if present; {@code Optional#empty()} otherwise
 	 */
 	protected abstract Optional<ApioLogger> getLoggerOptional();
 

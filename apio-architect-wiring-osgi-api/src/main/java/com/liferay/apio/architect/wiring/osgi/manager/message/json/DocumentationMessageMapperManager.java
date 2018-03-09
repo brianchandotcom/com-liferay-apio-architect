@@ -27,20 +27,17 @@ import javax.ws.rs.core.Request;
  * corresponds to the current request.
  *
  * @author Alejandro Hernández
- * @review
  */
 @ProviderType
 public interface DocumentationMessageMapperManager {
 
 	/**
-	 * Returns the {@code DocumentationMessageMapper} that corresponds to the
-	 * current request. Returns {@code Optional#empty()} if no message mapper
-	 * can be found.
+	 * Returns the {@code DocumentationMessageMapper}, if present, that
+	 * corresponds to the current request; {@code Optional#empty()} otherwise.
 	 *
 	 * @param  request the current request
-	 * @return the {@code DocumentationMessageMapper} that corresponds to the
-	 *         request, if present; {@code Optional#empty()} otherwise.
-	 * @review
+	 * @return the {@code DocumentationMessageMapper}, if present; {@code
+	 *         Optional#empty()} otherwise
 	 */
 	public Optional<DocumentationMessageMapper>
 		getDocumentationMessageMapperOptional(Request request);

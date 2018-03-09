@@ -38,7 +38,6 @@ import org.osgi.service.component.annotations.Reference;
  * Provides utility methods for transforming exceptions into responses.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component(immediate = true, service = ErrorUtil.class)
 public class ErrorUtil {
@@ -49,8 +48,7 @@ public class ErrorUtil {
 	 * @param  exception the exception
 	 * @param  request the current request
 	 * @param  httpHeaders the current HTTP headers
-	 * @return the transformed response
-	 * @review
+	 * @return the response
 	 */
 	public Response getErrorResponse(
 		Exception exception, Request request, HttpHeaders httpHeaders) {

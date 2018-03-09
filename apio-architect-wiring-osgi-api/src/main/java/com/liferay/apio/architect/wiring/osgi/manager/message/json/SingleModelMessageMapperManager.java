@@ -27,20 +27,17 @@ import javax.ws.rs.core.Request;
  * to the current request.
  *
  * @author Alejandro Hernández
- * @review
  */
 @ProviderType
 public interface SingleModelMessageMapperManager {
 
 	/**
-	 * Returns the {@code SingleModelMessageMapper} that corresponds to the
-	 * current request. Returns {@code Optional#empty()} if no message mapper
-	 * can be found.
+	 * Returns the {@code SingleModelMessageMapper}, if present, that
+	 * corresponds to the current request; {@code Optional#empty()} otherwise.
 	 *
 	 * @param  request the current request
-	 * @return the {@code SingleModelMessageMapper} that corresponds to the
-	 *         request, if present; {@code Optional#empty()} otherwise.
-	 * @review
+	 * @return the {@code SingleModelMessageMapper}, if present; {@code
+	 *         Optional#empty()} otherwise
 	 */
 	public <T> Optional<SingleModelMessageMapper<T>>
 		getSingleModelMessageMapperOptional(Request request);
