@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.jaxrs.json.internal.writer;
 
+import static javax.ws.rs.core.HttpHeaders.CONTENT_LENGTH;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
 import com.liferay.apio.architect.file.BinaryFile;
@@ -82,6 +83,9 @@ public class BinaryResourceBodyWriter
 
 		multivaluedMap.put(
 			CONTENT_TYPE, Collections.singletonList(binaryFile.getMimeType()));
+
+		multivaluedMap.put(
+			CONTENT_LENGTH, Collections.singletonList(binaryFile.getSize()));
 
 		byte[] bytes = new byte[1024];
 
