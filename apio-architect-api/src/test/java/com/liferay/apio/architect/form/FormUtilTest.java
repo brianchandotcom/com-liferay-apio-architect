@@ -504,7 +504,7 @@ public class FormUtilTest {
 
 	private static Body _fileBody() {
 		BinaryFile binaryFile = new BinaryFile(
-			new ByteArrayInputStream("content".getBytes(UTF_8)), "type");
+			new ByteArrayInputStream("content".getBytes(UTF_8)), 0L, "type");
 
 		return Body.create(
 			__ -> Optional.empty(), __ -> Optional.of(binaryFile));

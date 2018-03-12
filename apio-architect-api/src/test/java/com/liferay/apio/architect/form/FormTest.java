@@ -359,10 +359,10 @@ public class FormTest {
 		};
 
 		BinaryFile binaryFile1 = new BinaryFile(
-			new ByteArrayInputStream("Input Stream 1".getBytes(UTF_8)),
+			new ByteArrayInputStream("Input Stream 1".getBytes(UTF_8)), 0L,
 			"mimetype1");
 		BinaryFile binaryFile2 = new BinaryFile(
-			new ByteArrayInputStream("Input Stream 2".getBytes(UTF_8)),
+			new ByteArrayInputStream("Input Stream 2".getBytes(UTF_8)), 0L,
 			"mimetype2");
 
 		Map<String, BinaryFile> files = new HashMap<String, BinaryFile>() {

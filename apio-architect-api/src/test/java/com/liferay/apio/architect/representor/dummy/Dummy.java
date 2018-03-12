@@ -60,10 +60,10 @@ public class Dummy {
 	}
 
 	public final BinaryFile binaryFile1 = new BinaryFile(
-		new ByteArrayInputStream("Input Stream 1".getBytes(UTF_8)),
+		new ByteArrayInputStream("Input Stream 1".getBytes(UTF_8)), 0L,
 		"application/octet-stream");
 	public final BinaryFile binaryFile2 = new BinaryFile(
-		new ByteArrayInputStream("Input Stream 2".getBytes(UTF_8)),
+		new ByteArrayInputStream("Input Stream 2".getBytes(UTF_8)), 0L,
 		"application/octet-stream");
 	public final Boolean boolean1 = true;
 	public final Boolean boolean2 = false;

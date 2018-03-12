@@ -110,7 +110,9 @@ public class MediaObjectNestedCollectionResource
 		Try<FileEntry> fileEntryTry = Try.success(fileEntry);
 
 		return fileEntryTry.map(
-			file -> new BinaryFile(file.getContentStream(), file.getMimeType())
+			file -> new BinaryFile(
+				file.getContentStream(), fileEntry.getSize(),
+				file.getMimeType())
 		).orElse(
 			null
 		);

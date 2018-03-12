@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.endpoint;
 
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aFailTry;
-import static com.liferay.apio.architect.test.util.result.TryMatchers.aSuccessTry;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -86,11 +85,11 @@ public class BinaryEndpointTest {
 		Try<BinaryFile> binaryFileTry =
 			binaryEndpoint.getCollectionItemBinaryFileTry("", "", "binary");
 
-		assertThat(binaryFileTry, is(aSuccessTry()));
+		BinaryFile binaryFile = binaryFileTry.getUnchecked();
 
-		BinaryFile unchecked = binaryFileTry.getUnchecked();
+		assertThat(binaryFile.getSize(), is(0L));
 
-		InputStream inputStream = unchecked.getInputStream();
+		InputStream inputStream = binaryFile.getInputStream();
 
 		String result = Try.fromFallibleWithResources(
 			() -> new BufferedReader(new InputStreamReader(inputStream)),
@@ -141,7 +140,8 @@ public class BinaryEndpointTest {
 		).addBinary(
 			"binary",
 			__ -> new BinaryFile(
-				new ByteArrayInputStream("Apio".getBytes(UTF_8)), "image/png")
+				new ByteArrayInputStream("Apio".getBytes(UTF_8)), 0L,
+				"image/png")
 		).build();
 	}
 
