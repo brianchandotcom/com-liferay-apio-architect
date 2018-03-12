@@ -28,6 +28,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -41,9 +43,10 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
@@ -82,29 +85,34 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 				"Request body is not a valid multipart form");
 		}
 
-		ServletFileUpload upload = new ServletFileUpload();
+		FileItemFactory fileItemFactory = new DiskFileItemFactory();
+
+		ServletFileUpload servletFileUpload = new ServletFileUpload(
+			fileItemFactory);
 
 		try {
-			FileItemIterator fileItemIterator = upload.getItemIterator(
+			List<FileItem> fileItems = servletFileUpload.parseRequest(
 				_httpServletRequest);
+
+			Iterator<FileItem> iterator = fileItems.iterator();
 
 			Map<String, String> values = new HashMap<>();
 			Map<String, BinaryFile> files = new HashMap<>();
 
-			while (fileItemIterator.hasNext()) {
-				FileItemStream fileItemStream = fileItemIterator.next();
+			while (iterator.hasNext()) {
+				FileItem fileItem = iterator.next();
 
-				String name = fileItemStream.getFieldName();
+				String name = fileItem.getFieldName();
 
-				if (fileItemStream.isFormField()) {
-					InputStream stream = fileItemStream.openStream();
+				if (fileItem.isFormField()) {
+					InputStream stream = fileItem.getInputStream();
 
 					values.put(name, Streams.asString(stream));
 				}
 				else {
 					BinaryFile binaryFile = new BinaryFile(
-						fileItemStream.openStream(),
-						fileItemStream.getContentType());
+						fileItem.getInputStream(), fileItem.getSize(),
+						fileItem.getContentType());
 
 					files.put(name, binaryFile);
 				}
