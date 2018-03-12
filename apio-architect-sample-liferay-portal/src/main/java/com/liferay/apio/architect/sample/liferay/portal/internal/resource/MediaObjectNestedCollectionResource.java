@@ -24,12 +24,15 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
+import com.liferay.apio.architect.sample.liferay.portal.internal.form.MediaObjectCreatorForm;
+import com.liferay.apio.architect.sample.liferay.portal.internal.form.MediaObjectUpdaterForm;
 import com.liferay.apio.architect.sample.liferay.portal.internal.identifier.FolderIdentifier;
 import com.liferay.apio.architect.sample.liferay.portal.internal.identifier.MediaObjectIdentifier;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.service.ServiceContext;
 
 import java.util.List;
 
@@ -52,7 +55,10 @@ public class MediaObjectNestedCollectionResource
 	public NestedCollectionRoutes<FileEntry, Long> collectionRoutes(
 		NestedCollectionRoutes.Builder<FileEntry, Long> builder) {
 
-		return builder.addGetter(
+		return builder.addCreator(
+			this::_addFileEntry, (credentials, id) -> true,
+			MediaObjectCreatorForm::buildForm
+		).addGetter(
 			this::_getPageItems
 		).build();
 	}
@@ -71,6 +77,9 @@ public class MediaObjectNestedCollectionResource
 		).addRemover(
 			idempotent(_dlAppService::deleteFileEntry),
 			(credentials, id) -> true
+		).addUpdater(
+			this::_updateFileEntry, (credentials, id) -> true,
+			MediaObjectUpdaterForm::buildForm
 		).build();
 	}
 
@@ -106,6 +115,22 @@ public class MediaObjectNestedCollectionResource
 		).build();
 	}
 
+	private FileEntry _addFileEntry(
+			Long folderId, MediaObjectCreatorForm mediaObjectCreatorForm)
+		throws PortalException {
+
+		Folder folder = _dlAppService.getFolder(folderId);
+
+		BinaryFile binaryFile = mediaObjectCreatorForm.getBinaryFile();
+
+		return _dlAppService.addFileEntry(
+			folder.getGroupId(), folderId, mediaObjectCreatorForm.getName(),
+			binaryFile.getMimeType(), mediaObjectCreatorForm.getTitle(),
+			mediaObjectCreatorForm.getDescription(), null,
+			binaryFile.getInputStream(), binaryFile.getSize(),
+			new ServiceContext());
+	}
+
 	private BinaryFile _getBinaryFile(FileEntry fileEntry) {
 		Try<FileEntry> fileEntryTry = Try.success(fileEntry);
 
@@ -131,6 +156,22 @@ public class MediaObjectNestedCollectionResource
 			folder.getGroupId(), folder.getFolderId());
 
 		return new PageItems<>(dlFileEntries, count);
+	}
+
+	private FileEntry _updateFileEntry(
+			Long fileEntryId, MediaObjectUpdaterForm mediaObjectUpdaterForm)
+		throws PortalException {
+
+		BinaryFile binaryFile = mediaObjectUpdaterForm.getBinaryFile();
+
+		return _dlAppService.updateFileEntry(
+			fileEntryId, mediaObjectUpdaterForm.getName(),
+			binaryFile.getMimeType(), mediaObjectUpdaterForm.getTitle(),
+			mediaObjectUpdaterForm.getDescription(),
+			mediaObjectUpdaterForm.getChangelog(),
+			mediaObjectUpdaterForm.getMajorVersion(),
+			binaryFile.getInputStream(), binaryFile.getSize(),
+			new ServiceContext());
 	}
 
 	@Reference
