@@ -17,6 +17,7 @@ package com.liferay.apio.architect.form;
 import static com.liferay.apio.architect.date.DateTransformer.asDate;
 
 import com.liferay.apio.architect.alias.form.FieldFormBiConsumer;
+import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.functional.Try;
 
 import java.text.NumberFormat;
@@ -90,6 +91,21 @@ public class FormUtil {
 
 		return (key, function) -> _getDouble(
 			body, key, false, function.apply(t));
+	}
+
+	/**
+	 * Returns a field form consumer that tries to extract a file from the HTTP
+	 * request body and store it in the provided {@code T} instance. If the
+	 * field isn't a file, a {@code javax.ws.rs.BadRequestException} is thrown.
+	 *
+	 * @param  body the HTTP request body
+	 * @param  t the form values store
+	 * @return the field form consumer
+	 */
+	public static <T> FieldFormBiConsumer<T, BinaryFile> getOptionalFile(
+		Body body, T t) {
+
+		return (key, function) -> _getFile(body, key, false, function.apply(t));
 	}
 
 	/**
@@ -189,6 +205,21 @@ public class FormUtil {
 	}
 
 	/**
+	 * Returns a field form consumer that extracts a file from the HTTP request
+	 * body and stores it in the provided {@code T} instance. If the field isn't
+	 * found, or it isn't a file, a {@code BadRequestException} is thrown.
+	 *
+	 * @param  body the HTTP request body
+	 * @param  t the form values store
+	 * @return the field form consumer
+	 */
+	public static <T> FieldFormBiConsumer<T, BinaryFile> getRequiredFile(
+		Body body, T t) {
+
+		return (key, function) -> _getFile(body, key, true, function.apply(t));
+	}
+
+	/**
 	 * Returns a stream that contains the required {@code FormField} extracted
 	 * from a map whose keys are the {@code FormField} names.
 	 *
@@ -280,6 +311,20 @@ public class FormUtil {
 		Body body, String key, boolean required, Consumer<String> consumer) {
 
 		Optional<String> optional = body.getValueOptional(key);
+
+		if (optional.isPresent()) {
+			consumer.accept(optional.get());
+		}
+		else if (required) {
+			throw new BadRequestException("Field \"" + key + "\" is required");
+		}
+	}
+
+	private static void _getFile(
+		Body body, String key, boolean required,
+		Consumer<BinaryFile> consumer) {
+
+		Optional<BinaryFile> optional = body.getFileOptional(key);
 
 		if (optional.isPresent()) {
 			consumer.accept(optional.get());
