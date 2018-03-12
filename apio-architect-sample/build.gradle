@@ -19,8 +19,8 @@ dependencies {
 	testCompile project(":apps:foundation:apio-architect:apio-architect-test-util")
 }
 
-liferay {
-	if (!project.hasProperty('sample-whiteboard')) {
-		deployDir = file("${liferayHome}/osgi/other")
+deploy {
+	onlyIf {
+		project.hasProperty "sample-whiteboard"
 	}
 }

@@ -10,8 +10,8 @@ dependencies {
 	provided project(":apps:foundation:apio-architect:apio-architect-api")
 }
 
-liferay {
-	if (!project.hasProperty('sample-liferay-portal')) {
-		deployDir = file("${liferayHome}/osgi/other")
+deploy {
+	onlyIf {
+		project.hasProperty "sample-liferay-portal"
 	}
 }
