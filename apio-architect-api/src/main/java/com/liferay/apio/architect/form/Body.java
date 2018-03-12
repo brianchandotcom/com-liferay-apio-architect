@@ -14,7 +14,10 @@
 
 package com.liferay.apio.architect.form;
 
+import com.liferay.apio.architect.file.BinaryFile;
+
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Instances of this interface represent the current HTTP request body.
@@ -23,6 +26,45 @@ import java.util.Optional;
  * @review
  */
 public interface Body {
+
+	/**
+	 * Creates a new {@code Body} from two lambdas.
+	 *
+	 * @param  valueFunction the function used to obtain values
+	 * @param  fileFunction the function used to obtain files
+	 * @return the body instance
+	 * @review
+	 */
+	public static Body create(
+		Function<String, Optional<String>> valueFunction,
+		Function<String, Optional<BinaryFile>> fileFunction) {
+
+		return new Body() {
+
+			@Override
+			public Optional<BinaryFile> getFileOptional(String key) {
+				return fileFunction.apply(key);
+			}
+
+			@Override
+			public Optional<String> getValueOptional(String key) {
+				return valueFunction.apply(key);
+			}
+
+		};
+	}
+
+	/**
+	 * Returns a binary file from the body, if present. Returns {@code
+	 * Optional#empty()} otherwise.
+	 *
+	 * @param  key the key for extracting the file
+	 * @return the file, if present; {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	public default Optional<BinaryFile> getFileOptional(String key) {
+		return Optional.empty();
+	}
 
 	/**
 	 * Returns a value from the body, if present. Returns {@code
