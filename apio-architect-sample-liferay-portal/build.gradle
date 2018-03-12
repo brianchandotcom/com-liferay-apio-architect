@@ -12,6 +12,6 @@ dependencies {
 
 liferay {
 	if (!project.hasProperty('sample-liferay-portal')) {
-		deployDir = file("${liferayHome}/osgi/test")
+		deployDir = file("${liferayHome}/osgi/other")
 	}
 }

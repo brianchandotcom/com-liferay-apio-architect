@@ -21,6 +21,6 @@ dependencies {
 
 liferay {
 	if (!project.hasProperty('sample-whiteboard')) {
-		deployDir = file("${liferayHome}/osgi/test")
+		deployDir = file("${liferayHome}/osgi/other")
 	}
 }
