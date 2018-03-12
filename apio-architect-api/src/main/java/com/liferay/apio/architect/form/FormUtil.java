@@ -246,8 +246,17 @@ public class FormUtil {
 	private static void _getDate(
 		Body body, String key, boolean required, Consumer<Date> consumer) {
 
-		String message =
-			"Field \"" + key + "\" should be a string date in ISO-8601 format";
+		StringBuilder stringBuilder = new StringBuilder();
+
+		String message = stringBuilder.append(
+			"Field \""
+		).append(
+			key
+		).append(
+			"\" should be a string date in ISO-8601 format: "
+		).append(
+			"yyyy-MM-dd'T'HH:mm'Z'"
+		).toString();
 
 		_getString(
 			body, key, required,
