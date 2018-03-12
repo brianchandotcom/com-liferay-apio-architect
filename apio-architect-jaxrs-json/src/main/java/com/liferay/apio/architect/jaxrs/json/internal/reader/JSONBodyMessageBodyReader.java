@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.jaxrs.json.internal.reader;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -40,7 +42,7 @@ import javax.ws.rs.ext.Provider;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Reads JSON objects as a {@code Map<String, Object>}.
+ * Reads JSON objects as a {@link Body}.
  *
  * @author Alejandro Hernández
  */
@@ -48,9 +50,9 @@ import org.osgi.service.component.annotations.Component;
 	immediate = true,
 	property = "liferay.apio.architect.message.body.reader=true"
 )
-@Consumes(MediaType.APPLICATION_JSON)
+@Consumes(APPLICATION_JSON)
 @Provider
-public class MapMessageBodyReader implements MessageBodyReader<Body> {
+public class JSONBodyMessageBodyReader implements MessageBodyReader<Body> {
 
 	@Override
 	public boolean isReadable(
