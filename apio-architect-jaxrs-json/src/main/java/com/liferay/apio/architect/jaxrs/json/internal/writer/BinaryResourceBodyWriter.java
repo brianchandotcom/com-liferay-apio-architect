@@ -66,7 +66,7 @@ public class BinaryResourceBodyWriter
 				genericType, Try.class);
 
 		return classTry.filter(
-			InputStream.class::equals
+			BinaryFile.class::equals
 		).isSuccess();
 	}
 
