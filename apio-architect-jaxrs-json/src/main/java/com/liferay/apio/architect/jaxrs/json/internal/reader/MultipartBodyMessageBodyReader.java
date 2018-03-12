@@ -18,6 +18,7 @@ import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
 
 import static org.apache.commons.fileupload.servlet.ServletFileUpload.isMultipartContent;
 
+import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Body;
 
 import java.io.IOException;
@@ -87,7 +88,8 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 			FileItemIterator fileItemIterator = upload.getItemIterator(
 				_httpServletRequest);
 
-			Map<String, String> body = new HashMap<>();
+			Map<String, String> values = new HashMap<>();
+			Map<String, BinaryFile> files = new HashMap<>();
 
 			while (fileItemIterator.hasNext()) {
 				FileItemStream fileItemStream = fileItemIterator.next();
@@ -97,11 +99,20 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 				if (fileItemStream.isFormField()) {
 					InputStream stream = fileItemStream.openStream();
 
-					body.put(name, Streams.asString(stream));
+					values.put(name, Streams.asString(stream));
+				}
+				else {
+					BinaryFile binaryFile = new BinaryFile(
+						fileItemStream.openStream(),
+						fileItemStream.getContentType());
+
+					files.put(name, binaryFile);
 				}
 			}
 
-			return key -> Optional.ofNullable(body.get(key));
+			return Body.create(
+				key -> Optional.ofNullable(values.get(key)),
+				key -> Optional.ofNullable(files.get(key)));
 		}
 		catch (FileUploadException fue) {
 			throw new BadRequestException(
