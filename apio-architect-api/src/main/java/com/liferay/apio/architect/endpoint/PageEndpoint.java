@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.endpoint;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
 
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.functional.Try;
@@ -44,7 +45,7 @@ public interface PageEndpoint<T> {
 	 * @param  body the request's body
 	 * @return the new single model, or an exception if an error occurred
 	 */
-	@Consumes(APPLICATION_JSON)
+	@Consumes({APPLICATION_JSON, MULTIPART_FORM_DATA})
 	@Path("/")
 	@POST
 	public Try<SingleModel<T>> addCollectionItem(Body body);
@@ -58,7 +59,7 @@ public interface PageEndpoint<T> {
 	 * @param  body the request's body
 	 * @return the new single model, or an exception if an error occurred
 	 */
-	@Consumes(APPLICATION_JSON)
+	@Consumes({APPLICATION_JSON, MULTIPART_FORM_DATA})
 	@Path("{id}/{nestedName}")
 	@POST
 	public Try<SingleModel<T>> addNestedCollectionItem(
@@ -119,7 +120,7 @@ public interface PageEndpoint<T> {
 	 * @param  body the request's body
 	 * @return the updated single model, or an exception if an error occurred
 	 */
-	@Consumes(APPLICATION_JSON)
+	@Consumes({APPLICATION_JSON, MULTIPART_FORM_DATA})
 	@Path("{id}")
 	@PUT
 	public Try<SingleModel<T>> updateCollectionItem(
