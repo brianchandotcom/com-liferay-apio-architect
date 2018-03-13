@@ -643,9 +643,9 @@ public class ManagerCache {
 
 		List<MediaType> list = Arrays.asList(mediaTypes);
 
-		if (list.contains(_DEFAULT_MEDIA_TYPE)) {
+		if (list.contains(_MEDIA_TYPE)) {
 			return variantListBuilder.mediaTypes(
-				_DEFAULT_MEDIA_TYPE
+				_MEDIA_TYPE
 			).add(
 			).mediaTypes(
 				mediaTypes
@@ -655,7 +655,7 @@ public class ManagerCache {
 		return variantListBuilder.mediaTypes(mediaTypes);
 	}
 
-	private static final MediaType _DEFAULT_MEDIA_TYPE = MediaType.valueOf(
+	private static final MediaType _MEDIA_TYPE = MediaType.valueOf(
 		"application/ld+json");
 
 	private Map<String, CollectionRoutes> _collectionRoutes;
