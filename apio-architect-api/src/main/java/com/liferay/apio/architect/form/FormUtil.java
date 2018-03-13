@@ -360,7 +360,7 @@ public class FormUtil {
 				Try<String> stringTry = Try.success(value);
 
 				stringTry.map(
-					_NUMBER_FORMAT::parse
+					NumberFormat.getInstance()::parse
 				).map(
 					function::apply
 				).fold(
@@ -382,8 +382,5 @@ public class FormUtil {
 	private FormUtil() {
 		throw new UnsupportedOperationException();
 	}
-
-	private static final NumberFormat _NUMBER_FORMAT =
-		NumberFormat.getInstance();
 
 }
