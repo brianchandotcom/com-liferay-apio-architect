@@ -56,7 +56,7 @@ public class MediaObjectNestedCollectionResource
 		NestedCollectionRoutes.Builder<FileEntry, Long> builder) {
 
 		return builder.addCreator(
-			this::_addFileEntry, (credentials, id) -> true,
+			this::_addFileEntry, (credentials, folderId) -> true,
 			MediaObjectCreatorForm::buildForm
 		).addGetter(
 			this::_getPageItems
@@ -76,9 +76,9 @@ public class MediaObjectNestedCollectionResource
 			_dlAppService::getFileEntry
 		).addRemover(
 			idempotent(_dlAppService::deleteFileEntry),
-			(credentials, id) -> true
+			(credentials, fileEntryId) -> true
 		).addUpdater(
-			this::_updateFileEntry, (credentials, id) -> true,
+			this::_updateFileEntry, (credentials, fileEntryId) -> true,
 			MediaObjectUpdaterForm::buildForm
 		).build();
 	}

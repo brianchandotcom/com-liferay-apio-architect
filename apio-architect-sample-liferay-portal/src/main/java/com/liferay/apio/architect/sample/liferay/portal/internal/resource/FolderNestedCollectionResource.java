@@ -56,7 +56,8 @@ public class FolderNestedCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addFolder, (credentials, id) -> true, FolderForm::buildForm
+			this::_addFolder, (credentials, groupId) -> true,
+			FolderForm::buildForm
 		).build();
 	}
 
@@ -72,9 +73,10 @@ public class FolderNestedCollectionResource
 		return builder.addGetter(
 			_dlAppService::getFolder
 		).addRemover(
-			idempotent(_dlAppService::deleteFolder), (credentials, id) -> true
+			idempotent(_dlAppService::deleteFolder),
+			(credentials, folderId) -> true
 		).addUpdater(
-			this::_updateFolder, (credentials, id) -> true,
+			this::_updateFolder, (credentials, folderId) -> true,
 			FolderForm::buildForm
 		).build();
 	}

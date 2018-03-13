@@ -57,7 +57,7 @@ public class BlogPostingNestedCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addBlogsEntry, (credentials, id) -> true,
+			this::_addBlogsEntry, (credentials, groupId) -> true,
 			BlogPostingForm::buildForm
 		).build();
 	}
@@ -74,9 +74,10 @@ public class BlogPostingNestedCollectionResource
 		return builder.addGetter(
 			_blogsService::getEntry
 		).addRemover(
-			idempotent(_blogsService::deleteEntry), (credentials, id) -> true
+			idempotent(_blogsService::deleteEntry),
+			(credentials, entryId) -> true
 		).addUpdater(
-			this::_updateBlogsEntry, (credentials, id) -> true,
+			this::_updateBlogsEntry, (credentials, entryId) -> true,
 			BlogPostingForm::buildForm
 		).build();
 	}
@@ -116,14 +117,14 @@ public class BlogPostingNestedCollectionResource
 	}
 
 	private BlogsEntry _addBlogsEntry(
-			Long classNameClassPK, BlogPostingForm blogPostingForm)
+			Long groupId, BlogPostingForm blogPostingForm)
 		throws PortalException {
 
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
-		serviceContext.setScopeGroupId(classNameClassPK);
+		serviceContext.setScopeGroupId(groupId);
 
 		return _blogsService.addEntry(
 			blogPostingForm.getHeadline(),
@@ -138,18 +139,18 @@ public class BlogPostingNestedCollectionResource
 	}
 
 	private PageItems<BlogsEntry> _getPageItems(
-		Pagination pagination, Long classNameClassPK) {
+		Pagination pagination, Long groupId) {
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			classNameClassPK, 0, pagination.getStartPosition(),
+			groupId, 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
-		int count = _blogsService.getGroupEntriesCount(classNameClassPK, 0);
+		int count = _blogsService.getGroupEntriesCount(groupId, 0);
 
 		return new PageItems<>(blogsEntries, count);
 	}
 
 	private BlogsEntry _updateBlogsEntry(
-			Long blogsEntryId, BlogPostingForm blogPostingForm)
+			Long entryId, BlogPostingForm blogPostingForm)
 		throws PortalException {
 
 		ServiceContext serviceContext = new ServiceContext();
@@ -157,12 +158,12 @@ public class BlogPostingNestedCollectionResource
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
 
-		BlogsEntry blogsEntry = _blogsService.getEntry(blogsEntryId);
+		BlogsEntry blogsEntry = _blogsService.getEntry(entryId);
 
 		serviceContext.setScopeGroupId(blogsEntry.getGroupId());
 
 		return _blogsService.updateEntry(
-			blogsEntryId, blogPostingForm.getHeadline(),
+			entryId, blogPostingForm.getHeadline(),
 			blogPostingForm.getAlternativeHeadline(),
 			blogPostingForm.getDescription(), blogPostingForm.getArticleBody(),
 			blogPostingForm.getDisplayDateMonth(),
