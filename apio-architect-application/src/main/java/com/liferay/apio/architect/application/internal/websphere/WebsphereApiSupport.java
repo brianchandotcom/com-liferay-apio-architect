@@ -32,9 +32,6 @@ import org.osgi.framework.BundleException;
  */
 public class WebsphereApiSupport implements BundleActivator {
 
-	public static final String WEBSPHERE_CLASS =
-		"/com/ibm/websphere/product/VersionInfo.class";
-
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 		if (_isWebSphere()) {
@@ -45,6 +42,11 @@ public class WebsphereApiSupport implements BundleActivator {
 			try (InputStream inputStream = url.openStream()) {
 				_bundle = bundleContext.installBundle(
 					"javax.annotation API", inputStream);
+
+				_bundle.start();
+			}
+			catch (BundleException be) {
+				be.printStackTrace();
 			}
 		}
 	}
@@ -53,6 +55,7 @@ public class WebsphereApiSupport implements BundleActivator {
 	public void stop(BundleContext bundleContext) throws Exception {
 		try {
 			if (_bundle != null) {
+				_bundle.stop();
 				_bundle.uninstall();
 			}
 		}
