@@ -24,13 +24,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 /**
- * Add support for some Websphere versions where the {@code
+ * Add support for some WebSphere versions where the {@code
  * javax.annotation-api.jar} is not correctly provided.
  *
  * @author Carlos Sierra Andrés
  * @review
  */
-public class WebsphereApiSupport implements BundleActivator {
+public class WebSphereApiSupport implements BundleActivator {
 
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
