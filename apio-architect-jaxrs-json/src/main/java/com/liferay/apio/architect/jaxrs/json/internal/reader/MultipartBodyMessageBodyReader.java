@@ -67,7 +67,7 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 
 	@Override
 	public boolean isReadable(
-		Class<?> type, Type genericType, Annotation[] annotations,
+		Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
 		return true;
@@ -75,7 +75,7 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 
 	@Override
 	public Body readFrom(
-			Class<Body> type, Type genericType, Annotation[] annotations,
+			Class<Body> clazz, Type genericType, Annotation[] annotations,
 			MediaType mediaType, MultivaluedMap<String, String> httpHeaders,
 			InputStream entityStream)
 		throws IOException {
@@ -97,7 +97,7 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 			Iterator<FileItem> iterator = fileItems.iterator();
 
 			Map<String, String> values = new HashMap<>();
-			Map<String, BinaryFile> files = new HashMap<>();
+			Map<String, BinaryFile> binaryFiles = new HashMap<>();
 
 			while (iterator.hasNext()) {
 				FileItem fileItem = iterator.next();
@@ -114,13 +114,13 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 						fileItem.getInputStream(), fileItem.getSize(),
 						fileItem.getContentType());
 
-					files.put(name, binaryFile);
+					binaryFiles.put(name, binaryFile);
 				}
 			}
 
 			return Body.create(
 				key -> Optional.ofNullable(values.get(key)),
-				key -> Optional.ofNullable(files.get(key)));
+				key -> Optional.ofNullable(binaryFiles.get(key)));
 		}
 		catch (FileUploadException fue) {
 			throw new BadRequestException(
