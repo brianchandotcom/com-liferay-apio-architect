@@ -29,17 +29,17 @@ public class ThrowableHeptaFunctionTest {
 		throws Exception {
 
 		ThrowableHeptaFunction<String, String, String, String, String, String,
-			String, String> firstFunction = (
+			String, String> throwableHeptaFunction = (
 				string1, string2, string3, string4, string5, string6,
 				string7) ->
 					string1 + string2 + string3 + string4 + string5 + string6 +
 						string7;
 
-		ThrowableFunction<String, String> secondFunction =
+		ThrowableFunction<String, String> throwableFunction =
 			string -> string + "prosper";
 
-		String string = firstFunction.andThen(
-			secondFunction
+		String string = throwableHeptaFunction.andThen(
+			throwableFunction
 		).apply(
 			"Li", "ve", " ", "long", " ", "and", " "
 		);
@@ -50,13 +50,13 @@ public class ThrowableHeptaFunctionTest {
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
 		ThrowableHeptaFunction<String, String, String, String, String, String,
-			String, String> firstFunction = (
+			String, String> throwableHeptaFunction = (
 				string1, string2, string3, string4, string5, string6,
 				string7) ->
 					string1 + string2 + string3 + string4 + string5 + string6 +
 						string7;
 
-		firstFunction.andThen(null);
+		throwableHeptaFunction.andThen(null);
 	}
 
 }

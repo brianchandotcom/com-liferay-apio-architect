@@ -29,15 +29,15 @@ public class ThrowableHexaFunctionTest {
 		throws Exception {
 
 		ThrowableHexaFunction<String, String, String, String, String, String,
-			String> firstFunction =
+			String> throwableHexaFunction =
 				(string1, string2, string3, string4, string5, string6) ->
 					string1 + string2 + string3 + string4 + string5 + string6;
 
-		ThrowableFunction<String, String> secondFunction =
+		ThrowableFunction<String, String> throwableFunction =
 			string -> string + "prosper";
 
-		String string = firstFunction.andThen(
-			secondFunction
+		String string = throwableHexaFunction.andThen(
+			throwableFunction
 		).apply(
 			"Live", " ", "long", " ", "and", " "
 		);
@@ -48,11 +48,11 @@ public class ThrowableHexaFunctionTest {
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
 		ThrowableHexaFunction<String, String, String, String, String, String,
-			String> firstFunction = (
+			String> throwableHexaFunction = (
 				string1, string2, string3, string4, string5, string6) ->
 					string1 + string2 + string3 + string4 + string5 + string6;
 
-		firstFunction.andThen(null);
+		throwableHexaFunction.andThen(null);
 	}
 
 }

@@ -29,14 +29,15 @@ public class ThrowablePentaFunctionTest {
 		throws Exception {
 
 		ThrowablePentaFunction<String, String, String, String, String, String>
-			firstFunction = (string1, string2, string3, string4, string5) ->
-				string1 + string2 + string3 + string4 + string5;
+			throwablePentaFunction =
+				(string1, string2, string3, string4, string5) ->
+					string1 + string2 + string3 + string4 + string5;
 
-		ThrowableFunction<String, String> secondFunction =
+		ThrowableFunction<String, String> throwableFunction =
 			string -> string + "prosper";
 
-		String string = firstFunction.andThen(
-			secondFunction
+		String string = throwablePentaFunction.andThen(
+			throwableFunction
 		).apply(
 			"Live", " ", "long ", "and", " "
 		);
@@ -47,10 +48,11 @@ public class ThrowablePentaFunctionTest {
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
 		ThrowablePentaFunction<String, String, String, String, String, String>
-			firstFunction = (string1, string2, string3, string4, string5) ->
-				string1 + string2 + string3 + string4 + string5;
+			throwablePentaFunction =
+				(string1, string2, string3, string4, string5) ->
+					string1 + string2 + string3 + string4 + string5;
 
-		firstFunction.andThen(null);
+		throwablePentaFunction.andThen(null);
 	}
 
 }

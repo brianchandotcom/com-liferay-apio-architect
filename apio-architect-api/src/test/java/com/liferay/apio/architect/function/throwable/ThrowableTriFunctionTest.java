@@ -28,14 +28,15 @@ public class ThrowableTriFunctionTest {
 	public void testOnInvokingAndThenShouldExecuteBothFunctions()
 		throws Exception {
 
-		ThrowableTriFunction<String, String, String, String> firstFunction =
-			(string1, string2, string3) -> string1 + string2 + string3;
+		ThrowableTriFunction<String, String, String, String>
+			throwableTriFunction = (string1, string2, string3) ->
+				string1 + string2 + string3;
 
-		ThrowableFunction<String, String> secondFunction =
+		ThrowableFunction<String, String> throwableFunction =
 			string -> string + "prosper";
 
-		String string = firstFunction.andThen(
-			secondFunction
+		String string = throwableTriFunction.andThen(
+			throwableFunction
 		).apply(
 			"Live ", "long ", "and "
 		);
@@ -45,10 +46,11 @@ public class ThrowableTriFunctionTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
-		ThrowableTriFunction<String, String, String, String> firstFunction =
-			(string1, string2, string3) -> string1 + string2 + string3;
+		ThrowableTriFunction<String, String, String, String>
+			throwableTriFunction =
+				(string1, string2, string3) -> string1 + string2 + string3;
 
-		firstFunction.andThen(null);
+		throwableTriFunction.andThen(null);
 	}
 
 }

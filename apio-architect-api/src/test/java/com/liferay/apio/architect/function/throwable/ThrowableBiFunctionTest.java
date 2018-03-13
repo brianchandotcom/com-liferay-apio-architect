@@ -28,14 +28,14 @@ public class ThrowableBiFunctionTest {
 	public void testOnInvokingAndThenShouldExecuteBothFunctions()
 		throws Exception {
 
-		ThrowableBiFunction<String, String, String> firstFunction =
+		ThrowableBiFunction<String, String, String> throwableBiFunction =
 			(string1, string2) -> string1 + string2;
 
-		ThrowableFunction<String, String> secondFunction =
+		ThrowableFunction<String, String> throwableFunction =
 			string -> string + "prosper";
 
-		String string = firstFunction.andThen(
-			secondFunction
+		String string = throwableBiFunction.andThen(
+			throwableFunction
 		).apply(
 			"Live ", "long and "
 		);
@@ -45,10 +45,10 @@ public class ThrowableBiFunctionTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
-		ThrowableBiFunction<String, String, String> firstFunction =
+		ThrowableBiFunction<String, String, String> throwableBiFunction =
 			(string1, string2) -> string1 + string2;
 
-		firstFunction.andThen(null);
+		throwableBiFunction.andThen(null);
 	}
 
 }

@@ -29,17 +29,17 @@ public class ThrowableEnneaFunctionTest {
 		throws Exception {
 
 		ThrowableEnneaFunction<String, String, String, String, String, String,
-			String, String, String, String> firstFunction = (
+			String, String, String, String> throwableEnneaFunction = (
 				string1, string2, string3, string4, string5, string6,
 				string7, string8, string9) ->
 					string1 + string2 + string3 + string4 + string5 + string6 +
 						string7 + string8 + string9;
 
-		ThrowableFunction<String, String> secondFunction =
+		ThrowableFunction<String, String> throwableFunction =
 			string -> string + "prosper";
 
-		String string = firstFunction.andThen(
-			secondFunction
+		String string = throwableEnneaFunction.andThen(
+			throwableFunction
 		).apply(
 			"Li", "ve", " ", "lo", "ng", " ", "an", "d", " "
 		);
@@ -50,13 +50,13 @@ public class ThrowableEnneaFunctionTest {
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
 		ThrowableEnneaFunction<String, String, String, String, String, String,
-			String, String, String, String> firstFunction = (
+			String, String, String, String> throwableEnneaFunction = (
 				string1, string2, string3, string4, string5, string6,
 				string7, string8, string9) ->
 					string1 + string2 + string3 + string4 + string5 + string6 +
 						string7 + string8 + string9;
 
-		firstFunction.andThen(null);
+		throwableEnneaFunction.andThen(null);
 	}
 
 }

@@ -29,17 +29,17 @@ public class ThrowableDecaFunctionTest {
 		throws Exception {
 
 		ThrowableDecaFunction<String, String, String, String, String, String,
-			String, String, String, String, String> firstFunction = (
+			String, String, String, String, String> throwableDecaFunction = (
 				string1, string2, string3, string4, string5, string6, string7,
 				string8, string9, string10) ->
 					string1 + string2 + string3 + string4 + string5 + string6 +
 						string7 + string8 + string9 + string10;
 
-		ThrowableFunction<String, String> secondFunction =
+		ThrowableFunction<String, String> throwableFunction =
 			string -> string + "prosper";
 
-		String string = firstFunction.andThen(
-			secondFunction
+		String string = throwableDecaFunction.andThen(
+			throwableFunction
 		).apply(
 			"L", "i", "ve", " ", "lo", "ng", " ", "an", "d", " "
 		);
@@ -50,13 +50,13 @@ public class ThrowableDecaFunctionTest {
 	@Test(expected = NullPointerException.class)
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
 		ThrowableDecaFunction<String, String, String, String, String, String,
-			String, String, String, String, String> firstFunction = (
+			String, String, String, String, String> throwableDecaFunction = (
 				string1, string2, string3, string4, string5, string6, string7,
 				string8, string9, string10) ->
 					string1 + string2 + string3 + string4 + string5 + string6 +
 						string7 + string8 + string9 + string10;
 
-		firstFunction.andThen(null);
+		throwableDecaFunction.andThen(null);
 	}
 
 }
