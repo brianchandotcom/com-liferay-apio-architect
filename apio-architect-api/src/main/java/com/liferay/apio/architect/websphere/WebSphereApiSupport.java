@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.application.internal.websphere;
+package com.liferay.apio.architect.websphere;
 
 import java.io.InputStream;
 
@@ -41,7 +41,7 @@ public class WebSphereApiSupport implements BundleActivator {
 
 			try (InputStream inputStream = url.openStream()) {
 				_bundle = bundleContext.installBundle(
-					"javax.annotation API", inputStream);
+					"javax.annotation-api", inputStream);
 
 				_bundle.start();
 			}
