@@ -22,8 +22,10 @@ import com.google.gson.JsonObject;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.request.RequestInfo;
+import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
 import com.liferay.apio.architect.writer.DocumentationWriter;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -52,9 +54,15 @@ public class MockDocumentationWriter {
 
 		RequestInfo requestInfo = getRequestInfo(httpHeaders);
 
+		HashMap representors = new HashMap();
+
+		representors.put(
+			"root", MockRepresentorCreator.createRootModelRepresentor(false));
+
 		Documentation documentation = new Documentation(
 			__ -> Optional.of(() -> "Title"),
-			__ -> Optional.of(() -> "Description"));
+			__ -> Optional.of(() -> "Description"), () -> representors,
+			() -> null, () -> null);
 
 		DocumentationWriter documentationWriter = DocumentationWriter.create(
 			builder -> builder.documentation(
