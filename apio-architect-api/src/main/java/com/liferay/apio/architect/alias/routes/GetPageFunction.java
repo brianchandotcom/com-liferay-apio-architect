@@ -18,6 +18,8 @@ import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.pagination.Page;
 
+import javax.ws.rs.HttpMethod;
+
 /**
  * Defines a type alias for a function that can be used to get a collection
  * page.
@@ -27,4 +29,15 @@ import com.liferay.apio.architect.pagination.Page;
  */
 @FunctionalInterface
 public interface GetPageFunction<T> extends RequestFunction<Try<Page<T>>> {
+
+	@Override
+	public default boolean getCollection() {
+		return true;
+	}
+
+	@Override
+	public default String getHttpMethod() {
+		return HttpMethod.GET;
+	}
+
 }

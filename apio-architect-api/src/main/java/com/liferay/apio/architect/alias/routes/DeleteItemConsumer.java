@@ -17,6 +17,8 @@ package com.liferay.apio.architect.alias.routes;
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 
+import javax.ws.rs.HttpMethod;
+
 /**
  * Defines a type alias for a function that can be used to delete a collection
  * item.
@@ -28,4 +30,10 @@ import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 @FunctionalInterface
 public interface DeleteItemConsumer<T>
 	extends RequestFunction<ThrowableConsumer<T>> {
+
+	@Override
+	public default String getHttpMethod() {
+		return HttpMethod.DELETE;
+	}
+
 }

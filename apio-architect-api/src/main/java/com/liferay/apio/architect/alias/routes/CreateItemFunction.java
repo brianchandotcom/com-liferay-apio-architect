@@ -21,6 +21,8 @@ import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.function.Function;
 
+import javax.ws.rs.HttpMethod;
+
 /**
  * Defines a type alias for a function that can be used to create a collection
  * item.
@@ -31,4 +33,10 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface CreateItemFunction<T>
 	extends RequestFunction<Function<Body, Try<SingleModel<T>>>> {
+
+	@Override
+	public default String getHttpMethod() {
+		return HttpMethod.POST;
+	}
+
 }

@@ -20,6 +20,8 @@ import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.function.Function;
 
+import javax.ws.rs.HttpMethod;
+
 /**
  * Defines a type alias for a function that can be used to get a collection
  * item.
@@ -32,4 +34,10 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface GetItemFunction<T, S>
 	extends RequestFunction<Function<S, Try<SingleModel<T>>>> {
+
+	@Override
+	public default String getHttpMethod() {
+		return HttpMethod.GET;
+	}
+
 }
