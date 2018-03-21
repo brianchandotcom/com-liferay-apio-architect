@@ -16,7 +16,11 @@ package com.liferay.apio.architect.message.json;
 
 import aQute.bnd.annotation.ConsumerType;
 
+import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.documentation.Documentation;
+import com.liferay.apio.architect.form.FormField;
+
+import java.util.Optional;
 
 /**
  * Maps the API {@link Documentation} to its JSON object representation.
@@ -50,6 +54,20 @@ public interface DocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, String description) {
 	}
 
+	public default void mapFormField(
+		JSONObjectBuilder jsonObjectBuilder, Object name,
+		Optional<FormField> formFieldOptional) {
+	}
+
+	public default void mapOperation(
+		JSONObjectBuilder jsonObjectBuilder, String entity,
+		RequestFunction requestFunction) {
+	}
+
+	public default void mapResource(
+		JSONObjectBuilder jsonObjectBuilder, String entity) {
+	}
+
 	/**
 	 * Maps the API title to its JSON object representation.
 	 *
@@ -58,6 +76,36 @@ public interface DocumentationMessageMapper
 	 */
 	public default void mapTitle(
 		JSONObjectBuilder jsonObjectBuilder, String title) {
+	}
+
+	public default void onFinishOperation(
+		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder propertyJsonObjectBuilder) {
+	}
+
+	public default void onFinishProperty(
+		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder propertyJsonObjectBuilder) {
+	}
+
+	public default void onFinishResource(
+		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder entityJsonObjectBuilder) {
+	}
+
+	public default void onStartOperation(
+		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder operationJsonObjectBuilder) {
+	}
+
+	public default void onStartProperty(
+		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder propertyJsonObjectBuilder) {
+	}
+
+	public default void onStartResource(
+		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder entityJsonObjectBuilder) {
 	}
 
 }
