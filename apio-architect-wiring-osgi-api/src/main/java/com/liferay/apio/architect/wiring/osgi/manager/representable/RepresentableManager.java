@@ -18,6 +18,7 @@ import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.apio.architect.representor.Representor;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -30,6 +31,8 @@ import java.util.Optional;
  */
 @ProviderType
 public interface RepresentableManager {
+
+	public Map<String, Representor> getRepresentorMap();
 
 	/**
 	 * Returns the representor of the collection resource's model class, if that

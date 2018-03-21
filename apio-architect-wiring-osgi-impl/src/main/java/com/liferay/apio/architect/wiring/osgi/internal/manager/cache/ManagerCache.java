@@ -79,6 +79,16 @@ public class ManagerCache {
 		_singleModelMessageMappers = null;
 	}
 
+	public Map<String, CollectionRoutes> getCollectionRoutes(
+		EmptyFunction computeEmptyFunction) {
+
+		if (_collectionRoutes == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		return _collectionRoutes;
+	}
+
 	/**
 	 * Returns the collection routes for the collection resource's name.
 	 *
@@ -197,6 +207,16 @@ public class ManagerCache {
 		);
 	}
 
+	public Map<String, ItemRoutes> getItemRoutesMap(
+		EmptyFunction computeEmptyFunction) {
+
+		if (_itemRoutes == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		return _itemRoutes;
+	}
+
 	/**
 	 * Returns the item routes for the item resource's name.
 	 *
@@ -304,6 +324,16 @@ public class ManagerCache {
 			request, _pageMessageMappers);
 
 		return optional.map(Unsafe::unsafeCast);
+	}
+
+	public Map<String, Representor> getRepresentorMap(
+		EmptyFunction computeEmptyFunction) {
+
+		if (_representors == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		return _representors;
 	}
 
 	/**

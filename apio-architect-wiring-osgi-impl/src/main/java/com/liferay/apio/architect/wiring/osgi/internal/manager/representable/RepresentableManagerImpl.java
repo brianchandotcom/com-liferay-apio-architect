@@ -83,6 +83,10 @@ public class RepresentableManagerImpl
 			name, this::_computeRepresentables);
 	}
 
+	public Map<String, Representor> getRepresentorMap() {
+		return INSTANCE.getRepresentorMap(this::_computeRepresentables);
+	}
+
 	@Override
 	protected void emit(
 		ServiceReference<Representable> serviceReference,
