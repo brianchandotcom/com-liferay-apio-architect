@@ -14,13 +14,14 @@
 
 package com.liferay.apio.architect.alias.routes;
 
+import static com.liferay.apio.architect.operation.Method.GET;
+
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.function.Function;
-
-import javax.ws.rs.HttpMethod;
 
 /**
  * Defines a type alias for a function that can be used to get a collection
@@ -36,8 +37,8 @@ public interface GetItemFunction<T, S>
 	extends RequestFunction<Function<S, Try<SingleModel<T>>>> {
 
 	@Override
-	public default String getHttpMethod() {
-		return HttpMethod.GET;
+	public default Method getMethod() {
+		return GET;
 	}
 
 }

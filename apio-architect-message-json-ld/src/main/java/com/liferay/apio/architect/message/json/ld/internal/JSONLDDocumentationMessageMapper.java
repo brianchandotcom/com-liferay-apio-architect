@@ -33,10 +33,10 @@ import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
+import com.liferay.apio.architect.operation.Method;
 
 import java.util.Optional;
 
-import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.osgi.service.component.annotations.Component;
@@ -112,7 +112,7 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, String entity,
 		RequestFunction requestFunction) {
 
-		String httpMethod = requestFunction.getHttpMethod();
+		Method method = requestFunction.getMethod();
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
@@ -128,7 +128,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			"method"
 		).stringValue(
-			httpMethod
+			method.name()
 		);
 
 		String value = _getReturnValue(entity, requestFunction);
@@ -340,7 +340,7 @@ public class JSONLDDocumentationMessageMapper
 
 		String value = null;
 
-		if (HttpMethod.DELETE.equals(requestFunction.getHttpMethod())) {
+		if (Method.DELETE.equals(requestFunction.getMethod())) {
 			value = "http://www.w3.org/2002/07/owl#Nothing";
 		}
 		else if (requestFunction.getCollection()) {

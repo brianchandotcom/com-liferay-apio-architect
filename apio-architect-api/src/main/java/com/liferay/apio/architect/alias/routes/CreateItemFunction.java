@@ -14,14 +14,15 @@
 
 package com.liferay.apio.architect.alias.routes;
 
+import static com.liferay.apio.architect.operation.Method.POST;
+
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.function.Function;
-
-import javax.ws.rs.HttpMethod;
 
 /**
  * Defines a type alias for a function that can be used to create a collection
@@ -35,8 +36,8 @@ public interface CreateItemFunction<T>
 	extends RequestFunction<Function<Body, Try<SingleModel<T>>>> {
 
 	@Override
-	public default String getHttpMethod() {
-		return HttpMethod.POST;
+	public default Method getMethod() {
+		return POST;
 	}
 
 }

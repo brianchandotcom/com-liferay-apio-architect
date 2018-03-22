@@ -14,11 +14,12 @@
 
 package com.liferay.apio.architect.alias.routes;
 
+import static com.liferay.apio.architect.operation.Method.GET;
+
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.pagination.Page;
-
-import javax.ws.rs.HttpMethod;
 
 /**
  * Defines a type alias for a function that can be used to get a collection
@@ -36,8 +37,8 @@ public interface GetPageFunction<T> extends RequestFunction<Try<Page<T>>> {
 	}
 
 	@Override
-	public default String getHttpMethod() {
-		return HttpMethod.GET;
+	public default Method getMethod() {
+		return GET;
 	}
 
 }
