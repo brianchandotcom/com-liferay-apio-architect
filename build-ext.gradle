@@ -206,7 +206,11 @@ def getClientDeployDir() {
 	}
 
 	Properties properties = new Properties()
-	properties.load(project.rootProject.file('local.properties').newDataInputStream())
+	def file = project.rootProject.file('local.properties')
+
+	if (file.exists()) {
+		properties.load(file.newDataInputStream())
+	}
 
 	def apioDeployProperty = 'com.liferay.apio.architect.deploy.dir'
 
