@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.writer;
 
 import com.google.gson.JsonObject;
+
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.Form;

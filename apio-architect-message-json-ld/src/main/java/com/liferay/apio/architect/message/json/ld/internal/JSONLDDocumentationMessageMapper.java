@@ -17,10 +17,15 @@ package com.liferay.apio.architect.message.json.ld.internal;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_CONTEXT;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_DESCRIPTION;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_ID;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_PROPERTY;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_REQUIRED;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_TITLE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_TYPE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.MEDIA_TYPE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_API_DOCUMENTATION;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_CLASS;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_COLLECTION;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_OPERATION;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_HYDRA_PROFILE;
 
 import com.liferay.apio.architect.alias.RequestFunction;
@@ -72,14 +77,19 @@ public class JSONLDDocumentationMessageMapper
 		Optional<FormField> formFieldOptional) {
 
 		jsonObjectBuilder.field(
-			JSONLDConstants.FIELD_NAME_TITLE).stringValue(String.valueOf(name));
+			FIELD_NAME_TITLE
+		).stringValue(
+			String.valueOf(name)
+		);
 
-		Boolean required =
-			formFieldOptional.map(formField -> formField.required).orElse(
-				false);
+		Boolean required = formFieldOptional.map(
+			formField -> formField.required
+		).orElse(
+			false
+		);
 
 		jsonObjectBuilder.field(
-			JSONLDConstants.FIELD_NAME_REQUIRED
+			FIELD_NAME_REQUIRED
 		).booleanValue(
 			required
 		);
@@ -113,7 +123,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
 		).stringValue(
-			JSONLDConstants.TYPE_OPERATION
+			TYPE_OPERATION
 		);
 		jsonObjectBuilder.field(
 			"method"
@@ -142,10 +152,10 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
 		).stringValue(
-			JSONLDConstants.TYPE_CLASS
+			TYPE_CLASS
 		);
 		jsonObjectBuilder.field(
-			JSONLDConstants.FIELD_NAME_TITLE
+			FIELD_NAME_TITLE
 		).stringValue(
 			entity
 		);
@@ -214,7 +224,7 @@ public class JSONLDDocumentationMessageMapper
 		);
 
 		contextBuilder.field(
-			"ApiDocumentation"
+			TYPE_API_DOCUMENTATION
 		).stringValue(
 			"hydra:ApiDocumentation"
 		);
@@ -237,7 +247,7 @@ public class JSONLDDocumentationMessageMapper
 		propertyBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			JSONLDConstants.FIELD_NAME_PROPERTY
+			FIELD_NAME_PROPERTY
 		);
 
 		propertyBuilder.field(
@@ -334,7 +344,7 @@ public class JSONLDDocumentationMessageMapper
 			value = "http://www.w3.org/2002/07/owl#Nothing";
 		}
 		else if (requestFunction.getCollection()) {
-			value = "http://www.w3.org/ns/hydra/core#Collection";
+			value = URL_HYDRA_PROFILE + TYPE_COLLECTION;
 		}
 		else {
 			value = "http://schema.org/" + entity;
