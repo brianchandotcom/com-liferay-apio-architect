@@ -207,9 +207,17 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder.FieldStep contextBuilder =
 			jsonObjectBuilder.nestedField(FIELD_NAME_CONTEXT);
 
-		JSONObjectBuilder.FieldStep hydra = contextBuilder.field("hydra");
+		contextBuilder.field(
+			"hydra"
+		).stringValue(
+			URL_HYDRA_PROFILE
+		);
 
-		hydra.stringValue(URL_HYDRA_PROFILE);
+		contextBuilder.field(
+			"ApiDocumentation"
+		).stringValue(
+			"hydra:ApiDocumentation"
+		);
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
