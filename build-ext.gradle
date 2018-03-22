@@ -205,7 +205,14 @@ def getClientDeployDir() {
 		return new File(project.getProperty('liferay.home').toString() + '/osgi/modules')
 	}
 
-	return new File(rootDir, project.property("com.liferay.apio.architect.deploy.dir").toString())
+	Properties properties = new Properties()
+	properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+	def apioDeployProperty = 'com.liferay.apio.architect.deploy.dir'
+
+	def sdkDir = properties.getProperty(apioDeployProperty)
+
+	return new File(rootDir, (sdkDir ?: project.property(apioDeployProperty)).toString())
 }
 
 def getImageName() {
