@@ -56,6 +56,7 @@ public class WebSphereApiSupport implements BundleActivator {
 		try {
 			if (_bundle != null) {
 				_bundle.stop();
+
 				_bundle.uninstall();
 			}
 		}
