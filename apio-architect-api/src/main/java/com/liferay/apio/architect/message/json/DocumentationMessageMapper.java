@@ -55,7 +55,7 @@ public interface DocumentationMessageMapper
 	}
 
 	public default void mapFormField(
-		JSONObjectBuilder jsonObjectBuilder, Object name,
+		JSONObjectBuilder jsonObjectBuilder, String name,
 		Optional<FormField> formFieldOptional) {
 	}
 

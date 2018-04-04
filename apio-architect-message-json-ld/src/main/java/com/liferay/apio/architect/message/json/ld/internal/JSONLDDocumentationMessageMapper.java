@@ -73,7 +73,7 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void mapFormField(
-		JSONObjectBuilder jsonObjectBuilder, Object name,
+		JSONObjectBuilder jsonObjectBuilder, String name,
 		Optional<FormField> formFieldOptional) {
 
 		jsonObjectBuilder.field(
