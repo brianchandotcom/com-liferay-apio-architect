@@ -172,23 +172,23 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void onFinishOperation(
-		JSONObjectBuilder jsonObjectBuilder,
-		JSONObjectBuilder propertyJsonObjectBuilder) {
+		JSONObjectBuilder documentationJsonObjectBuilder,
+		JSONObjectBuilder operationJsonObjectBuilder) {
 
-		jsonObjectBuilder.field(
+		documentationJsonObjectBuilder.field(
 			"supportedOperation"
 		).arrayValue(
 		).add(
-			propertyJsonObjectBuilder
+			operationJsonObjectBuilder
 		);
 	}
 
 	@Override
 	public void onFinishProperty(
-		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder documentationJsonObjectBuilder,
 		JSONObjectBuilder propertyJsonObjectBuilder) {
 
-		jsonObjectBuilder.field(
+		documentationJsonObjectBuilder.field(
 			"supportedProperty"
 		).arrayValue(
 		).add(
@@ -198,14 +198,14 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void onFinishResource(
-		JSONObjectBuilder jsonObjectBuilder,
-		JSONObjectBuilder entityJsonObjectBuilder) {
+		JSONObjectBuilder documentationJsonObjectBuilder,
+		JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		jsonObjectBuilder.field(
+		documentationJsonObjectBuilder.field(
 			"supportedClass"
 		).arrayValue(
 		).add(
-			entityJsonObjectBuilder
+			resourceJsonObjectBuilder
 		);
 	}
 

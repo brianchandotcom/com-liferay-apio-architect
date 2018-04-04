@@ -79,33 +79,33 @@ public interface DocumentationMessageMapper
 	}
 
 	public default void onFinishOperation(
-		JSONObjectBuilder jsonObjectBuilder,
-		JSONObjectBuilder propertyJsonObjectBuilder) {
+		JSONObjectBuilder documentationJsonObjectBuilder,
+		JSONObjectBuilder operationJsonObjectBuilder) {
 	}
 
 	public default void onFinishProperty(
-		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder documentationJsonObjectBuilder,
 		JSONObjectBuilder propertyJsonObjectBuilder) {
 	}
 
 	public default void onFinishResource(
-		JSONObjectBuilder jsonObjectBuilder,
-		JSONObjectBuilder entityJsonObjectBuilder) {
+		JSONObjectBuilder documentationJsonObjectBuilder,
+		JSONObjectBuilder resourceJsonObjectBuilder) {
 	}
 
 	public default void onStartOperation(
-		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder documentationJsonObjectBuilder,
 		JSONObjectBuilder operationJsonObjectBuilder) {
 	}
 
 	public default void onStartProperty(
-		JSONObjectBuilder jsonObjectBuilder,
+		JSONObjectBuilder documentationJsonObjectBuilder,
 		JSONObjectBuilder propertyJsonObjectBuilder) {
 	}
 
 	public default void onStartResource(
-		JSONObjectBuilder jsonObjectBuilder,
-		JSONObjectBuilder entityJsonObjectBuilder) {
+		JSONObjectBuilder documentationJsonObjectBuilder,
+		JSONObjectBuilder resourceJsonObjectBuilder) {
 	}
 
 }
