@@ -32,7 +32,7 @@ import java.util.Optional;
 @ProviderType
 public interface RepresentableManager {
 
-	public Map<String, Representor> getRepresentorMap();
+	public Map<String, Representor> getRepresentors();
 
 	/**
 	 * Returns the representor of the collection resource's model class, if that

@@ -74,9 +74,9 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		_documentation = new Documentation(
 			apiTitleRequestFunction, apiDescriptionRequestFunction,
-			() -> _representableManager.getRepresentorMap(),
-			() -> _collectionRouterManager.getCollectionRoutesMap(),
-			() -> _itemRouterManager.getItemRoutesMap());
+			() -> _representableManager.getRepresentors(),
+			() -> _collectionRouterManager.getCollectionRoutes(),
+			() -> _itemRouterManager.getItemRoutes());
 	}
 
 	@Override

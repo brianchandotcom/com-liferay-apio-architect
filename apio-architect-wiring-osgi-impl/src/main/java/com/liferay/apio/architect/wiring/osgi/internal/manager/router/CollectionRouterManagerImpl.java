@@ -59,7 +59,7 @@ public class CollectionRouterManagerImpl
 	}
 
 	@Override
-	public Map<String, CollectionRoutes> getCollectionRoutesMap() {
+	public Map<String, CollectionRoutes> getCollectionRoutes() {
 		return INSTANCE.getCollectionRoutes(this::_computeCollectionRoutes);
 	}
 

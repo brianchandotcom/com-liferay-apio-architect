@@ -53,7 +53,7 @@ public class ItemRouterManagerImpl
 	}
 
 	@Override
-	public Map<String, ItemRoutes> getItemRoutesMap() {
+	public Map<String, ItemRoutes> getItemRoutes() {
 		return INSTANCE.getItemRoutesMap(this::_computeItemRoutes);
 	}
 

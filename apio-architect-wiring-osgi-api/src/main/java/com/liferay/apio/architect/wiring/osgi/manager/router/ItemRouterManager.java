@@ -31,7 +31,7 @@ import java.util.Optional;
 @ProviderType
 public interface ItemRouterManager {
 
-	public Map<String, ItemRoutes> getItemRoutesMap();
+	public Map<String, ItemRoutes> getItemRoutes();
 
 	/**
 	 * Returns the item routes for the item resource's name.

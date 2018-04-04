@@ -32,7 +32,7 @@ import java.util.Optional;
 @ProviderType
 public interface CollectionRouterManager {
 
-	public Map<String, CollectionRoutes> getCollectionRoutesMap();
+	public Map<String, CollectionRoutes> getCollectionRoutes();
 
 	/**
 	 * Returns the collection routes for the collection resource's name.
