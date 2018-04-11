@@ -54,18 +54,17 @@ public interface DocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, String description) {
 	}
 
-	public default void mapFormField(
-		JSONObjectBuilder jsonObjectBuilder, String name,
-		Optional<FormField> formFieldOptional) {
+	public default void mapProperty(
+		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
 	}
 
 	public default void mapOperation(
-		JSONObjectBuilder jsonObjectBuilder, String entity,
+		JSONObjectBuilder jsonObjectBuilder, String resourceName,
 		RequestFunction requestFunction) {
 	}
 
 	public default void mapResource(
-		JSONObjectBuilder jsonObjectBuilder, String entity) {
+		JSONObjectBuilder jsonObjectBuilder, String resourceName) {
 	}
 
 	/**

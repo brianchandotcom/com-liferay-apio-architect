@@ -72,14 +72,14 @@ public class JSONLDDocumentationMessageMapper
 	}
 
 	@Override
-	public void mapFormField(
-		JSONObjectBuilder jsonObjectBuilder, String name,
+	public void mapProperty(
+		JSONObjectBuilder jsonObjectBuilder, String fieldName,
 		Optional<FormField> formFieldOptional) {
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_TITLE
 		).stringValue(
-			String.valueOf(name)
+			fieldName
 		);
 
 		Boolean required = formFieldOptional.map(
@@ -109,7 +109,7 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void mapOperation(
-		JSONObjectBuilder jsonObjectBuilder, String entity,
+		JSONObjectBuilder jsonObjectBuilder, String resourceName,
 		RequestFunction requestFunction) {
 
 		Method method = requestFunction.getMethod();
@@ -117,7 +117,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"_:" + entity
+			"_:" + resourceName
 		);
 
 		jsonObjectBuilder.field(
@@ -131,7 +131,7 @@ public class JSONLDDocumentationMessageMapper
 			method.name()
 		);
 
-		String value = _getReturnValue(entity, requestFunction);
+		String value = _getReturnValue(resourceName, requestFunction);
 
 		jsonObjectBuilder.field(
 			"returns"
@@ -142,12 +142,12 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void mapResource(
-		JSONObjectBuilder jsonObjectBuilder, String entity) {
+		JSONObjectBuilder jsonObjectBuilder, String resourceName) {
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"http://schema.org/" + entity
+			"http://schema.org/" + resourceName
 		);
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
@@ -157,7 +157,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			FIELD_NAME_TITLE
 		).stringValue(
-			entity
+			resourceName
 		);
 	}
 

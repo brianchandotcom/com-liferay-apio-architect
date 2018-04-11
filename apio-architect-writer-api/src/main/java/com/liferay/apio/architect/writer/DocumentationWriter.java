@@ -310,7 +310,7 @@ public class DocumentationWriter {
 
 	private void _writeOperation(
 		Optional<RequestFunction> requestFunctionOptional,
-		JSONObjectBuilder jsonObjectBuilder, String resource) {
+		JSONObjectBuilder jsonObjectBuilder, String resourceName) {
 
 		JSONObjectBuilder operationJsonObjectBuilder = new JSONObjectBuilder();
 
@@ -319,7 +319,7 @@ public class DocumentationWriter {
 
 		requestFunctionOptional.ifPresent(
 			requestFunction -> _documentationMessageMapper.mapOperation(
-				operationJsonObjectBuilder, resource, requestFunction));
+				operationJsonObjectBuilder, resourceName, requestFunction));
 
 		_documentationMessageMapper.onFinishOperation(
 			jsonObjectBuilder, operationJsonObjectBuilder);
