@@ -48,19 +48,19 @@ public class ExceptionConverterManagerImpl
 		Optional<ExceptionConverter<T>> optional = unsafeCast(
 			getServiceOptional(exceptionClass));
 
-		if (!optional.isPresent()) {
-			Optional<Class<?>> classOptional = Optional.ofNullable(
-				exceptionClass.getSuperclass());
-
-			return classOptional.filter(
+		return optional.map(
+			exceptionConverter -> exceptionConverter.convert(exception)
+		).map(
+			Optional::of
+		).orElseGet(
+			() -> Optional.ofNullable(
+				exceptionClass.getSuperclass()
+			).filter(
 				Exception.class::isAssignableFrom
 			).flatMap(
 				clazz -> _convert(exception, unsafeCast(clazz))
-			);
-		}
-
-		return optional.map(
-			exceptionConverter -> exceptionConverter.convert(exception));
+			)
+		);
 	}
 
 }
