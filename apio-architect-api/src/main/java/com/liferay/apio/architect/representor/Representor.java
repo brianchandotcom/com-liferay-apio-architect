@@ -418,10 +418,13 @@ public class Representor<T, S> {
 			/**
 			 * Provides information about a resource localized string field.
 			 *
-			 * @deprecated As of 1.0.0, use {@link #addLocalizedStringByLanguage(String, BiFunction)} instead
-			 * @param  key the field's name
-			 * @param  stringFunction the function used to get the string value
-			 * @return builder's step
+			 * @param      key the field's name
+			 * @param      stringFunction the function used to get the string
+			 *             value
+			 * @return     builder's step
+			 * @deprecated As of 1.0.0, use {@link
+			 *             #addLocalizedStringByLanguage(String, BiFunction)}
+			 *             instead
 			 */
 			@Deprecated
 			public FirstStep addLocalizedString(
