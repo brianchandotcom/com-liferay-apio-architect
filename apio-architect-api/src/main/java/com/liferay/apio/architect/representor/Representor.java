@@ -418,26 +418,6 @@ public class Representor<T, S> {
 			/**
 			 * Provides information about a resource localized string field.
 			 *
-			 * @param      key the field's name
-			 * @param      stringFunction the function used to get the string
-			 *             value
-			 * @return     builder's step
-			 * @deprecated As of 1.0.0, use {@link
-			 *             #addLocalizedStringByLanguage(String, BiFunction)}
-			 *             instead
-			 */
-			@Deprecated
-			public FirstStep addLocalizedString(
-				String key, BiFunction<T, Language, String> stringFunction) {
-
-				_representor._localizedStringFunctions.put(key, stringFunction);
-
-				return this;
-			}
-
-			/**
-			 * Provides information about a resource localized string field.
-			 *
 			 * @param  key the field's name
 			 * @param  stringFunction the function used to get the string value
 			 * @return builder's step
@@ -460,12 +440,10 @@ public class Representor<T, S> {
 			public FirstStep addLocalizedStringByLocale(
 				String key, BiFunction<T, Locale, String> stringFunction) {
 
-				_representor._localizedStringFunctions.put(
+				return addLocalizedStringByLanguage(
 					key,
 					(t, language) -> stringFunction.apply(
 						t, language.getPreferredLocale()));
-
-				return this;
 			}
 
 			/**
