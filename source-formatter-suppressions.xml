@@ -2,6 +2,7 @@
 
 <suppressions>
 	<checkstyle>
+		<suppress checks="ParsePrimitiveTypeCheck" files="apio-architect-application/src/main/java/com/liferay/apio/architect/application/internal/uri/mapper/PathLongIdentifierMapper\.java" />
 		<suppress checks="SelfReferenceCheck" files="apio-architect-api/src/main/java/com/liferay/apio/architect/functional/Try\.java" />
 		<suppress checks="VariableNameCheck" files="apio-architect-api/src/main/java/com/liferay/apio/architect/routes/.*" />
 	</checkstyle>
