@@ -48,11 +48,9 @@ import java.util.stream.Stream;
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
- * @param  <S> the model identifier's type (e.g., {@code Long}, {@code String},
- *         etc.)
  * @see    Representor.Builder
  */
-public class Representor<T, S> {
+public class Representor<T> {
 
 	/**
 	 * Returns the binary resources linked to a model.
@@ -89,17 +87,8 @@ public class Representor<T, S> {
 	 * @param  model the model instance
 	 * @return the model's identifier
 	 */
-	public S getIdentifier(T model) {
+	public Object getIdentifier(T model) {
 		return _identifierFunction.apply(model);
-	}
-
-	/**
-	 * Returns the function that extracts the identifier from the model.
-	 *
-	 * @return the function
-	 */
-	public Function<T, S> getIdentifierFunction() {
-		return _identifierFunction;
 	}
 
 	/**
@@ -128,7 +117,7 @@ public class Representor<T, S> {
 	 *
 	 * @return the representors
 	 */
-	public Map<String, Representor<?, ?>> getNested() {
+	public Map<String, Representor<?>> getNested() {
 		return _nested;
 	}
 
@@ -215,6 +204,14 @@ public class Representor<T, S> {
 	 */
 	public List<String> getTypes() {
 		return _types;
+	}
+
+	public boolean isNested() {
+		if (_identifierFunction == null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -450,27 +447,6 @@ public class Representor<T, S> {
 			 * Provides information about a nested field.
 			 *
 			 * @param  key the field's name
-			 * @param  representorFunction the function that creates the nested
-			 *         representor
-			 * @return the builder's step
-			 */
-			public <W> FirstStep addNested(
-				String key,
-				Function<Builder<T, ?>, Representor<T, ?>>
-					representorFunction) {
-
-				_representor._nested.put(
-					key, representorFunction.apply(new Builder()));
-
-				_representor._nestedFunctions.put(key, Function.identity());
-
-				return this;
-			}
-
-			/**
-			 * Provides information about a nested field.
-			 *
-			 * @param  key the field's name
 			 * @param  transformFunction the function that transforms the model
 			 *         into the model used inside the nested representor
 			 * @param  representorFunction the function that creates the nested
@@ -479,11 +455,10 @@ public class Representor<T, S> {
 			 */
 			public <W> FirstStep addNested(
 				String key, Function<T, W> transformFunction,
-				Function<Builder<W, ?>, Representor<W, ?>>
-					representorFunction) {
+				Function<Builder<W, ?>, Representor<W>> representorFunction) {
 
 				_representor._nested.put(
-					key, representorFunction.apply(new Builder()));
+					key, representorFunction.apply(new Builder<>()));
 
 				_representor._nestedFunctions.put(key, transformFunction);
 
@@ -579,7 +554,7 @@ public class Representor<T, S> {
 			 *
 			 * @return the {@code Representor} instance
 			 */
-			public Representor<T, U> build() {
+			public Representor<T> build() {
 				return _representor;
 			}
 
@@ -605,12 +580,12 @@ public class Representor<T, S> {
 
 		private final BiConsumer<Class<?>, RelatedCollection<?>>
 			_relatedCollectionBiConsumer;
-		private final Representor<T, U> _representor;
+		private final Representor<T> _representor;
 
 	}
 
 	private Representor(
-		Class<? extends Identifier<S>> identifierClass,
+		Class<? extends Identifier<?>> identifierClass,
 		Supplier<List<RelatedCollection<? extends Identifier>>>
 			relatedCollectionsSupplier) {
 
@@ -624,12 +599,12 @@ public class Representor<T, S> {
 		new LinkedHashMap<>();
 	private final Map<String, Function<T, List<Boolean>>>
 		_booleanListFunctions = new LinkedHashMap<>();
-	private final Class<? extends Identifier<S>> _identifierClass;
-	private Function<T, S> _identifierFunction;
+	private final Class<? extends Identifier<?>> _identifierClass;
+	private Function<T, ?> _identifierFunction;
 	private final Map<String, String> _links = new LinkedHashMap<>();
 	private final Map<String, BiFunction<T, Language, String>>
 		_localizedStringFunctions = new LinkedHashMap<>();
-	private final Map<String, Representor<?, ?>> _nested = new HashMap<>();
+	private final Map<String, Representor<?>> _nested = new HashMap<>();
 	private final Map<String, Function<T, ?>> _nestedFunctions =
 		new HashMap<>();
 	private final Map<String, Function<T, Number>> _numberFunctions =
