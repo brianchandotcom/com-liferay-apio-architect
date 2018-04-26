@@ -86,7 +86,7 @@ public class SingleModelWriter<T> {
 	 */
 	@SuppressWarnings("Duplicates")
 	public Optional<String> write() {
-		Optional<FieldsWriter<T, ?>> optional = getFieldsWriter(
+		Optional<FieldsWriter<T>> optional = getFieldsWriter(
 			_singleModel, null, _requestInfo, _pathFunction,
 			_representorFunction, _singleModelFunction);
 
@@ -94,7 +94,7 @@ public class SingleModelWriter<T> {
 			return Optional.empty();
 		}
 
-		FieldsWriter<T, ?> fieldsWriter = optional.get();
+		FieldsWriter<T> fieldsWriter = optional.get();
 
 		_singleModelMessageMapper.onStart(
 			_jsonObjectBuilder, _singleModel, _requestInfo.getHttpHeaders());
@@ -219,7 +219,7 @@ public class SingleModelWriter<T> {
 		SingleModel<S> singleModel, FunctionalList<String> embeddedPathElements,
 		RepresentorFunction representorFunction) {
 
-		Optional<FieldsWriter<S, ?>> optional = getFieldsWriter(
+		Optional<FieldsWriter<S>> optional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
 			representorFunction, _representorFunction, _singleModelFunction,
 			_singleModel);
@@ -228,7 +228,7 @@ public class SingleModelWriter<T> {
 			return;
 		}
 
-		FieldsWriter<S, ?> fieldsWriter = optional.get();
+		FieldsWriter<S> fieldsWriter = optional.get();
 
 		fieldsWriter.writeBooleanFields(
 			(field, value) ->
@@ -502,13 +502,12 @@ public class SingleModelWriter<T> {
 		RepresentorFunction representorFunction, SingleModel<S> singleModel,
 		FunctionalList<String> embeddedPathElements) {
 
-		Optional<Representor<S, ?>> representorOptional = unsafeCast(
+		Optional<Representor<S>> representorOptional = unsafeCast(
 			representorFunction.apply(singleModel.getResourceName()));
 
 		representorOptional.ifPresent(
 			_representor -> {
-				Map<String, Representor<?, ?>> nested =
-					_representor.getNested();
+				Map<String, Representor<?>> nested = _representor.getNested();
 
 				nested.forEach(
 					(key, value) -> {

@@ -266,7 +266,7 @@ public class RepresentorTest {
 	private final Dummy _dummy = new Dummy(23);
 	private List<String> _keys;
 	private List<Class<?>> _relatedCollectionsClasses;
-	private Representor<Dummy, Integer> _representor;
+	private Representor<Dummy> _representor;
 
 	private interface IntegerIdentifier extends Identifier<Integer> {
 	}

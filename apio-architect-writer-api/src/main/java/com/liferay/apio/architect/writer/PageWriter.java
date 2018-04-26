@@ -325,7 +325,7 @@ public class PageWriter<T> {
 	}
 
 	private void _writeItem(SingleModel<T> singleModel) {
-		Optional<FieldsWriter<T, ?>> optional = getFieldsWriter(
+		Optional<FieldsWriter<T>> optional = getFieldsWriter(
 			singleModel, null, _requestInfo, _pathFunction,
 			_representorFunction, _singleModelFunction);
 
@@ -333,7 +333,7 @@ public class PageWriter<T> {
 			return;
 		}
 
-		FieldsWriter<T, ?> fieldsWriter = optional.get();
+		FieldsWriter<T> fieldsWriter = optional.get();
 
 		JSONObjectBuilder itemJsonObjectBuilder = new JSONObjectBuilder();
 
@@ -432,7 +432,7 @@ public class PageWriter<T> {
 		RepresentorFunction representorFunction,
 		SingleModel<U> rootSingleModel) {
 
-		Optional<FieldsWriter<S, ?>> optional = getFieldsWriter(
+		Optional<FieldsWriter<S>> optional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo, _pathFunction,
 			representorFunction, _representorFunction, _singleModelFunction,
 			rootSingleModel);
@@ -441,7 +441,7 @@ public class PageWriter<T> {
 			return;
 		}
 
-		FieldsWriter<S, ?> fieldsWriter = optional.get();
+		FieldsWriter<S> fieldsWriter = optional.get();
 
 		fieldsWriter.writeBooleanFields(
 			(field, value) ->
@@ -533,13 +533,12 @@ public class PageWriter<T> {
 		JSONObjectBuilder itemJsonObjectBuilder, SingleModel<S> rootSingleModel,
 		FunctionalList<String> embeddedPathElements) {
 
-		Optional<Representor<U, ?>> representorOptional = unsafeCast(
+		Optional<Representor<U>> representorOptional = unsafeCast(
 			representorFunction.apply(singleModel.getResourceName()));
 
 		representorOptional.ifPresent(
 			_representor -> {
-				Map<String, Representor<?, ?>> nested =
-					_representor.getNested();
+				Map<String, Representor<?>> nested = _representor.getNested();
 
 				nested.forEach(
 					(key, value) -> {

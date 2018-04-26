@@ -48,7 +48,7 @@ public class MockRepresentorCreator {
 	 *
 	 * @return the mock {@code Representor} for {@code FirstEmbeddedModel}
 	 */
-	public static Representor<FirstEmbeddedModel, String>
+	public static Representor<FirstEmbeddedModel>
 		createFirstEmbeddedModelRepresentor() {
 
 		Representor.Builder<FirstEmbeddedModel, String> builder =
@@ -91,8 +91,8 @@ public class MockRepresentorCreator {
 	 * @param  activateNulls whether to add {@code null} empty values
 	 * @return the mock {@code Representor} for {@code RootModel}
 	 */
-	public static Representor<RootModel, String>
-		createRootModelRepresentor(boolean activateNulls) {
+	public static Representor<RootModel> createRootModelRepresentor(
+		boolean activateNulls) {
 
 		Representor.Builder<RootModel, String> builder =
 			new Representor.Builder<>(RootModelId.class);
@@ -226,7 +226,7 @@ public class MockRepresentorCreator {
 	 *
 	 * @return the mock {@code Representor} for {@code SecondEmbeddedModel}
 	 */
-	public static Representor<SecondEmbeddedModel, String>
+	public static Representor<SecondEmbeddedModel>
 		createSecondEmbeddedModelRepresentor() {
 
 		Representor.Builder<SecondEmbeddedModel, String> builder =
@@ -266,7 +266,7 @@ public class MockRepresentorCreator {
 	 *
 	 * @return the mock {@code Representor} for {@code ThirdEmbeddedModel}
 	 */
-	public static Representor<ThirdEmbeddedModel, String>
+	public static Representor<ThirdEmbeddedModel>
 		createThirdEmbeddedModelRepresentor() {
 
 		Representor.Builder<ThirdEmbeddedModel, String> builder =

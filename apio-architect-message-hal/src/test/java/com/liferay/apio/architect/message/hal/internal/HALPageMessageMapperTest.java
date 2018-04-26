@@ -60,11 +60,8 @@ public class HALPageMessageMapperTest implements RepresentableManager {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public <T, U> Optional<Representor<T, U>> getRepresentorOptional(
-		String name) {
-
-		Optional<Representor<?, ?>> optional =
+	public <T> Optional<Representor<T>> getRepresentorOptional(String name) {
+		Optional<Representor<?>> optional =
 			MockWriterUtil.getRepresentorOptional(name);
 
 		return optional.map(Unsafe::unsafeCast);

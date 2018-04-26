@@ -315,7 +315,7 @@ public class ManagerCache {
 	 *         the data
 	 * @return the representor, if present; {@code Optional#empty()} otherwise
 	 */
-	public <U, T> Optional<Representor<T, U>> getRepresentorOptional(
+	public <U, T> Optional<Representor<T>> getRepresentorOptional(
 		String name, EmptyFunction computeEmptyFunction) {
 
 		if (_representors == null) {

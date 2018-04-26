@@ -51,7 +51,7 @@ public class WriterUtil {
 	 * @param  rootSingleModel the parent model
 	 * @return the {@code FieldsWriter} for the model
 	 */
-	public static <T, S> Optional<FieldsWriter<T, ?>> getFieldsWriter(
+	public static <T, S> Optional<FieldsWriter<T>> getFieldsWriter(
 		SingleModel<T> singleModel, FunctionalList<String> embeddedPathElements,
 		RequestInfo requestInfo, PathFunction pathFunction,
 		RepresentorFunction representorFunction,
@@ -59,7 +59,7 @@ public class WriterUtil {
 		SingleModelFunction singleModelFunction,
 		SingleModel<S> rootSingleModel) {
 
-		Optional<Representor<T, ?>> representorOptional = unsafeCast(
+		Optional<Representor<T>> representorOptional = unsafeCast(
 			representorFunction.apply(singleModel.getResourceName()));
 
 		Optional<Path> pathOptional = getPathOptional(
@@ -83,7 +83,7 @@ public class WriterUtil {
 	 * @param  representorFunction the function to get the {@link Representor}
 	 * @return the {@code FieldsWriter} for the model
 	 */
-	public static <T> Optional<FieldsWriter<T, ?>> getFieldsWriter(
+	public static <T> Optional<FieldsWriter<T>> getFieldsWriter(
 		SingleModel<T> singleModel, FunctionalList<String> embeddedPathElements,
 		RequestInfo requestInfo, PathFunction pathFunction,
 		RepresentorFunction representorFunction,
@@ -135,19 +135,18 @@ public class WriterUtil {
 		RepresentorFunction rootRepresentorFunction,
 		SingleModel<S> rootSingleModel) {
 
-		Optional<Representor<T, ?>> optional = unsafeCast(
+		Optional<Representor<T>> optional = unsafeCast(
 			representorFunction.apply(singleModel.getResourceName()));
 
 		return optional.flatMap(
 			representor -> {
-				if (representor.getIdentifierFunction() == null) {
-					Optional<Representor<S, ?>> representorOptional =
-						unsafeCast(
-							rootRepresentorFunction.apply(
-								rootSingleModel.getResourceName()));
+				if (representor.isNested()) {
+					Optional<Representor<S>> representorOptional = unsafeCast(
+						rootRepresentorFunction.apply(
+							rootSingleModel.getResourceName()));
 
 					if (representorOptional.isPresent()) {
-						Representor<S, ?> rootRepresentor =
+						Representor<S> rootRepresentor =
 							representorOptional.get();
 
 						return pathFunction.apply(

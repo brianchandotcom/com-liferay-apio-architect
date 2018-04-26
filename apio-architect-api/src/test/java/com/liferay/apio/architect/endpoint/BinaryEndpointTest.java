@@ -122,7 +122,7 @@ public class BinaryEndpointTest {
 	}
 
 	private static BinaryEndpoint _getBinaryEndpoint(
-		Representor<Object, Object> representor) {
+		Representor<Object> representor) {
 
 		return new BinaryEndpoint(
 			__ -> Optional.ofNullable(representor),
@@ -130,7 +130,7 @@ public class BinaryEndpointTest {
 				new SingleModel<>("apio", name, Collections.emptyList())));
 	}
 
-	private static Representor<Object, Object> _representor() {
+	private static Representor<Object> _representor() {
 		Builder<Object, Object> builder = new Builder<>();
 
 		return builder.types(

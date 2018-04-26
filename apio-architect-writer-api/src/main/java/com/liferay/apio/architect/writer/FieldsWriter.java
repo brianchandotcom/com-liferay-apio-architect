@@ -48,9 +48,8 @@ import java.util.stream.Stream;
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
- * @param  <S> the model identifier's type ({@link Long}, {@link String}, etc.)
  */
-public class FieldsWriter<T, S> {
+public class FieldsWriter<T> {
 
 	/**
 	 * Returns the {@link SingleModel} version of a {@link RelatedModel}.
@@ -77,7 +76,7 @@ public class FieldsWriter<T, S> {
 
 	public FieldsWriter(
 		SingleModel<T> singleModel, RequestInfo requestInfo,
-		Representor<T, S> representor, Path path,
+		Representor<T> representor, Path path,
 		FunctionalList<String> embeddedPathElements,
 		SingleModelFunction singleModelFunction) {
 
@@ -201,7 +200,7 @@ public class FieldsWriter<T, S> {
 	 * @param consumer the consumer used to process each filtered entry
 	 */
 	public <U> void writeFields(
-		Function<Representor<T, S>, Map<String, U>> representorFunction,
+		Function<Representor<T>, Map<String, U>> representorFunction,
 		Consumer<Entry<String, U>> consumer) {
 
 		Map<String, U> map = representorFunction.apply(_representor);
@@ -513,7 +512,7 @@ public class FieldsWriter<T, S> {
 
 	private final FunctionalList<String> _embeddedPathElements;
 	private final Path _path;
-	private final Representor<T, S> _representor;
+	private final Representor<T> _representor;
 	private final RequestInfo _requestInfo;
 	private final SingleModel<T> _singleModel;
 	private final SingleModelFunction _singleModelFunction;

@@ -39,7 +39,6 @@ public interface RepresentableManager {
 	 * @return the model class's representor, if present; {@code
 	 *         Optional#empty()} otherwise
 	 */
-	public <T, U> Optional<Representor<T, U>>
-		getRepresentorOptional(String name);
+	public <T> Optional<Representor<T>> getRepresentorOptional(String name);
 
 }
