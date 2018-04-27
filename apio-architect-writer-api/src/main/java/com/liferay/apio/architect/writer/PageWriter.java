@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.writer;
 
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionPageURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionURL;
 import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
@@ -34,6 +33,7 @@ import com.liferay.apio.architect.pagination.PageType;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.writer.alias.PathFunction;
 import com.liferay.apio.architect.writer.alias.RepresentorFunction;
@@ -43,9 +43,9 @@ import com.liferay.apio.architect.writer.alias.SingleModelFunction;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Writes a page.
@@ -533,33 +533,33 @@ public class PageWriter<T> {
 		JSONObjectBuilder itemJsonObjectBuilder, SingleModel<S> rootSingleModel,
 		FunctionalList<String> embeddedPathElements) {
 
-		Optional<Representor<U>> representorOptional = unsafeCast(
-			representorFunction.apply(singleModel.getResourceName()));
+		representorFunction.apply(
+			singleModel.getResourceName()
+		).<Representor<U>>map(
+			Unsafe::unsafeCast
+		).map(
+			Representor::getNestedFieldFunctions
+		).map(
+			List::stream
+		).orElseGet(
+			Stream::empty
+		).forEach(
+			nestedFieldFunction -> {
+				Function<U, ?> nestedMapper = nestedFieldFunction.function;
 
-		representorOptional.ifPresent(
-			_representor -> {
-				Map<String, Representor<?>> nested = _representor.getNested();
+				Object mappedModel = nestedMapper.apply(singleModel.getModel());
 
-				nested.forEach(
-					(key, value) -> {
-						Map<String, Function<U, ?>> nestedFunctions =
-							_representor.getNestedFunctions();
+				FunctionalList<String> embeddedNestedPathElements =
+					new FunctionalList<>(
+						embeddedPathElements, nestedFieldFunction.key);
 
-						Function<U, ?> nestedMapper = nestedFunctions.get(key);
-
-						Object mappedModel = nestedMapper.apply(
-							singleModel.getModel());
-
-						FunctionalList<String> embeddedNestedPathElements =
-							new FunctionalList<>(embeddedPathElements, key);
-
-						_writeItemEmbeddedModelFields(
-							new SingleModel<>(
-								mappedModel, "", Collections.emptyList()),
-							embeddedNestedPathElements, itemJsonObjectBuilder,
-							__ -> Optional.of(value), rootSingleModel);
-					});
-			});
+				_writeItemEmbeddedModelFields(
+					new SingleModel<>(mappedModel, "", Collections.emptyList()),
+					embeddedNestedPathElements, itemJsonObjectBuilder,
+					__ -> Optional.of(nestedFieldFunction.representor),
+					rootSingleModel);
+			}
+		);
 	}
 
 	private void _writePageURLs() {
