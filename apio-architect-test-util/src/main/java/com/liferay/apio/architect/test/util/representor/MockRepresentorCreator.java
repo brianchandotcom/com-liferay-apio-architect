@@ -28,7 +28,6 @@ import com.liferay.apio.architect.test.util.model.SecondEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
 
 import java.util.Date;
-import java.util.function.Function;
 
 /**
  * Provides methods that create {@link Representor} objects for {@link
@@ -171,9 +170,7 @@ public class MockRepresentorCreator {
 					"Type 4"
 				).addBidirectionalModel(
 					"bidirectionalModel3", "bidirectionalKey",
-					FirstEmbeddedId.class,
-					(Function<SecondEmbeddedModel, String>)
-						SecondEmbeddedModel::getId
+					FirstEmbeddedId.class, SecondEmbeddedModel::getId
 				).addString(
 					"string1", SecondEmbeddedModel::getId
 				).addNumber(

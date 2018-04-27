@@ -72,7 +72,7 @@ public class Representor<T> {
 	 */
 	public List<FieldFunction<T, BinaryFile>> getBinaryFunctions() {
 		return Optional.ofNullable(
-			_fieldFunctions.get("BINARY_FUNCTIONS")
+			_fieldFunctions.get("BINARY")
 		).<List<FieldFunction<T, BinaryFile>>>map(
 			Unsafe::unsafeCast
 		).orElseGet(
@@ -88,7 +88,7 @@ public class Representor<T> {
 	 */
 	public List<FieldFunction<T, Boolean>> getBooleanFunctions() {
 		return Optional.ofNullable(
-			_fieldFunctions.get("BOOLEAN_FUNCTIONS")
+			_fieldFunctions.get("BOOLEAN")
 		).<List<FieldFunction<T, Boolean>>>map(
 			Unsafe::unsafeCast
 		).orElseGet(
@@ -104,7 +104,7 @@ public class Representor<T> {
 	 */
 	public List<FieldFunction<T, List<Boolean>>> getBooleanListFunctions() {
 		return Optional.ofNullable(
-			_fieldFunctions.get("BOOLEAN_LIST_FUNCTIONS")
+			_fieldFunctions.get("BOOLEAN_LIST")
 		).<List<FieldFunction<T, List<Boolean>>>>map(
 			Unsafe::unsafeCast
 		).orElseGet(
@@ -129,7 +129,7 @@ public class Representor<T> {
 	 */
 	public List<FieldFunction<T, String>> getLinkFunctions() {
 		return Optional.ofNullable(
-			_fieldFunctions.get("LINK_FUNCTIONS")
+			_fieldFunctions.get("LINK")
 		).<List<FieldFunction<T, String>>>map(
 			Unsafe::unsafeCast
 		).orElseGet(
@@ -147,7 +147,7 @@ public class Representor<T> {
 		getLocalizedStringFunctions() {
 
 		return Optional.ofNullable(
-			_fieldFunctions.get("LOCALIZED_STRING_FUNCTIONS")
+			_fieldFunctions.get("LOCALIZED")
 		).<List<FieldFunction<T, Function<Language, String>>>>map(
 			Unsafe::unsafeCast
 		).orElseGet(
@@ -172,7 +172,7 @@ public class Representor<T> {
 	 */
 	public List<FieldFunction<T, Number>> getNumberFunctions() {
 		return Optional.ofNullable(
-			_fieldFunctions.get("NUMBER_FUNCTIONS")
+			_fieldFunctions.get("NUMBER")
 		).<List<FieldFunction<T, Number>>>map(
 			Unsafe::unsafeCast
 		).orElseGet(
@@ -188,7 +188,7 @@ public class Representor<T> {
 	 */
 	public List<FieldFunction<T, List<Number>>> getNumberListFunctions() {
 		return Optional.ofNullable(
-			_fieldFunctions.get("NUMBER_LIST_FUNCTIONS")
+			_fieldFunctions.get("NUMBER_LIST")
 		).<List<FieldFunction<T, List<Number>>>>map(
 			Unsafe::unsafeCast
 		).orElseGet(
@@ -205,7 +205,7 @@ public class Representor<T> {
 		getRelatedCollections() {
 
 		Stream<List<RelatedCollection<? extends Identifier>>> stream =
-			Stream.of(_relatedCollections, _relatedCollectionsSupplier.get());
+			Stream.of(_relatedCollections, _supplier.get());
 
 		return stream.filter(
 			Objects::nonNull
@@ -231,7 +231,7 @@ public class Representor<T> {
 	 */
 	public List<FieldFunction<T, String>> getStringFunctions() {
 		return Optional.ofNullable(
-			_fieldFunctions.get("STRING_FUNCTIONS")
+			_fieldFunctions.get("STRING")
 		).<List<FieldFunction<T, String>>>map(
 			Unsafe::unsafeCast
 		).orElseGet(
@@ -247,7 +247,7 @@ public class Representor<T> {
 	 */
 	public List<FieldFunction<T, List<String>>> getStringListFunctions() {
 		return Optional.ofNullable(
-			_fieldFunctions.get("STRING_LIST_FUNCTIONS")
+			_fieldFunctions.get("STRING_LIST")
 		).<List<FieldFunction<T, List<String>>>>map(
 			Unsafe::unsafeCast
 		).orElseGet(
@@ -283,24 +283,25 @@ public class Representor<T> {
 		}
 
 		public Builder(Class<? extends Identifier<U>> identifierClass) {
-			Supplier<List<RelatedCollection<?>>> listSupplier =
+			_identifierClass = identifierClass;
+
+			Supplier<List<RelatedCollection<?>>> supplier =
 				Collections::emptyList;
 
-			_relatedCollectionBiConsumer = (clazz, relatedCollection) -> {
+			_biConsumer = (clazz, relatedCollection) -> {
 			};
-			_representor = new Representor<>(identifierClass, listSupplier);
+			_representor = new Representor<>(supplier);
 		}
 
 		public Builder(
 			Class<? extends Identifier<U>> identifierClass,
-			BiConsumer<Class<?>, RelatedCollection<?>>
-				relatedCollectionBiConsumer,
-			Supplier<List<RelatedCollection<?>>> relatedCollectionsSupplier) {
+			BiConsumer<Class<?>, RelatedCollection<?>> biConsumer,
+			Supplier<List<RelatedCollection<?>>> supplier) {
 
-			_relatedCollectionBiConsumer = relatedCollectionBiConsumer;
+			_identifierClass = identifierClass;
+			_biConsumer = biConsumer;
 
-			_representor = new Representor<>(
-				identifierClass, relatedCollectionsSupplier);
+			_representor = new Representor<>(supplier);
 		}
 
 		/**
@@ -311,9 +312,7 @@ public class Representor<T> {
 		 * @return the builder's step
 		 */
 		public FirstStep nestedTypes(String type, String... types) {
-			_representor._types.add(type);
-
-			Collections.addAll(_representor._types, types);
+			_representor._addTypes(type, types);
 
 			return new FirstStep();
 		}
@@ -325,9 +324,7 @@ public class Representor<T> {
 		 * @return the builder's step
 		 */
 		public IdentifierStep types(String type, String... types) {
-			_representor._types.add(type);
-
-			Collections.addAll(_representor._types, types);
+			_representor._addTypes(type, types);
 
 			return new IdentifierStep();
 		}
@@ -351,16 +348,13 @@ public class Representor<T> {
 				Class<? extends Identifier<S>> identifierClass,
 				Function<T, S> identifierFunction) {
 
-				_representor._relatedModels.add(
-					new RelatedModel<>(
-						key, identifierClass, identifierFunction));
-
 				RelatedCollection<?> relatedCollection =
-					new RelatedCollection<>(
-						relatedKey, _representor._identifierClass);
+					new RelatedCollection<>(relatedKey, _identifierClass);
 
-				_relatedCollectionBiConsumer.accept(
-					identifierClass, relatedCollection);
+				_biConsumer.accept(identifierClass, relatedCollection);
+
+				_representor._addRelatedModel(
+					key, identifierClass, identifierFunction);
 
 				return this;
 			}
@@ -375,12 +369,7 @@ public class Representor<T> {
 			public FirstStep addBinary(
 				String key, BinaryFunction<T> binaryFunction) {
 
-				_representor._binaryFunctions.put(key, binaryFunction);
-
-				List<FieldFunction<T, BinaryFile>> list =
-					_representor.getBinaryFunctions();
-
-				list.add(new FieldFunction<>(key, binaryFunction));
+				_representor._addBinaryFunction(key, binaryFunction);
 
 				return this;
 			}
@@ -395,10 +384,7 @@ public class Representor<T> {
 			public FirstStep addBoolean(
 				String key, Function<T, Boolean> function) {
 
-				List<FieldFunction<T, Boolean>> list =
-					_representor.getBooleanFunctions();
-
-				list.add(new FieldFunction<>(key, function));
+				_representor._addBooleanFunction(key, function);
 
 				return this;
 			}
@@ -413,10 +399,7 @@ public class Representor<T> {
 			public FirstStep addBooleanList(
 				String key, Function<T, List<Boolean>> function) {
 
-				List<FieldFunction<T, List<Boolean>>> list =
-					_representor.getBooleanListFunctions();
-
-				list.add(new FieldFunction<>(key, function));
+				_representor._addBooleanListFunction(key, function);
 
 				return this;
 			}
@@ -425,12 +408,10 @@ public class Representor<T> {
 			 * Adds information about a resource's date field.
 			 *
 			 * @param  key the field's name
-			 * @param  dateFunction the function used to get the date value
+			 * @param  function the function used to get the date value
 			 * @return the builder's step
 			 */
-			public FirstStep addDate(
-				String key, Function<T, Date> dateFunction) {
-
+			public FirstStep addDate(String key, Function<T, Date> function) {
 				Function<Date, String> formatFunction = date -> {
 					if (date == null) {
 						return null;
@@ -439,13 +420,8 @@ public class Representor<T> {
 					return asString(date);
 				};
 
-				List<FieldFunction<T, String>> list =
-					_representor.getStringFunctions();
-
-				FieldFunction<T, String> fieldFunction = new FieldFunction<>(
-					key, dateFunction.andThen(formatFunction));
-
-				list.add(fieldFunction);
+				_representor._addStringFunction(
+					key, function.andThen(formatFunction));
 
 				return this;
 			}
@@ -458,10 +434,7 @@ public class Representor<T> {
 			 * @return the builder's step
 			 */
 			public FirstStep addLink(String key, String url) {
-				List<FieldFunction<T, String>> list =
-					_representor.getLinkFunctions();
-
-				list.add(new FieldFunction<>(key, __ -> url));
+				_representor._addLinkFunction(key, __ -> url);
 
 				return this;
 			}
@@ -479,9 +452,8 @@ public class Representor<T> {
 				String key, Class<? extends Identifier<S>> identifierClass,
 				Function<T, S> identifierFunction) {
 
-				_representor._relatedModels.add(
-					new RelatedModel<>(
-						key, identifierClass, identifierFunction));
+				_representor._addRelatedModel(
+					key, identifierClass, identifierFunction);
 
 				return this;
 			}
@@ -496,15 +468,8 @@ public class Representor<T> {
 			public FirstStep addLocalizedStringByLanguage(
 				String key, BiFunction<T, Language, String> stringFunction) {
 
-				List<FieldFunction<T, Function<Language, String>>> list =
-					_representor.getLocalizedStringFunctions();
-
-				FieldFunction<T, Function<Language, String>> fieldFunction =
-					new FieldFunction<>(
-						key,
-						t -> language -> stringFunction.apply(t, language));
-
-				list.add(fieldFunction);
+				_representor._addLanguageFunction(
+					key, t -> language -> stringFunction.apply(t, language));
 
 				return this;
 			}
@@ -539,12 +504,8 @@ public class Representor<T> {
 				String key, Function<T, W> transformFunction,
 				Function<Builder<W, ?>, Representor<W>> representorFunction) {
 
-				NestedFieldFunction<T, W> nestedFieldFunction =
-					new NestedFieldFunction<>(
-						key, transformFunction,
-						representorFunction.apply(new Builder<>()));
-
-				_representor._nestedFieldFunctions.add(nestedFieldFunction);
+				_representor._addNestedFieldFunction(
+					key, transformFunction, representorFunction);
 
 				return this;
 			}
@@ -559,10 +520,7 @@ public class Representor<T> {
 			public FirstStep addNumber(
 				String key, Function<T, Number> function) {
 
-				List<FieldFunction<T, Number>> list =
-					_representor.getNumberFunctions();
-
-				list.add(new FieldFunction<>(key, function));
+				_representor._addNumberFunction(key, function);
 
 				return this;
 			}
@@ -577,10 +535,7 @@ public class Representor<T> {
 			public FirstStep addNumberList(
 				String key, Function<T, List<Number>> function) {
 
-				List<FieldFunction<T, List<Number>>> list =
-					_representor.getNumberListFunctions();
-
-				list.add(new FieldFunction<>(key, function));
+				_representor._addNumberListFunction(key, function);
 
 				return this;
 			}
@@ -596,10 +551,7 @@ public class Representor<T> {
 			public <S extends Identifier> FirstStep addRelatedCollection(
 				String key, Class<S> itemIdentifierClass) {
 
-				RelatedCollection<S> relatedCollection =
-					new RelatedCollection<>(key, itemIdentifierClass);
-
-				_representor._relatedCollections.add(relatedCollection);
+				_representor._addRelatedCollection(key, itemIdentifierClass);
 
 				return this;
 			}
@@ -614,10 +566,7 @@ public class Representor<T> {
 			public FirstStep addString(
 				String key, Function<T, String> function) {
 
-				List<FieldFunction<T, String>> list =
-					_representor.getStringFunctions();
-
-				list.add(new FieldFunction<>(key, function));
+				_representor._addStringFunction(key, function);
 
 				return this;
 			}
@@ -632,22 +581,22 @@ public class Representor<T> {
 			public FirstStep addStringList(
 				String key, Function<T, List<String>> function) {
 
-				List<FieldFunction<T, List<String>>> list =
-					_representor.getStringListFunctions();
-
-				list.add(new FieldFunction<>(key, function));
+				_representor._addStringListFunction(key, function);
 
 				return this;
 			}
 
 			/**
-			 * Constructs and returns a {@link Representor} instance with the
+			 * Constructs and returns a {@link Representor} instance _with the
 			 * information provided to the builder.
 			 *
 			 * @return the {@code Representor} instance
 			 */
 			public Representor<T> build() {
 				return _representor;
+			}
+
+			private FirstStep() {
 			}
 
 		}
@@ -663,58 +612,140 @@ public class Representor<T> {
 			 * @return the builder's next step
 			 */
 			public FirstStep identifier(Function<T, U> identifierFunction) {
-				_representor._identifierFunction = identifierFunction;
+				_representor._setIdentifierFunction(identifierFunction);
 
 				return new FirstStep();
 			}
 
+			private IdentifierStep() {
+			}
+
 		}
 
-		private final BiConsumer<Class<?>, RelatedCollection<?>>
-			_relatedCollectionBiConsumer;
+		private final BiConsumer<Class<?>, RelatedCollection<?>> _biConsumer;
+		private Class<? extends Identifier> _identifierClass;
 		private final Representor<T> _representor;
 
 	}
 
-	private Representor(
-		Class<? extends Identifier<?>> identifierClass,
-		Supplier<List<RelatedCollection<? extends Identifier>>>
-			relatedCollectionsSupplier) {
-
-		_identifierClass = identifierClass;
-		_relatedCollectionsSupplier = relatedCollectionsSupplier;
-
-		_fieldFunctions =
-			new LinkedHashMap<String, List<FieldFunction<T, ?>>>() {
-				{
-					put("BINARY_FUNCTIONS", new ArrayList<>());
-					put("BOOLEAN_FUNCTIONS", new ArrayList<>());
-					put("BOOLEAN_LIST_FUNCTIONS", new ArrayList<>());
-					put("LINK_FUNCTIONS", new ArrayList<>());
-					put("LOCALIZED_STRING_FUNCTIONS", new ArrayList<>());
-					put("NUMBER_FUNCTIONS", new ArrayList<>());
-					put("NUMBER_LIST_FUNCTIONS", new ArrayList<>());
-					put("STRING_FUNCTIONS", new ArrayList<>());
-					put("STRING_LIST_FUNCTIONS", new ArrayList<>());
-				}
-			};
+	private Representor(Supplier<List<RelatedCollection<?>>> supplier) {
 		_binaryFunctions = new LinkedHashMap<>();
+		_fieldFunctions = new LinkedHashMap<>();
 		_nestedFieldFunctions = new ArrayList<>();
 		_relatedCollections = new ArrayList<>();
+		_supplier = supplier;
 		_relatedModels = new ArrayList<>();
 		_types = new ArrayList<>();
 	}
 
+	private void _addBinaryFunction(
+		String key, BinaryFunction<T> binaryFunction) {
+
+		_binaryFunctions.put(key, binaryFunction);
+
+		_addFieldFunction(key, binaryFunction, "BINARY");
+	}
+
+	private void _addBooleanFunction(
+		String key, Function<T, Boolean> function) {
+
+		_addFieldFunction(key, function, "BOOLEAN");
+	}
+
+	private void _addBooleanListFunction(
+		String key, Function<T, List<Boolean>> function) {
+
+		_addFieldFunction(key, function, "BOOLEAN_LIST");
+	}
+
+	private <S> void _addFieldFunction(
+		String key, Function<T, S> function, String mapKey) {
+
+		List<FieldFunction<T, ?>> list = _fieldFunctions.computeIfAbsent(
+			mapKey, __ -> new ArrayList<>());
+
+		FieldFunction<T, S> fieldFunction = new FieldFunction<>(key, function);
+
+		list.add(fieldFunction);
+	}
+
+	private void _addLanguageFunction(
+		String key, Function<T, Function<Language, String>> function) {
+
+		_addFieldFunction(key, function, "LOCALIZED");
+	}
+
+	private void _addLinkFunction(String key, Function<T, String> function) {
+		_addFieldFunction(key, function, "LINK");
+	}
+
+	private <S> void _addNestedFieldFunction(
+		String key, Function<T, S> transformFunction,
+		Function<Builder<S, ?>, Representor<S>> representorFunction) {
+
+		Representor<S> representor = representorFunction.apply(new Builder<>());
+
+		NestedFieldFunction<T, S> nestedFieldFunction =
+			new NestedFieldFunction<>(key, transformFunction, representor);
+
+		_nestedFieldFunctions.add(nestedFieldFunction);
+	}
+
+	private void _addNumberFunction(String key, Function<T, Number> function) {
+		_addFieldFunction(key, function, "NUMBER");
+	}
+
+	private void _addNumberListFunction(
+		String key, Function<T, List<Number>> function) {
+
+		_addFieldFunction(key, function, "NUMBER_LIST");
+	}
+
+	private <S extends Identifier> void _addRelatedCollection(
+		String key, Class<S> itemIdentifierClass) {
+
+		RelatedCollection<S> relatedCollection = new RelatedCollection<>(
+			key, itemIdentifierClass);
+
+		_relatedCollections.add(relatedCollection);
+	}
+
+	private <S> void _addRelatedModel(
+		String key, Class<? extends Identifier<S>> identifierClass,
+		Function<T, S> identifierFunction) {
+
+		RelatedModel<T, S> relatedModel = new RelatedModel<>(
+			key, identifierClass, identifierFunction);
+
+		_relatedModels.add(relatedModel);
+	}
+
+	private void _addStringFunction(String key, Function<T, String> function) {
+		_addFieldFunction(key, function, "STRING");
+	}
+
+	private void _addStringListFunction(
+		String key, Function<T, List<String>> function) {
+
+		_addFieldFunction(key, function, "STRING_LIST");
+	}
+
+	private void _addTypes(String type, String... types) {
+		_types.add(type);
+		Collections.addAll(_types, types);
+	}
+
+	private void _setIdentifierFunction(Function<T, ?> identifierFunction) {
+		_identifierFunction = identifierFunction;
+	}
+
 	private final Map<String, BinaryFunction<T>> _binaryFunctions;
 	private final Map<String, List<FieldFunction<T, ?>>> _fieldFunctions;
-	private final Class<? extends Identifier<?>> _identifierClass;
 	private Function<T, ?> _identifierFunction;
 	private final List<NestedFieldFunction<T, ?>> _nestedFieldFunctions;
-	private final List<RelatedCollection<? extends Identifier>>
-		_relatedCollections;
-	private final Supplier<List<RelatedCollection<?>>>
-		_relatedCollectionsSupplier;
+	private final List<RelatedCollection<?>> _relatedCollections;
 	private final List<RelatedModel<T, ?>> _relatedModels;
+	private final Supplier<List<RelatedCollection<?>>> _supplier;
 	private final List<String> _types;
 
 }
