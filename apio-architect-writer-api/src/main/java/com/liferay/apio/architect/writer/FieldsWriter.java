@@ -24,6 +24,7 @@ import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.representor.function.FieldFunction;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.response.control.Fields;
 import com.liferay.apio.architect.single.model.SingleModel;
@@ -32,10 +33,7 @@ import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.writer.alias.SingleModelFunction;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -115,8 +113,8 @@ public class FieldsWriter<T> {
 
 		writeFields(
 			Representor::getBinaryFunctions,
-			entry -> biConsumer.accept(
-				entry.getKey(), urlFunction.apply(entry.getKey())));
+			(key, binaryFile) -> biConsumer.accept(
+				key, urlFunction.apply(key)));
 	}
 
 	/**
@@ -154,11 +152,10 @@ public class FieldsWriter<T> {
 	 * @param  biConsumer the consumer used to process the key-value pair
 	 * @return the consumer for entries of a {@code Map<String, Function<T, S>}
 	 */
-	public <U> Consumer<Entry<String, Function<T, U>>> writeField(
+	public <U> BiConsumer<String, U> writeField(
 		BiConsumer<String, U> biConsumer) {
 
-		return writeField(
-			function -> function.apply(_singleModel.getModel()), biConsumer);
+		return writeField(Function.identity(), biConsumer);
 	}
 
 	/**
@@ -172,19 +169,19 @@ public class FieldsWriter<T> {
 	 * @param  biConsumer the consumer used to process the key-value pair
 	 * @return the consumer for entries of a {@code Map<String, S>}
 	 */
-	public <U, V> Consumer<Entry<String, U>> writeField(
+	public <U, V> BiConsumer<String, U> writeField(
 		Function<U, V> function, BiConsumer<String, V> biConsumer) {
 
-		return entry -> {
-			V data = function.apply(entry.getValue());
+		return (key, u) -> {
+			V data = function.apply(u);
 
 			if (data instanceof String) {
 				if ((data != null) && !((String)data).isEmpty()) {
-					biConsumer.accept(entry.getKey(), data);
+					biConsumer.accept(key, data);
 				}
 			}
 			else if (data != null) {
-				biConsumer.accept(entry.getKey(), data);
+				biConsumer.accept(key, data);
 			}
 		};
 	}
@@ -197,26 +194,31 @@ public class FieldsWriter<T> {
 	 *
 	 * @param representorFunction the {@code Representor} function that returns
 	 *        the map being written
-	 * @param consumer the consumer used to process each filtered entry
+	 * @param biConsumer the consumer used to process each filtered entry
 	 */
 	public <U> void writeFields(
-		Function<Representor<T>, Map<String, U>> representorFunction,
-		Consumer<Entry<String, U>> consumer) {
+		Function<Representor<T>, List<FieldFunction<T, U>>> representorFunction,
+		BiConsumer<String, U> biConsumer) {
 
-		Map<String, U> map = representorFunction.apply(_representor);
+		List<FieldFunction<T, U>> list = representorFunction.apply(
+			_representor);
 
-		Set<Entry<String, U>> entries = map.entrySet();
-
-		Stream<Entry<String, U>> stream = entries.stream();
+		Stream<FieldFunction<T, U>> stream = list.stream();
 
 		stream.filter(
-			entry -> {
+			fieldFunction -> {
 				Predicate<String> fieldsPredicate = getFieldsPredicate();
 
-				return fieldsPredicate.test(entry.getKey());
+				return fieldsPredicate.test(fieldFunction.key);
 			}
 		).forEach(
-			consumer
+			fieldFunction -> {
+				Function<T, U> function = fieldFunction.function;
+
+				U u = function.apply(_singleModel.getModel());
+
+				biConsumer.accept(fieldFunction.key, u);
+			}
 		);
 	}
 
@@ -229,7 +231,8 @@ public class FieldsWriter<T> {
 	 */
 	public void writeLinks(BiConsumer<String, String> biConsumer) {
 		writeFields(
-			Representor::getLinks, writeField(Function.identity(), biConsumer));
+			Representor::getLinkFunctions,
+			writeField(Function.identity(), biConsumer));
 	}
 
 	/**
@@ -245,8 +248,7 @@ public class FieldsWriter<T> {
 		writeFields(
 			Representor::getLocalizedStringFunctions,
 			writeField(
-				biFunction -> biFunction.apply(
-					_singleModel.getModel(), _requestInfo.getLanguage()),
+				function -> function.apply(_requestInfo.getLanguage()),
 				biConsumer));
 	}
 

@@ -17,10 +17,13 @@ package com.liferay.apio.architect.representor;
 import static com.liferay.apio.architect.date.DateTransformer.asString;
 
 import com.liferay.apio.architect.alias.BinaryFunction;
+import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
+import com.liferay.apio.architect.representor.function.FieldFunction;
+import com.liferay.apio.architect.unsafe.Unsafe;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,6 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -57,8 +61,23 @@ public class Representor<T> {
 	 *
 	 * @return the binary resources linked to a model
 	 */
-	public Map<String, BinaryFunction<T>> getBinaryFunctions() {
-		return _binaryFunctions;
+	public Optional<BinaryFunction<T>> getBinaryFunction(String binaryId) {
+		return Optional.ofNullable(_binaryFunctions.get(binaryId));
+	}
+
+	/**
+	 * Returns the binary resources linked to a model.
+	 *
+	 * @return the binary resources linked to a model
+	 */
+	public List<FieldFunction<T, BinaryFile>> getBinaryFunctions() {
+		return Optional.ofNullable(
+			_fieldFunctions.get("BINARY_FUNCTIONS")
+		).<List<FieldFunction<T, BinaryFile>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -67,8 +86,14 @@ public class Representor<T> {
 	 *
 	 * @return the map containing the boolean field names and functions
 	 */
-	public Map<String, Function<T, Boolean>> getBooleanFunctions() {
-		return _booleanFunctions;
+	public List<FieldFunction<T, Boolean>> getBooleanFunctions() {
+		return Optional.ofNullable(
+			_fieldFunctions.get("BOOLEAN_FUNCTIONS")
+		).<List<FieldFunction<T, Boolean>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -77,8 +102,14 @@ public class Representor<T> {
 	 *
 	 * @return the map containing the boolean list field names and functions
 	 */
-	public Map<String, Function<T, List<Boolean>>> getBooleanListFunctions() {
-		return _booleanListFunctions;
+	public List<FieldFunction<T, List<Boolean>>> getBooleanListFunctions() {
+		return Optional.ofNullable(
+			_fieldFunctions.get("BOOLEAN_LIST_FUNCTIONS")
+		).<List<FieldFunction<T, List<Boolean>>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -96,8 +127,14 @@ public class Representor<T> {
 	 *
 	 * @return the links
 	 */
-	public Map<String, String> getLinks() {
-		return _links;
+	public List<FieldFunction<T, String>> getLinkFunctions() {
+		return Optional.ofNullable(
+			_fieldFunctions.get("LINK_FUNCTIONS")
+		).<List<FieldFunction<T, String>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -106,10 +143,16 @@ public class Representor<T> {
 	 *
 	 * @return the map containing the localized string field names and functions
 	 */
-	public Map<String, BiFunction<T, Language, String>>
+	public List<FieldFunction<T, Function<Language, String>>>
 		getLocalizedStringFunctions() {
 
-		return _localizedStringFunctions;
+		return Optional.ofNullable(
+			_fieldFunctions.get("LOCALIZED_STRING_FUNCTIONS")
+		).<List<FieldFunction<T, Function<Language, String>>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -136,8 +179,14 @@ public class Representor<T> {
 	 *
 	 * @return the map containing the number field names and functions
 	 */
-	public Map<String, Function<T, Number>> getNumberFunctions() {
-		return _numberFunctions;
+	public List<FieldFunction<T, Number>> getNumberFunctions() {
+		return Optional.ofNullable(
+			_fieldFunctions.get("NUMBER_FUNCTIONS")
+		).<List<FieldFunction<T, Number>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -146,8 +195,14 @@ public class Representor<T> {
 	 *
 	 * @return the map containing the number list field names and functions
 	 */
-	public Map<String, Function<T, List<Number>>> getNumberListFunctions() {
-		return _numberListFunctions;
+	public List<FieldFunction<T, List<Number>>> getNumberListFunctions() {
+		return Optional.ofNullable(
+			_fieldFunctions.get("NUMBER_LIST_FUNCTIONS")
+		).<List<FieldFunction<T, List<Number>>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -183,8 +238,14 @@ public class Representor<T> {
 	 *
 	 * @return the map containing the string field names and functions
 	 */
-	public Map<String, Function<T, String>> getStringFunctions() {
-		return _stringFunctions;
+	public List<FieldFunction<T, String>> getStringFunctions() {
+		return Optional.ofNullable(
+			_fieldFunctions.get("STRING_FUNCTIONS")
+		).<List<FieldFunction<T, String>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -193,8 +254,14 @@ public class Representor<T> {
 	 *
 	 * @return the map containing the string list field names and functions
 	 */
-	public Map<String, Function<T, List<String>>> getStringListFunctions() {
-		return _stringListFunctions;
+	public List<FieldFunction<T, List<String>>> getStringListFunctions() {
+		return Optional.ofNullable(
+			_fieldFunctions.get("STRING_LIST_FUNCTIONS")
+		).<List<FieldFunction<T, List<String>>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
 	}
 
 	/**
@@ -319,6 +386,11 @@ public class Representor<T> {
 
 				_representor._binaryFunctions.put(key, binaryFunction);
 
+				List<FieldFunction<T, BinaryFile>> list =
+					_representor.getBinaryFunctions();
+
+				list.add(new FieldFunction<>(key, binaryFunction));
+
 				return this;
 			}
 
@@ -326,14 +398,16 @@ public class Representor<T> {
 			 * Adds information about a resource's boolean field.
 			 *
 			 * @param  key the field's name
-			 * @param  booleanFunction the function used to get the boolean
-			 *         value
+			 * @param  function the function used to get the boolean value
 			 * @return the builder's step
 			 */
 			public FirstStep addBoolean(
-				String key, Function<T, Boolean> booleanFunction) {
+				String key, Function<T, Boolean> function) {
 
-				_representor._booleanFunctions.put(key, booleanFunction);
+				List<FieldFunction<T, Boolean>> list =
+					_representor.getBooleanFunctions();
+
+				list.add(new FieldFunction<>(key, function));
 
 				return this;
 			}
@@ -342,15 +416,16 @@ public class Representor<T> {
 			 * Adds information about a resource's boolean list field.
 			 *
 			 * @param  key the field's name
-			 * @param  booleanListFunction the function used to get the boolean
-			 *         list
+			 * @param  function the function used to get the boolean list
 			 * @return the builder's step
 			 */
 			public FirstStep addBooleanList(
-				String key, Function<T, List<Boolean>> booleanListFunction) {
+				String key, Function<T, List<Boolean>> function) {
 
-				_representor._booleanListFunctions.put(
-					key, booleanListFunction);
+				List<FieldFunction<T, List<Boolean>>> list =
+					_representor.getBooleanListFunctions();
+
+				list.add(new FieldFunction<>(key, function));
 
 				return this;
 			}
@@ -373,8 +448,13 @@ public class Representor<T> {
 					return asString(date);
 				};
 
-				_representor._stringFunctions.put(
+				List<FieldFunction<T, String>> list =
+					_representor.getStringFunctions();
+
+				FieldFunction<T, String> fieldFunction = new FieldFunction<>(
 					key, dateFunction.andThen(formatFunction));
+
+				list.add(fieldFunction);
 
 				return this;
 			}
@@ -387,7 +467,10 @@ public class Representor<T> {
 			 * @return the builder's step
 			 */
 			public FirstStep addLink(String key, String url) {
-				_representor._links.put(key, url);
+				List<FieldFunction<T, String>> list =
+					_representor.getLinkFunctions();
+
+				list.add(new FieldFunction<>(key, __ -> url));
 
 				return this;
 			}
@@ -422,7 +505,15 @@ public class Representor<T> {
 			public FirstStep addLocalizedStringByLanguage(
 				String key, BiFunction<T, Language, String> stringFunction) {
 
-				_representor._localizedStringFunctions.put(key, stringFunction);
+				List<FieldFunction<T, Function<Language, String>>> list =
+					_representor.getLocalizedStringFunctions();
+
+				FieldFunction<T, Function<Language, String>> fieldFunction =
+					new FieldFunction<>(
+						key,
+						t -> language -> stringFunction.apply(t, language));
+
+				list.add(fieldFunction);
 
 				return this;
 			}
@@ -469,14 +560,16 @@ public class Representor<T> {
 			 * Adds information about a resource's number field.
 			 *
 			 * @param  key the field's name
-			 * @param  numberFunction the function used to get the number's
-			 *         value
+			 * @param  function the function used to get the number's value
 			 * @return the builder's step
 			 */
 			public FirstStep addNumber(
-				String key, Function<T, Number> numberFunction) {
+				String key, Function<T, Number> function) {
 
-				_representor._numberFunctions.put(key, numberFunction);
+				List<FieldFunction<T, Number>> list =
+					_representor.getNumberFunctions();
+
+				list.add(new FieldFunction<>(key, function));
 
 				return this;
 			}
@@ -485,14 +578,16 @@ public class Representor<T> {
 			 * Adds information about a resource's number list field.
 			 *
 			 * @param  key the field's name
-			 * @param  numberListFunction the function used to get the number
-			 *         list
+			 * @param  function the function used to get the number list
 			 * @return the builder's step
 			 */
 			public FirstStep addNumberList(
-				String key, Function<T, List<Number>> numberListFunction) {
+				String key, Function<T, List<Number>> function) {
 
-				_representor._numberListFunctions.put(key, numberListFunction);
+				List<FieldFunction<T, List<Number>>> list =
+					_representor.getNumberListFunctions();
+
+				list.add(new FieldFunction<>(key, function));
 
 				return this;
 			}
@@ -520,14 +615,16 @@ public class Representor<T> {
 			 * Adds information about a resource's string field.
 			 *
 			 * @param  key the field's name
-			 * @param  stringFunction the function used to get the string's
-			 *         value
+			 * @param  function the function used to get the string's value
 			 * @return the builder's step
 			 */
 			public FirstStep addString(
-				String key, Function<T, String> stringFunction) {
+				String key, Function<T, String> function) {
 
-				_representor._stringFunctions.put(key, stringFunction);
+				List<FieldFunction<T, String>> list =
+					_representor.getStringFunctions();
+
+				list.add(new FieldFunction<>(key, function));
 
 				return this;
 			}
@@ -536,14 +633,16 @@ public class Representor<T> {
 			 * Adds information about a resource's string list field.
 			 *
 			 * @param  key the field's name
-			 * @param  stringListFunction the function used to get the string
-			 *         list
+			 * @param  function the function used to get the string list
 			 * @return the builder's step
 			 */
 			public FirstStep addStringList(
-				String key, Function<T, List<String>> stringListFunction) {
+				String key, Function<T, List<String>> function) {
 
-				_representor._stringListFunctions.put(key, stringListFunction);
+				List<FieldFunction<T, List<String>>> list =
+					_representor.getStringListFunctions();
+
+				list.add(new FieldFunction<>(key, function));
 
 				return this;
 			}
@@ -591,35 +690,40 @@ public class Representor<T> {
 
 		_identifierClass = identifierClass;
 		_relatedCollectionsSupplier = relatedCollectionsSupplier;
+
+		_fieldFunctions =
+			new LinkedHashMap<String, List<FieldFunction<T, ?>>>() {
+				{
+					put("BINARY_FUNCTIONS", new ArrayList<>());
+					put("BOOLEAN_FUNCTIONS", new ArrayList<>());
+					put("BOOLEAN_LIST_FUNCTIONS", new ArrayList<>());
+					put("LINK_FUNCTIONS", new ArrayList<>());
+					put("LOCALIZED_STRING_FUNCTIONS", new ArrayList<>());
+					put("NUMBER_FUNCTIONS", new ArrayList<>());
+					put("NUMBER_LIST_FUNCTIONS", new ArrayList<>());
+					put("STRING_FUNCTIONS", new ArrayList<>());
+					put("STRING_LIST_FUNCTIONS", new ArrayList<>());
+				}
+			};
+		_binaryFunctions = new LinkedHashMap<>();
+		_nested = new HashMap<>();
+		_nestedFunctions = new HashMap<>();
+		_relatedCollections = new ArrayList<>();
+		_relatedModels = new ArrayList<>();
+		_types = new ArrayList<>();
 	}
 
-	private final Map<String, BinaryFunction<T>> _binaryFunctions =
-		new LinkedHashMap<>();
-	private final Map<String, Function<T, Boolean>> _booleanFunctions =
-		new LinkedHashMap<>();
-	private final Map<String, Function<T, List<Boolean>>>
-		_booleanListFunctions = new LinkedHashMap<>();
+	private final Map<String, BinaryFunction<T>> _binaryFunctions;
+	private final Map<String, List<FieldFunction<T, ?>>> _fieldFunctions;
 	private final Class<? extends Identifier<?>> _identifierClass;
 	private Function<T, ?> _identifierFunction;
-	private final Map<String, String> _links = new LinkedHashMap<>();
-	private final Map<String, BiFunction<T, Language, String>>
-		_localizedStringFunctions = new LinkedHashMap<>();
-	private final Map<String, Representor<?>> _nested = new HashMap<>();
-	private final Map<String, Function<T, ?>> _nestedFunctions =
-		new HashMap<>();
-	private final Map<String, Function<T, Number>> _numberFunctions =
-		new LinkedHashMap<>();
-	private final Map<String, Function<T, List<Number>>> _numberListFunctions =
-		new LinkedHashMap<>();
+	private final Map<String, Representor<?>> _nested;
+	private final Map<String, Function<T, ?>> _nestedFunctions;
 	private final List<RelatedCollection<? extends Identifier>>
-		_relatedCollections = new ArrayList<>();
+		_relatedCollections;
 	private final Supplier<List<RelatedCollection<?>>>
 		_relatedCollectionsSupplier;
-	private final List<RelatedModel<T, ?>> _relatedModels = new ArrayList<>();
-	private final Map<String, Function<T, String>> _stringFunctions =
-		new LinkedHashMap<>();
-	private final Map<String, Function<T, List<String>>> _stringListFunctions =
-		new LinkedHashMap<>();
-	private final List<String> _types = new ArrayList<>();
+	private final List<RelatedModel<T, ?>> _relatedModels;
+	private final List<String> _types;
 
 }

@@ -67,12 +67,10 @@ public class BinaryEndpoint {
 		).mapOptional(
 			model -> _representorFunction.apply(
 				name
+			).flatMap(
+				representor -> representor.getBinaryFunction(binaryId)
 			).map(
-				Representor::getBinaryFunctions
-			).map(
-				binaryFunctions -> binaryFunctions.get(binaryId)
-			).map(
-				binaryFunction -> binaryFunction.apply(model)
+				function -> function.apply(model)
 			),
 			notFound(name, id, binaryId)
 		);
