@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.writer;
 
 import com.google.gson.JsonObject;
+
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.Form;
@@ -26,11 +27,13 @@ import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Writes the documentation.
@@ -199,34 +202,33 @@ public class DocumentationWriter {
 
 	}
 
+	private Optional<FormField> _getFormField(
+		String fieldName, Form<FormField> formFieldForm) {
+
+		List<FormField> formFields = formFieldForm.getFormFields();
+
+		Stream<FormField> stream = formFields.stream();
+
+		return stream.filter(
+			formField -> formField.name.equals(fieldName)
+		).findFirst();
+	}
+
 	private void _writeFields(
 		Map<String, Function> functionMap,
 		JSONObjectBuilder resourceJsonObjectBuilder,
 		Optional<Form<FormField>> formOptional) {
 
 		functionMap.forEach(
-			(fieldName, function) -> {
+			(fieldName, function) -> formOptional.ifPresent(
+				formFieldForm -> {
+					Optional<FormField> field = _getFormField(
+						fieldName, formFieldForm);
 
-				formOptional.ifPresent(
-					formFieldForm -> formFieldForm.getFormFields().stream().filter(
-						formField -> formField.name.equals(fieldName))
-						.findFirst()
-						.ifPresent(formField -> {
-							JSONObjectBuilder jsonObjectBuilder =
-								new JSONObjectBuilder();
-
-							_documentationMessageMapper.onStartProperty(
-								resourceJsonObjectBuilder,
-								jsonObjectBuilder);
-
-							_documentationMessageMapper.mapProperty(
-								jsonObjectBuilder, formField);
-
-							_documentationMessageMapper.onFinishProperty(
-								resourceJsonObjectBuilder,
-								jsonObjectBuilder);
-						}));
-			});
+					field.ifPresent(
+						formField -> _writeFormField(
+							resourceJsonObjectBuilder, formField));
+				}));
 	}
 
 	private void _writeFields(
@@ -273,6 +275,20 @@ public class DocumentationWriter {
 
 		_writeFields(
 			representor.getLinks(), resourceJsonObjectBuilder, formOptional);
+	}
+
+	private void _writeFormField(
+		JSONObjectBuilder resourceJsonObjectBuilder, FormField formField) {
+
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
+
+		_documentationMessageMapper.onStartProperty(
+			resourceJsonObjectBuilder, jsonObjectBuilder, formField);
+
+		_documentationMessageMapper.mapProperty(jsonObjectBuilder, formField);
+
+		_documentationMessageMapper.onFinishProperty(
+			resourceJsonObjectBuilder, jsonObjectBuilder, formField);
 	}
 
 	private void _writeItemOperations(

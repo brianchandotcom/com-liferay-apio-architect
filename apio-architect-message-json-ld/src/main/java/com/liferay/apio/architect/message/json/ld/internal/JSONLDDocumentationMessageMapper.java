@@ -181,7 +181,7 @@ public class JSONLDDocumentationMessageMapper
 	@Override
 	public void onFinishProperty(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder propertyJsonObjectBuilder) {
+		JSONObjectBuilder propertyJsonObjectBuilder, FormField formField) {
 
 		documentationJsonObjectBuilder.field(
 			"supportedProperty"

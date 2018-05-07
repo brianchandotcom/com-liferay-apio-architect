@@ -20,8 +20,6 @@ import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.FormField;
 
-import java.util.Optional;
-
 /**
  * Maps the API {@link Documentation} to its JSON object representation.
  * Instances of this interface work like events. The {@code
@@ -54,13 +52,13 @@ public interface DocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, String description) {
 	}
 
-	public default void mapProperty(
-		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
-	}
-
 	public default void mapOperation(
 		JSONObjectBuilder jsonObjectBuilder, String resourceName,
 		RequestFunction requestFunction) {
+	}
+
+	public default void mapProperty(
+		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
 	}
 
 	public default void mapResource(
@@ -84,7 +82,7 @@ public interface DocumentationMessageMapper
 
 	public default void onFinishProperty(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder propertyJsonObjectBuilder) {
+		JSONObjectBuilder propertyJsonObjectBuilder, FormField formField) {
 	}
 
 	public default void onFinishResource(
@@ -99,7 +97,7 @@ public interface DocumentationMessageMapper
 
 	public default void onStartProperty(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder propertyJsonObjectBuilder) {
+		JSONObjectBuilder propertyJsonObjectBuilder, FormField formField) {
 	}
 
 	public default void onStartResource(
