@@ -28,12 +28,12 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstant
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_OPERATION;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_HYDRA_PROFILE;
 
-import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.Operation;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -72,14 +72,12 @@ public class JSONLDDocumentationMessageMapper
 	@Override
 	public void mapOperation(
 		JSONObjectBuilder jsonObjectBuilder, String resourceName,
-		RequestFunction requestFunction) {
-
-		Method method = requestFunction.getMethod();
+		Operation operation) {
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"_:" + resourceName
+			"_:" + operation.name
 		);
 
 		jsonObjectBuilder.field(
@@ -87,18 +85,19 @@ public class JSONLDDocumentationMessageMapper
 		).stringValue(
 			TYPE_OPERATION
 		);
+
 		jsonObjectBuilder.field(
 			"method"
 		).stringValue(
-			method.name()
+			operation.method.toString()
 		);
 
-		String value = _getReturnValue(resourceName, requestFunction);
+		String returnValue = _getReturnValue(resourceName, operation);
 
 		jsonObjectBuilder.field(
 			"returns"
 		).stringValue(
-			value
+			returnValue
 		);
 	}
 
@@ -166,7 +165,7 @@ public class JSONLDDocumentationMessageMapper
 	@Override
 	public void onFinishOperation(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder operationJsonObjectBuilder) {
+		JSONObjectBuilder operationJsonObjectBuilder, Operation operation) {
 
 		documentationJsonObjectBuilder.field(
 			"supportedOperation"
@@ -328,19 +327,17 @@ public class JSONLDDocumentationMessageMapper
 		);
 	}
 
-	private String _getReturnValue(
-		String entity, RequestFunction requestFunction) {
-
+	private String _getReturnValue(String resourceName, Operation operation) {
 		String value = null;
 
-		if (Method.DELETE.equals(requestFunction.getMethod())) {
+		if (Method.DELETE.equals(operation.method)) {
 			value = "http://www.w3.org/2002/07/owl#Nothing";
 		}
-		else if (requestFunction.getCollection()) {
+		else if (operation.method.equals(Method.GET)) {
 			value = URL_HYDRA_PROFILE + TYPE_COLLECTION;
 		}
 		else {
-			value = "http://schema.org/" + entity;
+			value = "http://schema.org/" + resourceName;
 		}
 
 		return value;

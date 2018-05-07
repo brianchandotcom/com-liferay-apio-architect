@@ -22,6 +22,8 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
+import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.routes.CollectionRoutes;
@@ -324,15 +326,17 @@ public class DocumentationWriter {
 
 		JSONObjectBuilder operationJsonObjectBuilder = new JSONObjectBuilder();
 
+		Operation operation = new Operation(Method.GET, "afs");
+
 		_documentationMessageMapper.onStartOperation(
-			jsonObjectBuilder, operationJsonObjectBuilder);
+			jsonObjectBuilder, operationJsonObjectBuilder, operation);
 
 		requestFunctionOptional.ifPresent(
 			requestFunction -> _documentationMessageMapper.mapOperation(
-				operationJsonObjectBuilder, resourceName, requestFunction));
+				operationJsonObjectBuilder, resourceName, operation));
 
 		_documentationMessageMapper.onFinishOperation(
-			jsonObjectBuilder, operationJsonObjectBuilder);
+			jsonObjectBuilder, operationJsonObjectBuilder, operation);
 	}
 
 	private void _writePageOperations(

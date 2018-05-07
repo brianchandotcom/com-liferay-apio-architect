@@ -37,9 +37,4 @@ import java.util.function.Function;
 public interface UpdateItemFunction<T, S>
 	extends RequestFunction<Function<S, Function<Body, Try<SingleModel<T>>>>> {
 
-	@Override
-	public default Method getMethod() {
-		return PUT;
-	}
-
 }

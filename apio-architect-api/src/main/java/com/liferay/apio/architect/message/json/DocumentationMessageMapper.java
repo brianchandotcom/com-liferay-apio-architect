@@ -16,9 +16,9 @@ package com.liferay.apio.architect.message.json;
 
 import aQute.bnd.annotation.ConsumerType;
 
-import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.FormField;
+import com.liferay.apio.architect.operation.Operation;
 
 /**
  * Maps the API {@link Documentation} to its JSON object representation.
@@ -54,7 +54,7 @@ public interface DocumentationMessageMapper
 
 	public default void mapOperation(
 		JSONObjectBuilder jsonObjectBuilder, String resourceName,
-		RequestFunction requestFunction) {
+		Operation operation) {
 	}
 
 	public default void mapProperty(
@@ -77,7 +77,7 @@ public interface DocumentationMessageMapper
 
 	public default void onFinishOperation(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder operationJsonObjectBuilder) {
+		JSONObjectBuilder operationJsonObjectBuilder, Operation operation) {
 	}
 
 	public default void onFinishProperty(
@@ -92,7 +92,7 @@ public interface DocumentationMessageMapper
 
 	public default void onStartOperation(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder operationJsonObjectBuilder) {
+		JSONObjectBuilder operationJsonObjectBuilder, Operation operation) {
 	}
 
 	public default void onStartProperty(

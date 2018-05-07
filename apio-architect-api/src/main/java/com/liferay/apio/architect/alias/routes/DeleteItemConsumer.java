@@ -32,9 +32,4 @@ import com.liferay.apio.architect.operation.Method;
 public interface DeleteItemConsumer<T>
 	extends RequestFunction<ThrowableConsumer<T>> {
 
-	@Override
-	public default Method getMethod() {
-		return DELETE;
-	}
-
 }

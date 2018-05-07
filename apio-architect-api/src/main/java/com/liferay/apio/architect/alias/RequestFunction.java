@@ -32,12 +32,4 @@ import javax.servlet.http.HttpServletRequest;
 @FunctionalInterface
 public interface RequestFunction<T> extends Function<HttpServletRequest, T> {
 
-	public default boolean getCollection() {
-		return false;
-	}
-
-	public default Method getMethod() {
-		return GET;
-	}
-
 }

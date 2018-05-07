@@ -31,14 +31,4 @@ import com.liferay.apio.architect.pagination.Page;
 @FunctionalInterface
 public interface GetPageFunction<T> extends RequestFunction<Try<Page<T>>> {
 
-	@Override
-	public default boolean getCollection() {
-		return true;
-	}
-
-	@Override
-	public default Method getMethod() {
-		return GET;
-	}
-
 }

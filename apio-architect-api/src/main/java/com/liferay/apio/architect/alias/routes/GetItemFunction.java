@@ -36,9 +36,4 @@ import java.util.function.Function;
 public interface GetItemFunction<T, S>
 	extends RequestFunction<Function<S, Try<SingleModel<T>>>> {
 
-	@Override
-	public default Method getMethod() {
-		return GET;
-	}
-
 }

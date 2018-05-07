@@ -35,9 +35,4 @@ import java.util.function.Function;
 public interface CreateItemFunction<T>
 	extends RequestFunction<Function<Body, Try<SingleModel<T>>>> {
 
-	@Override
-	public default Method getMethod() {
-		return POST;
-	}
-
 }
