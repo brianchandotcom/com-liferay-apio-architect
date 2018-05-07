@@ -93,7 +93,7 @@ public class PersonCollectionResource
 			"birthDate", PersonModel::getBirthDate
 		).addNested(
 			"address", PersonModel::getPostalAddressModel,
-			nestedBuilder -> nestedBuilder.nestedTypes(
+			nestedBuilder -> nestedBuilder.types(
 				"PostalAddress"
 			).addString(
 				"addressCountry", PostalAddressModel::getCountryCode
