@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.representor.function;
 
-import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.representor.NestedRepresentor;
 
 import java.util.function.Function;
 
@@ -27,9 +27,10 @@ import java.util.function.Function;
 public class NestedFieldFunction<T, S> {
 
 	public NestedFieldFunction(
-		String key, Function<T, S> function, Representor<S> representor) {
+		String key, Function<T, S> function,
+		NestedRepresentor<S> nestedRepresentor) {
 
-		this.representor = representor;
+		this.nestedRepresentor = nestedRepresentor;
 		this.key = key;
 		this.function = function;
 	}
@@ -50,8 +51,8 @@ public class NestedFieldFunction<T, S> {
 	public final String key;
 
 	/**
-	 * The field's {@code Representor}
+	 * The field's {@code NestedRepresentor}
 	 */
-	public final Representor<S> representor;
+	public final NestedRepresentor<S> nestedRepresentor;
 
 }

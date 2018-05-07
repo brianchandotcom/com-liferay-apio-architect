@@ -131,7 +131,7 @@ public class BinaryEndpointTest {
 	}
 
 	private static Representor<Object> _representor() {
-		Builder<Object, Object> builder = new Builder<>();
+		Builder<Object, Object> builder = new Builder<>(null);
 
 		return builder.types(
 			""
