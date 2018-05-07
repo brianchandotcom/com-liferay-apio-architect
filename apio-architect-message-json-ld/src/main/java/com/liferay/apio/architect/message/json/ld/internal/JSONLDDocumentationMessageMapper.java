@@ -73,20 +73,15 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void mapProperty(
-		JSONObjectBuilder jsonObjectBuilder, String fieldName,
-		Optional<FormField> formFieldOptional) {
+		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_TITLE
 		).stringValue(
-			fieldName
+			formField.name
 		);
 
-		Boolean required = formFieldOptional.map(
-			formField -> formField.required
-		).orElse(
-			false
-		);
+		Boolean required = formField.required;
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_REQUIRED
@@ -97,7 +92,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			"readonly"
 		).booleanValue(
-			!formFieldOptional.isPresent()
+			false
 		);
 
 		jsonObjectBuilder.field(

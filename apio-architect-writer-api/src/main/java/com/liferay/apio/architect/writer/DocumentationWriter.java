@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.writer;
 
 import com.google.gson.JsonObject;
-
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.Form;
@@ -27,7 +26,6 @@ import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -45,8 +43,8 @@ public class DocumentationWriter {
 	 * Creates a new {@code DocumentationWriter} object, without creating the
 	 * builder.
 	 *
-	 * @param  function the function that transforms a builder into the {@code
-	 *         DocumentationWriter}
+	 * @param function the function that transforms a builder into the {@code
+	 *                 DocumentationWriter}
 	 * @return the {@code DocumentationWriter} instance
 	 */
 	public static DocumentationWriter create(
@@ -133,7 +131,7 @@ public class DocumentationWriter {
 		/**
 		 * Add information about the documentation being written to the builder.
 		 *
-		 * @param  documentation the documentation being written
+		 * @param documentation the documentation being written
 		 * @return the updated builder
 		 */
 		public DocumentationMessageMapperStep documentation(
@@ -164,8 +162,8 @@ public class DocumentationWriter {
 			 * Adds information to the builder about the {@link
 			 * DocumentationMessageMapper}.
 			 *
-			 * @param  documentationMessageMapper the {@code
-			 *         DocumentationMessageMapper}
+			 * @param documentationMessageMapper the {@code
+			 *                                   DocumentationMessageMapper}
 			 * @return the updated builder
 			 */
 			public RequestInfoStep documentationMessageMapper(
@@ -183,8 +181,8 @@ public class DocumentationWriter {
 			/**
 			 * Adds information to the builder about the request.
 			 *
-			 * @param  requestInfo the information obtained from the request. It
-			 *         can be created by using a {@link RequestInfo.Builder}.
+			 * @param requestInfo the information obtained from the request. It
+			 *                    can be created by using a {@link RequestInfo.Builder}.
 			 * @return the updated builder
 			 */
 			public BuildStep requestInfo(RequestInfo requestInfo) {
@@ -201,37 +199,33 @@ public class DocumentationWriter {
 
 	}
 
-	private Optional<FormField> _findFormFieldWithName(
-		Optional<Form<FormField>> form, String name) {
-
-		return form.map(
-			Form::getFormFields
-		).orElseGet(
-			ArrayList::new
-		).stream(
-		).filter(
-			x -> x.name.equals(name)
-		).findFirst();
-	}
-
 	private void _writeFields(
 		Map<String, Function> functionMap,
 		JSONObjectBuilder resourceJsonObjectBuilder,
 		Optional<Form<FormField>> formOptional) {
 
 		functionMap.forEach(
-			(field, function) -> {
-				JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
+			(fieldName, function) -> {
 
-				_documentationMessageMapper.onStartProperty(
-					jsonObjectBuilder, jsonObjectBuilder);
+				formOptional.ifPresent(
+					formFieldForm -> formFieldForm.getFormFields().stream().filter(
+						formField -> formField.name.equals(fieldName))
+						.findFirst()
+						.ifPresent(formField -> {
+							JSONObjectBuilder jsonObjectBuilder =
+								new JSONObjectBuilder();
 
-				_documentationMessageMapper.mapFormField(
-					jsonObjectBuilder, field,
-					_findFormFieldWithName(formOptional, field));
+							_documentationMessageMapper.onStartProperty(
+								resourceJsonObjectBuilder,
+								jsonObjectBuilder);
 
-				_documentationMessageMapper.onFinishProperty(
-					resourceJsonObjectBuilder, jsonObjectBuilder);
+							_documentationMessageMapper.mapProperty(
+								jsonObjectBuilder, formField);
+
+							_documentationMessageMapper.onFinishProperty(
+								resourceJsonObjectBuilder,
+								jsonObjectBuilder);
+						}));
 			});
 	}
 
