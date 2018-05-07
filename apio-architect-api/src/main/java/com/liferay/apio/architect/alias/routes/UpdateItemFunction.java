@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.alias.routes;
 
-import static com.liferay.apio.architect.operation.Method.*;
+import static com.liferay.apio.architect.operation.Method.PUT;
 
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.form.Body;

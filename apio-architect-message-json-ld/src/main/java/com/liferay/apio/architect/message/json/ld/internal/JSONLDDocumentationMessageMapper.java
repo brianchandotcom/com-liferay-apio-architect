@@ -35,8 +35,6 @@ import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.operation.Method;
 
-import java.util.Optional;
-
 import javax.ws.rs.core.HttpHeaders;
 
 import org.osgi.service.component.annotations.Component;
@@ -72,37 +70,6 @@ public class JSONLDDocumentationMessageMapper
 	}
 
 	@Override
-	public void mapProperty(
-		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
-
-		jsonObjectBuilder.field(
-			FIELD_NAME_TITLE
-		).stringValue(
-			formField.name
-		);
-
-		Boolean required = formField.required;
-
-		jsonObjectBuilder.field(
-			FIELD_NAME_REQUIRED
-		).booleanValue(
-			required
-		);
-
-		jsonObjectBuilder.field(
-			"readonly"
-		).booleanValue(
-			false
-		);
-
-		jsonObjectBuilder.field(
-			"writeonly"
-		).booleanValue(
-			false
-		);
-	}
-
-	@Override
 	public void mapOperation(
 		JSONObjectBuilder jsonObjectBuilder, String resourceName,
 		RequestFunction requestFunction) {
@@ -132,6 +99,37 @@ public class JSONLDDocumentationMessageMapper
 			"returns"
 		).stringValue(
 			value
+		);
+	}
+
+	@Override
+	public void mapProperty(
+		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
+
+		jsonObjectBuilder.field(
+			FIELD_NAME_TITLE
+		).stringValue(
+			formField.name
+		);
+
+		Boolean required = formField.required;
+
+		jsonObjectBuilder.field(
+			FIELD_NAME_REQUIRED
+		).booleanValue(
+			required
+		);
+
+		jsonObjectBuilder.field(
+			"readonly"
+		).booleanValue(
+			false
+		);
+
+		jsonObjectBuilder.field(
+			"writeonly"
+		).booleanValue(
+			false
 		);
 	}
 

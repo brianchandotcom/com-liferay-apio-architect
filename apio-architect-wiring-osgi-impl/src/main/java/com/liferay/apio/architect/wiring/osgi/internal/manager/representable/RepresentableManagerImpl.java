@@ -83,6 +83,7 @@ public class RepresentableManagerImpl
 			name, this::_computeRepresentables);
 	}
 
+	@Override
 	public Map<String, Representor> getRepresentors() {
 		return INSTANCE.getRepresentorMap(this::_computeRepresentables);
 	}

@@ -68,7 +68,8 @@ public class HALPageMessageMapperTest implements RepresentableManager {
 		return optional.map(Unsafe::unsafeCast);
 	}
 
-	public Map<String, Representor> getRepresentorMap() {
+	@Override
+	public Map<String, Representor> getRepresentors() {
 		return null;
 	}
 

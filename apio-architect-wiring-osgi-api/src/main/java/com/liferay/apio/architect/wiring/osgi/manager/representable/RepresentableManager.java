@@ -32,8 +32,6 @@ import java.util.Optional;
 @ProviderType
 public interface RepresentableManager {
 
-	public Map<String, Representor> getRepresentors();
-
 	/**
 	 * Returns the representor of the collection resource's model class, if that
 	 * representor exists. Returns {@code Optional#empty()} otherwise.
@@ -43,5 +41,7 @@ public interface RepresentableManager {
 	 *         Optional#empty()} otherwise
 	 */
 	public <T> Optional<Representor<T>> getRepresentorOptional(String name);
+
+	public Map<String, Representor> getRepresentors();
 
 }
