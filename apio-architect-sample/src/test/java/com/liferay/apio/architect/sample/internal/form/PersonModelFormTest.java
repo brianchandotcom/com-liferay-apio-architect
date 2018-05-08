@@ -52,12 +52,6 @@ public class PersonModelFormTest {
 				"addressRegion",
 				isReturnedIn(_personForm(PostalAddressModel::getState))
 			).whereString(
-				"postalCode",
-				isReturnedIn(_personForm(PostalAddressModel::getZipCode))
-			).whereString(
-				"streetAddress",
-				isReturnedIn(_personForm(PostalAddressModel::getStreetAddress))
-			).whereString(
 				"email", isReturnedIn(PersonForm::getEmail)
 			).whereString(
 				"familyName", isReturnedIn(PersonForm::getFamilyName)
@@ -67,6 +61,12 @@ public class PersonModelFormTest {
 				"image", isReturnedIn(PersonForm::getImage)
 			).whereStringList(
 				"jobTitle", isReturnedIn(PersonForm::getJobTitles)
+			).whereString(
+				"postalCode",
+				isReturnedIn(_personForm(PostalAddressModel::getZipCode))
+			).whereString(
+				"streetAddress",
+				isReturnedIn(_personForm(PostalAddressModel::getStreetAddress))
 			).build());
 
 		assertThat(form, isAFormWithConditions);
