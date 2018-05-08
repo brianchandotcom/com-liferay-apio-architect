@@ -19,6 +19,7 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.apio.architect.alias.BinaryFunction;
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
+import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.AcceptLanguage;
@@ -116,8 +117,17 @@ public interface BaseRepresentor<T> {
 	 * Returns the list of nested field functions.
 	 *
 	 * @return the list of nested field functions.
+	 * @review
 	 */
 	public List<NestedFieldFunction<T, ?>> getNestedFieldFunctions();
+
+	/**
+	 * Returns the list of nested list field functions.
+	 *
+	 * @return the list of nested list field functions.
+	 * @review
+	 */
+	public List<NestedListFieldFunction<T, ?>> getNestedListFieldFunctions();
 
 	/**
 	 * Returns the list containing the number field names and the functions to
@@ -291,6 +301,21 @@ public interface BaseRepresentor<T> {
 			String key, Function<T, V> transformFunction,
 			Function<NestedRepresentor.Builder<V>, NestedRepresentor<V>>
 				function);
+
+		/**
+		 * Adds a nested list field to the {@code Representor}.
+		 *
+		 * @param  key the field's name
+		 * @param  transformFunction the function that transforms the model into
+		 *         the list whose models are used inside the nested representor
+		 * @param  function the function that creates the nested representor for
+		 *         each model
+		 * @review
+		 */
+		public <V> U addNestedList(
+			String key, Function<T, List<V>> transformFunction,
+			Function<NestedRepresentor.Builder<V>,
+				NestedRepresentor<V>> function);
 
 		/**
 		 * Adds information about a resource's number field.
