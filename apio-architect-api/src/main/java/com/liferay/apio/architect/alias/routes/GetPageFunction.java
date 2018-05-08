@@ -14,11 +14,8 @@
 
 package com.liferay.apio.architect.alias.routes;
 
-import static com.liferay.apio.architect.operation.Method.GET;
-
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.pagination.Page;
 
 /**
@@ -30,5 +27,4 @@ import com.liferay.apio.architect.pagination.Page;
  */
 @FunctionalInterface
 public interface GetPageFunction<T> extends RequestFunction<Try<Page<T>>> {
-
 }

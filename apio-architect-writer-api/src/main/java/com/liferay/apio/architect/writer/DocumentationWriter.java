@@ -14,6 +14,11 @@
 
 package com.liferay.apio.architect.writer;
 
+import static com.liferay.apio.architect.operation.Method.DELETE;
+import static com.liferay.apio.architect.operation.Method.GET;
+import static com.liferay.apio.architect.operation.Method.POST;
+import static com.liferay.apio.architect.operation.Method.PUT;
+
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.alias.RequestFunction;
@@ -216,8 +221,18 @@ public class DocumentationWriter {
 		).findFirst();
 	}
 
+	private Operation _getOperation(
+		String operationName, Optional<Form> formOptional, Method method) {
+
+		return formOptional.map(
+			form -> new Operation(form, method, operationName)
+		).orElse(
+			new Operation(method, operationName)
+		);
+	}
+
 	private void _writeFields(
-		Map<String, Function> functionMap,
+		Map<String, Object> functionMap,
 		JSONObjectBuilder resourceJsonObjectBuilder,
 		Optional<Form<FormField>> formOptional) {
 
@@ -306,34 +321,41 @@ public class DocumentationWriter {
 
 		itemRoutesOptional.ifPresent(
 			itemRoutes -> {
-				_writeOperation(
-					itemRoutes.getItemFunctionOptional(),
-					resourceJsonObjectBuilder, name);
+				String getOperationName = name + "/retrieve";
+
+				Operation getOperation = new Operation(GET, getOperationName);
+
+				_writeOperation(getOperation, resourceJsonObjectBuilder, name);
+
+				String updateOperationName = name + "/update";
+
+				Operation updateOperation = _getOperation(
+					updateOperationName, itemRoutes.getFormOptional(), PUT);
 
 				_writeOperation(
-					itemRoutes.getUpdateItemFunctionOptional(),
-					resourceJsonObjectBuilder, name);
+					updateOperation, resourceJsonObjectBuilder, name);
+
+				String deleteOperationName = name + "/delete";
+
+				Operation deleteOperation = new Operation(
+					DELETE, deleteOperationName);
 
 				_writeOperation(
-					itemRoutes.getDeleteConsumerOptional(),
-					resourceJsonObjectBuilder, name);
+					deleteOperation, resourceJsonObjectBuilder, name);
 			});
 	}
 
 	private void _writeOperation(
-		Optional<RequestFunction> requestFunctionOptional,
-		JSONObjectBuilder jsonObjectBuilder, String resourceName) {
+		Operation operation, JSONObjectBuilder jsonObjectBuilder,
+		String resourceName) {
 
 		JSONObjectBuilder operationJsonObjectBuilder = new JSONObjectBuilder();
-
-		Operation operation = new Operation(Method.GET, "afs");
 
 		_documentationMessageMapper.onStartOperation(
 			jsonObjectBuilder, operationJsonObjectBuilder, operation);
 
-		requestFunctionOptional.ifPresent(
-			requestFunction -> _documentationMessageMapper.mapOperation(
-				operationJsonObjectBuilder, resourceName, operation));
+		_documentationMessageMapper.mapOperation(
+			operationJsonObjectBuilder, resourceName, operation);
 
 		_documentationMessageMapper.onFinishOperation(
 			jsonObjectBuilder, operationJsonObjectBuilder, operation);
@@ -355,12 +377,16 @@ public class DocumentationWriter {
 		collectionRoutesOptional.ifPresent(
 			collectionRoutes -> {
 				_writeOperation(
-					collectionRoutes.getGetPageFunctionOptional(),
-					resourceJsonObjectBuilder, resource);
+					new Operation(GET, resource), resourceJsonObjectBuilder,
+					resource);
+
+				String operationName = resource + "/create";
+
+				Operation createOperation = _getOperation(
+					operationName, collectionRoutes.getFormOptional(), POST);
 
 				_writeOperation(
-					collectionRoutes.getCreateItemFunctionOptional(),
-					resourceJsonObjectBuilder, resource);
+					createOperation, resourceJsonObjectBuilder, resource);
 			});
 	}
 

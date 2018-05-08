@@ -14,12 +14,9 @@
 
 package com.liferay.apio.architect.alias.routes;
 
-import static com.liferay.apio.architect.operation.Method.PUT;
-
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.function.Function;
@@ -36,5 +33,4 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface UpdateItemFunction<T, S>
 	extends RequestFunction<Function<S, Function<Body, Try<SingleModel<T>>>>> {
-
 }

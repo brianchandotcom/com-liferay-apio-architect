@@ -14,11 +14,8 @@
 
 package com.liferay.apio.architect.alias.routes;
 
-import static com.liferay.apio.architect.operation.Method.GET;
-
 import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.function.Function;
@@ -35,5 +32,4 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface GetItemFunction<T, S>
 	extends RequestFunction<Function<S, Try<SingleModel<T>>>> {
-
 }

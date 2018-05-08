@@ -14,10 +14,6 @@
 
 package com.liferay.apio.architect.alias;
 
-import static com.liferay.apio.architect.operation.Method.GET;
-
-import com.liferay.apio.architect.operation.Method;
-
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,5 +27,4 @@ import javax.servlet.http.HttpServletRequest;
  */
 @FunctionalInterface
 public interface RequestFunction<T> extends Function<HttpServletRequest, T> {
-
 }
