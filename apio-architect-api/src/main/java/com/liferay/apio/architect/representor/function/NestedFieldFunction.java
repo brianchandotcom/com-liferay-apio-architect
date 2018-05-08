@@ -24,31 +24,16 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @review
  */
-public class NestedFieldFunction<T, S> {
+public class NestedFieldFunction<T, S> extends FieldFunction<T, S> {
 
 	public NestedFieldFunction(
 		String key, Function<T, S> function,
 		NestedRepresentor<S> nestedRepresentor) {
 
+		super(key, function);
+
 		this.nestedRepresentor = nestedRepresentor;
-		this.key = key;
-		this.function = function;
 	}
-
-	/**
-	 * The function that transforms the model into the value used in the {@code
-	 * NestedRepresentor#Builder}.
-	 *
-	 * @review
-	 */
-	public final Function<T, S> function;
-
-	/**
-	 * The field's key
-	 *
-	 * @review
-	 */
-	public final String key;
 
 	/**
 	 * The field's {@code NestedRepresentor}

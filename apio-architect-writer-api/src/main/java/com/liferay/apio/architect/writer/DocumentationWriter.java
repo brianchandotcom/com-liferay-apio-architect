@@ -30,6 +30,7 @@ import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.representor.function.FieldFunction;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -232,15 +233,15 @@ public class DocumentationWriter {
 	}
 
 	private void _writeFields(
-		Map<String, Object> functionMap,
+		List<FieldFunction> functionMap,
 		JSONObjectBuilder resourceJsonObjectBuilder,
 		Optional<Form<FormField>> formOptional) {
 
 		functionMap.forEach(
-			(fieldName, function) -> formOptional.ifPresent(
+			fieldFunction -> formOptional.ifPresent(
 				formFieldForm -> {
 					Optional<FormField> field = _getFormField(
-						fieldName, formFieldForm);
+						fieldFunction.key, formFieldForm);
 
 					field.ifPresent(
 						formField -> _writeFormField(
@@ -283,7 +284,7 @@ public class DocumentationWriter {
 			formOptional);
 
 		_writeFields(
-			representor.getNestedFunctions(), resourceJsonObjectBuilder,
+			representor.getNestedFieldFunctions(), resourceJsonObjectBuilder,
 			formOptional);
 
 		_writeFields(
@@ -291,7 +292,8 @@ public class DocumentationWriter {
 			formOptional);
 
 		_writeFields(
-			representor.getLinks(), resourceJsonObjectBuilder, formOptional);
+			representor.getLinkFunctions(), resourceJsonObjectBuilder,
+			formOptional);
 	}
 
 	private void _writeFormField(

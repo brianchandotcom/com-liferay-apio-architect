@@ -70,7 +70,7 @@ public class MockDocumentationWriter {
 			__ -> {
 			});
 
-		Representor<RootModel, String> rootModelRepresentor =
+		Representor<RootModel> rootModelRepresentor =
 			MockRepresentorCreator.createRootModelRepresentor(false);
 
 		Map<String, Representor> root = Collections.singletonMap(
