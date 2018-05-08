@@ -49,9 +49,9 @@ public class MockDocumentationWriter {
 	/**
 	 * Writes a {@link Documentation} object.
 	 *
-	 * @param httpHeaders                the request's HTTP headers
+	 * @param httpHeaders the request's HTTP headers
 	 * @param documentationMessageMapper the {@code DocumentationMessageMapper}
-	 *                                   to use for writing the JSON object
+	 *        to use for writing the JSON object
 	 */
 	public static JsonObject write(
 		HttpHeaders httpHeaders,
