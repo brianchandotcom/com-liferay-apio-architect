@@ -21,11 +21,16 @@ import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
+import com.liferay.apio.architect.routes.CollectionRoutes;
+import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
 import com.liferay.apio.architect.writer.DocumentationWriter;
 
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -44,9 +49,9 @@ public class MockDocumentationWriter {
 	/**
 	 * Writes a {@link Documentation} object.
 	 *
-	 * @param httpHeaders the request's HTTP headers
+	 * @param httpHeaders                the request's HTTP headers
 	 * @param documentationMessageMapper the {@code DocumentationMessageMapper}
-	 *        to use for writing the JSON object
+	 *                                   to use for writing the JSON object
 	 */
 	public static JsonObject write(
 		HttpHeaders httpHeaders,
@@ -54,15 +59,32 @@ public class MockDocumentationWriter {
 
 		RequestInfo requestInfo = getRequestInfo(httpHeaders);
 
-		HashMap representors = new HashMap();
+		CollectionRoutes.Builder<String> builder1 =
+			new CollectionRoutes.Builder<>(
+				"name", null,
+				__ -> {
+				});
 
-		representors.put(
-			"root", MockRepresentorCreator.createRootModelRepresentor(false));
+		ItemRoutes.Builder builder2 = new ItemRoutes.Builder<>(
+			"name", null,
+			__ -> {
+			});
+
+		Representor<RootModel, String> rootModelRepresentor =
+			MockRepresentorCreator.createRootModelRepresentor(false);
+
+		Map<String, Representor> root = Collections.singletonMap(
+			"root", rootModelRepresentor);
+
+		ItemRoutes build = builder2.build();
+
+		CollectionRoutes<String> collectionRoutes = builder1.build();
 
 		Documentation documentation = new Documentation(
 			__ -> Optional.of(() -> "Title"),
-			__ -> Optional.of(() -> "Description"), () -> representors,
-			() -> null, () -> null);
+			__ -> Optional.of(() -> "Description"), () -> root,
+			() -> Collections.singletonMap("root", collectionRoutes),
+			() -> Collections.singletonMap("root", build));
 
 		DocumentationWriter documentationWriter = DocumentationWriter.create(
 			builder -> builder.documentation(
