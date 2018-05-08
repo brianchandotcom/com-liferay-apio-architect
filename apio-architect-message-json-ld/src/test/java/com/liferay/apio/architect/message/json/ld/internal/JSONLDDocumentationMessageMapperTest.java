@@ -68,18 +68,18 @@ public class JSONLDDocumentationMessageMapperTest {
 		Conditions contextConditions = _getContextConditions();
 
 		Conditions conditions = builder.where(
+			"@context", is(aJsonObjectWith(contextConditions))
+		).where(
 			"@id", is(aJsonString(equalTo("http://api.example.com/doc/")))
 		).where(
 			"@type", is(aJsonString(equalTo("ApiDocumentation")))
 		).where(
 			"description", is(aJsonString(equalTo("Description")))
 		).where(
-			"title", is(aJsonString(equalTo("Title")))
-		).where(
-			"@context", is(aJsonObjectWith(contextConditions))
-		).where(
 			"supportedClass",
 			is(aJsonArrayThat(contains(supportedClassConditions)))
+		).where(
+			"title", is(aJsonString(equalTo("Title")))
 		).build();
 
 		assertThat(jsonObject, is(aJsonObjectWith(conditions)));
@@ -108,11 +108,17 @@ public class JSONLDDocumentationMessageMapperTest {
 			"ApiDocumentation",
 			is(aJsonString(equalTo("hydra:ApiDocumentation")))
 		).where(
+			"code", is(aJsonString(equalTo("hydra:statusCodes")))
+		).where(
+			"expect", is(aJsonObjectWith(expect))
+		).where(
+			"method", is(aJsonString(equalTo("hydra:method")))
+		).where(
 			"property", is(aJsonObjectWith(property))
 		).where(
 			"readonly", is(aJsonString(equalTo("hydra:readonly")))
 		).where(
-			"writeonly", is(aJsonString(equalTo("hydra:writeonly")))
+			"returns", is(aJsonObjectWith(returns))
 		).where(
 			"supportedClass", is(aJsonString(equalTo("hydra:supportedClass")))
 		).where(
@@ -122,15 +128,9 @@ public class JSONLDDocumentationMessageMapperTest {
 			"supportedOperation",
 			is(aJsonString(equalTo("hydra:supportedOperation")))
 		).where(
-			"method", is(aJsonString(equalTo("hydra:method")))
-		).where(
 			"statusCodes", is(aJsonString(equalTo("hydra:statusCodes")))
 		).where(
-			"code", is(aJsonString(equalTo("hydra:statusCodes")))
-		).where(
-			"expect", is(aJsonObjectWith(expect))
-		).where(
-			"returns", is(aJsonObjectWith(returns))
+			"writeonly", is(aJsonString(equalTo("hydra:writeonly")))
 		).build();
 	}
 
@@ -180,9 +180,9 @@ public class JSONLDDocumentationMessageMapperTest {
 		).where(
 			"@type", aJsonString(equalTo("Class"))
 		).where(
-			"title", aJsonString(equalTo("root"))
-		).where(
 			"supportedOperation", is(aJsonArrayThat(contains(matchers)))
+		).where(
+			"title", aJsonString(equalTo("root"))
 		).build();
 	}
 
