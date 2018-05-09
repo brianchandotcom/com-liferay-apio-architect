@@ -250,6 +250,18 @@ public interface SingleModelMessageMapper<T>
 	}
 
 	/**
+	 * Maps the total number of elements in a nested collection to its JSON
+	 * object representation.
+	 *
+	 * @param jsonObjectBuilder the JSON object builder for the nested
+	 *        collection
+	 * @param totalCount the total number of elements in the collection
+	 */
+	public default void mapNestedPageItemTotalCount(
+		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
+	}
+
+	/**
 	 * Maps a resource's number field to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the model
@@ -358,6 +370,38 @@ public interface SingleModelMessageMapper<T>
 	}
 
 	/**
+	 * Finishes a nested collection. This is the final nested-collection-mapper
+	 * method the writer calls.
+	 *
+	 * @param singleModelJSONObjectBuilder the JSON object builder for the root
+	 *        model
+	 * @param collectionJsonObjectBuilder the JSON object builder for the
+	 *        collection
+	 * @param fieldName the collection's field name
+	 * @param list the collection
+	 * @param embeddedPathElements the current resource's embedded path elements
+	 */
+	public default void onFinishNestedCollection(
+		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder collectionJsonObjectBuilder, String fieldName,
+		List<?> list, FunctionalList<String> embeddedPathElements) {
+	}
+
+	/**
+	 * Finishes a nested collection item. This is the final
+	 * nested-collection-item-mapper method the writer calls.
+	 *
+	 * @param collectionJsonObjectBuilder the JSON object builder for the
+	 *        collection
+	 * @param itemJSONObjectBuilder the JSON object builder for the item
+	 * @param singleModel the single model
+	 */
+	public default void onFinishNestedCollectionItem(
+		JSONObjectBuilder collectionJsonObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
+	}
+
+	/**
 	 * Finishes the operation. This is the final operation-mapper method the
 	 * writer calls.
 	 *
@@ -385,6 +429,38 @@ public interface SingleModelMessageMapper<T>
 		JSONObjectBuilder singleModelJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, Operation operation) {
+	}
+
+	/**
+	 * Starts a nested collection. This is the first nested-collection-mapper
+	 * method the writer calls.
+	 *
+	 * @param singleModelJSONObjectBuilder the JSON object builder for the root
+	 *        model
+	 * @param collectionJsonObjectBuilder the JSON object builder for the
+	 *        collection
+	 * @param fieldName the collection's field name
+	 * @param list the collection
+	 * @param embeddedPathElements the current resource's embedded path elements
+	 */
+	public default void onStartNestedCollection(
+		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder collectionJsonObjectBuilder, String fieldName,
+		List<?> list, FunctionalList<String> embeddedPathElements) {
+	}
+
+	/**
+	 * Starts a nested collection item. This is the first
+	 * nested-collection-item-mapper method the writer calls.
+	 *
+	 * @param collectionJsonObjectBuilder the JSON object builder for the
+	 *        collection
+	 * @param itemJSONObjectBuilder the JSON object builder for the item
+	 * @param singleModel the single model
+	 */
+	public default void onStartNestedCollectionItem(
+		JSONObjectBuilder collectionJsonObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
 	}
 
 	/**
