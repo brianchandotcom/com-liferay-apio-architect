@@ -17,11 +17,14 @@ package com.liferay.apio.architect.impl.internal.message.json.ld;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_CONTEXT;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_EXPECTS;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_ID;
+import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_MEMBER;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_METHOD;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_OPERATION;
+import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TOTAL_ITEMS;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TYPE;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_VOCAB;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.MEDIA_TYPE;
+import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_COLLECTION;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_OPERATION;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.URL_HYDRA_PROFILE;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.URL_SCHEMA_ORG;
@@ -334,6 +337,17 @@ public class JSONLDSingleModelMessageMapper<T>
 	}
 
 	@Override
+	public void mapNestedPageItemTotalCount(
+		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
+
+		jsonObjectBuilder.field(
+			FIELD_NAME_TOTAL_ITEMS
+		).numberValue(
+			totalCount
+		);
+	}
+
+	@Override
 	public void mapNumberField(
 		JSONObjectBuilder jsonObjectBuilder, String fieldName, Number value) {
 
@@ -474,6 +488,41 @@ public class JSONLDSingleModelMessageMapper<T>
 		).arrayValue(
 		).add(
 			operationJSONObjectBuilder
+		);
+	}
+
+	@Override
+	public void onFinishNestedCollection(
+		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder collectionJsonObjectBuilder, String fieldName,
+		List<?> list, FunctionalList<String> embeddedPathElements) {
+
+		collectionJsonObjectBuilder.field(
+			FIELD_NAME_TYPE
+		).arrayValue(
+		).addString(
+			TYPE_COLLECTION
+		);
+
+		Stream<String> tailStream = embeddedPathElements.tailStream();
+
+		singleModelJSONObjectBuilder.nestedField(
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
+		).objectValue(
+			collectionJsonObjectBuilder
+		);
+	}
+
+	@Override
+	public void onFinishNestedCollectionItem(
+		JSONObjectBuilder collectionJsonObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
+
+		collectionJsonObjectBuilder.field(
+			FIELD_NAME_MEMBER
+		).arrayValue(
+		).add(
+			itemJSONObjectBuilder
 		);
 	}
 
