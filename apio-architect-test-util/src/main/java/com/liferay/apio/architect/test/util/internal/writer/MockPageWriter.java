@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.test.util.writer;
+package com.liferay.apio.architect.test.util.internal.writer;
 
 import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.test.util.form.MockFormCreator.createForm;
@@ -28,6 +28,7 @@ import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.test.util.model.RootModel;
+import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.writer.PageWriter;
 

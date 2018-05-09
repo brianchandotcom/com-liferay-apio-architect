@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.test.util.writer;
 
+import com.liferay.apio.architect.test.util.internal.writer.MockDocumentationWriter;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 

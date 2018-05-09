@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.test.util.writer;
+package com.liferay.apio.architect.test.util.internal.writer;
 
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 

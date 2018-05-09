@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.test.util.writer;
+package com.liferay.apio.architect.test.util.internal.writer;
 
 import static com.liferay.apio.architect.operation.Method.DELETE;
 import static com.liferay.apio.architect.operation.Method.PUT;
@@ -29,6 +29,7 @@ import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
+import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.writer.SingleModelWriter;
 
 import java.util.Optional;

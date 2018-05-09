@@ -31,11 +31,11 @@ import com.liferay.apio.architect.message.json.FormMessageMapper;
 import com.liferay.apio.architect.message.json.MessageMapper;
 import com.liferay.apio.architect.message.json.PageMessageMapper;
 import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
+import com.liferay.apio.architect.test.util.internal.writer.MockDocumentationWriter;
+import com.liferay.apio.architect.test.util.internal.writer.MockFormWriter;
+import com.liferay.apio.architect.test.util.internal.writer.MockPageWriter;
+import com.liferay.apio.architect.test.util.internal.writer.MockSingleModelWriter;
 import com.liferay.apio.architect.test.util.model.RootModel;
-import com.liferay.apio.architect.test.util.writer.MockDocumentationWriter;
-import com.liferay.apio.architect.test.util.writer.MockFormWriter;
-import com.liferay.apio.architect.test.util.writer.MockPageWriter;
-import com.liferay.apio.architect.test.util.writer.MockSingleModelWriter;
 import com.liferay.apio.architect.writer.ErrorWriter;
 
 import java.io.File;
