@@ -14,18 +14,9 @@
 
 package com.liferay.apio.architect.error.problem.json.internal;
 
-import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonInt;
-import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectStringWith;
-import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString;
+import com.liferay.apio.architect.test.util.json.MessageMapperTesterBuilder;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-
-import com.liferay.apio.architect.error.APIError;
-import com.liferay.apio.architect.message.json.ErrorMessageMapper;
-import com.liferay.apio.architect.test.util.json.Conditions;
-import com.liferay.apio.architect.writer.ErrorWriter;
+import java.nio.file.Paths;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -39,39 +30,16 @@ import org.mockito.Mockito;
 public class ProblemJSONErrorMessageMapperTest {
 
 	@Test
-	public void testJSONLDErrorMessageMapper() {
-		APIError apiError = new APIError(
-			new IllegalArgumentException(), "A title", "A description",
-			"A type", 404);
-
-		HttpHeaders httpHeaders = Mockito.mock(HttpHeaders.class);
-
-		String error = ErrorWriter.writeError(
-			_errorMessageMapper, apiError, httpHeaders);
-
-		Conditions.Builder builder = new Conditions.Builder();
-
-		Conditions conditions = builder.where(
-			"detail", is(aJsonString(equalTo("A description")))
-		).where(
-			"status", is(aJsonInt(equalTo(404)))
-		).where(
-			"title", is(aJsonString(equalTo("A title")))
-		).where(
-			"type", is(aJsonString(equalTo("A type")))
-		).build();
-
-		assertThat(error, is(aJsonObjectStringWith(conditions)));
+	public void testProblemJSONErrorMessageMapper() {
+		MessageMapperTesterBuilder.path(
+			Paths.get("apio-architect-error-problem-json/src/test/resources")
+		).httpHeaders(
+			Mockito.mock(HttpHeaders.class)
+		).mediaType(
+			"application/problem+json"
+		).validateErrorMessageMapper(
+			new ProblemJSONErrorMessageMapper()
+		);
 	}
-
-	@Test
-	public void testMediaTypeIsCorrect() {
-		String mediaType = _errorMessageMapper.getMediaType();
-
-		assertThat(mediaType, is("application/problem+json"));
-	}
-
-	private final ErrorMessageMapper _errorMessageMapper =
-		new ProblemJSONErrorMessageMapper();
 
 }
