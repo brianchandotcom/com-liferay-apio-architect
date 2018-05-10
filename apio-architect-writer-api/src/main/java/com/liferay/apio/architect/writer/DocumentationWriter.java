@@ -318,10 +318,9 @@ public class DocumentationWriter {
 
 		Map<String, ItemRoutes> itemRoutesMap = itemRoutesMapSupplier.get();
 
-		Optional<ItemRoutes> itemRoutesOptional = Optional.ofNullable(
-			itemRoutesMap.getOrDefault(name, null));
-
-		itemRoutesOptional.ifPresent(
+		Optional.ofNullable(
+			itemRoutesMap.getOrDefault(name, null)
+		).ifPresent(
 			itemRoutes -> {
 				String getOperationName = name + "/retrieve";
 
@@ -344,7 +343,8 @@ public class DocumentationWriter {
 
 				_writeOperation(
 					deleteOperation, resourceJsonObjectBuilder, name);
-			});
+			}
+		);
 	}
 
 	private void _writeOperation(
@@ -372,11 +372,9 @@ public class DocumentationWriter {
 		Map<String, CollectionRoutes> collectionRoutesMap =
 			routesMapSupplier.get();
 
-		Optional<CollectionRoutes> collectionRoutesOptional =
-			Optional.ofNullable(
-				collectionRoutesMap.getOrDefault(resource, null));
-
-		collectionRoutesOptional.ifPresent(
+		Optional.ofNullable(
+			collectionRoutesMap.getOrDefault(resource, null)
+		).ifPresent(
 			collectionRoutes -> {
 				_writeOperation(
 					new Operation(GET, resource), resourceJsonObjectBuilder,
@@ -389,7 +387,8 @@ public class DocumentationWriter {
 
 				_writeOperation(
 					createOperation, resourceJsonObjectBuilder, resource);
-			});
+			}
+		);
 	}
 
 	private void _writeRoute(
