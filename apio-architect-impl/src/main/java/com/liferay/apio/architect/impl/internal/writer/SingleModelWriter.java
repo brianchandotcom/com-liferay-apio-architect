@@ -784,6 +784,10 @@ public class SingleModelWriter<T> {
 				List<?> list = nestedListFieldFunction.apply(
 					singleModel.getModel());
 
+				if (list == null) {
+					return;
+				}
+
 				FunctionalList<String> embeddedNestedPathElements =
 					new FunctionalList<>(
 						embeddedPathElements, nestedListFieldFunction.getKey());
