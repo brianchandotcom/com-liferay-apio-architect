@@ -124,7 +124,7 @@ public class BlogPostingCollectionResource
 			blogPostingForm.getHeadline());
 	}
 
-	private void _deleteBlogPostingModel(Long id, Credentials credentials) {
+	private void _deleteBlogPostingModel(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -132,7 +132,7 @@ public class BlogPostingCollectionResource
 		BlogPostingModel.remove(id);
 	}
 
-	private BlogPostingModel _getBlogPostingModel(Long id) {
+	private BlogPostingModel _getBlogPostingModel(long id) {
 		Optional<BlogPostingModel> optional = BlogPostingModel.get(id);
 
 		return optional.orElseThrow(
@@ -148,7 +148,7 @@ public class BlogPostingCollectionResource
 	}
 
 	private BlogPostingModel _updateBlogPostingModel(
-		Long id, BlogPostingForm blogPostingForm, Credentials credentials) {
+		long id, BlogPostingForm blogPostingForm, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();

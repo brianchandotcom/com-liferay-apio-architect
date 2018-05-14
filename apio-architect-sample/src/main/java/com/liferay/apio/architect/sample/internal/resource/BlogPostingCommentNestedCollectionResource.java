@@ -121,7 +121,7 @@ public class BlogPostingCommentNestedCollectionResource implements
 			blogPostingCommentCreatorForm.getText());
 	}
 
-	private void _deleteBlogPostingComment(Long id, Credentials credentials) {
+	private void _deleteBlogPostingComment(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -129,7 +129,7 @@ public class BlogPostingCommentNestedCollectionResource implements
 		BlogPostingCommentModel.remove(id);
 	}
 
-	private BlogPostingCommentModel _getBlogPostingComment(Long id) {
+	private BlogPostingCommentModel _getBlogPostingComment(long id) {
 		Optional<BlogPostingCommentModel> optional =
 			BlogPostingCommentModel.get(id);
 
@@ -151,7 +151,7 @@ public class BlogPostingCommentNestedCollectionResource implements
 	}
 
 	private BlogPostingCommentModel _updateBlogPostingComment(
-		Long id, BlogPostingCommentUpdaterForm blogPostingCommentUpdaterForm,
+		long id, BlogPostingCommentUpdaterForm blogPostingCommentUpdaterForm,
 		Credentials credentials) {
 
 		if (!hasPermission(credentials)) {

@@ -135,7 +135,7 @@ public class PersonCollectionResource
 			personForm.getFamilyName());
 	}
 
-	private void _deletePerson(Long id, Credentials credentials) {
+	private void _deletePerson(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -151,7 +151,7 @@ public class PersonCollectionResource
 		return new PageItems<>(personModels, count);
 	}
 
-	private PersonModel _getPerson(Long id) {
+	private PersonModel _getPerson(long id) {
 		Optional<PersonModel> optional = PersonModel.get(id);
 
 		return optional.orElseThrow(
@@ -159,7 +159,7 @@ public class PersonCollectionResource
 	}
 
 	private PersonModel _updatePerson(
-		Long id, PersonForm personForm, Credentials credentials) {
+		long id, PersonForm personForm, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
