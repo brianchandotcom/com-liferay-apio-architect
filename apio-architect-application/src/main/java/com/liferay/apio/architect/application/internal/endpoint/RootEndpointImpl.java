@@ -58,12 +58,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(
-	property = {
-		"osgi.jaxrs.application.select=(liferay.apio.architect.application=true)",
-		"osgi.jaxrs.resource=true"
-	}
-)
+@Component
 public class RootEndpointImpl implements RootEndpoint {
 
 	@Activate
