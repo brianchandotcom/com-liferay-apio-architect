@@ -53,7 +53,10 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true,
-	property = "liferay.apio.architect.message.body.reader=true"
+	property = {
+		"osgi.jaxrs.application.select=(liferay.apio.architect.application=true)",
+		"osgi.jaxrs.extension=true"
+	}
 )
 @Consumes(APPLICATION_JSON)
 @Provider
