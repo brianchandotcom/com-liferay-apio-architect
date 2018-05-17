@@ -199,7 +199,7 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass, dClass,
-					a -> b -> c -> d -> throwableHexaFunction.andThen(
+					(a, b, c, d) -> throwableHexaFunction.andThen(
 						t -> new SingleModel<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
@@ -243,7 +243,7 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass,
-					a -> b -> c -> throwablePentaFunction.andThen(
+					(a, b, c) -> throwablePentaFunction.andThen(
 						t -> new SingleModel<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
@@ -284,7 +284,7 @@ public class NestedCollectionRoutes<T, S> {
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
-					a -> b -> throwableTetraFunction.andThen(
+					(a, b) -> throwableTetraFunction.andThen(
 						t -> new SingleModel<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
@@ -347,7 +347,7 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, Credentials.class,
-					pagination -> credentials -> biFunction.andThen(
+					(pagination, credentials) -> biFunction.andThen(
 						items -> new Page<>(
 							_nestedName, items, pagination, path,
 							_getOperations(credentials, identifier))
@@ -385,7 +385,7 @@ public class NestedCollectionRoutes<T, S> {
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, cClass, dClass,
 					Credentials.class,
-					pagination -> a -> b -> c -> d -> credentials ->
+					(pagination, a, b, c, d, credentials) ->
 						hexaFunction.andThen(
 							items -> new Page<>(
 								_nestedName, items, pagination, path,
@@ -420,14 +420,13 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, cClass, Credentials.class,
-					pagination -> a -> b -> c -> credentials ->
-						pentaFunction.andThen(
-							items -> new Page<>(
-								_nestedName, items, pagination, path,
-								_getOperations(credentials, identifier))
-						).apply(
-							pagination, identifier, a, b, c
-						));
+					(pagination, a, b, c, credentials) -> pentaFunction.andThen(
+						items -> new Page<>(
+							_nestedName, items, pagination, path,
+							_getOperations(credentials, identifier))
+					).apply(
+						pagination, identifier, a, b, c
+					));
 
 			return this;
 		}
@@ -452,14 +451,13 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, Credentials.class,
-					pagination -> a -> b -> credentials ->
-						tetraFunction.andThen(
-							items -> new Page<>(
-								_nestedName, items, pagination, path,
-								_getOperations(credentials, identifier))
-						).apply(
-							pagination, identifier, a, b
-						));
+					(pagination, a, b, credentials) -> tetraFunction.andThen(
+						items -> new Page<>(
+							_nestedName, items, pagination, path,
+							_getOperations(credentials, identifier))
+					).apply(
+						pagination, identifier, a, b
+					));
 
 			return this;
 		}
@@ -481,7 +479,7 @@ public class NestedCollectionRoutes<T, S> {
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, Credentials.class,
-					pagination -> a -> credentials -> triFunction.andThen(
+					(pagination, a, credentials) -> triFunction.andThen(
 						items -> new Page<>(
 							_nestedName, items, pagination, path,
 							_getOperations(credentials, identifier))

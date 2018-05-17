@@ -60,7 +60,7 @@ public class RoutesBuilderUtilTest {
 		provideConsumer(
 			PROVIDE_FUNCTION, Language.class, Long.class, Integer.class,
 			Boolean.class,
-			string -> aLong -> integer -> aBoolean -> {
+			(string, aLong, integer, aBoolean) -> {
 				throw new AssertionError("This lambda should not be called");
 			});
 	}
@@ -70,7 +70,7 @@ public class RoutesBuilderUtilTest {
 		Try<Object> aTry = provide(
 			PROVIDE_FUNCTION, Language.class, Long.class, Integer.class,
 			Boolean.class, Float.class,
-			string -> aLong -> integer -> aBoolean -> list -> {
+			(string, aLong, integer, aBoolean, list) -> {
 				throw new AssertionError("This lambda should not be called");
 			});
 
@@ -82,7 +82,7 @@ public class RoutesBuilderUtilTest {
 		Try<String> result = provide(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
 			Boolean.class, Float.class,
-			string -> aLong -> integer -> aBoolean -> aFloat -> {
+			(string, aLong, integer, aBoolean, aFloat) -> {
 				assertThat(string, is("Apio"));
 				assertThat(aLong, is(42L));
 				assertThat(integer, is(2017));
@@ -102,7 +102,7 @@ public class RoutesBuilderUtilTest {
 		provideConsumer(
 			PROVIDE_FUNCTION, Language.class, Long.class, Integer.class,
 			Boolean.class,
-			string -> aLong -> integer -> aBoolean -> {
+			(string, aLong, integer, aBoolean) -> {
 				throw new AssertionError("This lambda should not be called");
 			});
 	}
@@ -114,7 +114,7 @@ public class RoutesBuilderUtilTest {
 		provideConsumer(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
 			Boolean.class,
-			string -> aLong -> integer -> aBoolean -> {
+			(string, aLong, integer, aBoolean) -> {
 				assertThat(string, is("Apio"));
 				assertThat(aLong, is(42L));
 				assertThat(integer, is(2017));
@@ -127,7 +127,7 @@ public class RoutesBuilderUtilTest {
 		Try<Object> aTry = provide(
 			PROVIDE_FUNCTION, Language.class, Long.class, Integer.class,
 			Boolean.class,
-			string -> aLong -> integer -> aBoolean -> {
+			(string, aLong, integer, aBoolean) -> {
 				throw new AssertionError("This lambda should not be called");
 			});
 
@@ -139,7 +139,7 @@ public class RoutesBuilderUtilTest {
 		Try<String> result = provide(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
 			Boolean.class,
-			string -> aLong -> integer -> aBoolean -> {
+			(string, aLong, integer, aBoolean) -> {
 				assertThat(string, is("Apio"));
 				assertThat(aLong, is(42L));
 				assertThat(integer, is(2017));
@@ -201,7 +201,7 @@ public class RoutesBuilderUtilTest {
 
 		provideConsumer(
 			PROVIDE_FUNCTION, Language.class, Long.class, Integer.class,
-			string -> aLong -> integer -> {
+			(string, aLong, integer) -> {
 				throw new AssertionError("This lambda should not be called");
 			});
 	}
@@ -212,7 +212,7 @@ public class RoutesBuilderUtilTest {
 
 		provideConsumer(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
-			string -> aLong -> integer -> {
+			(string, aLong, integer) -> {
 				assertThat(string, is("Apio"));
 				assertThat(aLong, is(42L));
 				assertThat(integer, is(2017));
@@ -223,7 +223,7 @@ public class RoutesBuilderUtilTest {
 	public void testThreeParameterProvideMethodFailsIfNoProvider() {
 		Try<Object> aTry = provide(
 			PROVIDE_FUNCTION, Language.class, Long.class, Integer.class,
-			string -> aLong -> integer -> {
+			(string, aLong, integer) -> {
 				throw new AssertionError("This lambda should not be called");
 			});
 
@@ -234,7 +234,7 @@ public class RoutesBuilderUtilTest {
 	public void testThreeParameterProvideMethodProvides() {
 		Try<String> result = provide(
 			PROVIDE_FUNCTION, String.class, Long.class, Integer.class,
-			string -> aLong -> integer -> {
+			(string, aLong, integer) -> {
 				assertThat(string, is("Apio"));
 				assertThat(aLong, is(42L));
 				assertThat(integer, is(2017));
@@ -251,7 +251,7 @@ public class RoutesBuilderUtilTest {
 
 		provideConsumer(
 			PROVIDE_FUNCTION, Language.class, Long.class,
-			string -> aLong -> {
+			(string, aLong) -> {
 				throw new AssertionError("This lambda should not be called");
 			});
 	}
@@ -262,7 +262,7 @@ public class RoutesBuilderUtilTest {
 
 		provideConsumer(
 			PROVIDE_FUNCTION, String.class, Long.class,
-			string -> aLong -> {
+			(string, aLong) -> {
 				assertThat(string, is("Apio"));
 				assertThat(aLong, is(42L));
 			});
@@ -272,7 +272,7 @@ public class RoutesBuilderUtilTest {
 	public void testTwoParameterProvideMethodFailsIfNoProvider() {
 		Try<Object> aTry = provide(
 			PROVIDE_FUNCTION, Language.class, Long.class,
-			string -> aLong -> {
+			(string, aLong) -> {
 				throw new AssertionError("This lambda should not be called");
 			});
 
@@ -283,7 +283,7 @@ public class RoutesBuilderUtilTest {
 	public void testTwoParameterProvideMethodProvides() {
 		Try<String> result = provide(
 			PROVIDE_FUNCTION, String.class, Long.class,
-			string -> aLong -> {
+			(string, aLong) -> {
 				assertThat(string, is("Apio"));
 				assertThat(aLong, is(42L));
 

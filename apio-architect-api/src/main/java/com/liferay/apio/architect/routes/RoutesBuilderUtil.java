@@ -16,8 +16,16 @@ package com.liferay.apio.architect.routes;
 
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
+import com.liferay.apio.architect.consumer.throwable.ThrowableBiConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
+import com.liferay.apio.architect.consumer.throwable.ThrowableTetraConsumer;
+import com.liferay.apio.architect.consumer.throwable.ThrowableTriConsumer;
+import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
+import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 
 import java.util.function.Function;
@@ -51,24 +59,12 @@ public class RoutesBuilderUtil {
 	public static <A, B, C, D, E, F, R> Try<R> provide(
 		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
 		Class<C> cClass, Class<D> dClass, Class<E> eClass, Class<F> fClass,
-		Function<A, Function<B, Function<C, Function<D, Function<E,
-			ThrowableFunction<F, R>>>>>> function) {
+		ThrowableHexaFunction<A, B, C, D, E, F, R> function) {
 
 		return provide(
 			provideFunction, aClass, bClass, cClass, dClass, eClass,
-			a -> b -> c -> d -> e -> function.apply(
-				a
-			).apply(
-				b
-			).apply(
-				c
-			).apply(
-				d
-			).apply(
-				e
-			).apply(
-				_provideClass(provideFunction, fClass)
-			));
+			(a, b, c, d, e) -> function.apply(
+				a, b, c, d, e, _provideClass(provideFunction, fClass)));
 	}
 
 	/**
@@ -88,22 +84,12 @@ public class RoutesBuilderUtil {
 	public static <A, B, C, D, E, R> Try<R> provide(
 		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
 		Class<C> cClass, Class<D> dClass, Class<E> eClass,
-		Function<A, Function<B, Function<C, Function<D,
-			ThrowableFunction<E, R>>>>> function) {
+		ThrowablePentaFunction<A, B, C, D, E, R> function) {
 
 		return provide(
 			provideFunction, aClass, bClass, cClass, dClass,
-			a -> b -> c -> d -> function.apply(
-				a
-			).apply(
-				b
-			).apply(
-				c
-			).apply(
-				d
-			).apply(
-				_provideClass(provideFunction, eClass)
-			));
+			(a, b, c, d) -> function.apply(
+				a, b, c, d, _provideClass(provideFunction, eClass)));
 	}
 
 	/**
@@ -122,20 +108,12 @@ public class RoutesBuilderUtil {
 	public static <A, B, C, D, R> Try<R> provide(
 		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
 		Class<C> cClass, Class<D> dClass,
-		Function<A, Function<B, Function<C, ThrowableFunction<D, R>>>>
-			function) {
+		ThrowableTetraFunction<A, B, C, D, R> function) {
 
 		return provide(
 			provideFunction, aClass, bClass, cClass,
-			a -> b -> c -> function.apply(
-				a
-			).apply(
-				b
-			).apply(
-				c
-			).apply(
-				_provideClass(provideFunction, dClass)
-			));
+			(a, b, c) -> function.apply(
+				a, b, c, _provideClass(provideFunction, dClass)));
 	}
 
 	/**
@@ -152,18 +130,12 @@ public class RoutesBuilderUtil {
 	 */
 	public static <A, B, C, R> Try<R> provide(
 		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
-		Class<C> cClass,
-		Function<A, Function<B, ThrowableFunction<C, R>>> function) {
+		Class<C> cClass, ThrowableTriFunction<A, B, C, R> function) {
 
 		return provide(
 			provideFunction, aClass, bClass,
-			a -> b -> function.apply(
-				a
-			).apply(
-				b
-			).apply(
-				_provideClass(provideFunction, cClass)
-			));
+			(a, b) -> function.apply(
+				a, b, _provideClass(provideFunction, cClass)));
 	}
 
 	/**
@@ -179,15 +151,11 @@ public class RoutesBuilderUtil {
 	 */
 	public static <A, B, R> Try<R> provide(
 		Function<Class<?>, ?> provideFunction, Class<A> aClass, Class<B> bClass,
-		Function<A, ThrowableFunction<B, R>> function) {
+		ThrowableBiFunction<A, B, R> function) {
 
 		return provide(
 			provideFunction, aClass,
-			a -> function.apply(
-				a
-			).apply(
-				_provideClass(provideFunction, bClass)
-			));
+			a -> function.apply(a, _provideClass(provideFunction, bClass)));
 	}
 
 	/**
@@ -221,21 +189,13 @@ public class RoutesBuilderUtil {
 	public static <A, B, C, D> void provideConsumer(
 			Function<Class<?>, ?> provideFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass, Class<D> dClass,
-			Function<A, Function<B, Function<C, ThrowableConsumer<D>>>>
-				function)
+			ThrowableTetraConsumer<A, B, C, D> function)
 		throws Exception {
 
 		provideConsumer(
 			provideFunction, aClass, bClass, cClass,
-			a -> b -> c -> function.apply(
-				a
-			).apply(
-				b
-			).apply(
-				c
-			).accept(
-				_provideClass(provideFunction, dClass)
-			));
+			(a, b, c) -> function.accept(
+				a, b, c, _provideClass(provideFunction, dClass)));
 	}
 
 	/**
@@ -251,18 +211,13 @@ public class RoutesBuilderUtil {
 	public static <A, B, C> void provideConsumer(
 			Function<Class<?>, ?> provideFunction, Class<A> aClass,
 			Class<B> bClass, Class<C> cClass,
-			Function<A, Function<B, ThrowableConsumer<C>>> function)
+			ThrowableTriConsumer<A, B, C> function)
 		throws Exception {
 
 		provideConsumer(
 			provideFunction, aClass, bClass,
-			a -> b -> function.apply(
-				a
-			).apply(
-				b
-			).accept(
-				_provideClass(provideFunction, cClass)
-			));
+			(a, b) -> function.accept(
+				a, b, _provideClass(provideFunction, cClass)));
 	}
 
 	/**
@@ -276,16 +231,12 @@ public class RoutesBuilderUtil {
 	 */
 	public static <A, B> void provideConsumer(
 			Function<Class<?>, ?> provideFunction, Class<A> aClass,
-			Class<B> bClass, Function<A, ThrowableConsumer<B>> function)
+			Class<B> bClass, ThrowableBiConsumer<A, B> function)
 		throws Exception {
 
 		provideConsumer(
 			provideFunction, aClass,
-			a -> function.apply(
-				a
-			).accept(
-				_provideClass(provideFunction, bClass)
-			));
+			a -> function.accept(a, _provideClass(provideFunction, bClass)));
 	}
 
 	/**

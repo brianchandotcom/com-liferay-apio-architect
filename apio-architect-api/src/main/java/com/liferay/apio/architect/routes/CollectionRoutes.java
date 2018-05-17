@@ -218,7 +218,7 @@ public class CollectionRoutes<T> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass,
-				a -> b -> c -> d -> throwablePentaFunction.andThen(
+				(a, b, c, d) -> throwablePentaFunction.andThen(
 					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a, b, c, d
@@ -259,7 +259,7 @@ public class CollectionRoutes<T> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass,
-				a -> b -> c -> throwableTetraFunction.andThen(
+				(a, b, c) -> throwableTetraFunction.andThen(
 					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a, b, c
@@ -297,7 +297,7 @@ public class CollectionRoutes<T> {
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				a -> b -> throwableTriFunction.andThen(
+				(a, b) -> throwableTriFunction.andThen(
 					t -> new SingleModel<>(t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a, b
@@ -323,7 +323,7 @@ public class CollectionRoutes<T> {
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, Credentials.class,
-				pagination -> a -> credentials -> throwableBiFunction.andThen(
+				(pagination, a, credentials) -> throwableBiFunction.andThen(
 					items -> new Page<>(
 						_name, items, pagination, _getOperations(credentials))
 				).apply(
@@ -346,7 +346,7 @@ public class CollectionRoutes<T> {
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				Credentials.class,
-				pagination -> credentials -> throwableFunction.andThen(
+				(pagination, credentials) -> throwableFunction.andThen(
 					items -> new Page<>(
 						_name, items, pagination, _getOperations(credentials))
 				).apply(
@@ -381,7 +381,7 @@ public class CollectionRoutes<T> {
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, cClass, dClass, Credentials.class,
-				pagination -> a -> b -> c -> d -> credentials ->
+				(pagination, a, b, c, d, credentials) ->
 					throwablePentaFunction.andThen(
 						items -> new Page<>(
 							_name, items, pagination,
@@ -415,7 +415,7 @@ public class CollectionRoutes<T> {
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, cClass, Credentials.class,
-				pagination -> a -> b -> c -> credentials ->
+				(pagination, a, b, c, credentials) ->
 					throwableTetraFunction.andThen(
 						items -> new Page<>(
 							_name, items, pagination,
@@ -446,14 +446,12 @@ public class CollectionRoutes<T> {
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, Credentials.class,
-				pagination -> a -> b -> credentials ->
-					throwableTriFunction.andThen(
-						items -> new Page<>(
-							_name, items, pagination,
-							_getOperations(credentials))
-					).apply(
-						pagination, a, b
-					));
+				(pagination, a, b, credentials) -> throwableTriFunction.andThen(
+					items -> new Page<>(
+						_name, items, pagination, _getOperations(credentials))
+				).apply(
+					pagination, a, b
+				));
 
 			return this;
 		}
