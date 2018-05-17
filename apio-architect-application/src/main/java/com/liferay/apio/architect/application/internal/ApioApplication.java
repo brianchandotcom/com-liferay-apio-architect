@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Component;
 	immediate = true,
 	property = {
 		"liferay.apio.architect.application=true",
-		"osgi.jaxrs.application.base=/api-whiteboard"
+		"osgi.jaxrs.application.base=/api"
 	},
 	service = Application.class
 )
