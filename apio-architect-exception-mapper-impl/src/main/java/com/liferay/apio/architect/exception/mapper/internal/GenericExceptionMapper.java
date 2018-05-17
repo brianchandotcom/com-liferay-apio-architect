@@ -12,47 +12,28 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.core.Response;
-
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code BadRequestException} to its {@link APIError}
- * representation.
+ * Converts any exception to its {@link APIError} representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class BadRequestExceptionMapper
-	extends WebApplicationExceptionConverter
-	implements ExceptionMapper<BadRequestException> {
+public class GenericExceptionMapper implements ExceptionMapper<Exception> {
 
 	@Override
-	public APIError map(BadRequestException exception) {
-		return super.convert(exception);
-	}
-
-	@Override
-	protected Response.StatusType getStatusType() {
-		return BAD_REQUEST;
-	}
-
-	@Override
-	protected String getTitle() {
-		return "Malformed request message";
-	}
-
-	@Override
-	protected String getType() {
-		return "bad-request";
+	public APIError map(Exception exception) {
+		return new APIError(
+			exception, "General server error", "server-error",
+			INTERNAL_SERVER_ERROR.getStatusCode());
 	}
 
 }

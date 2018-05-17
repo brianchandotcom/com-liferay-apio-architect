@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
-import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import javax.ws.rs.NotAcceptableException;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code NotAcceptableException} to its {@link APIError}
+ * Converts a {@code NotAuthorizedException} to its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class NotAcceptableExceptionMapper
-	extends WebApplicationExceptionConverter
-	implements ExceptionMapper<NotAcceptableException> {
+public class NotAuthorizedExceptionMapper
+	extends WebApplicationExceptionMapper
+	implements ExceptionMapper<NotAuthorizedException> {
 
 	@Override
-	public APIError map(NotAcceptableException exception) {
+	public APIError map(NotAuthorizedException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return NOT_ACCEPTABLE;
+		return UNAUTHORIZED;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Client media type requested not supported";
+		return "Authentication failure";
 	}
 
 	@Override
 	protected String getType() {
-		return "not-acceptable";
+		return "not-authorized";
 	}
 
 }

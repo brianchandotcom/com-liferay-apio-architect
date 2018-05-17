@@ -12,47 +12,46 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
-import static javax.ws.rs.core.Response.Status.METHOD_NOT_ALLOWED;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import javax.ws.rs.NotAllowedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code NotAllowedException} to its {@link APIError}
- * representation.
+ * Converts a {@code NotFoundException} to its {@link APIError} representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class NotAllowedExceptionMapper
-	extends WebApplicationExceptionConverter
-	implements ExceptionMapper<NotAllowedException> {
+public class NotFoundExceptionMapper
+	extends WebApplicationExceptionMapper
+	implements ExceptionMapper<NotFoundException> {
 
 	@Override
-	public APIError map(NotAllowedException exception) {
+	public APIError map(NotFoundException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return METHOD_NOT_ALLOWED;
+		return NOT_FOUND;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "HTTP method not supported";
+		return "Resource not found";
 	}
 
 	@Override
 	protected String getType() {
-		return "not-allowed";
+		return "not-found";
 	}
 
 }

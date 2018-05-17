@@ -12,34 +12,47 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
+
+import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code ClientErrorException} to its {@link APIError}
+ * Converts a {@code NotAcceptableException} to its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class ClientErrorExceptionMapper
-	implements ExceptionMapper<ClientErrorException> {
+public class NotAcceptableExceptionMapper
+	extends WebApplicationExceptionMapper
+	implements ExceptionMapper<NotAcceptableException> {
 
 	@Override
-	public APIError map(ClientErrorException exception) {
-		Response response = exception.getResponse();
+	public APIError map(NotAcceptableException exception) {
+		return super.convert(exception);
+	}
 
-		int status = response.getStatus();
+	@Override
+	protected Response.StatusType getStatusType() {
+		return NOT_ACCEPTABLE;
+	}
 
-		return new APIError(
-			exception, "General server error", "client-error", status);
+	@Override
+	protected String getTitle() {
+		return "Client media type requested not supported";
+	}
+
+	@Override
+	protected String getType() {
+		return "not-acceptable";
 	}
 
 }

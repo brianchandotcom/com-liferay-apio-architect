@@ -12,47 +12,34 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
-
-import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
+package com.liferay.apio.architect.exception.mapper.internal;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import javax.ws.rs.ServiceUnavailableException;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code ServiceUnavailableException} to its {@link APIError}
+ * Converts a {@code ClientErrorException} to its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class ServiceUnavailableExceptionMapper
-	extends WebApplicationExceptionConverter
-	implements ExceptionMapper<ServiceUnavailableException> {
+public class ClientErrorExceptionMapper
+	implements ExceptionMapper<ClientErrorException> {
 
 	@Override
-	public APIError map(ServiceUnavailableException exception) {
-		return super.convert(exception);
-	}
+	public APIError map(ClientErrorException exception) {
+		Response response = exception.getResponse();
 
-	@Override
-	protected Response.StatusType getStatusType() {
-		return SERVICE_UNAVAILABLE;
-	}
+		int status = response.getStatus();
 
-	@Override
-	protected String getTitle() {
-		return "Server is temporarily unavailable or busy";
-	}
-
-	@Override
-	protected String getType() {
-		return "unavailable";
+		return new APIError(
+			exception, "General server error", "client-error", status);
 	}
 
 }

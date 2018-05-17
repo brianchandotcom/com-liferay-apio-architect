@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.ServiceUnavailableException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code InternalServerErrorException} to its {@link APIError}
+ * Converts a {@code ServiceUnavailableException} to its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class InternalServerErrorExceptionMapper
-	extends WebApplicationExceptionConverter
-	implements ExceptionMapper<InternalServerErrorException> {
+public class ServiceUnavailableExceptionMapper
+	extends WebApplicationExceptionMapper
+	implements ExceptionMapper<ServiceUnavailableException> {
 
 	@Override
-	public APIError map(InternalServerErrorException exception) {
+	public APIError map(ServiceUnavailableException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return INTERNAL_SERVER_ERROR;
+		return SERVICE_UNAVAILABLE;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "General server error";
+		return "Server is temporarily unavailable or busy";
 	}
 
 	@Override
 	protected String getType() {
-		return "server-error";
+		return "unavailable";
 	}
 
 }

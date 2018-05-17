@@ -12,46 +12,47 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.UNSUPPORTED_MEDIA_TYPE;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import javax.ws.rs.NotFoundException;
+import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code NotFoundException} to its {@link APIError} representation.
+ * Converts a {@code NotSupportedException} to its {@link APIError}
+ * representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class NotFoundExceptionMapper
-	extends WebApplicationExceptionConverter
-	implements ExceptionMapper<NotFoundException> {
+public class NotSupportedExceptionMapper
+	extends WebApplicationExceptionMapper
+	implements ExceptionMapper<NotSupportedException> {
 
 	@Override
-	public APIError map(NotFoundException exception) {
+	public APIError map(NotSupportedException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return NOT_FOUND;
+		return UNSUPPORTED_MEDIA_TYPE;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Resource not found";
+		return "Client posted media type not supported";
 	}
 
 	@Override
 	protected String getType() {
-		return "not-found";
+		return "not-supported";
 	}
 
 }

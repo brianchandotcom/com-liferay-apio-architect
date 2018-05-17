@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 
@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component
 public class ForbiddenExceptionMapper
-	extends WebApplicationExceptionConverter
+	extends WebApplicationExceptionMapper
 	implements ExceptionMapper<ForbiddenException> {
 
 	@Override

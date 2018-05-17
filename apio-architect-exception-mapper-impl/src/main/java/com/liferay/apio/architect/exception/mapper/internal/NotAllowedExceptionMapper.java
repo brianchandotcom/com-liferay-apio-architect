@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
-import static javax.ws.rs.core.Response.Status.UNSUPPORTED_MEDIA_TYPE;
+import static javax.ws.rs.core.Response.Status.METHOD_NOT_ALLOWED;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import javax.ws.rs.NotSupportedException;
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code NotSupportedException} to its {@link APIError}
+ * Converts a {@code NotAllowedException} to its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class NotSupportedExceptionMapper
-	extends WebApplicationExceptionConverter
-	implements ExceptionMapper<NotSupportedException> {
+public class NotAllowedExceptionMapper
+	extends WebApplicationExceptionMapper
+	implements ExceptionMapper<NotAllowedException> {
 
 	@Override
-	public APIError map(NotSupportedException exception) {
+	public APIError map(NotAllowedException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return UNSUPPORTED_MEDIA_TYPE;
+		return METHOD_NOT_ALLOWED;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Client posted media type not supported";
+		return "HTTP method not supported";
 	}
 
 	@Override
 	protected String getType() {
-		return "not-supported";
+		return "not-allowed";
 	}
 
 }

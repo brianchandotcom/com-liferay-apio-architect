@@ -12,47 +12,47 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts a {@code NotAuthorizedException} to its {@link APIError}
+ * Converts a {@code BadRequestException} to its {@link APIError}
  * representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class NotAuthorizedExceptionMapper
-	extends WebApplicationExceptionConverter
-	implements ExceptionMapper<NotAuthorizedException> {
+public class BadRequestExceptionMapper
+	extends WebApplicationExceptionMapper
+	implements ExceptionMapper<BadRequestException> {
 
 	@Override
-	public APIError map(NotAuthorizedException exception) {
+	public APIError map(BadRequestException exception) {
 		return super.convert(exception);
 	}
 
 	@Override
 	protected Response.StatusType getStatusType() {
-		return UNAUTHORIZED;
+		return BAD_REQUEST;
 	}
 
 	@Override
 	protected String getTitle() {
-		return "Authentication failure";
+		return "Malformed request message";
 	}
 
 	@Override
 	protected String getType() {
-		return "not-authorized";
+		return "bad-request";
 	}
 
 }

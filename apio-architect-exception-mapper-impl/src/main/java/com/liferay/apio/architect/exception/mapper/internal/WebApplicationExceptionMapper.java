@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
 import com.liferay.apio.architect.error.APIError;
 
@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response;
  *
  * @author Alejandro Hernández
  */
-public abstract class WebApplicationExceptionConverter {
+public abstract class WebApplicationExceptionMapper {
 
 	/**
 	 * Converts a {@code WebApplicationException} to its {@code APIError}

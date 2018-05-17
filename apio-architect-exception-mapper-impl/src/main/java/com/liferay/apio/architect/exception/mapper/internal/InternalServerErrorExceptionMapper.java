@@ -12,28 +12,47 @@
  * details.
  */
 
-package com.liferay.apio.architect.error.internal.converter;
+package com.liferay.apio.architect.exception.mapper.internal;
 
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.Response;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Converts any exception to its {@link APIError} representation.
+ * Converts a {@code InternalServerErrorException} to its {@link APIError}
+ * representation.
  *
  * @author Alejandro Hernández
  */
 @Component
-public class GenericExceptionMapper implements ExceptionMapper<Exception> {
+public class InternalServerErrorExceptionMapper
+	extends WebApplicationExceptionMapper
+	implements ExceptionMapper<InternalServerErrorException> {
 
 	@Override
-	public APIError map(Exception exception) {
-		return new APIError(
-			exception, "General server error", "server-error",
-			INTERNAL_SERVER_ERROR.getStatusCode());
+	public APIError map(InternalServerErrorException exception) {
+		return super.convert(exception);
+	}
+
+	@Override
+	protected Response.StatusType getStatusType() {
+		return INTERNAL_SERVER_ERROR;
+	}
+
+	@Override
+	protected String getTitle() {
+		return "General server error";
+	}
+
+	@Override
+	protected String getType() {
+		return "server-error";
 	}
 
 }
