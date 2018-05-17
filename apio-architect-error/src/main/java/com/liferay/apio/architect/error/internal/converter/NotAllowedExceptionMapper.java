@@ -16,8 +16,8 @@ package com.liferay.apio.architect.error.internal.converter;
 
 import static javax.ws.rs.core.Response.Status.METHOD_NOT_ALLOWED;
 
-import com.liferay.apio.architect.converter.ExceptionMapper;
 import com.liferay.apio.architect.error.APIError;
+import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.core.Response;

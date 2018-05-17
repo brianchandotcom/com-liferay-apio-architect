@@ -16,8 +16,8 @@ package com.liferay.apio.architect.error.internal.converter;
 
 import static javax.ws.rs.core.Response.Status.UNSUPPORTED_MEDIA_TYPE;
 
-import com.liferay.apio.architect.converter.ExceptionMapper;
 import com.liferay.apio.architect.error.APIError;
+import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
 import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.Response;

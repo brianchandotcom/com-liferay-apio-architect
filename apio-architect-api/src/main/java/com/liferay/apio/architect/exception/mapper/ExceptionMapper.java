@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.converter;
+package com.liferay.apio.architect.exception.mapper;
 
 import aQute.bnd.annotation.ConsumerType;
 
