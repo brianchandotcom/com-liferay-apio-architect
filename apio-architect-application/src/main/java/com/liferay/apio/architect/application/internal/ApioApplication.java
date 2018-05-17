@@ -41,7 +41,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	property = {
 		"liferay.apio.architect.application=true",
-		"osgi.jaxrs.application.base=/api"
+		"osgi.jaxrs.application.base=/api", "osgi.jaxrs.name=apio-application"
 	},
 	service = Application.class
 )
