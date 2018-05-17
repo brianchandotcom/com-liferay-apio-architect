@@ -49,7 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component
 public class CollectionRouterManagerImpl
 	extends ClassNameBaseManager<CollectionRouter>
 	implements CollectionRouterManager {

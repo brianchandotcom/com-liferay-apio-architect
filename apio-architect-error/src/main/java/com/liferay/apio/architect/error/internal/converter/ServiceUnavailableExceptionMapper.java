@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component
 public class ServiceUnavailableExceptionMapper
 	extends WebApplicationExceptionConverter
 	implements ExceptionMapper<ServiceUnavailableException> {

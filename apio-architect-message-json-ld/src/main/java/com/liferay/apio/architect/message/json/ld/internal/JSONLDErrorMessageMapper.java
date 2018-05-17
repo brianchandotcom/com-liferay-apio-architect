@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component
 public class JSONLDErrorMessageMapper implements ErrorMessageMapper {
 
 	@Override

@@ -50,7 +50,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component
 public class NestedCollectionRouterManagerImpl
 	extends ClassNameBaseManager<NestedCollectionRouter>
 	implements NestedCollectionRouterManager {

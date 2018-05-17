@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component(immediate = true)
+@Component
 public class EmbeddedProvider implements Provider<Embedded> {
 
 	public Embedded createContext(HttpServletRequest httpServletRequest) {

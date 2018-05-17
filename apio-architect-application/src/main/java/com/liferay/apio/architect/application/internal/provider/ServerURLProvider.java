@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Javier Gamarra
  */
-@Component(immediate = true)
+@Component
 public class ServerURLProvider implements Provider<ServerURL> {
 
 	@Override

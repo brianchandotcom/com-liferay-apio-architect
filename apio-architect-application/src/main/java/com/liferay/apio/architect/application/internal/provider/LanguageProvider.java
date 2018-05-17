@@ -41,7 +41,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component
 public class LanguageProvider implements Provider<Language> {
 
 	@Override

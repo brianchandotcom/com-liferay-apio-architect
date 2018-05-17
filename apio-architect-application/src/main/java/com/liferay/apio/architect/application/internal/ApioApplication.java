@@ -33,7 +33,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Jorge Ferrer
  */
 @Component(
-	immediate = true,
 	property = {
 		"liferay.apio.architect.application=true",
 		"osgi.jaxrs.application.base=/api"

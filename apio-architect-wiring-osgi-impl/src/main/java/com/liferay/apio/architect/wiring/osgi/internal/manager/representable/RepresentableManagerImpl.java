@@ -54,7 +54,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component
 public class RepresentableManagerImpl
 	extends BaseManager<Representable, Class<Identifier>>
 	implements NameManager, IdentifierClassManager, RepresentableManager {

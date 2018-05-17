@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component
 public class ExceptionMapperManagerImpl
 	extends ClassNameBaseManager<ExceptionMapper>
 	implements ExceptionMapperManager {

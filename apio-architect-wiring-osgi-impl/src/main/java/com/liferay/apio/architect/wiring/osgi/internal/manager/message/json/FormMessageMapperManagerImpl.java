@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component
 public class FormMessageMapperManagerImpl
 	extends MessageMapperBaseManager<FormMessageMapper>
 	implements FormMessageMapperManager {
