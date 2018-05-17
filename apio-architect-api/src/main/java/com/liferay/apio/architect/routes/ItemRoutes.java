@@ -125,8 +125,8 @@ public class ItemRoutes<T, S> {
 	 * com.liferay.apio.architect.router.ItemRouter}.
 	 *
 	 * @param <T> the model's type
-	 * @param <S> the model identifier's type. It must be a subclass of {@code
-	 *        Identifier}.
+	 * @param <S> the type of the model's identifier (e.g., {@code Long}, {@code
+	 *        String}, etc.)
 	 */
 	@SuppressWarnings("unused")
 	public static class Builder<T, S> {
