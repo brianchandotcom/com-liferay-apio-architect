@@ -110,7 +110,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", "b", _name), _pathToIdentifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_batchCreateItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,

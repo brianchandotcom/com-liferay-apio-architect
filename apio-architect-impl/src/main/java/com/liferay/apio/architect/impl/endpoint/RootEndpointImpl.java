@@ -14,7 +14,9 @@
 
 package com.liferay.apio.architect.impl.endpoint;
 
+import static com.liferay.apio.architect.impl.endpoint.ExceptionSupplierUtil.notAllowed;
 import static com.liferay.apio.architect.impl.endpoint.ExceptionSupplierUtil.notFound;
+import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
@@ -61,6 +63,20 @@ public class RootEndpointImpl implements RootEndpoint {
 			() -> _collectionRouterManager.getCollectionRoutes(),
 			() -> _itemRouterManager.getItemRoutes(),
 			() -> _nestedCollectionRouterManager.getNestedCollectionRoutes());
+	}
+
+	@Override
+	public BatchEndpoint batchEndpoint(String name) {
+		return body -> Try.fromFallible(
+			() -> _getCollectionRoutesOrFail(name)
+		).mapOptional(
+			CollectionRoutes::getBatchCreateItemFunctionOptional,
+			notAllowed(POST, name)
+		).map(
+			requestFunction -> requestFunction.apply(_httpServletRequest)
+		).flatMap(
+			bodyFunction -> bodyFunction.apply(body)
+		);
 	}
 
 	@Override
