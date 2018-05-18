@@ -37,7 +37,8 @@ import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type
- * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code String}, etc.)
+ * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code
+ *         String}, etc.)
  * @param  <U> the type of the resource's identifier. It must be a subclass of
  *         {@code Identifier}.
  * @see    CollectionRoutes.Builder
