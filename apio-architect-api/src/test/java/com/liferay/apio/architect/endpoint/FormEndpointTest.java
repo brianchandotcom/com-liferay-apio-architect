@@ -174,7 +174,7 @@ public class FormEndpointTest {
 				}));
 	}
 
-	private static <T, S> NestedCollectionRoutes<T, S>
+	private static <T, S, U> NestedCollectionRoutes<T, S, U>
 		_emptyNestedCollectionRoutes() {
 
 		return new NestedCollectionRoutes<>(
@@ -196,10 +196,10 @@ public class FormEndpointTest {
 		).build();
 	}
 
-	private static <T, S> NestedCollectionRoutes<T, S>
+	private static <T, S, U> NestedCollectionRoutes<T, S, U>
 		_nestedCollectionRoutes() {
 
-		NestedCollectionRoutes.Builder<T, S> builder =
+		NestedCollectionRoutes.Builder<T, S, U> builder =
 			new NestedCollectionRoutes.Builder<>(
 				"name", "nestedName", REQUEST_PROVIDE_FUNCTION,
 				__ -> {

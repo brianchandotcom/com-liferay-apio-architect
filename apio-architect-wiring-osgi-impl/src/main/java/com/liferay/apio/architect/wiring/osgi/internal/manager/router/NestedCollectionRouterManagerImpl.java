@@ -60,7 +60,7 @@ public class NestedCollectionRouterManagerImpl
 	}
 
 	@Override
-	public <T, S> Optional<NestedCollectionRoutes<T, S>>
+	public <T, S, U> Optional<NestedCollectionRoutes<T, S, U>>
 		getNestedCollectionRoutesOptional(String name, String nestedName) {
 
 		return INSTANCE.getNestedCollectionRoutesOptional(
@@ -132,18 +132,19 @@ public class NestedCollectionRouterManagerImpl
 
 				String nestedName = nestedNameOptional.get();
 
-				NestedCollectionRouter<Object, ?, Object, ?>
+				NestedCollectionRouter<Object, Object, ?, Object, ?>
 					nestedCollectionRouter = unsafeCast(
 						serviceTrackerMap.getService(key));
 
 				Set<String> neededProviders = new TreeSet<>();
 
-				Builder<Object, Object> builder = new Builder<>(
+				Builder<Object, Object, Object> builder = new Builder<>(
 					name, nestedName, curry(_providerManager::provideMandatory),
 					neededProviders::add);
 
-				NestedCollectionRoutes<Object, Object> nestedCollectionRoutes =
-					nestedCollectionRouter.collectionRoutes(builder);
+				NestedCollectionRoutes<Object, Object, Object>
+					nestedCollectionRoutes =
+						nestedCollectionRouter.collectionRoutes(builder);
 
 				List<String> missingProviders =
 					_providerManager.getMissingProviders(neededProviders);

@@ -284,7 +284,7 @@ public class ManagerCache {
 	 *         the data
 	 * @return the nested collection routes
 	 */
-	public <S, T> Optional<NestedCollectionRoutes<T, S>>
+	public <T, S, U> Optional<NestedCollectionRoutes<T, S, U>>
 		getNestedCollectionRoutesOptional(
 			String name, String nestedName,
 			EmptyFunction computeEmptyFunction) {
@@ -344,7 +344,7 @@ public class ManagerCache {
 	 *         the data
 	 * @return the representor, if present; {@code Optional#empty()} otherwise
 	 */
-	public <U, T> Optional<Representor<T>> getRepresentorOptional(
+	public <T> Optional<Representor<T>> getRepresentorOptional(
 		String name, EmptyFunction computeEmptyFunction) {
 
 		if (_representors == null) {

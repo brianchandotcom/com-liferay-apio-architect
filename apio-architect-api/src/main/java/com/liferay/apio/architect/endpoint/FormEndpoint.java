@@ -43,7 +43,7 @@ public class FormEndpoint {
 		Function<String, Optional<ItemRoutes<Object, Object>>>
 			itemRoutesFunction,
 		BiFunction<String, String, Optional
-			<NestedCollectionRoutes<Object, Object>>>
+			<NestedCollectionRoutes<Object, Object, Object>>>
 				nestedCollectionRoutesFunction) {
 
 		_collectionRoutesFunction = collectionRoutesFunction;
@@ -117,7 +117,7 @@ public class FormEndpoint {
 	private final Function<String, Optional<ItemRoutes<Object, Object>>>
 		_itemRoutesFunction;
 	private final BiFunction<String, String,
-		Optional<NestedCollectionRoutes<Object, Object>>>
+		Optional<NestedCollectionRoutes<Object, Object, Object>>>
 			_nestedCollectionRoutesFunction;
 
 }
