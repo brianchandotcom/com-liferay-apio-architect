@@ -59,7 +59,12 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alejandro Hernández
  */
-@Component(property = "liferay.apio.architect.message.body.writer=true")
+@Component(
+	property = {
+		"osgi.jaxrs.application.select=(liferay.apio.architect.application=true)",
+		"osgi.jaxrs.extension=true"
+	}
+)
 @Provider
 public class DocumentationMessageBodyWriter
 	implements MessageBodyWriter<Documentation> {

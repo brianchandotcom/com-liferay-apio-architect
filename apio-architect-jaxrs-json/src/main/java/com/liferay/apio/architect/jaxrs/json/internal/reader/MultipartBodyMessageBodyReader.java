@@ -67,7 +67,12 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component(property = "liferay.apio.architect.message.body.reader=true")
+@Component(
+	property = {
+		"osgi.jaxrs.application.select=(liferay.apio.architect.application=true)",
+		"osgi.jaxrs.extension=true"
+	}
+)
 @Consumes(MULTIPART_FORM_DATA)
 @Provider
 public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {

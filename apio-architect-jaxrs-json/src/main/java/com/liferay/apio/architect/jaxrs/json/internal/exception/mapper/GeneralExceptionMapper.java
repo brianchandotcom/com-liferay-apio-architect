@@ -30,7 +30,12 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component(property = "liferay.apio.architect.exception.mapper=true")
+@Component(
+	property = {
+		"osgi.jaxrs.application.select=(liferay.apio.architect.application=true)",
+		"osgi.jaxrs.extension=true"
+	}
+)
 public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
 
 	@Override
