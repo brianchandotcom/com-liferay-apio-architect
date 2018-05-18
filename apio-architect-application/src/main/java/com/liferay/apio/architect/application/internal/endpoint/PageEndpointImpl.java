@@ -56,7 +56,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		String name, HttpServletRequest httpServletRequest,
 		Function<String, Optional<Class<Identifier>>> identifierClassFunction,
 		Function<String, Try<SingleModel<T>>> singleModelFunction,
-		Supplier<Optional<CollectionRoutes<T>>> collectionRoutesSupplier,
+		Supplier<Optional<CollectionRoutes<T, S>>> collectionRoutesSupplier,
 		Supplier<Optional<Representor<T>>> representorSupplier,
 		Supplier<Optional<ItemRoutes<T, S>>> itemRoutesSupplier,
 		Function<String, Optional<NestedCollectionRoutes<T, Object>>>
@@ -245,7 +245,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		);
 	}
 
-	private final Supplier<Optional<CollectionRoutes<T>>>
+	private final Supplier<Optional<CollectionRoutes<T, S>>>
 		_collectionRoutesSupplier;
 	private final HttpServletRequest _httpServletRequest;
 	private final Function<String, Optional<Class<Identifier>>>

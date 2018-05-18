@@ -97,7 +97,7 @@ public class ManagerCache {
 	 *         the data
 	 * @return the collection routes
 	 */
-	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
+	public <T, S> Optional<CollectionRoutes<T, S>> getCollectionRoutesOptional(
 		String name, EmptyFunction computeEmptyFunction) {
 
 		if (_collectionRoutes == null) {

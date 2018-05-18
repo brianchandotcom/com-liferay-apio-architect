@@ -64,7 +64,7 @@ public class CollectionRouterManagerImpl
 	}
 
 	@Override
-	public <T> Optional<CollectionRoutes<T>> getCollectionRoutesOptional(
+	public <T, S> Optional<CollectionRoutes<T, S>> getCollectionRoutesOptional(
 		String name) {
 
 		return INSTANCE.getCollectionRoutesOptional(
@@ -109,16 +109,16 @@ public class CollectionRouterManagerImpl
 
 				String name = nameOptional.get();
 
-				CollectionRouter<Object, ?> collectionRouter = unsafeCast(
-					serviceTrackerMap.getService(className));
+				CollectionRouter<Object, Object, ?> collectionRouter =
+					unsafeCast(serviceTrackerMap.getService(className));
 
 				Set<String> neededProviders = new TreeSet<>();
 
-				Builder<Object> builder = new Builder<>(
+				Builder<Object, Object> builder = new Builder<>(
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add);
 
-				CollectionRoutes<Object> collectionRoutes =
+				CollectionRoutes<Object, Object> collectionRoutes =
 					collectionRouter.collectionRoutes(builder);
 
 				List<String> missingProviders =
