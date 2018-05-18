@@ -74,7 +74,6 @@ public class ManagerCache {
 		_nestedCollectionRoutes = null;
 		_pageMessageMappers = null;
 		_representors = null;
-		_reusableNestedCollectionRoutes = null;
 		_rootResourceNames = null;
 		_singleModelMessageMappers = null;
 	}
@@ -362,32 +361,6 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the nested collection routes for the reusable nested collection
-	 * resource's name.
-	 *
-	 * @param  name the reusable nested collection resource's name
-	 * @param  computeEmptyFunction the function that can be called to compute
-	 *         the data
-	 * @return the nested collection routes
-	 */
-	public <S, T> Optional<NestedCollectionRoutes<T, S>>
-		getReusableNestedCollectionRoutesOptional(
-			String name, EmptyFunction computeEmptyFunction) {
-
-		if (_reusableNestedCollectionRoutes == null) {
-			computeEmptyFunction.invoke();
-		}
-
-		return Optional.ofNullable(
-			_reusableNestedCollectionRoutes
-		).map(
-			map -> map.get(name)
-		).map(
-			Unsafe::unsafeCast
-		);
-	}
-
-	/**
 	 * Returns a list containing the names of the root resources with routes.
 	 *
 	 * @param  computeEmptyFunction the function that can be called to compute
@@ -588,24 +561,6 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds reusable nested collection routes.
-	 *
-	 * @param key the key
-	 * @param reusableNestedCollectionRoutes the reusable nested collection
-	 *        routes
-	 */
-	public void putReusableNestedCollectionRoutes(
-		String key, NestedCollectionRoutes reusableNestedCollectionRoutes) {
-
-		if (_reusableNestedCollectionRoutes == null) {
-			_reusableNestedCollectionRoutes = new HashMap<>();
-		}
-
-		_reusableNestedCollectionRoutes.put(
-			key, reusableNestedCollectionRoutes);
-	}
-
-	/**
 	 * Adds a root resource name.
 	 *
 	 * @param rootResourceName the root resource name
@@ -697,7 +652,6 @@ public class ManagerCache {
 	private Map<String, NestedCollectionRoutes> _nestedCollectionRoutes;
 	private Map<MediaType, PageMessageMapper> _pageMessageMappers;
 	private Map<String, Representor> _representors;
-	private Map<String, NestedCollectionRoutes> _reusableNestedCollectionRoutes;
 	private List<String> _rootResourceNames;
 	private Map<MediaType, SingleModelMessageMapper> _singleModelMessageMappers;
 
