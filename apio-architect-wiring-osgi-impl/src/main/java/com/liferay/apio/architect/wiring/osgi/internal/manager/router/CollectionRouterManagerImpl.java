@@ -55,7 +55,7 @@ public class CollectionRouterManagerImpl
 	implements CollectionRouterManager {
 
 	public CollectionRouterManagerImpl() {
-		super(CollectionRouter.class, 1);
+		super(CollectionRouter.class, 2);
 	}
 
 	@Override

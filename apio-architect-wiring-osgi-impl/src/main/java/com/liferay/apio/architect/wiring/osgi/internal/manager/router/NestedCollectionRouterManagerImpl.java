@@ -56,7 +56,7 @@ public class NestedCollectionRouterManagerImpl
 	implements NestedCollectionRouterManager {
 
 	public NestedCollectionRouterManagerImpl() {
-		super(NestedCollectionRouter.class, 1);
+		super(NestedCollectionRouter.class, 2);
 	}
 
 	@Override
@@ -77,12 +77,12 @@ public class NestedCollectionRouterManagerImpl
 		Class<?> identifierClass = getGenericClassFromPropertyOrElse(
 			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT,
 			() -> getTypeParamOrFail(
-				nestedCollectionRouter, NestedCollectionRouter.class, 1));
+				nestedCollectionRouter, NestedCollectionRouter.class, 2));
 
 		Class<?> parentIdentifierClass = getGenericClassFromPropertyOrElse(
 			serviceReference, KEY_PARENT_IDENTIFIER_CLASS,
 			() -> getTypeParamOrFail(
-				nestedCollectionRouter, NestedCollectionRouter.class, 3));
+				nestedCollectionRouter, NestedCollectionRouter.class, 4));
 
 		emitter.emit(
 			parentIdentifierClass.getName() + "-" + identifierClass.getName());
