@@ -22,10 +22,6 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.Mana
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
-
-import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.router.NestedCollectionRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
@@ -106,11 +102,9 @@ public class NestedCollectionRouterManagerImpl
 					parentClassName);
 
 				if (!nameOptional.isPresent()) {
-					if (_apioLogger != null) {
-						_apioLogger.warning(
-							"Unable to find a Representable for parent class " +
-								"name " + parentClassName);
-					}
+					warning(
+						"Unable to find a Representable for parent class " +
+							"name " + parentClassName);
 
 					return;
 				}
@@ -121,11 +115,9 @@ public class NestedCollectionRouterManagerImpl
 					_nameManager.getNameOptional(nestedClassName);
 
 				if (!nestedNameOptional.isPresent()) {
-					if (_apioLogger != null) {
-						_apioLogger.warning(
-							"Unable to find a Representable for nested class " +
-								"name " + nestedClassName);
-					}
+					warning(
+						"Unable to find a Representable for nested class " +
+							"name " + nestedClassName);
 
 					return;
 				}
@@ -150,11 +142,8 @@ public class NestedCollectionRouterManagerImpl
 					_providerManager.getMissingProviders(neededProviders);
 
 				if (!missingProviders.isEmpty()) {
-					if (_apioLogger != null) {
-						_apioLogger.warning(
-							"Missing providers for classes: " +
-								missingProviders);
-					}
+					warning(
+						"Missing providers for classes: " + missingProviders);
 
 					return;
 				}
@@ -163,11 +152,9 @@ public class NestedCollectionRouterManagerImpl
 					_itemRouterManager.getItemRoutesOptional(nestedName);
 
 				if (!nestedItemRoutes.isPresent()) {
-					if (_apioLogger != null) {
-						_apioLogger.warning(
-							"Missing item router for resource with name " +
-								nestedName);
-					}
+					warning(
+						"Missing item router for resource with name " +
+							nestedName);
 
 					return;
 				}
@@ -176,11 +163,8 @@ public class NestedCollectionRouterManagerImpl
 					_itemRouterManager.getItemRoutesOptional(name);
 
 				if (!parentItemRoutes.isPresent()) {
-					if (_apioLogger != null) {
-						_apioLogger.warning(
-							"Missing item router for resource with name " +
-								name);
-					}
+					warning(
+						"Missing item router for resource with name " + name);
 
 					return;
 				}
@@ -189,9 +173,6 @@ public class NestedCollectionRouterManagerImpl
 					name + "-" + nestedName, nestedCollectionRoutes);
 			});
 	}
-
-	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
-	private ApioLogger _apioLogger;
 
 	@Reference
 	private ItemRouterManager _itemRouterManager;

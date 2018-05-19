@@ -20,11 +20,8 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.Mana
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
@@ -49,7 +46,6 @@ import java.util.stream.Stream;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Hernández
@@ -132,11 +128,9 @@ public class RepresentableManagerImpl
 				).findFirst();
 
 				if (classNameOptional.isPresent()) {
-					if (_apioLogger != null) {
-						_apioLogger.warning(
-							_getDuplicateErrorMessage(
-								clazz, name, classNameOptional.get()));
-					}
+					String className = classNameOptional.get();
+
+					warning(_getDuplicateErrorMessage(clazz, name, className));
 
 					return;
 				}
@@ -194,8 +188,5 @@ public class RepresentableManagerImpl
 
 		return representable.representor(builder);
 	}
-
-	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
-	private ApioLogger _apioLogger;
 
 }
