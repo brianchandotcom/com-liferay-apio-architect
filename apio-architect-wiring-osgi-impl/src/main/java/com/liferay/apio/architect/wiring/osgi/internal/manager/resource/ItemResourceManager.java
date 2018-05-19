@@ -16,8 +16,13 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.resource;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.createServiceTracker;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamTry;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+
+import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.resource.ItemResource;
 import com.liferay.apio.architect.router.ItemRouter;
@@ -27,6 +32,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -46,10 +52,14 @@ public class ItemResourceManager {
 		_serviceTracker = createServiceTracker(
 			bundleContext, ItemResource.class, classes,
 			(properties, service) -> {
-				Class<?> identifierClass = getTypeParamOrFail(
+				Try<Class<Object>> classTry = getTypeParamTry(
 					service, ItemResource.class, 2);
 
-				properties.put(KEY_IDENTIFIER_CLASS, identifierClass);
+				classTry.voidFold(
+					__ -> _warning(
+						"Unable to get identifier class from " +
+							service.getClass()),
+					clazz -> properties.put(KEY_IDENTIFIER_CLASS, clazz));
 			});
 
 		_serviceTracker.open();
@@ -59,6 +69,15 @@ public class ItemResourceManager {
 	protected void deactivate() {
 		_serviceTracker.close();
 	}
+
+	private void _warning(String message) {
+		if (_apioLogger != null) {
+			_apioLogger.warning(message);
+		}
+	}
+
+	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
+	private ApioLogger _apioLogger;
 
 	private ServiceTracker<ItemResource, ServiceRegistration<?>>
 		_serviceTracker;

@@ -17,15 +17,16 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.representable;
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromProperty;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamTry;
 
-
+import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
+import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -92,11 +93,23 @@ public class RepresentableManagerImpl
 		Representable representable = bundleContext.getService(
 			serviceReference);
 
-		Class<Identifier> genericClass = getGenericClassFromPropertyOrElse(
-			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT,
-			() -> getTypeParamOrFail(representable, Representable.class, 2));
+		if (representable == null) {
+			return;
+		}
 
-		emitter.emit(genericClass);
+		Try<Class<Object>> classTry = getGenericClassFromProperty(
+			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT);
+
+		classTry.recoverWith(
+			__ -> getTypeParamTry(representable, Representable.class, 2)
+		).<Class<Identifier>>map(
+			Unsafe::unsafeCast
+		).voidFold(
+			__ -> warning(
+				"Unable to get identifier class from " +
+					representable.getClass()),
+			emitter::emit
+		);
 	}
 
 	private void _computeRepresentables() {

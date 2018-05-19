@@ -19,9 +19,10 @@ import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromPropertyOrElse;
-import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamOrFail;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getGenericClassFromProperty;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamTry;
 
+import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.router.NestedCollectionRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
@@ -70,18 +71,36 @@ public class NestedCollectionRouterManagerImpl
 		NestedCollectionRouter nestedCollectionRouter =
 			bundleContext.getService(serviceReference);
 
-		Class<?> identifierClass = getGenericClassFromPropertyOrElse(
-			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT,
-			() -> getTypeParamOrFail(
-				nestedCollectionRouter, NestedCollectionRouter.class, 2));
+		if (nestedCollectionRouter == null) {
+			return;
+		}
 
-		Class<?> parentIdentifierClass = getGenericClassFromPropertyOrElse(
-			serviceReference, KEY_PARENT_IDENTIFIER_CLASS,
-			() -> getTypeParamOrFail(
-				nestedCollectionRouter, NestedCollectionRouter.class, 4));
+		Try<Class<Object>> identifierClassTry = getGenericClassFromProperty(
+			serviceReference, KEY_PRINCIPAL_TYPE_ARGUMENT);
 
-		emitter.emit(
-			parentIdentifierClass.getName() + "-" + identifierClass.getName());
+		Try<Class<Object>> parentClassTry = getGenericClassFromProperty(
+			serviceReference, KEY_PARENT_IDENTIFIER_CLASS);
+
+		identifierClassTry.recoverWith(
+			__ -> getTypeParamTry(
+				nestedCollectionRouter, NestedCollectionRouter.class, 2)
+		).map(
+			Class::getName
+		).flatMap(
+			identifierClassName -> parentClassTry.recoverWith(
+				__ -> getTypeParamTry(
+					nestedCollectionRouter, NestedCollectionRouter.class, 4)
+			).map(
+				Class::getName
+			).map(
+				parentClassName -> parentClassName + "-" + identifierClassName
+			)
+		).voidFold(
+			__ -> warning(
+				"Unable to get generic information from " +
+					nestedCollectionRouter.getClass()),
+			emitter::emit
+		);
 	}
 
 	private void _computeNestedCollectionRoutes() {
