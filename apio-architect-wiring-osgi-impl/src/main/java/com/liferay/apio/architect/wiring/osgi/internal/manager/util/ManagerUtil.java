@@ -131,11 +131,11 @@ public class ManagerUtil {
 	 * @param  t the object
 	 * @param  interfaceClass the class's interface
 	 * @param  position the position
-	 * @return a {@code Try.Success} containing the type parameter; othersiwe a
+	 * @return a {@code Try.Success} containing the type parameter; otherwise a
 	 *         {@code Try.Failure} containing the failure
 	 */
 	public static <T, U> Try<Class<U>> getTypeParamTry(
-		T t, Class<T> interfaceClass, Integer position) {
+		T t, Class<T> interfaceClass, int position) {
 
 		return Try.fromFallible(
 			() -> getGenericTypeArgumentTry(
