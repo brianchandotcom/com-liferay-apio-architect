@@ -60,12 +60,13 @@ public class ManagerUtil {
 					Dictionary<String, Object> properties = getProperties(
 						serviceReference);
 
-					T t = null;
+					T t = Try.fromFallible(
+						() -> bundleContext.getService(serviceReference)
+					).orElse(
+						null
+					);
 
-					try {
-						t = bundleContext.getService(serviceReference);
-					}
-					catch (Exception e) {
+					if (t == null) {
 						return null;
 					}
 
@@ -96,7 +97,7 @@ public class ManagerUtil {
 			serviceReference::getProperty
 		).filter(
 			Objects::nonNull
-		).<Class<T>>map(
+		).map(
 			Unsafe::unsafeCast
 		);
 	}
