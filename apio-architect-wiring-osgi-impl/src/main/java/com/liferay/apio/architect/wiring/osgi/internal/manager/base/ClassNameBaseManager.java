@@ -34,7 +34,7 @@ import org.osgi.framework.ServiceReference;
 public abstract class ClassNameBaseManager<T> extends BaseManager<T, String> {
 
 	public ClassNameBaseManager(
-		Class<T> managedClass, Integer principalTypeParamPosition) {
+		Class<T> managedClass, int principalTypeParamPosition) {
 
 		super(managedClass);
 
@@ -78,6 +78,6 @@ public abstract class ClassNameBaseManager<T> extends BaseManager<T, String> {
 	}
 
 	private final Class<T> _managedClass;
-	private final Integer _principalTypeParamPosition;
+	private final int _principalTypeParamPosition;
 
 }
