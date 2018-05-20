@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
 import com.liferay.apio.architect.credentials.Credentials;
@@ -37,7 +36,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -84,10 +82,8 @@ public class CollectionRouterManagerImpl
 			return;
 		}
 
-		Stream<String> stream = getKeyStream();
-
-		stream.forEach(
-			className -> {
+		forEachService(
+			(className, collectionRouter) -> {
 				Optional<String> nameOptional = _nameManager.getNameOptional(
 					className);
 
@@ -101,16 +97,14 @@ public class CollectionRouterManagerImpl
 
 				String name = nameOptional.get();
 
-				CollectionRouter<Object, Object, ?> collectionRouter =
-					unsafeCast(serviceTrackerMap.getService(className));
-
 				Set<String> neededProviders = new TreeSet<>();
 
-				Builder<Object, Object> builder = new Builder<>(
+				Builder builder = new Builder<>(
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add);
 
-				CollectionRoutes<Object, Object> collectionRoutes =
+				@SuppressWarnings("unchecked")
+				CollectionRoutes collectionRoutes =
 					collectionRouter.collectionRoutes(builder);
 
 				List<String> missingProviders =

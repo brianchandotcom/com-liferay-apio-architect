@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
 import com.liferay.apio.architect.router.ItemRouter;
@@ -32,7 +31,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -61,10 +59,8 @@ public class ItemRouterManagerImpl
 	}
 
 	private void _computeItemRoutes() {
-		Stream<String> stream = getKeyStream();
-
-		stream.forEach(
-			className -> {
+		forEachService(
+			(className, itemRouter) -> {
 				Optional<String> nameOptional = _nameManager.getNameOptional(
 					className);
 
@@ -78,17 +74,14 @@ public class ItemRouterManagerImpl
 
 				String name = nameOptional.get();
 
-				ItemRouter<Object, Object, ?> itemRouter = unsafeCast(
-					serviceTrackerMap.getService(className));
-
 				Set<String> neededProviders = new TreeSet<>();
 
-				Builder<Object, Object> builder = new Builder<>(
+				Builder builder = new Builder<>(
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add);
 
-				ItemRoutes<Object, Object> itemRoutes = itemRouter.itemRoutes(
-					builder);
+				@SuppressWarnings("unchecked")
+				ItemRoutes itemRoutes = itemRouter.itemRoutes(builder);
 
 				List<String> missingProviders =
 					_providerManager.getMissingProviders(neededProviders);

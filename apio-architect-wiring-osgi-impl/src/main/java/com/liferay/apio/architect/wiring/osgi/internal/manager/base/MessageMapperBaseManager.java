@@ -18,7 +18,6 @@ import com.liferay.apio.architect.message.json.MessageMapper;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper;
 
 import java.util.function.BiConsumer;
-import java.util.stream.Stream;
 
 import javax.ws.rs.core.MediaType;
 
@@ -46,16 +45,12 @@ public abstract class MessageMapperBaseManager<T extends MessageMapper>
 	 * consumer to store them.
 	 */
 	protected void computeMessageMappers() {
-		Stream<String> stream = getKeyStream();
-
-		stream.forEach(
-			key -> {
-				T formMessageMapper = serviceTrackerMap.getService(key);
-
+		forEachService(
+			(key, messageMapper) -> {
 				try {
 					MediaType mediaType = MediaType.valueOf(key);
 
-					_storeBiConsumer.accept(mediaType, formMessageMapper);
+					_storeBiConsumer.accept(mediaType, messageMapper);
 				}
 				catch (IllegalArgumentException iae) {
 					warning("Message mapper has invalid media type: " + key);

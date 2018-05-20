@@ -28,7 +28,7 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.E
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 
 import java.util.Set;
-import java.util.stream.Stream;
+import java.util.function.BiConsumer;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -68,15 +68,11 @@ public abstract class BaseManager<T, U> {
 		INSTANCE.clear();
 	}
 
-	/**
-	 * Returns the service tracker key stream.
-	 *
-	 * @return the service tracker key stream
-	 */
-	public Stream<U> getKeyStream() {
+	public void forEachService(BiConsumer<U, T> biConsumer) {
 		Set<U> keys = serviceTrackerMap.keySet();
 
-		return keys.stream();
+		keys.forEach(
+			u -> biConsumer.accept(u, serviceTrackerMap.getService(u)));
 	}
 
 	/**

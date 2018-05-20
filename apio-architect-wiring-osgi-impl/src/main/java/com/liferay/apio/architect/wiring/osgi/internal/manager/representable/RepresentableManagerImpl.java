@@ -116,13 +116,8 @@ public class RepresentableManagerImpl
 		Map<String, List<RelatedCollection<?>>> relatedCollections =
 			new HashMap<>();
 
-		Stream<Class<Identifier>> keyStream = getKeyStream();
-
-		keyStream.forEach(
-			clazz -> {
-				Representable representable = serviceTrackerMap.getService(
-					clazz);
-
+		forEachService(
+			(clazz, representable) -> {
 				String name = representable.getName();
 
 				Optional<Map<String, String>> optional =
@@ -148,13 +143,13 @@ public class RepresentableManagerImpl
 					return;
 				}
 
+				Representor<Object> representor = _getRepresentor(
+					unsafeCast(representable), unsafeCast(clazz),
+					relatedCollections);
+
 				INSTANCE.putName(clazz.getName(), name);
 				INSTANCE.putIdentifierClass(name, clazz);
-				INSTANCE.putRepresentor(
-					name,
-					_getRepresentor(
-						unsafeCast(representable), unsafeCast(clazz),
-						relatedCollections));
+				INSTANCE.putRepresentor(name, representor);
 			});
 	}
 
@@ -172,9 +167,7 @@ public class RepresentableManagerImpl
 		).append(
 			name
 		).append(
-			", but it's already in use by Representable "
-		).append(
-			"registered under "
+			", but it's already in use by Representable registered under "
 		).append(
 			className
 		).toString();

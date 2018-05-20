@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
 import static com.liferay.apio.architect.alias.ProvideFunction.curry;
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Stream;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
@@ -104,10 +102,8 @@ public class NestedCollectionRouterManagerImpl
 	}
 
 	private void _computeNestedCollectionRoutes() {
-		Stream<String> stream = getKeyStream();
-
-		stream.forEach(
-			key -> {
+		forEachService(
+			(key, nestedCollectionRouter) -> {
 				String[] classNames = key.split("-");
 
 				if (classNames.length != 2) {
@@ -143,19 +139,15 @@ public class NestedCollectionRouterManagerImpl
 
 				String nestedName = nestedNameOptional.get();
 
-				NestedCollectionRouter<Object, Object, ?, Object, ?>
-					nestedCollectionRouter = unsafeCast(
-						serviceTrackerMap.getService(key));
-
 				Set<String> neededProviders = new TreeSet<>();
 
-				Builder<Object, Object, Object> builder = new Builder<>(
+				Builder builder = new Builder<>(
 					name, nestedName, curry(_providerManager::provideMandatory),
 					neededProviders::add);
 
-				NestedCollectionRoutes<Object, Object, Object>
-					nestedCollectionRoutes =
-						nestedCollectionRouter.collectionRoutes(builder);
+				@SuppressWarnings("unchecked")
+				NestedCollectionRoutes nestedCollectionRoutes =
+					nestedCollectionRouter.collectionRoutes(builder);
 
 				List<String> missingProviders =
 					_providerManager.getMissingProviders(neededProviders);
