@@ -39,7 +39,8 @@ public class DocumentationTest {
 	@Test
 	public void testDocumentationWithEmptyValuesReturnEmpty() {
 		Documentation documentation = new Documentation(
-			__ -> Optional.empty(), __ -> Optional.empty(), null, null, null);
+			__ -> Optional.empty(), __ -> Optional.empty(), null, null, null,
+			null);
 
 		RequestFunction<Optional<String>> apiTitleRequestFunction =
 			documentation.getAPITitleRequestFunction();
@@ -64,7 +65,7 @@ public class DocumentationTest {
 	public void testDocumentationWithNonemptyValuesReturnThem() {
 		Documentation documentation = new Documentation(
 			__ -> Optional.of(() -> "A"), __ -> Optional.of(() -> "B"), null,
-			null, null);
+			null, null, null);
 
 		RequestFunction<Optional<String>> apiTitleRequestFunction =
 			documentation.getAPITitleRequestFunction();

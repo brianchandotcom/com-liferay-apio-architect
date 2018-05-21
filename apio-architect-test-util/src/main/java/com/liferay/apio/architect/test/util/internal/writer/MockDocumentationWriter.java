@@ -60,11 +60,7 @@ public class MockDocumentationWriter {
 
 		RequestInfo requestInfo = getRequestInfo(httpHeaders);
 
-<<<<<<< HEAD
-		CollectionRoutes.Builder<String, Object> builder1 =
-=======
-		CollectionRoutes.Builder<String> collectionBuilder =
->>>>>>> APIO-17 expose nested collection routes
+		CollectionRoutes.Builder<String, Object> collectionBuilder =
 			new CollectionRoutes.Builder<>(
 				"name", null,
 				__ -> {
