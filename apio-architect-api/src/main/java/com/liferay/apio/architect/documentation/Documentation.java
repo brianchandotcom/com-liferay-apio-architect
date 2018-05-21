@@ -18,6 +18,7 @@ import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
 import java.util.Map;
 import java.util.Optional;
@@ -35,13 +36,16 @@ public class Documentation {
 		RequestFunction<Optional<APIDescription>> apiDescriptionRequestFunction,
 		Supplier<Map<String, Representor>> representorMapSupplier,
 		Supplier<Map<String, CollectionRoutes>> collectionRoutesMapSupplier,
-		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier) {
+		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier,
+		Supplier<Map<String, NestedCollectionRoutes>>
+			nestedCollectionRoutesMapSupplier) {
 
 		_apiTitleRequestFunction = apiTitleRequestFunction;
 		_apiDescriptionRequestFunction = apiDescriptionRequestFunction;
 		_representorMapSupplier = representorMapSupplier;
 		_routesMapSupplier = collectionRoutesMapSupplier;
 		_itemRoutesMapSupplier = itemRoutesMapSupplier;
+		_nestedCollectionRoutesMapSupplier = nestedCollectionRoutesMapSupplier;
 	}
 
 	/**
@@ -79,6 +83,12 @@ public class Documentation {
 		return _itemRoutesMapSupplier;
 	}
 
+	public Supplier<Map<String, NestedCollectionRoutes>>
+		getNestedCollectionMapSupplier() {
+
+		return _nestedCollectionRoutesMapSupplier;
+	}
+
 	public Supplier<Map<String, Representor>> getRepresentorMapSupplier() {
 		return _representorMapSupplier;
 	}
@@ -91,6 +101,8 @@ public class Documentation {
 		_apiDescriptionRequestFunction;
 	private final RequestFunction<Optional<APITitle>> _apiTitleRequestFunction;
 	private final Supplier<Map<String, ItemRoutes>> _itemRoutesMapSupplier;
+	private final Supplier<Map<String, NestedCollectionRoutes>>
+		_nestedCollectionRoutesMapSupplier;
 	private final Supplier<Map<String, Representor>> _representorMapSupplier;
 	private final Supplier<Map<String, CollectionRoutes>> _routesMapSupplier;
 

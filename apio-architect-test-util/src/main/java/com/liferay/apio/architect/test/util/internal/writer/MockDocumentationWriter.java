@@ -25,6 +25,7 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
 import com.liferay.apio.architect.writer.DocumentationWriter;
@@ -59,16 +60,26 @@ public class MockDocumentationWriter {
 
 		RequestInfo requestInfo = getRequestInfo(httpHeaders);
 
+<<<<<<< HEAD
 		CollectionRoutes.Builder<String, Object> builder1 =
+=======
+		CollectionRoutes.Builder<String> collectionBuilder =
+>>>>>>> APIO-17 expose nested collection routes
 			new CollectionRoutes.Builder<>(
 				"name", null,
 				__ -> {
 				});
 
-		ItemRoutes.Builder builder2 = new ItemRoutes.Builder<>(
+		ItemRoutes.Builder itemBuilder = new ItemRoutes.Builder<>(
 			"name", null,
 			__ -> {
 			});
+
+		NestedCollectionRoutes.Builder nestedBuilder =
+			new NestedCollectionRoutes.Builder(
+				"name", null, __ -> null,
+				__ -> {
+				});
 
 		Representor<RootModel> rootModelRepresentor =
 			MockRepresentorCreator.createRootModelRepresentor(false);
@@ -76,15 +87,19 @@ public class MockDocumentationWriter {
 		Map<String, Representor> root = Collections.singletonMap(
 			"root", rootModelRepresentor);
 
-		ItemRoutes build = builder2.build();
+		CollectionRoutes<String, Object> collectionRoutes =
+			collectionBuilder.build();
 
-		CollectionRoutes<String, Object> collectionRoutes = builder1.build();
+		ItemRoutes itemRoutes = itemBuilder.build();
+
+		NestedCollectionRoutes nestedCollectionRoutes = nestedBuilder.build();
 
 		Documentation documentation = new Documentation(
 			__ -> Optional.of(() -> "Title"),
 			__ -> Optional.of(() -> "Description"), () -> root,
 			() -> Collections.singletonMap("root", collectionRoutes),
-			() -> Collections.singletonMap("root", build));
+			() -> Collections.singletonMap("root", itemRoutes),
+			() -> Collections.singletonMap("root", nestedCollectionRoutes));
 
 		DocumentationWriter documentationWriter = DocumentationWriter.create(
 			builder -> builder.documentation(

@@ -74,7 +74,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			apiTitleRequestFunction, apiDescriptionRequestFunction,
 			() -> _representableManager.getRepresentors(),
 			() -> _collectionRouterManager.getCollectionRoutes(),
-			() -> _itemRouterManager.getItemRoutes());
+			() -> _itemRouterManager.getItemRoutes(),
+			() -> _nestedCollectionRouterManager.getNestedCollectionRoutes());
 	}
 
 	@Override
