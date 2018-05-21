@@ -71,7 +71,7 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void mapOperation(
-		JSONObjectBuilder jsonObjectBuilder, String resourceName,
+		JSONObjectBuilder jsonObjectBuilder, String resourceName, String type,
 		Operation operation) {
 
 		jsonObjectBuilder.field(
@@ -92,7 +92,7 @@ public class JSONLDDocumentationMessageMapper
 			operation.method.toString()
 		);
 
-		String returnValue = _getReturnValue(resourceName, operation);
+		String returnValue = _getReturnValue(type, operation);
 
 		jsonObjectBuilder.field(
 			"returns"
@@ -150,6 +150,46 @@ public class JSONLDDocumentationMessageMapper
 			FIELD_NAME_TITLE
 		).stringValue(
 			resourceType
+		);
+	}
+
+	@Override
+	public void mapResourceCollection(
+		JSONObjectBuilder jsonObjectBuilder, String resourceType) {
+
+		jsonObjectBuilder.field(
+			FIELD_NAME_ID
+		).stringValue(
+			"vocab:" + resourceType + "Collection"
+		);
+		jsonObjectBuilder.field(
+			FIELD_NAME_TYPE
+		).stringValue(
+			TYPE_CLASS
+		);
+
+		jsonObjectBuilder.field(
+			FIELD_NAME_TYPE
+		).stringValue(
+			TYPE_CLASS
+		);
+
+		jsonObjectBuilder.field(
+			"subClassOf"
+		).stringValue(
+			"http://www.w3.org/ns/hydra/core#Collection"
+		);
+
+		jsonObjectBuilder.field(
+			"description"
+		).stringValue(
+			"A collection of " + resourceType
+		);
+
+		jsonObjectBuilder.field(
+			FIELD_NAME_TITLE
+		).stringValue(
+			resourceType + "Collection"
 		);
 	}
 
@@ -333,7 +373,7 @@ public class JSONLDDocumentationMessageMapper
 		if (Method.DELETE.equals(operation.method)) {
 			value = "http://www.w3.org/2002/07/owl#Nothing";
 		}
-		else if (operation.method.equals(Method.GET)) {
+		else if (operation.collection && operation.method.equals(Method.GET)) {
 			value = URL_HYDRA_PROFILE + TYPE_COLLECTION;
 		}
 		else {

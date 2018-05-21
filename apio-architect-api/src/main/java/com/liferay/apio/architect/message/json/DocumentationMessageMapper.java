@@ -53,7 +53,7 @@ public interface DocumentationMessageMapper
 	}
 
 	public default void mapOperation(
-		JSONObjectBuilder jsonObjectBuilder, String resourceName,
+		JSONObjectBuilder jsonObjectBuilder, String resourceName, String type,
 		Operation operation) {
 	}
 
@@ -62,6 +62,10 @@ public interface DocumentationMessageMapper
 	}
 
 	public default void mapResource(
+		JSONObjectBuilder jsonObjectBuilder, String resourceName) {
+	}
+
+	public default void mapResourceCollection(
 		JSONObjectBuilder jsonObjectBuilder, String resourceName) {
 	}
 

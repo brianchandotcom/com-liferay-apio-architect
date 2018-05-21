@@ -25,15 +25,24 @@ import java.util.Optional;
  */
 public class Operation {
 
-	public Operation(Form form, Method method, String name) {
+	public Operation(Form form, Method method, String name, boolean collection) {
 		_form = form;
 
 		this.method = method;
 		this.name = name;
+		this.collection = collection;
+	}
+
+	public Operation(Form form, Method method, String name) {
+		this(form, method, name, false);
+	}
+
+	public Operation(Method method, String name, boolean collection) {
+		this(null, method, name, collection);
 	}
 
 	public Operation(Method method, String name) {
-		this(null, method, name);
+		this(null, method, name, false);
 	}
 
 	/**
@@ -58,5 +67,7 @@ public class Operation {
 	public final String name;
 
 	private final Form _form;
+
+	public final boolean collection;
 
 }

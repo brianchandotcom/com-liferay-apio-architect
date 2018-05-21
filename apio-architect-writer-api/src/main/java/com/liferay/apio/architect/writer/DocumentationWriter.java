@@ -22,6 +22,7 @@ import static com.liferay.apio.architect.operation.Method.PUT;
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.alias.RequestFunction;
+import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
@@ -39,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -114,7 +114,9 @@ public class DocumentationWriter {
 
 		routesMap.forEach(
 			(name, collectionRoutes) -> _writeRoute(
-				jsonObjectBuilder, representorMap, routesMap, name,
+				jsonObjectBuilder, representorMap,
+				collectionRoutes.getFormOptional(), name,
+				_documentationMessageMapper::mapResourceCollection,
 				this::_writePageOperations));
 
 		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier =
@@ -124,7 +126,9 @@ public class DocumentationWriter {
 
 		itemRoutesMap.forEach(
 			(name, itemRoutes) -> _writeRoute(
-				jsonObjectBuilder, representorMap, routesMap, name,
+				jsonObjectBuilder, representorMap,
+				itemRoutes.getFormOptional(), name,
+				_documentationMessageMapper::mapResource,
 				this::_writeItemOperations));
 
 		_documentationMessageMapper.onFinish(
@@ -252,13 +256,7 @@ public class DocumentationWriter {
 
 	private void _writeFields(
 		Representor representor, JSONObjectBuilder resourceJsonObjectBuilder,
-		Optional<CollectionRoutes> collectionRoutesOptional) {
-
-		Optional<Form<FormField>> formOptional = collectionRoutesOptional.map(
-			collectionRoutes -> collectionRoutes.getFormOptional()
-		).orElse(
-			Optional.empty()
-		);
+		Optional<Form<FormField>> formOptional) {
 
 		_writeFields(
 			representor.getBooleanFunctions(), resourceJsonObjectBuilder,
@@ -312,7 +310,7 @@ public class DocumentationWriter {
 	}
 
 	private void _writeItemOperations(
-		String name, JSONObjectBuilder resourceJsonObjectBuilder) {
+		String name, String type, JSONObjectBuilder resourceJsonObjectBuilder) {
 
 		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier =
 			_documentation.getItemRoutesMapSupplier();
@@ -325,9 +323,9 @@ public class DocumentationWriter {
 			itemRoutes -> {
 				String getOperationName = name + "/retrieve";
 
-				Operation getOperation = new Operation(GET, getOperationName);
+				Operation getOperation = new Operation(GET, getOperationName, false);
 
-				_writeOperation(getOperation, resourceJsonObjectBuilder, name);
+				_writeOperation(getOperation, resourceJsonObjectBuilder, name, type);
 
 				String updateOperationName = name + "/update";
 
@@ -335,7 +333,7 @@ public class DocumentationWriter {
 					updateOperationName, itemRoutes.getFormOptional(), PUT);
 
 				_writeOperation(
-					updateOperation, resourceJsonObjectBuilder, name);
+					updateOperation, resourceJsonObjectBuilder, name, type);
 
 				String deleteOperationName = name + "/delete";
 
@@ -343,14 +341,14 @@ public class DocumentationWriter {
 					DELETE, deleteOperationName);
 
 				_writeOperation(
-					deleteOperation, resourceJsonObjectBuilder, name);
+					deleteOperation, resourceJsonObjectBuilder, name, type);
 			}
 		);
 	}
 
 	private void _writeOperation(
 		Operation operation, JSONObjectBuilder jsonObjectBuilder,
-		String resourceName) {
+		String resourceName, String type) {
 
 		JSONObjectBuilder operationJsonObjectBuilder = new JSONObjectBuilder();
 
@@ -358,14 +356,14 @@ public class DocumentationWriter {
 			jsonObjectBuilder, operationJsonObjectBuilder, operation);
 
 		_documentationMessageMapper.mapOperation(
-			operationJsonObjectBuilder, resourceName, operation);
+			operationJsonObjectBuilder, resourceName, type, operation);
 
 		_documentationMessageMapper.onFinishOperation(
 			jsonObjectBuilder, operationJsonObjectBuilder, operation);
 	}
 
 	private void _writePageOperations(
-		String resource, JSONObjectBuilder resourceJsonObjectBuilder) {
+		String resource, String type, JSONObjectBuilder resourceJsonObjectBuilder) {
 
 		Supplier<Map<String, CollectionRoutes>> routesMapSupplier =
 			_documentation.getRoutesMapSupplier();
@@ -378,8 +376,8 @@ public class DocumentationWriter {
 		).ifPresent(
 			collectionRoutes -> {
 				_writeOperation(
-					new Operation(GET, resource), resourceJsonObjectBuilder,
-					resource);
+					new Operation(GET, resource, true), resourceJsonObjectBuilder,
+					resource, type);
 
 				String operationName = resource + "/create";
 
@@ -387,7 +385,7 @@ public class DocumentationWriter {
 					operationName, collectionRoutes.getFormOptional(), POST);
 
 				_writeOperation(
-					createOperation, resourceJsonObjectBuilder, resource);
+					createOperation, resourceJsonObjectBuilder, resource, type);
 			}
 		);
 	}
@@ -395,8 +393,9 @@ public class DocumentationWriter {
 	private void _writeRoute(
 		JSONObjectBuilder jsonObjectBuilder,
 		Map<String, Representor> representorMap,
-		Map<String, CollectionRoutes> collectionRoutesMap, String name,
-		BiConsumer<String, JSONObjectBuilder> writeOperationsBiConsumer) {
+		Optional<Form<FormField>> formOptional, String name,
+		BiConsumer<JSONObjectBuilder, String> biConsumer,
+		TriConsumer<String, String, JSONObjectBuilder> writeOperationsBiConsumer) {
 
 		JSONObjectBuilder resourceJsonObjectBuilder = new JSONObjectBuilder();
 
@@ -409,16 +408,12 @@ public class DocumentationWriter {
 			_documentationMessageMapper.onStartResource(
 				jsonObjectBuilder, resourceJsonObjectBuilder, type);
 
-			_documentationMessageMapper.mapResource(
-				resourceJsonObjectBuilder, type);
+			biConsumer.accept(resourceJsonObjectBuilder, type);
 
-			writeOperationsBiConsumer.accept(name, resourceJsonObjectBuilder);
-
-			Optional<CollectionRoutes> collectionRoutesOptional =
-				Optional.ofNullable(collectionRoutesMap.getOrDefault(name, null));
+			writeOperationsBiConsumer.accept(name, type, resourceJsonObjectBuilder);
 
 			_writeFields(
-				representor, resourceJsonObjectBuilder, collectionRoutesOptional);
+				representor, resourceJsonObjectBuilder, formOptional);
 
 			_documentationMessageMapper.onFinishResource(
 				jsonObjectBuilder, resourceJsonObjectBuilder, type);
