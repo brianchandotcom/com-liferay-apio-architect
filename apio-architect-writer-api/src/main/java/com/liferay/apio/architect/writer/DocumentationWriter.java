@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -399,24 +400,29 @@ public class DocumentationWriter {
 
 		JSONObjectBuilder resourceJsonObjectBuilder = new JSONObjectBuilder();
 
-		_documentationMessageMapper.onStartResource(
-			jsonObjectBuilder, resourceJsonObjectBuilder);
-
-		_documentationMessageMapper.mapResource(
-			resourceJsonObjectBuilder, name);
-
-		writeOperationsBiConsumer.accept(name, resourceJsonObjectBuilder);
-
 		Representor representor = representorMap.get(name);
 
-		Optional<CollectionRoutes> collectionRoutesOptional =
-			Optional.ofNullable(collectionRoutesMap.getOrDefault(name, null));
+		List<String> types = representor.getTypes();
 
-		_writeFields(
-			representor, resourceJsonObjectBuilder, collectionRoutesOptional);
+		types.forEach(type -> {
 
-		_documentationMessageMapper.onFinishResource(
-			jsonObjectBuilder, resourceJsonObjectBuilder);
+			_documentationMessageMapper.onStartResource(
+				jsonObjectBuilder, resourceJsonObjectBuilder, type);
+
+			_documentationMessageMapper.mapResource(
+				resourceJsonObjectBuilder, type);
+
+			writeOperationsBiConsumer.accept(name, resourceJsonObjectBuilder);
+
+			Optional<CollectionRoutes> collectionRoutesOptional =
+				Optional.ofNullable(collectionRoutesMap.getOrDefault(name, null));
+
+			_writeFields(
+				representor, resourceJsonObjectBuilder, collectionRoutesOptional);
+
+			_documentationMessageMapper.onFinishResource(
+				jsonObjectBuilder, resourceJsonObjectBuilder, type);
+		});
 	}
 
 	private final Documentation _documentation;

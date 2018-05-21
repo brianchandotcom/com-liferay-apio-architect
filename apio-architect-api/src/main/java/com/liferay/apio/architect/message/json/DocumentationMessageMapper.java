@@ -87,7 +87,7 @@ public interface DocumentationMessageMapper
 
 	public default void onFinishResource(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder resourceJsonObjectBuilder) {
+		JSONObjectBuilder resourceJsonObjectBuilder, String type) {
 	}
 
 	public default void onStartOperation(
@@ -102,7 +102,7 @@ public interface DocumentationMessageMapper
 
 	public default void onStartResource(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder resourceJsonObjectBuilder) {
+		JSONObjectBuilder resourceJsonObjectBuilder, String type) {
 	}
 
 }

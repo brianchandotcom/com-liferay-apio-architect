@@ -134,12 +134,12 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void mapResource(
-		JSONObjectBuilder jsonObjectBuilder, String resourceName) {
+		JSONObjectBuilder jsonObjectBuilder, String resourceType) {
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"http://schema.org/" + resourceName
+			"http://schema.org/" + resourceType
 		);
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
@@ -149,7 +149,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			FIELD_NAME_TITLE
 		).stringValue(
-			resourceName
+			resourceType
 		);
 	}
 
@@ -191,7 +191,7 @@ public class JSONLDDocumentationMessageMapper
 	@Override
 	public void onFinishResource(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder resourceJsonObjectBuilder) {
+		JSONObjectBuilder resourceJsonObjectBuilder, String type) {
 
 		documentationJsonObjectBuilder.field(
 			"supportedClass"
