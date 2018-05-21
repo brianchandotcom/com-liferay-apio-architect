@@ -28,7 +28,7 @@ import org.osgi.framework.BundleContext;
  * @author Alejandro Hernández
  * @review
  */
-public class APIOSampleBundleActivator implements BundleActivator {
+public class ApioSampleBundleActivator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
