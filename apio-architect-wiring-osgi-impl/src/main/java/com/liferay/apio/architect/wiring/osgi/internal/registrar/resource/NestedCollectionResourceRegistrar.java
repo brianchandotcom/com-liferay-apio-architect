@@ -12,9 +12,10 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.manager.resource;
+package com.liferay.apio.architect.wiring.osgi.internal.registrar.resource;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_IDENTIFIER_CLASS;
+import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.createServiceTracker;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamTry;
 
@@ -24,9 +25,9 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.representor.Representable;
-import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.router.CollectionRouter;
+import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.router.NestedCollectionRouter;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -37,32 +38,43 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Registers resources as {@link CollectionResource}, instead of implementing a
- * register for each of the enclosing interfaces separately.
+ * Allow developers to register resources as {@link NestedCollectionResource},
+ * instead of implementing a register for each of the enclosing interfaces
+ * separately.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class CollectionResourceManager {
+public class NestedCollectionResourceRegistrar {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		String[] classes = {
-			CollectionRouter.class.getName(), ItemRouter.class.getName(),
+			ItemRouter.class.getName(), NestedCollectionRouter.class.getName(),
 			Representable.class.getName()
 		};
 
 		_serviceTracker = createServiceTracker(
-			bundleContext, CollectionResource.class, classes,
+			bundleContext, NestedCollectionResource.class, classes,
 			(properties, service) -> {
-				Try<Class<Object>> classTry = getTypeParamTry(
-					service, CollectionResource.class, 2);
+				Try<Class<Object>> identifierClassTry = getTypeParamTry(
+					service, NestedCollectionResource.class, 2);
 
-				classTry.voidFold(
+				identifierClassTry.voidFold(
 					__ -> _warning(
-						"Unable to get generic identifier class from " +
+						"Unable to get identifier class from " +
 							service.getClass()),
 					clazz -> properties.put(KEY_IDENTIFIER_CLASS, clazz));
+
+				Try<Class<Object>> parentClassTry = getTypeParamTry(
+					service, NestedCollectionResource.class, 4);
+
+				parentClassTry.voidFold(
+					__ -> _warning(
+						"Unable to get parent identifier class from " +
+							service.getClass()),
+					clazz -> properties.put(
+						KEY_PARENT_IDENTIFIER_CLASS, clazz));
 			});
 
 		_serviceTracker.open();
@@ -82,7 +94,7 @@ public class CollectionResourceManager {
 	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
 
-	private ServiceTracker<CollectionResource, ServiceRegistration<?>>
+	private ServiceTracker<NestedCollectionResource, ServiceRegistration<?>>
 		_serviceTracker;
 
 }

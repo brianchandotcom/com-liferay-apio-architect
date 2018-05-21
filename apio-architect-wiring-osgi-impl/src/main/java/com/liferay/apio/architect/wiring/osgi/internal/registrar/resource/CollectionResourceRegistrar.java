@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.wiring.osgi.internal.manager.resource;
+package com.liferay.apio.architect.wiring.osgi.internal.registrar.resource;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.createServiceTracker;
@@ -24,7 +24,8 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.representor.Representable;
-import com.liferay.apio.architect.resource.ItemResource;
+import com.liferay.apio.architect.resource.CollectionResource;
+import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.router.ItemRouter;
 
 import org.osgi.framework.BundleContext;
@@ -36,28 +37,30 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Registers resources as {@link ItemResource}, instead of implementing a
- * register for each of the enclosing interfaces separately.
+ * Allow developers to register resources as {@link CollectionResource}, instead
+ * of implementing a register for each of the enclosing interfaces separately.
  *
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class ItemResourceManager {
+public class CollectionResourceRegistrar {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		String[] classes =
-			{ItemRouter.class.getName(), Representable.class.getName()};
+		String[] classes = {
+			CollectionRouter.class.getName(), ItemRouter.class.getName(),
+			Representable.class.getName()
+		};
 
 		_serviceTracker = createServiceTracker(
-			bundleContext, ItemResource.class, classes,
+			bundleContext, CollectionResource.class, classes,
 			(properties, service) -> {
 				Try<Class<Object>> classTry = getTypeParamTry(
-					service, ItemResource.class, 2);
+					service, CollectionResource.class, 2);
 
 				classTry.voidFold(
 					__ -> _warning(
-						"Unable to get identifier class from " +
+						"Unable to get generic identifier class from " +
 							service.getClass()),
 					clazz -> properties.put(KEY_IDENTIFIER_CLASS, clazz));
 			});
@@ -79,7 +82,7 @@ public class ItemResourceManager {
 	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
 
-	private ServiceTracker<ItemResource, ServiceRegistration<?>>
+	private ServiceTracker<CollectionResource, ServiceRegistration<?>>
 		_serviceTracker;
 
 }
