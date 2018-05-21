@@ -25,7 +25,13 @@ import java.util.Optional;
  */
 public class Operation {
 
-	public Operation(Form form, Method method, String name, boolean collection) {
+	public Operation(Form form, Method method, String name) {
+		this(form, method, name, false);
+	}
+
+	public Operation(
+		Form form, Method method, String name, boolean collection) {
+
 		_form = form;
 
 		this.method = method;
@@ -33,16 +39,12 @@ public class Operation {
 		this.collection = collection;
 	}
 
-	public Operation(Form form, Method method, String name) {
-		this(form, method, name, false);
+	public Operation(Method method, String name) {
+		this(null, method, name, false);
 	}
 
 	public Operation(Method method, String name, boolean collection) {
 		this(null, method, name, collection);
-	}
-
-	public Operation(Method method, String name) {
-		this(null, method, name, false);
 	}
 
 	/**
@@ -56,6 +58,8 @@ public class Operation {
 		return Optional.ofNullable(_form);
 	}
 
+	public final boolean collection;
+
 	/**
 	 * The operation's method.
 	 */
@@ -67,7 +71,5 @@ public class Operation {
 	public final String name;
 
 	private final Form _form;
-
-	public final boolean collection;
 
 }

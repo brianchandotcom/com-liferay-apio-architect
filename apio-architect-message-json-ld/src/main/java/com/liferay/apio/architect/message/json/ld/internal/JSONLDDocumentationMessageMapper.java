@@ -29,7 +29,6 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstant
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_HYDRA_PROFILE;
 
 import com.liferay.apio.architect.documentation.Documentation;
-import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.operation.Method;
@@ -103,15 +102,14 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void mapProperty(
-		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
+		JSONObjectBuilder jsonObjectBuilder, String fieldName,
+		boolean required) {
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_TITLE
 		).stringValue(
-			formField.name
+			fieldName
 		);
-
-		Boolean required = formField.required;
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_REQUIRED
@@ -218,7 +216,7 @@ public class JSONLDDocumentationMessageMapper
 	@Override
 	public void onFinishProperty(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder propertyJsonObjectBuilder, FormField formField) {
+		JSONObjectBuilder propertyJsonObjectBuilder, String formField) {
 
 		documentationJsonObjectBuilder.field(
 			"supportedProperty"

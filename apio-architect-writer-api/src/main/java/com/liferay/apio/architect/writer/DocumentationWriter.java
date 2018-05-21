@@ -296,17 +296,25 @@ public class DocumentationWriter {
 	}
 
 	private void _writeFormField(
-		JSONObjectBuilder resourceJsonObjectBuilder, FormField formField) {
+		JSONObjectBuilder resourceJsonObjectBuilder, String fieldName,
+		Optional<FormField> formField) {
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
 		_documentationMessageMapper.onStartProperty(
-			resourceJsonObjectBuilder, jsonObjectBuilder, formField);
+			resourceJsonObjectBuilder, jsonObjectBuilder, fieldName);
 
-		_documentationMessageMapper.mapProperty(jsonObjectBuilder, formField);
+		boolean required = formField.map(
+			field -> field.required
+		).orElse(
+			false
+		);
+
+		_documentationMessageMapper.mapProperty(
+			jsonObjectBuilder, fieldName, required);
 
 		_documentationMessageMapper.onFinishProperty(
-			resourceJsonObjectBuilder, jsonObjectBuilder, formField);
+			resourceJsonObjectBuilder, jsonObjectBuilder, fieldName);
 	}
 
 	private void _writeItemOperations(
