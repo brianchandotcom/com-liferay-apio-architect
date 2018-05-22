@@ -17,9 +17,12 @@ package com.liferay.apio.architect.message.json.ld.internal;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_CONTEXT;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_DESCRIPTION;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_ID;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_MEMBER;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_NUMBER_OF_ITEMS;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_PROPERTY;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_REQUIRED;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_TITLE;
+import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_TOTAL_ITEMS;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.FIELD_NAME_TYPE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.MEDIA_TYPE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_API_DOCUMENTATION;
@@ -33,6 +36,9 @@ import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.operation.Operation;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -189,6 +195,28 @@ public class JSONLDDocumentationMessageMapper
 		).stringValue(
 			resourceType + "Collection"
 		);
+
+		String[] collectionProperties = {
+			FIELD_NAME_TOTAL_ITEMS, FIELD_NAME_MEMBER,
+			FIELD_NAME_NUMBER_OF_ITEMS
+		};
+
+		Stream<String> collectionStream = Arrays.stream(collectionProperties);
+
+		collectionStream.forEach(
+			fieldName -> {
+				JSONObjectBuilder propertyJsonObjectBuilder =
+					new JSONObjectBuilder();
+
+				onStartProperty(
+					jsonObjectBuilder, propertyJsonObjectBuilder, fieldName);
+
+				mapProperty(propertyJsonObjectBuilder, fieldName, false);
+
+				onFinishProperty(
+					jsonObjectBuilder, propertyJsonObjectBuilder, fieldName);
+
+			});
 	}
 
 	@Override
