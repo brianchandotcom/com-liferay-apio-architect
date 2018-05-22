@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.Manag
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.util.ManagerUtil.getTypeParamTry;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.functional.Try;
@@ -79,7 +80,7 @@ public class CollectionResourceRegistrar {
 		}
 	}
 
-	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
+	@Reference(cardinality = OPTIONAL, policy = DYNAMIC, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
 
 	private ServiceTracker<CollectionResource, ServiceRegistration<?>>

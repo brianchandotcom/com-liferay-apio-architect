@@ -17,6 +17,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.base;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.logger.ApioLogger;
@@ -96,7 +97,7 @@ public abstract class BaseManager<T, U> {
 		}
 	}
 
-	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
+	@Reference(cardinality = OPTIONAL, policy = DYNAMIC, policyOption = GREEDY)
 	protected ApioLogger apioLogger;
 
 	protected BundleContext bundleContext;
