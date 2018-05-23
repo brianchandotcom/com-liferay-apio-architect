@@ -41,11 +41,13 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -131,10 +133,12 @@ public class DocumentationWriter {
 					jsonObjectBuilder, representorMap,
 					nestedCollectionRoutesMap, name);
 
-				_writeCollectionRoute(
-					jsonObjectBuilder, representorMap.get(name), name,
+				_writeRoute(
+					jsonObjectBuilder, name, representorMap.get(name),
 					_documentationMessageMapper::mapResourceCollection,
-					this::_writePageOperations);
+					this::_writePageOperations,
+					resourceJsonObjectBuilder -> {
+					});
 			});
 
 		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier =
@@ -148,11 +152,15 @@ public class DocumentationWriter {
 					jsonObjectBuilder, representorMap,
 					nestedCollectionRoutesMap, name);
 
+				Representor representor = representorMap.get(name);
+
 				_writeRoute(
-					jsonObjectBuilder, representorMap.get(name),
-					itemRoutes.getFormOptional(), name,
+					jsonObjectBuilder, name, representor,
 					_documentationMessageMapper::mapResource,
-					this::_writeItemOperations);
+					this::_writeItemOperations,
+					resourceJsonObjectBuilder -> _writeAllFields(
+						representor, resourceJsonObjectBuilder,
+						itemRoutes.getFormOptional()));
 			});
 
 		_documentationMessageMapper.onFinish(
@@ -257,22 +265,65 @@ public class DocumentationWriter {
 					if (route.equals("") && !route.equals(nestedResourceName) &&
 						representorMap.containsKey(nestedResourceName)) {
 
-						Representor representor = representorMap.get(
-							nestedResourceName);
-
-						_writeCollectionRoute(
-							jsonObjectBuilder, representor, nestedResourceName,
+						_writeRoute(
+							jsonObjectBuilder, nestedResourceName,
+							representorMap.get(nestedResourceName),
 							_documentationMessageMapper::mapResourceCollection,
-							this::_writePageOperations);
+							this::_writePageOperations,
+							resourceJsonObjectBuilder -> {
+							});
 					}
 				}
 			});
 	}
 
-	private Stream _extractKeys(List<FieldFunction> fieldFunctions) {
-		Stream<FieldFunction> stream = fieldFunctions.stream();
+	private Stream<String> _calculateNestableFieldNames(
+		BaseRepresentor representor) {
 
-		return stream.map(fieldFunction -> fieldFunction.key);
+		List<FieldFunction> fieldFunctions = new ArrayList<>();
+
+		fieldFunctions.addAll(representor.getBinaryFunctions());
+		fieldFunctions.addAll(representor.getBooleanFunctions());
+		fieldFunctions.addAll(representor.getBooleanListFunctions());
+		fieldFunctions.addAll(representor.getLinkFunctions());
+		fieldFunctions.addAll(representor.getLocalizedStringFunctions());
+		fieldFunctions.addAll(representor.getNestedFieldFunctions());
+		fieldFunctions.addAll(representor.getNumberFunctions());
+		fieldFunctions.addAll(representor.getNumberListFunctions());
+		fieldFunctions.addAll(representor.getStringFunctions());
+		fieldFunctions.addAll(representor.getStringListFunctions());
+
+		Stream<FieldFunction> fieldFunctionStream = fieldFunctions.stream();
+
+		Stream<String> fieldNamesStream = fieldFunctionStream.map(
+			fieldFunction -> fieldFunction.key);
+
+		List<RelatedModel> relatedModels = representor.getRelatedModels();
+
+		Stream<RelatedModel> relatedModelStream = relatedModels.stream();
+
+		Stream<String> relatedModelNamesStream = relatedModelStream.map(
+			RelatedModel::getKey);
+
+		fieldNamesStream = Stream.concat(
+			fieldNamesStream, relatedModelNamesStream);
+
+		List<NestedFieldFunction> nestedFieldFunctions =
+			representor.getNestedFieldFunctions();
+
+		Stream<NestedFieldFunction> nestedFieldFunctionStream =
+			nestedFieldFunctions.stream();
+
+		Stream<String> nestedFieldNamesStream = nestedFieldFunctionStream.map(
+			nestedFieldFunction -> _calculateNestableFieldNames(
+				nestedFieldFunction.nestedRepresentor)
+		).reduce(
+			Stream::concat
+		).orElseGet(
+			Stream::empty
+		);
+
+		return Stream.concat(fieldNamesStream, nestedFieldNamesStream);
 	}
 
 	private Optional<FormField> _getFormField(
@@ -301,58 +352,26 @@ public class DocumentationWriter {
 		Representor representor, JSONObjectBuilder resourceJsonObjectBuilder,
 		Optional<Form<FormField>> formOptional) {
 
-		_writeNestableFields(
-			representor, resourceJsonObjectBuilder, formOptional);
+		Stream<String> fieldNamesStream = _calculateNestableFieldNames(
+			representor);
 
 		Stream<RelatedCollection> relatedCollections =
 			representor.getRelatedCollections();
 
-		Stream<String> relatedCollectionsKeys = relatedCollections.map(
+		Stream<String> relatedCollectionsNamesStream = relatedCollections.map(
 			RelatedCollection::getKey);
 
-		_writeFields(
-			relatedCollectionsKeys, resourceJsonObjectBuilder, formOptional);
+		fieldNamesStream = Stream.concat(
+			fieldNamesStream, relatedCollectionsNamesStream);
 
-		List<NestedFieldFunction> nestedFieldFunctions =
-			representor.getNestedFieldFunctions();
-
-		nestedFieldFunctions.forEach(
-			nestedFieldFunction -> _writeNestableFields(
-				nestedFieldFunction.nestedRepresentor,
-				resourceJsonObjectBuilder, formOptional));
-	}
-
-	private void _writeCollectionRoute(
-		JSONObjectBuilder jsonObjectBuilder, Representor representor,
-		String name,
-		BiConsumer<JSONObjectBuilder, String> writeResourceBiconsumer,
-		TriConsumer<String, String, JSONObjectBuilder>
-			writeOperationsBiConsumer) {
-
-		JSONObjectBuilder resourceJsonObjectBuilder = new JSONObjectBuilder();
-
-		List<String> types = representor.getTypes();
-
-		types.forEach(
-			type -> {
-				_documentationMessageMapper.onStartResource(
-					jsonObjectBuilder, resourceJsonObjectBuilder, type);
-
-				writeResourceBiconsumer.accept(resourceJsonObjectBuilder, type);
-
-				writeOperationsBiConsumer.accept(
-					name, type, resourceJsonObjectBuilder);
-
-				_documentationMessageMapper.onFinishResource(
-					jsonObjectBuilder, resourceJsonObjectBuilder, type);
-			});
+		_writeFields(fieldNamesStream, resourceJsonObjectBuilder, formOptional);
 	}
 
 	private void _writeFields(
 		Stream<String> fields, JSONObjectBuilder resourceJsonObjectBuilder,
 		Optional<Form<FormField>> formOptional) {
 
-		fields.forEach(
+		fields.distinct().forEach(
 			field -> {
 				Optional<FormField> formFieldOptional = formOptional.flatMap(
 					formFieldForm -> _getFormField(field, formFieldForm));
@@ -423,60 +442,6 @@ public class DocumentationWriter {
 		);
 	}
 
-	private void _writeNestableFields(
-		BaseRepresentor representor,
-		JSONObjectBuilder resourceJsonObjectBuilder,
-		Optional<Form<FormField>> formOptional) {
-
-		_writeFields(
-			_extractKeys(representor.getBinaryFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		_writeFields(
-			_extractKeys(representor.getBooleanFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		_writeFields(
-			_extractKeys(representor.getBooleanListFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		_writeFields(
-			_extractKeys(representor.getLinkFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		_writeFields(
-			_extractKeys(representor.getLocalizedStringFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		_writeFields(
-			_extractKeys(representor.getNestedFieldFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		_writeFields(
-			_extractKeys(representor.getNumberFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		_writeFields(
-			_extractKeys(representor.getNumberListFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		_writeFields(
-			_extractKeys(representor.getStringFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		_writeFields(
-			_extractKeys(representor.getStringListFunctions()),
-			resourceJsonObjectBuilder, formOptional);
-
-		List<RelatedModel> relatedModels = representor.getRelatedModels();
-
-		Stream<RelatedModel> stream = relatedModels.stream();
-
-		Stream<String> relatedModelKeys = stream.map(RelatedModel::getKey);
-
-		_writeFields(relatedModelKeys, resourceJsonObjectBuilder, formOptional);
-	}
-
 	private void _writeOperation(
 		Operation operation, JSONObjectBuilder jsonObjectBuilder,
 		String resourceName, String type) {
@@ -523,28 +488,29 @@ public class DocumentationWriter {
 	}
 
 	private void _writeRoute(
-		JSONObjectBuilder jsonObjectBuilder, Representor representor,
-		Optional<Form<FormField>> formOptional, String name,
+		JSONObjectBuilder jsonObjectBuilder, String name,
+		Representor representor,
 		BiConsumer<JSONObjectBuilder, String> writeResourceBiConsumer,
 		TriConsumer<String, String, JSONObjectBuilder>
-			writeOperationsBiConsumer) {
-
-		JSONObjectBuilder resourceJsonObjectBuilder = new JSONObjectBuilder();
+			writeOperationsTriConsumer,
+		Consumer<JSONObjectBuilder> writeFieldsRepresentor) {
 
 		List<String> types = representor.getTypes();
 
 		types.forEach(
 			type -> {
+				JSONObjectBuilder resourceJsonObjectBuilder =
+					new JSONObjectBuilder();
+
 				_documentationMessageMapper.onStartResource(
 					jsonObjectBuilder, resourceJsonObjectBuilder, type);
 
 				writeResourceBiConsumer.accept(resourceJsonObjectBuilder, type);
 
-				writeOperationsBiConsumer.accept(
+				writeOperationsTriConsumer.accept(
 					name, type, resourceJsonObjectBuilder);
 
-				_writeAllFields(
-					representor, resourceJsonObjectBuilder, formOptional);
+				writeFieldsRepresentor.accept(resourceJsonObjectBuilder);
 
 				_documentationMessageMapper.onFinishResource(
 					jsonObjectBuilder, resourceJsonObjectBuilder, type);
