@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.jaxrs.json.internal.util;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
-import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import com.liferay.apio.architect.error.APIError;
@@ -108,7 +107,7 @@ public class ErrorUtil {
 		);
 	}
 
-	@Reference(cardinality = OPTIONAL, policy = DYNAMIC, policyOption = GREEDY)
+	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
 	private ApioLogger _apioLogger;
 
 	@Reference
