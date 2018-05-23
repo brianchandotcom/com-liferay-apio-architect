@@ -42,6 +42,7 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -115,6 +116,20 @@ public class DocumentationWriter {
 
 		Map<String, Representor> representorMap = representorMapSupplier.get();
 
+		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier =
+			_documentation.getItemRoutesMapSupplier();
+
+		Map<String, ItemRoutes> itemRoutesMap = itemRoutesMapSupplier.get();
+
+		itemRoutesMap.forEach(
+			(name, itemRoutes) -> _writeRoute(
+				jsonObjectBuilder, name, representorMap.get(name),
+				_documentationMessageMapper::mapResource,
+				this::_writeItemOperations,
+				resourceJsonObjectBuilder -> _writeAllFields(
+					representorMap.get(name), resourceJsonObjectBuilder,
+					itemRoutes.getFormOptional())));
+
 		Supplier<Map<String, NestedCollectionRoutes>>
 			nestedCollectionMapSupplier =
 				_documentation.getNestedCollectionMapSupplier();
@@ -127,41 +142,28 @@ public class DocumentationWriter {
 
 		Map<String, CollectionRoutes> routesMap = routesMapSupplier.get();
 
-		routesMap.forEach(
-			(name, collectionRoutes) -> {
-				_addNestedCollectionResources(
-					jsonObjectBuilder, representorMap,
-					nestedCollectionRoutesMap, name);
+		Set<String> collectionResources = new HashSet<>(routesMap.keySet());
 
-				_writeRoute(
-					jsonObjectBuilder, name, representorMap.get(name),
-					_documentationMessageMapper::mapResourceCollection,
-					this::_writePageOperations,
-					resourceJsonObjectBuilder -> {
-					});
+		Set<String> nestedRoutes = new HashSet<>(itemRoutesMap.keySet());
+
+		nestedRoutes.addAll(routesMap.keySet());
+
+		nestedRoutes.forEach(
+			name -> {
+				Optional<String> nestedCollectionRoute =
+					_getNestedCollectionRouteOptional(
+						representorMap, nestedCollectionRoutesMap, name);
+
+				nestedCollectionRoute.ifPresent(collectionResources::add);
 			});
 
-		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier =
-			_documentation.getItemRoutesMapSupplier();
-
-		Map<String, ItemRoutes> itemRoutesMap = itemRoutesMapSupplier.get();
-
-		itemRoutesMap.forEach(
-			(name, itemRoutes) -> {
-				_addNestedCollectionResources(
-					jsonObjectBuilder, representorMap,
-					nestedCollectionRoutesMap, name);
-
-				Representor representor = representorMap.get(name);
-
-				_writeRoute(
-					jsonObjectBuilder, name, representor,
-					_documentationMessageMapper::mapResource,
-					this::_writeItemOperations,
-					resourceJsonObjectBuilder -> _writeAllFields(
-						representor, resourceJsonObjectBuilder,
-						itemRoutes.getFormOptional()));
-			});
+		collectionResources.forEach(
+			name -> _writeRoute(
+				jsonObjectBuilder, name, representorMap.get(name),
+				_documentationMessageMapper::mapResourceCollection,
+				this::_writePageOperations,
+				__ -> {
+				}));
 
 		_documentationMessageMapper.onFinish(
 			jsonObjectBuilder, _documentation, _requestInfo.getHttpHeaders());
@@ -247,36 +249,6 @@ public class DocumentationWriter {
 
 	}
 
-	private void _addNestedCollectionResources(
-		JSONObjectBuilder jsonObjectBuilder,
-		Map<String, Representor> representorMap, Map<String, ?> nestedRoutesMap,
-		String name) {
-
-		Set<String> nestedRoutes = nestedRoutesMap.keySet();
-
-		nestedRoutes.forEach(
-			nestedRoute -> {
-				String[] routes = nestedRoute.split(name + "-");
-
-				if (routes.length == 2) {
-					String route = routes[0];
-					String nestedResourceName = routes[1];
-
-					if (route.equals("") && !route.equals(nestedResourceName) &&
-						representorMap.containsKey(nestedResourceName)) {
-
-						_writeRoute(
-							jsonObjectBuilder, nestedResourceName,
-							representorMap.get(nestedResourceName),
-							_documentationMessageMapper::mapResourceCollection,
-							this::_writePageOperations,
-							resourceJsonObjectBuilder -> {
-							});
-					}
-				}
-			});
-	}
-
 	private Stream<String> _calculateNestableFieldNames(
 		BaseRepresentor representor) {
 
@@ -335,6 +307,26 @@ public class DocumentationWriter {
 
 		return stream.filter(
 			formField -> formField.name.equals(fieldName)
+		).findFirst();
+	}
+
+	private Optional<String> _getNestedCollectionRouteOptional(
+		Map<String, Representor> representorMap, Map<String, ?> nestedRoutesMap,
+		String name) {
+
+		Set<String> nestedRoutes = nestedRoutesMap.keySet();
+
+		Stream<String> nestedRoutesStream = nestedRoutes.stream();
+
+		return nestedRoutesStream.map(
+			nestedRoute -> nestedRoute.split(name + "-")
+		).filter(
+			routes ->
+				routes.length == 2 && !routes[0].equals("") &&
+				!routes[0].equals(routes[1]) &&
+				representorMap.containsKey(routes[1])
+		).map(
+			routes -> routes[1]
 		).findFirst();
 	}
 
