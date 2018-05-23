@@ -2,8 +2,8 @@
 	"@context": {
 		"ApiDocumentation": "hydra:ApiDocumentation",
 		"code": "hydra:statusCodes",
-		"expect": {
-			"@id": "hydra:expect",
+		"expects": {
+			"@id": "hydra:expects",
 			"@type": "@id"
 		},
 		"hydra": "https://www.w3.org/ns/hydra/core#",
