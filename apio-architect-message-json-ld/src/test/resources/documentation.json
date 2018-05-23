@@ -28,88 +28,6 @@
 	"description": "Description",
 	"supportedClass": [
 		{
-			"@id": "vocab:Type 1Collection",
-			"@type": "Class",
-			"description": "A collection of Type 1",
-			"subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
-			"supportedOperation": [
-				{
-					"@id": "_:root",
-					"@type": "Operation",
-					"method": "GET",
-					"returns": "https://www.w3.org/ns/hydra/core#Collection"
-				},
-				{
-					"@id": "_:root/create",
-					"@type": "Operation",
-					"method": "POST",
-					"returns": "http://schema.org/Type 1"
-				}
-			],
-			"supportedProperty": [
-				{
-					"readonly": false,
-					"required": false,
-					"title": "totalItems",
-					"writeonly": false
-				},
-				{
-					"readonly": false,
-					"required": false,
-					"title": "member",
-					"writeonly": false
-				},
-				{
-					"readonly": false,
-					"required": false,
-					"title": "numberOfItems",
-					"writeonly": false
-				}
-			],
-			"title": "Type 1Collection"
-		},
-		{
-			"@id": "vocab:Type 2Collection",
-			"@type": "Class",
-			"description": "A collection of Type 2",
-			"subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
-			"supportedOperation": [
-				{
-					"@id": "_:root",
-					"@type": "Operation",
-					"method": "GET",
-					"returns": "https://www.w3.org/ns/hydra/core#Collection"
-				},
-				{
-					"@id": "_:root/create",
-					"@type": "Operation",
-					"method": "POST",
-					"returns": "http://schema.org/Type 2"
-				}
-			],
-			"supportedProperty": [
-				{
-					"readonly": false,
-					"required": false,
-					"title": "totalItems",
-					"writeonly": false
-				},
-				{
-					"readonly": false,
-					"required": false,
-					"title": "member",
-					"writeonly": false
-				},
-				{
-					"readonly": false,
-					"required": false,
-					"title": "numberOfItems",
-					"writeonly": false
-				}
-			],
-			"title": "Type 2Collection"
-		},
-		{
 			"@id": "http://schema.org/Type 1",
 			"@type": "Class",
 			"supportedOperation": [
@@ -522,6 +440,88 @@
 				}
 			],
 			"title": "Type 2"
+		},
+		{
+			"@id": "vocab:Type 1Collection",
+			"@type": "Class",
+			"description": "A collection of Type 1",
+			"subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
+			"supportedOperation": [
+				{
+					"@id": "_:root",
+					"@type": "Operation",
+					"method": "GET",
+					"returns": "https://www.w3.org/ns/hydra/core#Collection"
+				},
+				{
+					"@id": "_:root/create",
+					"@type": "Operation",
+					"method": "POST",
+					"returns": "http://schema.org/Type 1"
+				}
+			],
+			"supportedProperty": [
+				{
+					"readonly": false,
+					"required": false,
+					"title": "totalItems",
+					"writeonly": false
+				},
+				{
+					"readonly": false,
+					"required": false,
+					"title": "member",
+					"writeonly": false
+				},
+				{
+					"readonly": false,
+					"required": false,
+					"title": "numberOfItems",
+					"writeonly": false
+				}
+			],
+			"title": "Type 1Collection"
+		},
+		{
+			"@id": "vocab:Type 2Collection",
+			"@type": "Class",
+			"description": "A collection of Type 2",
+			"subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
+			"supportedOperation": [
+				{
+					"@id": "_:root",
+					"@type": "Operation",
+					"method": "GET",
+					"returns": "https://www.w3.org/ns/hydra/core#Collection"
+				},
+				{
+					"@id": "_:root/create",
+					"@type": "Operation",
+					"method": "POST",
+					"returns": "http://schema.org/Type 2"
+				}
+			],
+			"supportedProperty": [
+				{
+					"readonly": false,
+					"required": false,
+					"title": "totalItems",
+					"writeonly": false
+				},
+				{
+					"readonly": false,
+					"required": false,
+					"title": "member",
+					"writeonly": false
+				},
+				{
+					"readonly": false,
+					"required": false,
+					"title": "numberOfItems",
+					"writeonly": false
+				}
+			],
+			"title": "Type 2Collection"
 		}
 	],
 	"title": "Title"
