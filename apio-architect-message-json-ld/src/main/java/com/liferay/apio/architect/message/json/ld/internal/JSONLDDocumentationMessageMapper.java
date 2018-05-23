@@ -351,12 +351,12 @@ public class JSONLDDocumentationMessageMapper
 		);
 
 		JSONObjectBuilder.FieldStep expectBuilder = contextBuilder.nestedField(
-			"expect");
+			"expects");
 
 		expectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"hydra:expect"
+			"hydra:expects"
 		);
 
 		expectBuilder.field(
