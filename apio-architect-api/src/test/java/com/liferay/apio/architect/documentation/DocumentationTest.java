@@ -21,8 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import com.liferay.apio.architect.alias.RequestFunction;
-
+import java.util.Collections;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,23 +38,14 @@ public class DocumentationTest {
 	@Test
 	public void testDocumentationWithEmptyValuesReturnEmpty() {
 		Documentation documentation = new Documentation(
-			__ -> Optional.empty(), __ -> Optional.empty(), null, null, null,
-			null);
+			Optional::empty, Optional::empty, Collections::emptyMap,
+			Collections::emptyMap, Collections::emptyMap,
+			Collections::emptyMap);
 
-		RequestFunction<Optional<String>> apiTitleRequestFunction =
-			documentation.getAPITitleRequestFunction();
-
-		HttpServletRequest httpServletRequest = Mockito.mock(
-			HttpServletRequest.class);
-
-		Optional<String> optionalTitle = apiTitleRequestFunction.apply(
-			httpServletRequest);
-
-		RequestFunction<Optional<String>> apiDescriptionRequestFunction =
-			documentation.getAPIDescriptionRequestFunction();
+		Optional<String> optionalTitle = documentation.getAPITitleOptional();
 
 		Optional<String> optionalDescription =
-			apiDescriptionRequestFunction.apply(httpServletRequest);
+			documentation.getAPIDescriptionOptional();
 
 		assertThat(optionalTitle, is(emptyOptional()));
 		assertThat(optionalDescription, is(emptyOptional()));
@@ -64,23 +54,16 @@ public class DocumentationTest {
 	@Test
 	public void testDocumentationWithNonemptyValuesReturnThem() {
 		Documentation documentation = new Documentation(
-			__ -> Optional.of(() -> "A"), __ -> Optional.of(() -> "B"), null,
-			null, null, null);
+			() -> Optional.of(() -> "A"), () -> Optional.of(() -> "B"),
+			() -> Collections.singletonMap("r", null),
+			() -> Collections.singletonMap("c", null),
+			() -> Collections.singletonMap("i", null),
+			() -> Collections.singletonMap("n", null));
 
-		RequestFunction<Optional<String>> apiTitleRequestFunction =
-			documentation.getAPITitleRequestFunction();
-
-		HttpServletRequest httpServletRequest = Mockito.mock(
-			HttpServletRequest.class);
-
-		Optional<String> optionalTitle = apiTitleRequestFunction.apply(
-			httpServletRequest);
-
-		RequestFunction<Optional<String>> apiDescriptionRequestFunction =
-			documentation.getAPIDescriptionRequestFunction();
+		Optional<String> optionalTitle = documentation.getAPITitleOptional();
 
 		Optional<String> optionalDescription =
-			apiDescriptionRequestFunction.apply(httpServletRequest);
+			documentation.getAPIDescriptionOptional();
 
 		assertThat(optionalTitle, is(optionalWithValue(equalTo("A"))));
 		assertThat(optionalDescription, is(optionalWithValue(equalTo("B"))));

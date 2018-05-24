@@ -91,8 +91,8 @@ public class MockDocumentationWriter {
 		NestedCollectionRoutes nestedCollectionRoutes = nestedBuilder.build();
 
 		Documentation documentation = new Documentation(
-			__ -> Optional.of(() -> "Title"),
-			__ -> Optional.of(() -> "Description"), () -> root,
+			() -> Optional.of(() -> "Title"),
+			() -> Optional.of(() -> "Description"), () -> root,
 			() -> Collections.singletonMap("root", collectionRoutes),
 			() -> Collections.singletonMap("root", itemRoutes),
 			() -> Collections.singletonMap("root", nestedCollectionRoutes));

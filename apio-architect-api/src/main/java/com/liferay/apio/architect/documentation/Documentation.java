@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.documentation;
 
-import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -32,16 +31,16 @@ import java.util.function.Supplier;
 public class Documentation {
 
 	public Documentation(
-		RequestFunction<Optional<APITitle>> apiTitleRequestFunction,
-		RequestFunction<Optional<APIDescription>> apiDescriptionRequestFunction,
+		Supplier<Optional<APITitle>> apiTitleSupplier,
+		Supplier<Optional<APIDescription>> apiDescriptionSupplier,
 		Supplier<Map<String, Representor>> representorMapSupplier,
 		Supplier<Map<String, CollectionRoutes>> collectionRoutesMapSupplier,
 		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier,
 		Supplier<Map<String, NestedCollectionRoutes>>
 			nestedCollectionRoutesMapSupplier) {
 
-		_apiTitleRequestFunction = apiTitleRequestFunction;
-		_apiDescriptionRequestFunction = apiDescriptionRequestFunction;
+		_apiTitleSupplier = apiTitleSupplier;
+		_apiDescriptionSupplier = apiDescriptionSupplier;
 		_representorMapSupplier = representorMapSupplier;
 		_routesMapSupplier = collectionRoutesMapSupplier;
 		_itemRoutesMapSupplier = itemRoutesMapSupplier;
@@ -49,38 +48,30 @@ public class Documentation {
 	}
 
 	/**
-	 * Returns the function that calculates the API's description, if present.
-	 * Returns {@code Optional#empty()} otherwise.
+	 * Returns the API's description, if present. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the API's description, if present; {@code Optional#empty()}
 	 *         otherwise
+	 * @review
 	 */
-	public RequestFunction<Optional<String>>
-		getAPIDescriptionRequestFunction() {
+	public Optional<String> getAPIDescriptionOptional() {
 
-		return httpServletRequest -> _apiDescriptionRequestFunction.apply(
-			httpServletRequest
-		).map(
-			APIDescription::get
-		);
+		Optional<APIDescription> optional = _apiDescriptionSupplier.get();
+
+		return optional.map(APIDescription::get);
 	}
 
 	/**
-	 * Returns the function that calculates the API's description, if present.
-	 * Returns {@code Optional#empty()} otherwise.
+	 * Returns the API's title, if present. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the API's title, if present; {@code Optional#empty()} otherwise
+	 * @return the API's title, if present; {@code Optional#empty()}
+	 *         otherwise
+	 * @review
 	 */
-	public RequestFunction<Optional<String>> getAPITitleRequestFunction() {
-		return httpServletRequest -> _apiTitleRequestFunction.apply(
-			httpServletRequest
-		).map(
-			APITitle::get
-		);
-	}
+	public Optional<String> getAPITitleOptional() {
+		Optional<APITitle> optional = _apiTitleSupplier.get();
 
-	public Supplier<Map<String, ItemRoutes>> getItemRoutesMapSupplier() {
-		return _itemRoutesMapSupplier;
+		return optional.map(APITitle::get);
 	}
 
 	public Supplier<Map<String, NestedCollectionRoutes>>
@@ -97,9 +88,8 @@ public class Documentation {
 		return _routesMapSupplier;
 	}
 
-	private final RequestFunction<Optional<APIDescription>>
-		_apiDescriptionRequestFunction;
-	private final RequestFunction<Optional<APITitle>> _apiTitleRequestFunction;
+	private final Supplier<Optional<APIDescription>> _apiDescriptionSupplier;
+	private final Supplier<Optional<APITitle>> _apiTitleSupplier;
 	private final Supplier<Map<String, ItemRoutes>> _itemRoutesMapSupplier;
 	private final Supplier<Map<String, NestedCollectionRoutes>>
 		_nestedCollectionRoutesMapSupplier;

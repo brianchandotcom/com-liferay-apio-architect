@@ -21,7 +21,6 @@ import static com.liferay.apio.architect.operation.Method.PUT;
 
 import com.google.gson.JsonObject;
 
-import com.liferay.apio.architect.alias.RequestFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.Form;
@@ -88,22 +87,18 @@ public class DocumentationWriter {
 	public String write() {
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		RequestFunction<Optional<String>> apiTitleRequestFunction =
-			_documentation.getAPITitleRequestFunction();
+		Optional<String> apiTitleOptional =
+			_documentation.getAPITitleOptional();
 
-		apiTitleRequestFunction.apply(
-			_requestInfo.getHttpServletRequest()
-		).ifPresent(
+		apiTitleOptional.ifPresent(
 			title -> _documentationMessageMapper.mapTitle(
 				jsonObjectBuilder, title)
 		);
 
-		RequestFunction<Optional<String>> apiDescriptionRequestFunction =
-			_documentation.getAPIDescriptionRequestFunction();
+		Optional<String> apiDescriptionOptional =
+			_documentation.getAPIDescriptionOptional();
 
-		apiDescriptionRequestFunction.apply(
-			_requestInfo.getHttpServletRequest()
-		).ifPresent(
+		apiDescriptionOptional.ifPresent(
 			description -> _documentationMessageMapper.mapDescription(
 				jsonObjectBuilder, description)
 		);
