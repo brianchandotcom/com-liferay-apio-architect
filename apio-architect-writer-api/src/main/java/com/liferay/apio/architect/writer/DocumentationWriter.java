@@ -49,7 +49,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -92,29 +91,22 @@ public class DocumentationWriter {
 
 		apiTitleOptional.ifPresent(
 			title -> _documentationMessageMapper.mapTitle(
-				jsonObjectBuilder, title)
-		);
+				jsonObjectBuilder, title));
 
 		Optional<String> apiDescriptionOptional =
 			_documentation.getAPIDescriptionOptional();
 
 		apiDescriptionOptional.ifPresent(
 			description -> _documentationMessageMapper.mapDescription(
-				jsonObjectBuilder, description)
-		);
+				jsonObjectBuilder, description));
 
 		_documentationMessageMapper.onStart(
 			jsonObjectBuilder, _documentation, _requestInfo.getHttpHeaders());
 
-		Supplier<Map<String, Representor>> representorMapSupplier =
-			_documentation.getRepresentorMapSupplier();
+		Map<String, Representor> representorMap =
+			_documentation.getRepresentors();
 
-		Map<String, Representor> representorMap = representorMapSupplier.get();
-
-		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier =
-			_documentation.getItemRoutesMapSupplier();
-
-		Map<String, ItemRoutes> itemRoutesMap = itemRoutesMapSupplier.get();
+		Map<String, ItemRoutes> itemRoutesMap = _documentation.getItemRoutes();
 
 		itemRoutesMap.forEach(
 			(name, itemRoutes) -> _writeRoute(
@@ -125,17 +117,11 @@ public class DocumentationWriter {
 					representorMap.get(name), resourceJsonObjectBuilder,
 					itemRoutes.getFormOptional())));
 
-		Supplier<Map<String, NestedCollectionRoutes>>
-			nestedCollectionMapSupplier =
-				_documentation.getNestedCollectionMapSupplier();
-
 		Map<String, NestedCollectionRoutes> nestedCollectionRoutesMap =
-			nestedCollectionMapSupplier.get();
+			_documentation.getNestedCollectionRoutes();
 
-		Supplier<Map<String, CollectionRoutes>> routesMapSupplier =
-			_documentation.getRoutesMapSupplier();
-
-		Map<String, CollectionRoutes> routesMap = routesMapSupplier.get();
+		Map<String, CollectionRoutes> routesMap =
+			_documentation.getCollectionRoutes();
 
 		Set<String> collectionResources = new HashSet<>(routesMap.keySet());
 
@@ -393,10 +379,7 @@ public class DocumentationWriter {
 	private void _writeItemOperations(
 		String name, String type, JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		Supplier<Map<String, ItemRoutes>> itemRoutesMapSupplier =
-			_documentation.getItemRoutesMapSupplier();
-
-		Map<String, ItemRoutes> itemRoutesMap = itemRoutesMapSupplier.get();
+		Map<String, ItemRoutes> itemRoutesMap = _documentation.getItemRoutes();
 
 		Optional.ofNullable(
 			itemRoutesMap.getOrDefault(name, null)
@@ -449,11 +432,8 @@ public class DocumentationWriter {
 		String resource, String type,
 		JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		Supplier<Map<String, CollectionRoutes>> routesMapSupplier =
-			_documentation.getRoutesMapSupplier();
-
 		Map<String, CollectionRoutes> collectionRoutesMap =
-			routesMapSupplier.get();
+			_documentation.getCollectionRoutes();
 
 		Optional.ofNullable(
 			collectionRoutesMap.getOrDefault(resource, null)
