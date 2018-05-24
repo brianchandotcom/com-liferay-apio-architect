@@ -91,44 +91,45 @@ public class DocumentationWriter {
 
 		_writeDocumentationMetadata(jsonObjectBuilder);
 
-		Map<String, Representor> representorMap =
+		Map<String, Representor> representors =
 			_documentation.getRepresentors();
 
 		Map<String, ItemRoutes> itemRoutesMap = _documentation.getItemRoutes();
 
 		itemRoutesMap.forEach(
 			(name, itemRoutes) -> _writeRoute(
-				jsonObjectBuilder, name, representorMap.get(name),
+				jsonObjectBuilder, name, representors.get(name),
 				_documentationMessageMapper::mapResource,
 				this::_writeItemOperations,
 				resourceJsonObjectBuilder -> _writeAllFields(
-					representorMap.get(name), resourceJsonObjectBuilder,
+					representors.get(name), resourceJsonObjectBuilder,
 					itemRoutes.getFormOptional())));
 
 		Map<String, NestedCollectionRoutes> nestedCollectionRoutesMap =
 			_documentation.getNestedCollectionRoutes();
 
-		Map<String, CollectionRoutes> routesMap =
+		Map<String, CollectionRoutes> collectionRoutes =
 			_documentation.getCollectionRoutes();
 
-		Set<String> collectionResources = new HashSet<>(routesMap.keySet());
+		Set<String> collectionResources = new HashSet<>(
+			collectionRoutes.keySet());
 
 		Set<String> nestedRoutes = new HashSet<>(itemRoutesMap.keySet());
 
-		nestedRoutes.addAll(routesMap.keySet());
+		nestedRoutes.addAll(collectionRoutes.keySet());
 
 		nestedRoutes.forEach(
 			name -> {
 				Optional<String> nestedCollectionRoute =
 					_getNestedCollectionRouteOptional(
-						representorMap, nestedCollectionRoutesMap, name);
+						representors, nestedCollectionRoutesMap, name);
 
 				nestedCollectionRoute.ifPresent(collectionResources::add);
 			});
 
 		collectionResources.forEach(
 			name -> _writeRoute(
-				jsonObjectBuilder, name, representorMap.get(name),
+				jsonObjectBuilder, name, representors.get(name),
 				_documentationMessageMapper::mapResourceCollection,
 				this::_writePageOperations,
 				__ -> {
@@ -140,22 +141,6 @@ public class DocumentationWriter {
 		JsonObject jsonObject = jsonObjectBuilder.build();
 
 		return jsonObject.toString();
-	}
-
-	private void _writeDocumentationMetadata(JSONObjectBuilder jsonObjectBuilder) {
-		Optional<String> apiTitleOptional =
-			_documentation.getAPITitleOptional();
-
-		apiTitleOptional.ifPresent(
-			title -> _documentationMessageMapper.mapTitle(
-				jsonObjectBuilder, title));
-
-		Optional<String> apiDescriptionOptional =
-			_documentation.getAPIDescriptionOptional();
-
-		apiDescriptionOptional.ifPresent(
-			description -> _documentationMessageMapper.mapDescription(
-				jsonObjectBuilder, description));
 	}
 
 	/**
@@ -342,6 +327,24 @@ public class DocumentationWriter {
 			fieldNamesStream, relatedCollectionsNamesStream);
 
 		_writeFields(fieldNamesStream, resourceJsonObjectBuilder, formOptional);
+	}
+
+	private void _writeDocumentationMetadata(
+		JSONObjectBuilder jsonObjectBuilder) {
+
+		Optional<String> apiTitleOptional =
+			_documentation.getAPITitleOptional();
+
+		apiTitleOptional.ifPresent(
+			title -> _documentationMessageMapper.mapTitle(
+				jsonObjectBuilder, title));
+
+		Optional<String> apiDescriptionOptional =
+			_documentation.getAPIDescriptionOptional();
+
+		apiDescriptionOptional.ifPresent(
+			description -> _documentationMessageMapper.mapDescription(
+				jsonObjectBuilder, description));
 	}
 
 	private void _writeFields(
