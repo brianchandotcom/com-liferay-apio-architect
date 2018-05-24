@@ -86,22 +86,10 @@ public class DocumentationWriter {
 	public String write() {
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		Optional<String> apiTitleOptional =
-			_documentation.getAPITitleOptional();
-
-		apiTitleOptional.ifPresent(
-			title -> _documentationMessageMapper.mapTitle(
-				jsonObjectBuilder, title));
-
-		Optional<String> apiDescriptionOptional =
-			_documentation.getAPIDescriptionOptional();
-
-		apiDescriptionOptional.ifPresent(
-			description -> _documentationMessageMapper.mapDescription(
-				jsonObjectBuilder, description));
-
 		_documentationMessageMapper.onStart(
 			jsonObjectBuilder, _documentation, _requestInfo.getHttpHeaders());
+
+		_writeDocumentationMetadata(jsonObjectBuilder);
 
 		Map<String, Representor> representorMap =
 			_documentation.getRepresentors();
@@ -152,6 +140,22 @@ public class DocumentationWriter {
 		JsonObject jsonObject = jsonObjectBuilder.build();
 
 		return jsonObject.toString();
+	}
+
+	private void _writeDocumentationMetadata(JSONObjectBuilder jsonObjectBuilder) {
+		Optional<String> apiTitleOptional =
+			_documentation.getAPITitleOptional();
+
+		apiTitleOptional.ifPresent(
+			title -> _documentationMessageMapper.mapTitle(
+				jsonObjectBuilder, title));
+
+		Optional<String> apiDescriptionOptional =
+			_documentation.getAPIDescriptionOptional();
+
+		apiDescriptionOptional.ifPresent(
+			description -> _documentationMessageMapper.mapDescription(
+				jsonObjectBuilder, description));
 	}
 
 	/**
