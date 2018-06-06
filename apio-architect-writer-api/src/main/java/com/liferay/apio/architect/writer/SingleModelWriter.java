@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.writer;
 
-import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
+import static com.liferay.apio.architect.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
 

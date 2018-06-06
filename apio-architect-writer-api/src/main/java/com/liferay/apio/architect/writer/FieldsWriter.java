@@ -15,9 +15,9 @@
 package com.liferay.apio.architect.writer;
 
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
-import static com.liferay.apio.architect.writer.url.URLCreator.createBinaryURL;
-import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
-import static com.liferay.apio.architect.writer.url.URLCreator.createSingleURL;
+import static com.liferay.apio.architect.url.URLCreator.createBinaryURL;
+import static com.liferay.apio.architect.url.URLCreator.createNestedCollectionURL;
+import static com.liferay.apio.architect.url.URLCreator.createSingleURL;
 
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.list.FunctionalList;
@@ -31,8 +31,8 @@ import com.liferay.apio.architect.response.control.Fields;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.url.URLCreator;
 import com.liferay.apio.architect.writer.alias.SingleModelFunction;
-import com.liferay.apio.architect.writer.url.URLCreator;
 
 import java.util.List;
 import java.util.Optional;

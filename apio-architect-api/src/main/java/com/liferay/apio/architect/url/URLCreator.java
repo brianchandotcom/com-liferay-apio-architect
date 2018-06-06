@@ -12,13 +12,12 @@
  * details.
  */
 
-package com.liferay.apio.architect.writer.url;
+package com.liferay.apio.architect.url;
 
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageType;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.url.ServerURL;
 
 import java.net.URI;
 
@@ -139,6 +138,27 @@ public final class URLCreator {
 	 */
 	public static String createSingleURL(ServerURL serverURL, Path path) {
 		return serverURL.get() + "/p/" + path.asURI();
+	}
+
+	/**
+	 * Returns the {@link Path} from the HTTP servlet request's original URL.
+	 *
+	 * @return a Path objectSingleModelWriter.java
+	 */
+	public static Path getPath(String url) {
+		String[] serverAndPath = url.split("/[bfp]/");
+
+		if (serverAndPath.length == 2) {
+			String fullPath = serverAndPath[1];
+
+			String[] pathComponentes = fullPath.split("/");
+
+			String id = pathComponentes.length == 1 ? null : pathComponentes[1];
+
+			return new Path(pathComponentes[0], id);
+		}
+
+		return null;
 	}
 
 	private URLCreator() {

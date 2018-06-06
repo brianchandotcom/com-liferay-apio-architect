@@ -14,10 +14,10 @@
 
 package com.liferay.apio.architect.writer;
 
-import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionPageURL;
-import static com.liferay.apio.architect.writer.url.URLCreator.createCollectionURL;
-import static com.liferay.apio.architect.writer.url.URLCreator.createFormURL;
-import static com.liferay.apio.architect.writer.url.URLCreator.createNestedCollectionURL;
+import static com.liferay.apio.architect.url.URLCreator.createCollectionPageURL;
+import static com.liferay.apio.architect.url.URLCreator.createCollectionURL;
+import static com.liferay.apio.architect.url.URLCreator.createFormURL;
+import static com.liferay.apio.architect.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
 
