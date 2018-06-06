@@ -60,7 +60,8 @@ public class NestedCollectionRoutesTest {
 		Builder<String, Long, Long> builder = new Builder<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
-			});
+			},
+			null);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.build();
@@ -81,7 +82,8 @@ public class NestedCollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long, Long> builder = new Builder<>(
-			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			null);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -107,7 +109,8 @@ public class NestedCollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long, Long> builder = new Builder<>(
-			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			null);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -133,7 +136,8 @@ public class NestedCollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long, Long> builder = new Builder<>(
-			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			null);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -153,7 +157,8 @@ public class NestedCollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long, Long> builder = new Builder<>(
-			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			null);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -177,7 +182,8 @@ public class NestedCollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long, Long> builder = new Builder<>(
-			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			null);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(

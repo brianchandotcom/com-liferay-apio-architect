@@ -64,18 +64,21 @@ public class MockDocumentationWriter {
 			new CollectionRoutes.Builder<>(
 				"name", null,
 				__ -> {
-				});
+				},
+				null);
 
 		ItemRoutes.Builder itemBuilder = new ItemRoutes.Builder<>(
 			"name", null,
 			__ -> {
-			});
+			},
+			null);
 
 		NestedCollectionRoutes.Builder nestedBuilder =
 			new NestedCollectionRoutes.Builder(
 				"name", null, __ -> null,
 				__ -> {
-				});
+				},
+				null);
 
 		Representor<RootModel> rootModelRepresentor =
 			MockRepresentorCreator.createRootModelRepresentor(false);

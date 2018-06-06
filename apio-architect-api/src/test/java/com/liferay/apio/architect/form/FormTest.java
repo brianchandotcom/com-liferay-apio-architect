@@ -348,7 +348,7 @@ public class FormTest {
 			Builder<Map<String, Object>>.FieldStep> function) {
 
 		Builder<Map<String, Object>> builder = new Builder<>(
-			Collections.emptyList());
+			Collections.emptyList(), null);
 
 		return function.apply(
 			builder.title(
@@ -396,7 +396,7 @@ public class FormTest {
 
 	private Form<Map<String, Object>> _getForm() {
 		Builder<Map<String, Object>> builder = new Builder<>(
-			asList("1", "2", "3"));
+			asList("1", "2", "3"), null);
 
 		return builder.title(
 			__ -> "title"

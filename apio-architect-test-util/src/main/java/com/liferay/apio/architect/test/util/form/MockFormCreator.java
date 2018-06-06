@@ -38,7 +38,7 @@ public class MockFormCreator {
 	 * @return the mock {@code Form}
 	 */
 	public static Form createForm(String... paths) {
-		Builder<Object> builder = new Builder<>(Arrays.asList(paths));
+		Builder<Object> builder = new Builder<>(Arrays.asList(paths), null);
 
 		return builder.title(
 			__ -> "title"

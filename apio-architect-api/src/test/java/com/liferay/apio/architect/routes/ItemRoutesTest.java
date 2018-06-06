@@ -55,7 +55,8 @@ public class ItemRoutesTest {
 		Builder<String, Long> builder = new Builder<>(
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
-			});
+			},
+			null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.build();
 
@@ -82,7 +83,7 @@ public class ItemRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
@@ -112,7 +113,7 @@ public class ItemRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
@@ -142,7 +143,7 @@ public class ItemRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
@@ -166,7 +167,7 @@ public class ItemRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
@@ -193,7 +194,7 @@ public class ItemRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
