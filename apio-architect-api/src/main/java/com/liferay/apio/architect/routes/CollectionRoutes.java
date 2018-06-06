@@ -17,6 +17,7 @@ package com.liferay.apio.architect.routes;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
+import com.liferay.apio.architect.alias.routes.BatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasAddingPermissionFunction;
@@ -29,6 +30,7 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -49,6 +51,17 @@ import java.util.Optional;
  */
 @ProviderType
 public interface CollectionRoutes<T, S> {
+
+	/**
+	 * Returns the function that is used to create multiple collection items, if
+	 * the endpoint was added through the {@link Builder} and the function
+	 * therefore exists. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the function used to create a collection item, if the function
+	 *         exists; {@code Optional#empty()} otherwise
+	 */
+	public Optional<BatchCreateItemFunction<S>>
+		getBatchCreateItemFunctionOptional();
 
 	/**
 	 * Returns the function that is used to create a collection item, if the
@@ -86,6 +99,12 @@ public interface CollectionRoutes<T, S> {
 	 */
 	@ProviderType
 	public interface Builder<T, S> {
+
+		public <A, R> Builder<T, S> addBatchCreator(
+			ThrowableBiFunction<List<R>, A, List<S>> throwableBiFunction,
+			Class<A> aClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a route to a creator function that has one extra parameter.

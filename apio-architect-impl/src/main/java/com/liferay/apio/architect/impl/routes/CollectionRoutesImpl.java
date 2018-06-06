@@ -18,9 +18,11 @@ import static com.liferay.apio.architect.impl.routes.RoutesBuilderUtil.provide;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
+import com.liferay.apio.architect.alias.routes.BatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasAddingPermissionFunction;
+import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
@@ -53,9 +55,17 @@ import java.util.function.Function;
 public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 	public CollectionRoutesImpl(BuilderImpl<T, S> builderImpl) {
+		_batchCreateItemFunction = builderImpl._batchCreateItemFunction;
 		_createItemFunction = builderImpl._createItemFunction;
 		_form = builderImpl._form;
 		_getPageFunction = builderImpl._getPageFunction;
+	}
+
+	@Override
+	public Optional<BatchCreateItemFunction<S>>
+		getBatchCreateItemFunctionOptional() {
+
+		return Optional.ofNullable(_batchCreateItemFunction);
 	}
 
 	@Override
@@ -85,6 +95,32 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_neededProviderConsumer = neededProviderConsumer;
 
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
+		}
+
+		@Override
+		public <A, R> Builder<T, S> addBatchCreator(
+			ThrowableBiFunction<List<R>, A, List<S>> throwableBiFunction,
+			Class<A> aClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
+
+			_hasAddingPermissionFunction = hasAddingPermissionFunction;
+
+			Form<R> form = formBuilderFunction.apply(
+				new FormImpl.BuilderImpl<>(
+					Arrays.asList("c", "b", _name), _pathToIdentifierFunction));
+
+			_batchCreateItemFunction = httpServletRequest -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass,
+				a -> throwableBiFunction.andThen(
+					t -> new BatchResult<>(t, _name)
+				).apply(
+					form.getList(body), a
+				));
+
+			return this;
 		}
 
 		@Override
@@ -377,6 +413,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return Collections.singletonList(createOperation);
 		}
 
+		private BatchCreateItemFunction<S> _batchCreateItemFunction;
 		private CreateItemFunction<T> _createItemFunction;
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
@@ -388,6 +425,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 	}
 
+	private final BatchCreateItemFunction<S> _batchCreateItemFunction;
 	private final CreateItemFunction<T> _createItemFunction;
 	private final Form _form;
 	private final GetPageFunction<T> _getPageFunction;
