@@ -18,6 +18,7 @@ import static java.util.Collections.emptyList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 
 import com.liferay.apio.architect.pagination.Page;
@@ -26,6 +27,7 @@ import com.liferay.apio.architect.pagination.PageType;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.url.URLCreator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -123,6 +125,15 @@ public class URLCreatorTest {
 		String url = URLCreator.createSingleURL(_serverURL, _path);
 
 		assertThat(url, is("www.liferay.com/p/name/id"));
+	}
+
+	@Test
+	public void testExtractsPathFromSingleURL() {
+		Path path = URLCreator.getPath("www.liferay.com/p/name/id");
+
+		assertThat(path, is(notNullValue()));
+		assertThat(path.getName(), is("name"));
+		assertThat(path.getId(), is("id"));
 	}
 
 	private final Path _path = new Path("name", "id");

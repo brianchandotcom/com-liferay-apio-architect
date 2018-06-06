@@ -26,6 +26,7 @@ import static com.liferay.apio.architect.form.FormUtil.getOptionalDoubleList;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalFile;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalFileList;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalFormFieldStream;
+import static com.liferay.apio.architect.form.FormUtil.getOptionalLinkedModel;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalLong;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalLongList;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalString;
@@ -39,6 +40,7 @@ import static com.liferay.apio.architect.form.FormUtil.getRequiredDoubleList;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredFile;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredFileList;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredFormFieldStream;
+import static com.liferay.apio.architect.form.FormUtil.getRequiredLinkedModel;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredLong;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredLongList;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredString;
@@ -70,7 +72,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.ws.rs.BadRequestException;
@@ -180,10 +185,9 @@ public class FormUtilTest {
 		_validateOptionalValueMethod(
 			(Body body, List<Long> list) -> getOptionalLong(body, list));
 		_validateOptionalValueMethod(
+			(Body body, List<Long> list) -> getOptionalLong(body, list));
+		_validateOptionalValueMethod(
 			(Body body, List<String> list) -> getOptionalString(body, list));
-		_validateOptionalListMethod(
-			(Body body, List<Boolean> list) -> getOptionalBooleanList(
-				body, list));
 		_validateOptionalListMethod(
 			(Body body, List<Boolean> list) -> getOptionalBooleanList(
 				body, list));
@@ -285,6 +289,21 @@ public class FormUtilTest {
 		FormField secondFormField = new FormField("second", false, BOOLEAN);
 
 		assertThat(stream, contains(firstFormField, secondFormField));
+	}
+
+	@Test
+	public void testGetOptionalLinkedModelExtractsLinkedModel() {
+		List<String> list = new ArrayList<>();
+
+		BiConsumer<String, Function<List<String>, Consumer<?>>>
+			fieldFormBiConsumer = getOptionalLinkedModel(
+				_valueBody("https://localhost:8080/p/string/1"), list,
+				__ -> "Apio");
+
+		fieldFormBiConsumer.accept(
+			"Apio", __ -> string -> list.add(String.valueOf(string)));
+
+		_validateStringList(list);
 	}
 
 	@Test
@@ -587,6 +606,18 @@ public class FormUtilTest {
 		FormField secondFormField = new FormField("second", true, BOOLEAN);
 
 		assertThat(stream, contains(firstFormField, secondFormField));
+	}
+
+	@Test(expected = BadRequestException.class)
+	public void testGetRequiredLinkedModelFailsIfNotPresent() {
+		List<String> list = new ArrayList<>();
+
+		BiConsumer<String, Function<List<String>, Consumer>>
+			requiredLinkedModel = getRequiredLinkedModel(
+				__ -> Optional.empty(), list, path -> "");
+
+		requiredLinkedModel.accept(
+			"linkedModel", strings -> o -> list.addAll(strings));
 	}
 
 	@Test
