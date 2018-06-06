@@ -622,7 +622,7 @@ public class FormUtil {
 
 		Optional<String> optional = body.getValueOptional(key);
 
-		if (optional.isPresent() && (identifierFunction != null)) {
+		if (optional.isPresent()) {
 			String url = optional.get();
 
 			Path path = URLCreator.getPath(url);

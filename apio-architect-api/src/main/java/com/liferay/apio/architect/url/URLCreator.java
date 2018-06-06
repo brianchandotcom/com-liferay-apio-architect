@@ -151,11 +151,11 @@ public final class URLCreator {
 		if (serverAndPath.length == 2) {
 			String fullPath = serverAndPath[1];
 
-			String[] pathComponentes = fullPath.split("/");
+			String[] pathComponents = fullPath.split("/");
 
-			String id = pathComponentes.length == 1 ? null : pathComponentes[1];
+			String id = pathComponents.length == 1 ? null : pathComponents[1];
 
-			return new Path(pathComponentes[0], id);
+			return new Path(pathComponents[0], id);
 		}
 
 		return null;

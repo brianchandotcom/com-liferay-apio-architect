@@ -59,7 +59,7 @@ public class CollectionRoutesTest {
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			null);
+			__ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.build();
 
@@ -79,7 +79,7 @@ public class CollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, ?> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
 			this::_testAndReturnFourParameterCreatorRoute, String.class,
@@ -104,7 +104,7 @@ public class CollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, ?> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
 			this::_testAndReturnThreeParameterCreatorRoute, String.class,
@@ -129,7 +129,7 @@ public class CollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, ?> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
 			this::_testAndReturnNoParameterCreatorRoute,
@@ -148,7 +148,7 @@ public class CollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, ?> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
 			this::_testAndReturnTwoParameterCreatorRoute, String.class,
@@ -170,7 +170,7 @@ public class CollectionRoutesTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, ?> builder = new Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
 			this::_testAndReturnOneParameterCreatorRoute, String.class,

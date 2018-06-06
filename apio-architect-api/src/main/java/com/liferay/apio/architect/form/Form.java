@@ -105,29 +105,28 @@ public class Form<T> {
 		_optionalDates.forEach(getOptionalDate(body, t));
 		_optionalDoubles.forEach(getOptionalDouble(body, t));
 		_optionalFiles.forEach(getOptionalFile(body, t));
+		_optionalLinkedModel.forEach(
+			getOptionalLinkedModel(body, t, _identifierFunction));
 		_optionalLongs.forEach(getOptionalLong(body, t));
 		_optionalStrings.forEach(getOptionalString(body, t));
 		_requiredBooleans.forEach(getRequiredBoolean(body, t));
 		_requiredDates.forEach(getRequiredDate(body, t));
 		_requiredDoubles.forEach(getRequiredDouble(body, t));
 		_requiredFiles.forEach(getRequiredFile(body, t));
-
+		_requiredLinkedModel.forEach(
+			getRequiredLinkedModel(body, t, _identifierFunction));
 		_requiredLongs.forEach(getRequiredLong(body, t));
 		_requiredStrings.forEach(getRequiredString(body, t));
 		_optionalBooleanLists.forEach(getOptionalBooleanList(body, t));
 		_optionalDateLists.forEach(getOptionalDateList(body, t));
 		_optionalDoubleLists.forEach(getOptionalDoubleList(body, t));
 		_optionalFileLists.forEach(getOptionalFileList(body, t));
-		_optionalLinkedModel.forEach(
-			getOptionalLinkedModel(body, t, _identifierFunction));
 		_optionalLongLists.forEach(getOptionalLongList(body, t));
 		_optionalStringLists.forEach(getOptionalStringList(body, t));
 		_requiredBooleanLists.forEach(getRequiredBooleanList(body, t));
 		_requiredDateLists.forEach(getRequiredDateList(body, t));
 		_requiredDoubleLists.forEach(getRequiredDoubleList(body, t));
 		_requiredFileLists.forEach(getRequiredFileList(body, t));
-		_requiredLinkedModel.forEach(
-			getRequiredLinkedModel(body, t, _identifierFunction));
 		_requiredLongLists.forEach(getRequiredLongList(body, t));
 		_requiredStringLists.forEach(getRequiredStringList(body, t));
 
@@ -236,15 +235,13 @@ public class Form<T> {
 		 * @return the new builder
 		 */
 		public static <T> Builder<T> empty() {
-			return new Builder<>(Collections.emptyList(), null);
+			return new Builder<>(Collections.emptyList(), __ -> null);
 		}
 
 		public Builder(
 			List<String> paths, Function<Path, ?> identifierFunction) {
 
-			_form = new Form<>(paths);
-
-			_form._identifierFunction = identifierFunction;
+			_form = new Form<>(paths, identifierFunction);
 		}
 
 		/**
@@ -947,16 +944,16 @@ public class Form<T> {
 		}
 
 		private final Form<T> _form;
-		private final Function<Path, ?> _identifierFunction;
 
 	}
 
-	private Form(List<String> paths) {
+	private Form(List<String> paths, Function<Path, ?> identifierFunction) {
 		id = String.join("/", paths);
+		_identifierFunction = identifierFunction;
 	}
 
 	private Function<Language, String> _descriptionFunction;
-	private Function<Path, ?> _identifierFunction;
+	private final Function<Path, ?> _identifierFunction;
 	private final Map<String, Function<T, Consumer<List<Boolean>>>>
 		_optionalBooleanLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Boolean>>>

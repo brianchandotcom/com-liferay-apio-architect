@@ -152,7 +152,7 @@ public class FormEndpointTest {
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			null);
+			__ -> null);
 
 		return builder.addCreator(
 			__ -> null, HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
@@ -165,7 +165,7 @@ public class FormEndpointTest {
 				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				null));
+				__ -> null));
 	}
 
 	private static <T, S> ItemRoutes<T, S> _emptyItemRoutes() {

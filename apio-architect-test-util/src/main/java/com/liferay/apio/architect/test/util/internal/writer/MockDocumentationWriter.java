@@ -65,7 +65,7 @@ public class MockDocumentationWriter {
 				"name", null,
 				__ -> {
 				},
-				null);
+				__ -> null);
 
 		ItemRoutes.Builder itemBuilder = new ItemRoutes.Builder<>(
 			"name", null,
@@ -78,7 +78,7 @@ public class MockDocumentationWriter {
 				"name", null, __ -> null,
 				__ -> {
 				},
-				null);
+				__ -> null);
 
 		Representor<RootModel> rootModelRepresentor =
 			MockRepresentorCreator.createRootModelRepresentor(false);
