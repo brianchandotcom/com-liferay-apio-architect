@@ -22,6 +22,7 @@ import static com.liferay.apio.architect.form.FieldType.DOUBLE;
 import static com.liferay.apio.architect.form.FieldType.DOUBLE_LIST;
 import static com.liferay.apio.architect.form.FieldType.FILE;
 import static com.liferay.apio.architect.form.FieldType.FILE_LIST;
+import static com.liferay.apio.architect.form.FieldType.LINKED_MODEL;
 import static com.liferay.apio.architect.form.FieldType.LONG;
 import static com.liferay.apio.architect.form.FieldType.LONG_LIST;
 import static com.liferay.apio.architect.form.FieldType.STRING;
@@ -35,6 +36,7 @@ import static com.liferay.apio.architect.form.FormUtil.getOptionalDoubleList;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalFile;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalFileList;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalFormFieldStream;
+import static com.liferay.apio.architect.form.FormUtil.getOptionalLinkedModel;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalLong;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalLongList;
 import static com.liferay.apio.architect.form.FormUtil.getOptionalString;
@@ -48,13 +50,16 @@ import static com.liferay.apio.architect.form.FormUtil.getRequiredDoubleList;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredFile;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredFileList;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredFormFieldStream;
+import static com.liferay.apio.architect.form.FormUtil.getRequiredLinkedModel;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredLong;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredLongList;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredString;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredStringList;
 
 import com.liferay.apio.architect.file.BinaryFile;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
+import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collections;
 import java.util.Date;
@@ -106,18 +111,23 @@ public class Form<T> {
 		_requiredDates.forEach(getRequiredDate(body, t));
 		_requiredDoubles.forEach(getRequiredDouble(body, t));
 		_requiredFiles.forEach(getRequiredFile(body, t));
+
 		_requiredLongs.forEach(getRequiredLong(body, t));
 		_requiredStrings.forEach(getRequiredString(body, t));
 		_optionalBooleanLists.forEach(getOptionalBooleanList(body, t));
 		_optionalDateLists.forEach(getOptionalDateList(body, t));
 		_optionalDoubleLists.forEach(getOptionalDoubleList(body, t));
 		_optionalFileLists.forEach(getOptionalFileList(body, t));
+		_optionalLinkedModel.forEach(
+			getOptionalLinkedModel(body, t, _identifierFunction));
 		_optionalLongLists.forEach(getOptionalLongList(body, t));
 		_optionalStringLists.forEach(getOptionalStringList(body, t));
 		_requiredBooleanLists.forEach(getRequiredBooleanList(body, t));
 		_requiredDateLists.forEach(getRequiredDateList(body, t));
 		_requiredDoubleLists.forEach(getRequiredDoubleList(body, t));
 		_requiredFileLists.forEach(getRequiredFileList(body, t));
+		_requiredLinkedModel.forEach(
+			getRequiredLinkedModel(body, t, _identifierFunction));
 		_requiredLongLists.forEach(getRequiredLongList(body, t));
 		_requiredStringLists.forEach(getRequiredStringList(body, t));
 
@@ -162,6 +172,7 @@ public class Form<T> {
 			getRequiredFormFieldStream(_requiredDoubleLists, DOUBLE_LIST),
 			getRequiredFormFieldStream(_requiredFiles, FILE),
 			getRequiredFormFieldStream(_requiredFileLists, FILE_LIST),
+			getRequiredFormFieldStream(_requiredLinkedModel, LINKED_MODEL),
 			getRequiredFormFieldStream(_requiredLongs, LONG),
 			getRequiredFormFieldStream(_requiredLongLists, LONG_LIST),
 			getRequiredFormFieldStream(_requiredStrings, STRING),
@@ -225,11 +236,15 @@ public class Form<T> {
 		 * @return the new builder
 		 */
 		public static <T> Builder<T> empty() {
-			return new Builder<>(Collections.emptyList());
+			return new Builder<>(Collections.emptyList(), null);
 		}
 
-		public Builder(List<String> paths) {
+		public Builder(
+			List<String> paths, Function<Path, ?> identifierFunction) {
+
 			_form = new Form<>(paths);
+
+			_form._identifierFunction = identifierFunction;
 		}
 
 		/**
@@ -473,6 +488,35 @@ public class Form<T> {
 
 				_form._optionalFileLists.put(
 					key, t -> list -> biConsumer.accept(t, list));
+
+				return this;
+			}
+
+			/**
+			 * Requests an optional linked model from the HTTP request body.
+			 *
+			 * <p>
+			 * This method calls the provided consumer with the store instance
+			 * (provided with the {@link ConstructorStep#constructor(Supplier)}
+			 * method) and the field value. A {@code BadRequestException} is
+			 * thrown if the field isn't found, or it's found but it isn't a
+			 * linked model.
+			 * </p>
+			 *
+			 * @param  key the field's key
+			 * @param  aClass the identifier class to extract the class
+			 * id and return it
+			 * @param  biConsumer the consumer to call
+			 * @return the updated builder
+			 *
+			 * @review
+			 */
+			public <C> FieldStep addOptionalLinkedModel(
+				String key, Class<? extends Identifier<C>> aClass,
+				BiConsumer<T, C> biConsumer) {
+
+				_form._optionalLinkedModel.put(
+					key, t -> c -> biConsumer.accept(t, (C)c));
 
 				return this;
 			}
@@ -766,6 +810,35 @@ public class Form<T> {
 			}
 
 			/**
+			 * Requests a mandatory linked model from the HTTP request body.
+			 *
+			 * <p>
+			 * This method calls the provided consumer with the store instance
+			 * (provided with the {@link ConstructorStep#constructor(Supplier)}
+			 * method) and the field value. A {@code BadRequestException} is
+			 * thrown if the field isn't found, or it's found but it isn't a
+			 * required linked model.
+			 * </p>
+			 *
+			 * @param  key the field's key
+			 * @param  aClass the identifier class to extract the class
+			 * id and return it
+			 * @param  biConsumer the consumer to call
+			 * @return the updated builder
+			 *
+			 * @review
+			 */
+			public <C> FieldStep addRequiredLinkedModel(
+				String key, Class<? extends Identifier<C>> aClass,
+				BiConsumer<T, C> biConsumer) {
+
+				_form._requiredLinkedModel.put(
+					key, t -> c -> biConsumer.accept(t, (C)c));
+
+				return this;
+			}
+
+			/**
 			 * Requests a mandatory long from the HTTP request body.
 			 *
 			 * <p>
@@ -874,6 +947,7 @@ public class Form<T> {
 		}
 
 		private final Form<T> _form;
+		private final Function<Path, ?> _identifierFunction;
 
 	}
 
@@ -882,6 +956,7 @@ public class Form<T> {
 	}
 
 	private Function<Language, String> _descriptionFunction;
+	private Function<Path, ?> _identifierFunction;
 	private final Map<String, Function<T, Consumer<List<Boolean>>>>
 		_optionalBooleanLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Boolean>>>
@@ -898,6 +973,8 @@ public class Form<T> {
 		_optionalFileLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<BinaryFile>>>
 		_optionalFiles = new HashMap<>();
+	private final Map<String, Function<T, Consumer<?>>> _optionalLinkedModel =
+		new HashMap<>();
 	private final Map<String, Function<T, Consumer<List<Long>>>>
 		_optionalLongLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Long>>> _optionalLongs =
@@ -922,6 +999,8 @@ public class Form<T> {
 		_requiredFileLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<BinaryFile>>>
 		_requiredFiles = new HashMap<>();
+	private final Map<String, Function<T, Consumer>> _requiredLinkedModel =
+		new HashMap<>();
 	private final Map<String, Function<T, Consumer<List<Long>>>>
 		_requiredLongLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Long>>> _requiredLongs =
