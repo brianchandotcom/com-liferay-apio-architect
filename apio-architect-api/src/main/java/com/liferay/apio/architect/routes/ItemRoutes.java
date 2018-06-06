@@ -42,12 +42,14 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.uri.Path;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Holds information about the routes supported for an {@link
@@ -135,11 +137,13 @@ public class ItemRoutes<T, S> {
 
 		public Builder(
 			String name, ProvideFunction provideFunction,
-			Consumer<String> neededProviderConsumer) {
+			Consumer<String> neededProviderConsumer,
+			Function<Path, ?> identifierFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
+			_identifierFunction = identifierFunction;
 		}
 
 		/**
@@ -438,7 +442,8 @@ public class ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("u", _name)));
+				new Form.Builder<>(
+					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;
 
@@ -482,7 +487,8 @@ public class ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("u", _name)));
+				new Form.Builder<>(
+					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;
 
@@ -526,7 +532,8 @@ public class ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("u", _name)));
+				new Form.Builder<>(
+					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;
 
@@ -567,7 +574,8 @@ public class ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("u", _name)));
+				new Form.Builder<>(
+					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;
 
@@ -607,7 +615,8 @@ public class ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("u", _name)));
+				new Form.Builder<>(
+					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;
 
@@ -671,6 +680,7 @@ public class ItemRoutes<T, S> {
 		private Form _form;
 		private HasRemovePermissionFunction<S> _hasRemovePermissionFunction;
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
+		private final Function<Path, ?> _identifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;

@@ -35,12 +35,14 @@ import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.uri.Path;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Holds information about the routes supported for a {@link
@@ -111,11 +113,13 @@ public class CollectionRoutes<T, S> {
 
 		public Builder(
 			String name, ProvideFunction provideFunction,
-			Consumer<String> neededProviderConsumer) {
+			Consumer<String> neededProviderConsumer,
+			Function<Path, ?> identifierFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
+			_identifierFunction = identifierFunction;
 		}
 
 		/**
@@ -139,7 +143,8 @@ public class CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;
 
@@ -172,7 +177,8 @@ public class CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;
 
@@ -216,7 +222,8 @@ public class CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;
 
@@ -258,7 +265,8 @@ public class CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;
 
@@ -298,7 +306,8 @@ public class CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;
 
@@ -495,6 +504,7 @@ public class CollectionRoutes<T, S> {
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
+		private final Function<Path, ?> _identifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;

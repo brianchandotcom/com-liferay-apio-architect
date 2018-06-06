@@ -25,6 +25,7 @@ import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.url.ServerURL;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
+import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
@@ -101,7 +102,8 @@ public class CollectionRouterManagerImpl
 
 				Builder builder = new Builder<>(
 					name, curry(_providerManager::provideMandatory),
-					neededProviders::add);
+					neededProviders::add,
+					_pathIdentifierMapperManager::mapToIdentifierOrFail);
 
 				@SuppressWarnings("unchecked")
 				CollectionRoutes collectionRoutes =
@@ -141,6 +143,9 @@ public class CollectionRouterManagerImpl
 
 	@Reference
 	private NameManager _nameManager;
+
+	@Reference
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 	@Reference
 	private ProviderManager _providerManager;

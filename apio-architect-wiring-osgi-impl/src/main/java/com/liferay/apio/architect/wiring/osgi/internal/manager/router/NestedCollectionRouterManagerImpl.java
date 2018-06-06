@@ -27,6 +27,7 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
+import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
@@ -149,7 +150,8 @@ public class NestedCollectionRouterManagerImpl
 
 				Builder builder = new Builder<>(
 					name, nestedName, curry(_providerManager::provideMandatory),
-					neededProviders::add);
+					neededProviders::add,
+					_pathIdentifierMapperManager::mapToIdentifierOrFail);
 
 				@SuppressWarnings("unchecked")
 				NestedCollectionRoutes nestedCollectionRoutes =
@@ -196,6 +198,9 @@ public class NestedCollectionRouterManagerImpl
 
 	@Reference
 	private NameManager _nameManager;
+
+	@Reference
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 	@Reference
 	private ProviderManager _providerManager;

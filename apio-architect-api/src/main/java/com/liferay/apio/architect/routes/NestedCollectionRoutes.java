@@ -32,17 +32,20 @@ import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.uri.Path;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Holds information about the routes supported for a {@link
@@ -125,12 +128,14 @@ public class NestedCollectionRoutes<T, S, U> {
 
 		public Builder(
 			String name, String nestedName, ProvideFunction provideFunction,
-			Consumer<String> neededProviderConsumer) {
+			Consumer<String> neededProviderConsumer,
+			Function<Path, ? extends Identifier<?>> identifierFunction) {
 
 			_name = name;
 			_nestedName = nestedName;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
+			_identifierFunction = identifierFunction;
 		}
 
 		/**
@@ -154,7 +159,9 @@ public class NestedCollectionRoutes<T, S, U> {
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name, _nestedName),
+					_identifierFunction));
 
 			_form = form;
 
@@ -201,7 +208,9 @@ public class NestedCollectionRoutes<T, S, U> {
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name, _nestedName),
+					_identifierFunction));
 
 			_form = form;
 
@@ -248,7 +257,9 @@ public class NestedCollectionRoutes<T, S, U> {
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name, _nestedName),
+					_identifierFunction));
 
 			_form = form;
 
@@ -293,7 +304,9 @@ public class NestedCollectionRoutes<T, S, U> {
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name, _nestedName),
+					_identifierFunction));
 
 			_form = form;
 
@@ -335,7 +348,9 @@ public class NestedCollectionRoutes<T, S, U> {
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(Arrays.asList("c", _name, _nestedName)));
+				new Form.Builder<>(
+					Arrays.asList("c", _name, _nestedName),
+					_identifierFunction));
 
 			_form = form;
 
@@ -544,6 +559,7 @@ public class NestedCollectionRoutes<T, S, U> {
 		private Form _form;
 		private ThrowableBiFunction<Credentials, U, Boolean>
 			_hasNestedAddingPermissionFunction;
+		private final Function<Path, ?> _identifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private NestedCreateItemFunction<T, U> _nestedCreateItemFunction;
