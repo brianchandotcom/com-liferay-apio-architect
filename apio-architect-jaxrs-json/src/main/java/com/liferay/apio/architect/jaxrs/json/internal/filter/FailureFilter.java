@@ -78,11 +78,7 @@ public class FailureFilter implements ContainerResponseFilter {
 					headers.add(CONTENT_TYPE, mediaType.toString());
 				}
 
-				Object entity = response.getEntity();
-
-				if (entity != null) {
-					containerResponseContext.setEntity(entity);
-				}
+				containerResponseContext.setEntity(response.getEntity());
 			}
 		);
 	}
