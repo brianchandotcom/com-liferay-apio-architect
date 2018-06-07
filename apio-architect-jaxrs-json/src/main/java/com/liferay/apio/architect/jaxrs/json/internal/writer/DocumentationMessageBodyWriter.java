@@ -19,7 +19,7 @@ import com.liferay.apio.architect.jaxrs.json.internal.writer.base.BaseMessageBod
 import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.DocumentationMessageMapperManager;
-import com.liferay.apio.architect.writer.DocumentationWriter;
+import com.liferay.apio.architect.writer.util.writer.DocumentationWriter;
 
 import java.lang.reflect.Type;
 

@@ -26,7 +26,7 @@ import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManage
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.PageMessageMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
-import com.liferay.apio.architect.writer.PageWriter;
+import com.liferay.apio.architect.writer.util.writer.PageWriter;
 
 import java.lang.reflect.Type;
 

@@ -1,4 +1,8 @@
 Bundle-Name: Liferay Apio Architect JAX-RS JSON
 Bundle-SymbolicName: com.liferay.apio.architect.jaxrs.json
 Bundle-Version: 1.0.0
+-conditionalpackage:\
+	com.liferay.apio.architect.writer.util.alias,\
+	com.liferay.apio.architect.writer.util.util,\
+	com.liferay.apio.architect.writer.util.writer
 -dsannotations-options: inherit

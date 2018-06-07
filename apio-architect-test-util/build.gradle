@@ -9,7 +9,7 @@ dependencies {
 	compile group: "org.json", name: "json", version: "20180130"
 	compile group: "org.skyscreamer", name: "jsonassert", version: "1.5.0"
 	compile project(":apps:apio-architect:apio-architect-api")
-	compile project(":apps:apio-architect:apio-architect-writer-api")
+	compile project(":apps:apio-architect:apio-architect-writer-util")
 }
 
 liferay {

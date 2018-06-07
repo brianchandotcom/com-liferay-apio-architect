@@ -22,7 +22,7 @@ import com.liferay.apio.architect.message.json.FormMessageMapper;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.FormMessageMapperManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
-import com.liferay.apio.architect.writer.FormWriter;
+import com.liferay.apio.architect.writer.util.writer.FormWriter;
 
 import java.lang.reflect.Type;
 

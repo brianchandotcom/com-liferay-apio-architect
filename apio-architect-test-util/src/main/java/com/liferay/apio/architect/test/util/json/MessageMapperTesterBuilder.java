@@ -36,7 +36,7 @@ import com.liferay.apio.architect.test.util.internal.writer.MockFormWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockPageWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockSingleModelWriter;
 import com.liferay.apio.architect.test.util.model.RootModel;
-import com.liferay.apio.architect.writer.ErrorWriter;
+import com.liferay.apio.architect.writer.util.writer.ErrorWriter;
 
 import java.io.File;
 import java.io.IOException;

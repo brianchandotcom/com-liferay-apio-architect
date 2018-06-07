@@ -22,7 +22,7 @@ import com.google.gson.JsonObject;
 import com.liferay.apio.architect.message.json.FormMessageMapper;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.test.util.form.MockFormCreator;
-import com.liferay.apio.architect.writer.FormWriter;
+import com.liferay.apio.architect.writer.util.writer.FormWriter;
 
 import javax.ws.rs.core.HttpHeaders;
 

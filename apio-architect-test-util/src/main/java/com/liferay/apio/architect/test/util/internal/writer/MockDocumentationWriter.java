@@ -28,7 +28,7 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
-import com.liferay.apio.architect.writer.DocumentationWriter;
+import com.liferay.apio.architect.writer.util.writer.DocumentationWriter;
 
 import java.util.Collections;
 import java.util.Map;

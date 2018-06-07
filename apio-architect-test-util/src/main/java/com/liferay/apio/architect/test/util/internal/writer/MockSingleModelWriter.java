@@ -30,7 +30,7 @@ import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
-import com.liferay.apio.architect.writer.SingleModelWriter;
+import com.liferay.apio.architect.writer.util.writer.SingleModelWriter;
 
 import java.util.Optional;
 

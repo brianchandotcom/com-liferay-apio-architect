@@ -30,7 +30,7 @@ import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.writer.PageWriter;
+import com.liferay.apio.architect.writer.util.writer.PageWriter;
 
 import java.util.Arrays;
 import java.util.Collection;
