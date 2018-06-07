@@ -501,11 +501,10 @@ public class Form<T> {
 			 * </p>
 			 *
 			 * @param  key the field's key
-			 * @param  aClass the identifier class to extract the class
-			 * id and return it
+			 * @param  aClass the identifier class to extract the class ID and
+			 *         return it
 			 * @param  biConsumer the consumer to call
 			 * @return the updated builder
-			 *
 			 * @review
 			 */
 			public <C> FieldStep addOptionalLinkedModel(
@@ -818,11 +817,10 @@ public class Form<T> {
 			 * </p>
 			 *
 			 * @param  key the field's key
-			 * @param  aClass the identifier class to extract the class
-			 * id and return it
+			 * @param  aClass the identifier class to extract the class ID and
+			 *         return it
 			 * @param  biConsumer the consumer to call
 			 * @return the updated builder
-			 *
 			 * @review
 			 */
 			public <C> FieldStep addRequiredLinkedModel(

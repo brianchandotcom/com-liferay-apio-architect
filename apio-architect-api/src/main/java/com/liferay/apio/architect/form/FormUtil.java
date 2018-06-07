@@ -197,9 +197,10 @@ public class FormUtil {
 	}
 
 	/**
-	 * Returns a field form consumer that tries to extract a linked model from the HTTP
-	 * request body and store it in the provided {@code T} instance. If the
-	 * field isn't an URL, a {@code javax.ws.rs.BadRequestException} is thrown.
+	 * Returns a field form consumer that tries to extract a linked model from
+	 * the HTTP request body and store it in the provided {@code T} instance. If
+	 * the field isn't an URL, a {@code javax.ws.rs.BadRequestException} is
+	 * thrown.
 	 *
 	 * @param  body the HTTP request body
 	 * @param  t the form values store
@@ -428,9 +429,10 @@ public class FormUtil {
 	}
 
 	/**
-	 * Returns a required {@code FormField} consumer that tries to extract a linked model from the HTTP
-	 * request body and store it in the provided {@code T} instance. If the
-	 * field isn't an URL, a {@code javax.ws.rs.BadRequestException} is thrown.
+	 * Returns a required {@code FormField} consumer that tries to extract a
+	 * linked model from the HTTP request body and store it in the provided
+	 * {@code T} instance. If the field isn't an URL, a {@code
+	 * BadRequestException} is thrown.
 	 *
 	 * @param  body the HTTP request body
 	 * @param  t the form values store
