@@ -30,6 +30,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -64,23 +65,27 @@ public class FailureFilter implements ContainerResponseFilter {
 			exception -> _errorUtil.getErrorResponse(
 				exception, _request, _httpHeaders)
 		).ifSuccess(
-			response -> {
-				containerResponseContext.setStatus(response.getStatus());
-
-				MultivaluedMap<String, Object> headers =
-					containerResponseContext.getHeaders();
-
-				headers.remove(CONTENT_TYPE);
-
-				MediaType mediaType = response.getMediaType();
-
-				if (mediaType != null) {
-					headers.add(CONTENT_TYPE, mediaType.toString());
-				}
-
-				containerResponseContext.setEntity(response.getEntity());
-			}
+			response -> _updateContext(containerResponseContext, response)
 		);
+	}
+
+	private static void _updateContext(
+		ContainerResponseContext containerResponseContext, Response response) {
+
+		containerResponseContext.setStatus(response.getStatus());
+
+		MultivaluedMap<String, Object> headers =
+			containerResponseContext.getHeaders();
+
+		headers.remove(CONTENT_TYPE);
+
+		MediaType mediaType = response.getMediaType();
+
+		if (mediaType != null) {
+			headers.add(CONTENT_TYPE, mediaType.toString());
+		}
+
+		containerResponseContext.setEntity(response.getEntity());
 	}
 
 	@Reference
