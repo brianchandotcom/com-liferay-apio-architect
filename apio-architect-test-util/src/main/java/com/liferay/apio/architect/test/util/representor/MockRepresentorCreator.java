@@ -26,6 +26,7 @@ import com.liferay.apio.architect.test.util.model.FirstEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.model.SecondEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
+import com.liferay.apio.architect.util.representor.RepresentorImpl;
 
 import java.util.Date;
 
@@ -51,7 +52,7 @@ public class MockRepresentorCreator {
 		createFirstEmbeddedModelRepresentor() {
 
 		Representor.Builder<FirstEmbeddedModel, String> builder =
-			new Representor.Builder<>(FirstEmbeddedId.class);
+			new RepresentorImpl.BuilderImpl<>(FirstEmbeddedId.class);
 
 		return builder.types(
 			"Type"
@@ -94,9 +95,9 @@ public class MockRepresentorCreator {
 		boolean activateNulls) {
 
 		Representor.Builder<RootModel, String> builder =
-			new Representor.Builder<>(RootModelId.class);
+			new RepresentorImpl.BuilderImpl<>(RootModelId.class);
 
-		Representor.Builder<RootModel, String>.FirstStep firstStepBuilder =
+		Representor.FirstStep<RootModel> firstStepBuilder =
 			builder.types(
 				"Type 1", "Type 2"
 			).identifier(
@@ -226,7 +227,7 @@ public class MockRepresentorCreator {
 		createSecondEmbeddedModelRepresentor() {
 
 		Representor.Builder<SecondEmbeddedModel, String> builder =
-			new Representor.Builder<>(SecondEmbeddedId.class);
+			new RepresentorImpl.BuilderImpl<>(SecondEmbeddedId.class);
 
 		return builder.types(
 			"Type"
@@ -266,7 +267,7 @@ public class MockRepresentorCreator {
 		createThirdEmbeddedModelRepresentor() {
 
 		Representor.Builder<ThirdEmbeddedModel, String> builder =
-			new Representor.Builder<>(ThirdEmbeddedId.class);
+			new RepresentorImpl.BuilderImpl<>(ThirdEmbeddedId.class);
 
 		return builder.types(
 			"Type"

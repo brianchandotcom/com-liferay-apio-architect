@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.apio.architect.representor;
+package com.liferay.apio.architect.util.representor;
 
-import static com.liferay.apio.architect.representor.RepresentorTestUtil.testFields;
-import static com.liferay.apio.architect.representor.RepresentorTestUtil.testRelatedModel;
+import static com.liferay.apio.architect.util.representor.RepresentorTestUtil.testFields;
+import static com.liferay.apio.architect.util.representor.RepresentorTestUtil.testRelatedModel;
 
 import static java.util.Arrays.asList;
 
@@ -28,8 +28,9 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
-import com.liferay.apio.architect.representor.dummy.Dummy;
+import com.liferay.apio.architect.util.representor.dummy.Dummy;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -55,7 +56,7 @@ public class RepresentorTest {
 		_classes = new ArrayList<>();
 		_relatedCollectionsClasses = new ArrayList<>();
 
-		Builder<Dummy, Integer> builder = new Builder<>(
+		Builder<Dummy, Integer> builder = new RepresentorImpl.BuilderImpl<>(
 			IntegerIdentifier.class,
 			(clazz, relatedCollection) -> {
 				_classes.add(clazz);

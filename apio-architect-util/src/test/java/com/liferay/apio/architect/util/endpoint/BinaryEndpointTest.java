@@ -27,6 +27,7 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.util.representor.RepresentorImpl.BuilderImpl;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -131,7 +132,7 @@ public class BinaryEndpointTest {
 	}
 
 	private static Representor<Object> _representor() {
-		Builder<Object, Object> builder = new Builder<>(null);
+		Builder<Object, Object> builder = new BuilderImpl<>(null);
 
 		return builder.types(
 			""

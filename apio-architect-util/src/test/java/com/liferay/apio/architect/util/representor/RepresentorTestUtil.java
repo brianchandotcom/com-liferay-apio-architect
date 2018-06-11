@@ -12,15 +12,15 @@
  * details.
  */
 
-package com.liferay.apio.architect.representor;
+package com.liferay.apio.architect.util.representor;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedModel;
-import com.liferay.apio.architect.representor.dummy.Dummy;
 import com.liferay.apio.architect.representor.function.FieldFunction;
+import com.liferay.apio.architect.util.representor.dummy.Dummy;
 
 import java.util.List;
 import java.util.function.Function;

@@ -27,6 +27,7 @@ import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
 import com.liferay.apio.architect.unsafe.Unsafe;
+import com.liferay.apio.architect.util.representor.RepresentorImpl.BuilderImpl;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.BaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -189,7 +190,7 @@ public class RepresentableManagerImpl
 				list.add(relatedCollection);
 			};
 
-		Builder<T, S> builder = new Builder<>(
+		Builder<T, S> builder = new BuilderImpl<>(
 			clazz, biConsumer, relatedCollectionSupplier);
 
 		return representable.representor(builder);
