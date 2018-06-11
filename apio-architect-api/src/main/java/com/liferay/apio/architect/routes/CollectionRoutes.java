@@ -100,12 +100,6 @@ public interface CollectionRoutes<T, S> {
 	@ProviderType
 	public interface Builder<T, S> {
 
-		public <A, R> Builder<T, S> addBatchCreator(
-			ThrowableBiFunction<List<R>, A, List<S>> throwableBiFunction,
-			Class<A> aClass,
-			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
-
 		/**
 		 * Adds a route to a creator function that has one extra parameter.
 		 *
@@ -119,6 +113,26 @@ public interface CollectionRoutes<T, S> {
 		 */
 		public <A, R> Builder<T, S> addCreator(
 			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
+			Class<A> aClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction);
+
+		/**
+		 * Adds a route to a creator function that has one extra parameter.
+		 *
+		 * @param  creatorThrowableBiFunction the creator function
+		 * @param  batchCreatorThrowableBiFunction the batch creator function
+		 * @param  aClass the class of the creator function's second parameter
+		 * @param  hasAddingPermissionFunction the permission function for this
+		 *         route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 */
+		public <A, R> Builder<T, S> addCreator(
+			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
+			ThrowableBiFunction<List<R>, A, List<S>>
+				batchCreatorThrowableBiFunction,
 			Class<A> aClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction);
