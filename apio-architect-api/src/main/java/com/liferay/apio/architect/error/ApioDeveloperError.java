@@ -38,19 +38,6 @@ public class ApioDeveloperError extends Error {
 
 	}
 
-	/**
-	 * Represents the error the developer should throw when a generic container
-	 * has an invalid generic type.
-	 */
-	public static class MustHaveValidGenericType extends ApioDeveloperError {
-
-		public MustHaveValidGenericType(Class clazz) {
-			super(
-				"Class " + clazz.getName() + " must have a valid generic type");
-		}
-
-	}
-
 	private ApioDeveloperError(String message) {
 		super(message);
 	}
