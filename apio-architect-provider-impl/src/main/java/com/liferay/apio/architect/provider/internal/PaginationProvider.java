@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.response.control.internal;
+package com.liferay.apio.architect.provider.internal;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.pagination.Pagination;

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.response.control.internal;
+package com.liferay.apio.architect.provider.internal;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
