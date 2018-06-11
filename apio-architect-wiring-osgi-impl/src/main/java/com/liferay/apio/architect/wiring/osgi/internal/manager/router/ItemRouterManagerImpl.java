@@ -21,10 +21,10 @@ import com.liferay.apio.architect.router.ItemRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
-import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
+import com.liferay.apio.architect.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
+import com.liferay.apio.architect.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 
 import java.util.List;
 import java.util.Map;

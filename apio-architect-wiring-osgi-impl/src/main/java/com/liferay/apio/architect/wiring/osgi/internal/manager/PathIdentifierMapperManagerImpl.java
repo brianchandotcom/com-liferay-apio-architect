@@ -23,8 +23,8 @@ import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.uri.mapper.PathIdentifierMapper;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
+import com.liferay.apio.architect.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 
 import java.util.Optional;
 

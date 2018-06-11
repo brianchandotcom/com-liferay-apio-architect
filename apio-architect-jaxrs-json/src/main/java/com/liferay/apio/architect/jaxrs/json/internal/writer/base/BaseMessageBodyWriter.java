@@ -29,7 +29,7 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.url.ServerURL;
-import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
+import com.liferay.apio.architect.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 

@@ -2,8 +2,10 @@ Bundle-Name: Liferay Apio Architect Wiring OSGi API
 Bundle-SymbolicName: com.liferay.apio.architect.wiring.osgi.api
 Bundle-Version: 1.0.0
 Export-Package:\
-	com.liferay.apio.architect.wiring.osgi.manager,\
+	com.liferay.apio.architect.wiring.osgi.manager.exception.mapper,\
 	com.liferay.apio.architect.wiring.osgi.manager.message.json,\
+	com.liferay.apio.architect.wiring.osgi.manager.provider,\
 	com.liferay.apio.architect.wiring.osgi.manager.representable,\
 	com.liferay.apio.architect.wiring.osgi.manager.router,\
+	com.liferay.apio.architect.wiring.osgi.manager.uri.mapper,\
 	com.liferay.apio.architect.wiring.osgi.util

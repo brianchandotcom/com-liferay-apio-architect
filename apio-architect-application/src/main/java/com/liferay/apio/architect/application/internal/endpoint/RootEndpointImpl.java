@@ -29,13 +29,13 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
-import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
-import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
+import com.liferay.apio.architect.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.CollectionRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
+import com.liferay.apio.architect.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 
 import java.util.List;
 import java.util.Optional;

@@ -19,7 +19,7 @@ import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.wiring.osgi.manager.ExceptionMapperManager;
+import com.liferay.apio.architect.wiring.osgi.manager.exception.mapper.ExceptionMapperManager;
 
 import java.util.Optional;
 

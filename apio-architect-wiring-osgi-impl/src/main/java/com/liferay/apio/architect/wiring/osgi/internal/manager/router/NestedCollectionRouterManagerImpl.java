@@ -27,11 +27,11 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
-import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
+import com.liferay.apio.architect.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.wiring.osgi.manager.router.NestedCollectionRouterManager;
+import com.liferay.apio.architect.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
 import java.util.List;

@@ -19,7 +19,7 @@ import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.provider.Provider;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.wiring.osgi.manager.ProviderManager;
+import com.liferay.apio.architect.wiring.osgi.manager.provider.ProviderManager;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -22,9 +22,9 @@ import com.liferay.apio.architect.jaxrs.json.internal.writer.base.BaseMessageBod
 import com.liferay.apio.architect.message.json.PageMessageMapper;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.request.RequestInfo;
-import com.liferay.apio.architect.wiring.osgi.manager.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.PageMessageMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
+import com.liferay.apio.architect.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.wiring.osgi.util.GenericUtil;
 import com.liferay.apio.architect.writer.util.writer.PageWriter;
 

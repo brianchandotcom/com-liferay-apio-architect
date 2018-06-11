@@ -20,7 +20,7 @@ import static org.osgi.service.component.annotations.ReferencePolicyOption.GREED
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.message.json.ErrorMessageMapper;
-import com.liferay.apio.architect.wiring.osgi.manager.ExceptionMapperManager;
+import com.liferay.apio.architect.wiring.osgi.manager.exception.mapper.ExceptionMapperManager;
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.ErrorMessageMapperManager;
 import com.liferay.apio.architect.writer.util.writer.ErrorWriter;
 
