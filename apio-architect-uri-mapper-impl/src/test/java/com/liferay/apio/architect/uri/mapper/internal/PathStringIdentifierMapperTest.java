@@ -12,40 +12,37 @@
  * details.
  */
 
-package com.liferay.apio.architect.application.internal.uri.mapper;
+package com.liferay.apio.architect.uri.mapper.internal;
 
-import com.liferay.apio.architect.functional.Try;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.uri.mapper.PathIdentifierMapper;
 
-import javax.ws.rs.BadRequestException;
-
-import org.osgi.service.component.annotations.Component;
+import org.junit.Test;
 
 /**
- * Maps a {@link Path} to a {@link Long}, and vice versa.
- *
- * <p>
- * {@code Long} can then be used as the identifier of a resource model.
- * </p>
- *
  * @author Alejandro Hernández
  */
-@Component
-public class PathLongIdentifierMapper implements PathIdentifierMapper<Long> {
+public class PathStringIdentifierMapperTest {
 
-	@Override
-	public Long map(Path path) {
-		return Try.fromFallible(
-			() -> Long.parseLong(path.getId())
-		).orElseThrow(
-			BadRequestException::new
-		);
+	@Test
+	public void testMapReturnsPath() {
+		Path path = _pathIdentifierMapper.map("name", "id");
+
+		assertThat(path.getName(), is("name"));
+		assertThat(path.getId(), is("id"));
 	}
 
-	@Override
-	public Path map(String name, Long aLong) {
-		return new Path(name, String.valueOf(aLong));
+	@Test
+	public void testMapReturnsString() {
+		String identifier = _pathIdentifierMapper.map(new Path("name", "id"));
+
+		assertThat(identifier, is("id"));
 	}
+
+	private final PathIdentifierMapper<String> _pathIdentifierMapper =
+		new PathStringIdentifierMapper();
 
 }

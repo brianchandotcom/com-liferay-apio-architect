@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.application.internal.uri.mapper;
+package com.liferay.apio.architect.uri.mapper.internal;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
