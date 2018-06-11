@@ -41,11 +41,11 @@ public class BlogPostingCommentCreatorForm {
 			__ -> "This form can be used to create a blog posting comment"
 		).constructor(
 			BlogPostingCommentCreatorForm::new
-		).addRequiredString(
-			"text", BlogPostingCommentCreatorForm::_setText
 		).addRequiredLinkedModel(
 			"author", PersonIdentifier.class,
 			BlogPostingCommentCreatorForm::_setAuthor
+		).addRequiredString(
+			"text", BlogPostingCommentCreatorForm::_setText
 		).build();
 	}
 

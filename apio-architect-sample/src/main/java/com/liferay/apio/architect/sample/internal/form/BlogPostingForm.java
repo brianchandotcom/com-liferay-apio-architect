@@ -41,14 +41,14 @@ public class BlogPostingForm {
 			__ -> "This form can be used to create or update a blog posting"
 		).constructor(
 			BlogPostingForm::new
-		).addRequiredString(
-			"headline", BlogPostingForm::_setHeadline
-		).addRequiredString(
-			"articleBody", BlogPostingForm::_setArticleBody
 		).addRequiredLinkedModel(
 			"creator", PersonIdentifier.class, BlogPostingForm::_setCreator
 		).addRequiredString(
+			"articleBody", BlogPostingForm::_setArticleBody
+		).addRequiredString(
 			"alternativeHeadline", BlogPostingForm::_setAlternativeHeadline
+		).addRequiredString(
+			"headline", BlogPostingForm::_setHeadline
 		).build();
 	}
 
