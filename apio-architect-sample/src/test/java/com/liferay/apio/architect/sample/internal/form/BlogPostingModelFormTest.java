@@ -14,12 +14,15 @@
 
 package com.liferay.apio.architect.sample.internal.form;
 
-import static com.liferay.apio.architect.form.Form.Builder.empty;
 import static com.liferay.apio.architect.sample.internal.form.BlogPostingForm.buildForm;
 import static com.liferay.apio.architect.test.util.form.FormMatchers.isAFormWithConditions;
 import static com.liferay.apio.architect.test.util.form.FormMatchers.isReturnedIn;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.liferay.apio.architect.form.Form.Builder;
+
+import java.util.Collections;
 
 import org.junit.Test;
 
@@ -30,11 +33,14 @@ public class BlogPostingModelFormTest {
 
 	@Test
 	public void test() {
+		Builder<BlogPostingForm> formBuilder = new Builder<>(
+			Collections.emptyList(), __ -> 42L);
+
 		assertThat(
-			buildForm(empty()),
+			buildForm(formBuilder),
 			isAFormWithConditions(
-				builder -> builder.whereLong(
-					"creator", isReturnedIn(BlogPostingForm::getCreator)
+				builder -> builder.whereIdentifier(
+					"creator", 42L, isReturnedIn(BlogPostingForm::getCreator)
 				).whereString(
 					"alternativeHeadline",
 					isReturnedIn(BlogPostingForm::getAlternativeHeadline)
