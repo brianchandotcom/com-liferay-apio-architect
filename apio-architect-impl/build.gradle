@@ -24,6 +24,7 @@ dependencies {
 	compileInclude project(":apps:apio-architect:apio-architect-message-json-plain")
 	compileInclude project(":apps:apio-architect:apio-architect-provider-impl")
 	compileInclude project(":apps:apio-architect:apio-architect-uri-mapper-impl")
+	compileInclude project(":apps:apio-architect:apio-architect-util")
 	compileInclude project(":apps:apio-architect:apio-architect-wiring-osgi-api")
 	compileInclude project(":apps:apio-architect:apio-architect-wiring-osgi-impl")
 	compileInclude project(":apps:apio-architect:apio-architect-writer-util")
