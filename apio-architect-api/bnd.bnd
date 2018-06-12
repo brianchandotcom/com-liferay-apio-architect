@@ -4,6 +4,7 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.apio.architect.alias,\
 	com.liferay.apio.architect.alias.form,\
+	com.liferay.apio.architect.alias.representor,\
 	com.liferay.apio.architect.alias.routes,\
 	com.liferay.apio.architect.alias.routes.permission,\
 	com.liferay.apio.architect.consumer,\
@@ -26,7 +27,6 @@ Export-Package:\
 	com.liferay.apio.architect.provider,\
 	com.liferay.apio.architect.related,\
 	com.liferay.apio.architect.representor,\
-	com.liferay.apio.architect.representor.function,\
 	com.liferay.apio.architect.resource,\
 	com.liferay.apio.architect.router,\
 	com.liferay.apio.architect.routes,\

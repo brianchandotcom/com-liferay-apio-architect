@@ -12,11 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.representor.function;
+package com.liferay.apio.architect.alias.representor;
 
 import com.liferay.apio.architect.representor.NestedRepresentor;
-
-import java.util.function.Function;
 
 /**
  * Instances of this class represent a {@code Representor} nested field.
@@ -24,20 +22,13 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @review
  */
-public class NestedFieldFunction<T, S> extends FieldFunction<T, S> {
-
-	public NestedFieldFunction(
-		String key, Function<T, S> function,
-		NestedRepresentor<S> nestedRepresentor) {
-
-		super(key, function);
-
-		this.nestedRepresentor = nestedRepresentor;
-	}
+public interface NestedFieldFunction<T, S> extends FieldFunction<T, S> {
 
 	/**
-	 * The field's {@code NestedRepresentor}
+	 * Returns the field's {@code NestedRepresentor}.
+	 *
+	 * @return the field's {@code NestedRepresentor}
 	 */
-	public final NestedRepresentor<S> nestedRepresentor;
+	public NestedRepresentor<S> getNestedRepresentor();
 
 }

@@ -21,6 +21,8 @@ import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
 import com.google.gson.JsonObject;
 
+import com.liferay.apio.architect.alias.representor.FieldFunction;
+import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
@@ -30,8 +32,6 @@ import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.representor.function.FieldFunction;
-import com.liferay.apio.architect.representor.function.NestedFieldFunction;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
@@ -239,7 +239,7 @@ public class DocumentationWriter {
 		Stream<FieldFunction> fieldFunctionStream = fieldFunctions.stream();
 
 		Stream<String> fieldNamesStream = fieldFunctionStream.map(
-			fieldFunction -> fieldFunction.key);
+			fieldFunction -> fieldFunction.getKey());
 
 		List<RelatedModel> relatedModels = representor.getRelatedModels();
 
@@ -259,7 +259,7 @@ public class DocumentationWriter {
 
 		Stream<String> nestedFieldNamesStream = nestedFieldFunctionStream.map(
 			nestedFieldFunction -> _calculateNestableFieldNames(
-				nestedFieldFunction.nestedRepresentor)
+				nestedFieldFunction.getNestedRepresentor())
 		).reduce(
 			Stream::concat
 		).orElseGet(

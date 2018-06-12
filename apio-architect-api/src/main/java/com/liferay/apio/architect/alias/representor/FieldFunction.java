@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.representor.function;
+package com.liferay.apio.architect.alias.representor;
 
 import java.util.function.Function;
 
@@ -23,25 +23,14 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @review
  */
-public class FieldFunction<T, S> {
-
-	public FieldFunction(String key, Function<T, S> function) {
-		this.key = key;
-		this.function = function;
-	}
+public interface FieldFunction<T, S> extends Function<T, S> {
 
 	/**
-	 * The function that transforms the model into the field
+	 * Returns the field key.
 	 *
+	 * @return the field key
 	 * @review
 	 */
-	public final Function<T, S> function;
-
-	/**
-	 * The field key
-	 *
-	 * @review
-	 */
-	public final String key;
+	public String getKey();
 
 }

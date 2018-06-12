@@ -545,19 +545,19 @@ public class SingleModelWriter<T> {
 			Stream::empty
 		).forEach(
 			nestedFieldFunction -> {
-				Function<S, ?> nestedMapper = nestedFieldFunction.function;
-
-				Object mappedModel = nestedMapper.apply(singleModel.getModel());
+				Object mappedModel = nestedFieldFunction.apply(
+					singleModel.getModel());
 
 				FunctionalList<String> embeddedNestedPathElements =
 					new FunctionalList<>(
-						embeddedPathElements, nestedFieldFunction.key);
+						embeddedPathElements, nestedFieldFunction.getKey());
 
 				writeEmbeddedModelFields(
 					new SingleModelImpl<>(
 						mappedModel, "", Collections.emptyList()),
 					embeddedNestedPathElements,
-					__ -> Optional.of(nestedFieldFunction.nestedRepresentor));
+					__ -> Optional.of(
+						nestedFieldFunction.getNestedRepresentor()));
 			}
 		);
 	}

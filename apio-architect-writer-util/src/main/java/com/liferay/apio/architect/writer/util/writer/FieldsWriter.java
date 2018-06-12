@@ -19,12 +19,12 @@ import static com.liferay.apio.architect.util.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.util.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.util.url.URLCreator.createSingleURL;
 
+import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.representor.function.FieldFunction;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.list.FunctionalList;
@@ -213,15 +213,13 @@ public class FieldsWriter<T> {
 			fieldFunction -> {
 				Predicate<String> fieldsPredicate = getFieldsPredicate();
 
-				return fieldsPredicate.test(fieldFunction.key);
+				return fieldsPredicate.test(fieldFunction.getKey());
 			}
 		).forEach(
 			fieldFunction -> {
-				Function<T, U> function = fieldFunction.function;
+				U u = fieldFunction.apply(_singleModel.getModel());
 
-				U u = function.apply(_singleModel.getModel());
-
-				biConsumer.accept(fieldFunction.key, u);
+				biConsumer.accept(fieldFunction.getKey(), u);
 			}
 		);
 	}

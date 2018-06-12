@@ -17,14 +17,14 @@ package com.liferay.apio.architect.util.representor;
 import static com.liferay.apio.architect.util.date.DateTransformer.asString;
 
 import com.liferay.apio.architect.alias.BinaryFunction;
+import com.liferay.apio.architect.alias.representor.FieldFunction;
+import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.NestedRepresentor;
-import com.liferay.apio.architect.representor.function.FieldFunction;
-import com.liferay.apio.architect.representor.function.NestedFieldFunction;
 import com.liferay.apio.architect.util.related.RelatedModelImpl;
 import com.liferay.apio.architect.util.unsafe.Unsafe;
 
@@ -263,8 +263,24 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		Function<NestedRepresentor.Builder<S>, NestedRepresentor<S>> function) {
 
 		NestedFieldFunction<T, S> nestedFieldFunction = function.andThen(
-			nestedRepresentor -> new NestedFieldFunction<>(
-				key, transformFunction, nestedRepresentor)
+			nestedRepresentor -> new NestedFieldFunction<T, S>() {
+
+				@Override
+				public S apply(T t) {
+					return transformFunction.apply(t);
+				}
+
+				@Override
+				public String getKey() {
+					return key;
+				}
+
+				@Override
+				public NestedRepresentor<S> getNestedRepresentor() {
+					return nestedRepresentor;
+				}
+
+			}
 		).apply(
 			new NestedRepresentorImpl.BuilderImpl<>()
 		);
@@ -544,7 +560,19 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		List<FieldFunction<T, ?>> list = fieldFunctions.computeIfAbsent(
 			mapKey, __ -> new ArrayList<>());
 
-		FieldFunction<T, S> fieldFunction = new FieldFunction<>(key, function);
+		FieldFunction<T, S> fieldFunction = new FieldFunction<T, S>() {
+
+			@Override
+			public S apply(T t) {
+				return function.apply(t);
+			}
+
+			@Override
+			public String getKey() {
+				return key;
+			}
+
+		};
 
 		list.add(fieldFunction);
 	}

@@ -17,9 +17,9 @@ package com.liferay.apio.architect.util.representor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedModel;
-import com.liferay.apio.architect.representor.function.FieldFunction;
 import com.liferay.apio.architect.util.representor.dummy.Dummy;
 
 import java.util.List;
@@ -59,9 +59,9 @@ public class RepresentorTestUtil {
 		for (int i = 0; i < keys.size(); i++) {
 			FieldFunction<T, S> fieldFunction = list.get(i);
 
-			assertThat(fieldFunction.key, is(keys.get(i)));
+			assertThat(fieldFunction.getKey(), is(keys.get(i)));
 
-			U u = fieldFunction.function.andThen(
+			U u = fieldFunction.andThen(
 				function
 			).apply(
 				t

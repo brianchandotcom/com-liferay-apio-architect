@@ -577,19 +577,19 @@ public class PageWriter<T> {
 			Stream::empty
 		).forEach(
 			nestedFieldFunction -> {
-				Function<U, ?> nestedMapper = nestedFieldFunction.function;
-
-				Object mappedModel = nestedMapper.apply(singleModel.getModel());
+				Object mappedModel = nestedFieldFunction.apply(
+					singleModel.getModel());
 
 				FunctionalList<String> embeddedNestedPathElements =
 					new FunctionalList<>(
-						embeddedPathElements, nestedFieldFunction.key);
+						embeddedPathElements, nestedFieldFunction.getKey());
 
 				_writeItemEmbeddedModelFields(
 					new SingleModelImpl<>(
 						mappedModel, "", Collections.emptyList()),
 					embeddedNestedPathElements, itemJsonObjectBuilder,
-					__ -> Optional.of(nestedFieldFunction.nestedRepresentor),
+					__ -> Optional.of(
+						nestedFieldFunction.getNestedRepresentor()),
 					rootSingleModel);
 			}
 		);
