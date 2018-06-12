@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.message.json;
-
-import aQute.bnd.annotation.ConsumerType;
+package com.liferay.apio.architect.util.message.json;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -29,7 +27,6 @@ import javax.ws.rs.core.HttpHeaders;
  * @author Alejandro Hernández
  * @param  <T> The type of message this mapper handles
  */
-@ConsumerType
 public interface MessageMapper<T> {
 
 	/**

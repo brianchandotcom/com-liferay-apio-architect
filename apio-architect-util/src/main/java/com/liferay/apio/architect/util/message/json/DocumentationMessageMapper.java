@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.message.json;
-
-import aQute.bnd.annotation.ConsumerType;
+package com.liferay.apio.architect.util.message.json;
 
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.operation.Operation;
@@ -28,16 +26,13 @@ import com.liferay.apio.architect.operation.Operation;
  * object. To enable this, each method receives a {@link JSONObjectBuilder}.
  *
  * <p>
- * The methods {@link #onStart(JSONObjectBuilder, Object, HttpHeaders)} and
- * {@link #onFinish(JSONObjectBuilder, Object, HttpHeaders)} are called when the
- * writer starts and finishes the page, respectively. Otherwise, the page
- * message mapper's methods aren't called in a particular order.
+ * The methods {@link #onStart} and {@link #onFinish} are called when the writer
+ * starts and finishes the page, respectively. Otherwise, the page message
+ * mapper's methods aren't called in a particular order.
  * </p>
  *
  * @author Alejandro Hernández
  */
-@ConsumerType
-@SuppressWarnings("unused")
 public interface DocumentationMessageMapper
 	extends MessageMapper<Documentation> {
 

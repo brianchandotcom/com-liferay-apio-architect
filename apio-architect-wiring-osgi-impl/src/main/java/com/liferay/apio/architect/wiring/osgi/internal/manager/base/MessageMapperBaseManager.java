@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.base;
 
-import com.liferay.apio.architect.message.json.MessageMapper;
+import com.liferay.apio.architect.util.message.json.MessageMapper;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper;
 
 import java.util.function.BiConsumer;

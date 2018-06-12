@@ -25,17 +25,17 @@ import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
-import com.liferay.apio.architect.message.json.ErrorMessageMapper;
-import com.liferay.apio.architect.message.json.FormMessageMapper;
-import com.liferay.apio.architect.message.json.MessageMapper;
-import com.liferay.apio.architect.message.json.PageMessageMapper;
-import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.test.util.internal.writer.MockDocumentationWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockFormWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockPageWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockSingleModelWriter;
 import com.liferay.apio.architect.test.util.model.RootModel;
+import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.util.message.json.ErrorMessageMapper;
+import com.liferay.apio.architect.util.message.json.FormMessageMapper;
+import com.liferay.apio.architect.util.message.json.MessageMapper;
+import com.liferay.apio.architect.util.message.json.PageMessageMapper;
+import com.liferay.apio.architect.util.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.writer.util.writer.ErrorWriter;
 
 import java.io.File;

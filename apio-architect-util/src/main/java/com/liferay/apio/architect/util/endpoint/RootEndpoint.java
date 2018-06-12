@@ -14,8 +14,6 @@
 
 package com.liferay.apio.architect.util.endpoint;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.apio.architect.documentation.Documentation;
 
 import javax.ws.rs.GET;

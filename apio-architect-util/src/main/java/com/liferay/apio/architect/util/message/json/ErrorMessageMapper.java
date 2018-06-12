@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.message.json;
-
-import aQute.bnd.annotation.ConsumerType;
+package com.liferay.apio.architect.util.message.json;
 
 import com.liferay.apio.architect.error.APIError;
 
@@ -26,16 +24,13 @@ import com.liferay.apio.architect.error.APIError;
  * this, each method receives a {@link JSONObjectBuilder}.
  *
  * <p>
- * Besides {@link #onStart(JSONObjectBuilder, Object, HttpHeaders)} and {@link
- * #onFinish(JSONObjectBuilder, Object, HttpHeaders)}, which are respectively
- * called when the writer starts and finishes the error, the methods aren't
- * called in a particular order.
+ * Besides {@link #onStart} and {@link #onFinish}, which are respectively called
+ * when the writer starts and finishes the error, the methods aren't called in a
+ * particular order.
  * </p>
  *
  * @author Alejandro Hernández
  */
-@ConsumerType
-@SuppressWarnings("unused")
 public interface ErrorMessageMapper extends MessageMapper<APIError> {
 
 	/**

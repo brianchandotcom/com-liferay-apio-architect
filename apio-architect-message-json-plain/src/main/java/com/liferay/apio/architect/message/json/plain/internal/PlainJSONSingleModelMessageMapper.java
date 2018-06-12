@@ -15,8 +15,8 @@
 package com.liferay.apio.architect.message.json.plain.internal;
 
 import com.liferay.apio.architect.list.FunctionalList;
-import com.liferay.apio.architect.message.json.JSONObjectBuilder;
-import com.liferay.apio.architect.message.json.SingleModelMessageMapper;
+import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
+import com.liferay.apio.architect.util.message.json.SingleModelMessageMapper;
 
 import java.util.List;
 import java.util.stream.Stream;

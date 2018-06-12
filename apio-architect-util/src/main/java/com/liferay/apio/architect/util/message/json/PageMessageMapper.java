@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.message.json;
-
-import aQute.bnd.annotation.ConsumerType;
+package com.liferay.apio.architect.util.message.json;
 
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.operation.Method;
@@ -57,8 +55,6 @@ import javax.ws.rs.core.HttpHeaders;
  * @author Jorge Ferrer
  * @param  <T> the model's type
  */
-@ConsumerType
-@SuppressWarnings("unused")
 public interface PageMessageMapper<T> extends MessageMapper<Page<T>> {
 
 	/**

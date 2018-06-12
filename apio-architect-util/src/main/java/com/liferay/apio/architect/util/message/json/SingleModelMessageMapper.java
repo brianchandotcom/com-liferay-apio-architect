@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.message.json;
-
-import aQute.bnd.annotation.ConsumerType;
+package com.liferay.apio.architect.util.message.json;
 
 import com.liferay.apio.architect.list.FunctionalList;
 import com.liferay.apio.architect.operation.Method;
@@ -32,10 +30,9 @@ import java.util.List;
  * object. To enable this, each method receives a {@link JSONObjectBuilder}.
  *
  * <p>
- * The methods {@link #onStart(JSONObjectBuilder, Object, HttpHeaders)} and
- * {@link #onFinish(JSONObjectBuilder, Object, HttpHeaders)} are called when the
- * writer starts and finishes the single model item, respectively. Otherwise,
- * the message mapper's methods aren't called in a particular order.
+ * The methods {@link #onStart} and {@link #onFinish} are called when the writer
+ * starts and finishes the single model item, respectively. Otherwise, the
+ * message mapper's methods aren't called in a particular order.
  * </p>
  *
  * @author Alejandro Hernández
@@ -43,8 +40,6 @@ import java.util.List;
  * @author Jorge Ferrer
  * @param  <T> the model's type
  */
-@ConsumerType
-@SuppressWarnings("unused")
 public interface SingleModelMessageMapper<T>
 	extends MessageMapper<SingleModel<T>> {
 

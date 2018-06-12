@@ -33,8 +33,8 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstant
 
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
-import com.liferay.apio.architect.message.json.FormMessageMapper;
-import com.liferay.apio.architect.message.json.JSONObjectBuilder;
+import com.liferay.apio.architect.util.message.json.FormMessageMapper;
+import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
 
 import javax.ws.rs.core.HttpHeaders;
 

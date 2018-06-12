@@ -18,8 +18,6 @@ import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasAddingPermissionFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasNestedAddingPermissionFunction;
-import com.liferay.apio.architect.alias.routes.permission.HasRemovePermissionFunction;
-import com.liferay.apio.architect.alias.routes.permission.HasUpdatePermissionFunction;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.Pagination;
 

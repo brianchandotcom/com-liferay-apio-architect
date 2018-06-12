@@ -16,7 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.manager.message.json;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.apio.architect.message.json.PageMessageMapper;
+import com.liferay.apio.architect.util.message.json.PageMessageMapper;
 
 import java.util.Optional;
 

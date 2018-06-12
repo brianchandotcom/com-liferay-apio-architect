@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.message.json;
+package com.liferay.apio.architect.util.message.json;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

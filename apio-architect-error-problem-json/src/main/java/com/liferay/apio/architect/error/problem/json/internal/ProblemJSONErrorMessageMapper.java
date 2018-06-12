@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.error.problem.json.internal;
 
-import com.liferay.apio.architect.message.json.ErrorMessageMapper;
-import com.liferay.apio.architect.message.json.JSONObjectBuilder;
+import com.liferay.apio.architect.util.message.json.ErrorMessageMapper;
+import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
 
 import org.osgi.service.component.annotations.Component;
 

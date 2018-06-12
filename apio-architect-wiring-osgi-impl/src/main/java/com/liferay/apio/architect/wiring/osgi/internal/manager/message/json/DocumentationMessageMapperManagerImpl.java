@@ -16,7 +16,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.message.json;
 
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
-import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.MessageMapperBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.DocumentationMessageMapperManager;
 

@@ -16,8 +16,8 @@ package com.liferay.apio.architect.jaxrs.json.internal.writer;
 
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.jaxrs.json.internal.writer.base.BaseMessageBodyWriter;
-import com.liferay.apio.architect.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.request.RequestInfo;
+import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.wiring.osgi.manager.message.json.DocumentationMessageMapperManager;
 import com.liferay.apio.architect.writer.util.writer.DocumentationWriter;
 
