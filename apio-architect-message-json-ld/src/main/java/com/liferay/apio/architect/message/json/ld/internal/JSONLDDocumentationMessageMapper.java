@@ -31,9 +31,9 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstant
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.TYPE_OPERATION;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_HYDRA_PROFILE;
 
-import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.util.documentation.Documentation;
 import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
 

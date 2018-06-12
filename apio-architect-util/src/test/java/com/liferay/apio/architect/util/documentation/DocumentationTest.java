@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.documentation;
+package com.liferay.apio.architect.util.documentation;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;

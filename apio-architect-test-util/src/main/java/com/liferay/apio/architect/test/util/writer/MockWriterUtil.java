@@ -32,7 +32,6 @@ import com.liferay.apio.architect.test.util.model.SecondEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.request.RequestInfo;
-import com.liferay.apio.architect.util.url.ServerURL;
 
 import java.util.Arrays;
 import java.util.Collections;

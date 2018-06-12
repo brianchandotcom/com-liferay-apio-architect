@@ -22,7 +22,6 @@ import static com.liferay.apio.architect.operation.Method.PUT;
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.consumer.TriConsumer;
-import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.operation.Method;
@@ -36,6 +35,7 @@ import com.liferay.apio.architect.representor.function.NestedFieldFunction;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
+import com.liferay.apio.architect.util.documentation.Documentation;
 import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.util.request.RequestInfo;

@@ -18,9 +18,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.language.Language;
-import com.liferay.apio.architect.util.url.ServerURL;
 import com.liferay.apio.architect.util.response.control.Embedded;
 import com.liferay.apio.architect.util.response.control.Fields;
+import com.liferay.apio.architect.util.url.ServerURL;
 
 import javax.servlet.http.HttpServletRequest;
 

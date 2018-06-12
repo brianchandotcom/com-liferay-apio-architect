@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.util.message.json;
 
-import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.util.documentation.Documentation;
 
 /**
  * Maps the API {@link Documentation} to its JSON object representation.

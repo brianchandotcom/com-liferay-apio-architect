@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.util.endpoint;
 
-import com.liferay.apio.architect.documentation.Documentation;
+import com.liferay.apio.architect.util.documentation.Documentation;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

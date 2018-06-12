@@ -12,8 +12,10 @@
  * details.
  */
 
-package com.liferay.apio.architect.documentation;
+package com.liferay.apio.architect.util.documentation;
 
+import com.liferay.apio.architect.documentation.APIDescription;
+import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
