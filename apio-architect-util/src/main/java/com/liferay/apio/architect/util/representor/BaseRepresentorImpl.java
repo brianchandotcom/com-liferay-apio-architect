@@ -25,6 +25,7 @@ import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.NestedRepresentor;
 import com.liferay.apio.architect.representor.function.FieldFunction;
 import com.liferay.apio.architect.representor.function.NestedFieldFunction;
+import com.liferay.apio.architect.util.related.RelatedModelImpl;
 import com.liferay.apio.architect.util.unsafe.Unsafe;
 
 import java.util.ArrayList;
@@ -308,7 +309,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		String key, Class<? extends Identifier<S>> identifierClass,
 		Function<T, S> identifierFunction) {
 
-		RelatedModel<T, S> relatedModel = new RelatedModel<>(
+		RelatedModel<T, S> relatedModel = new RelatedModelImpl<>(
 			key, identifierClass, identifierFunction);
 
 		relatedModels.add(relatedModel);

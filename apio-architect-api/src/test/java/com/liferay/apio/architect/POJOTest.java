@@ -17,8 +17,6 @@ package com.liferay.apio.architect;
 import static com.openpojo.reflection.impl.PojoClassFactory.getPojoClass;
 
 import com.liferay.apio.architect.pagination.PageItems;
-import com.liferay.apio.architect.related.RelatedCollection;
-import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.uri.Path;
 
 import com.openpojo.reflection.utils.AttributeHelper;
@@ -57,12 +55,6 @@ public class POJOTest {
 		).with(
 			new DefaultValuesNullTester()
 		).build();
-	}
-
-	@Test
-	public void testIdentifier() {
-		_validator.validate(getPojoClass(RelatedCollection.class));
-		_validator.validate(getPojoClass(RelatedModel.class));
 	}
 
 	@Test

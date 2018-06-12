@@ -30,6 +30,7 @@ import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
+import com.liferay.apio.architect.util.related.RelatedCollectionImpl;
 import com.liferay.apio.architect.util.representor.dummy.Dummy;
 
 import java.io.BufferedReader;
@@ -65,7 +66,7 @@ public class RepresentorTest {
 					relatedCollection.getIdentifierClass());
 			},
 			() -> Collections.singletonList(
-				new RelatedCollection<>("extra", IntegerIdentifier.class)));
+				new RelatedCollectionImpl<>("extra", IntegerIdentifier.class)));
 
 		_representor = builder.types(
 			"Type 1", "Type 2", "Type 3"

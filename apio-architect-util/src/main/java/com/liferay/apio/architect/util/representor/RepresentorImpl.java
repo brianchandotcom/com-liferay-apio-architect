@@ -17,6 +17,7 @@ package com.liferay.apio.architect.util.representor;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.util.related.RelatedCollectionImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -98,7 +99,7 @@ public class RepresentorImpl<T>
 				Function<T, U> identifierFunction) {
 
 				RelatedCollection<?> relatedCollection =
-					new RelatedCollection<>(relatedKey, _identifierClass);
+					new RelatedCollectionImpl<>(relatedKey, _identifierClass);
 
 				_biConsumer.accept(identifierClass, relatedCollection);
 
@@ -152,7 +153,7 @@ public class RepresentorImpl<T>
 	private <S extends Identifier> void _addRelatedCollection(
 		String key, Class<S> itemIdentifierClass) {
 
-		RelatedCollection<S> relatedCollection = new RelatedCollection<>(
+		RelatedCollection<S> relatedCollection = new RelatedCollectionImpl<>(
 			key, itemIdentifierClass);
 
 		_relatedCollections.add(relatedCollection);

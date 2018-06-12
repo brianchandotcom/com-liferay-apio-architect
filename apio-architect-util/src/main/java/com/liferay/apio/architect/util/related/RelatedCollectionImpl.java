@@ -12,9 +12,10 @@
  * details.
  */
 
-package com.liferay.apio.architect.related;
+package com.liferay.apio.architect.util.related;
 
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.related.RelatedCollection;
 
 /**
  * Represents the relation between a resource and a collection. The type of the
@@ -23,20 +24,25 @@ import com.liferay.apio.architect.identifier.Identifier;
  * @author Alejandro Hernández
  * @param  <T> the type of the resource's identifier
  */
-public interface RelatedCollection<T extends Identifier> {
+public class RelatedCollectionImpl<T extends Identifier>
+	implements RelatedCollection<T> {
 
-	/**
-	 * Returns the class of the collection items' identifier.
-	 *
-	 * @return the class of the collection items' identifier
-	 */
-	public Class<T> getIdentifierClass();
+	public RelatedCollectionImpl(String key, Class<T> identifierClass) {
+		_key = key;
+		_identifierClass = identifierClass;
+	}
 
-	/**
-	 * Returns the relation's key.
-	 *
-	 * @return the relation's key
-	 */
-	public String getKey();
+	@Override
+	public Class<T> getIdentifierClass() {
+		return _identifierClass;
+	}
+
+	@Override
+	public String getKey() {
+		return _key;
+	}
+
+	private final Class<T> _identifierClass;
+	private final String _key;
 
 }

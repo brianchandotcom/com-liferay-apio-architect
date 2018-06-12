@@ -38,6 +38,7 @@ import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.list.FunctionalList;
+import com.liferay.apio.architect.util.related.RelatedModelImpl;
 import com.liferay.apio.architect.util.request.RequestInfo;
 import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 import com.liferay.apio.architect.writer.util.writer.FieldsWriter;
@@ -104,7 +105,7 @@ public class FieldsWriterTest {
 		SingleModel<Integer> parentSingleModel = new SingleModelImpl<>(
 			3, "", Collections.emptyList());
 
-		RelatedModel<Integer, String> relatedModel = new RelatedModel<>(
+		RelatedModel<Integer, String> relatedModel = new RelatedModelImpl<>(
 			"key", FirstEmbeddedId.class, String::valueOf);
 
 		Optional<SingleModel<FirstEmbeddedModel>> optional =

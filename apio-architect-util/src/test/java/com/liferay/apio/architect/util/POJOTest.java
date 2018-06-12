@@ -17,6 +17,8 @@ package com.liferay.apio.architect.util;
 import static com.openpojo.reflection.impl.PojoClassFactory.getPojoClass;
 
 import com.liferay.apio.architect.util.operation.OperationImpl;
+import com.liferay.apio.architect.util.related.RelatedCollectionImpl;
+import com.liferay.apio.architect.util.related.RelatedModelImpl;
 
 import com.openpojo.reflection.utils.AttributeHelper;
 import com.openpojo.validation.Validator;
@@ -51,6 +53,12 @@ public class POJOTest {
 		).with(
 			new DefaultValuesNullTester()
 		).build();
+	}
+
+	@Test
+	public void testIdentifier() {
+		_validator.validate(getPojoClass(RelatedCollectionImpl.class));
+		_validator.validate(getPojoClass(RelatedModelImpl.class));
 	}
 
 	@Test

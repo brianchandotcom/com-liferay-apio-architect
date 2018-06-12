@@ -12,9 +12,10 @@
  * details.
  */
 
-package com.liferay.apio.architect.related;
+package com.liferay.apio.architect.util.related;
 
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.related.RelatedModel;
 
 import java.util.function.Function;
 
@@ -28,28 +29,34 @@ import java.util.function.Function;
  * @param  <S> the model identifier's type (e.g., {@code Long}, {@code String},
  *         etc.)
  */
-public interface RelatedModel<T, S> {
+public class RelatedModelImpl<T, S> implements RelatedModel<T, S> {
 
-	/**
-	 * Returns the related resource identifier's class.
-	 *
-	 * @return the related resource identifier's class
-	 */
-	public Class<? extends Identifier<S>> getIdentifierClass();
+	public RelatedModelImpl(
+		String key, Class<? extends Identifier<S>> identifierClass,
+		Function<T, S> identifierFunction) {
 
-	/**
-	 * Returns the function you can use to retrieve the related resource's
-	 * identifier.
-	 *
-	 * @return the function that calculates the related resource's identifier.
-	 */
-	public Function<T, S> getIdentifierFunction();
+		_key = key;
+		_identifierClass = identifierClass;
+		_identifierFunction = identifierFunction;
+	}
 
-	/**
-	 * Returns the relation's key.
-	 *
-	 * @return the relation's key
-	 */
-	public String getKey();
+	@Override
+	public Class<? extends Identifier<S>> getIdentifierClass() {
+		return _identifierClass;
+	}
+
+	@Override
+	public Function<T, S> getIdentifierFunction() {
+		return _identifierFunction;
+	}
+
+	@Override
+	public String getKey() {
+		return _key;
+	}
+
+	private final Class<? extends Identifier<S>> _identifierClass;
+	private final Function<T, S> _identifierFunction;
+	private final String _key;
 
 }
