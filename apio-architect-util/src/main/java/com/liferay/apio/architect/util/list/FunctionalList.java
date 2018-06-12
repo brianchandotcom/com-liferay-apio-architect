@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.list;
+package com.liferay.apio.architect.util.list;
 
 import java.util.ArrayList;
 import java.util.Collections;

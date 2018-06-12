@@ -20,7 +20,7 @@ import static com.liferay.apio.architect.url.URLCreator.createNestedCollectionUR
 import static com.liferay.apio.architect.url.URLCreator.createSingleURL;
 
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.list.FunctionalList;
+import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;

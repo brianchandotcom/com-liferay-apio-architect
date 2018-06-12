@@ -26,7 +26,7 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstant
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_HYDRA_PROFILE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_SCHEMA_ORG;
 
-import com.liferay.apio.architect.list.FunctionalList;
+import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;

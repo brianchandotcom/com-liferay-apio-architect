@@ -30,7 +30,7 @@ import static org.hamcrest.collection.IsMapWithSize.aMapWithSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import com.liferay.apio.architect.list.FunctionalList;
+import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;

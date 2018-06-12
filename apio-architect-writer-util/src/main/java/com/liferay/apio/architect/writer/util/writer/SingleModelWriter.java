@@ -21,7 +21,7 @@ import static com.liferay.apio.architect.writer.util.util.WriterUtil.getPathOpti
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.list.FunctionalList;
+import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.request.RequestInfo;

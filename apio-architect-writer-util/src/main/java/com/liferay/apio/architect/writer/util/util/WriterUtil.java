@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.writer.util.util;
 
-import com.liferay.apio.architect.list.FunctionalList;
+import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.request.RequestInfo;

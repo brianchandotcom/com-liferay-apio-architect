@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.list;
+package com.liferay.apio.architect.util.list;
 
 import static co.unruly.matchers.StreamMatchers.contains;
 import static co.unruly.matchers.StreamMatchers.empty;
