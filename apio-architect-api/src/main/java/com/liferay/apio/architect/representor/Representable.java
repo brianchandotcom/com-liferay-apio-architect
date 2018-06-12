@@ -64,10 +64,9 @@ public interface Representable<T, S, U extends Identifier<S>> {
 	 *
 	 * <p>
 	 * To construct a representor, you must call {@link
-	 * Representor.FirstStep#build()} ()}. Before calling this method,
-	 * you must call the other representor builder methods to populate the
-	 * builder with data. This ensures that the resulting representor contains
-	 * the data.
+	 * Representor.FirstStep#build()} ()}. Before calling this method, you must
+	 * call the other representor builder methods to populate the builder with
+	 * data. This ensures that the resulting representor contains the data.
 	 * </p>
 	 *
 	 * @param builder the representor builder used to create the representor

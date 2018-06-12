@@ -19,8 +19,8 @@ import aQute.bnd.annotation.ConsumerType;
 import java.util.Collection;
 
 /**
- * Provides the information needed by Apio Architect to construct a valid
- * {@link Page}.
+ * Provides the information needed by Apio Architect to construct a valid {@link
+ * Page}.
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type

@@ -14,8 +14,6 @@
 
 package com.liferay.apio.architect.uri;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Represents a resource path. For example, the ID and name of a resource
  * obtained from the URL {@code /p/customers/2012} is {@code 2012} and {@code
