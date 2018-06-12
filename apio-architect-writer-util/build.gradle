@@ -11,3 +11,7 @@ dependencies {
 	testCompile group: "org.glassfish.jersey.core", name: "jersey-common", version: "2.22.2"
 	testCompile project(":apps:apio-architect:apio-architect-test-util")
 }
+
+deploy {
+	enabled = false
+}

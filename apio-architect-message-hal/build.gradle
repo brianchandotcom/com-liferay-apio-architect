@@ -13,3 +13,7 @@ dependencies {
 	testCompile group: "org.hamcrest", name: "hamcrest-all", version: "1.3"
 	testCompile project(":apps:apio-architect:apio-architect-test-util")
 }
+
+deploy {
+	enabled = false
+}

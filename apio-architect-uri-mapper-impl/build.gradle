@@ -8,3 +8,7 @@ dependencies {
 
 	testCompile group: "org.glassfish.jersey.core", name: "jersey-common", version: "2.26"
 }
+
+deploy {
+	enabled = false
+}

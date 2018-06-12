@@ -13,3 +13,7 @@ dependencies {
 	testCompile project(":apps:apio-architect:apio-architect-test-util")
 	testCompile project(":apps:apio-architect:apio-architect-writer-util")
 }
+
+deploy {
+	enabled = false
+}
