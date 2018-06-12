@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.date;
+package com.liferay.apio.architect.util.date;
 
 import com.liferay.apio.architect.functional.Try;
 

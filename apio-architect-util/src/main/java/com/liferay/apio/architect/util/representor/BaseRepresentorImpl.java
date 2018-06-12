@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.util.representor;
 
-import static com.liferay.apio.architect.date.DateTransformer.asString;
+import static com.liferay.apio.architect.util.date.DateTransformer.asString;
 
 import com.liferay.apio.architect.alias.BinaryFunction;
 import com.liferay.apio.architect.file.BinaryFile;

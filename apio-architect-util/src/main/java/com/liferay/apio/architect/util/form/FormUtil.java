@@ -14,10 +14,9 @@
 
 package com.liferay.apio.architect.util.form;
 
-import static com.liferay.apio.architect.date.DateTransformer.asDate;
+import static com.liferay.apio.architect.util.date.DateTransformer.asDate;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
-import com.liferay.apio.architect.date.DateTransformer;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.FieldType;
@@ -26,6 +25,7 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.URLCreator;
 import com.liferay.apio.architect.util.alias.form.FieldFormBiConsumer;
+import com.liferay.apio.architect.util.date.DateTransformer;
 
 import java.text.NumberFormat;
 

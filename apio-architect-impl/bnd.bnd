@@ -1,7 +1,5 @@
 Bundle-Name: Liferay Apio Architect Implementation
 Bundle-SymbolicName: com.liferay.apio.architect.impl
 Bundle-Version: 1.0.0
--conditionalpackage:\
-	com.liferay.apio.architect.date,\
-	com.liferay.apio.architect.url
+-conditionalpackage: com.liferay.apio.architect.url
 -dsannotations-options: inherit
