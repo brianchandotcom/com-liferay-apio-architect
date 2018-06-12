@@ -33,12 +33,12 @@ import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.function.FieldFunction;
 import com.liferay.apio.architect.representor.function.NestedFieldFunction;
-import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
+import com.liferay.apio.architect.util.request.RequestInfo;
 
 import java.util.ArrayList;
 import java.util.HashSet;

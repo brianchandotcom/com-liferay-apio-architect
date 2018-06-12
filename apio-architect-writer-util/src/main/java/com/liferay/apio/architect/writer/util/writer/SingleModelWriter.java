@@ -21,15 +21,15 @@ import static com.liferay.apio.architect.writer.util.util.WriterUtil.getPathOpti
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.representor.BaseRepresentor;
-import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.util.message.json.SingleModelMessageMapper;
+import com.liferay.apio.architect.util.request.RequestInfo;
 import com.liferay.apio.architect.writer.util.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.writer.util.alias.PathFunction;
 import com.liferay.apio.architect.writer.util.alias.RepresentorFunction;

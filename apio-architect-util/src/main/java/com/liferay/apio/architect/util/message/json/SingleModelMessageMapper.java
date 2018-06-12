@@ -14,10 +14,10 @@
 
 package com.liferay.apio.architect.util.message.json;
 
-import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.operation.Method;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.util.list.FunctionalList;
 
 import java.util.List;
 

@@ -20,18 +20,18 @@ import static com.liferay.apio.architect.url.URLCreator.createNestedCollectionUR
 import static com.liferay.apio.architect.url.URLCreator.createSingleURL;
 
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.function.FieldFunction;
-import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.response.control.Fields;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.URLCreator;
+import com.liferay.apio.architect.util.list.FunctionalList;
+import com.liferay.apio.architect.util.request.RequestInfo;
 import com.liferay.apio.architect.writer.util.alias.SingleModelFunction;
 
 import java.util.List;

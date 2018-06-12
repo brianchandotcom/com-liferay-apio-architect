@@ -23,7 +23,6 @@ import static com.liferay.apio.architect.test.util.representor.MockRepresentorCr
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.identifier.FirstEmbeddedId;
 import com.liferay.apio.architect.test.util.identifier.SecondEmbeddedId;
@@ -32,6 +31,7 @@ import com.liferay.apio.architect.test.util.model.FirstEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.SecondEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.request.RequestInfo;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -19,9 +19,9 @@ import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequ
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.test.util.form.MockFormCreator;
 import com.liferay.apio.architect.util.message.json.FormMessageMapper;
+import com.liferay.apio.architect.util.request.RequestInfo;
 import com.liferay.apio.architect.writer.util.writer.FormWriter;
 
 import javax.ws.rs.core.HttpHeaders;

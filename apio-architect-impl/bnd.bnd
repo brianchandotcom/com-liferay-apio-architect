@@ -3,7 +3,6 @@ Bundle-SymbolicName: com.liferay.apio.architect.impl
 Bundle-Version: 1.0.0
 -conditionalpackage:\
 	com.liferay.apio.architect.date,\
-	com.liferay.apio.architect.request,\
 	com.liferay.apio.architect.response.control,\
 	com.liferay.apio.architect.url
 -dsannotations-options: inherit

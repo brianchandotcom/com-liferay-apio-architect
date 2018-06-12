@@ -21,13 +21,13 @@ import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.documentation.Documentation;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
 import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.util.request.RequestInfo;
 import com.liferay.apio.architect.writer.util.writer.DocumentationWriter;
 
 import java.util.Collections;

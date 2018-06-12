@@ -30,15 +30,15 @@ import static org.hamcrest.collection.IsMapWithSize.aMapWithSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.related.RelatedModel;
-import com.liferay.apio.architect.request.RequestInfo;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.identifier.FirstEmbeddedId;
 import com.liferay.apio.architect.test.util.model.FirstEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.list.FunctionalList;
+import com.liferay.apio.architect.util.request.RequestInfo;
 import com.liferay.apio.architect.writer.util.writer.FieldsWriter;
 
 import java.util.ArrayList;

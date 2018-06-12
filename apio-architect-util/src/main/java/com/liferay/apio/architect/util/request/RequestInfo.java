@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.request;
+package com.liferay.apio.architect.util.request;
 
 import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.response.control.Embedded;
