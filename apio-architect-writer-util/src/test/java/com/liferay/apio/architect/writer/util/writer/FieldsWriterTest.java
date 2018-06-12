@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.writer.util;
+package com.liferay.apio.architect.writer.util.writer;
 
 import static com.liferay.apio.architect.test.util.list.FunctionalListMatchers.aFunctionalListThat;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createRootModelRepresentor;
@@ -41,7 +41,6 @@ import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.util.related.RelatedModelImpl;
 import com.liferay.apio.architect.util.request.RequestInfo;
 import com.liferay.apio.architect.util.single.model.SingleModelImpl;
-import com.liferay.apio.architect.writer.util.writer.FieldsWriter;
 
 import java.util.ArrayList;
 import java.util.Collections;

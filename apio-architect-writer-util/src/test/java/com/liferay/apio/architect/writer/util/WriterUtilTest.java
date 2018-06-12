@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.writer.util.util;
+package com.liferay.apio.architect.writer.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

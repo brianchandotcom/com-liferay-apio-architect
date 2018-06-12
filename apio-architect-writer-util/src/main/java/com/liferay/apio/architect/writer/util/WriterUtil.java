@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.writer.util.util;
+package com.liferay.apio.architect.writer.util;
 
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;

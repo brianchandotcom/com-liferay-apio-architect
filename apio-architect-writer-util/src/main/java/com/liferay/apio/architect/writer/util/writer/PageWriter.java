@@ -18,8 +18,8 @@ import static com.liferay.apio.architect.util.url.URLCreator.createCollectionPag
 import static com.liferay.apio.architect.util.url.URLCreator.createCollectionURL;
 import static com.liferay.apio.architect.util.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.util.url.URLCreator.createNestedCollectionURL;
-import static com.liferay.apio.architect.writer.util.util.WriterUtil.getFieldsWriter;
-import static com.liferay.apio.architect.writer.util.util.WriterUtil.getPathOptional;
+import static com.liferay.apio.architect.writer.util.WriterUtil.getFieldsWriter;
+import static com.liferay.apio.architect.writer.util.WriterUtil.getPathOptional;
 
 import com.google.gson.JsonObject;
 

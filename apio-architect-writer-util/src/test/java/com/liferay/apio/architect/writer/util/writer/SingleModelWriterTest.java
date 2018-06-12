@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.writer.util;
+package com.liferay.apio.architect.writer.util.writer;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 
@@ -20,7 +20,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import com.liferay.apio.architect.util.single.model.SingleModelImpl;
-import com.liferay.apio.architect.writer.util.writer.SingleModelWriter;
 
 import java.util.Collections;
 import java.util.Optional;

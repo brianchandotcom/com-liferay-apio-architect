@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.writer.util;
+package com.liferay.apio.architect.writer.util.writer;
 
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonBoolean;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonInt;
@@ -27,7 +27,6 @@ import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.test.util.json.Conditions;
 import com.liferay.apio.architect.util.message.json.ErrorMessageMapper;
 import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
-import com.liferay.apio.architect.writer.util.writer.ErrorWriter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

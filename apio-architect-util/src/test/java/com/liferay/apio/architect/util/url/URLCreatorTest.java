@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.writer.util.url;
+package com.liferay.apio.architect.util.url;
 
 import static java.util.Collections.emptyList;
 
@@ -27,8 +27,6 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.pagination.PageImpl;
 import com.liferay.apio.architect.util.pagination.PageType;
-import com.liferay.apio.architect.util.url.ServerURL;
-import com.liferay.apio.architect.util.url.URLCreator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
