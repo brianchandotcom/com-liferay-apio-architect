@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.writer.util.writer;
 
-import static com.liferay.apio.architect.url.URLCreator.createFormURL;
+import static com.liferay.apio.architect.util.url.URLCreator.createFormURL;
 
 import com.google.gson.JsonObject;
 

@@ -24,7 +24,7 @@ import com.liferay.apio.architect.language.Language;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.unsafe.Unsafe;
-import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.util.url.ServerURL;
 import com.liferay.apio.architect.util.message.json.MessageMapper;
 import com.liferay.apio.architect.util.request.RequestInfo;
 import com.liferay.apio.architect.util.response.control.Embedded;

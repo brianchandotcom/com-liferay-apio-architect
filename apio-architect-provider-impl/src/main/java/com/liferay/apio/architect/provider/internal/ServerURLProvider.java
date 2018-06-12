@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.provider.internal;
 
 import com.liferay.apio.architect.provider.Provider;
-import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.util.url.ServerURL;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -25,7 +25,7 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.util.url.ServerURL;
 import com.liferay.apio.architect.util.endpoint.BinaryEndpoint;
 import com.liferay.apio.architect.util.endpoint.FormEndpoint;
 import com.liferay.apio.architect.util.endpoint.RootEndpoint;

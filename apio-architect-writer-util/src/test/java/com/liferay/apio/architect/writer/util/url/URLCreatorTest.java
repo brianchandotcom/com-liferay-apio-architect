@@ -26,8 +26,8 @@ import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.PageType;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.url.ServerURL;
-import com.liferay.apio.architect.url.URLCreator;
+import com.liferay.apio.architect.util.url.ServerURL;
+import com.liferay.apio.architect.util.url.URLCreator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

@@ -32,6 +32,7 @@ import com.liferay.apio.architect.test.util.model.SecondEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.request.RequestInfo;
+import com.liferay.apio.architect.util.url.ServerURL;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -78,7 +79,7 @@ public class MockWriterUtil {
 
 	/**
 	 * Returns a {@link RequestInfo} with the provided {@code HttpHeaders}, a
-	 * mock {@link com.liferay.apio.architect.url.ServerURL}, a mock {@link
+	 * mock {@link ServerURL}, a mock {@link
 	 * Embedded} request, and a mock {@link
 	 * com.liferay.apio.architect.language.Language} with {@code
 	 * Locale#getDefault()}.

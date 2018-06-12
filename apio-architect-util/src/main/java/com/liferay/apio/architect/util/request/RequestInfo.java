@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.util.request;
 
 import com.liferay.apio.architect.language.Language;
-import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.util.url.ServerURL;
 import com.liferay.apio.architect.util.response.control.Embedded;
 import com.liferay.apio.architect.util.response.control.Fields;
 

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.url;
+package com.liferay.apio.architect.util.url;
 
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.pagination.Page;

@@ -23,7 +23,7 @@ import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.routes.ItemRoutes;
-import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.util.url.ServerURL;
 import com.liferay.apio.architect.util.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.provider.ProviderManager;

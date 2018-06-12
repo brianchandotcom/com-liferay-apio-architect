@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.url;
+package com.liferay.apio.architect.util.url;
 
 /**
  * Provides the final URL based on the HTTP servlet request. The implementation
