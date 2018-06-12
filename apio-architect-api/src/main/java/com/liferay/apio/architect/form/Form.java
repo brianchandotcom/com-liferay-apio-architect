@@ -56,10 +56,10 @@ import static com.liferay.apio.architect.form.FormUtil.getRequiredLongList;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredString;
 import static com.liferay.apio.architect.form.FormUtil.getRequiredStringList;
 
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.Language;
-import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collections;
 import java.util.Date;
@@ -239,7 +239,7 @@ public class Form<T> {
 		}
 
 		public Builder(
-			List<String> paths, Function<Path, ?> identifierFunction) {
+			List<String> paths, IdentifierFunction identifierFunction) {
 
 			_form = new Form<>(paths, identifierFunction);
 		}
@@ -945,13 +945,13 @@ public class Form<T> {
 
 	}
 
-	private Form(List<String> paths, Function<Path, ?> identifierFunction) {
+	private Form(List<String> paths, IdentifierFunction identifierFunction) {
 		id = String.join("/", paths);
 		_identifierFunction = identifierFunction;
 	}
 
 	private Function<Language, String> _descriptionFunction;
-	private final Function<Path, ?> _identifierFunction;
+	private final IdentifierFunction<?> _identifierFunction;
 	private final Map<String, Function<T, Consumer<List<Boolean>>>>
 		_optionalBooleanLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Boolean>>>

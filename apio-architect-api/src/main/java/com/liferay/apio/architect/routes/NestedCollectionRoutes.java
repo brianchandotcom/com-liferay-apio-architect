@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 
 import static java.lang.String.join;
 
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
@@ -32,7 +33,6 @@ import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -129,13 +129,14 @@ public class NestedCollectionRoutes<T, S, U> {
 		public Builder(
 			String name, String nestedName, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ? extends Identifier<?>> identifierFunction) {
+			Function<Path, ?> identifierFunction) {
 
 			_name = name;
 			_nestedName = nestedName;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
-			_identifierFunction = identifierFunction;
+
+			_identifierFunction = identifierFunction::apply;
 		}
 
 		/**
@@ -559,7 +560,7 @@ public class NestedCollectionRoutes<T, S, U> {
 		private Form _form;
 		private ThrowableBiFunction<Credentials, U, Boolean>
 			_hasNestedAddingPermissionFunction;
-		private final Function<Path, ?> _identifierFunction;
+		private final IdentifierFunction<?> _identifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private NestedCreateItemFunction<T, U> _nestedCreateItemFunction;

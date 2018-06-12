@@ -16,6 +16,7 @@ package com.liferay.apio.architect.form;
 
 import static com.liferay.apio.architect.date.DateTransformer.asDate;
 
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FieldFormBiConsumer;
 import com.liferay.apio.architect.date.DateTransformer;
 import com.liferay.apio.architect.file.BinaryFile;
@@ -209,7 +210,7 @@ public class FormUtil {
 	 */
 	public static <T> BiConsumer<String, Function<T, Consumer<?>>>
 		getOptionalLinkedModel(
-			Body body, T t, Function<Path, ?> identifierFunction) {
+			Body body, T t, IdentifierFunction identifierFunction) {
 
 		return (key, function) -> _getLinkedModelValueField(
 			body, key, false, function.apply(t), identifierFunction);
@@ -440,8 +441,8 @@ public class FormUtil {
 	 * @review
 	 */
 	public static <T> BiConsumer<String, Function<T, Consumer>>
-		getRequiredLinkedModel(Body body, T t, Function<Path, ?>
-		identifierFunction) {
+		getRequiredLinkedModel(
+			Body body, T t, IdentifierFunction identifierFunction) {
 
 		return (key, function) -> _getLinkedModelValueField(
 			body, key, true, function.apply(t), identifierFunction);
@@ -620,7 +621,7 @@ public class FormUtil {
 
 	private static void _getLinkedModelValueField(
 		Body body, String key, boolean required, Consumer consumer,
-		Function<Path, ?> identifierFunction) {
+		IdentifierFunction<?> identifierFunction) {
 
 		Optional<String> optional = body.getValueOptional(key);
 
@@ -629,9 +630,9 @@ public class FormUtil {
 
 			Path path = URLCreator.getPath(url);
 
-			Object apply = identifierFunction.apply(path);
+			Object object = identifierFunction.apply(path);
 
-			consumer.accept(apply);
+			consumer.accept(object);
 		}
 		else if (required) {
 			throw new BadRequestException("Field \"" + key + "\" is required");

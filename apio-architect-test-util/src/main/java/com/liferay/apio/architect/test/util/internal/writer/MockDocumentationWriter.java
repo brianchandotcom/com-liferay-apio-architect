@@ -71,7 +71,7 @@ public class MockDocumentationWriter {
 			"name", null,
 			__ -> {
 			},
-			null);
+			__ -> null);
 
 		NestedCollectionRoutes.Builder nestedBuilder =
 			new NestedCollectionRoutes.Builder(

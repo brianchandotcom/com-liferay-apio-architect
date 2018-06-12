@@ -174,7 +174,7 @@ public class FormEndpointTest {
 				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				null));
+				__ -> null));
 	}
 
 	private static <T, S, U> NestedCollectionRoutes<T, S, U>
@@ -185,7 +185,7 @@ public class FormEndpointTest {
 				"", "", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				null));
+				__ -> null));
 	}
 
 	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
@@ -193,7 +193,7 @@ public class FormEndpointTest {
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			null);
+			__ -> null);
 
 		return builder.addUpdater(
 			(aLong, body) -> null, (credentials, s) -> true,
@@ -209,7 +209,7 @@ public class FormEndpointTest {
 				"name", "nestedName", REQUEST_PROVIDE_FUNCTION,
 				__ -> {
 				},
-				null);
+				__ -> null);
 
 		return builder.addCreator(
 			(s, body) -> null, hasNestedAddingPermissionFunction(),

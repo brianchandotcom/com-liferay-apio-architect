@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.operation.Method.PUT;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideConsumer;
 
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
@@ -143,7 +144,8 @@ public class ItemRoutes<T, S> {
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
-			_identifierFunction = identifierFunction;
+
+			_identifierFunction = identifierFunction::apply;
 		}
 
 		/**
@@ -680,7 +682,7 @@ public class ItemRoutes<T, S> {
 		private Form _form;
 		private HasRemovePermissionFunction<S> _hasRemovePermissionFunction;
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
-		private final Function<Path, ?> _identifierFunction;
+		private final IdentifierFunction<?> _identifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;

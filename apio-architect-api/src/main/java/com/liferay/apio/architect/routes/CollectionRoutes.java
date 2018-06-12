@@ -17,6 +17,7 @@ package com.liferay.apio.architect.routes;
 import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
 
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
@@ -119,7 +120,8 @@ public class CollectionRoutes<T, S> {
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
-			_identifierFunction = identifierFunction;
+
+			_identifierFunction = identifierFunction::apply;
 		}
 
 		/**
@@ -504,7 +506,7 @@ public class CollectionRoutes<T, S> {
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
-		private final Function<Path, ?> _identifierFunction;
+		private final IdentifierFunction<?> _identifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;

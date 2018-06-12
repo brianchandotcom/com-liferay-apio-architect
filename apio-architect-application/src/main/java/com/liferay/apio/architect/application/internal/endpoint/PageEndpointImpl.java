@@ -22,6 +22,7 @@ import static com.liferay.apio.architect.operation.Method.PUT;
 
 import static javax.ws.rs.core.Response.noContent;
 
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.endpoint.PageEndpoint;
 import com.liferay.apio.architect.form.Body;
@@ -61,7 +62,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		Supplier<Optional<ItemRoutes<T, S>>> itemRoutesSupplier,
 		Function<String, Optional<NestedCollectionRoutes<T, S, Object>>>
 			nestedCollectionRoutesFunction,
-		Function<Path, S> identifierFunction) {
+		IdentifierFunction<S> identifierFunction) {
 
 		_name = name;
 		_httpServletRequest = httpServletRequest;
@@ -250,7 +251,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	private final HttpServletRequest _httpServletRequest;
 	private final Function<String, Optional<Class<Identifier>>>
 		_identifierClassFunction;
-	private final Function<Path, S> _identifierFunction;
+	private final IdentifierFunction<S> _identifierFunction;
 	private final Supplier<Optional<ItemRoutes<T, S>>> _itemRoutesSupplier;
 	private final String _name;
 	private final Function<String, Optional<NestedCollectionRoutes
