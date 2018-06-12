@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.endpoint;
-
-import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notFound;
+package com.liferay.apio.architect.util.endpoint;
 
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.functional.Try;
@@ -72,7 +70,7 @@ public class BinaryEndpoint {
 			).map(
 				function -> function.apply(model)
 			),
-			notFound(name, id, binaryId)
+			ExceptionSupplierUtil.notFound(name, id, binaryId)
 		);
 	}
 

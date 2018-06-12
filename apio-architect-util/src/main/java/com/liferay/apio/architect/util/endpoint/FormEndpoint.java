@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.endpoint;
-
-import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notFound;
+package com.liferay.apio.architect.util.endpoint;
 
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.functional.Try;
@@ -67,7 +65,7 @@ public class FormEndpoint {
 			).flatMap(
 				CollectionRoutes::getFormOptional
 			),
-			notFound(name));
+			ExceptionSupplierUtil.notFound(name));
 	}
 
 	/**
@@ -90,7 +88,7 @@ public class FormEndpoint {
 			).flatMap(
 				NestedCollectionRoutes::getFormOptional
 			),
-			notFound(name, nestedName));
+			ExceptionSupplierUtil.notFound(name, nestedName));
 	}
 
 	/**
@@ -109,7 +107,7 @@ public class FormEndpoint {
 			).flatMap(
 				ItemRoutes::getFormOptional
 			),
-			notFound(name));
+			ExceptionSupplierUtil.notFound(name));
 	}
 
 	private final Function<String, Optional<CollectionRoutes<Object, Object>>>

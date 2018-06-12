@@ -14,21 +14,21 @@
 
 package com.liferay.apio.architect.application.internal.endpoint;
 
-import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notFound;
+import static com.liferay.apio.architect.util.endpoint.ExceptionSupplierUtil.notFound;
 
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.documentation.Documentation;
-import com.liferay.apio.architect.endpoint.BinaryEndpoint;
-import com.liferay.apio.architect.endpoint.FormEndpoint;
-import com.liferay.apio.architect.endpoint.RootEndpoint;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.util.endpoint.BinaryEndpoint;
+import com.liferay.apio.architect.util.endpoint.FormEndpoint;
+import com.liferay.apio.architect.util.endpoint.RootEndpoint;
 import com.liferay.apio.architect.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;

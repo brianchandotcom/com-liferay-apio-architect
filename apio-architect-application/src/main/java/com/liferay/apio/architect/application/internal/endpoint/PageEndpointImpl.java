@@ -14,17 +14,16 @@
 
 package com.liferay.apio.architect.application.internal.endpoint;
 
-import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notAllowed;
-import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notFound;
 import static com.liferay.apio.architect.operation.Method.DELETE;
 import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.operation.Method.PUT;
+import static com.liferay.apio.architect.util.endpoint.ExceptionSupplierUtil.notAllowed;
+import static com.liferay.apio.architect.util.endpoint.ExceptionSupplierUtil.notFound;
 
 import static javax.ws.rs.core.Response.noContent;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
-import com.liferay.apio.architect.endpoint.PageEndpoint;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
@@ -37,6 +36,7 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.endpoint.PageEndpoint;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;

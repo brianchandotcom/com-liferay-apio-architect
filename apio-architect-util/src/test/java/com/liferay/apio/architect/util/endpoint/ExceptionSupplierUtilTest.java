@@ -12,12 +12,12 @@
  * details.
  */
 
-package com.liferay.apio.architect.endpoint;
+package com.liferay.apio.architect.util.endpoint;
 
-import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notAllowed;
-import static com.liferay.apio.architect.endpoint.ExceptionSupplierUtil.notFound;
 import static com.liferay.apio.architect.operation.Method.POST;
 import static com.liferay.apio.architect.operation.Method.PUT;
+import static com.liferay.apio.architect.util.endpoint.ExceptionSupplierUtil.notAllowed;
+import static com.liferay.apio.architect.util.endpoint.ExceptionSupplierUtil.notFound;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

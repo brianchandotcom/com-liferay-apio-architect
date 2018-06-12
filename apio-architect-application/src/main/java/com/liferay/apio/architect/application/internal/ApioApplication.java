@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.application.internal;
 
-import com.liferay.apio.architect.endpoint.RootEndpoint;
+import com.liferay.apio.architect.util.endpoint.RootEndpoint;
 
 import java.util.Collections;
 import java.util.Set;

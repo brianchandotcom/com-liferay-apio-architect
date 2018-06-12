@@ -18,8 +18,8 @@ import java.util.Collection;
 
 /**
  * Provides the information needed by {@link
- * com.liferay.apio.architect.endpoint.RootEndpoint} to construct a valid {@link
- * Page}.
+ * com.liferay.apio.architect.util.endpoint.RootEndpoint} to construct a valid
+ * {@link Page}.
  *
  * @author Alejandro Hernández
  * @param  <T> the model's type

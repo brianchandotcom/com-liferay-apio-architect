@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.endpoint;
+package com.liferay.apio.architect.util.endpoint;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -31,7 +31,6 @@ import javax.ws.rs.core.Response;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@ProviderType
 public interface RootEndpoint {
 
 	/**

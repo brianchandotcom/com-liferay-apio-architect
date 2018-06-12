@@ -3,7 +3,6 @@ Bundle-SymbolicName: com.liferay.apio.architect.impl
 Bundle-Version: 1.0.0
 -conditionalpackage:\
 	com.liferay.apio.architect.date,\
-	com.liferay.apio.architect.endpoint,\
 	com.liferay.apio.architect.list,\
 	com.liferay.apio.architect.message.json,\
 	com.liferay.apio.architect.request,\

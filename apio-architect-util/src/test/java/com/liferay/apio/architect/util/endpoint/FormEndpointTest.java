@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.apio.architect.endpoint;
+package com.liferay.apio.architect.util.endpoint;
 
-import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.hasNestedAddingPermissionFunction;
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aFailTry;
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aSuccessTry;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.hasNestedAddingPermissionFunction;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
