@@ -353,8 +353,8 @@ public class NestedCollectionRoutesImplTest {
 		Operation secondOperation = operations.get(0);
 
 		assertThat(secondOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(secondOperation.httpMethod, is(POST));
-		assertThat(secondOperation.name, is("name/nested/create"));
+		assertThat(secondOperation.getHttpMethod(), is(POST));
+		assertThat(secondOperation.getName(), is("name/nested/create"));
 	}
 
 	private final Body _body = __ -> Optional.of("Apio");

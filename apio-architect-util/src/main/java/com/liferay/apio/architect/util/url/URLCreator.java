@@ -16,8 +16,8 @@ package com.liferay.apio.architect.util.url;
 
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.pagination.Page;
-import com.liferay.apio.architect.pagination.PageType;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.pagination.PageType;
 
 import java.net.URI;
 

@@ -38,6 +38,7 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.util.documentation.Documentation;
 import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
+import com.liferay.apio.architect.util.operation.OperationImpl;
 import com.liferay.apio.architect.util.request.RequestInfo;
 
 import java.util.ArrayList;
@@ -309,9 +310,9 @@ public class DocumentationWriter {
 		HTTPMethod httpMethod) {
 
 		return formOptional.map(
-			form -> new Operation(form, httpMethod, operationName)
+			form -> new OperationImpl(form, httpMethod, operationName)
 		).orElse(
-			new Operation(httpMethod, operationName)
+			new OperationImpl(httpMethod, operationName)
 		);
 	}
 
@@ -399,7 +400,7 @@ public class DocumentationWriter {
 			itemRoutes -> {
 				String getOperationName = name + "/retrieve";
 
-				Operation getOperation = new Operation(
+				Operation getOperation = new OperationImpl(
 					GET, getOperationName, false);
 
 				_writeOperation(
@@ -415,7 +416,7 @@ public class DocumentationWriter {
 
 				String deleteOperationName = name + "/delete";
 
-				Operation deleteOperation = new Operation(
+				Operation deleteOperation = new OperationImpl(
 					DELETE, deleteOperationName);
 
 				_writeOperation(
@@ -452,7 +453,7 @@ public class DocumentationWriter {
 		).ifPresent(
 			collectionRoutes -> {
 				_writeOperation(
-					new Operation(GET, resource, true),
+					new OperationImpl(GET, resource, true),
 					resourceJsonObjectBuilder, resource, type);
 
 				String operationName = resource + "/create";

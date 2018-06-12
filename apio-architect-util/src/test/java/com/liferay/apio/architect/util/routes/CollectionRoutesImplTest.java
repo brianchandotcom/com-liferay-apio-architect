@@ -322,8 +322,8 @@ public class CollectionRoutesImplTest {
 		Operation operation = operations.get(0);
 
 		assertThat(operation.getFormOptional(), is(optionalWithValue()));
-		assertThat(operation.httpMethod, is(POST));
-		assertThat(operation.name, is("name/create"));
+		assertThat(operation.getHttpMethod(), is(POST));
+		assertThat(operation.getName(), is("name/create"));
 	}
 
 	private final Body _body = __ -> Optional.of("Apio");

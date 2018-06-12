@@ -31,14 +31,15 @@ import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.operation.Operation;
-import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.routes.CollectionRoutes;
-import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.alias.ProvideFunction;
 import com.liferay.apio.architect.util.form.FormImpl;
+import com.liferay.apio.architect.util.operation.OperationImpl;
+import com.liferay.apio.architect.util.pagination.PageImpl;
+import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -106,7 +107,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
 				a -> throwableBiFunction.andThen(
-					t -> new SingleModel<>(t, _name, Collections.emptyList())
+					t -> new SingleModelImpl<>(
+						t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a
 				));
@@ -131,7 +133,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_createItemFunction = httpServletRequest -> body ->
 				Try.fromFallible(
 					() -> throwableFunction.andThen(
-						t -> new SingleModel<>(
+						t -> new SingleModelImpl<>(
 							t, _name, Collections.emptyList())
 					).apply(
 						form.get(body)
@@ -164,7 +166,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass,
 				(a, b, c, d) -> throwablePentaFunction.andThen(
-					t -> new SingleModel<>(t, _name, Collections.emptyList())
+					t -> new SingleModelImpl<>(
+						t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a, b, c, d
 				));
@@ -195,7 +198,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass,
 				(a, b, c) -> throwableTetraFunction.andThen(
-					t -> new SingleModel<>(t, _name, Collections.emptyList())
+					t -> new SingleModelImpl<>(
+						t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a, b, c
 				));
@@ -224,7 +228,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				(a, b) -> throwableTriFunction.andThen(
-					t -> new SingleModel<>(t, _name, Collections.emptyList())
+					t -> new SingleModelImpl<>(
+						t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a, b
 				));
@@ -244,7 +249,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, Credentials.class,
 				(pagination, a, credentials) -> throwableBiFunction.andThen(
-					items -> new Page<>(
+					items -> new PageImpl<>(
 						_name, items, pagination, _getOperations(credentials))
 				).apply(
 					pagination, a
@@ -261,7 +266,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				Credentials.class,
 				(pagination, credentials) -> throwableFunction.andThen(
-					items -> new Page<>(
+					items -> new PageImpl<>(
 						_name, items, pagination, _getOperations(credentials))
 				).apply(
 					pagination
@@ -287,7 +292,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				aClass, bClass, cClass, dClass, Credentials.class,
 				(pagination, a, b, c, d, credentials) ->
 					throwablePentaFunction.andThen(
-						items -> new Page<>(
+						items -> new PageImpl<>(
 							_name, items, pagination,
 							_getOperations(credentials))
 					).apply(
@@ -312,7 +317,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				aClass, bClass, cClass, Credentials.class,
 				(pagination, a, b, c, credentials) ->
 					throwableTetraFunction.andThen(
-						items -> new Page<>(
+						items -> new PageImpl<>(
 							_name, items, pagination,
 							_getOperations(credentials))
 					).apply(
@@ -335,7 +340,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, Credentials.class,
 				(pagination, a, b, credentials) -> throwableTriFunction.andThen(
-					items -> new Page<>(
+					items -> new PageImpl<>(
 						_name, items, pagination, _getOperations(credentials))
 				).apply(
 					pagination, a, b
@@ -359,7 +364,9 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					false
 				)
 			).map(
-				form -> new Operation(form, POST, _name + "/create")
+				form -> new OperationImpl(form, POST, _name + "/create")
+			).map(
+				Operation.class::cast
 			).map(
 				Collections::singletonList
 			).orElseGet(

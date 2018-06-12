@@ -30,6 +30,7 @@ import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.util.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.util.request.RequestInfo;
+import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 import com.liferay.apio.architect.writer.util.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.writer.util.alias.PathFunction;
 import com.liferay.apio.architect.writer.util.alias.RepresentorFunction;
@@ -178,7 +179,7 @@ public class SingleModelWriter<T> {
 
 				_singleModelMessageMapper.mapOperationMethod(
 					_jsonObjectBuilder, operationJSONObjectBuilder,
-					operation.httpMethod);
+					operation.getHttpMethod());
 
 				_singleModelMessageMapper.onFinishOperation(
 					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
@@ -330,7 +331,7 @@ public class SingleModelWriter<T> {
 
 				_singleModelMessageMapper.mapEmbeddedOperationMethod(
 					_jsonObjectBuilder, operationJSONObjectBuilder,
-					embeddedPathElements, operation.httpMethod);
+					embeddedPathElements, operation.getHttpMethod());
 
 				_singleModelMessageMapper.onFinishEmbeddedOperation(
 					_jsonObjectBuilder, operationJSONObjectBuilder,
@@ -553,7 +554,8 @@ public class SingleModelWriter<T> {
 						embeddedPathElements, nestedFieldFunction.key);
 
 				writeEmbeddedModelFields(
-					new SingleModel<>(mappedModel, "", Collections.emptyList()),
+					new SingleModelImpl<>(
+						mappedModel, "", Collections.emptyList()),
 					embeddedNestedPathElements,
 					__ -> Optional.of(nestedFieldFunction.nestedRepresentor));
 			}

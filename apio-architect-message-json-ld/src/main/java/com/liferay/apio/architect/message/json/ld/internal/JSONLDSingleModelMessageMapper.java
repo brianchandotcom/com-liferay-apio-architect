@@ -464,7 +464,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		operationJSONObjectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"_:" + operation.name
+			"_:" + operation.getName()
 		);
 
 		operationJSONObjectBuilder.field(
@@ -491,7 +491,7 @@ public class JSONLDSingleModelMessageMapper<T>
 		operationJSONObjectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"_:" + operation.name
+			"_:" + operation.getName()
 		);
 
 		operationJSONObjectBuilder.field(

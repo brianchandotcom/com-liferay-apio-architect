@@ -42,10 +42,11 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes;
-import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.alias.ProvideFunction;
 import com.liferay.apio.architect.util.form.FormImpl;
+import com.liferay.apio.architect.util.operation.OperationImpl;
+import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,7 +120,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass,
 				Credentials.class,
 				(a, credentials) -> throwableBiFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s, a
@@ -135,7 +136,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), Credentials.class,
 				credentials -> throwableFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s
@@ -159,7 +160,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass, Credentials.class,
 				(a, b, c, d, credentials) -> throwablePentaFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s, a, b, c, d
@@ -181,7 +182,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, Credentials.class,
 				(a, b, c, credentials) -> throwableTetraFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s, a, b, c
@@ -202,7 +203,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				Credentials.class,
 				(a, b, credentials) -> throwableTriFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s, a, b
@@ -314,7 +315,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_updateItemFunction = httpServletRequest -> s -> body -> provide(
 				_provideFunction.apply(httpServletRequest), Credentials.class,
 				credentials -> throwableBiFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s, form.get(body)
@@ -347,7 +348,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass, Credentials.class,
 				(a, b, c, d, credentials) -> throwableHexaFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s, form.get(body), a, b, c, d
@@ -379,7 +380,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, Credentials.class,
 				(a, b, c, credentials) -> throwablePentaFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s, form.get(body), a, b, c
@@ -410,7 +411,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				Credentials.class,
 				(a, b, credentials) -> throwableTetraFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s, form.get(body), a, b
@@ -440,7 +441,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), aClass,
 				Credentials.class,
 				(a, credentials) -> throwableTriFunction.andThen(
-					t -> new SingleModel<>(
+					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
 					s, form.get(body), a
@@ -468,7 +469,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					false
 				)
 			).ifPresent(
-				__ -> operations.add(new Operation(DELETE, _name + "/delete"))
+				__ -> operations.add(
+					new OperationImpl(DELETE, _name + "/delete"))
 			);
 
 			Optional.ofNullable(
@@ -481,7 +483,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				)
 			).ifPresent(
 				__ -> operations.add(
-					new Operation(_form, PUT, _name + "/update"))
+					new OperationImpl(_form, PUT, _name + "/update"))
 			);
 
 			return operations;

@@ -34,14 +34,15 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.operation.Operation;
-import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
-import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.alias.ProvideFunction;
 import com.liferay.apio.architect.util.form.FormImpl;
+import com.liferay.apio.architect.util.operation.OperationImpl;
+import com.liferay.apio.architect.util.pagination.PageImpl;
+import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -116,7 +117,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> Try.fromFallible(
 					() -> throwableBiFunction.andThen(
-						t -> new SingleModel<>(
+						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
 						identifier, form.get(body)
@@ -153,7 +154,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass, dClass,
 					(a, b, c, d) -> throwableHexaFunction.andThen(
-						t -> new SingleModel<>(
+						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
 						identifier, form.get(body), a, b, c, d
@@ -189,7 +190,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass,
 					(a, b, c) -> throwablePentaFunction.andThen(
-						t -> new SingleModel<>(
+						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
 						identifier, form.get(body), a, b, c
@@ -223,7 +224,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					(a, b) -> throwableTetraFunction.andThen(
-						t -> new SingleModel<>(
+						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
 						identifier, form.get(body), a, b
@@ -256,7 +257,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass,
 					a -> throwableTriFunction.andThen(
-						t -> new SingleModel<>(
+						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
 						identifier, form.get(body), a
@@ -274,7 +275,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, Credentials.class,
 					(pagination, credentials) -> biFunction.andThen(
-						items -> new Page<>(
+						items -> new PageImpl<>(
 							_nestedName, items, pagination, path,
 							_getOperations(credentials, identifier))
 					).apply(
@@ -303,7 +304,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					Credentials.class,
 					(pagination, a, b, c, d, credentials) ->
 						hexaFunction.andThen(
-							items -> new Page<>(
+							items -> new PageImpl<>(
 								_nestedName, items, pagination, path,
 								_getOperations(credentials, identifier))
 						).apply(
@@ -328,7 +329,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, cClass, Credentials.class,
 					(pagination, a, b, c, credentials) -> pentaFunction.andThen(
-						items -> new Page<>(
+						items -> new PageImpl<>(
 							_nestedName, items, pagination, path,
 							_getOperations(credentials, identifier))
 					).apply(
@@ -352,7 +353,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, Credentials.class,
 					(pagination, a, b, credentials) -> tetraFunction.andThen(
-						items -> new Page<>(
+						items -> new PageImpl<>(
 							_nestedName, items, pagination, path,
 							_getOperations(credentials, identifier))
 					).apply(
@@ -374,7 +375,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, Credentials.class,
 					(pagination, a, credentials) -> triFunction.andThen(
-						items -> new Page<>(
+						items -> new PageImpl<>(
 							_nestedName, items, pagination, path,
 							_getOperations(credentials, identifier))
 					).apply(
@@ -402,8 +403,10 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					false
 				)
 			).map(
-				form -> new Operation(
+				form -> new OperationImpl(
 					form, POST, join("/", _name, _nestedName, "create"))
+			).map(
+				Operation.class::cast
 			).map(
 				Collections::singletonList
 			).orElseGet(

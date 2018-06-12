@@ -12,9 +12,10 @@
  * details.
  */
 
-package com.liferay.apio.architect.single.model;
+package com.liferay.apio.architect.util.single.model;
 
 import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.List;
 
@@ -24,27 +25,33 @@ import java.util.List;
  * @author Alejandro Hernández
  * @param  <T> the model's type
  */
-public interface SingleModel<T> {
+public class SingleModelImpl<T> implements SingleModel<T> {
 
-	/**
-	 * Returns the model.
-	 *
-	 * @return the model
-	 */
-	public T getModel();
+	public SingleModelImpl(
+		T model, String resourceName, List<Operation> operations) {
 
-	/**
-	 * Returns the list of operations for the model.
-	 *
-	 * @return the list of operations
-	 */
-	public List<Operation> getOperations();
+		_model = model;
+		_resourceName = resourceName;
+		_operations = operations;
+	}
 
-	/**
-	 * Returns the resource's name.
-	 *
-	 * @return the resource's name
-	 */
-	public String getResourceName();
+	@Override
+	public T getModel() {
+		return _model;
+	}
+
+	@Override
+	public List<Operation> getOperations() {
+		return _operations;
+	}
+
+	@Override
+	public String getResourceName() {
+		return _resourceName;
+	}
+
+	private final T _model;
+	private final List<Operation> _operations;
+	private final String _resourceName;
 
 }

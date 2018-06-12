@@ -26,8 +26,8 @@ import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
-import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.util.representor.RepresentorImpl.BuilderImpl;
+import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -114,7 +114,8 @@ public class BinaryEndpointTest {
 				names.add(id);
 
 				return Try.success(
-					new SingleModel<>("apio", name, Collections.emptyList()));
+					new SingleModelImpl<>(
+						"apio", name, Collections.emptyList()));
 			});
 
 		binaryEndpoint.getCollectionItemBinaryFileTry("a", "b", "binaryId");
@@ -128,7 +129,7 @@ public class BinaryEndpointTest {
 		return new BinaryEndpoint(
 			__ -> Optional.ofNullable(representor),
 			(name, id) -> Try.success(
-				new SingleModel<>("apio", name, Collections.emptyList())));
+				new SingleModelImpl<>("apio", name, Collections.emptyList())));
 	}
 
 	private static Representor<Object> _representor() {

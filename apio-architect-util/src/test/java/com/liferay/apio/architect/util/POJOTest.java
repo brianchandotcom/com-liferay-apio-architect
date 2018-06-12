@@ -12,19 +12,15 @@
  * details.
  */
 
-package com.liferay.apio.architect;
+package com.liferay.apio.architect.util;
 
 import static com.openpojo.reflection.impl.PojoClassFactory.getPojoClass;
 
-import com.liferay.apio.architect.pagination.PageItems;
-import com.liferay.apio.architect.related.RelatedCollection;
-import com.liferay.apio.architect.related.RelatedModel;
-import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.operation.OperationImpl;
 
 import com.openpojo.reflection.utils.AttributeHelper;
 import com.openpojo.validation.Validator;
 import com.openpojo.validation.ValidatorBuilder;
-import com.openpojo.validation.rule.impl.GetterMustExistRule;
 import com.openpojo.validation.rule.impl.NoFieldShadowingRule;
 import com.openpojo.validation.rule.impl.NoPublicFieldsRule;
 import com.openpojo.validation.rule.impl.NoStaticExceptFinalRule;
@@ -45,8 +41,6 @@ public class POJOTest {
 
 		_validator = ValidatorBuilder.create(
 		).with(
-			new GetterMustExistRule()
-		).with(
 			new NoStaticExceptFinalRule()
 		).with(
 			new NoFieldShadowingRule()
@@ -60,19 +54,8 @@ public class POJOTest {
 	}
 
 	@Test
-	public void testIdentifier() {
-		_validator.validate(getPojoClass(RelatedCollection.class));
-		_validator.validate(getPojoClass(RelatedModel.class));
-	}
-
-	@Test
-	public void testPagination() {
-		_validator.validate(getPojoClass(PageItems.class));
-	}
-
-	@Test
-	public void testURI() {
-		_validator.validate(getPojoClass(Path.class));
+	public void testOperationImpl() {
+		_validator.validate(getPojoClass(OperationImpl.class));
 	}
 
 	private Validator _validator;

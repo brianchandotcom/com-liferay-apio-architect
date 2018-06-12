@@ -31,7 +31,9 @@ import com.liferay.apio.architect.test.util.model.FirstEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.SecondEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.operation.OperationImpl;
 import com.liferay.apio.architect.util.request.RequestInfo;
+import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -78,9 +80,8 @@ public class MockWriterUtil {
 
 	/**
 	 * Returns a {@link RequestInfo} with the provided {@code HttpHeaders}, a
-	 * mock {@link ServerURL}, a mock {@link
-	 * Embedded} request, and a mock {@link
-	 * com.liferay.apio.architect.language.Language} with {@code
+	 * mock {@code ServerURL}, a mock {@code Embedded} request, and a mock
+	 * {@link com.liferay.apio.architect.language.Language} with {@code
 	 * Locale#getDefault()}.
 	 *
 	 * @param  httpHeaders the {@code HttpHeaders}
@@ -120,24 +121,24 @@ public class MockWriterUtil {
 
 		if (identifierClass.equals(FirstEmbeddedId.class)) {
 			List<Operation> operations = Collections.singletonList(
-				new Operation(DELETE, "delete-operation"));
+				new OperationImpl(DELETE, "delete-operation"));
 
 			return Optional.of(
-				new SingleModel<>(
+				new SingleModelImpl<>(
 					(FirstEmbeddedModel)() -> (String)identifier, "first",
 					operations));
 		}
 
 		if (identifierClass.equals(SecondEmbeddedId.class)) {
 			return Optional.of(
-				new SingleModel<>(
+				new SingleModelImpl<>(
 					(SecondEmbeddedModel)() -> (String)identifier, "second",
 					Collections.emptyList()));
 		}
 
 		if (identifierClass.equals(ThirdEmbeddedId.class)) {
 			return Optional.of(
-				new SingleModel<>(
+				new SingleModelImpl<>(
 					(ThirdEmbeddedModel)() -> (String)identifier, "third",
 					Collections.emptyList()));
 		}

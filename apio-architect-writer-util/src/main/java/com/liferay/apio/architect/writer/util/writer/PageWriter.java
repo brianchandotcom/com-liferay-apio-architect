@@ -26,7 +26,6 @@ import com.google.gson.JsonObject;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
-import com.liferay.apio.architect.pagination.PageType;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.unsafe.Unsafe;
@@ -34,7 +33,9 @@ import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.util.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.util.message.json.PageMessageMapper;
+import com.liferay.apio.architect.util.pagination.PageType;
 import com.liferay.apio.architect.util.request.RequestInfo;
+import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 import com.liferay.apio.architect.writer.util.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.writer.util.alias.PathFunction;
 import com.liferay.apio.architect.writer.util.alias.RepresentorFunction;
@@ -114,7 +115,7 @@ public class PageWriter<T> {
 
 		items.forEach(
 			model -> _writeItem(
-				new SingleModel<>(
+				new SingleModelImpl<>(
 					model, resourceName, Collections.emptyList())));
 
 		List<Operation> operations = _page.getOperations();
@@ -138,7 +139,7 @@ public class PageWriter<T> {
 
 				_pageMessageMapper.mapOperationMethod(
 					_jsonObjectBuilder, operationJSONObjectBuilder,
-					operation.httpMethod);
+					operation.getHttpMethod());
 
 				_pageMessageMapper.onFinishOperation(
 					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
@@ -585,7 +586,8 @@ public class PageWriter<T> {
 						embeddedPathElements, nestedFieldFunction.key);
 
 				_writeItemEmbeddedModelFields(
-					new SingleModel<>(mappedModel, "", Collections.emptyList()),
+					new SingleModelImpl<>(
+						mappedModel, "", Collections.emptyList()),
 					embeddedNestedPathElements, itemJsonObjectBuilder,
 					__ -> Optional.of(nestedFieldFunction.nestedRepresentor),
 					rootSingleModel);

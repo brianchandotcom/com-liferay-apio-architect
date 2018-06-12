@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.pagination;
+package com.liferay.apio.architect.util.pagination;
+
+import com.liferay.apio.architect.pagination.Page;
 
 /**
  * Represents the different types of pages.

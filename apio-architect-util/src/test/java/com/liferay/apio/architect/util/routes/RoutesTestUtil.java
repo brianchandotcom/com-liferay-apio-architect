@@ -22,6 +22,7 @@ import com.liferay.apio.architect.alias.routes.permission.HasUpdatePermissionFun
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.util.alias.ProvideFunction;
+import com.liferay.apio.architect.util.pagination.PaginationImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +73,7 @@ public class RoutesTestUtil {
 	/**
 	 * A mock {@code Pagination} object.
 	 */
-	public static final Pagination PAGINATION = new Pagination(4, 2);
+	public static final Pagination PAGINATION = new PaginationImpl(4, 2);
 
 	/**
 	 * A function that provides instances of {@code String}, {@code Long},

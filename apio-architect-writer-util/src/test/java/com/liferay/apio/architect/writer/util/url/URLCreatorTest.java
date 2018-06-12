@@ -23,9 +23,10 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
-import com.liferay.apio.architect.pagination.PageType;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.pagination.PageImpl;
+import com.liferay.apio.architect.util.pagination.PageType;
 import com.liferay.apio.architect.util.url.ServerURL;
 import com.liferay.apio.architect.util.url.URLCreator;
 
@@ -97,7 +98,7 @@ public class URLCreatorTest {
 
 		PageItems<String> pageItems = new PageItems<>(emptyList(), 0);
 
-		Page page = new Page<>("", pageItems, pagination, null);
+		Page page = new PageImpl<>("", pageItems, pagination, null);
 
 		String firstPageURL = URLCreator.createCollectionPageURL(
 			"www.liferay.com", page, PageType.FIRST);

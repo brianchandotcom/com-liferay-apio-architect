@@ -29,7 +29,9 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.util.message.json.SingleModelMessageMapper;
+import com.liferay.apio.architect.util.operation.OperationImpl;
 import com.liferay.apio.architect.util.request.RequestInfo;
+import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 import com.liferay.apio.architect.writer.util.writer.SingleModelWriter;
 
 import java.util.Optional;
@@ -61,11 +63,12 @@ public class MockSingleModelWriter {
 
 		RequestInfo requestInfo = getRequestInfo(httpHeaders);
 
-		Operation deleteOperation = new Operation(DELETE, "delete-operation");
-		Operation putOperation = new Operation(
+		Operation deleteOperation = new OperationImpl(
+			DELETE, "delete-operation");
+		Operation putOperation = new OperationImpl(
 			createForm("u", "r"), PUT, "update-operation");
 
-		SingleModel<RootModel> singleModel = new SingleModel<>(
+		SingleModel<RootModel> singleModel = new SingleModelImpl<>(
 			() -> "first", "root", asList(deleteOperation, putOperation));
 
 		SingleModelWriter<RootModel> singleModelWriter =

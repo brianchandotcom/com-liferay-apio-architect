@@ -12,11 +12,13 @@
  * details.
  */
 
-package com.liferay.apio.architect.pagination;
+package com.liferay.apio.architect.util.pagination;
 
 import static org.hamcrest.Matchers.is;
 
 import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
+
+import com.liferay.apio.architect.pagination.Page;
 
 import org.junit.Before;
 import org.junit.Test;

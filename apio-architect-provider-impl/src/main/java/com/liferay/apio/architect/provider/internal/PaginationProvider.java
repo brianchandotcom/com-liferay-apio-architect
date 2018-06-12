@@ -17,6 +17,7 @@ package com.liferay.apio.architect.provider.internal;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.provider.Provider;
+import com.liferay.apio.architect.util.pagination.PaginationImpl;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,7 +43,7 @@ public class PaginationProvider implements Provider<Pagination> {
 		int pageNumber = _getAsInt(
 			httpServletRequest.getParameter("page"), _PAGE_NUMBER_DEFAULT);
 
-		return new Pagination(itemsPerPage, pageNumber);
+		return new PaginationImpl(itemsPerPage, pageNumber);
 	}
 
 	private int _getAsInt(String parameterValue, int defaultValue) {

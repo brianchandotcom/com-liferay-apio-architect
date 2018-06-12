@@ -375,14 +375,14 @@ public class ItemRoutesImplTest {
 		Operation firstOperation = operations.get(0);
 
 		assertThat(firstOperation.getFormOptional(), is(emptyOptional()));
-		assertThat(firstOperation.httpMethod, is(DELETE));
-		assertThat(firstOperation.name, is("name/delete"));
+		assertThat(firstOperation.getHttpMethod(), is(DELETE));
+		assertThat(firstOperation.getName(), is("name/delete"));
 
 		Operation secondOperation = operations.get(1);
 
 		assertThat(secondOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(secondOperation.httpMethod, is(PUT));
-		assertThat(secondOperation.name, is("name/update"));
+		assertThat(secondOperation.getHttpMethod(), is(PUT));
+		assertThat(secondOperation.getName(), is("name/update"));
 	}
 
 	private void _testOneParameterRemoverRoute(Long identifier, String string) {

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.pagination;
+package com.liferay.apio.architect.util.pagination;
 
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
@@ -25,7 +25,11 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.pagination.PageItems;
+import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.operation.OperationImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,14 +47,15 @@ public class PageTest {
 	public void setUp() {
 		_pageItems = new PageItems<>(Collections.singleton("apio"), 10);
 
-		Pagination pagination = new Pagination(1, 4);
+		Pagination pagination = new PaginationImpl(1, 4);
 
 		_path = new Path("name", "id");
 
 		_operations = Collections.singletonList(
-			new Operation(POST, "operation"));
+			new OperationImpl(POST, "operation"));
 
-		_page = new Page<>("name", _pageItems, pagination, _path, _operations);
+		_page = new PageImpl<>(
+			"name", _pageItems, pagination, _path, _operations);
 	}
 
 	@Test
@@ -65,11 +70,11 @@ public class PageTest {
 
 	@Test
 	public void testGetLastPageNumberIsOneWithEmptyList() {
-		Pagination pagination = new Pagination(30, 1);
+		Pagination pagination = new PaginationImpl(30, 1);
 
 		PageItems<String> pageItems = new PageItems<>(emptyList(), 0);
 
-		Page<String> page = new Page<>(
+		Page<String> page = new PageImpl<>(
 			"", pageItems, pagination, _path, emptyList());
 
 		assertThat(page.getLastPageNumber(), is(1));
@@ -115,9 +120,9 @@ public class PageTest {
 
 	@Test
 	public void testHasNextReturnsFalseWhenIsLast() {
-		Pagination pagination = new Pagination(1, 10);
+		Pagination pagination = new PaginationImpl(1, 10);
 
-		Page<String> page = new Page<>(
+		Page<String> page = new PageImpl<>(
 			"", _pageItems, pagination, _path, emptyList());
 
 		assertThat(page.hasNext(), is(false));
@@ -131,9 +136,9 @@ public class PageTest {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	@Test
 	public void testHasPreviousReturnsFalseWhenIsFirst() {
-		Pagination pagination = new Pagination(1, 1);
+		Pagination pagination = new PaginationImpl(1, 1);
 
-		Page<String> page = new Page<>(
+		Page<String> page = new PageImpl<>(
 			"", _pageItems, pagination, _path, emptyList());
 
 		assertThat(page.hasPrevious(), is(false));

@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.pagination;
+package com.liferay.apio.architect.util.pagination;
+
+import com.liferay.apio.architect.pagination.Pagination;
 
 /**
  * Defines pagination for a collection endpoint. An instance of this class is
@@ -23,34 +25,34 @@ package com.liferay.apio.architect.pagination;
  * @author Jorge Ferrer
  * @see    Page
  */
-public interface Pagination {
+public class PaginationImpl implements Pagination {
 
-	/**
-	 * Returns the position of the requested page's last element.
-	 *
-	 * @return the position of the requested page's last element
-	 */
-	public int getEndPosition();
+	public PaginationImpl(int itemsPerPage, int pageNumber) {
+		_itemsPerPage = itemsPerPage;
+		_pageNumber = pageNumber;
+	}
 
-	/**
-	 * Returns the selected number of items per page.
-	 *
-	 * @return the selected number of items per page
-	 */
-	public int getItemsPerPage();
+	@Override
+	public int getEndPosition() {
+		return _pageNumber * _itemsPerPage;
+	}
 
-	/**
-	 * Returns the requested page's number.
-	 *
-	 * @return the requested page's number
-	 */
-	public int getPageNumber();
+	@Override
+	public int getItemsPerPage() {
+		return _itemsPerPage;
+	}
 
-	/**
-	 * Returns the position of the requested page's first element.
-	 *
-	 * @return the position of the requested page's first element
-	 */
-	public int getStartPosition();
+	@Override
+	public int getPageNumber() {
+		return _pageNumber;
+	}
+
+	@Override
+	public int getStartPosition() {
+		return (_pageNumber - 1) * _itemsPerPage;
+	}
+
+	private final int _itemsPerPage;
+	private final int _pageNumber;
 
 }

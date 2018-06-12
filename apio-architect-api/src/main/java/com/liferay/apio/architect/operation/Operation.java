@@ -23,29 +23,7 @@ import java.util.Optional;
  *
  * @author Alejandro Hernández
  */
-public class Operation {
-
-	public Operation(Form form, HTTPMethod httpMethod, String name) {
-		this(form, httpMethod, name, false);
-	}
-
-	public Operation(
-		Form form, HTTPMethod httpMethod, String name, boolean collection) {
-
-		_form = form;
-
-		this.httpMethod = httpMethod;
-		this.name = name;
-		this.collection = collection;
-	}
-
-	public Operation(HTTPMethod httpMethod, String name) {
-		this(null, httpMethod, name, false);
-	}
-
-	public Operation(HTTPMethod httpMethod, String name, boolean collection) {
-		this(null, httpMethod, name, collection);
-	}
+public interface Operation {
 
 	/**
 	 * Returns this operation's expected form, if present; returns {@code
@@ -54,22 +32,28 @@ public class Operation {
 	 * @return the operation's expected form, if present; {@code
 	 *         Optional#empty()} otherwise
 	 */
-	public Optional<Form> getFormOptional() {
-		return Optional.ofNullable(_form);
-	}
-
-	public final boolean collection;
+	public Optional<Form> getFormOptional();
 
 	/**
-	 * The operation's method.
+	 * Returns the operation's method.
+	 *
+	 * @review the operation's method
 	 */
-	public final HTTPMethod httpMethod;
+	public HTTPMethod getHttpMethod();
 
 	/**
-	 * The operation's name.
+	 * Returns the operation's name.
+	 *
+	 * @review the operation's name
 	 */
-	public final String name;
+	public String getName();
 
-	private final Form _form;
+	/**
+	 * Return {@code true} if this is a collection's operation
+	 *
+	 * @return {@code true} if this is a collection's operation
+	 * @review
+	 */
+	public boolean isCollection();
 
 }

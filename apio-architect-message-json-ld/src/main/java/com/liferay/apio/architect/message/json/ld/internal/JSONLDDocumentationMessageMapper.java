@@ -33,6 +33,7 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstant
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.util.documentation.Documentation;
 import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
@@ -83,7 +84,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"_:" + operation.name
+			"_:" + operation.getName()
 		);
 
 		jsonObjectBuilder.field(
@@ -95,7 +96,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			"method"
 		).stringValue(
-			operation.httpMethod.toString()
+			operation.getHttpMethod().toString()
 		);
 
 		String returnValue = _getReturnValue(type, operation);
@@ -397,10 +398,12 @@ public class JSONLDDocumentationMessageMapper
 	private String _getReturnValue(String resourceName, Operation operation) {
 		String value = null;
 
-		if (DELETE.equals(operation.httpMethod)) {
+		HTTPMethod httpMethod = operation.getHttpMethod();
+
+		if (DELETE.equals(httpMethod)) {
 			value = "http://www.w3.org/2002/07/owl#Nothing";
 		}
-		else if (operation.collection && operation.httpMethod.equals(GET)) {
+		else if (operation.isCollection() && httpMethod.equals(GET)) {
 			value = URL_HYDRA_PROFILE + TYPE_COLLECTION;
 		}
 		else {

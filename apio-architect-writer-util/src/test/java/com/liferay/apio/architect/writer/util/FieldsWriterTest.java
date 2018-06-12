@@ -39,6 +39,7 @@ import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.util.request.RequestInfo;
+import com.liferay.apio.architect.util.single.model.SingleModelImpl;
 import com.liferay.apio.architect.writer.util.writer.FieldsWriter;
 
 import java.util.ArrayList;
@@ -91,7 +92,8 @@ public class FieldsWriterTest {
 		);
 
 		_fieldsWriter = new FieldsWriter<>(
-			new SingleModel<>(() -> "first", "root", Collections.emptyList()),
+			new SingleModelImpl<>(
+				() -> "first", "root", Collections.emptyList()),
 			_requestInfo, createRootModelRepresentor(true),
 			new Path("name", "id"), new FunctionalList<>(null, "first"),
 			MockWriterUtil::getSingleModel);
@@ -99,7 +101,7 @@ public class FieldsWriterTest {
 
 	@Test
 	public void testGetSingleModel() {
-		SingleModel<Integer> parentSingleModel = new SingleModel<>(
+		SingleModel<Integer> parentSingleModel = new SingleModelImpl<>(
 			3, "", Collections.emptyList());
 
 		RelatedModel<Integer, String> relatedModel = new RelatedModel<>(

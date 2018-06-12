@@ -12,10 +12,12 @@
  * details.
  */
 
-package com.liferay.apio.architect.pagination;
+package com.liferay.apio.architect.util.pagination;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+
+import com.liferay.apio.architect.pagination.Pagination;
 
 import org.junit.Test;
 
@@ -26,14 +28,14 @@ public class PaginationTest {
 
 	@Test
 	public void testEndPositionReturnsEndPosition() {
-		Pagination pagination = new Pagination(30, 3);
+		Pagination pagination = new PaginationImpl(30, 3);
 
 		assertThat(pagination.getEndPosition(), is(90));
 	}
 
 	@Test
 	public void testStartPositionReturnsStartPosition() {
-		Pagination pagination = new Pagination(30, 3);
+		Pagination pagination = new PaginationImpl(30, 3);
 
 		assertThat(pagination.getStartPosition(), is(60));
 	}
