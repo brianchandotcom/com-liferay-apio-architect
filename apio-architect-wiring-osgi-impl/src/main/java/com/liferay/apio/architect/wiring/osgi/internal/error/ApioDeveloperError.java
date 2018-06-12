@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.error;
+package com.liferay.apio.architect.wiring.osgi.internal.error;
 
 import com.liferay.apio.architect.uri.Path;
 
