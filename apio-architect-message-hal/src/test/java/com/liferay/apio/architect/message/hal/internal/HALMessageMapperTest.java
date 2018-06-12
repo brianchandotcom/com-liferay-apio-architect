@@ -18,7 +18,7 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.test.util.json.MessageMapperTesterBuilder;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
-import com.liferay.apio.architect.unsafe.Unsafe;
+import com.liferay.apio.architect.util.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.RepresentableManager;
 
 import java.nio.file.Paths;

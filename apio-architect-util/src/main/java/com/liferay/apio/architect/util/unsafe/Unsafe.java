@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.unsafe;
+package com.liferay.apio.architect.util.unsafe;
 
 /**
  * Provides a utility class for unsafe operations.

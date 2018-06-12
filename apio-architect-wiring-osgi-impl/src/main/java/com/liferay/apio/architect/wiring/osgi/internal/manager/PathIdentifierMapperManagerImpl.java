@@ -18,9 +18,9 @@ import static com.liferay.apio.architect.wiring.osgi.util.GenericUtil.getGeneric
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.uri.mapper.PathIdentifierMapper;
+import com.liferay.apio.architect.util.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.error.ApioDeveloperError.MustHavePathIdentifierMapper;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.IdentifierClassManager;

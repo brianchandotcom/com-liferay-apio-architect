@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.jaxrs.json.internal.writer;
 
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
+import static com.liferay.apio.architect.util.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.functional.Try.Success;

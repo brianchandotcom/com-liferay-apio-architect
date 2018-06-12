@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.unsafe;
+package com.liferay.apio.architect.util.unsafe;
 
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
+import static com.liferay.apio.architect.util.unsafe.Unsafe.unsafeCast;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

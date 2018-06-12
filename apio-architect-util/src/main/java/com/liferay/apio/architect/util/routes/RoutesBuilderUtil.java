@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.util.routes;
 
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
+import static com.liferay.apio.architect.util.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.consumer.throwable.ThrowableBiConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;

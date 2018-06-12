@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.writer.util.writer;
 
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
+import static com.liferay.apio.architect.util.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.util.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.util.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.util.url.URLCreator.createSingleURL;
@@ -26,11 +26,11 @@ import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.function.FieldFunction;
 import com.liferay.apio.architect.single.model.SingleModel;
-import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.list.FunctionalList;
 import com.liferay.apio.architect.util.request.RequestInfo;
 import com.liferay.apio.architect.util.response.control.Fields;
+import com.liferay.apio.architect.util.unsafe.Unsafe;
 import com.liferay.apio.architect.util.url.URLCreator;
 import com.liferay.apio.architect.writer.util.alias.SingleModelFunction;
 

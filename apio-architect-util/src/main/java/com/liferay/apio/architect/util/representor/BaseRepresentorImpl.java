@@ -25,7 +25,7 @@ import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.NestedRepresentor;
 import com.liferay.apio.architect.representor.function.FieldFunction;
 import com.liferay.apio.architect.representor.function.NestedFieldFunction;
-import com.liferay.apio.architect.unsafe.Unsafe;
+import com.liferay.apio.architect.util.unsafe.Unsafe;
 
 import java.util.ArrayList;
 import java.util.Collections;

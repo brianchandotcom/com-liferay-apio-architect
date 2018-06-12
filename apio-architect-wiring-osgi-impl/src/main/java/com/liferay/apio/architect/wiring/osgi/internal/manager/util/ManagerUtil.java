@@ -17,7 +17,7 @@ package com.liferay.apio.architect.wiring.osgi.internal.manager.util;
 import static com.liferay.apio.architect.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
 
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.unsafe.Unsafe;
+import com.liferay.apio.architect.util.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.service.tracker.customizer.ServiceRegistrationServiceTrackerCustomizer;
 
 import java.util.Dictionary;

@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.util.message.json;
 
-import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
+import static com.liferay.apio.architect.util.unsafe.Unsafe.unsafeCast;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 

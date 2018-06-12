@@ -21,12 +21,12 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
-import com.liferay.apio.architect.unsafe.Unsafe;
 import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.util.message.json.ErrorMessageMapper;
 import com.liferay.apio.architect.util.message.json.FormMessageMapper;
 import com.liferay.apio.architect.util.message.json.PageMessageMapper;
 import com.liferay.apio.architect.util.message.json.SingleModelMessageMapper;
+import com.liferay.apio.architect.util.unsafe.Unsafe;
 import com.liferay.apio.architect.wiring.osgi.internal.alias.EmptyFunction;
 
 import java.util.ArrayList;

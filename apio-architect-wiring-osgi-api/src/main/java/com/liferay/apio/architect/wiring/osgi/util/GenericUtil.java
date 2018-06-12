@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.wiring.osgi.util;
 
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.unsafe.Unsafe;
+import com.liferay.apio.architect.util.unsafe.Unsafe;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
