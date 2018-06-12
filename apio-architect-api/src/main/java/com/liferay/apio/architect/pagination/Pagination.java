@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.pagination;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Defines pagination for a collection endpoint. An instance of this class is
  * handed to resources that handle pagination parameters.
@@ -23,6 +25,7 @@ package com.liferay.apio.architect.pagination;
  * @author Jorge Ferrer
  * @see    Page
  */
+@ProviderType
 public interface Pagination {
 
 	/**

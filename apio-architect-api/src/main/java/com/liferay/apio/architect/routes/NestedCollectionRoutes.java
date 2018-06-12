@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.routes;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedGetPageFunction;
@@ -47,6 +49,7 @@ import java.util.Optional;
  *         {@code String}, etc.)
  * @see    Builder
  */
+@ProviderType
 public interface NestedCollectionRoutes<T, S, U> {
 
 	/**
@@ -92,6 +95,7 @@ public interface NestedCollectionRoutes<T, S, U> {
 	 * @param <U> the type of the parent model's identifier (e.g., {@code Long},
 	 *        {@code String}, etc.)
 	 */
+	@ProviderType
 	public interface Builder<T, S, U> {
 
 		/**

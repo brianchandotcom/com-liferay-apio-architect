@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.routes;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
@@ -51,6 +53,7 @@ import java.util.Optional;
  *         String}, etc.)
  * @see    Builder
  */
+@ProviderType
 public interface ItemRoutes<T, S> {
 
 	/**
@@ -101,6 +104,7 @@ public interface ItemRoutes<T, S> {
 	 * @param <S> the type of the model's identifier (e.g., {@code Long}, {@code
 	 *        String}, etc.)
 	 */
+	@ProviderType
 	public interface Builder<T, S> {
 
 		/**

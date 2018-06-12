@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.related;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.apio.architect.identifier.Identifier;
 
 /**
@@ -23,6 +25,7 @@ import com.liferay.apio.architect.identifier.Identifier;
  * @author Alejandro Hernández
  * @param  <T> the type of the resource's identifier
  */
+@ProviderType
 public interface RelatedCollection<T extends Identifier> {
 
 	/**

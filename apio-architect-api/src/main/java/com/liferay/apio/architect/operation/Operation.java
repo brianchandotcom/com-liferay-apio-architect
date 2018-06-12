@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.operation;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.apio.architect.form.Form;
 
 import java.util.Optional;
@@ -23,6 +25,7 @@ import java.util.Optional;
  *
  * @author Alejandro Hernández
  */
+@ProviderType
 public interface Operation {
 
 	/**

@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.single.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.apio.architect.operation.Operation;
 
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.List;
  * @author Alejandro Hernández
  * @param  <T> the model's type
  */
+@ProviderType
 public interface SingleModel<T> {
 
 	/**

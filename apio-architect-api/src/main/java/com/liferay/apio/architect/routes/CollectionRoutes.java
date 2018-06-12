@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.routes;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
@@ -45,6 +47,7 @@ import java.util.Optional;
  *         String}, etc.)
  * @see    Builder
  */
+@ProviderType
 public interface CollectionRoutes<T, S> {
 
 	/**
@@ -81,6 +84,7 @@ public interface CollectionRoutes<T, S> {
 	 * Creates the {@link CollectionRoutes} of a {@link
 	 * com.liferay.apio.architect.router.CollectionRouter}.
 	 */
+	@ProviderType
 	public interface Builder<T, S> {
 
 		/**

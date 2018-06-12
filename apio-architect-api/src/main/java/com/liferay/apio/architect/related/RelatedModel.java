@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.related;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.apio.architect.identifier.Identifier;
 
 import java.util.function.Function;
@@ -28,6 +30,7 @@ import java.util.function.Function;
  * @param  <S> the model identifier's type (e.g., {@code Long}, {@code String},
  *         etc.)
  */
+@ProviderType
 public interface RelatedModel<T, S> {
 
 	/**
