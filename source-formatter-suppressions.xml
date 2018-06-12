@@ -5,6 +5,7 @@
 		<suppress checks="ParsePrimitiveTypeCheck" files="apio-architect-uri-mapper-impl/src/main/java/com/liferay/apio/architect/uri/mapper/internal/PathLongIdentifierMapper\.java" />
 		<suppress checks="SelfReferenceCheck" files="apio-architect-api/src/main/java/com/liferay/apio/architect/functional/Try\.java" />
 		<suppress checks="VariableNameCheck" files="apio-architect-api/src/main/java/com/liferay/apio/architect/routes/.*" />
+		<suppress checks="VariableNameCheck" files="apio-architect-util/src/main/java/com/liferay/apio/architect/util/routes/.*" />
 	</checkstyle>
 	<source-check>
 		<suppress checks="JavaDiamondOperatorCheck" files="apio-architect-jaxrs-json/src/main/java/com/liferay/apio/architect/jaxrs/json/internal/reader/JSONBodyMessageBodyReader\.java" />

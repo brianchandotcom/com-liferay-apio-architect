@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.alias;
+package com.liferay.apio.architect.util.alias;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

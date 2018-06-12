@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.apio.architect.routes;
+package com.liferay.apio.architect.util.routes;
 
-import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provide;
-import static com.liferay.apio.architect.routes.RoutesBuilderUtil.provideConsumer;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aFailTry;
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aTryWithValueThat;
+import static com.liferay.apio.architect.util.routes.RoutesBuilderUtil.provide;
+import static com.liferay.apio.architect.util.routes.RoutesBuilderUtil.provideConsumer;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.PROVIDE_FUNCTION;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

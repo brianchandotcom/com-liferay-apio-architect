@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
-import static com.liferay.apio.architect.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.util.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
 
 import com.liferay.apio.architect.credentials.Credentials;
@@ -24,6 +24,7 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.url.ServerURL;
+import com.liferay.apio.architect.util.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -100,7 +101,7 @@ public class CollectionRouterManagerImpl
 
 				Set<String> neededProviders = new TreeSet<>();
 
-				Builder builder = new Builder<>(
+				Builder builder = new BuilderImpl<>(
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add,
 					_pathIdentifierMapperManager::mapToIdentifierOrFail);

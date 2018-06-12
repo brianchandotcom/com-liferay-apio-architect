@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.apio.architect.routes;
+package com.liferay.apio.architect.util.routes;
 
 import static com.liferay.apio.architect.operation.Method.POST;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.PAGINATION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.hasNestedAddingPermissionFunction;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.PAGINATION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.hasNestedAddingPermissionFunction;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
@@ -37,9 +37,11 @@ import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
+import com.liferay.apio.architect.util.routes.NestedCollectionRoutesImpl.BuilderImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -53,11 +55,11 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class NestedCollectionRoutesTest {
+public class NestedCollectionRoutesImplTest {
 
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
-		Builder<String, Long, Long> builder = new Builder<>(
+		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
@@ -81,7 +83,7 @@ public class NestedCollectionRoutesTest {
 	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long, Long> builder = new Builder<>(
+		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
 			__ -> null);
 
@@ -108,7 +110,7 @@ public class NestedCollectionRoutesTest {
 	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long, Long> builder = new Builder<>(
+		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
 			__ -> null);
 
@@ -135,7 +137,7 @@ public class NestedCollectionRoutesTest {
 	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long, Long> builder = new Builder<>(
+		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
 			__ -> null);
 
@@ -156,7 +158,7 @@ public class NestedCollectionRoutesTest {
 	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long, Long> builder = new Builder<>(
+		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
 			__ -> null);
 
@@ -181,7 +183,7 @@ public class NestedCollectionRoutesTest {
 	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long, Long> builder = new Builder<>(
+		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
 			__ -> null);
 

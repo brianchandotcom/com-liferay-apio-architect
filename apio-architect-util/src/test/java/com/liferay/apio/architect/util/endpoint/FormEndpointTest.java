@@ -30,6 +30,9 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
+import com.liferay.apio.architect.util.routes.CollectionRoutesImpl;
+import com.liferay.apio.architect.util.routes.ItemRoutesImpl;
+import com.liferay.apio.architect.util.routes.NestedCollectionRoutesImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,11 +151,12 @@ public class FormEndpointTest {
 	}
 
 	private static <T, S> CollectionRoutes<T, S> _collectionRoutes() {
-		CollectionRoutes.Builder<T, S> builder = new CollectionRoutes.Builder<>(
-			"name", REQUEST_PROVIDE_FUNCTION,
-			__ -> {
-			},
-			__ -> null);
+		CollectionRoutes.Builder<T, S> builder =
+			new CollectionRoutesImpl.BuilderImpl<>(
+				"name", REQUEST_PROVIDE_FUNCTION,
+				__ -> {
+				},
+				__ -> null);
 
 		return builder.addCreator(
 			__ -> null, HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
@@ -160,8 +164,8 @@ public class FormEndpointTest {
 	}
 
 	private static <T, S> CollectionRoutes<T, S> _emptyCollectionRoutes() {
-		return new CollectionRoutes<>(
-			new CollectionRoutes.Builder<>(
+		return new CollectionRoutesImpl<>(
+			new CollectionRoutesImpl.BuilderImpl<>(
 				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
@@ -169,8 +173,8 @@ public class FormEndpointTest {
 	}
 
 	private static <T, S> ItemRoutes<T, S> _emptyItemRoutes() {
-		return new ItemRoutes<>(
-			new ItemRoutes.Builder<>(
+		return new ItemRoutesImpl<>(
+			new ItemRoutesImpl.BuilderImpl<>(
 				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
@@ -180,8 +184,8 @@ public class FormEndpointTest {
 	private static <T, S, U> NestedCollectionRoutes<T, S, U>
 		_emptyNestedCollectionRoutes() {
 
-		return new NestedCollectionRoutes<>(
-			new NestedCollectionRoutes.Builder<>(
+		return new NestedCollectionRoutesImpl<>(
+			new NestedCollectionRoutesImpl.BuilderImpl<>(
 				"", "", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
@@ -189,7 +193,7 @@ public class FormEndpointTest {
 	}
 
 	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
-		ItemRoutes.Builder<T, S> builder = new ItemRoutes.Builder<>(
+		ItemRoutes.Builder<T, S> builder = new ItemRoutesImpl.BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
@@ -205,7 +209,7 @@ public class FormEndpointTest {
 		_nestedCollectionRoutes() {
 
 		NestedCollectionRoutes.Builder<T, S, U> builder =
-			new NestedCollectionRoutes.Builder<>(
+			new NestedCollectionRoutesImpl.BuilderImpl<>(
 				"name", "nestedName", REQUEST_PROVIDE_FUNCTION,
 				__ -> {
 				},

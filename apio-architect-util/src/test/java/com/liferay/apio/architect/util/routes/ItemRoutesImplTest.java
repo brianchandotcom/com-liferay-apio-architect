@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.apio.architect.routes;
+package com.liferay.apio.architect.util.routes;
 
 import static com.liferay.apio.architect.operation.Method.DELETE;
 import static com.liferay.apio.architect.operation.Method.PUT;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.HAS_REMOVE_PERMISSION_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.HAS_UPDATE_PERMISSION_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.HAS_REMOVE_PERMISSION_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.HAS_UPDATE_PERMISSION_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
@@ -34,8 +34,10 @@ import com.liferay.apio.architect.alias.routes.GetItemFunction;
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.util.routes.ItemRoutesImpl.BuilderImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -48,11 +50,11 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class ItemRoutesTest {
+public class ItemRoutesImplTest {
 
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
-		Builder<String, Long> builder = new Builder<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
@@ -82,7 +84,7 @@ public class ItemRoutesTest {
 
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long> builder = new Builder<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
@@ -112,7 +114,7 @@ public class ItemRoutesTest {
 
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long> builder = new Builder<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
@@ -142,7 +144,7 @@ public class ItemRoutesTest {
 
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long> builder = new Builder<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
@@ -166,7 +168,7 @@ public class ItemRoutesTest {
 
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long> builder = new Builder<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
@@ -193,7 +195,7 @@ public class ItemRoutesTest {
 
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, Long> builder = new Builder<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(

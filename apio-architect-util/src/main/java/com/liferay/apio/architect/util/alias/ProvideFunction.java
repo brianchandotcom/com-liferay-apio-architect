@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.alias;
+package com.liferay.apio.architect.util.alias;
+
+import com.liferay.apio.architect.alias.RequestFunction;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

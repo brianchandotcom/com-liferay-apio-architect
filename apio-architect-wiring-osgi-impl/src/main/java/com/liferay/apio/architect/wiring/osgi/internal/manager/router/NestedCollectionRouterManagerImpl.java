@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.wiring.osgi.internal.manager.router;
 
-import static com.liferay.apio.architect.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.util.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.wiring.osgi.internal.manager.cache.ManagerCache.INSTANCE;
@@ -26,6 +26,7 @@ import com.liferay.apio.architect.router.NestedCollectionRouter;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
+import com.liferay.apio.architect.util.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.wiring.osgi.internal.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.wiring.osgi.manager.representable.NameManager;
@@ -148,7 +149,7 @@ public class NestedCollectionRouterManagerImpl
 
 				Set<String> neededProviders = new TreeSet<>();
 
-				Builder builder = new Builder<>(
+				Builder builder = new BuilderImpl<>(
 					name, nestedName, curry(_providerManager::provideMandatory),
 					neededProviders::add,
 					_pathIdentifierMapperManager::mapToIdentifierOrFail);

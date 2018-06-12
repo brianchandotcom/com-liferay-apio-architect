@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.apio.architect.routes;
+package com.liferay.apio.architect.util.routes;
 
 import static com.liferay.apio.architect.operation.Method.POST;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.PAGINATION;
-import static com.liferay.apio.architect.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.PAGINATION;
+import static com.liferay.apio.architect.util.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
@@ -36,8 +36,10 @@ import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.util.routes.CollectionRoutesImpl.BuilderImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,11 +53,11 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class CollectionRoutesTest {
+public class CollectionRoutesImplTest {
 
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
-		Builder<String, ?> builder = new Builder<>(
+		Builder<String, ?> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
@@ -78,7 +80,7 @@ public class CollectionRoutesTest {
 	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new Builder<>(
+		Builder<String, ?> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
@@ -103,7 +105,7 @@ public class CollectionRoutesTest {
 	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new Builder<>(
+		Builder<String, ?> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
@@ -128,7 +130,7 @@ public class CollectionRoutesTest {
 	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new Builder<>(
+		Builder<String, ?> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
@@ -147,7 +149,7 @@ public class CollectionRoutesTest {
 	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new Builder<>(
+		Builder<String, ?> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
@@ -169,7 +171,7 @@ public class CollectionRoutesTest {
 	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new Builder<>(
+		Builder<String, ?> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(

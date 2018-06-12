@@ -14,12 +14,14 @@
 
 package com.liferay.apio.architect.util.routes;
 
-import com.liferay.apio.architect.alias.ProvideFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasAddingPermissionFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasNestedAddingPermissionFunction;
+import com.liferay.apio.architect.alias.routes.permission.HasRemovePermissionFunction;
+import com.liferay.apio.architect.alias.routes.permission.HasUpdatePermissionFunction;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.util.alias.ProvideFunction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +56,18 @@ public class RoutesTestUtil {
 	 */
 	public static final HasAddingPermissionFunction
 		HAS_ADDING_PERMISSION_FUNCTION = __ -> true;
+
+	/**
+	 * An item permission function that always returns {@code true}.
+	 */
+	public static final HasRemovePermissionFunction<Long>
+		HAS_REMOVE_PERMISSION_FUNCTION = (credentials, aLong) -> true;
+
+	/**
+	 * An item permission function that always returns {@code true}.
+	 */
+	public static final HasUpdatePermissionFunction<Long>
+		HAS_UPDATE_PERMISSION_FUNCTION = (credentials, aLong) -> true;
 
 	/**
 	 * A mock {@code Pagination} object.

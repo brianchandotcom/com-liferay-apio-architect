@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.routes;
+package com.liferay.apio.architect.util.routes;
 
 import static com.liferay.apio.architect.unsafe.Unsafe.unsafeCast;
 
