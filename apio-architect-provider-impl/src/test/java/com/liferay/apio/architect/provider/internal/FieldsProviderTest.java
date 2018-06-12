@@ -17,7 +17,7 @@ package com.liferay.apio.architect.provider.internal;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import com.liferay.apio.architect.response.control.Fields;
+import com.liferay.apio.architect.util.response.control.Fields;
 
 import java.util.Collections;
 import java.util.Map;

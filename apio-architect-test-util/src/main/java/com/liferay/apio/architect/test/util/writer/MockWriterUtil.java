@@ -79,8 +79,8 @@ public class MockWriterUtil {
 	/**
 	 * Returns a {@link RequestInfo} with the provided {@code HttpHeaders}, a
 	 * mock {@link com.liferay.apio.architect.url.ServerURL}, a mock {@link
-	 * com.liferay.apio.architect.response.control.Embedded} request, and a mock
-	 * {@link com.liferay.apio.architect.language.Language} with {@code
+	 * Embedded} request, and a mock {@link
+	 * com.liferay.apio.architect.language.Language} with {@code
 	 * Locale#getDefault()}.
 	 *
 	 * @param  httpHeaders the {@code HttpHeaders}

@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.provider.internal;
 
 import com.liferay.apio.architect.provider.Provider;
-import com.liferay.apio.architect.response.control.Embedded;
+import com.liferay.apio.architect.util.response.control.Embedded;
 
 import java.util.Arrays;
 import java.util.List;

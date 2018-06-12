@@ -12,29 +12,23 @@
  * details.
  */
 
-package com.liferay.apio.architect.response.control;
+package com.liferay.apio.architect.util.response.control;
 
-import aQute.bnd.annotation.ProviderType;
-
-import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Defines the fields context selected by clients. An instance of this interface
- * is handed to {@code javax.ws.rs.ext.MessageBodyWriter} to decide which
- * resource fields to write.
+ * Defines the embedded context selected by clients. An instance of this
+ * interface is handed to {@code javax.ws.rs.ext.MessageBodyWriter} to decide
+ * which resources to embed.
  *
  * <p>
- * Instances of this interface act as a function that receive the resource's
- * list of types and return the predicate to test if a certain field should be
- * added to the representation.
+ * Instances of this interface act as the predicate that can be used to test if
+ * a relation must be embedded
  * </p>
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@ProviderType
-public interface Fields extends Function<List<String>, Predicate<String>> {
+public interface Embedded extends Predicate<String> {
 }
