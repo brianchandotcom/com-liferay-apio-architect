@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.pagination;
 
-import static com.liferay.apio.architect.operation.Method.POST;
+import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 

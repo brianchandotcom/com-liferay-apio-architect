@@ -25,26 +25,26 @@ import java.util.Optional;
  */
 public class Operation {
 
-	public Operation(Form form, Method method, String name) {
-		this(form, method, name, false);
+	public Operation(Form form, HTTPMethod httpMethod, String name) {
+		this(form, httpMethod, name, false);
 	}
 
 	public Operation(
-		Form form, Method method, String name, boolean collection) {
+		Form form, HTTPMethod httpMethod, String name, boolean collection) {
 
 		_form = form;
 
-		this.method = method;
+		this.httpMethod = httpMethod;
 		this.name = name;
 		this.collection = collection;
 	}
 
-	public Operation(Method method, String name) {
-		this(null, method, name, false);
+	public Operation(HTTPMethod httpMethod, String name) {
+		this(null, httpMethod, name, false);
 	}
 
-	public Operation(Method method, String name, boolean collection) {
-		this(null, method, name, collection);
+	public Operation(HTTPMethod httpMethod, String name, boolean collection) {
+		this(null, httpMethod, name, collection);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class Operation {
 	/**
 	 * The operation's method.
 	 */
-	public final Method method;
+	public final HTTPMethod httpMethod;
 
 	/**
 	 * The operation's name.

@@ -19,7 +19,7 @@ package com.liferay.apio.architect.operation;
  *
  * @author Alejandro Hernández
  */
-public enum Method {
+public enum HTTPMethod {
 
 	DELETE, GET, POST, PUT
 

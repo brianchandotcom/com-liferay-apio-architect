@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.util.message.json;
 
-import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.util.list.FunctionalList;
@@ -90,12 +90,12 @@ public interface SingleModelMessageMapper<T>
 	 * @param operationJSONObjectBuilder the JSON object builder for the
 	 *        operation
 	 * @param embeddedPathElements the current resource's embedded path elements
-	 * @param method the operation's method
+	 * @param httpMethod the operation's method
 	 */
 	public default void mapEmbeddedOperationMethod(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder,
-		FunctionalList<String> embeddedPathElements, Method method) {
+		FunctionalList<String> embeddedPathElements, HTTPMethod httpMethod) {
 	}
 
 	/**
@@ -291,11 +291,11 @@ public interface SingleModelMessageMapper<T>
 	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
 	 * @param operationJSONObjectBuilder the JSON object builder for the
 	 *        operation
-	 * @param method the operation's method
+	 * @param httpMethod the operation's method
 	 */
 	public default void mapOperationMethod(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Method method) {
+		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
 	}
 
 	/**

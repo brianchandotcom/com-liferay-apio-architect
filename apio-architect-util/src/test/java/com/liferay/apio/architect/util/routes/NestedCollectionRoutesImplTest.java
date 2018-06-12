@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.util.routes;
 
-import static com.liferay.apio.architect.operation.Method.POST;
+import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 import static com.liferay.apio.architect.util.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.util.routes.RoutesTestUtil.PAGINATION;
 import static com.liferay.apio.architect.util.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
@@ -353,7 +353,7 @@ public class NestedCollectionRoutesImplTest {
 		Operation secondOperation = operations.get(0);
 
 		assertThat(secondOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(secondOperation.method, is(POST));
+		assertThat(secondOperation.httpMethod, is(POST));
 		assertThat(secondOperation.name, is("name/nested/create"));
 	}
 

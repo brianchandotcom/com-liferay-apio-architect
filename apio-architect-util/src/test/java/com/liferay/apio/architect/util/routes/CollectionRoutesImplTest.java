@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.util.routes;
 
-import static com.liferay.apio.architect.operation.Method.POST;
+import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 import static com.liferay.apio.architect.util.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.util.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.util.routes.RoutesTestUtil.PAGINATION;
@@ -322,7 +322,7 @@ public class CollectionRoutesImplTest {
 		Operation operation = operations.get(0);
 
 		assertThat(operation.getFormOptional(), is(optionalWithValue()));
-		assertThat(operation.method, is(POST));
+		assertThat(operation.httpMethod, is(POST));
 		assertThat(operation.name, is("name/create"));
 	}
 

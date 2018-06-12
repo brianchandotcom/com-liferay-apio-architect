@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.util.message.json;
 
-import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.single.model.SingleModel;
@@ -589,11 +589,11 @@ public interface PageMessageMapper<T> extends MessageMapper<Page<T>> {
 	 * @param pageJSONObjectBuilder the JSON object builder for the page
 	 * @param operationJSONObjectBuilder the JSON object builder for the
 	 *        operation
-	 * @param method the operation's method
+	 * @param httpMethod the operation's method
 	 */
 	public default void mapOperationMethod(
 		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Method method) {
+		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
 
 		Optional<SingleModelMessageMapper<T>> optional =
 			getSingleModelMessageMapperOptional();
@@ -601,7 +601,8 @@ public interface PageMessageMapper<T> extends MessageMapper<Page<T>> {
 		optional.ifPresent(
 			singleModelMessageMapper ->
 				singleModelMessageMapper.mapOperationMethod(
-					pageJSONObjectBuilder, operationJSONObjectBuilder, method));
+					pageJSONObjectBuilder, operationJSONObjectBuilder,
+					httpMethod));
 	}
 
 	/**

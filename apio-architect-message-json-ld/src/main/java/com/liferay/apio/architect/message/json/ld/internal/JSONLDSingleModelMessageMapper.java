@@ -26,7 +26,7 @@ import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstant
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_HYDRA_PROFILE;
 import static com.liferay.apio.architect.message.json.ld.internal.JSONLDConstants.URL_SCHEMA_ORG;
 
-import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.util.list.FunctionalList;
@@ -103,12 +103,12 @@ public class JSONLDSingleModelMessageMapper<T>
 	public void mapEmbeddedOperationMethod(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder,
-		FunctionalList<String> embeddedPathElements, Method method) {
+		FunctionalList<String> embeddedPathElements, HTTPMethod httpMethod) {
 
 		operationJSONObjectBuilder.field(
 			FIELD_NAME_METHOD
 		).stringValue(
-			method.name()
+			httpMethod.name()
 		);
 	}
 
@@ -372,12 +372,12 @@ public class JSONLDSingleModelMessageMapper<T>
 	@Override
 	public void mapOperationMethod(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Method method) {
+		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
 
 		operationJSONObjectBuilder.field(
 			FIELD_NAME_METHOD
 		).stringValue(
-			method.name()
+			httpMethod.name()
 		);
 	}
 

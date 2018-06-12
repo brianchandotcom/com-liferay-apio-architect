@@ -16,7 +16,7 @@ package com.liferay.apio.architect.util.endpoint;
 
 import static javax.ws.rs.core.Response.Status.METHOD_NOT_ALLOWED;
 
-import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.HTTPMethod;
 
 import java.util.function.Supplier;
 
@@ -39,16 +39,16 @@ public class ExceptionSupplierUtil {
 	/**
 	 * Returns a supplier of {@code NotAllowedException}.
 	 *
-	 * @param  method the method that isn't allowed
+	 * @param  httpMethod the method that isn't allowed
 	 * @param  path the path in which the method isn't allowed. The path's
 	 *         components are joined using forward slashes {@code /}
 	 * @return a supplier of {@code NotAllowedException}
 	 */
 	public static Supplier<NotAllowedException> notAllowed(
-		Method method, String... path) {
+		HTTPMethod httpMethod, String... path) {
 
 		String message =
-			method.name() + " method is not allowed for path " +
+			httpMethod.name() + " method is not allowed for path " +
 				String.join("/", path);
 
 		Response response = Response.status(METHOD_NOT_ALLOWED).build();

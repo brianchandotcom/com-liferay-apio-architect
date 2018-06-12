@@ -178,7 +178,7 @@ public class SingleModelWriter<T> {
 
 				_singleModelMessageMapper.mapOperationMethod(
 					_jsonObjectBuilder, operationJSONObjectBuilder,
-					operation.method);
+					operation.httpMethod);
 
 				_singleModelMessageMapper.onFinishOperation(
 					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
@@ -330,7 +330,7 @@ public class SingleModelWriter<T> {
 
 				_singleModelMessageMapper.mapEmbeddedOperationMethod(
 					_jsonObjectBuilder, operationJSONObjectBuilder,
-					embeddedPathElements, operation.method);
+					embeddedPathElements, operation.httpMethod);
 
 				_singleModelMessageMapper.onFinishEmbeddedOperation(
 					_jsonObjectBuilder, operationJSONObjectBuilder,

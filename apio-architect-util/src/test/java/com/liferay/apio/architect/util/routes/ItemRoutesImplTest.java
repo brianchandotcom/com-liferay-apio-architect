@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.util.routes;
 
-import static com.liferay.apio.architect.operation.Method.DELETE;
-import static com.liferay.apio.architect.operation.Method.PUT;
+import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
+import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 import static com.liferay.apio.architect.util.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.util.routes.RoutesTestUtil.HAS_REMOVE_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.util.routes.RoutesTestUtil.HAS_UPDATE_PERMISSION_FUNCTION;
@@ -375,13 +375,13 @@ public class ItemRoutesImplTest {
 		Operation firstOperation = operations.get(0);
 
 		assertThat(firstOperation.getFormOptional(), is(emptyOptional()));
-		assertThat(firstOperation.method, is(DELETE));
+		assertThat(firstOperation.httpMethod, is(DELETE));
 		assertThat(firstOperation.name, is("name/delete"));
 
 		Operation secondOperation = operations.get(1);
 
 		assertThat(secondOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(secondOperation.method, is(PUT));
+		assertThat(secondOperation.httpMethod, is(PUT));
 		assertThat(secondOperation.name, is("name/update"));
 	}
 

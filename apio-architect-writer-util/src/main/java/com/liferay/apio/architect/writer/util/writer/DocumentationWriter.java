@@ -14,17 +14,17 @@
 
 package com.liferay.apio.architect.writer.util.writer;
 
-import static com.liferay.apio.architect.operation.Method.DELETE;
-import static com.liferay.apio.architect.operation.Method.GET;
-import static com.liferay.apio.architect.operation.Method.POST;
-import static com.liferay.apio.architect.operation.Method.PUT;
+import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
+import static com.liferay.apio.architect.operation.HTTPMethod.GET;
+import static com.liferay.apio.architect.operation.HTTPMethod.POST;
+import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
-import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
@@ -305,12 +305,13 @@ public class DocumentationWriter {
 	}
 
 	private Operation _getOperation(
-		String operationName, Optional<Form> formOptional, Method method) {
+		String operationName, Optional<Form> formOptional,
+		HTTPMethod httpMethod) {
 
 		return formOptional.map(
-			form -> new Operation(form, method, operationName)
+			form -> new Operation(form, httpMethod, operationName)
 		).orElse(
-			new Operation(method, operationName)
+			new Operation(httpMethod, operationName)
 		);
 	}
 

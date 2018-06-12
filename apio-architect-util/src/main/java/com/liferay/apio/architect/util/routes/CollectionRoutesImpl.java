@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.util.routes;
 
-import static com.liferay.apio.architect.operation.Method.POST;
+import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 import static com.liferay.apio.architect.util.routes.RoutesBuilderUtil.provide;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;

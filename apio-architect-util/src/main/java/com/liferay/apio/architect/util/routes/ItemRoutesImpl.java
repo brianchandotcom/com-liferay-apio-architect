@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.util.routes;
 
-import static com.liferay.apio.architect.operation.Method.DELETE;
-import static com.liferay.apio.architect.operation.Method.PUT;
+import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
+import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 import static com.liferay.apio.architect.util.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.util.routes.RoutesBuilderUtil.provideConsumer;
 

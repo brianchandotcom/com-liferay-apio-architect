@@ -138,7 +138,7 @@ public class PageWriter<T> {
 
 				_pageMessageMapper.mapOperationMethod(
 					_jsonObjectBuilder, operationJSONObjectBuilder,
-					operation.method);
+					operation.httpMethod);
 
 				_pageMessageMapper.onFinishOperation(
 					_jsonObjectBuilder, operationJSONObjectBuilder, operation);

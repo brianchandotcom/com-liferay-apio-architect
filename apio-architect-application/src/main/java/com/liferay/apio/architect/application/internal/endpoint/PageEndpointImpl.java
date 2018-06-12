@@ -14,9 +14,9 @@
 
 package com.liferay.apio.architect.application.internal.endpoint;
 
-import static com.liferay.apio.architect.operation.Method.DELETE;
-import static com.liferay.apio.architect.operation.Method.POST;
-import static com.liferay.apio.architect.operation.Method.PUT;
+import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
+import static com.liferay.apio.architect.operation.HTTPMethod.POST;
+import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 import static com.liferay.apio.architect.util.endpoint.ExceptionSupplierUtil.notAllowed;
 import static com.liferay.apio.architect.util.endpoint.ExceptionSupplierUtil.notFound;
 
