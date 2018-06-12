@@ -282,7 +282,7 @@ public class CollectionRoutesImplTest {
 			CollectionRoutes::getFormOptional
 		).map(
 			form -> {
-				assertThat(form.id, is("c/name"));
+				assertThat(form.getId(), is("c/name"));
 
 				return (Map)form.get(_body);
 			}

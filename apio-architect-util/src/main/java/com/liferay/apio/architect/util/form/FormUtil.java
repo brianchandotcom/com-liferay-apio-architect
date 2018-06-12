@@ -12,17 +12,20 @@
  * details.
  */
 
-package com.liferay.apio.architect.form;
+package com.liferay.apio.architect.util.form;
 
 import static com.liferay.apio.architect.date.DateTransformer.asDate;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
-import com.liferay.apio.architect.alias.form.FieldFormBiConsumer;
 import com.liferay.apio.architect.date.DateTransformer;
 import com.liferay.apio.architect.file.BinaryFile;
+import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.FieldType;
+import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.url.URLCreator;
+import com.liferay.apio.architect.util.alias.form.FieldFormBiConsumer;
 
 import java.text.NumberFormat;
 
@@ -616,7 +619,7 @@ public class FormUtil {
 
 		Stream<String> stream = keys.stream();
 
-		return stream.map(name -> new FormField(name, required, fieldType));
+		return stream.map(name -> new FormFieldImpl(name, required, fieldType));
 	}
 
 	private static void _getLinkedModelValueField(

@@ -117,7 +117,7 @@ public class FormEndpointTest {
 
 		Form form = creatorFormTry.getUnchecked();
 
-		assertThat(form.id, is("c/name"));
+		assertThat(form.getId(), is("c/name"));
 	}
 
 	@Test
@@ -132,7 +132,7 @@ public class FormEndpointTest {
 
 		Form form = nestedCreatorFormTry.getUnchecked();
 
-		assertThat(form.id, is("c/name/nestedName"));
+		assertThat(form.getId(), is("c/name/nestedName"));
 	}
 
 	@Test
@@ -147,7 +147,7 @@ public class FormEndpointTest {
 
 		Form form = updaterFormTry.getUnchecked();
 
-		assertThat(form.id, is("u/name"));
+		assertThat(form.getId(), is("u/name"));
 	}
 
 	private static <T, S> CollectionRoutes<T, S> _collectionRoutes() {

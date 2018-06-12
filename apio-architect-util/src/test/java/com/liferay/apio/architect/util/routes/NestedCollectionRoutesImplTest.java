@@ -304,7 +304,7 @@ public class NestedCollectionRoutesImplTest {
 			NestedCollectionRoutes::getFormOptional
 		).map(
 			form -> {
-				assertThat(form.id, is("c/name/nested"));
+				assertThat(form.getId(), is("c/name/nested"));
 
 				return (Map)form.get(_body);
 			}

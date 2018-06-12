@@ -21,6 +21,7 @@ import static com.liferay.apio.architect.test.util.form.FormMatchers.isReturnedI
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.liferay.apio.architect.form.Form.Builder;
+import com.liferay.apio.architect.util.form.FormImpl;
 
 import java.util.Collections;
 
@@ -33,7 +34,7 @@ public class BlogPostingModelFormTest {
 
 	@Test
 	public void test() {
-		Builder<BlogPostingForm> formBuilder = new Builder<>(
+		Builder<BlogPostingForm> formBuilder = new FormImpl.BuilderImpl<>(
 			Collections.emptyList(), __ -> 42L);
 
 		assertThat(

@@ -38,6 +38,7 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.alias.ProvideFunction;
+import com.liferay.apio.architect.util.form.FormImpl;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -97,7 +98,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;
@@ -122,7 +123,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;
@@ -154,7 +155,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;
@@ -185,7 +186,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;
@@ -215,7 +216,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _identifierFunction));
 
 			_form = form;

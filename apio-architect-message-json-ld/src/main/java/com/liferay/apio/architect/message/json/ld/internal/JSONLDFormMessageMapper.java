@@ -87,7 +87,7 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 				builder.field(
 					FIELD_NAME_PROPERTY
 				).stringValue(
-					formField.name
+					formField.getName()
 				);
 
 				builder.field(
@@ -99,7 +99,7 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 				builder.field(
 					FIELD_NAME_REQUIRED
 				).booleanValue(
-					formField.required
+					formField.isRequired()
 				);
 
 				builder.field(

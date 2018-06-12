@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.alias.form;
+package com.liferay.apio.architect.util.alias.form;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;

@@ -276,7 +276,11 @@ public class DocumentationWriter {
 		Stream<FormField> stream = formFields.stream();
 
 		return stream.filter(
-			formField -> formField.name.equals(fieldName)
+			formField -> {
+				String name = formField.getName();
+
+				return name.equals(fieldName);
+			}
 		).findFirst();
 	}
 
@@ -371,7 +375,7 @@ public class DocumentationWriter {
 			resourceJsonObjectBuilder, jsonObjectBuilder, fieldName);
 
 		boolean required = formField.map(
-			field -> field.required
+			FormField::isRequired
 		).orElse(
 			false
 		);

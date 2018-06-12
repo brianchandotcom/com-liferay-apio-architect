@@ -111,7 +111,7 @@ public final class URLCreator {
 	 * @return the URL for a {@code Form}
 	 */
 	public static String createFormURL(ServerURL serverURL, Form form) {
-		return String.join("/", serverURL.get(), "f", form.id);
+		return String.join("/", serverURL.get(), "f", form.getId());
 	}
 
 	/**

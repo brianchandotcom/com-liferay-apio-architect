@@ -323,7 +323,7 @@ public class ItemRoutesImplTest {
 			ItemRoutes::getFormOptional
 		).map(
 			form -> {
-				assertThat(form.id, is("u/name"));
+				assertThat(form.getId(), is("u/name"));
 
 				return (Map)form.get(_body);
 			}

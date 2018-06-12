@@ -45,6 +45,7 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.alias.ProvideFunction;
+import com.liferay.apio.architect.util.form.FormImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -305,7 +306,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;
@@ -337,7 +338,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;
@@ -369,7 +370,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;
@@ -400,7 +401,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;
@@ -430,7 +431,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("u", _name), _identifierFunction));
 
 			_form = form;

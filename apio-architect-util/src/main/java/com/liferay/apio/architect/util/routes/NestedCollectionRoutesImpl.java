@@ -41,6 +41,7 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.util.alias.ProvideFunction;
+import com.liferay.apio.architect.util.form.FormImpl;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -106,7 +107,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
 					_identifierFunction));
 
@@ -141,7 +142,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
 					_identifierFunction));
 
@@ -177,7 +178,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
 					_identifierFunction));
 
@@ -212,7 +213,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
 					_identifierFunction));
 
@@ -245,7 +246,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
-				new Form.Builder<>(
+				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
 					_identifierFunction));
 

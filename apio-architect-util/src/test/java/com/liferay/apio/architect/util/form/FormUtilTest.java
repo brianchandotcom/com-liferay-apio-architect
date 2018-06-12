@@ -12,39 +12,39 @@
  * details.
  */
 
-package com.liferay.apio.architect.form;
+package com.liferay.apio.architect.util.form;
 
 import static co.unruly.matchers.StreamMatchers.contains;
 
 import static com.liferay.apio.architect.form.FieldType.BOOLEAN;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalBoolean;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalBooleanList;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalDate;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalDateList;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalDouble;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalDoubleList;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalFile;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalFileList;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalFormFieldStream;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalLinkedModel;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalLong;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalLongList;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalString;
-import static com.liferay.apio.architect.form.FormUtil.getOptionalStringList;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredBoolean;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredBooleanList;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredDate;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredDateList;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredDouble;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredDoubleList;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredFile;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredFileList;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredFormFieldStream;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredLinkedModel;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredLong;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredLongList;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredString;
-import static com.liferay.apio.architect.form.FormUtil.getRequiredStringList;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalBoolean;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalBooleanList;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalDate;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalDateList;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalDouble;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalDoubleList;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalFile;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalFileList;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalFormFieldStream;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalLinkedModel;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalLong;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalLongList;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalString;
+import static com.liferay.apio.architect.util.form.FormUtil.getOptionalStringList;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredBoolean;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredBooleanList;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredDate;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredDateList;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredDouble;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredDoubleList;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredFile;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredFileList;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredFormFieldStream;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredLinkedModel;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredLong;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredLongList;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredString;
+import static com.liferay.apio.architect.util.form.FormUtil.getRequiredStringList;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -53,9 +53,11 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
-import com.liferay.apio.architect.alias.form.FieldFormBiConsumer;
 import com.liferay.apio.architect.file.BinaryFile;
+import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.util.alias.form.FieldFormBiConsumer;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -285,8 +287,8 @@ public class FormUtilTest {
 
 		Stream<FormField> stream = getOptionalFormFieldStream(map, BOOLEAN);
 
-		FormField firstFormField = new FormField("first", false, BOOLEAN);
-		FormField secondFormField = new FormField("second", false, BOOLEAN);
+		FormField firstFormField = new FormFieldImpl("first", false, BOOLEAN);
+		FormField secondFormField = new FormFieldImpl("second", false, BOOLEAN);
 
 		assertThat(stream, contains(firstFormField, secondFormField));
 	}
@@ -602,8 +604,8 @@ public class FormUtilTest {
 
 		Stream<FormField> stream = getRequiredFormFieldStream(map, BOOLEAN);
 
-		FormField firstFormField = new FormField("first", true, BOOLEAN);
-		FormField secondFormField = new FormField("second", true, BOOLEAN);
+		FormField firstFormField = new FormFieldImpl("first", true, BOOLEAN);
+		FormField secondFormField = new FormFieldImpl("second", true, BOOLEAN);
 
 		assertThat(stream, contains(firstFormField, secondFormField));
 	}

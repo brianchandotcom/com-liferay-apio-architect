@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.form;
+package com.liferay.apio.architect.util.form;
 
 import static com.liferay.apio.architect.form.FieldType.BOOLEAN;
 import static com.liferay.apio.architect.form.FieldType.BOOLEAN_LIST;
@@ -40,9 +40,13 @@ import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.file.BinaryFile;
+import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.Form.Builder;
+import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.language.Language;
+import com.liferay.apio.architect.util.form.FormImpl.BuilderImpl;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -69,7 +73,7 @@ public class FormTest {
 
 	@Test
 	public void testEmptyCreatesEmptyPathBuilder() {
-		Builder<Object> builder = Builder.empty();
+		Builder<Object> builder = BuilderImpl.empty();
 
 		Form<Object> form = builder.title(
 			__ -> ""
@@ -79,14 +83,14 @@ public class FormTest {
 			Object::new
 		).build();
 
-		assertThat(form.id, is(emptyString()));
+		assertThat(form.getId(), is(emptyString()));
 	}
 
 	@Test
 	public void testFormCreatesValidForm() {
 		Form<Map<String, Object>> form = _getForm();
 
-		assertThat(form.id, is("1/2/3"));
+		assertThat(form.getId(), is("1/2/3"));
 
 		Language language = Locale::getDefault;
 
@@ -99,30 +103,30 @@ public class FormTest {
 		assertThat(
 			formFields,
 			contains(
-				new FormField("boolean1", false, BOOLEAN),
-				new FormField("booleanList", false, BOOLEAN_LIST),
-				new FormField("date1", false, DATE),
-				new FormField("dateList", false, DATE_LIST),
-				new FormField("double1", false, DOUBLE),
-				new FormField("doubleList", false, DOUBLE_LIST),
-				new FormField("file1", false, FILE),
-				new FormField("fileList", false, FILE_LIST),
-				new FormField("long1", false, LONG),
-				new FormField("longList", false, LONG_LIST),
-				new FormField("string1", false, STRING),
-				new FormField("stringList", false, STRING_LIST),
-				new FormField("boolean2", true, BOOLEAN),
-				new FormField("booleanList", true, BOOLEAN_LIST),
-				new FormField("date2", true, DATE),
-				new FormField("dateList", true, DATE_LIST),
-				new FormField("double2", true, DOUBLE),
-				new FormField("doubleList", true, DOUBLE_LIST),
-				new FormField("file2", true, FILE),
-				new FormField("fileList", true, FILE_LIST),
-				new FormField("long2", true, LONG),
-				new FormField("longList", true, LONG_LIST),
-				new FormField("string2", true, STRING),
-				new FormField("stringList", true, STRING_LIST)));
+				new FormFieldImpl("boolean1", false, BOOLEAN),
+				new FormFieldImpl("booleanList", false, BOOLEAN_LIST),
+				new FormFieldImpl("date1", false, DATE),
+				new FormFieldImpl("dateList", false, DATE_LIST),
+				new FormFieldImpl("double1", false, DOUBLE),
+				new FormFieldImpl("doubleList", false, DOUBLE_LIST),
+				new FormFieldImpl("file1", false, FILE),
+				new FormFieldImpl("fileList", false, FILE_LIST),
+				new FormFieldImpl("long1", false, LONG),
+				new FormFieldImpl("longList", false, LONG_LIST),
+				new FormFieldImpl("string1", false, STRING),
+				new FormFieldImpl("stringList", false, STRING_LIST),
+				new FormFieldImpl("boolean2", true, BOOLEAN),
+				new FormFieldImpl("booleanList", true, BOOLEAN_LIST),
+				new FormFieldImpl("date2", true, DATE),
+				new FormFieldImpl("dateList", true, DATE_LIST),
+				new FormFieldImpl("double2", true, DOUBLE),
+				new FormFieldImpl("doubleList", true, DOUBLE_LIST),
+				new FormFieldImpl("file2", true, FILE),
+				new FormFieldImpl("fileList", true, FILE_LIST),
+				new FormFieldImpl("long2", true, LONG),
+				new FormFieldImpl("longList", true, LONG_LIST),
+				new FormFieldImpl("string2", true, STRING),
+				new FormFieldImpl("stringList", true, STRING_LIST)));
 
 		assertThat(title, is("title"));
 		assertThat(description, is("description"));
@@ -344,11 +348,11 @@ public class FormTest {
 	}
 
 	private static Form<Map<String, Object>> _mapForm(
-		Function<Builder<Map<String, Object>>.FieldStep,
-			Builder<Map<String, Object>>.FieldStep> function) {
+		Function<Builder.FieldStep<Map<String, Object>>,
+			Builder.FieldStep<Map<String, Object>>> function) {
 
-		Builder<Map<String, Object>> builder = new Builder<>(
-			Collections.emptyList(), null);
+		Builder<Map<String, Object>> builder = new BuilderImpl<>(
+			Collections.emptyList(), __ -> null);
 
 		return function.apply(
 			builder.title(
@@ -395,8 +399,8 @@ public class FormTest {
 	}
 
 	private Form<Map<String, Object>> _getForm() {
-		Builder<Map<String, Object>> builder = new Builder<>(
-			asList("1", "2", "3"), null);
+		Builder<Map<String, Object>> builder = new BuilderImpl<>(
+			asList("1", "2", "3"), __ -> null);
 
 		return builder.title(
 			__ -> "title"
