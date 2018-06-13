@@ -11,6 +11,7 @@ Export-Package:\
 	com.liferay.apio.architect.consumer,\
 	com.liferay.apio.architect.consumer.throwable,\
 	com.liferay.apio.architect.credentials,\
+	com.liferay.apio.architect.custom.actions,\
 	com.liferay.apio.architect.documentation,\
 	com.liferay.apio.architect.documentation.contributor,\
 	com.liferay.apio.architect.error,\
