@@ -17,6 +17,7 @@ package com.liferay.apio.architect.test.util.representor;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
+import com.liferay.apio.architect.impl.internal.representor.RepresentorImpl;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.test.util.identifier.FirstEmbeddedId;
 import com.liferay.apio.architect.test.util.identifier.RootModelId;
@@ -26,7 +27,6 @@ import com.liferay.apio.architect.test.util.model.FirstEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.model.SecondEmbeddedModel;
 import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
-import com.liferay.apio.architect.util.representor.RepresentorImpl;
 
 import java.util.Date;
 

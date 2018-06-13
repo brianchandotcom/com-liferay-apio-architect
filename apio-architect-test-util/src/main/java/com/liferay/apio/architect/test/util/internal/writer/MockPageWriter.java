@@ -21,6 +21,12 @@ import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequ
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import com.liferay.apio.architect.impl.internal.message.json.PageMessageMapper;
+import com.liferay.apio.architect.impl.internal.operation.OperationImpl;
+import com.liferay.apio.architect.impl.internal.pagination.PageImpl;
+import com.liferay.apio.architect.impl.internal.pagination.PaginationImpl;
+import com.liferay.apio.architect.impl.internal.request.RequestInfo;
+import com.liferay.apio.architect.impl.internal.writer.PageWriter;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -28,12 +34,6 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.uri.Path;
-import com.liferay.apio.architect.util.message.json.PageMessageMapper;
-import com.liferay.apio.architect.util.operation.OperationImpl;
-import com.liferay.apio.architect.util.pagination.PageImpl;
-import com.liferay.apio.architect.util.pagination.PaginationImpl;
-import com.liferay.apio.architect.util.request.RequestInfo;
-import com.liferay.apio.architect.writer.util.writer.PageWriter;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -24,15 +24,15 @@ import static java.util.Arrays.asList;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import com.liferay.apio.architect.impl.internal.message.json.SingleModelMessageMapper;
+import com.liferay.apio.architect.impl.internal.operation.OperationImpl;
+import com.liferay.apio.architect.impl.internal.request.RequestInfo;
+import com.liferay.apio.architect.impl.internal.single.model.SingleModelImpl;
+import com.liferay.apio.architect.impl.internal.writer.SingleModelWriter;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
-import com.liferay.apio.architect.util.message.json.SingleModelMessageMapper;
-import com.liferay.apio.architect.util.operation.OperationImpl;
-import com.liferay.apio.architect.util.request.RequestInfo;
-import com.liferay.apio.architect.util.single.model.SingleModelImpl;
-import com.liferay.apio.architect.writer.util.writer.SingleModelWriter;
 
 import java.util.Optional;
 

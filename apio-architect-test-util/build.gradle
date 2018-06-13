@@ -9,9 +9,8 @@ dependencies {
 	compile group: "org.json", name: "json", version: "20180130"
 	compile group: "org.skyscreamer", name: "jsonassert", version: "1.5.0"
 	compile project(":apps:apio-architect:apio-architect-api")
-	compile project(":apps:apio-architect:apio-architect-writer-util")
 
-	compileOnly project(":apps:apio-architect:apio-architect-util")
+	compileOnly project(":apps:apio-architect:apio-architect-impl")
 }
 
 deploy {

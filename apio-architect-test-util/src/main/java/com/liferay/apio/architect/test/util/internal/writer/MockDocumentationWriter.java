@@ -19,19 +19,19 @@ import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequ
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import com.liferay.apio.architect.impl.internal.documentation.Documentation;
+import com.liferay.apio.architect.impl.internal.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.impl.internal.request.RequestInfo;
+import com.liferay.apio.architect.impl.internal.routes.CollectionRoutesImpl;
+import com.liferay.apio.architect.impl.internal.routes.ItemRoutesImpl;
+import com.liferay.apio.architect.impl.internal.routes.NestedCollectionRoutesImpl;
+import com.liferay.apio.architect.impl.internal.writer.DocumentationWriter;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
-import com.liferay.apio.architect.util.documentation.Documentation;
-import com.liferay.apio.architect.util.message.json.DocumentationMessageMapper;
-import com.liferay.apio.architect.util.request.RequestInfo;
-import com.liferay.apio.architect.util.routes.CollectionRoutesImpl;
-import com.liferay.apio.architect.util.routes.ItemRoutesImpl;
-import com.liferay.apio.architect.util.routes.NestedCollectionRoutesImpl;
-import com.liferay.apio.architect.writer.util.writer.DocumentationWriter;
 
 import java.util.Collections;
 import java.util.Map;
