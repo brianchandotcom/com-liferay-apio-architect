@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.custom.actions;
 
 import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.HTTPMethod;
 
 import java.util.Optional;
 
@@ -31,7 +31,7 @@ public abstract class CustomRoute<T> {
 		return Optional.ofNullable(_form);
 	}
 
-	public abstract Method getMethod();
+	public abstract HTTPMethod getMethod();
 
 	public abstract String getName();
 

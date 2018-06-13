@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.custom.actions;
 
-import com.liferay.apio.architect.operation.Method;
+import com.liferay.apio.architect.operation.HTTPMethod;
 
 /**
  * Models a resource route with PUT semantics
@@ -25,8 +25,8 @@ import com.liferay.apio.architect.operation.Method;
 public abstract class PutRoute<T> extends CustomRoute<T> {
 
 	@Override
-	public Method getMethod() {
-		return Method.PUT;
+	public HTTPMethod getMethod() {
+		return HTTPMethod.PUT;
 	}
 
 }

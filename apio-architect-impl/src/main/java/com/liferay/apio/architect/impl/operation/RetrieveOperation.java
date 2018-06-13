@@ -33,10 +33,16 @@ public class RetrieveOperation implements Operation {
 
 	public RetrieveOperation(
 		String resourceName, boolean collection, String uri) {
+		this(resourceName, collection, uri, false);
+	}
+
+	public RetrieveOperation(
+		String resourceName, boolean collection, String uri, boolean custom) {
 
 		_resourceName = resourceName;
 		_collection = collection;
 		_uri = uri;
+		_custom = custom;
 	}
 
 	@Override
@@ -54,6 +60,10 @@ public class RetrieveOperation implements Operation {
 		return _resourceName + "/retrieve";
 	}
 
+	public boolean isCustom() {
+		return _custom;
+	}
+
 	@Override
 	public Optional<String> getURIOptional() {
 		return Optional.ofNullable(_uri);
@@ -65,7 +75,9 @@ public class RetrieveOperation implements Operation {
 	}
 
 	private final boolean _collection;
+	private final boolean _custom;
 	private final String _resourceName;
 	private final String _uri;
+
 
 }
