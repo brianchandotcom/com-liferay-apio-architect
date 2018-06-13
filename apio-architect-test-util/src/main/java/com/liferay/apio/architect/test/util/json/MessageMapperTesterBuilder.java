@@ -356,8 +356,13 @@ public class MessageMapperTesterBuilder {
 
 			String file = fileName + ".json";
 
+			String stringPath = _path.toString();
+
+			String folder = stringPath.substring(
+				stringPath.lastIndexOf('/') + 1);
+
 			String expected = Try.success(
-				_path.toString()
+				stringPath
 			).map(
 				path -> Paths.get(path, file)
 			).map(
@@ -368,7 +373,7 @@ public class MessageMapperTesterBuilder {
 				).map(
 					Class::getClassLoader
 				).map(
-					classLoader -> classLoader.getResource(file)
+					classLoader -> classLoader.getResource(folder + "/" + file)
 				).map(
 					URL::getPath
 				).map(
