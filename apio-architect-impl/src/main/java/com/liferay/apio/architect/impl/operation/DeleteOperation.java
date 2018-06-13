@@ -61,6 +61,13 @@ public class DeleteOperation implements Operation {
 		return false;
 	}
 
+	@Override
+	public boolean isCustom() {
+		return _custom;
+	}
+
+	private boolean _custom;
+
 	private final String _resourceName;
 	private final String _uri;
 

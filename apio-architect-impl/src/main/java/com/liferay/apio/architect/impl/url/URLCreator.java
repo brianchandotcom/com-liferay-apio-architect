@@ -186,6 +186,33 @@ public final class URLCreator {
 	}
 
 	/**
+	 * Returns the URL for an operation
+	 *
+	 * @param  serverURL the server URL
+	 * @param  operation the operation to represent
+	 * @param  path the single resource's {@link Path}
+	 * @return the collection URL
+	 */
+	public static String createOperationURL(
+		ServerURL serverURL, Operation operation, Path path) {
+
+		String pathRoute = path == null &&
+						   operation.getURIOptional().isPresent() ?
+			operation.getURIOptional().get() : path.asURI();
+
+		String endPath = "";
+
+		if (operation.isCustom()) {
+			endPath = String.join("/", "c" + pathRoute + operation.getName());
+		}
+		else {
+			endPath = String.join("/", "p" + pathRoute);
+		}
+
+		return String.join("/", serverURL.get(), endPath);
+	}
+
+	/**
 	 * Returns the URL of a model's resource.
 	 *
 	 * @param  applicationURL the application URL

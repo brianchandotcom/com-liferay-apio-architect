@@ -64,7 +64,13 @@ public class BatchCreateOperation implements Operation {
 		return false;
 	}
 
+	@Override
+	public boolean isCustom() {
+		return _custom;
+	}
+
 	private final Form _form;
+	private boolean _custom;
 	private final String _resourceName;
 	private final String _uri;
 

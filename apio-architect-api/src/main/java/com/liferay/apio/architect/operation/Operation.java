@@ -66,4 +66,12 @@ public interface Operation {
 	 */
 	public boolean isCollection();
 
+	/**
+	 * Return {@code true} if this is a custom operation
+	 *
+	 * @return {@code true} if this is a custom operation
+	 * @review
+	 */
+	public boolean isCustom();
+
 }
