@@ -25,13 +25,13 @@ import org.junit.Test;
 /**
  * @author Alejandro Hernández
  */
-public class LanguageTest {
+public class AcceptLanguageTest {
 
 	@Test
 	public void testGetPreferredLocaleReturnOnlyPreferredLocaleByDefault() {
-		Language language = Locale::getDefault;
+		AcceptLanguage acceptLanguage = Locale::getDefault;
 
-		assertThat(language.getLocales(), contains(Locale.getDefault()));
+		assertThat(acceptLanguage.getLocales(), contains(Locale.getDefault()));
 	}
 
 }
