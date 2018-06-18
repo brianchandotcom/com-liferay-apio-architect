@@ -90,14 +90,14 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
-			Function<T, S> identifierFunction) {
+			Function<T, S> modelToIdentifierFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
-			_identifierFunction = identifierFunction;
+			_modelToIdentifierFunction = modelToIdentifierFunction;
 		}
 
 		@Override
@@ -539,7 +539,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			for (U u : list) {
 				S s = transformThrowableFunction.andThen(
-					_identifierFunction::apply
+					_modelToIdentifierFunction::apply
 				).apply(
 					u
 				);
@@ -555,7 +555,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
-		private final Function<T, S> _identifierFunction;
+		private final Function<T, S> _modelToIdentifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private final IdentifierFunction<?> _pathToIdentifierFunction;
