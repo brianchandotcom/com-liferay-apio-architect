@@ -337,57 +337,6 @@ public class JSONLDDocumentationMessageMapper
 		).stringValue(
 			TYPE_API_DOCUMENTATION
 		);
-
-		JSONObjectBuilder.FieldStep propertyBuilder =
-			contextBuilder.nestedField("property");
-
-		propertyBuilder.field(
-			FIELD_NAME_ID
-		).stringValue(
-			FIELD_NAME_PROPERTY
-		);
-
-		propertyBuilder.field(
-			FIELD_NAME_TYPE
-		).stringValue(
-			FIELD_NAME_ID
-		);
-
-		contextBuilder.field(
-			"supportedClass"
-		).stringValue(
-			"hydra:supportedClass"
-		);
-
-		contextBuilder.field(
-			"supportedProperty"
-		).stringValue(
-			"hydra:supportedProperty"
-		);
-
-		contextBuilder.field(
-			"supportedOperation"
-		).stringValue(
-			"hydra:supportedOperation"
-		);
-
-		contextBuilder.field(
-			"method"
-		).stringValue(
-			"hydra:method"
-		);
-
-		contextBuilder.field(
-			"statusCodes"
-		).stringValue(
-			"hydra:statusCodes"
-		);
-
-		contextBuilder.field(
-			"code"
-		).stringValue(
-			"hydra:statusCodes"
-		);
 	}
 
 	private String _getReturnValue(String resourceName, Operation operation) {
