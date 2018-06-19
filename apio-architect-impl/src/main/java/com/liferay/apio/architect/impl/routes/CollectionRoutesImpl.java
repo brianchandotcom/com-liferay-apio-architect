@@ -74,6 +74,9 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		_createItemFunction = builderImpl._createItemFunction;
 		_form = builderImpl._form;
 		_getPageFunction = builderImpl._getPageFunction;
+
+		_customRoutes = builderImpl._customRoutes;
+		_customRouteFunctions = builderImpl._customRouteFunctions;
 	}
 
 	@Override
@@ -86,6 +89,18 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 	@Override
 	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional() {
 		return Optional.ofNullable(_createItemFunction);
+	}
+
+	@Override
+	public Optional<Map<String, CustomPageFunction<?>>>
+		getCustomRouteFunction() {
+
+		return Optional.of(_customRouteFunctions);
+	}
+
+	@Override
+	public Map<String, CustomRoute> getCustomRoutes() {
+		return _customRoutes;
 	}
 
 	@Override
@@ -104,7 +119,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
-			Function<T, S> modelToIdentifierFunction) {
+			Function<T, S> modelToIdentifierFunction,
+			Function<String, Optional<String>> nameFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
@@ -112,6 +128,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 			_modelToIdentifierFunction = modelToIdentifierFunction;
+			_nameFunction = nameFunction;
 		}
 
 		@Override
@@ -856,13 +873,12 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		private Map<String, CustomPageFunction<?>> _customRouteFunctions =
 			new HashMap<>();
 		private final Map<String, CustomRoute> _customRoutes = new HashMap<>();
-		private Function<String, Optional<String>> _nameFunction;
-
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
 		private final Function<T, S> _modelToIdentifierFunction;
 		private final String _name;
+		private final Function<String, Optional<String>> _nameFunction;
 		private final Consumer<String> _neededProviderConsumer;
 		private final IdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
@@ -871,6 +887,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 	private final BatchCreateItemFunction<S> _batchCreateItemFunction;
 	private final CreateItemFunction<T> _createItemFunction;
+	private final Map<String, CustomPageFunction<?>> _customRouteFunctions;
+	private final Map<String, CustomRoute> _customRoutes;
 	private final Form _form;
 	private final GetPageFunction<T> _getPageFunction;
 

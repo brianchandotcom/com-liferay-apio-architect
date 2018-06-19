@@ -28,6 +28,8 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Declares the endpoint for form operations.
@@ -69,23 +71,30 @@ public class FormEndpoint {
 			notFound(name));
 	}
 
+	/**
+	 * Returns the custom {@link Form} for the specified resource.
+	 *
+	 * @param  name the resource's name, extracted from the URL
+	 * @param  nestedName the form's name, extracted from the URL
+	 * @return the {@link Form} for the specified resource, or an exception if
+	 *         an error occurred
+	 */
 	@GET
 	@Path("p/{name}/{nestedName}")
-	public Try<Form> myForm(
+	public Try<Form> customForm(
 		@PathParam("name") String name,
 		@PathParam("nestedName") String nestedName) {
 
-		return Try.fromOptional(
-			() -> _itemRoutesFunction.apply(
-				name
-			).map(
-				ItemRoutes::getCustomRoutes
-			).map(
-				customRouteMap -> customRouteMap.get(nestedName)
-			).flatMap(
-				(Function<CustomRoute, Optional<Form>>)CustomRoute::getForm
-			),
-			notFound(name, nestedName));
+		return Try.fromFallible(
+			() -> _itemRoutesFunction.apply(name)
+		).map(
+			ItemRoutes::getCustomRoutes
+		).map(
+			stringCustomRouteMap -> stringCustomRouteMap.get(nestedName)
+		).flatMap(
+			customRoute -> Try.fromOptional(
+				() -> (Optional<Form>) customRoute.getForm(), notFound(name, nestedName))
+		);
 	}
 
 	/**

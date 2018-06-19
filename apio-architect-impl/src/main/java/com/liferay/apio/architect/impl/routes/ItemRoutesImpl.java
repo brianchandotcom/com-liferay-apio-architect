@@ -77,6 +77,21 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		_form = builderImpl._form;
 		_singleModelFunction = builderImpl._singleModelFunction;
 		_updateItemFunction = builderImpl._updateItemFunction;
+
+		_customItemFunctions = builderImpl._customItemFunctions;
+		_customRoutes = builderImpl._customRoutes;
+	}
+
+	@Override
+	public Optional<Map<String, CustomItemFunction<?, S>>>
+		getCustomItemFunctions() {
+
+		return Optional.of(_customItemFunctions);
+	}
+
+	@Override
+	public Map<String, CustomRoute> getCustomRoutes() {
+		return _customRoutes;
 	}
 
 	@Override
@@ -114,7 +129,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
-			Function<S, Optional<Path>> identifierToPathFunction) {
+			Function<S, Optional<Path>> identifierToPathFunction,
+			Function<String, Optional<String>> nameFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
@@ -122,6 +138,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 			_identifierToPathFunction = identifierToPathFunction;
+			_nameFunction = nameFunction;
 		}
 
 		public <R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
@@ -785,7 +802,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
 		private final Function<S, Optional<Path>> _identifierToPathFunction;
 		private final String _name;
-		private Function<String, Optional<String>> _nameFunction;
+		private final Function<String, Optional<String>> _nameFunction;
 		private final Consumer<String> _neededProviderConsumer;
 		private final IdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
@@ -794,6 +811,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 	}
 
+	private final Map<String, CustomItemFunction<?, S>> _customItemFunctions;
+	private final Map<String, CustomRoute> _customRoutes;
 	private final DeleteItemConsumer<S> _deleteItemConsumer;
 	private final Form _form;
 	private final GetItemFunction<T, S> _singleModelFunction;

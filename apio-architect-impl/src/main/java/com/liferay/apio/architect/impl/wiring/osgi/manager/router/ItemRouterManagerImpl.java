@@ -97,7 +97,8 @@ public class ItemRouterManagerImpl
 					neededProviders::add,
 					_pathIdentifierMapperManager::mapToIdentifierOrFail,
 					identifier -> _pathIdentifierMapperManager.mapToPath(
-						name, identifier));
+						name, identifier),
+					_nameManager::getNameOptional);
 
 				@SuppressWarnings("unchecked")
 				ItemRoutes itemRoutes = itemRouter.itemRoutes(builder);

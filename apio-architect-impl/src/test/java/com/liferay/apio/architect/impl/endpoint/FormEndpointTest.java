@@ -150,4 +150,80 @@ public class FormEndpointTest {
 		assertThat(form.getId(), is("u/name"));
 	}
 
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/endpoint/FormEndpointTest.java
+=======
+	private static <T, S> CollectionRoutes<T, S> _collectionRoutes() {
+		CollectionRoutes.Builder<T, S> builder =
+			new CollectionRoutesImpl.BuilderImpl<>(
+				"name", __ -> null, REQUEST_PROVIDE_FUNCTION,
+				__ -> {
+				},
+				__ -> null);
+
+		return builder.addCreator(
+			__ -> null, HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
+		).build();
+	}
+
+	private static <T, S> CollectionRoutes<T, S> _emptyCollectionRoutes() {
+		return new CollectionRoutesImpl<>(
+			new CollectionRoutesImpl.BuilderImpl<>(
+				"",
+				__ -> null, httpServletRequest -> aClass -> Optional.empty(),
+				__ -> {
+				},
+				__ -> null));
+	}
+
+	private static <T, S> ItemRoutes<T, S> _emptyItemRoutes() {
+		return new ItemRoutesImpl<>(
+			new ItemRoutesImpl.BuilderImpl<>(
+				"",
+				__ -> null, httpServletRequest -> aClass -> Optional.empty(),
+				__ -> {
+				},
+				__ -> null));
+	}
+
+	private static <T, S, U> NestedCollectionRoutes<T, S, U>
+		_emptyNestedCollectionRoutes() {
+
+		return new NestedCollectionRoutesImpl<>(
+			new NestedCollectionRoutesImpl.BuilderImpl<>(
+				"", "", httpServletRequest -> aClass -> Optional.empty(),
+				__ -> {
+				},
+				__ -> null));
+	}
+
+	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
+		ItemRoutes.Builder<T, S> builder = new ItemRoutesImpl.BuilderImpl<>(
+			"name", __ -> null, REQUEST_PROVIDE_FUNCTION,
+			__ -> {
+			},
+			__ -> null);
+
+		return builder.addUpdater(
+			(aLong, body) -> null, (credentials, s) -> true,
+			FORM_BUILDER_FUNCTION
+		).build();
+	}
+
+	private static <T, S, U> NestedCollectionRoutes<T, S, U>
+		_nestedCollectionRoutes() {
+
+		NestedCollectionRoutes.Builder<T, S, U> builder =
+			new NestedCollectionRoutesImpl.BuilderImpl<>(
+				"name", "nestedName", REQUEST_PROVIDE_FUNCTION,
+				__ -> {
+				},
+				__ -> null);
+
+		return builder.addCreator(
+			(s, body) -> null, hasNestedAddingPermissionFunction(),
+			FORM_BUILDER_FUNCTION
+		).build();
+	}
+
+>>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/endpoint/FormEndpointTest.java
 }

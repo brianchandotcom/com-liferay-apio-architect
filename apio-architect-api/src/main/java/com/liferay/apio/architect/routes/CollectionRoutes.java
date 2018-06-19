@@ -19,8 +19,10 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.BatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
+import com.liferay.apio.architect.alias.routes.CustomPageFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasAddingPermissionFunction;
+import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
@@ -31,6 +33,7 @@ import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -71,6 +74,11 @@ public interface CollectionRoutes<T, S> {
 	 *         exists; {@code Optional#empty()} otherwise
 	 */
 	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional();
+
+	public Optional<Map<String, CustomPageFunction<?>>>
+		getCustomRouteFunction();
+
+	public Map<String, CustomRoute> getCustomRoutes();
 
 	/**
 	 * Returns the form that is used to create a collection item, if it was

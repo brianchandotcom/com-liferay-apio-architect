@@ -17,6 +17,7 @@ package com.liferay.apio.architect.routes;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
+import com.liferay.apio.architect.alias.routes.CustomItemFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
@@ -27,6 +28,7 @@ import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowablePentaConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowableTetraConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowableTriConsumer;
+import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
@@ -35,6 +37,7 @@ import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -55,6 +58,11 @@ import java.util.Optional;
  */
 @ProviderType
 public interface ItemRoutes<T, S> {
+
+	public Optional<Map<String, CustomItemFunction<?, S>>>
+		getCustomItemFunctions();
+
+	public Map<String, CustomRoute> getCustomRoutes();
 
 	/**
 	 * Returns the function used to delete the item, if the endpoint was added

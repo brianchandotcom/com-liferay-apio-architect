@@ -121,7 +121,8 @@ public class CollectionRouterManagerImpl
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add,
 					_pathIdentifierMapperManager::mapToIdentifierOrFail,
-					representor::getIdentifier);
+					representor::getIdentifier,
+					_nameManager::getNameOptional);
 
 				@SuppressWarnings("unchecked")
 				CollectionRoutes collectionRoutes =

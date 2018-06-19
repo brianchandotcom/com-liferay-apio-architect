@@ -63,7 +63,11 @@ public class ItemRoutesImplTest {
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			__ -> null, IDENTIFIER_TO_PATH_FUNCTION);
+=======
+			__ -> null, __ -> null);
+>>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
 		ItemRoutes<String, Long> itemRoutes = builder.build();
 
@@ -90,8 +94,13 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
+>>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
@@ -121,8 +130,13 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
+>>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
@@ -152,8 +166,13 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
+>>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
@@ -177,8 +196,13 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
+>>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
@@ -205,8 +229,13 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
+>>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
