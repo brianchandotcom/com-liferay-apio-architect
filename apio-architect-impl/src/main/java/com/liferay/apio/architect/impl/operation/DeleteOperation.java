@@ -32,8 +32,13 @@ public class DeleteOperation implements Operation {
 	}
 
 	public DeleteOperation(String resourceName, String uri) {
+		this(resourceName, uri, false);
+	}
+
+	public DeleteOperation(String resourceName, String uri, boolean custom) {
 		_resourceName = resourceName;
 		_uri = uri;
+		_custom = custom;
 	}
 
 	@Override

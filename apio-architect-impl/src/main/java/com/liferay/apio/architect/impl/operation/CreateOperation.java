@@ -32,9 +32,14 @@ public class CreateOperation implements Operation {
 	}
 
 	public CreateOperation(Form form, String resourceName, String uri) {
+		this(form, resourceName, uri, false);
+	}
+
+	public CreateOperation(Form form, String resourceName, String uri, boolean custom) {
 		_form = form;
 		_resourceName = resourceName;
 		_uri = uri;
+		_custom = custom;
 	}
 
 	@Override
