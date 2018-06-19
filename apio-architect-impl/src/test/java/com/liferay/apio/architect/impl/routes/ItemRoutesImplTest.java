@@ -95,10 +95,14 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 <<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
 =======
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+>>>>>>> APIO-99 source format and parameter order:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 			__ -> null);
 >>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
@@ -131,10 +135,14 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 <<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
 =======
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+>>>>>>> APIO-99 source format and parameter order:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 			__ -> null);
 >>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
@@ -167,10 +175,14 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 <<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
 =======
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+>>>>>>> APIO-99 source format and parameter order:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 			__ -> null);
 >>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
@@ -197,10 +209,14 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 <<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
 =======
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+>>>>>>> APIO-99 source format and parameter order:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 			__ -> null);
 >>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 
@@ -230,10 +246,14 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 <<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
+<<<<<<< HEAD:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/routes/ItemRoutesImplTest.java
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			IDENTIFIER_TO_PATH_FUNCTION);
 =======
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+=======
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+>>>>>>> APIO-99 source format and parameter order:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 			__ -> null);
 >>>>>>> APIO-99 adapt tests:apio-architect-impl/src/test/java/com/liferay/apio/architect/impl/internal/routes/ItemRoutesImplTest.java
 

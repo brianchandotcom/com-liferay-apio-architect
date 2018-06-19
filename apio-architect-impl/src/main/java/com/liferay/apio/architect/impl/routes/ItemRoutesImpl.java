@@ -142,17 +142,16 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		/**
-		 * Adds a custom route with the http method specified in customRoute
-		 * and with a function that receives the id of the element and returns
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
 		 * another model of type R
 		 *
 		 * @param  customRoute the name and method of the custom route
 		 * @param  throwableBiFunction the custom route function
 		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionBiFunction the permission function for this
-		 *         route
+		 * @param  permissionBiFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
-		 * 		   this operation
+		 *         this operation
 		 * @return the updated builder
 		 * @review
 		 */
@@ -186,21 +185,20 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		/**
-		 * Adds a custom route with the http method specified in customRoute
-		 * and with a function that receives the id of the element and returns
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
 		 * another model of type R
 		 *
 		 * @param  customRoute the name and method of the custom route
 		 * @param  throwableHexaFunction the custom route function
-		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionBiFunction the permission function for this
-		 *         route
 		 * @param  aClass the class of the page function's second parameter
 		 * @param  bClass the class of the item function's third parameter
 		 * @param  cClass the class of the item function's fourth parameter
 		 * @param  dClass the class of the item function's fifth parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
-		 * 		   this operation
+		 *         this operation
 		 * @return the updated builder
 		 * @review
 		 */
@@ -245,20 +243,19 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		/**
-		 * Adds a custom route with the http method specified in customRoute
-		 * and with a function that receives the id of the element and returns
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
 		 * another model of type R
 		 *
 		 * @param  customRoute the name and method of the custom route
 		 * @param  throwablePentaFunction the custom route function
-		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionBiFunction the permission function for this
-		 *         route
 		 * @param  aClass the class of the page function's second parameter
 		 * @param  bClass the class of the item function's third parameter
 		 * @param  cClass the class of the item function's fourth parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
-		 * 		   this operation
+		 *         this operation
 		 * @return the updated builder
 		 * @review
 		 */
@@ -300,19 +297,18 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		/**
-		 * Adds a custom route with the http method specified in customRoute
-		 * and with a function that receives the id of the element and returns
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
 		 * another model of type R
 		 *
 		 * @param  customRoute the name and method of the custom route
 		 * @param  throwableTetraFunction the custom route function
-		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionBiFunction the permission function for this
-		 *         route
 		 * @param  aClass the class of the page function's second parameter
 		 * @param  bClass the class of the item function's third parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
-		 * 		   this operation
+		 *         this operation
 		 * @return the updated builder
 		 * @review
 		 */
@@ -351,18 +347,17 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		/**
-		 * Adds a custom route with the http method specified in customRoute
-		 * and with a function that receives the id of the element and returns
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
 		 * another model of type R
 		 *
 		 * @param  customRoute the name and method of the custom route
 		 * @param  throwableTriFunction the custom route function
-		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionBiFunction the permission function for this
-		 *         route
 		 * @param  aClass the class of the page function's second parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
-		 * 		   this operation
+		 *         this operation
 		 * @return the updated builder
 		 * @review
 		 */
