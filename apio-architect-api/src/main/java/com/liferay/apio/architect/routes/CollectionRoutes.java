@@ -22,19 +22,23 @@ import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CustomPageFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasAddingPermissionFunction;
+import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Holds information about the routes supported for a {@link
@@ -75,9 +79,23 @@ public interface CollectionRoutes<T, S> {
 	 */
 	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional();
 
+	/**
+	 * Returns the functions that are used to create custom operations, if the
+	 * endpoint was added through the {@link CollectionRoutes.Builder} and the
+	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the function used to create custom operations, if the function
+	 *         exists; {@code Optional#empty()} otherwise
+	 * @review
+	 */
 	public Optional<Map<String, CustomPageFunction<?>>>
 		getCustomRouteFunction();
 
+	/**
+	 * Returns the custom routes configured based on their paths
+	 *
+	 * @review
+	 */
 	public Map<String, CustomRoute> getCustomRoutes();
 
 	/**
@@ -300,6 +318,131 @@ public interface CollectionRoutes<T, S> {
 			Class<A> aClass, Class<B> bClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction);
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the pagination and returns another
+		 * model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableBiFunction the custom route function
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <R, I extends Identifier> CollectionRoutes.Builder<T, S>
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
+				Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction);
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the pagination and returns another
+		 * model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableHexaFunction the custom route function
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  bClass the class of the page function's third parameter
+		 * @param  cClass the class of the page function's fourth parameter
+		 * @param  dClass the class of the page function's fifth parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <A, B, C, D, R, I extends Identifier>
+			CollectionRoutes.Builder<T, S> addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowableHexaFunction<Pagination, T, A, B, C, D, R>
+					throwableHexaFunction,
+				Class<A> aClass, Class<B> bClass, Class<C> cClass,
+				Class<D> dClass, Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction);
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the pagination and returns another
+		 * model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwablePentaFunction the custom route function
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  bClass the class of the page function's third parameter
+		 * @param  cClass the class of the page function's fourth parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <A, B, C, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowablePentaFunction<Pagination, T, A, B, C, R>
+					throwablePentaFunction,
+				Class<A> aClass, Class<B> bClass, Class<C> cClass,
+				Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction);
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the pagination and returns another
+		 * model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableTetraFunction the custom route function
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  bClass the class of the page function's third parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <A, B, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowableTetraFunction<Pagination, T, A, B, R>
+					throwableTetraFunction,
+				Class<A> aClass, Class<B> bClass, Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction);
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the pagination and returns another
+		 * model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableTriFunction the custom route function
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <A, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowableTriFunction<Pagination, T, A, R> throwableTriFunction,
+				Class<A> aClass, Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction);
 
 		/**
 		 * Adds a route to a collection page function with one extra parameter.

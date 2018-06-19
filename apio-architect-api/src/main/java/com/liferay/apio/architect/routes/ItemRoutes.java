@@ -28,6 +28,7 @@ import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowablePentaConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowableTetraConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowableTriConsumer;
+import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
@@ -36,9 +37,11 @@ import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
+import com.liferay.apio.architect.identifier.Identifier;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * Holds information about the routes supported for an {@link
@@ -59,9 +62,23 @@ import java.util.Optional;
 @ProviderType
 public interface ItemRoutes<T, S> {
 
+	/**
+	 * Returns the functions that are used to create custom operations, if the
+	 * endpoint was added through the {@link CollectionRoutes.Builder} and the
+	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the function used to create custom operations, if the function
+	 *         exists; {@code Optional#empty()} otherwise
+	 * @review
+	 */
 	public Optional<Map<String, CustomItemFunction<?, S>>>
 		getCustomItemFunctions();
 
+	/**
+	 * Returns the custom routes configured based on their paths
+	 *
+	 * @review
+	 */
 	public Map<String, CustomRoute> getCustomRoutes();
 
 	/**
@@ -114,6 +131,125 @@ public interface ItemRoutes<T, S> {
 	 */
 	@ProviderType
 	public interface Builder<T, S> {
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableBiFunction the custom route function
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
+			CustomRoute<T> customRoute,
+			ThrowableBiFunction<S, T, R> throwableBiFunction, Class<I> supplier,
+			BiFunction<Credentials, S, Boolean> permissionBiFunction,
+			FormBuilderFunction<T> formBuilderFunction);
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableHexaFunction the custom route function
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  bClass the class of the item function's third parameter
+		 * @param  cClass the class of the item function's fourth parameter
+		 * @param  dClass the class of the item function's fifth parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <A, B, C, D, R, I extends Identifier<S>> Builder<T, S>
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowableHexaFunction<S, T, A, B, C, D, R>
+					throwableHexaFunction,
+				Class<A> aClass, Class<B> bClass, Class<C> cClass,
+				Class<D> dClass, Class<I> supplier,
+				BiFunction<Credentials, S, Boolean> permissionBiFunction,
+				FormBuilderFunction<T> formBuilderFunction);
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwablePentaFunction the custom route function
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  bClass the class of the item function's third parameter
+		 * @param  cClass the class of the item function's fourth parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <A, B, C, R, I extends Identifier<S>> Builder<T, S>
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowablePentaFunction<S, T, A, B, C, R> throwablePentaFunction,
+				Class<A> aClass, Class<B> bClass, Class<C> cClass,
+				Class<I> supplier,
+				BiFunction<Credentials, S, Boolean> permissionBiFunction,
+				FormBuilderFunction<T> formBuilderFunction);
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableTetraFunction the custom route function
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  bClass the class of the item function's third parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <A, B, R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
+			CustomRoute<T> customRoute,
+			ThrowableTetraFunction<S, T, A, B, R> throwableTetraFunction,
+			Class<A> aClass, Class<B> bClass, Class<I> supplier,
+			BiFunction<Credentials, S, Boolean> permissionBiFunction,
+			FormBuilderFunction<T> formBuilderFunction);
+
+		/**
+		 * Adds a custom route with the http method specified in customRoute and
+		 * with a function that receives the ID of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableTriFunction the custom route function
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 * @review
+		 */
+		public <A, R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
+			CustomRoute<T> customRoute,
+			ThrowableTriFunction<S, T, A, R> throwableTriFunction,
+			Class<A> aClass, Class<I> supplier,
+			BiFunction<Credentials, S, Boolean> permissionBiFunction,
+			FormBuilderFunction<T> formBuilderFunction);
 
 		/**
 		 * Adds a route to an item function with one extra parameter.
