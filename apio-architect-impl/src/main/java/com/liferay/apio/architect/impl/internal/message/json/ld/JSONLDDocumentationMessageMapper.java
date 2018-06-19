@@ -135,7 +135,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"http://schema.org/" + resourceType
+			resourceType
 		);
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
@@ -173,7 +173,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			"subClassOf"
 		).stringValue(
-			"http://www.w3.org/ns/hydra/core#Collection"
+			TYPE_COLLECTION
 		);
 
 		jsonObjectBuilder.field(
@@ -348,10 +348,10 @@ public class JSONLDDocumentationMessageMapper
 			value = "http://www.w3.org/2002/07/owl#Nothing";
 		}
 		else if (operation.isCollection() && httpMethod.equals(GET)) {
-			value = URL_HYDRA_PROFILE + TYPE_COLLECTION;
+			value = TYPE_COLLECTION;
 		}
 		else {
-			value = "http://schema.org/" + resourceName;
+			value = resourceName;
 		}
 
 		return value;
