@@ -33,7 +33,7 @@ public class JSONLDMessageMapperTest {
 	@Test
 	public void testJSONLDMessageMappers() {
 		MessageMapperTesterBuilder.path(
-			Paths.get("src/test/resources/ld")
+			Paths.get("src", "test/resources/ld".split("/"))
 		).httpHeaders(
 			Mockito.mock(HttpHeaders.class)
 		).mediaType(

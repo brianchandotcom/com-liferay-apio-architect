@@ -35,7 +35,7 @@ public class PlainJSONMessageMapperTest {
 	@Test
 	public void testPlainJSONMessageMappers() {
 		MessageMapperTesterBuilder.path(
-			Paths.get("src/test/resources/plain")
+			Paths.get("src", "test/resources/plain".split("/"))
 		).httpHeaders(
 			Mockito.mock(HttpHeaders.class)
 		).mediaType(

@@ -32,7 +32,7 @@ public class ProblemJSONErrorMessageMapperTest {
 	@Test
 	public void testProblemJSONErrorMessageMapper() {
 		MessageMapperTesterBuilder.path(
-			Paths.get("src/test/resources/problem")
+			Paths.get("src", "test/resources/problem".split("/"))
 		).httpHeaders(
 			Mockito.mock(HttpHeaders.class)
 		).mediaType(

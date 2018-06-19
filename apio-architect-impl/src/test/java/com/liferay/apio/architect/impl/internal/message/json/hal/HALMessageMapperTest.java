@@ -60,7 +60,7 @@ public class HALMessageMapperTest implements RepresentableManager {
 		pageMessageMapper.representableManager = this;
 
 		MessageMapperTesterBuilder.path(
-			Paths.get("src/test/resources/hal")
+			Paths.get("src", "test/resources/hal".split("/"))
 		).httpHeaders(
 			Mockito.mock(HttpHeaders.class)
 		).mediaType(
