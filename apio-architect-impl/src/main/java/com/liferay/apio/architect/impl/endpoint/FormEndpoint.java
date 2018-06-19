@@ -16,6 +16,7 @@ package com.liferay.apio.architect.impl.endpoint;
 
 import static com.liferay.apio.architect.impl.endpoint.ExceptionSupplierUtil.notFound;
 
+import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
@@ -66,6 +67,25 @@ public class FormEndpoint {
 				name
 			),
 			notFound(name));
+	}
+
+	@GET
+	@Path("p/{name}/{nestedName}")
+	public Try<Form> myForm(
+		@PathParam("name") String name,
+		@PathParam("nestedName") String nestedName) {
+
+		return Try.fromOptional(
+			() -> _itemRoutesFunction.apply(
+				name
+			).map(
+				ItemRoutes::getCustomRoutes
+			).map(
+				customRouteMap -> customRouteMap.get(nestedName)
+			).flatMap(
+				(Function<CustomRoute, Optional<Form>>)CustomRoute::getForm
+			),
+			notFound(name, nestedName));
 	}
 
 	/**

@@ -17,6 +17,7 @@ package com.liferay.apio.architect.impl.single.model;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,6 +27,10 @@ import java.util.List;
  * @param  <T> the model's type
  */
 public class SingleModelImpl<T> implements SingleModel<T> {
+
+	public SingleModelImpl(T model, String resourceName) {
+		this(model, resourceName, Collections.emptyList());
+	}
 
 	public SingleModelImpl(
 		T model, String resourceName, List<Operation> operations) {
