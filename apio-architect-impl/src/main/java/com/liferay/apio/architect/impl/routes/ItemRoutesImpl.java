@@ -141,6 +141,21 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_nameFunction = nameFunction;
 		}
 
+		/**
+		 * Adds a custom route with the http method specified in customRoute
+		 * and with a function that receives the id of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableBiFunction the custom route function
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this
+		 *         route
+		 * @param  formBuilderFunction the function that creates the form for
+		 * 		   this operation
+		 * @return the updated builder
+		 * @review
+		 */
 		public <R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
 			CustomRoute<T> customRoute,
 			ThrowableBiFunction<S, T, R> throwableBiFunction, Class<I> supplier,
@@ -170,6 +185,25 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return this;
 		}
 
+		/**
+		 * Adds a custom route with the http method specified in customRoute
+		 * and with a function that receives the id of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableHexaFunction the custom route function
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this
+		 *         route
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  bClass the class of the item function's third parameter
+		 * @param  cClass the class of the item function's fourth parameter
+		 * @param  dClass the class of the item function's fifth parameter
+		 * @param  formBuilderFunction the function that creates the form for
+		 * 		   this operation
+		 * @return the updated builder
+		 * @review
+		 */
 		public <A, B, C, D, R, I extends Identifier<S>> Builder<T, S>
 			addCustomRoute(
 				CustomRoute<T> customRoute,
@@ -210,6 +244,24 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return this;
 		}
 
+		/**
+		 * Adds a custom route with the http method specified in customRoute
+		 * and with a function that receives the id of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwablePentaFunction the custom route function
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this
+		 *         route
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  bClass the class of the item function's third parameter
+		 * @param  cClass the class of the item function's fourth parameter
+		 * @param  formBuilderFunction the function that creates the form for
+		 * 		   this operation
+		 * @return the updated builder
+		 * @review
+		 */
 		public <A, B, C, R, I extends Identifier<S>> Builder<T, S>
 			addCustomRoute(
 				CustomRoute<T> customRoute,
@@ -237,8 +289,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass,
 					(a, b, c) -> throwablePentaFunction.andThen(
-						t -> new SingleModelImpl<>(
-							t, _getResourceName(supplier))
+						t -> new SingleModelImpl(t, _getResourceName(supplier))
 					).apply(
 						s, _getModel(formOptional, body), a, b, c
 					));
@@ -248,6 +299,23 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return this;
 		}
 
+		/**
+		 * Adds a custom route with the http method specified in customRoute
+		 * and with a function that receives the id of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableTetraFunction the custom route function
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this
+		 *         route
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  bClass the class of the item function's third parameter
+		 * @param  formBuilderFunction the function that creates the form for
+		 * 		   this operation
+		 * @return the updated builder
+		 * @review
+		 */
 		public <A, B, R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
 			CustomRoute<T> customRoute,
 			ThrowableTetraFunction<S, T, A, B, R> throwableTetraFunction,
@@ -282,6 +350,22 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return this;
 		}
 
+		/**
+		 * Adds a custom route with the http method specified in customRoute
+		 * and with a function that receives the id of the element and returns
+		 * another model of type R
+		 *
+		 * @param  customRoute the name and method of the custom route
+		 * @param  throwableTriFunction the custom route function
+		 * @param  supplier the class of the identifier of the type R
+		 * @param  permissionBiFunction the permission function for this
+		 *         route
+		 * @param  aClass the class of the page function's second parameter
+		 * @param  formBuilderFunction the function that creates the form for
+		 * 		   this operation
+		 * @return the updated builder
+		 * @review
+		 */
 		public <A, R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
 			CustomRoute<T> customRoute,
 			ThrowableTriFunction<S, T, A, R> throwableTriFunction,
@@ -304,7 +388,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				httpServletRequest -> s -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass,
 					a -> throwableTriFunction.andThen(
-						t -> new SingleModelImpl(t, _getResourceName(supplier))
+						t -> new SingleModelImpl<>(
+							t, _getResourceName(supplier))
 					).apply(
 						s, _getModel(formOptional, body), a
 					));
