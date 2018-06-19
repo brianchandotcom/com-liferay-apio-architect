@@ -12,7 +12,6 @@
 			"@id": "property",
 			"@type": "@id"
 		},
-		"readonly": "hydra:readonly",
 		"returns": {
 			"@id": "hydra:returns",
 			"@type": "@id"
@@ -20,8 +19,7 @@
 		"statusCodes": "hydra:statusCodes",
 		"supportedClass": "hydra:supportedClass",
 		"supportedOperation": "hydra:supportedOperation",
-		"supportedProperty": "hydra:supportedProperty",
-		"writeonly": "hydra:writeonly"
+		"supportedProperty": "hydra:supportedProperty"
 	},
 	"@id": "http://api.example.com/doc/",
 	"@type": "ApiDocumentation",
@@ -52,184 +50,124 @@
 			],
 			"supportedProperty": [
 				{
-					"readonly": false,
-					"required": false,
-					"title": "binary1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "binary1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "binary2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "binary2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "boolean1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "boolean1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "boolean2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "boolean2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "booleanList1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "booleanList1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "booleanList2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "booleanList2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "link1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "link1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "link2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "link2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "localizedString1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "localizedString1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "localizedString2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "localizedString2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "nested1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "nested1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "nested2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "nested2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "number1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "number1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "number2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "number2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "numberList1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "numberList1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "numberList2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "numberList2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "date1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "date1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "date2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "date2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "string1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "string1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "string2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "string2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "stringList1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "stringList1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "stringList2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "stringList2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "embedded1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "embedded1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "embedded2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "embedded2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "linked1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "linked1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "linked2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "linked2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "nested3",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "nested3"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "linked3",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "linked3"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "relatedCollection1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "relatedCollection1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "relatedCollection2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "relatedCollection2"
 				}
 			],
 			"title": "Type 1"
@@ -259,184 +197,124 @@
 			],
 			"supportedProperty": [
 				{
-					"readonly": false,
-					"required": false,
-					"title": "binary1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "binary1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "binary2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "binary2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "boolean1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "boolean1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "boolean2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "boolean2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "booleanList1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "booleanList1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "booleanList2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "booleanList2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "link1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "link1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "link2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "link2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "localizedString1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "localizedString1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "localizedString2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "localizedString2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "nested1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "nested1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "nested2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "nested2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "number1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "number1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "number2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "number2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "numberList1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "numberList1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "numberList2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "numberList2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "date1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "date1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "date2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "date2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "string1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "string1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "string2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "string2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "stringList1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "stringList1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "stringList2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "stringList2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "embedded1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "embedded1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "embedded2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "embedded2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "linked1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "linked1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "linked2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "linked2"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "nested3",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "nested3"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "linked3",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "linked3"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "relatedCollection1",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "relatedCollection1"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "relatedCollection2",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "relatedCollection2"
 				}
 			],
 			"title": "Type 2"
@@ -462,22 +340,16 @@
 			],
 			"supportedProperty": [
 				{
-					"readonly": false,
-					"required": false,
-					"title": "totalItems",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "totalItems"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "member",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "member"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "numberOfItems",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "numberOfItems"
 				}
 			],
 			"title": "Type 1Collection"
@@ -503,22 +375,16 @@
 			],
 			"supportedProperty": [
 				{
-					"readonly": false,
-					"required": false,
-					"title": "totalItems",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "totalItems"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "member",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "member"
 				},
 				{
-					"readonly": false,
-					"required": false,
-					"title": "numberOfItems",
-					"writeonly": false
+					"@type": "SupportedProperty",
+					"property": "numberOfItems"
 				}
 			],
 			"title": "Type 2Collection"
