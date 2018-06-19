@@ -20,7 +20,6 @@ import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDCon
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_MEMBER;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_NUMBER_OF_ITEMS;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_PROPERTY;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_REQUIRED;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TITLE;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TOTAL_ITEMS;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TYPE;
@@ -29,6 +28,7 @@ import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDCon
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_CLASS;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_COLLECTION;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_OPERATION;
+import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_SUPPORTED_PROPERTY;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.URL_HYDRA_PROFILE;
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
@@ -110,31 +110,17 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void mapProperty(
-		JSONObjectBuilder jsonObjectBuilder, String fieldName,
-		boolean required) {
+		JSONObjectBuilder jsonObjectBuilder, String fieldName) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TITLE
+			FIELD_NAME_TYPE
+		).stringValue(
+			TYPE_SUPPORTED_PROPERTY
+		);
+		jsonObjectBuilder.field(
+			FIELD_NAME_PROPERTY
 		).stringValue(
 			fieldName
-		);
-
-		jsonObjectBuilder.field(
-			FIELD_NAME_REQUIRED
-		).booleanValue(
-			required
-		);
-
-		jsonObjectBuilder.field(
-			"readonly"
-		).booleanValue(
-			false
-		);
-
-		jsonObjectBuilder.field(
-			"writeonly"
-		).booleanValue(
-			false
 		);
 	}
 
@@ -213,7 +199,7 @@ public class JSONLDDocumentationMessageMapper
 				onStartProperty(
 					jsonObjectBuilder, propertyJsonObjectBuilder, fieldName);
 
-				mapProperty(propertyJsonObjectBuilder, fieldName, false);
+				mapProperty(propertyJsonObjectBuilder, fieldName);
 
 				onFinishProperty(
 					jsonObjectBuilder, propertyJsonObjectBuilder, fieldName);
@@ -314,18 +300,6 @@ public class JSONLDDocumentationMessageMapper
 			FIELD_NAME_TYPE
 		).stringValue(
 			FIELD_NAME_ID
-		);
-
-		contextBuilder.field(
-			"readonly"
-		).stringValue(
-			"hydra:readonly"
-		);
-
-		contextBuilder.field(
-			"writeonly"
-		).stringValue(
-			"hydra:writeonly"
 		);
 
 		contextBuilder.field(
