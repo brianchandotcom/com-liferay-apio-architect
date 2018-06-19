@@ -329,7 +329,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
 		).stringValue(
-			"http://api.example.com/doc/"
+			"/doc"
 		);
 
 		jsonObjectBuilder.field(
