@@ -23,6 +23,7 @@ import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDCon
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TITLE;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TOTAL_ITEMS;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TYPE;
+import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_VOCAB;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.MEDIA_TYPE;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_API_DOCUMENTATION;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_CLASS;
@@ -30,6 +31,7 @@ import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDCon
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_OPERATION;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_SUPPORTED_PROPERTY;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.URL_HYDRA_PROFILE;
+import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.URL_SCHEMA_ORG;
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
@@ -40,6 +42,7 @@ import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -55,6 +58,7 @@ import org.osgi.service.component.annotations.Component;
  * </p>
  *
  * @author Alejandro Hernández
+ * @author Zoltán Takács
  */
 @Component
 public class JSONLDDocumentationMessageMapper
@@ -260,19 +264,66 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, Documentation documentation,
 		HttpHeaders httpHeaders) {
 
-		JSONObjectBuilder.FieldStep contextBuilder =
-			jsonObjectBuilder.nestedField(FIELD_NAME_CONTEXT);
+		JSONObjectBuilder.FieldStep contextBuilder = jsonObjectBuilder.field(
+			FIELD_NAME_CONTEXT
+		);
 
-		contextBuilder.field(
-			"hydra"
-		).stringValue(
+		contextBuilder.arrayValue(
+		).add(
+			builder -> builder.field(
+				FIELD_NAME_VOCAB
+			).stringValue(
+				URL_SCHEMA_ORG
+			)
+		);
+
+		contextBuilder.arrayValue(
+		).addString(
 			URL_HYDRA_PROFILE
 		);
 
-		contextBuilder.field(
-			TYPE_API_DOCUMENTATION
-		).stringValue(
-			"hydra:ApiDocumentation"
+		Consumer<JSONObjectBuilder> expects = builder -> {
+			JSONObjectBuilder.FieldStep expectBuilder = builder.nestedField(
+				"expects");
+
+			expectBuilder.field(
+				FIELD_NAME_ID
+			).stringValue(
+				"hydra:expects"
+			);
+
+			expectBuilder.field(
+				FIELD_NAME_TYPE
+			).stringValue(
+				FIELD_NAME_ID
+			);
+		};
+
+		contextBuilder.arrayValue(
+		).add(
+			expects
+		);
+
+		Consumer<JSONObjectBuilder> returns = builder -> {
+			JSONObjectBuilder.FieldStep returnsBuilder = builder.nestedField(
+				"returns");
+
+			returnsBuilder.field(
+				FIELD_NAME_ID
+			).stringValue(
+				"hydra:returns"
+			);
+
+			returnsBuilder.field(
+				FIELD_NAME_TYPE
+			).stringValue(
+				FIELD_NAME_ID
+			);
+		};
+
+		contextBuilder.arrayValue(
+		).add(
+			returns
 		);
 
 		jsonObjectBuilder.field(
@@ -324,36 +375,6 @@ public class JSONLDDocumentationMessageMapper
 			"method"
 		).stringValue(
 			"hydra:method"
-		);
-
-		JSONObjectBuilder.FieldStep expectBuilder = contextBuilder.nestedField(
-			"expects");
-
-		expectBuilder.field(
-			FIELD_NAME_ID
-		).stringValue(
-			"hydra:expects"
-		);
-
-		expectBuilder.field(
-			FIELD_NAME_TYPE
-		).stringValue(
-			FIELD_NAME_ID
-		);
-
-		JSONObjectBuilder.FieldStep returnsBuilder = contextBuilder.nestedField(
-			"returns");
-
-		returnsBuilder.field(
-			FIELD_NAME_ID
-		).stringValue(
-			"hydra:returns"
-		);
-
-		returnsBuilder.field(
-			FIELD_NAME_TYPE
-		).stringValue(
-			FIELD_NAME_ID
 		);
 
 		contextBuilder.field(
