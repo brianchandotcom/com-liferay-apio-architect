@@ -116,27 +116,38 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 		@Override
 		public <A, R> Builder<T, S> addCreator(
-			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
-			Class<A> aClass,
+			ThrowableBiFunction<R, A, T> throwableBiFunction, Class<A> aClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			ThrowableBiFunction<List<R>, A, List<S>>
-				batchCreatorThrowableBiFunction = (formList, a) ->
-					_transformList(
-						formList, r -> creatorThrowableBiFunction.apply(r, a));
+			_neededProviderConsumer.accept(aClass.getName());
 
-			return addCreator(
-				creatorThrowableBiFunction, batchCreatorThrowableBiFunction,
-				aClass, hasAddingPermissionFunction, formBuilderFunction);
+			_hasAddingPermissionFunction = hasAddingPermissionFunction;
+
+			Form<R> form = formBuilderFunction.apply(
+				new FormImpl.BuilderImpl<>(
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
+
+			_form = form;
+
+			_createItemFunction = httpServletRequest -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass,
+				a -> throwableBiFunction.andThen(
+					t -> new SingleModelImpl<>(
+						t, _name, Collections.emptyList())
+				).apply(
+					form.get(body), a
+				));
+
+			return this;
 		}
 
 		public <R, I extends Identifier> CollectionRoutes.Builder<T, S>
-		addCustomRoute(
-			CustomRoute<T> customRoute,
-			ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
-			Class<I> supplier,
-			Function<Credentials, Boolean> permissionFunction) {
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
+				Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction) {
 
 			return addCustomRoute(
 				customRoute, throwableBiFunction, supplier, permissionFunction,
@@ -144,12 +155,12 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		public <R, I extends Identifier> CollectionRoutes.Builder<T, S>
-		addCustomRoute(
-			CustomRoute<T> customRoute,
-			ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
-			Class<I> supplier,
-			Function<Credentials, Boolean> permissionFunction,
-			FormBuilderFunction<T> formBuilderFunction) {
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
+				Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction) {
 
 			String name = customRoute.getName();
 
@@ -290,11 +301,11 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 		public <A, R, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
-			CustomRoute<T> customRoute,
-			ThrowableTriFunction<Pagination, T, A, R> throwableTriFunction,
-			Class<A> aClass, Class<I> supplier,
-			Function<Credentials, Boolean> permissionFunction,
-			FormBuilderFunction<T> formBuilderFunction) {
+				CustomRoute<T> customRoute,
+				ThrowableTriFunction<Pagination, T, A, R> throwableTriFunction,
+				Class<A> aClass, Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 
@@ -740,7 +751,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				Arrays.asList(createOperation, batchCreateOperation);
 
 			operations.addAll(_createCustomOperations(credentials));
-			
+
 			return operations;
 		}
 
@@ -839,6 +850,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			);
 		}
 
+		private CreateItemFunction<T> _createItemFunction;
 		private final Map<String, Function<Credentials, Boolean>>
 			_customPermissionFunctions = new HashMap<>();
 		private Map<String, CustomPageFunction<?>> _customRouteFunctions =
@@ -846,7 +858,6 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		private final Map<String, CustomRoute> _customRoutes = new HashMap<>();
 		private Function<String, Optional<String>> _nameFunction;
 
-		private CreateItemFunction<T> _createItemFunction;
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
