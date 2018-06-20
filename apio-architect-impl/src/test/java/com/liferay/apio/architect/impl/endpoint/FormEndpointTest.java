@@ -194,7 +194,7 @@ public class FormEndpointTest {
 				"", "", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				__ -> null, __ -> Optional.empty()));
+				__ -> null, __ -> Optional.empty(), __ -> null));
 	}
 
 	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
@@ -218,7 +218,7 @@ public class FormEndpointTest {
 				"name", "nestedName", REQUEST_PROVIDE_FUNCTION,
 				__ -> {
 				},
-				__ -> null, __ -> Optional.empty());
+				__ -> null, __ -> Optional.empty(), __ -> null);
 
 		return builder.addCreator(
 			(s, body) -> null, hasNestedAddingPermissionFunction(),

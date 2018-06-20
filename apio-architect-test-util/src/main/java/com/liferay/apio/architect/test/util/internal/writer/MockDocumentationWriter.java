@@ -73,7 +73,7 @@ public class MockDocumentationWriter {
 				"name", null, __ -> null,
 				__ -> {
 				},
-				__ -> null, __ -> Optional.empty());
+				__ -> null, __ -> Optional.empty(), __ -> null);
 
 		Representor<RootModel> rootModelRepresentor =
 			MockRepresentorCreator.createRootModelRepresentor(false);
