@@ -169,12 +169,6 @@ public class JSONLDDocumentationMessageMapper
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TYPE
-		).stringValue(
-			TYPE_CLASS
-		);
-
-		jsonObjectBuilder.field(
 			"subClassOf"
 		).stringValue(
 			TYPE_COLLECTION
