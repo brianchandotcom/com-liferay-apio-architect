@@ -89,7 +89,7 @@ public interface CollectionRoutes<T, S> {
 	 * @review
 	 */
 	public Optional<Map<String, CustomPageFunction<?>>>
-		getCustomRouteFunction();
+		getCustomPageFunctions();
 
 	/**
 	 * Returns the custom routes configured based on their paths
