@@ -22,10 +22,10 @@ import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -86,7 +86,6 @@ public class JSONObjectBuilderTest {
 			)
 		);
 
-		@SuppressWarnings("unchecked")
 		Matcher<JsonElement> isAJsonArrayWithElements = is(
 			aJsonArrayThat(contains(_aJsonObjectWithTheSolution)));
 
@@ -113,7 +112,6 @@ public class JSONObjectBuilderTest {
 			jsonObjectBuilder
 		);
 
-		@SuppressWarnings("unchecked")
 		Matcher<JsonElement> isAJsonArrayWithElements = is(
 			aJsonArrayThat(contains(_aJsonObjectWithTheSolution)));
 
@@ -140,6 +138,36 @@ public class JSONObjectBuilderTest {
 
 		Matcher<JsonElement> isAJsonArrayWithElements = is(
 			aJsonArrayThat(contains(matchers)));
+
+		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
+			aJsonObjectWhere("array", isAJsonArrayWithElements));
+
+		assertThat(getJsonObject(), isAJsonObjectWithAnArray);
+	}
+
+	@Test
+	public void testInvokingAddVarargConsumersCreatesAValidJsonArray() {
+		_jsonObjectBuilder.field(
+			"array"
+		).arrayValue(
+		).add(
+			jsonObjectBuilder -> jsonObjectBuilder.field(
+				"solution"
+			).numberValue(
+				42
+			),
+			jsonObjectBuilder -> jsonObjectBuilder.field(
+				"solution"
+			).numberValue(
+				42
+			)
+		);
+
+		@SuppressWarnings("unchecked")
+		Matcher<JsonElement> isAJsonArrayWithElements = is(
+			aJsonArrayThat(
+				contains(
+					_aJsonObjectWithTheSolution, _aJsonObjectWithTheSolution)));
 
 		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
 			aJsonObjectWhere("array", isAJsonArrayWithElements));

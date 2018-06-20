@@ -250,6 +250,28 @@ public class JSONObjectBuilder {
 		}
 
 		/**
+		 * Adds several JSON object, created by the provided consumers, to the
+		 * JSON array.
+		 *
+		 * @param  consumer the consumer that creates the new JSON object
+		 * @param  consumers the list of consumers that creates new JSON objects
+		 * @review
+		 */
+		@SafeVarargs
+		public final void add(
+			Consumer<JSONObjectBuilder> consumer,
+			Consumer<JSONObjectBuilder>... consumers) {
+
+			add(consumer);
+
+			for (Consumer<JSONObjectBuilder> jsonObjectBuilderConsumer :
+					consumers) {
+
+				add(jsonObjectBuilderConsumer);
+			}
+		}
+
+		/**
 		 * Adds the JSON object, created by the provided JSON object builder, to
 		 * the JSON array.
 		 *

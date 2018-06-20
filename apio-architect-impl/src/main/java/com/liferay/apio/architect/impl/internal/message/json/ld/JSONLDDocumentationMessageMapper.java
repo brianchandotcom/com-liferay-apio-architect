@@ -274,46 +274,32 @@ public class JSONLDDocumentationMessageMapper
 
 		contextBuilder.arrayValue(
 		).add(
-			builder -> builder.nestedField(
-				"expects"
-			).field(
-				FIELD_NAME_TYPE
-			).stringValue(
-				FIELD_NAME_ID
-			)
-		);
+			builder -> {
+				builder.nestedField(
+					"expects", FIELD_NAME_TYPE
+				).stringValue(
+					FIELD_NAME_ID
+				);
 
-		contextBuilder.arrayValue(
-		).add(
-			builder -> builder.nestedField(
-				"expects"
-			).field(
-				FIELD_NAME_ID
-			).stringValue(
-				"hydra:expects"
-			)
-		);
+				builder.nestedField(
+					"expects", FIELD_NAME_ID
+				).stringValue(
+					"hydra:expects"
+				);
+			},
+			builder -> {
+				builder.nestedField(
+					"returns", FIELD_NAME_ID
+				).stringValue(
+					"hydra:returns"
+				);
 
-		contextBuilder.arrayValue(
-		).add(
-			builder -> builder.nestedField(
-				"returns"
-			).field(
-				FIELD_NAME_ID
-			).stringValue(
-				"hydra:returns"
-			)
-		);
-
-		contextBuilder.arrayValue(
-		).add(
-			builder -> builder.nestedField(
-				"returns"
-			).field(
-				FIELD_NAME_TYPE
-			).stringValue(
-				FIELD_NAME_ID
-			)
+				builder.nestedField(
+					"returns", FIELD_NAME_TYPE
+				).stringValue(
+					FIELD_NAME_ID
+				);
+			}
 		);
 
 		jsonObjectBuilder.field(
