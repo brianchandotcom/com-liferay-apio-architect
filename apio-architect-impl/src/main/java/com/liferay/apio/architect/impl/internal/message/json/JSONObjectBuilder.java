@@ -446,6 +446,25 @@ public class JSONObjectBuilder {
 		}
 
 		/**
+		 * Creates a new JSON object inside the field and populates it with the
+		 * provided consumers.
+		 *
+		 * @param consumer the consumer that first populates the JSON Object
+		 * @param consumers the rest of the list of consumers that populates the
+		 *        JSON Object
+		 */
+		@SafeVarargs
+		public final void fields(
+			Consumer<FieldStep> consumer, Consumer<FieldStep>... consumers) {
+
+			consumer.accept(this);
+
+			for (Consumer<FieldStep> fieldStepConsumer : consumers) {
+				fieldStepConsumer.accept(this);
+			}
+		}
+
+		/**
 		 * Begins creating a new JSON object field, only if a condition is met.
 		 * If the condition is met, this method returns the field step created
 		 * by {@code ifFunction}. Otherwise, no operation is performed.

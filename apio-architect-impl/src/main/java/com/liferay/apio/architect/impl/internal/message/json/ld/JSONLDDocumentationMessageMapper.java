@@ -266,32 +266,34 @@ public class JSONLDDocumentationMessageMapper
 			),
 			arrayBuilder -> arrayBuilder.addString(URL_HYDRA_PROFILE),
 			arrayBuilder -> arrayBuilder.add(
-				builder -> {
-					builder.nestedField(
-						"expects", FIELD_NAME_TYPE
+				builder -> builder.field(
+					"expects"
+				).fields(
+					nestedBuilder -> nestedBuilder.field(
+						FIELD_NAME_TYPE
 					).stringValue(
 						FIELD_NAME_ID
-					);
-
-					builder.nestedField(
-						"expects", FIELD_NAME_ID
+					),
+					nestedBuilder -> nestedBuilder.field(
+						FIELD_NAME_ID
 					).stringValue(
 						"hydra:expects"
-					);
-				},
-				builder -> {
-					builder.nestedField(
-						"returns", FIELD_NAME_ID
+					)
+				),
+				builder -> builder.field(
+					"returns"
+				).fields(
+					nestedBuilder -> nestedBuilder.field(
+						FIELD_NAME_ID
 					).stringValue(
 						"hydra:returns"
-					);
-
-					builder.nestedField(
-						"returns", FIELD_NAME_TYPE
+					),
+					nestedBuilder -> nestedBuilder.field(
+						FIELD_NAME_TYPE
 					).stringValue(
 						FIELD_NAME_ID
-					);
-				}
+					)
+				)
 			)
 		);
 

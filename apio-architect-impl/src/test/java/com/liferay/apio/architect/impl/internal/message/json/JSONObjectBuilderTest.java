@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonArrayT
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonBoolean;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonInt;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWhere;
+import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWith;
 import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,6 +30,8 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import com.liferay.apio.architect.test.util.json.Conditions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -343,6 +346,36 @@ public class JSONObjectBuilderTest {
 		);
 
 		assertThat(getJsonObject(), is(_aJsonObjectWithTheSolution));
+	}
+
+	@Test
+	public void testInvokingFieldsWithConsumersCreatesAValidJsonObject() {
+		_jsonObjectBuilder.field(
+			"object"
+		).fields(
+			builder -> builder.field(
+				"first"
+			).numberValue(
+				42
+			),
+			builder -> builder.field(
+				"second"
+			).numberValue(
+				2018
+			)
+		);
+
+		Conditions.Builder builder = new Conditions.Builder();
+
+		Conditions conditions = builder.where(
+			"first", is(aJsonInt(equalTo(42)))
+		).where(
+			"second", is(aJsonInt(equalTo(2018)))
+		).build();
+
+		assertThat(
+			getJsonObject(),
+			is(aJsonObjectWhere("object", is(aJsonObjectWith(conditions)))));
 	}
 
 	@Test
