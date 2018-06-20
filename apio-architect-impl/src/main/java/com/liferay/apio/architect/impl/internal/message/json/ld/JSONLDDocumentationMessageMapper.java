@@ -254,52 +254,45 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, Documentation documentation,
 		HttpHeaders httpHeaders) {
 
-		JSONObjectBuilder.FieldStep contextBuilder = jsonObjectBuilder.field(
+		jsonObjectBuilder.field(
 			FIELD_NAME_CONTEXT
-		);
+		).arrayValue(
+			arrayBuilder -> arrayBuilder.add(
+				builder -> builder.field(
+					FIELD_NAME_VOCAB
+				).stringValue(
+					URL_SCHEMA_ORG
+				)
+			),
+			arrayBuilder -> arrayBuilder.addString(URL_HYDRA_PROFILE),
+			arrayBuilder -> arrayBuilder.add(
+				builder -> {
+					builder.nestedField(
+						"expects", FIELD_NAME_TYPE
+					).stringValue(
+						FIELD_NAME_ID
+					);
 
-		contextBuilder.arrayValue(
-		).add(
-			builder -> builder.field(
-				FIELD_NAME_VOCAB
-			).stringValue(
-				URL_SCHEMA_ORG
+					builder.nestedField(
+						"expects", FIELD_NAME_ID
+					).stringValue(
+						"hydra:expects"
+					);
+				},
+				builder -> {
+					builder.nestedField(
+						"returns", FIELD_NAME_ID
+					).stringValue(
+						"hydra:returns"
+					);
+
+					builder.nestedField(
+						"returns", FIELD_NAME_TYPE
+					).stringValue(
+						FIELD_NAME_ID
+					);
+				}
 			)
-		);
-
-		contextBuilder.arrayValue(
-		).addString(
-			URL_HYDRA_PROFILE
-		);
-
-		contextBuilder.arrayValue(
-		).add(
-			builder -> {
-				builder.nestedField(
-					"expects", FIELD_NAME_TYPE
-				).stringValue(
-					FIELD_NAME_ID
-				);
-
-				builder.nestedField(
-					"expects", FIELD_NAME_ID
-				).stringValue(
-					"hydra:expects"
-				);
-			},
-			builder -> {
-				builder.nestedField(
-					"returns", FIELD_NAME_ID
-				).stringValue(
-					"hydra:returns"
-				);
-
-				builder.nestedField(
-					"returns", FIELD_NAME_TYPE
-				).stringValue(
-					FIELD_NAME_ID
-				);
-			}
 		);
 
 		jsonObjectBuilder.field(

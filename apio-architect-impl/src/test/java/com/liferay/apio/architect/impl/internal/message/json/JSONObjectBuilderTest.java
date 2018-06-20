@@ -189,6 +189,29 @@ public class JSONObjectBuilderTest {
 	}
 
 	@Test
+	public void testInvokingArrayValueWithConsumersCreatesAValidJsonArray() {
+		_jsonObjectBuilder.field(
+			"array"
+		).arrayValue(
+			arrayBuilder -> arrayBuilder.addString("first"),
+			arrayBuilder -> arrayBuilder.addString("second")
+		);
+
+		@SuppressWarnings("unchecked")
+		Matcher<Iterable<? extends JsonElement>> containsFirstAndSecond =
+			contains(
+				aJsonString(equalTo("first")), aJsonString(equalTo("second")));
+
+		Matcher<JsonElement> isAJsonArrayWithElements = is(
+			aJsonArrayThat(containsFirstAndSecond));
+
+		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
+			aJsonObjectWhere("array", isAJsonArrayWithElements));
+
+		assertThat(getJsonObject(), isAJsonObjectWithAnArray);
+	}
+
+	@Test
 	public void testInvokingBooleanValueCreatesABoolean() {
 		_jsonObjectBuilder.field(
 			"solution"

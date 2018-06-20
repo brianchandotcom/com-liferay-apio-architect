@@ -392,6 +392,29 @@ public class JSONObjectBuilder {
 		}
 
 		/**
+		 * Creates a JSON array inside the field and populates it with the
+		 * provided consumers.
+		 *
+		 * @param consumer the consumer that creates the first JSON object of
+		 *        the array
+		 * @param consumers the list of consumers that creates the rest of JSON
+		 *        objects of the array
+		 */
+		@SafeVarargs
+		public final void arrayValue(
+			Consumer<ArrayValueStep> consumer,
+			Consumer<ArrayValueStep>... consumers) {
+
+			ArrayValueStep arrayValueStep = arrayValue();
+
+			consumer.accept(arrayValueStep);
+
+			for (Consumer<ArrayValueStep> arrayValueStepConsumer : consumers) {
+				arrayValueStepConsumer.accept(arrayValueStep);
+			}
+		}
+
+		/**
 		 * Adds a new boolean value to the JSON array.
 		 *
 		 * @param value the boolean value to add to the JSON array
