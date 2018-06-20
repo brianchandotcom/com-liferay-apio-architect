@@ -41,8 +41,6 @@ import com.liferay.apio.architect.impl.internal.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 
-import java.util.Arrays;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -103,12 +101,10 @@ public class JSONLDDocumentationMessageMapper
 			operation.getHttpMethod().toString()
 		);
 
-		String returnValue = _getReturnValue(type, operation);
-
 		jsonObjectBuilder.field(
 			"returns"
 		).stringValue(
-			returnValue
+			_getReturnValue(type, operation)
 		);
 	}
 
@@ -186,14 +182,10 @@ public class JSONLDDocumentationMessageMapper
 			resourceType + "Collection"
 		);
 
-		String[] collectionProperties = {
+		Stream.of(
 			FIELD_NAME_TOTAL_ITEMS, FIELD_NAME_MEMBER,
 			FIELD_NAME_NUMBER_OF_ITEMS
-		};
-
-		Stream<String> collectionStream = Arrays.stream(collectionProperties);
-
-		collectionStream.forEach(
+		).forEach(
 			fieldName -> {
 				JSONObjectBuilder propertyJsonObjectBuilder =
 					new JSONObjectBuilder();
@@ -205,8 +197,8 @@ public class JSONLDDocumentationMessageMapper
 
 				onFinishProperty(
 					jsonObjectBuilder, propertyJsonObjectBuilder, fieldName);
-
-			});
+			}
+		);
 	}
 
 	@Override
@@ -280,48 +272,48 @@ public class JSONLDDocumentationMessageMapper
 			URL_HYDRA_PROFILE
 		);
 
-		Consumer<JSONObjectBuilder> expects = builder -> {
-			JSONObjectBuilder.FieldStep expectBuilder = builder.nestedField(
-				"expects");
+		contextBuilder.arrayValue(
+		).add(
+			builder -> builder.nestedField(
+				"expects"
+			).field(
+				FIELD_NAME_TYPE
+			).stringValue(
+				FIELD_NAME_ID
+			)
+		);
 
-			expectBuilder.field(
+		contextBuilder.arrayValue(
+		).add(
+			builder -> builder.nestedField(
+				"expects"
+			).field(
 				FIELD_NAME_ID
 			).stringValue(
 				"hydra:expects"
-			);
-
-			expectBuilder.field(
-				FIELD_NAME_TYPE
-			).stringValue(
-				FIELD_NAME_ID
-			);
-		};
+			)
+		);
 
 		contextBuilder.arrayValue(
 		).add(
-			expects
-		);
-
-		Consumer<JSONObjectBuilder> returns = builder -> {
-			JSONObjectBuilder.FieldStep returnsBuilder = builder.nestedField(
-				"returns");
-
-			returnsBuilder.field(
+			builder -> builder.nestedField(
+				"returns"
+			).field(
 				FIELD_NAME_ID
 			).stringValue(
 				"hydra:returns"
-			);
-
-			returnsBuilder.field(
-				FIELD_NAME_TYPE
-			).stringValue(
-				FIELD_NAME_ID
-			);
-		};
+			)
+		);
 
 		contextBuilder.arrayValue(
 		).add(
-			returns
+			builder -> builder.nestedField(
+				"returns"
+			).field(
+				FIELD_NAME_TYPE
+			).stringValue(
+				FIELD_NAME_ID
+			)
 		);
 
 		jsonObjectBuilder.field(
