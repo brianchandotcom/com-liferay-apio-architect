@@ -182,8 +182,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> form = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 			_customPermissionFunctions.put(name, permissionFunction);
@@ -196,7 +195,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						model -> new SingleModelImpl(
 							model, _getResourceName(supplier))
 					).apply(
-						pagination, _getModel(form, body)
+						pagination, _getModel(customRoute, body)
 					));
 
 			_customRouteFunctions.put(name, requestFunction);
@@ -222,8 +221,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> form = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 			_customPermissionFunctions.put(name, permissionFunction);
@@ -236,7 +234,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						model -> new SingleModelImpl(
 							model, _getResourceName(supplier))
 					).apply(
-						pagination, _getModel(form, body), a, b, c, d
+						pagination, _getModel(customRoute, body), a, b, c, d
 					));
 
 			_customRouteFunctions.put(name, requestFunction);
@@ -261,8 +259,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> form = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 			_customPermissionFunctions.put(name, permissionFunction);
@@ -275,7 +272,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						model -> new SingleModelImpl(
 							model, _getResourceName(supplier))
 					).apply(
-						pagination, _getModel(form, body), a, b, c
+						pagination, _getModel(customRoute, body), a, b, c
 					));
 
 			_customRouteFunctions.put(name, requestFunction);
@@ -298,8 +295,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> form = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 			_customPermissionFunctions.put(name, permissionFunction);
@@ -312,7 +308,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						model -> new SingleModelImpl(
 							model, _getResourceName(supplier))
 					).apply(
-						pagination, _getModel(form, body), a, b
+						pagination, _getModel(customRoute, body), a, b
 					));
 
 			_customRouteFunctions.put(name, requestFunction);
@@ -333,8 +329,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> form = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 			_customPermissionFunctions.put(name, permissionFunction);
@@ -347,7 +342,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						model -> new SingleModelImpl(
 							model, _getResourceName(supplier))
 					).apply(
-						pagination, _getModel(form, body), a
+						pagination, _getModel(customRoute, body), a
 					));
 
 			_customRouteFunctions.put(name, requestFunction);
@@ -775,6 +770,29 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			operations.addAll(_createCustomOperations(credentials));
 
 			return operations;
+		}
+
+		private void _calculateForm(
+			CustomRoute customRoute, FormBuilderFunction<T> formBuilderFunction,
+			String name) {
+
+			if (formBuilderFunction != null) {
+				Form<T> form = formBuilderFunction.apply(
+					new FormImpl.BuilderImpl<>(
+						Arrays.asList("p", _name, name), _pathToIdentifierFunction));
+
+				customRoute.setForm(form);
+			}
+		}
+
+		private T _getModel(CustomRoute<T> customRoute, Body body) {
+			Optional<Form<T>> form = customRoute.getForm();
+
+			return form.map(
+				f -> f.get(body)
+			).orElse(
+				null
+			);
 		}
 
 		private List<Operation> _createCustomOperations(
