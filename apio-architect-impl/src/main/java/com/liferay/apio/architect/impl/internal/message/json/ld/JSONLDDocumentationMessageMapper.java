@@ -121,6 +121,7 @@ public class JSONLDDocumentationMessageMapper
 		).stringValue(
 			TYPE_SUPPORTED_PROPERTY
 		);
+
 		jsonObjectBuilder.field(
 			FIELD_NAME_PROPERTY
 		).stringValue(
@@ -137,11 +138,13 @@ public class JSONLDDocumentationMessageMapper
 		).stringValue(
 			resourceType
 		);
+
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
 		).stringValue(
 			TYPE_CLASS
 		);
+
 		jsonObjectBuilder.field(
 			FIELD_NAME_TITLE
 		).stringValue(
@@ -158,6 +161,7 @@ public class JSONLDDocumentationMessageMapper
 		).stringValue(
 			"vocab:" + resourceType + "Collection"
 		);
+
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
 		).stringValue(
