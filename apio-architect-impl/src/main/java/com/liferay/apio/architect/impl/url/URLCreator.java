@@ -17,9 +17,16 @@ package com.liferay.apio.architect.impl.url;
 import static java.lang.String.join;
 
 import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.impl.operation.CreateOperation;
+import com.liferay.apio.architect.impl.operation.DeleteOperation;
+import com.liferay.apio.architect.impl.operation.RetrieveOperation;
+import com.liferay.apio.architect.impl.operation.UpdateOperation;
 import com.liferay.apio.architect.impl.pagination.PageType;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.uri.Path;
+
+import java.util.Optional;
 
 import javax.ws.rs.core.UriBuilder;
 
@@ -136,6 +143,44 @@ public final class URLCreator {
 
 		return createAbsoluteURL(
 			applicationURL, join("/", "p", path.asURI(), name));
+	}
+
+	/**
+	 * Returns the URL for an operation
+	 *
+	 * @param  applicationURL the application URL
+	 * @param  operation the operation to represent
+	 * @return the operation URL
+	 * @review
+	 */
+	public static Optional<String> createOperationURL(
+		ApplicationURL applicationURL, Operation operation) {
+
+		Optional<String> optional = operation.getURIOptional();
+
+		return optional.map(
+			uri -> {
+				if (operation instanceof CreateOperation) {
+					return "p/" + uri;
+				}
+
+				if (operation instanceof DeleteOperation) {
+					return "p/" + uri;
+				}
+
+				if (operation instanceof UpdateOperation) {
+					return "p/" + uri;
+				}
+
+				if (operation instanceof RetrieveOperation) {
+					return "p/" + uri;
+				}
+
+				return null;
+			}
+		).map(
+			uri -> createAbsoluteURL(applicationURL, uri)
+		);
 	}
 
 	/**

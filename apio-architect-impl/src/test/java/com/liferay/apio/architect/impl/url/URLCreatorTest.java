@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.impl.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.impl.url.URLCreator.createCollectionPageURL;
 import static com.liferay.apio.architect.impl.url.URLCreator.createCollectionURL;
 import static com.liferay.apio.architect.impl.url.URLCreator.createNestedCollectionURL;
+import static com.liferay.apio.architect.impl.url.URLCreator.createOperationURL;
 import static com.liferay.apio.architect.impl.url.URLCreator.createSingleURL;
 import static com.liferay.apio.architect.impl.url.URLCreator.getPath;
 
@@ -29,8 +30,15 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 
+import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.impl.operation.CreateOperation;
+import com.liferay.apio.architect.impl.operation.DeleteOperation;
+import com.liferay.apio.architect.impl.operation.RetrieveOperation;
+import com.liferay.apio.architect.impl.operation.UpdateOperation;
 import com.liferay.apio.architect.impl.pagination.PageImpl;
 import com.liferay.apio.architect.impl.pagination.PageType;
+import com.liferay.apio.architect.operation.HTTPMethod;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -38,6 +46,9 @@ import com.liferay.apio.architect.uri.Path;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.junit.Test;
 
@@ -127,11 +138,39 @@ public class URLCreatorTest {
 		assertThat(url, is("www.liferay.com/p/name/id/related"));
 	}
 
+	@Test(expected = NoSuchElementException.class)
+	public void testCreateOperationWithoutURIReturnsOptionalEmpty() {
+		CreateOperation createOperation = new CreateOperation(null, "");
+
+		_validateOperationURL(createOperation, "");
+	}
+
+	@Test
+	public void testCreateOperationWithURIHasValidURL() {
+		CreateOperation createOperation = new CreateOperation(null, "", "name");
+
+		_validateOperationURL(createOperation, "www.liferay.com/p/name");
+	}
+
 	@Test
 	public void testCreateSingleURL() {
 		String url = createSingleURL(_applicationURL, _path);
 
 		assertThat(url, is("www.liferay.com/p/name/id"));
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testDeleteOperationWithoutURIReturnsOptionalEmpty() {
+		DeleteOperation deleteOperation = new DeleteOperation("");
+
+		_validateOperationURL(deleteOperation, "");
+	}
+
+	@Test
+	public void testDeleteOperationWithURIHasValidURL() {
+		DeleteOperation deleteOperation = new DeleteOperation("", "name");
+
+		_validateOperationURL(deleteOperation, "www.liferay.com/p/name");
 	}
 
 	@Test
@@ -141,6 +180,80 @@ public class URLCreatorTest {
 		assertThat(path, is(notNullValue()));
 		assertThat(path.getName(), is("name"));
 		assertThat(path.getId(), is("id"));
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testNotSpecificOperationReturnsOptionalEmpty() {
+		Operation operation = new Operation() {
+
+			@Override
+			public Optional<Form> getFormOptional() {
+				return Optional.empty();
+			}
+
+			@Override
+			public HTTPMethod getHttpMethod() {
+				return null;
+			}
+
+			@Override
+			public String getName() {
+				return null;
+			}
+
+			@Override
+			public Optional<String> getURIOptional() {
+				return Optional.of("name");
+			}
+
+			@Override
+			public boolean isCollection() {
+				return false;
+			}
+
+		};
+
+		_validateOperationURL(operation, "");
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testRetrieveOperationWithoutURIReturnsOptionalEmpty() {
+		RetrieveOperation retrieveOperation = new RetrieveOperation("", false);
+
+		_validateOperationURL(retrieveOperation, "");
+	}
+
+	@Test
+	public void testRetrieveOperationWithURIHasValidURL() {
+		RetrieveOperation retrieveOperation = new RetrieveOperation(
+			"", false, "name");
+
+		_validateOperationURL(retrieveOperation, "www.liferay.com/p/name");
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testUpdateOperationWithoutURIReturnsOptionalEmpty() {
+		UpdateOperation updateOperation = new UpdateOperation(null, "");
+
+		_validateOperationURL(updateOperation, "");
+	}
+
+	@Test
+	public void testUpdateOperationWithURIHasValidURL() {
+		UpdateOperation updateOperation = new UpdateOperation(null, "", "name");
+
+		_validateOperationURL(updateOperation, "www.liferay.com/p/name");
+	}
+
+	private void _validateOperationURL(
+		Operation operation, String expectedURL) {
+
+		Optional<String> optional = createOperationURL(
+			_applicationURL, operation);
+
+		String url = optional.orElseThrow(NoSuchElementException::new);
+
+		assertThat(url, is(expectedURL));
 	}
 
 	private final ApplicationURL _applicationURL = () -> "www.liferay.com/";

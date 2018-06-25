@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.impl.writer;
 
 import static com.liferay.apio.architect.impl.url.URLCreator.createFormURL;
+import static com.liferay.apio.architect.impl.url.URLCreator.createOperationURL;
 
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
@@ -43,6 +44,13 @@ public class OperationWriter {
 
 	public void write(Operation operation) {
 		JSONObjectBuilder operationJSONObjectBuilder = new JSONObjectBuilder();
+
+		Optional<String> urlOptional = createOperationURL(
+			_requestInfo.getApplicationURL(), operation);
+
+		urlOptional.ifPresent(
+			url -> _operationMapper.mapOperationURL(
+				operationJSONObjectBuilder, url));
 
 		Optional<Form> formOptional = operation.getFormOptional();
 
