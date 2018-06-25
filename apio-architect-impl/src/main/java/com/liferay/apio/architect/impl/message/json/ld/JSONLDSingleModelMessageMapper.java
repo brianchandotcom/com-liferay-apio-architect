@@ -352,6 +352,17 @@ public class JSONLDSingleModelMessageMapper<T>
 	}
 
 	@Override
+	public void mapOperationURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
+		jsonObjectBuilder.field(
+			"target"
+		).stringValue(
+			url
+		);
+	}
+
+	@Override
 	public void mapSelfURL(JSONObjectBuilder jsonObjectBuilder, String url) {
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
