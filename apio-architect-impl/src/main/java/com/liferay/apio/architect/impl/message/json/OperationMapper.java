@@ -47,6 +47,16 @@ public interface OperationMapper {
 	}
 
 	/**
+	 * Maps a resource operation's url to its JSON object representation.
+	 *
+	 * @param jsonObjectBuilder the JSON object builder for the operation
+	 * @param url the operation's url
+	 */
+	public default void mapOperationURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+	}
+
+	/**
 	 * Maps a resource operation's method to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the operation
