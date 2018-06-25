@@ -14,18 +14,16 @@
 
 package com.liferay.apio.architect.test.util.internal.writer;
 
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
-import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 import static com.liferay.apio.architect.test.util.form.MockFormCreator.createForm;
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
 import static java.util.Arrays.asList;
 
 import com.liferay.apio.architect.impl.message.json.SingleModelMessageMapper;
-import com.liferay.apio.architect.impl.operation.OperationImpl;
+import com.liferay.apio.architect.impl.operation.DeleteOperation;
+import com.liferay.apio.architect.impl.operation.UpdateOperation;
 import com.liferay.apio.architect.impl.single.model.SingleModelImpl;
 import com.liferay.apio.architect.impl.writer.SingleModelWriter;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
@@ -55,13 +53,12 @@ public class MockSingleModelWriter {
 	public static String write(
 		SingleModelMessageMapper<RootModel> singleModelMessageMapper) {
 
-		Operation deleteOperation = new OperationImpl(
-			DELETE, "delete-operation");
-		Operation putOperation = new OperationImpl(
-			createForm("u", "r"), PUT, "update-operation");
+		DeleteOperation deleteOperation = new DeleteOperation("resource");
+		UpdateOperation updateOperation = new UpdateOperation(
+			createForm("u", "r"), "resource");
 
 		SingleModel<RootModel> singleModel = new SingleModelImpl<>(
-			() -> "first", "root", asList(deleteOperation, putOperation));
+			() -> "first", "root", asList(deleteOperation, updateOperation));
 
 		SingleModelWriter<RootModel> singleModelWriter =
 			SingleModelWriter.create(

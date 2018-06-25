@@ -15,9 +15,6 @@
 package com.liferay.apio.architect.impl.routes;
 
 import static com.liferay.apio.architect.impl.routes.RoutesBuilderUtil.provide;
-import static com.liferay.apio.architect.operation.HTTPMethod.POST;
-
-import static java.lang.String.join;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -34,7 +31,7 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.alias.ProvideFunction;
 import com.liferay.apio.architect.impl.form.FormImpl;
-import com.liferay.apio.architect.impl.operation.OperationImpl;
+import com.liferay.apio.architect.impl.operation.CreateOperation;
 import com.liferay.apio.architect.impl.pagination.PageImpl;
 import com.liferay.apio.architect.impl.single.model.SingleModelImpl;
 import com.liferay.apio.architect.operation.Operation;
@@ -410,8 +407,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					false
 				)
 			).map(
-				form -> new OperationImpl(
-					form, POST, join("/", _name, _nestedName, "create"))
+				form -> new CreateOperation(form, _name + "/" + _nestedName)
 			).map(
 				Operation.class::cast
 			).map(

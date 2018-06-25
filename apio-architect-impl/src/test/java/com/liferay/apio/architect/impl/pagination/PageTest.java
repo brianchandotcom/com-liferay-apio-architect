@@ -14,8 +14,6 @@
 
 package com.liferay.apio.architect.impl.pagination;
 
-import static com.liferay.apio.architect.operation.HTTPMethod.POST;
-
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
 import static java.util.Collections.emptyList;
@@ -24,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
 
-import com.liferay.apio.architect.impl.operation.OperationImpl;
+import com.liferay.apio.architect.impl.operation.RetrieveOperation;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -52,7 +50,7 @@ public class PageTest {
 		_path = new Path("name", "id");
 
 		_operations = Collections.singletonList(
-			new OperationImpl(POST, "operation"));
+			new RetrieveOperation("resource", false));
 
 		_page = new PageImpl<>(
 			"name", _pageItems, pagination, _path, _operations);

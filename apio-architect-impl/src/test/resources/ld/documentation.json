@@ -354,7 +354,7 @@
 			"subClassOf": "Collection",
 			"supportedOperation": [
 				{
-					"@id": "_:root",
+					"@id": "_:root/retrieve",
 					"@type": "Operation",
 					"method": "GET",
 					"returns": "Collection"
@@ -389,7 +389,7 @@
 			"subClassOf": "Collection",
 			"supportedOperation": [
 				{
-					"@id": "_:root",
+					"@id": "_:root/retrieve",
 					"@type": "Operation",
 					"method": "GET",
 					"returns": "Collection"

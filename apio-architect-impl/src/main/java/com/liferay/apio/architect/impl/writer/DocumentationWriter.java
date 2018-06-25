@@ -14,11 +14,6 @@
 
 package com.liferay.apio.architect.impl.writer;
 
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
-import static com.liferay.apio.architect.operation.HTTPMethod.GET;
-import static com.liferay.apio.architect.operation.HTTPMethod.POST;
-import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
-
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
@@ -26,9 +21,11 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.impl.documentation.Documentation;
 import com.liferay.apio.architect.impl.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
-import com.liferay.apio.architect.impl.operation.OperationImpl;
+import com.liferay.apio.architect.impl.operation.CreateOperation;
+import com.liferay.apio.architect.impl.operation.DeleteOperation;
+import com.liferay.apio.architect.impl.operation.RetrieveOperation;
+import com.liferay.apio.architect.impl.operation.UpdateOperation;
 import com.liferay.apio.architect.impl.request.RequestInfo;
-import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
@@ -281,17 +278,6 @@ public class DocumentationWriter {
 		).findFirst();
 	}
 
-	private Operation _getOperation(
-		String operationName, Optional<Form> formOptional,
-		HTTPMethod httpMethod) {
-
-		return formOptional.map(
-			form -> new OperationImpl(form, httpMethod, operationName)
-		).orElse(
-			new OperationImpl(httpMethod, operationName)
-		);
-	}
-
 	private void _writeAllFields(
 		Representor representor, JSONObjectBuilder resourceJsonObjectBuilder) {
 
@@ -355,26 +341,24 @@ public class DocumentationWriter {
 			itemRoutesMap.getOrDefault(name, null)
 		).ifPresent(
 			itemRoutes -> {
-				String getOperationName = name + "/retrieve";
-
-				Operation getOperation = new OperationImpl(
-					GET, getOperationName, false);
+				RetrieveOperation retrieveOperation = new RetrieveOperation(
+					name, false);
 
 				_writeOperation(
-					getOperation, resourceJsonObjectBuilder, name, type);
+					retrieveOperation, resourceJsonObjectBuilder, name, type);
 
-				String updateOperationName = name + "/update";
+				Optional<Form> optional = itemRoutes.getFormOptional();
 
-				Operation updateOperation = _getOperation(
-					updateOperationName, itemRoutes.getFormOptional(), PUT);
+				UpdateOperation updateOperation = optional.map(
+					form -> new UpdateOperation(form, name)
+				).orElse(
+					new UpdateOperation(null, name)
+				);
 
 				_writeOperation(
 					updateOperation, resourceJsonObjectBuilder, name, type);
 
-				String deleteOperationName = name + "/delete";
-
-				Operation deleteOperation = new OperationImpl(
-					DELETE, deleteOperationName);
+				DeleteOperation deleteOperation = new DeleteOperation(name);
 
 				_writeOperation(
 					deleteOperation, resourceJsonObjectBuilder, name, type);
@@ -407,13 +391,16 @@ public class DocumentationWriter {
 		).ifPresent(
 			collectionRoutes -> {
 				_writeOperation(
-					new OperationImpl(GET, resource, true),
+					new RetrieveOperation(resource, true),
 					resourceJsonObjectBuilder, resource, type);
 
-				String operationName = resource + "/create";
+				Optional<Form> optional = collectionRoutes.getFormOptional();
 
-				Operation createOperation = _getOperation(
-					operationName, collectionRoutes.getFormOptional(), POST);
+				CreateOperation createOperation = optional.map(
+					form -> new CreateOperation(form, resource)
+				).orElse(
+					new CreateOperation(null, resource)
+				);
 
 				_writeOperation(
 					createOperation, resourceJsonObjectBuilder, resource, type);

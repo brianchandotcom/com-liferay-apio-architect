@@ -76,7 +76,7 @@
 		"numberList": [1, 2],
 		"operation": [
 			{
-				"@id": "_:delete-operation",
+				"@id": "_:resource/delete",
 				"@type": "Operation",
 				"method": "DELETE"
 			}
@@ -135,12 +135,12 @@
 	"numberList2": [6, 7, 8, 9, 10],
 	"operation": [
 		{
-			"@id": "_:delete-operation",
+			"@id": "_:resource/delete",
 			"@type": "Operation",
 			"method": "DELETE"
 		},
 		{
-			"@id": "_:update-operation",
+			"@id": "_:resource/update",
 			"@type": "Operation",
 			"expects": "localhost/o/api/f/u/r",
 			"method": "PUT"
