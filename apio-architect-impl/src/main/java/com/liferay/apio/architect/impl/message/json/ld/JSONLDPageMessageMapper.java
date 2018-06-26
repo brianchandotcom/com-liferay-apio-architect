@@ -14,24 +14,6 @@
 
 package com.liferay.apio.architect.impl.message.json.ld;
 
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_CONTEXT;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_FIRST;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_ID;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_LAST;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_MEMBER;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_NEXT;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_NUMBER_OF_ITEMS;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_PREVIOUS;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_TOTAL_ITEMS;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_TYPE;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_VIEW;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_VOCAB;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.MEDIA_TYPE;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_COLLECTION;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_PARTIAL_COLLECTION_VIEW;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.URL_HYDRA_PROFILE;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.URL_SCHEMA_ORG;
-
 import com.liferay.apio.architect.impl.list.FunctionalList;
 import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.impl.message.json.PageMessageMapper;
@@ -62,7 +44,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 	@Override
 	public String getMediaType() {
-		return MEDIA_TYPE;
+		return "application/ld+json";
 	}
 
 	@Override
@@ -84,7 +66,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			FIELD_NAME_VIEW, FIELD_NAME_ID
+			"view", "@id"
 		).stringValue(
 			url
 		);
@@ -95,7 +77,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			FIELD_NAME_VIEW, FIELD_NAME_FIRST
+			"view", "first"
 		).stringValue(
 			url
 		);
@@ -106,7 +88,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TOTAL_ITEMS
+			"totalItems"
 		).numberValue(
 			totalCount
 		);
@@ -117,7 +99,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			FIELD_NAME_VIEW, FIELD_NAME_LAST
+			"view", "last"
 		).stringValue(
 			url
 		);
@@ -128,7 +110,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TOTAL_ITEMS
+			"totalItems"
 		).numberValue(
 			totalCount
 		);
@@ -139,7 +121,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			FIELD_NAME_VIEW, FIELD_NAME_NEXT
+			"view", "next"
 		).stringValue(
 			url
 		);
@@ -148,7 +130,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	@Override
 	public void mapPageCount(JSONObjectBuilder jsonObjectBuilder, int count) {
 		jsonObjectBuilder.field(
-			FIELD_NAME_NUMBER_OF_ITEMS
+			"numberOfItems"
 		).numberValue(
 			count
 		);
@@ -159,7 +141,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
 		jsonObjectBuilder.nestedField(
-			FIELD_NAME_VIEW, FIELD_NAME_PREVIOUS
+			"view", "previous"
 		).stringValue(
 			url
 		);
@@ -168,29 +150,30 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	@Override
 	public void onFinish(JSONObjectBuilder jsonObjectBuilder, Page<T> page) {
 		jsonObjectBuilder.field(
-			FIELD_NAME_CONTEXT
+			"@context"
 		).arrayValue(
 			arrayBuilder -> arrayBuilder.add(
 				builder -> builder.field(
-					FIELD_NAME_VOCAB
+					"@vocab"
 				).stringValue(
-					URL_SCHEMA_ORG
+					"http://schema.org/"
 				)),
-			arrayBuilder -> arrayBuilder.addString(URL_HYDRA_PROFILE)
+			arrayBuilder -> arrayBuilder.addString(
+				"https://www.w3.org/ns/hydra/core#")
 		);
 
 		jsonObjectBuilder.nestedField(
-			FIELD_NAME_VIEW, FIELD_NAME_TYPE
+			"view", "@type"
 		).arrayValue(
 		).addString(
-			TYPE_PARTIAL_COLLECTION_VIEW
+			"PartialCollectionView"
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TYPE
+			"@type"
 		).arrayValue(
 		).addString(
-			TYPE_COLLECTION
+			"Collection"
 		);
 	}
 
@@ -200,7 +183,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<T> singleModel) {
 
 		pageJSONObjectBuilder.field(
-			FIELD_NAME_MEMBER
+			"member"
 		).arrayValue(
 		).add(
 			itemJSONObjectBuilder
@@ -214,10 +197,10 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		List<?> list, FunctionalList<String> embeddedPathElements) {
 
 		collectionJsonObjectBuilder.field(
-			FIELD_NAME_TYPE
+			"@type"
 		).arrayValue(
 		).addString(
-			TYPE_COLLECTION
+			"Collection"
 		);
 
 		singleModelJSONObjectBuilder.nestedField(
@@ -233,7 +216,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
 
 		collectionJsonObjectBuilder.field(
-			FIELD_NAME_MEMBER
+			"member"
 		).arrayValue(
 		).add(
 			itemJSONObjectBuilder

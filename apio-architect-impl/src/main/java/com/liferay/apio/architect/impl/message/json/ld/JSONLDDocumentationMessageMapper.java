@@ -14,23 +14,6 @@
 
 package com.liferay.apio.architect.impl.message.json.ld;
 
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_CONTEXT;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_DESCRIPTION;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_ID;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_MEMBER;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_NUMBER_OF_ITEMS;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_PROPERTY;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_TITLE;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_TOTAL_ITEMS;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_TYPE;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_VOCAB;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.MEDIA_TYPE;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_API_DOCUMENTATION;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_CLASS;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_COLLECTION;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_SUPPORTED_PROPERTY;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.URL_HYDRA_PROFILE;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.URL_SCHEMA_ORG;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDMessageMapperUtil.getOperationTypes;
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
@@ -62,7 +45,7 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public String getMediaType() {
-		return MEDIA_TYPE;
+		return "application/ld+json";
 	}
 
 	@Override
@@ -70,7 +53,7 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, String description) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_DESCRIPTION
+			"description"
 		).stringValue(
 			description
 		);
@@ -82,13 +65,13 @@ public class JSONLDDocumentationMessageMapper
 		Operation operation) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_ID
+			"@id"
 		).stringValue(
 			"_:" + operation.getName()
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TYPE
+			"@type"
 		).arrayValue(
 		).addAllStrings(
 			getOperationTypes(operation)
@@ -112,13 +95,13 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, String fieldName) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TYPE
+			"@type"
 		).stringValue(
-			TYPE_SUPPORTED_PROPERTY
+			"SupportedProperty"
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_PROPERTY
+			"property"
 		).stringValue(
 			fieldName
 		);
@@ -129,19 +112,19 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, String resourceType) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_ID
+			"@id"
 		).stringValue(
 			resourceType
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TYPE
+			"@type"
 		).stringValue(
-			TYPE_CLASS
+			"Class"
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TITLE
+			"title"
 		).stringValue(
 			resourceType
 		);
@@ -152,21 +135,21 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, String resourceType) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_ID
+			"@id"
 		).stringValue(
 			"vocab:" + resourceType + "Collection"
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TYPE
+			"@type"
 		).stringValue(
-			TYPE_CLASS
+			"Class"
 		);
 
 		jsonObjectBuilder.field(
 			"subClassOf"
 		).stringValue(
-			TYPE_COLLECTION
+			"Collection"
 		);
 
 		jsonObjectBuilder.field(
@@ -176,14 +159,13 @@ public class JSONLDDocumentationMessageMapper
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TITLE
+			"title"
 		).stringValue(
 			resourceType + "Collection"
 		);
 
 		Stream.of(
-			FIELD_NAME_TOTAL_ITEMS, FIELD_NAME_MEMBER,
-			FIELD_NAME_NUMBER_OF_ITEMS
+			"totalItems", "member", "numberOfItems"
 		).forEach(
 			fieldName -> {
 				JSONObjectBuilder propertyJsonObjectBuilder =
@@ -200,7 +182,7 @@ public class JSONLDDocumentationMessageMapper
 	@Override
 	public void mapTitle(JSONObjectBuilder jsonObjectBuilder, String title) {
 		jsonObjectBuilder.field(
-			FIELD_NAME_TITLE
+			"title"
 		).stringValue(
 			title
 		);
@@ -211,27 +193,28 @@ public class JSONLDDocumentationMessageMapper
 		JSONObjectBuilder jsonObjectBuilder, Documentation documentation) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_CONTEXT
+			"@context"
 		).arrayValue(
 			arrayBuilder -> arrayBuilder.add(
 				builder -> builder.field(
-					FIELD_NAME_VOCAB
+					"@vocab"
 				).stringValue(
-					URL_SCHEMA_ORG
+					"http://schema.org/"
 				)
 			),
-			arrayBuilder -> arrayBuilder.addString(URL_HYDRA_PROFILE),
+			arrayBuilder -> arrayBuilder.addString(
+				"https://www.w3.org/ns/hydra/core#"),
 			arrayBuilder -> arrayBuilder.add(
 				builder -> builder.field(
 					"expects"
 				).fields(
 					nestedBuilder -> nestedBuilder.field(
-						FIELD_NAME_TYPE
+						"@type"
 					).stringValue(
-						FIELD_NAME_ID
+						"@id"
 					),
 					nestedBuilder -> nestedBuilder.field(
-						FIELD_NAME_ID
+						"@id"
 					).stringValue(
 						"hydra:expects"
 					)
@@ -240,29 +223,29 @@ public class JSONLDDocumentationMessageMapper
 					"returns"
 				).fields(
 					nestedBuilder -> nestedBuilder.field(
-						FIELD_NAME_ID
+						"@id"
 					).stringValue(
 						"hydra:returns"
 					),
 					nestedBuilder -> nestedBuilder.field(
-						FIELD_NAME_TYPE
+						"@type"
 					).stringValue(
-						FIELD_NAME_ID
+						"@id"
 					)
 				)
 			)
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_ID
+			"@id"
 		).stringValue(
 			"/doc"
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TYPE
+			"@type"
 		).stringValue(
-			TYPE_API_DOCUMENTATION
+			"ApiDocumentation"
 		);
 	}
 
@@ -314,7 +297,7 @@ public class JSONLDDocumentationMessageMapper
 			value = "http://www.w3.org/2002/07/owl#Nothing";
 		}
 		else if (operation.isCollection() && httpMethod.equals(GET)) {
-			value = TYPE_COLLECTION;
+			value = "Collection";
 		}
 		else {
 			value = resourceName;
