@@ -39,7 +39,6 @@ import com.liferay.apio.architect.uri.Path;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -55,7 +54,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		Function<String, Try<SingleModel<T>>> singleModelFunction,
 		ThrowableSupplier<CollectionRoutes<T, S>> collectionRoutesSupplier,
 		ThrowableSupplier<Representor<T>> representorSupplier,
-		Supplier<Optional<ItemRoutes<T, S>>> itemRoutesSupplier,
+		ThrowableSupplier<ItemRoutes<T, S>> itemRoutesSupplier,
 		ThrowableFunction<String, NestedCollectionRoutes<T, S, Object>>
 			nestedCollectionRoutesFunction,
 		IdentifierFunction<S> identifierFunction) {
@@ -112,8 +111,8 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 	@Override
 	public Response deleteCollectionItem(String id) throws Exception {
-		ThrowableConsumer<S> deleteItemThrowableConsumer = Try.fromOptional(
-			_itemRoutesSupplier::get, notFound(_name)
+		ThrowableConsumer<S> deleteItemThrowableConsumer = Try.fromFallible(
+			_itemRoutesSupplier
 		).mapOptional(
 			ItemRoutes::getDeleteConsumerOptional, notAllowed(DELETE, _name, id)
 		).map(
@@ -172,8 +171,8 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 	@Override
 	public Try<SingleModel<T>> updateCollectionItem(String id, Body body) {
-		return Try.fromOptional(
-			_itemRoutesSupplier::get, notFound(_name, id)
+		return Try.fromFallible(
+			_itemRoutesSupplier
 		).mapOptional(
 			ItemRoutes::getUpdateItemFunctionOptional,
 			notAllowed(PUT, _name, id)
@@ -200,7 +199,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	private final ThrowableSupplier<CollectionRoutes<T, S>>
 		_collectionRoutesSupplier;
 	private final HttpServletRequest _httpServletRequest;
-	private final Supplier<Optional<ItemRoutes<T, S>>> _itemRoutesSupplier;
+	private final ThrowableSupplier<ItemRoutes<T, S>> _itemRoutesSupplier;
 	private final String _name;
 	private final ThrowableFunction
 		<String, NestedCollectionRoutes<T, S, Object>>

@@ -24,9 +24,6 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
-import java.util.Optional;
-import java.util.function.Function;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -41,7 +38,7 @@ public class FormEndpoint {
 	public FormEndpoint(
 		ThrowableFunction<String, CollectionRoutes<Object, Object>>
 			collectionRoutesFunction,
-		Function<String, Optional<ItemRoutes<Object, Object>>>
+		ThrowableFunction<String, ItemRoutes<Object, Object>>
 			itemRoutesFunction,
 		ThrowableBiFunction
 			<String, String, NestedCollectionRoutes<Object, Object, Object>>
@@ -105,17 +102,17 @@ public class FormEndpoint {
 	@Path("u/{name}")
 	public Try<Form> updaterForm(@PathParam("name") String name) {
 		return Try.fromOptional(
-			() -> _itemRoutesFunction.apply(
-				name
-			).flatMap(
+			() -> _itemRoutesFunction.andThen(
 				ItemRoutes::getFormOptional
+			).apply(
+				name
 			),
 			notFound(name));
 	}
 
 	private final ThrowableFunction<String, CollectionRoutes<Object, Object>>
 		_collectionRoutesFunction;
-	private final Function<String, Optional<ItemRoutes<Object, Object>>>
+	private final ThrowableFunction<String, ItemRoutes<Object, Object>>
 		_itemRoutesFunction;
 	private final ThrowableBiFunction
 		<String, String, NestedCollectionRoutes<Object, Object, Object>>

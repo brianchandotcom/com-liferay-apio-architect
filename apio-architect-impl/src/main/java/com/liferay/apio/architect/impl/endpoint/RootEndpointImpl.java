@@ -82,8 +82,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	@Override
 	public FormEndpoint formEndpoint() {
 		return new FormEndpoint(
-			this::_getCollectionRoutesOrFail,
-			_itemRouterManager::getItemRoutesOptional,
+			this::_getCollectionRoutesOrFail, this::_getItemRoutesOrFail,
 			this::_getNestedCollectionRoutesOrFail);
 	}
 
@@ -116,8 +115,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		return new PageEndpointImpl<>(
 			name, _httpServletRequest, id -> _getSingleModelTry(name, id),
 			() -> _getCollectionRoutesOrFail(name),
-			() -> _getRepresentorOrFail(name),
-			() -> _itemRouterManager.getItemRoutesOptional(name),
+			() -> _getRepresentorOrFail(name), () -> _getItemRoutesOrFail(name),
 			nestedName -> _getNestedCollectionRoutesOrFail(name, nestedName),
 			_pathIdentifierMapperManager::mapToIdentifierOrFail);
 	}
@@ -127,6 +125,13 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		Optional<CollectionRoutes<Object, Object>> optional =
 			_collectionRouterManager.getCollectionRoutesOptional(name);
+
+		return optional.orElseThrow(notFound(name));
+	}
+
+	private ItemRoutes<Object, Object> _getItemRoutesOrFail(String name) {
+		Optional<ItemRoutes<Object, Object>> optional =
+			_itemRouterManager.getItemRoutesOptional(name);
 
 		return optional.orElseThrow(notFound(name));
 	}
@@ -151,10 +156,8 @@ public class RootEndpointImpl implements RootEndpoint {
 	private Try<SingleModel<Object>> _getSingleModelTry(
 		String name, String id) {
 
-		return Try.success(
-			name
-		).mapOptional(
-			_itemRouterManager::getItemRoutesOptional
+		return Try.fromFallible(
+			() -> _getItemRoutesOrFail(name)
 		).mapOptional(
 			ItemRoutes::getItemFunctionOptional, notFound(name, id)
 		).map(
