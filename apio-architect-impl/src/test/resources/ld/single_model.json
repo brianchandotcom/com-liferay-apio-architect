@@ -1,18 +1,15 @@
 {
 	"@context": [
-		{"embedded2": {"@type": "@id"}},
-		{"linked1": {"@type": "@id"}},
-		{"linked2": {"@type": "@id"}},
-		{"relatedCollection1": {"@type": "@id"}},
-		{"relatedCollection2": {"@type": "@id"}},
-		{"@vocab": "http://schema.org/"},
+		{ "embedded2": { "@type": "@id" } },
+		{ "linked1": { "@type": "@id" } },
+		{ "linked2": { "@type": "@id" } },
+		{ "relatedCollection1": { "@type": "@id" } },
+		{ "relatedCollection2": { "@type": "@id" } },
+		{ "@vocab": "http://schema.org/" },
 		"https://www.w3.org/ns/hydra/core#"
 	],
 	"@id": "localhost/o/api/p/model/first",
-	"@type": [
-		"Type 1",
-		"Type 2"
-	],
+	"@type": ["Type 1", "Type 2"],
 	"applicationRelativeURL1": "localhost/o/api/first",
 	"binary1": "localhost/o/api/b/model/first/binary1",
 	"binary2": "localhost/o/api/b/model/first/binary2",
@@ -24,8 +21,8 @@
 	"date2": "2017-04-03T18:36Z",
 	"embedded1": {
 		"@context": [
-			{"linked": {"@type": "@id"}},
-			{"relatedCollection": {"@type": "@id"}}
+			{ "linked": { "@type": "@id" } },
+			{ "relatedCollection": { "@type": "@id" } }
 		],
 		"@id": "localhost/o/api/p/first-inner-model/first",
 		"@type": ["Type"],
@@ -34,9 +31,9 @@
 		"booleanList": [true, false],
 		"embedded": {
 			"@context": [
-				{"embedded": {"@type": "@id"}},
-				{"linked": {"@type": "@id"}},
-				{"relatedCollection": {"@type": "@id"}}
+				{ "embedded": { "@type": "@id" } },
+				{ "linked": { "@type": "@id" } },
+				{ "relatedCollection": { "@type": "@id" } }
 			],
 			"@id": "localhost/o/api/p/second-inner-model/first",
 			"@type": ["Type"],
@@ -82,7 +79,7 @@
 		"string2": "string2"
 	},
 	"nested2": {
-		"@context": [{"linked3": {"@type": "@id"}}],
+		"@context": [ { "linked3": { "@type": "@id" } } ],
 		"@type": ["Type 4"],
 		"linked3": "localhost/o/api/p/third-inner-model/fifth",
 		"nested3": {
