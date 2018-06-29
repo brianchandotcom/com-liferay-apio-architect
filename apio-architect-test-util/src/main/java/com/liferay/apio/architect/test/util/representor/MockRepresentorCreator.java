@@ -136,6 +136,18 @@ public class MockRepresentorCreator {
 			"localizedString1", (model, acceptLanguage) -> "Translated 1"
 		).addLocalizedStringByLanguage(
 			"localizedString2", (model, acceptLanguage) -> "Translated 2"
+		).addNestedList(
+			"nestedList",
+			__ -> asList((FirstEmbeddedModel)() -> "id 1", () -> "id 2"),
+			nestedListBuilder -> nestedListBuilder.types(
+				"Type 6"
+			).addNumber(
+				"number1", __ -> 2017
+			).addString(
+				"string1", FirstEmbeddedModel::getId
+			).addString(
+				"string2", __ -> "string2"
+			).build()
 		).addNumber(
 			"number1", __ -> 2017
 		).addNumber(

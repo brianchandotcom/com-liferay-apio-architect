@@ -89,6 +89,26 @@
 		"number1": 42,
 		"string1": "first"
 	},
+	"nestedList": {
+		"@type": [
+			"Collection"
+		],
+		"member": [
+			{
+				"@type": ["Type 6"],
+				"number1": 2017,
+				"string1": "id 1",
+				"string2": "string2"
+			},
+			{
+				"@type": ["Type 6"],
+				"number1": 2017,
+				"string1": "id 2",
+				"string2": "string2"
+			}
+		],
+		"totalItems": 2
+	},
 	"number1": 2017,
 	"number2": 42,
 	"numberList1": [1, 2, 3, 4, 5],
