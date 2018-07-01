@@ -55,7 +55,8 @@ import javax.ws.rs.core.HttpHeaders;
  * @author Jorge Ferrer
  * @param  <T> the model's type
  */
-public interface PageMessageMapper<T> extends MessageMapper<Page<T>> {
+public interface PageMessageMapper<T>
+	extends MessageMapper<Page<T>>, OperationMapper {
 
 	/**
 	 * Returns the {@link SingleModelMessageMapper} used by the item methods.
@@ -570,6 +571,7 @@ public interface PageMessageMapper<T> extends MessageMapper<Page<T>> {
 	 *        operation
 	 * @param url the operation form's URL
 	 */
+	@Override
 	public default void mapOperationFormURL(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, String url) {
@@ -591,6 +593,7 @@ public interface PageMessageMapper<T> extends MessageMapper<Page<T>> {
 	 *        operation
 	 * @param httpMethod the operation's method
 	 */
+	@Override
 	public default void mapOperationMethod(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
@@ -649,6 +652,7 @@ public interface PageMessageMapper<T> extends MessageMapper<Page<T>> {
 	 *        operation
 	 * @param operation the operation
 	 */
+	@Override
 	public default void onFinishOperation(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
@@ -687,6 +691,7 @@ public interface PageMessageMapper<T> extends MessageMapper<Page<T>> {
 	 *        operation
 	 * @param operation the operation
 	 */
+	@Override
 	public default void onStartOperation(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {

@@ -19,9 +19,12 @@ import com.liferay.apio.architect.impl.internal.alias.PathFunction;
 import com.liferay.apio.architect.impl.internal.alias.RepresentorFunction;
 import com.liferay.apio.architect.impl.internal.alias.SingleModelFunction;
 import com.liferay.apio.architect.impl.internal.list.FunctionalList;
+import com.liferay.apio.architect.impl.internal.message.json.JSONObjectBuilder;
+import com.liferay.apio.architect.impl.internal.message.json.OperationMapper;
 import com.liferay.apio.architect.impl.internal.request.RequestInfo;
 import com.liferay.apio.architect.impl.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.impl.internal.writer.FieldsWriter;
+import com.liferay.apio.architect.impl.internal.writer.OperationWriter;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.single.model.SingleModel;
@@ -70,6 +73,23 @@ public class WriterUtil {
 				singleModel, requestInfo, baseRepresentor, path,
 				embeddedPathElements, singleModelFunction)
 		);
+	}
+
+	/**
+	 * Returns the {@link OperationWriter} for a given model
+	 *
+	 * @param  operationMapper the mapper for the model
+	 * @param  requestInfo the current request's information
+	 * @param  jsonObjectBuilder the current JSON object builder
+	 * @return the {@code OperationWriter} for the model
+	 * @review
+	 */
+	public static OperationWriter getOperationWriter(
+		OperationMapper operationMapper, RequestInfo requestInfo,
+		JSONObjectBuilder jsonObjectBuilder) {
+
+		return new OperationWriter(
+			operationMapper, requestInfo, jsonObjectBuilder);
 	}
 
 	/**

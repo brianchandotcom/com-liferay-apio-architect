@@ -16,6 +16,7 @@ package com.liferay.apio.architect.impl.internal.writer;
 
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getFieldsWriter;
+import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getOperationWriter;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getPathOptional;
 
 import com.google.gson.JsonObject;
@@ -88,7 +89,6 @@ public class SingleModelWriter<T> {
 	 *         model's {@code Representor} and {@code Path} exist; returns
 	 *         {@code Optional#empty()} otherwise
 	 */
-	@SuppressWarnings("Duplicates")
 	public Optional<String> write() {
 		Optional<Path> pathOptional = getPathOptional(
 			_singleModel, _pathFunction, _representorFunction::apply);
@@ -164,31 +164,10 @@ public class SingleModelWriter<T> {
 
 		List<Operation> operations = _singleModel.getOperations();
 
-		operations.forEach(
-			operation -> {
-				JSONObjectBuilder operationJSONObjectBuilder =
-					new JSONObjectBuilder();
+		OperationWriter operationWriter = getOperationWriter(
+			_singleModelMessageMapper, _requestInfo, _jsonObjectBuilder);
 
-				_singleModelMessageMapper.onStartOperation(
-					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
-
-				Optional<Form> formOptional = operation.getFormOptional();
-
-				formOptional.map(
-					form -> createFormURL(
-						_requestInfo.getApplicationURL(), form)
-				).ifPresent(
-					url -> _singleModelMessageMapper.mapOperationFormURL(
-						_jsonObjectBuilder, operationJSONObjectBuilder, url)
-				);
-
-				_singleModelMessageMapper.mapOperationMethod(
-					_jsonObjectBuilder, operationJSONObjectBuilder,
-					operation.getHttpMethod());
-
-				_singleModelMessageMapper.onFinishOperation(
-					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
-			});
+		operations.forEach(operationWriter::write);
 
 		fieldsWriter.writeRelatedModels(
 			singleModel -> getPathOptional(

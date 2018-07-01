@@ -41,7 +41,7 @@ import java.util.List;
  * @param  <T> the model's type
  */
 public interface SingleModelMessageMapper<T>
-	extends MessageMapper<SingleModel<T>> {
+	extends MessageMapper<SingleModel<T>>, OperationMapper {
 
 	/**
 	 * Maps a resource's boolean field to its JSON object representation.
@@ -285,32 +285,6 @@ public interface SingleModelMessageMapper<T>
 	}
 
 	/**
-	 * Maps a resource operation form's URL to its JSON object representation.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param url the operation form's URL
-	 */
-	public default void mapOperationFormURL(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, String url) {
-	}
-
-	/**
-	 * Maps a resource operation's method to its JSON object representation.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param httpMethod the operation's method
-	 */
-	public default void mapOperationMethod(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
-	}
-
-	/**
 	 * Maps a resource's URL to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the model
@@ -402,20 +376,6 @@ public interface SingleModelMessageMapper<T>
 	}
 
 	/**
-	 * Finishes the operation. This is the final operation-mapper method the
-	 * writer calls.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param operation the operation
-	 */
-	public default void onFinishOperation(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
-	}
-
-	/**
 	 * Starts an embedded model's operation. This is the first
 	 * embedded-operation-mapper method the writer calls.
 	 *
@@ -461,20 +421,6 @@ public interface SingleModelMessageMapper<T>
 	public default void onStartNestedCollectionItem(
 		JSONObjectBuilder collectionJsonObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
-	}
-
-	/**
-	 * Starts an operation. This is the first operation-mapper method the writer
-	 * calls.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param operation the operation
-	 */
-	public default void onStartOperation(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
 	}
 
 }
