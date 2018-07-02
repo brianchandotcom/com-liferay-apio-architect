@@ -408,6 +408,9 @@ public class PageWriter<T> {
 					_jsonObjectBuilder, itemJsonObjectBuilder,
 					embeddedPathElements1, resourceURL));
 
+		_writePageNestedResources(
+			baseRepresentorFunction, singleModel, itemJsonObjectBuilder, null);
+
 		_writeNestedLists(
 			baseRepresentorFunction, singleModel, itemJsonObjectBuilder);
 
@@ -613,6 +616,10 @@ public class PageWriter<T> {
 					_jsonObjectBuilder, itemJsonObjectBuilder,
 					resourceEmbeddedPathElements, url));
 
+		_writeNestedLists(
+			baseRepresentorFunction, singleModel, itemJsonObjectBuilder,
+			embeddedPathElements);
+
 		_writeNestedResources(
 			baseRepresentorFunction, singleModel, itemJsonObjectBuilder,
 			rootSingleModel, embeddedPathElements);
@@ -713,6 +720,45 @@ public class PageWriter<T> {
 					__ -> Optional.of(
 						nestedFieldFunction.getNestedRepresentor()),
 					rootSingleModel);
+			}
+		);
+	}
+
+	private <U> void _writePageNestedResources(
+		BaseRepresentorFunction baseRepresentorFunction,
+		SingleModel<U> singleModel, JSONObjectBuilder itemJsonObjectBuilder,
+		FunctionalList<String> embeddedPathElements) {
+
+		baseRepresentorFunction.apply(
+			singleModel.getResourceName()
+		).<BaseRepresentor<U>>map(
+			Unsafe::unsafeCast
+		).map(
+			BaseRepresentor::getNestedFieldFunctions
+		).map(
+			List::stream
+		).orElseGet(
+			Stream::empty
+		).forEach(
+			nestedFieldFunction -> {
+				Object mappedModel = nestedFieldFunction.apply(
+					singleModel.getModel());
+
+				if (mappedModel == null) {
+					return;
+				}
+
+				FunctionalList<String> embeddedNestedPathElements =
+					new FunctionalList<>(
+						embeddedPathElements, nestedFieldFunction.getKey());
+
+				_writeItemEmbeddedModelFields(
+					new SingleModelImpl<>(
+						mappedModel, "", Collections.emptyList()),
+					embeddedNestedPathElements, itemJsonObjectBuilder,
+					__ -> Optional.of(
+						nestedFieldFunction.getNestedRepresentor()),
+					singleModel);
 			}
 		);
 	}
