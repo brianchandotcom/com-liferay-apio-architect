@@ -58,6 +58,26 @@
 				"link": "www.liferay.com",
 				"linked": "localhost/o/api/p/second-inner-model/second",
 				"localizedString": "Translated",
+				"nestedList": {
+					"@type": [
+						"Collection"
+					],
+					"member": [
+						{
+							"@type": ["Type 7"],
+							"number1": 2018,
+							"string1": "id 1",
+							"string2": "string3"
+						},
+						{
+							"@type": ["Type 7"],
+							"number1": 2018,
+							"string1": "id 2",
+							"string2": "string3"
+						}
+					],
+					"totalItems": 2
+				},
 				"number": 42,
 				"numberList": [1, 2],
 				"relatedCollection": "localhost/o/api/p/first-inner-model/first/models",
@@ -94,13 +114,13 @@
 				],
 				"member": [
 					{
-						"@type": "Type 6",
+						"@type": ["Type 6"],
 						"number1": 2017,
 						"string1": "id 1",
 						"string2": "string2"
 					},
 					{
-						"@type": "Type 6",
+						"@type": ["Type 6"],
 						"number1": 2017,
 						"string1": "id 2",
 						"string2": "string2"
@@ -173,6 +193,26 @@
 				"link": "www.liferay.com",
 				"linked": "localhost/o/api/p/second-inner-model/second",
 				"localizedString": "Translated",
+				"nestedList": {
+					"@type": [
+						"Collection"
+					],
+					"member": [
+						{
+							"@type": ["Type 7"],
+							"number1": 2018,
+							"string1": "id 1",
+							"string2": "string3"
+						},
+						{
+							"@type": ["Type 7"],
+							"number1": 2018,
+							"string1": "id 2",
+							"string2": "string3"
+						}
+					],
+					"totalItems": 2
+				},
 				"number": 42,
 				"numberList": [1, 2],
 				"relatedCollection": "localhost/o/api/p/first-inner-model/first/models",
@@ -209,13 +249,13 @@
 				],
 				"member": [
 					{
-						"@type": "Type 6",
+						"@type": ["Type 6"],
 						"number1": 2017,
 						"string1": "id 1",
 						"string2": "string2"
 					},
 					{
-						"@type": "Type 6",
+						"@type": ["Type 6"],
 						"number1": 2017,
 						"string1": "id 2",
 						"string2": "string2"
@@ -288,6 +328,26 @@
 				"link": "www.liferay.com",
 				"linked": "localhost/o/api/p/second-inner-model/second",
 				"localizedString": "Translated",
+				"nestedList": {
+					"@type": [
+						"Collection"
+					],
+					"member": [
+						{
+							"@type": ["Type 7"],
+							"number1": 2018,
+							"string1": "id 1",
+							"string2": "string3"
+						},
+						{
+							"@type": ["Type 7"],
+							"number1": 2018,
+							"string1": "id 2",
+							"string2": "string3"
+						}
+					],
+					"totalItems": 2
+				},
 				"number": 42,
 				"numberList": [1, 2],
 				"relatedCollection": "localhost/o/api/p/first-inner-model/first/models",
@@ -324,13 +384,13 @@
 				],
 				"member": [
 					{
-						"@type": "Type 6",
+						"@type": ["Type 6"],
 						"number1": 2017,
 						"string1": "id 1",
 						"string2": "string2"
 					},
 					{
-						"@type": "Type 6",
+						"@type": ["Type 6"],
 						"number1": 2017,
 						"string1": "id 2",
 						"string2": "string2"

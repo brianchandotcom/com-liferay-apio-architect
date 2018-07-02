@@ -44,14 +44,34 @@
 			"link": "community.liferay.com",
 			"linked": "localhost/o/api/p/third-inner-model/second",
 			"number": 2017,
-			"numberList": [1],
 			"relatedCollection": "localhost/o/api/p/second-inner-model/first/models",
+			"numberList": [1],
 			"string": "A string",
 			"stringList": ["a"]
 		},
 		"link": "www.liferay.com",
 		"linked": "localhost/o/api/p/second-inner-model/second",
 		"localizedString": "Translated",
+		"nestedList": {
+			"@type": [
+				"Collection"
+			],
+			"member": [
+				{
+					"@type": ["Type 7"],
+					"number1": 2018,
+					"string1": "id 1",
+					"string2": "string3"
+				},
+				{
+					"@type": ["Type 7"],
+					"number1": 2018,
+					"string1": "id 2",
+					"string2": "string3"
+				}
+			],
+			"totalItems": 2
+		},
 		"number": 42,
 		"numberList": [1, 2],
 		"operation": [
