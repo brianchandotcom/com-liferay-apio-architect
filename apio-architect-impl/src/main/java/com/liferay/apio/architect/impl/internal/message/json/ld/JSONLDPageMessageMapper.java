@@ -32,13 +32,16 @@ import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDCon
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.URL_HYDRA_PROFILE;
 import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.URL_SCHEMA_ORG;
 
+import com.liferay.apio.architect.impl.internal.list.FunctionalList;
 import com.liferay.apio.architect.impl.internal.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.impl.internal.message.json.PageMessageMapper;
 import com.liferay.apio.architect.impl.internal.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.single.model.SingleModel;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -123,6 +126,17 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
+	public void mapNestedPageItemTotalCount(
+		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
+
+		jsonObjectBuilder.field(
+			FIELD_NAME_TOTAL_ITEMS
+		).numberValue(
+			totalCount
+		);
+	}
+
+	@Override
 	public void mapNextPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 
@@ -197,6 +211,45 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 		).add(
 			itemJSONObjectBuilder
 		);
+	}
+
+	@Override
+	public void onFinishNestedCollection(
+		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder collectionJsonObjectBuilder, String fieldName,
+		List<?> list, FunctionalList<String> embeddedPathElements) {
+
+		collectionJsonObjectBuilder.field(
+			FIELD_NAME_TYPE
+		).arrayValue(
+		).addString(
+			TYPE_COLLECTION
+		);
+
+		singleModelJSONObjectBuilder.nestedField(
+			embeddedPathElements.head(), _getTail(embeddedPathElements)
+		).objectValue(
+			collectionJsonObjectBuilder
+		);
+	}
+
+	@Override
+	public void onFinishNestedCollectionItem(
+		JSONObjectBuilder collectionJsonObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
+
+		collectionJsonObjectBuilder.field(
+			FIELD_NAME_MEMBER
+		).arrayValue(
+		).add(
+			itemJSONObjectBuilder
+		);
+	}
+
+	private String[] _getTail(FunctionalList<String> embeddedPathElements) {
+		Stream<String> stream = embeddedPathElements.tailStream();
+
+		return stream.toArray(String[]::new);
 	}
 
 	private final SingleModelMessageMapper<T> _singleModelMessageMapper =
