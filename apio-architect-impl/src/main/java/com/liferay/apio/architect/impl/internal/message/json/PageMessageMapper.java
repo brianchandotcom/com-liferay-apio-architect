@@ -93,6 +93,48 @@ public interface PageMessageMapper<T>
 	}
 
 	/**
+	 * Maps a resource operation form's URL to its JSON object representation.
+	 *
+	 * @param pageJSONObjectBuilder the JSON object builder for the page
+	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *        operation
+	 * @param url the operation form's URL
+	 */
+	@Override
+	public default void mapFormURL(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, String url) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper -> singleModelMessageMapper.mapFormURL(
+				pageJSONObjectBuilder, operationJSONObjectBuilder, url));
+	}
+
+	/**
+	 * Maps a resource operation's method to its JSON object representation.
+	 *
+	 * @param pageJSONObjectBuilder the JSON object builder for the page
+	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *        operation
+	 * @param httpMethod the operation's method
+	 */
+	@Override
+	public default void mapHTTPMethod(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper -> singleModelMessageMapper.mapHTTPMethod(
+				pageJSONObjectBuilder, operationJSONObjectBuilder, httpMethod));
+	}
+
+	/**
 	 * Maps a resource's boolean field to its JSON object representation.
 	 *
 	 * @param pageJSONObjectBuilder the JSON object builder for the page
@@ -569,51 +611,6 @@ public interface PageMessageMapper<T>
 	}
 
 	/**
-	 * Maps a resource operation form's URL to its JSON object representation.
-	 *
-	 * @param pageJSONObjectBuilder the JSON object builder for the page
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param url the operation form's URL
-	 */
-	@Override
-	public default void mapOperationFormURL(
-		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, String url) {
-
-		Optional<SingleModelMessageMapper<T>> optional =
-			getSingleModelMessageMapperOptional();
-
-		optional.ifPresent(
-			singleModelMessageMapper ->
-				singleModelMessageMapper.mapOperationFormURL(
-					pageJSONObjectBuilder, operationJSONObjectBuilder, url));
-	}
-
-	/**
-	 * Maps a resource operation's method to its JSON object representation.
-	 *
-	 * @param pageJSONObjectBuilder the JSON object builder for the page
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param httpMethod the operation's method
-	 */
-	@Override
-	public default void mapOperationMethod(
-		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
-
-		Optional<SingleModelMessageMapper<T>> optional =
-			getSingleModelMessageMapperOptional();
-
-		optional.ifPresent(
-			singleModelMessageMapper ->
-				singleModelMessageMapper.mapOperationMethod(
-					pageJSONObjectBuilder, operationJSONObjectBuilder,
-					httpMethod));
-	}
-
-	/**
 	 * Maps the page count to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the page
@@ -631,6 +628,28 @@ public interface PageMessageMapper<T>
 	 */
 	public default void mapPreviousPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
+	}
+
+	/**
+	 * Finishes the operation. This is the final operation-mapper method the
+	 * writer calls.
+	 *
+	 * @param pageJSONObjectBuilder the JSON object builder for the page
+	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *        operation
+	 * @param operation the operation
+	 */
+	@Override
+	public default void onFinish(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper -> singleModelMessageMapper.onFinish(
+				pageJSONObjectBuilder, operationJSONObjectBuilder, operation));
 	}
 
 	/**
@@ -676,30 +695,6 @@ public interface PageMessageMapper<T>
 	public default void onFinishNestedCollectionItem(
 		JSONObjectBuilder collectionJsonObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
-	}
-
-	/**
-	 * Finishes the operation. This is the final operation-mapper method the
-	 * writer calls.
-	 *
-	 * @param pageJSONObjectBuilder the JSON object builder for the page
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param operation the operation
-	 */
-	@Override
-	public default void onFinishOperation(
-		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
-
-		Optional<SingleModelMessageMapper<T>> optional =
-			getSingleModelMessageMapperOptional();
-
-		optional.ifPresent(
-			singleModelMessageMapper ->
-				singleModelMessageMapper.onFinishOperation(
-					pageJSONObjectBuilder, operationJSONObjectBuilder,
-					operation));
 	}
 
 }

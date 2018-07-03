@@ -251,6 +251,30 @@ public class JSONLDSingleModelMessageMapper<T>
 	}
 
 	@Override
+	public void mapFormURL(
+		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, String url) {
+
+		operationJSONObjectBuilder.field(
+			FIELD_NAME_EXPECTS
+		).stringValue(
+			url
+		);
+	}
+
+	@Override
+	public void mapHTTPMethod(
+		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
+
+		operationJSONObjectBuilder.field(
+			FIELD_NAME_METHOD
+		).stringValue(
+			httpMethod.name()
+		);
+	}
+
+	@Override
 	public void mapLink(
 		JSONObjectBuilder jsonObjectBuilder, String fieldName, String url) {
 
@@ -332,30 +356,6 @@ public class JSONLDSingleModelMessageMapper<T>
 	}
 
 	@Override
-	public void mapOperationFormURL(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, String url) {
-
-		operationJSONObjectBuilder.field(
-			FIELD_NAME_EXPECTS
-		).stringValue(
-			url
-		);
-	}
-
-	@Override
-	public void mapOperationMethod(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
-
-		operationJSONObjectBuilder.field(
-			FIELD_NAME_METHOD
-		).stringValue(
-			httpMethod.name()
-		);
-	}
-
-	@Override
 	public void mapSelfURL(JSONObjectBuilder jsonObjectBuilder, String url) {
 		jsonObjectBuilder.field(
 			FIELD_NAME_ID
@@ -397,6 +397,31 @@ public class JSONLDSingleModelMessageMapper<T>
 		).arrayValue(
 		).addAllStrings(
 			types
+		);
+	}
+
+	@Override
+	public void onFinish(
+		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
+
+		operationJSONObjectBuilder.field(
+			FIELD_NAME_ID
+		).stringValue(
+			"_:" + operation.getName()
+		);
+
+		operationJSONObjectBuilder.field(
+			FIELD_NAME_TYPE
+		).stringValue(
+			TYPE_OPERATION
+		);
+
+		singleModelJSONObjectBuilder.field(
+			FIELD_NAME_OPERATION
+		).arrayValue(
+		).add(
+			operationJSONObjectBuilder
 		);
 	}
 
@@ -478,31 +503,6 @@ public class JSONLDSingleModelMessageMapper<T>
 		).arrayValue(
 		).add(
 			itemJSONObjectBuilder
-		);
-	}
-
-	@Override
-	public void onFinishOperation(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
-
-		operationJSONObjectBuilder.field(
-			FIELD_NAME_ID
-		).stringValue(
-			"_:" + operation.getName()
-		);
-
-		operationJSONObjectBuilder.field(
-			FIELD_NAME_TYPE
-		).stringValue(
-			TYPE_OPERATION
-		);
-
-		singleModelJSONObjectBuilder.field(
-			FIELD_NAME_OPERATION
-		).arrayValue(
-		).add(
-			operationJSONObjectBuilder
 		);
 	}
 

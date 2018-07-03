@@ -44,7 +44,7 @@ public interface OperationMapper {
 	 *        operation
 	 * @param url the operation form's URL
 	 */
-	public default void mapOperationFormURL(
+	public default void mapFormURL(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, String url) {
 	}
@@ -57,7 +57,7 @@ public interface OperationMapper {
 	 *        operation
 	 * @param httpMethod the operation's method
 	 */
-	public default void mapOperationMethod(
+	public default void mapHTTPMethod(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
 	}
@@ -71,7 +71,7 @@ public interface OperationMapper {
 	 *        operation
 	 * @param operation the operation
 	 */
-	public default void onFinishOperation(
+	public default void onFinish(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
 	}

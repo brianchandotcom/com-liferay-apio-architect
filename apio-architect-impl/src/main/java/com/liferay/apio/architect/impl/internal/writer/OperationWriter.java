@@ -49,15 +49,15 @@ public class OperationWriter {
 		formOptional.map(
 			form -> createFormURL(_requestInfo.getApplicationURL(), form)
 		).ifPresent(
-			url -> _operationMapper.mapOperationFormURL(
+			url -> _operationMapper.mapFormURL(
 				_jsonObjectBuilder, operationJSONObjectBuilder, url)
 		);
 
-		_operationMapper.mapOperationMethod(
+		_operationMapper.mapHTTPMethod(
 			_jsonObjectBuilder, operationJSONObjectBuilder,
 			operation.getHttpMethod());
 
-		_operationMapper.onFinishOperation(
+		_operationMapper.onFinish(
 			_jsonObjectBuilder, operationJSONObjectBuilder, operation);
 	}
 
