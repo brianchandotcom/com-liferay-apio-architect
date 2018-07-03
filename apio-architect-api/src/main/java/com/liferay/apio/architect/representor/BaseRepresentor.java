@@ -51,6 +51,15 @@ import java.util.function.Function;
 public interface BaseRepresentor<T> {
 
 	/**
+	 * Returns the list containing the application relative URL (depending on
+	 * the server context) field names and the functions to get those fields.
+	 *
+	 * @return the list containing the relative URL field names and functions
+	 * @review
+	 */
+	public List<FieldFunction<T, String>> getApplicationRelativeURLFunctions();
+
+	/**
 	 * Returns a binary resource linked to a model, if present. Returns {@code
 	 * Optional#empty} otherwise.
 	 *
@@ -176,6 +185,20 @@ public interface BaseRepresentor<T> {
 	@ProviderType
 	public interface BaseFirstStep
 		<T, S extends BaseRepresentor<T>, U extends BaseFirstStep<T, S, U>> {
+
+		/**
+		 * Adds information about a resource's application relative URL field
+		 * (relative to the application url, with the server context). This
+		 * field's value will be represented as an absolute URI, by prefixing it
+		 * with the server URL.
+		 *
+		 * @param  key the field's name
+		 * @param  function the function used to get the url
+		 * @return the builder's step
+		 * @review
+		 */
+		public U addApplicationRelativeURL(
+			String key, Function<T, String> function);
 
 		/**
 		 * Adds binary files to a resource.

@@ -16,6 +16,7 @@ package com.liferay.apio.architect.impl.internal.request;
 
 import com.liferay.apio.architect.impl.internal.response.control.Embedded;
 import com.liferay.apio.architect.impl.internal.response.control.Fields;
+import com.liferay.apio.architect.impl.internal.url.ApplicationServerURL;
 import com.liferay.apio.architect.impl.internal.url.ServerURL;
 import com.liferay.apio.architect.language.AcceptLanguage;
 
@@ -50,6 +51,15 @@ public class RequestInfo {
 	 */
 	public AcceptLanguage getAcceptLanguage() {
 		return _acceptLanguage;
+	}
+
+	/**
+	 * Returns the application server URL.
+	 *
+	 * @return the application server URL
+	 */
+	public ApplicationServerURL getApplicationServerURL() {
+		return _applicationServerURL;
 	}
 
 	/**
@@ -109,6 +119,25 @@ public class RequestInfo {
 			return new HttpServletRequestStep();
 		}
 
+		public class ApplicationServerURLStep {
+
+			/**
+			 * Add information about the application server URL to the builder.
+			 *
+			 * @param  applicationServerURL the application server URL
+			 * @return the builder's next step
+			 * @review
+			 */
+			public EmbeddedStep applicationServerURL(
+				ApplicationServerURL applicationServerURL) {
+
+				_applicationServerURL = applicationServerURL;
+
+				return new EmbeddedStep();
+			}
+
+		}
+
 		public class BuildStep {
 
 			/**
@@ -124,6 +153,12 @@ public class RequestInfo {
 		}
 
 		public class EmbeddedStep {
+
+			public EmbeddedStep applicationServerURL(
+				ApplicationServerURL applicationServerURL) {
+
+				return null;
+			}
 
 			/**
 			 * Adds information about embedded resources to the builder.
@@ -197,15 +232,16 @@ public class RequestInfo {
 			 * @param  serverURL the server URL
 			 * @return the builder's next step
 			 */
-			public EmbeddedStep serverURL(ServerURL serverURL) {
+			public ApplicationServerURLStep serverURL(ServerURL serverURL) {
 				_serverURL = serverURL;
 
-				return new EmbeddedStep();
+				return new ApplicationServerURLStep();
 			}
 
 		}
 
 		private AcceptLanguage _acceptLanguage;
+		private ApplicationServerURL _applicationServerURL;
 		private Embedded _embedded;
 		private Fields _fields;
 		private HttpHeaders _httpHeaders;
@@ -219,11 +255,13 @@ public class RequestInfo {
 		_fields = builder._fields;
 		_httpHeaders = builder._httpHeaders;
 		_serverURL = builder._serverURL;
+		_applicationServerURL = builder._applicationServerURL;
 		_embedded = builder._embedded;
 		_httpServletRequest = builder._httpServletRequest;
 	}
 
 	private final AcceptLanguage _acceptLanguage;
+	private final ApplicationServerURL _applicationServerURL;
 	private final Embedded _embedded;
 	private final Fields _fields;
 	private final HttpHeaders _httpHeaders;

@@ -45,6 +45,17 @@ import java.util.function.Function;
 public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 
 	@Override
+	public List<FieldFunction<T, String>> getApplicationRelativeURLFunctions() {
+		return Optional.ofNullable(
+			fieldFunctions.get("APPLICATION_RELATIVE_URL")
+		).<List<FieldFunction<T, String>>>map(
+			Unsafe::unsafeCast
+		).orElseGet(
+			Collections::emptyList
+		);
+	}
+
+	@Override
 	public Optional<BinaryFunction<T>> getBinaryFunction(String binaryId) {
 		return Optional.ofNullable(binaryFunctions.get(binaryId));
 	}
@@ -182,6 +193,19 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		nestedFieldFunctions = new ArrayList<>();
 		relatedModels = new ArrayList<>();
 		types = new ArrayList<>();
+	}
+
+	/**
+	 * Adds a relative URL function to the {@code Representor}.
+	 *
+	 * @param  key the field's name
+	 * @param  function the function used to get the URL
+	 * @review
+	 */
+	protected void addApplicationRelativeURLFunction(
+		String key, Function<T, String> function) {
+
+		_addFieldFunction(key, function, "APPLICATION_RELATIVE_URL");
 	}
 
 	/**
@@ -392,6 +416,16 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		public abstract class BaseFirstStepImpl
 			<U extends BaseRepresentor<T>, V extends BaseFirstStep<T, U, V>>
 				implements BaseFirstStep<T, U, V> {
+
+			@Override
+			public V addApplicationRelativeURL(
+				String key, Function<T, String> function) {
+
+				baseRepresentor.addApplicationRelativeURLFunction(
+					key, function);
+
+				return _this;
+			}
 
 			@Override
 			public V addBinary(String key, BinaryFunction<T> binaryFunction) {
