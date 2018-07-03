@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.cache
 
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.impl.internal.routes.CollectionRoutesImpl.BuilderImpl;
+import com.liferay.apio.architect.impl.internal.url.ApplicationURL;
 import com.liferay.apio.architect.impl.internal.url.ServerURL;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.provider.ProviderManager;
@@ -134,8 +135,8 @@ public class CollectionRouterManagerImpl
 	}
 
 	private static final List<String> _mandatoryClassNames = Arrays.asList(
-		Credentials.class.getName(), ServerURL.class.getName(),
-		Pagination.class.getName());
+		ApplicationURL.class.getName(), Credentials.class.getName(),
+		Pagination.class.getName(), ServerURL.class.getName());
 
 	@Reference
 	private ItemRouterManager _itemRouterManager;
