@@ -24,8 +24,6 @@ import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
-import javax.ws.rs.core.HttpHeaders;
-
 /**
  * Represents the information the server has about a request.
  *
@@ -80,15 +78,6 @@ public class RequestInfo {
 		return _fields;
 	}
 
-	/**
-	 * Returns the HTTP headers.
-	 *
-	 * @return the HTTP headers
-	 */
-	public HttpHeaders getHttpHeaders() {
-		return _httpHeaders;
-	}
-
 	public HttpServletRequest getHttpServletRequest() {
 		return _httpServletRequest;
 	}
@@ -108,15 +97,17 @@ public class RequestInfo {
 	public static class Builder {
 
 		/**
-		 * Adds information about the HTTP headers to the builder.
+		 * Adds information about the HTTP request to the builder.
 		 *
-		 * @param  httpHeaders the request's HTTP headers
+		 * @param  httpServletRequest the HTTP request
 		 * @return the builder's following step
 		 */
-		public HttpServletRequestStep httpHeaders(HttpHeaders httpHeaders) {
-			_httpHeaders = httpHeaders;
+		public ServerURLStep httpServletRequest(
+			HttpServletRequest httpServletRequest) {
 
-			return new HttpServletRequestStep();
+			_httpServletRequest = httpServletRequest;
+
+			return new ServerURLStep();
 		}
 
 		public class ApplicationURLStep {
@@ -182,24 +173,6 @@ public class RequestInfo {
 
 		}
 
-		public class HttpServletRequestStep {
-
-			/**
-			 * Adds information about the HTTP request to the builder.
-			 *
-			 * @param  httpServletRequest the HTTP request
-			 * @return the builder's following step
-			 */
-			public ServerURLStep httpServletRequest(
-				HttpServletRequest httpServletRequest) {
-
-				_httpServletRequest = httpServletRequest;
-
-				return new ServerURLStep();
-			}
-
-		}
-
 		public class LanguageStep {
 
 			/**
@@ -236,7 +209,6 @@ public class RequestInfo {
 		private ApplicationURL _applicationURL;
 		private Embedded _embedded;
 		private Fields _fields;
-		private HttpHeaders _httpHeaders;
 		private HttpServletRequest _httpServletRequest;
 		private ServerURL _serverURL;
 
@@ -245,7 +217,6 @@ public class RequestInfo {
 	private RequestInfo(Builder builder) {
 		_acceptLanguage = builder._acceptLanguage;
 		_fields = builder._fields;
-		_httpHeaders = builder._httpHeaders;
 		_serverURL = builder._serverURL;
 		_applicationURL = builder._applicationURL;
 		_embedded = builder._embedded;
@@ -256,7 +227,6 @@ public class RequestInfo {
 	private final ApplicationURL _applicationURL;
 	private final Embedded _embedded;
 	private final Fields _fields;
-	private final HttpHeaders _httpHeaders;
 	private final HttpServletRequest _httpServletRequest;
 	private final ServerURL _serverURL;
 

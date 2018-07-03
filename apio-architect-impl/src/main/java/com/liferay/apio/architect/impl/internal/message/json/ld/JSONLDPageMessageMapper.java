@@ -43,8 +43,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.ws.rs.core.HttpHeaders;
-
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -168,10 +166,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
-	public void onFinish(
-		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
-		HttpHeaders httpHeaders) {
-
+	public void onFinish(JSONObjectBuilder jsonObjectBuilder, Page<T> page) {
 		jsonObjectBuilder.field(
 			FIELD_NAME_CONTEXT
 		).arrayValue(
@@ -202,8 +197,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	@Override
 	public void onFinishItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<T> singleModel,
-		HttpHeaders httpHeaders) {
+		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<T> singleModel) {
 
 		pageJSONObjectBuilder.field(
 			FIELD_NAME_MEMBER

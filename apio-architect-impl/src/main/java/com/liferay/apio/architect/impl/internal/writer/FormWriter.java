@@ -78,8 +78,7 @@ public class FormWriter {
 			formField -> _formMessageMapper.mapFormField(
 				jsonObjectBuilder, formField));
 
-		_formMessageMapper.onFinish(
-			jsonObjectBuilder, _form, _requestInfo.getHttpHeaders());
+		_formMessageMapper.onFinish(jsonObjectBuilder, _form);
 
 		JsonObject jsonObject = jsonObjectBuilder.build();
 

@@ -42,8 +42,6 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
-import javax.ws.rs.core.HttpHeaders;
-
 /**
  * Provides utility functions for mock writers.
  *
@@ -79,19 +77,16 @@ public class MockWriterUtil {
 	}
 
 	/**
-	 * Returns a {@link RequestInfo} with the provided {@code HttpHeaders}, a
-	 * mock {@code ServerURL}, a mock {@code Embedded} request, and a mock
-	 * {@link com.liferay.apio.architect.language.AcceptLanguage} with {@code
+	 * Returns a {@link RequestInfo} with a mock {@code ServerURL}, {@code
+	 * Embedded} request, and {@link
+	 * com.liferay.apio.architect.language.AcceptLanguage} with {@code
 	 * Locale#getDefault()}.
 	 *
-	 * @param  httpHeaders the {@code HttpHeaders}
 	 * @return the {@code RequestInfo}
 	 */
-	public static RequestInfo getRequestInfo(HttpHeaders httpHeaders) {
+	public static RequestInfo getRequestInfo() {
 		return RequestInfo.create(
-			builder -> builder.httpHeaders(
-				httpHeaders
-			).httpServletRequest(
+			builder -> builder.httpServletRequest(
 				null
 			).serverURL(
 				() -> "localhost"

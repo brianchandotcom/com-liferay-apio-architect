@@ -40,8 +40,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.ws.rs.core.HttpHeaders;
-
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -404,8 +402,7 @@ public class JSONLDSingleModelMessageMapper<T>
 
 	@Override
 	public void onFinish(
-		JSONObjectBuilder jsonObjectBuilder, SingleModel<T> singleModel,
-		HttpHeaders httpHeaders) {
+		JSONObjectBuilder jsonObjectBuilder, SingleModel<T> singleModel) {
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_CONTEXT

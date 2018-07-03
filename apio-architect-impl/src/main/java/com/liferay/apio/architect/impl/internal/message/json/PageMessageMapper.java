@@ -23,8 +23,6 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import java.util.List;
 import java.util.Optional;
 
-import javax.ws.rs.core.HttpHeaders;
-
 /**
  * Maps {@link Page} data to its representation in a JSON object. Instances of
  * this interface work like events. The {@code
@@ -642,12 +640,10 @@ public interface PageMessageMapper<T>
 	 * @param pageJSONObjectBuilder the JSON object builder for the page
 	 * @param itemJSONObjectBuilder the JSON object builder for the item
 	 * @param singleModel the single model
-	 * @param httpHeaders the current request's HTTP headers
 	 */
 	public default void onFinishItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<T> singleModel,
-		HttpHeaders httpHeaders) {
+		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<T> singleModel) {
 	}
 
 	/**

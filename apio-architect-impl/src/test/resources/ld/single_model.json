@@ -44,8 +44,8 @@
 			"link": "community.liferay.com",
 			"linked": "localhost/o/api/p/third-inner-model/second",
 			"number": 2017,
-			"relatedCollection": "localhost/o/api/p/second-inner-model/first/models",
 			"numberList": [1],
+			"relatedCollection": "localhost/o/api/p/second-inner-model/first/models",
 			"string": "A string",
 			"stringList": ["a"]
 		},

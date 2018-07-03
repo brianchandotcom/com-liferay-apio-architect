@@ -14,8 +14,6 @@
 
 package com.liferay.apio.architect.impl.internal.message.json;
 
-import javax.ws.rs.core.HttpHeaders;
-
 /**
  * Maps message data to its representation in a JSON object. Instances of this
  * interface work like events. The message's {@code
@@ -42,10 +40,8 @@ public interface MessageMapper<T> {
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the message
 	 * @param t the message
-	 * @param httpHeaders the current request's HTTP headers
 	 */
-	public default void onFinish(
-		JSONObjectBuilder jsonObjectBuilder, T t, HttpHeaders httpHeaders) {
+	public default void onFinish(JSONObjectBuilder jsonObjectBuilder, T t) {
 	}
 
 }

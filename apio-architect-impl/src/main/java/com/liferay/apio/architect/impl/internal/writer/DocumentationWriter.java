@@ -131,8 +131,7 @@ public class DocumentationWriter {
 				__ -> {
 				}));
 
-		_documentationMessageMapper.onFinish(
-			jsonObjectBuilder, _documentation, _requestInfo.getHttpHeaders());
+		_documentationMessageMapper.onFinish(jsonObjectBuilder, _documentation);
 
 		JsonObject jsonObject = jsonObjectBuilder.build();
 

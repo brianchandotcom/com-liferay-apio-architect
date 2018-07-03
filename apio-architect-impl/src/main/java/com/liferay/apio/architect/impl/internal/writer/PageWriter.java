@@ -120,8 +120,7 @@ public class PageWriter<T> {
 
 		operations.forEach(operationWriter::write);
 
-		_pageMessageMapper.onFinish(
-			_jsonObjectBuilder, _page, _requestInfo.getHttpHeaders());
+		_pageMessageMapper.onFinish(_jsonObjectBuilder, _page);
 
 		JsonObject jsonObject = _jsonObjectBuilder.build();
 
@@ -471,8 +470,7 @@ public class PageWriter<T> {
 			null);
 
 		_pageMessageMapper.onFinishItem(
-			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel,
-			_requestInfo.getHttpHeaders());
+			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel);
 	}
 
 	private <S> void _writeItemEmbeddedModelFields(

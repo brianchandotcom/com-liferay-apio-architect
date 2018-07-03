@@ -31,13 +31,7 @@ import com.liferay.apio.architect.test.util.json.Conditions;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import java.util.Objects;
-
-import javax.ws.rs.core.HttpHeaders;
-
 import org.junit.Test;
-
-import org.mockito.Mockito;
 
 /**
  * @author Alejandro Hernández
@@ -67,22 +61,7 @@ public class ErrorWriterTest {
 			new IllegalArgumentException(), "A title", "A description",
 			"A type", 404);
 
-		HttpHeaders httpHeaders = Mockito.mock(HttpHeaders.class);
-
-		Mockito.when(
-			httpHeaders.getHeaderString("start")
-		).thenReturn(
-			"true"
-		);
-
-		Mockito.when(
-			httpHeaders.getHeaderString("end")
-		).thenReturn(
-			"true"
-		);
-
-		String error = ErrorWriter.writeError(
-			errorMessageMapper, apiError, httpHeaders);
+		String error = ErrorWriter.writeError(errorMessageMapper, apiError);
 
 		Conditions.Builder builder = new Conditions.Builder();
 
@@ -153,16 +132,13 @@ public class ErrorWriterTest {
 
 		@Override
 		public void onFinish(
-			JSONObjectBuilder jsonObjectBuilder, APIError apiError,
-			HttpHeaders httpHeaders) {
+			JSONObjectBuilder jsonObjectBuilder, APIError apiError) {
 
-			if (Objects.equals(httpHeaders.getHeaderString("end"), "true")) {
-				jsonObjectBuilder.field(
-					"end"
-				).booleanValue(
-					true
-				);
-			}
+			jsonObjectBuilder.field(
+				"end"
+			).booleanValue(
+				true
+			);
 		}
 
 	}

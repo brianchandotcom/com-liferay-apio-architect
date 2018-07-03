@@ -16,6 +16,8 @@ package com.liferay.apio.architect.impl.internal.jaxrs.json.writer.base;
 
 import static java.util.Collections.singletonList;
 
+import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
+
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.impl.internal.message.json.MessageMapper;
@@ -50,7 +52,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Request;
@@ -123,9 +124,7 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 		S s = optional.orElseThrow(NotSupportedException::new);
 
 		RequestInfo requestInfo = RequestInfo.create(
-			builder -> builder.httpHeaders(
-				_httpHeaders
-			).httpServletRequest(
+			builder -> builder.httpServletRequest(
 				_httpServletRequest
 			).serverURL(
 				providerManager.provideMandatory(
@@ -155,8 +154,7 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 
 		String result = write(t, s, requestInfo);
 
-		httpHeaders.put(
-			HttpHeaders.CONTENT_TYPE, singletonList(s.getMediaType()));
+		httpHeaders.put(CONTENT_TYPE, singletonList(s.getMediaType()));
 
 		printWriter.println(result);
 
@@ -217,9 +215,6 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 
 	@Reference
 	protected ProviderManager providerManager;
-
-	@Context
-	private HttpHeaders _httpHeaders;
 
 	@Context
 	private HttpServletRequest _httpServletRequest;

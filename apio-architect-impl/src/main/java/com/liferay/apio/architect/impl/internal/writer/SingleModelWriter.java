@@ -146,8 +146,7 @@ public class SingleModelWriter<T> {
 			_representorFunction::apply, _singleModel, _jsonObjectBuilder,
 			null);
 
-		_singleModelMessageMapper.onFinish(
-			_jsonObjectBuilder, _singleModel, _requestInfo.getHttpHeaders());
+		_singleModelMessageMapper.onFinish(_jsonObjectBuilder, _singleModel);
 
 		JsonObject jsonObject = _jsonObjectBuilder.build();
 

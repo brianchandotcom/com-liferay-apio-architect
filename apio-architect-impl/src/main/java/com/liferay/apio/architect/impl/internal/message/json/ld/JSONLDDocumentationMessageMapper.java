@@ -43,8 +43,6 @@ import com.liferay.apio.architect.operation.Operation;
 
 import java.util.stream.Stream;
 
-import javax.ws.rs.core.HttpHeaders;
-
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -209,8 +207,7 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void onFinish(
-		JSONObjectBuilder jsonObjectBuilder, Documentation documentation,
-		HttpHeaders httpHeaders) {
+		JSONObjectBuilder jsonObjectBuilder, Documentation documentation) {
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_CONTEXT
