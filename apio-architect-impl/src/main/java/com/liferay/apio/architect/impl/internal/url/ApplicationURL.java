@@ -21,7 +21,7 @@ package com.liferay.apio.architect.impl.internal.url;
  * @author Javier Gamarra
  * @review
  */
-public interface ApplicationServerURL {
+public interface ApplicationURL {
 
 	/**
 	 * Returns the HTTP servlet request's original URL.

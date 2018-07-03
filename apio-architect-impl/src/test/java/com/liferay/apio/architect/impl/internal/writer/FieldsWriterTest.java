@@ -127,7 +127,7 @@ public class FieldsWriterTest {
 	@Test
 	public void testWriteApplicationRelativeURLFields() {
 		Mockito.when(
-			_requestInfo.getApplicationServerURL()
+			_requestInfo.getApplicationURL()
 		).thenReturn(
 			() -> "localhost/o/api"
 		);
@@ -145,7 +145,7 @@ public class FieldsWriterTest {
 	@Test
 	public void testWriteApplicationRelativeURLFieldsWithFilter() {
 		Mockito.when(
-			_requestInfo.getApplicationServerURL()
+			_requestInfo.getApplicationURL()
 		).thenReturn(
 			() -> "localhost/o/api"
 		);

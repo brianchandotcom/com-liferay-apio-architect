@@ -37,20 +37,20 @@ public final class URLCreator {
 	/**
 	 * Returns the absolute version of an application relative URL
 	 *
-	 * @param  applicationServerURL the application server URL
+	 * @param  applicationURL the application server URL
 	 * @param  relativeURL the relative URL
 	 * @return the absolute URL
 	 * @review
 	 */
 	public static String createAbsoluteURL(
-		ApplicationServerURL applicationServerURL, String relativeURL) {
+		ApplicationURL applicationURL, String relativeURL) {
 
 		if ((relativeURL == null) || relativeURL.isEmpty()) {
 			return null;
 		}
 
 		URI uri = UriBuilder.fromUri(
-			applicationServerURL.get()
+			applicationURL.get()
 		).path(
 			relativeURL
 		).build();

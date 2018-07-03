@@ -95,7 +95,7 @@ public class MockWriterUtil {
 				null
 			).serverURL(
 				() -> "localhost"
-			).applicationServerURL(
+			).applicationURL(
 				() -> "localhost/o/api"
 			).embedded(
 				Arrays.asList("embedded1", "embedded1.embedded")::contains

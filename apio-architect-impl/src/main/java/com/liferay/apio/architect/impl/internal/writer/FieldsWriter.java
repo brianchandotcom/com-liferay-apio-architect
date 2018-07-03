@@ -117,7 +117,7 @@ public class FieldsWriter<T> {
 			BaseRepresentor::getApplicationRelativeURLFunctions,
 			writeField(
 				relativeURL -> URLCreator.createAbsoluteURL(
-					_requestInfo.getApplicationServerURL(), relativeURL),
+					_requestInfo.getApplicationURL(), relativeURL),
 				biConsumer));
 	}
 

@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.impl.internal.provider;
 
-import com.liferay.apio.architect.impl.internal.url.ApplicationServerURL;
+import com.liferay.apio.architect.impl.internal.url.ApplicationURL;
 import com.liferay.apio.architect.impl.internal.url.ServerURL;
 import com.liferay.apio.architect.provider.Provider;
 
@@ -29,12 +29,10 @@ import org.osgi.service.component.annotations.Component;
  * @author Javier Gamarra
  */
 @Component
-public class ApplicationURLProvider implements Provider<ApplicationServerURL> {
+public class ApplicationURLProvider implements Provider<ApplicationURL> {
 
 	@Override
-	public ApplicationServerURL createContext(
-		HttpServletRequest httpServletRequest) {
-
+	public ApplicationURL createContext(HttpServletRequest httpServletRequest) {
 		return () -> {
 			ServerURLProvider serverURLProvider = new ServerURLProvider();
 
