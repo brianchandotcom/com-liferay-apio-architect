@@ -103,6 +103,25 @@ public class FieldsWriter<T> {
 	}
 
 	/**
+	 * Writes the model's application relative URL fields. This method uses a
+	 * consumer so each {@code javax.ws.rs.ext.MessageBodyWriter} can write each
+	 * field differently.
+	 *
+	 * @param biConsumer the consumer that writes each field
+	 * @review
+	 */
+	public void writeApplicationRelativeURLFields(
+		BiConsumer<String, String> biConsumer) {
+
+		writeFields(
+			BaseRepresentor::getApplicationRelativeURLFunctions,
+			writeField(
+				relativeURL -> URLCreator.createAbsoluteURL(
+					_requestInfo.getApplicationServerURL(), relativeURL),
+				biConsumer));
+	}
+
+	/**
 	 * Writes binary resources. This method uses a {@code BiConsumer} so each
 	 * {@code javax.ws.rs.ext.MessageBodyWriter} can write each binary
 	 * differently.

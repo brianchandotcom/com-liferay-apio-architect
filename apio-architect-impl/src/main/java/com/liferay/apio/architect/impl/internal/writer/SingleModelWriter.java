@@ -110,6 +110,10 @@ public class SingleModelWriter<T> {
 		_singleModelMessageMapper.onStart(
 			_jsonObjectBuilder, _singleModel, _requestInfo.getHttpHeaders());
 
+		fieldsWriter.writeApplicationRelativeURLFields(
+			(field, value) -> _singleModelMessageMapper.mapStringField(
+				_jsonObjectBuilder, field, value));
+
 		fieldsWriter.writeBooleanFields(
 			(field, value) -> _singleModelMessageMapper.mapBooleanField(
 				_jsonObjectBuilder, field, value));

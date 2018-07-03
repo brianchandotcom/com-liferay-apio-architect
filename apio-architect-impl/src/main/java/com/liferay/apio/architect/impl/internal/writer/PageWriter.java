@@ -353,6 +353,10 @@ public class PageWriter<T> {
 			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel,
 			_requestInfo.getHttpHeaders());
 
+		fieldsWriter.writeApplicationRelativeURLFields(
+			(field, value) -> _pageMessageMapper.mapItemStringField(
+				_jsonObjectBuilder, itemJsonObjectBuilder, field, value));
+
 		fieldsWriter.writeBooleanFields(
 			(field, value) -> _pageMessageMapper.mapItemBooleanField(
 				_jsonObjectBuilder, itemJsonObjectBuilder, field, value));
@@ -498,6 +502,12 @@ public class PageWriter<T> {
 					embeddedPathElements, field, value));
 
 		fieldsWriter.writeRelativeURLFields(
+			(field, value) ->
+				_pageMessageMapper.mapItemEmbeddedResourceStringField(
+					_jsonObjectBuilder, itemJsonObjectBuilder,
+					embeddedPathElements, field, value));
+
+		fieldsWriter.writeApplicationRelativeURLFields(
 			(field, value) ->
 				_pageMessageMapper.mapItemEmbeddedResourceStringField(
 					_jsonObjectBuilder, itemJsonObjectBuilder,

@@ -25,6 +25,7 @@ import com.liferay.apio.architect.impl.internal.request.RequestInfo;
 import com.liferay.apio.architect.impl.internal.response.control.Embedded;
 import com.liferay.apio.architect.impl.internal.response.control.Fields;
 import com.liferay.apio.architect.impl.internal.unsafe.Unsafe;
+import com.liferay.apio.architect.impl.internal.url.ApplicationServerURL;
 import com.liferay.apio.architect.impl.internal.url.ServerURL;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.representable.NameManager;
@@ -131,6 +132,9 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 			).serverURL(
 				providerManager.provideMandatory(
 					_httpServletRequest, ServerURL.class)
+			).applicationServerURL(
+				providerManager.provideMandatory(
+					_httpServletRequest, ApplicationServerURL.class)
 			).embedded(
 				providerManager.provideOptional(
 					_httpServletRequest, Embedded.class
