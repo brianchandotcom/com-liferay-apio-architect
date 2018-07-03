@@ -251,11 +251,8 @@ public class JSONLDSingleModelMessageMapper<T>
 	}
 
 	@Override
-	public void mapFormURL(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, String url) {
-
-		operationJSONObjectBuilder.field(
+	public void mapFormURL(JSONObjectBuilder jsonObjectBuilder, String url) {
+		jsonObjectBuilder.field(
 			FIELD_NAME_EXPECTS
 		).stringValue(
 			url
@@ -264,10 +261,9 @@ public class JSONLDSingleModelMessageMapper<T>
 
 	@Override
 	public void mapHTTPMethod(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
+		JSONObjectBuilder jsonObjectBuilder, HTTPMethod httpMethod) {
 
-		operationJSONObjectBuilder.field(
+		jsonObjectBuilder.field(
 			FIELD_NAME_METHOD
 		).stringValue(
 			httpMethod.name()
@@ -402,7 +398,7 @@ public class JSONLDSingleModelMessageMapper<T>
 
 	@Override
 	public void onFinish(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder resourceJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
 
 		operationJSONObjectBuilder.field(
@@ -417,7 +413,7 @@ public class JSONLDSingleModelMessageMapper<T>
 			TYPE_OPERATION
 		);
 
-		singleModelJSONObjectBuilder.field(
+		resourceJSONObjectBuilder.field(
 			FIELD_NAME_OPERATION
 		).arrayValue(
 		).add(

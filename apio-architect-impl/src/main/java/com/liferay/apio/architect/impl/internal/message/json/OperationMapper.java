@@ -38,41 +38,35 @@ public interface OperationMapper {
 
 	/**
 	 * Maps a resource operation form's URL to its JSON object representation.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *  @param jsonObjectBuilder the JSON object builder for the
 	 *        operation
 	 * @param url the operation form's URL
 	 */
 	public default void mapFormURL(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, String url) {
+		JSONObjectBuilder jsonObjectBuilder, String url) {
 	}
 
 	/**
 	 * Maps a resource operation's method to its JSON object representation.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *  @param jsonObjectBuilder the JSON object builder for the
 	 *        operation
 	 * @param httpMethod the operation's method
 	 */
 	public default void mapHTTPMethod(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, HTTPMethod httpMethod) {
+		JSONObjectBuilder jsonObjectBuilder, HTTPMethod httpMethod) {
 	}
 
 	/**
 	 * Finishes the operation. This is the final operation-mapper method the
 	 * writer calls.
 	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
+	 * @param resourceJSONObjectBuilder the JSON object builder for the model
 	 * @param operationJSONObjectBuilder the JSON object builder for the
 	 *        operation
 	 * @param operation the operation
 	 */
 	public default void onFinish(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder resourceJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
 	}
 
