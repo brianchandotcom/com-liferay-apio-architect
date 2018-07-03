@@ -199,12 +199,6 @@ public class PageMessageMapperTest {
 		).onFinishOperation(
 			null, null, null
 		);
-
-		Mockito.verify(
-			singleModelMessageMapper
-		).onStartOperation(
-			null, null, null
-		);
 	}
 
 	private static void _callAllItemMethods(
@@ -244,7 +238,6 @@ public class PageMessageMapperTest {
 		pageMessageMapper.mapOperationFormURL(null, null, null);
 		pageMessageMapper.mapOperationMethod(null, null, null);
 		pageMessageMapper.onFinishOperation(null, null, null);
-		pageMessageMapper.onStartOperation(null, null, null);
 	}
 
 }

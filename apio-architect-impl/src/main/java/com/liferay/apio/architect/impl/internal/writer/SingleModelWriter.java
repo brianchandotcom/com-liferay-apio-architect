@@ -107,9 +107,6 @@ public class SingleModelWriter<T> {
 
 		FieldsWriter<T> fieldsWriter = fieldsWriterOptional.get();
 
-		_singleModelMessageMapper.onStart(
-			_jsonObjectBuilder, _singleModel, _requestInfo.getHttpHeaders());
-
 		_writeBasicFields(fieldsWriter, _jsonObjectBuilder);
 
 		fieldsWriter.writeSingleURL(
@@ -209,10 +206,6 @@ public class SingleModelWriter<T> {
 			operation -> {
 				JSONObjectBuilder operationJSONObjectBuilder =
 					new JSONObjectBuilder();
-
-				_singleModelMessageMapper.onStartEmbeddedOperation(
-					jsonObjectBuilder, operationJSONObjectBuilder,
-					embeddedPathElements, operation);
 
 				Optional<Form> formOptional = operation.getFormOptional();
 
@@ -571,9 +564,6 @@ public class SingleModelWriter<T> {
 
 		JSONObjectBuilder itemJsonObjectBuilder = new JSONObjectBuilder();
 
-		_singleModelMessageMapper.onStartNestedCollectionItem(
-			collectionJSONObjectBuilder, itemJsonObjectBuilder, singleModel);
-
 		_writeBasicFields(fieldsWriter, itemJsonObjectBuilder);
 
 		fieldsWriter.writeRelatedModels(
@@ -659,10 +649,6 @@ public class SingleModelWriter<T> {
 		BaseRepresentorFunction baseRepresentorFunction) {
 
 		JSONObjectBuilder pageJSONObjectBuilder = new JSONObjectBuilder();
-
-		_singleModelMessageMapper.onStartNestedCollection(
-			_jsonObjectBuilder, pageJSONObjectBuilder, fieldName, list,
-			embeddedPathElements);
 
 		_singleModelMessageMapper.mapNestedPageItemTotalCount(
 			pageJSONObjectBuilder, list.size());

@@ -59,9 +59,6 @@ public class FormWriter {
 	public String write() {
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		_formMessageMapper.onStart(
-			jsonObjectBuilder, _form, _requestInfo.getHttpHeaders());
-
 		String url = createFormURL(_requestInfo.getApplicationURL(), _form);
 
 		_formMessageMapper.mapFormURL(jsonObjectBuilder, url);

@@ -34,13 +34,8 @@ import javax.ws.rs.core.HttpHeaders;
  * enable this, each method receives a {@link JSONObjectBuilder}.
  *
  * <p>
- * The methods {@link #onStart(JSONObjectBuilder, Object, HttpHeaders)} and
- * {@link #onFinish(JSONObjectBuilder, Object, HttpHeaders)} are called when the
- * writer starts and finishes the page, respectively. The methods {@link
- * #onStartItem(JSONObjectBuilder, JSONObjectBuilder, SingleModel, HttpHeaders)}
- * and {@link #onFinishItem(JSONObjectBuilder, JSONObjectBuilder, SingleModel,
- * HttpHeaders)} are called when the writer starts and finishes an item,
- * respectively. Otherwise, the page message mapper's methods aren't called in a
+ * The method {@link #onFinish} is called when the writer finishes writing the
+ * page. Otherwise, the page message mapper's methods aren't called in a
  * particular order.
  * </p>
  *
@@ -707,77 +702,6 @@ public interface PageMessageMapper<T>
 		optional.ifPresent(
 			singleModelMessageMapper ->
 				singleModelMessageMapper.onFinishOperation(
-					pageJSONObjectBuilder, operationJSONObjectBuilder,
-					operation));
-	}
-
-	/**
-	 * Starts the item. This is the first page message mapper method the writer
-	 * calls for the item.
-	 *
-	 * @param pageJSONObjectBuilder the JSON object builder for the page
-	 * @param itemJSONObjectBuilder the JSON object builder for the item
-	 * @param singleModel the single model
-	 * @param httpHeaders the current request's HTTP headers
-	 */
-	public default void onStartItem(
-		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<T> singleModel,
-		HttpHeaders httpHeaders) {
-	}
-
-	/**
-	 * Starts a nested collection. This is the first nested-collection-mapper
-	 * method the writer calls.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the root
-	 *        model
-	 * @param collectionJsonObjectBuilder the JSON object builder for the
-	 *        collection
-	 * @param fieldName the collection's field name
-	 * @param list the collection
-	 * @param embeddedPathElements the current resource's embedded path elements
-	 */
-	public default void onStartNestedCollection(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder collectionJsonObjectBuilder, String fieldName,
-		List<?> list, FunctionalList<String> embeddedPathElements) {
-	}
-
-	/**
-	 * Starts a nested collection item. This is the first
-	 * nested-collection-item-mapper method the writer calls.
-	 *
-	 * @param collectionJsonObjectBuilder the JSON object builder for the
-	 *        collection
-	 * @param itemJSONObjectBuilder the JSON object builder for the item
-	 * @param singleModel the single model
-	 */
-	public default void onStartNestedCollectionItem(
-		JSONObjectBuilder collectionJsonObjectBuilder,
-		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
-	}
-
-	/**
-	 * Starts an operation. This is the first operation-mapper method the writer
-	 * calls.
-	 *
-	 * @param pageJSONObjectBuilder the JSON object builder for the page
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param operation the operation
-	 */
-	@Override
-	public default void onStartOperation(
-		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
-
-		Optional<SingleModelMessageMapper<T>> optional =
-			getSingleModelMessageMapperOptional();
-
-		optional.ifPresent(
-			singleModelMessageMapper ->
-				singleModelMessageMapper.onStartOperation(
 					pageJSONObjectBuilder, operationJSONObjectBuilder,
 					operation));
 	}

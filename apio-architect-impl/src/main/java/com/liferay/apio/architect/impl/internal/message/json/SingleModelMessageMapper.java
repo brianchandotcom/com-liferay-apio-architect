@@ -30,9 +30,9 @@ import java.util.List;
  * object. To enable this, each method receives a {@link JSONObjectBuilder}.
  *
  * <p>
- * The methods {@link #onStart} and {@link #onFinish} are called when the writer
- * starts and finishes the single model item, respectively. Otherwise, the
- * message mapper's methods aren't called in a particular order.
+ * The method {@link #onFinish} is called when the writer finishes writing the
+ * single model. Otherwise, the single model message mapper's methods aren't
+ * called in a particular order.
  * </p>
  *
  * @author Alejandro Hernández
@@ -371,54 +371,6 @@ public interface SingleModelMessageMapper<T>
 	 * @param singleModel the single model
 	 */
 	public default void onFinishNestedCollectionItem(
-		JSONObjectBuilder collectionJsonObjectBuilder,
-		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
-	}
-
-	/**
-	 * Starts an embedded model's operation. This is the first
-	 * embedded-operation-mapper method the writer calls.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param embeddedPathElements the current resource's embedded path elements
-	 * @param operation the operation
-	 */
-	public default void onStartEmbeddedOperation(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder,
-		FunctionalList<String> embeddedPathElements, Operation operation) {
-	}
-
-	/**
-	 * Starts a nested collection. This is the first nested-collection-mapper
-	 * method the writer calls.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the root
-	 *        model
-	 * @param collectionJsonObjectBuilder the JSON object builder for the
-	 *        collection
-	 * @param fieldName the collection's field name
-	 * @param list the collection
-	 * @param embeddedPathElements the current resource's embedded path elements
-	 */
-	public default void onStartNestedCollection(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder collectionJsonObjectBuilder, String fieldName,
-		List<?> list, FunctionalList<String> embeddedPathElements) {
-	}
-
-	/**
-	 * Starts a nested collection item. This is the first
-	 * nested-collection-item-mapper method the writer calls.
-	 *
-	 * @param collectionJsonObjectBuilder the JSON object builder for the
-	 *        collection
-	 * @param itemJSONObjectBuilder the JSON object builder for the item
-	 * @param singleModel the single model
-	 */
-	public default void onStartNestedCollectionItem(
 		JSONObjectBuilder collectionJsonObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, SingleModel<?> singleModel) {
 	}

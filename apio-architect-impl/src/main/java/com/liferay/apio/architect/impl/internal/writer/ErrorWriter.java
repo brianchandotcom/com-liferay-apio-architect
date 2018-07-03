@@ -50,8 +50,6 @@ public final class ErrorWriter {
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		errorMessageMapper.onStart(jsonObjectBuilder, apiError, httpHeaders);
-
 		Optional<String> optional = apiError.getDescription();
 
 		optional.ifPresent(

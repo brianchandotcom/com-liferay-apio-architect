@@ -95,8 +95,6 @@ public class ErrorWriterTest {
 		).where(
 			"status", is(aJsonInt(equalTo(404)))
 		).where(
-			"start", is(aJsonBoolean(true))
-		).where(
 			"end", is(aJsonBoolean(true))
 		).withStrictModeDeactivated(
 		).build();
@@ -161,20 +159,6 @@ public class ErrorWriterTest {
 			if (Objects.equals(httpHeaders.getHeaderString("end"), "true")) {
 				jsonObjectBuilder.field(
 					"end"
-				).booleanValue(
-					true
-				);
-			}
-		}
-
-		@Override
-		public void onStart(
-			JSONObjectBuilder jsonObjectBuilder, APIError apiError,
-			HttpHeaders httpHeaders) {
-
-			if (Objects.equals(httpHeaders.getHeaderString("start"), "true")) {
-				jsonObjectBuilder.field(
-					"start"
 				).booleanValue(
 					true
 				);

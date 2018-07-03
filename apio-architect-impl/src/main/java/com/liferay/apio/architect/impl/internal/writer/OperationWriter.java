@@ -44,9 +44,6 @@ public class OperationWriter {
 	public void write(Operation operation) {
 		JSONObjectBuilder operationJSONObjectBuilder = new JSONObjectBuilder();
 
-		_operationMapper.onStartOperation(
-			_jsonObjectBuilder, operationJSONObjectBuilder, operation);
-
 		Optional<Form> formOptional = operation.getFormOptional();
 
 		formOptional.map(

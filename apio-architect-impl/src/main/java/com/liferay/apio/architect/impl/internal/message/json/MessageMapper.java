@@ -48,16 +48,4 @@ public interface MessageMapper<T> {
 		JSONObjectBuilder jsonObjectBuilder, T t, HttpHeaders httpHeaders) {
 	}
 
-	/**
-	 * Starts the mapping. This is the first mapper method the writer should
-	 * call.
-	 *
-	 * @param jsonObjectBuilder the JSON object builder for the message
-	 * @param t the message
-	 * @param httpHeaders the current request's HTTP headers
-	 */
-	public default void onStart(
-		JSONObjectBuilder jsonObjectBuilder, T t, HttpHeaders httpHeaders) {
-	}
-
 }

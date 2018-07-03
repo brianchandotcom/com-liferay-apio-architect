@@ -18,12 +18,17 @@ import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 
 /**
- * Maps an {@link Operation} to its representation in a JSON object.
+ * Maps {@link Operation} data to its representation in a JSON object. Instances
+ * of this interface work like events. The different {@code
+ * javax.ws.rs.ext.MessageBodyWriter} call the {@code OperationMapper} methods.
+ * In each method, developers should only map the provided part of the resource
+ * to its representation in a JSON object. To enable this, each method receives
+ * a {@link JSONObjectBuilder}.
  *
  * <p>
- * The methods {@link #onStartOperation} and {@link #onFinishOperation} are
- * called when the writer starts and finishes the operation, respectively.
- * Otherwise, the message mapper's methods aren't called in a particular order.
+ * The method {@link #onFinish} is called when the writer finishes writing the
+ * operation. Otherwise, the operation message mapper's methods aren't called in
+ * a particular order.
  * </p>
  *
  * @author Javier Gamarra
@@ -67,20 +72,6 @@ public interface OperationMapper {
 	 * @param operation the operation
 	 */
 	public default void onFinishOperation(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
-	}
-
-	/**
-	 * Starts an operation. This is the first operation-mapper method the writer
-	 * calls.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param operation the operation
-	 */
-	public default void onStartOperation(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
 	}

@@ -60,7 +60,7 @@ import java.util.stream.Stream;
  * <pre>
  * {@code
  * jsonObjectBuilder
- *      .nestedField("object", "inner","another")
+ *      .nestedField("object", "inner", "another")
  *      .value("Hello World!");
  * }
  * </pre><pre>

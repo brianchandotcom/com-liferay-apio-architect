@@ -93,9 +93,6 @@ public class PageWriter<T> {
 	 *         Optional#empty()} otherwise
 	 */
 	public String write() {
-		_pageMessageMapper.onStart(
-			_jsonObjectBuilder, _page, _requestInfo.getHttpHeaders());
-
 		_pageMessageMapper.mapItemTotalCount(
 			_jsonObjectBuilder, _page.getTotalCount());
 
@@ -385,9 +382,6 @@ public class PageWriter<T> {
 
 		JSONObjectBuilder itemJsonObjectBuilder = new JSONObjectBuilder();
 
-		_pageMessageMapper.onStartNestedCollectionItem(
-			collectionJSONObjectBuilder, itemJsonObjectBuilder, singleModel);
-
 		_writeBasicFields(fieldsWriter, itemJsonObjectBuilder);
 
 		fieldsWriter.writeRelatedModels(
@@ -437,10 +431,6 @@ public class PageWriter<T> {
 		FieldsWriter<T> fieldsWriter = optional.get();
 
 		JSONObjectBuilder itemJsonObjectBuilder = new JSONObjectBuilder();
-
-		_pageMessageMapper.onStartItem(
-			_jsonObjectBuilder, itemJsonObjectBuilder, singleModel,
-			_requestInfo.getHttpHeaders());
 
 		_writeBasicFields(fieldsWriter, itemJsonObjectBuilder);
 
@@ -633,10 +623,6 @@ public class PageWriter<T> {
 		SingleModel singleModel) {
 
 		JSONObjectBuilder pageJSONObjectBuilder = new JSONObjectBuilder();
-
-		_pageMessageMapper.onStartNestedCollection(
-			_jsonObjectBuilder, pageJSONObjectBuilder, fieldName, list,
-			embeddedPathElements);
 
 		_pageMessageMapper.mapNestedPageItemTotalCount(
 			pageJSONObjectBuilder, list.size());

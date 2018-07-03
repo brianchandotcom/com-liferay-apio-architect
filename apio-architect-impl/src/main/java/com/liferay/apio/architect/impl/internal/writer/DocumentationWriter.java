@@ -86,9 +86,6 @@ public class DocumentationWriter {
 	public String write() {
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		_documentationMessageMapper.onStart(
-			jsonObjectBuilder, _documentation, _requestInfo.getHttpHeaders());
-
 		_writeDocumentationMetadata(jsonObjectBuilder);
 
 		Map<String, Representor> representors =
@@ -348,9 +345,6 @@ public class DocumentationWriter {
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		_documentationMessageMapper.onStartProperty(
-			resourceJsonObjectBuilder, jsonObjectBuilder, fieldName);
-
 		_documentationMessageMapper.mapProperty(jsonObjectBuilder, fieldName);
 
 		_documentationMessageMapper.onFinishProperty(
@@ -399,9 +393,6 @@ public class DocumentationWriter {
 
 		JSONObjectBuilder operationJsonObjectBuilder = new JSONObjectBuilder();
 
-		_documentationMessageMapper.onStartOperation(
-			jsonObjectBuilder, operationJsonObjectBuilder, operation);
-
 		_documentationMessageMapper.mapOperation(
 			operationJsonObjectBuilder, resourceName, type, operation);
 
@@ -449,9 +440,6 @@ public class DocumentationWriter {
 			type -> {
 				JSONObjectBuilder resourceJsonObjectBuilder =
 					new JSONObjectBuilder();
-
-				_documentationMessageMapper.onStartResource(
-					jsonObjectBuilder, resourceJsonObjectBuilder, type);
 
 				writeResourceBiConsumer.accept(resourceJsonObjectBuilder, type);
 
