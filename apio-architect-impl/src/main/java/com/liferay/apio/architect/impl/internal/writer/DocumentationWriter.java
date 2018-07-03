@@ -25,7 +25,6 @@ import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.impl.internal.documentation.Documentation;
 import com.liferay.apio.architect.impl.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.impl.internal.message.json.JSONObjectBuilder;
@@ -268,22 +267,6 @@ public class DocumentationWriter {
 		);
 
 		return Stream.concat(fieldNamesStream, nestedFieldNamesStream);
-	}
-
-	private Optional<FormField> _getFormField(
-		String fieldName, Form<FormField> formFieldForm) {
-
-		List<FormField> formFields = formFieldForm.getFormFields();
-
-		Stream<FormField> stream = formFields.stream();
-
-		return stream.filter(
-			formField -> {
-				String name = formField.getName();
-
-				return name.equals(fieldName);
-			}
-		).findFirst();
 	}
 
 	private Optional<String> _getNestedCollectionRouteOptional(
