@@ -35,6 +35,30 @@ import javax.ws.rs.core.UriBuilder;
 public final class URLCreator {
 
 	/**
+	 * Returns the absolute version of an application relative URL
+	 *
+	 * @param  applicationServerURL the application server URL
+	 * @param  relativeURL the relative URL
+	 * @return the absolute URL
+	 * @review
+	 */
+	public static String createAbsoluteURL(
+		ApplicationServerURL applicationServerURL, String relativeURL) {
+
+		if ((relativeURL == null) || relativeURL.isEmpty()) {
+			return null;
+		}
+
+		URI uri = UriBuilder.fromUri(
+			applicationServerURL.get()
+		).path(
+			relativeURL
+		).build();
+
+		return uri.toString();
+	}
+
+	/**
 	 * Returns the absolute version of a relative URL
 	 *
 	 * @param  serverURL the server URL
