@@ -224,6 +224,7 @@ public class DocumentationWriter {
 
 		List<FieldFunction> fieldFunctions = new ArrayList<>();
 
+		fieldFunctions.addAll(representor.getApplicationRelativeURLFunctions());
 		fieldFunctions.addAll(representor.getBinaryFunctions());
 		fieldFunctions.addAll(representor.getBooleanFunctions());
 		fieldFunctions.addAll(representor.getBooleanListFunctions());
@@ -232,6 +233,7 @@ public class DocumentationWriter {
 		fieldFunctions.addAll(representor.getNestedFieldFunctions());
 		fieldFunctions.addAll(representor.getNumberFunctions());
 		fieldFunctions.addAll(representor.getNumberListFunctions());
+		fieldFunctions.addAll(representor.getRelativeURLFunctions());
 		fieldFunctions.addAll(representor.getStringFunctions());
 		fieldFunctions.addAll(representor.getStringListFunctions());
 
