@@ -15,10 +15,11 @@
 package com.liferay.apio.architect.impl.internal.url;
 
 /**
- * Provides the final URL based on the HTTP servlet request. The implementation
- * depends on any proxy configuration, SSO, and so on.
+ * Provides the final URL based on the HTTP servlet request without the context
+ * path. The implementation depends on any proxy configuration, SSO, and so on.
  *
  * @author Javier Gamarra
+ * @review
  */
 public interface ServerURL {
 
