@@ -43,7 +43,7 @@ public class DocumentationMessageMapperManagerImpl
 	public Optional<DocumentationMessageMapper>
 		getDocumentationMessageMapperOptional(Request request) {
 
-		return INSTANCE.getDocumentationMessageMapperOptional(
+		return ManagerCache.INSTANCE.getDocumentationMessageMapperOptional(
 			request, this::computeMessageMappers);
 	}
 

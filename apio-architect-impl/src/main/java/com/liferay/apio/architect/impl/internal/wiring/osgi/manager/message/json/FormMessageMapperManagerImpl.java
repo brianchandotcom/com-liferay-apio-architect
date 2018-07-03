@@ -41,7 +41,7 @@ public class FormMessageMapperManagerImpl
 	public Optional<FormMessageMapper> getFormMessageMapperOptional(
 		Request request) {
 
-		return INSTANCE.getFormMessageMapperOptional(
+		return ManagerCache.INSTANCE.getFormMessageMapperOptional(
 			request, this::computeMessageMappers);
 	}
 

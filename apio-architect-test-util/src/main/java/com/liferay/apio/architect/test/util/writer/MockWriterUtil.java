@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.test.util.writer;
 
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createFirstEmbeddedModelRepresentor;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createRootModelRepresentor;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createSecondEmbeddedModelRepresentor;
@@ -24,6 +23,7 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.impl.internal.operation.OperationImpl;
 import com.liferay.apio.architect.impl.internal.request.RequestInfo;
 import com.liferay.apio.architect.impl.internal.single.model.SingleModelImpl;
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.single.model.SingleModel;
@@ -123,7 +123,7 @@ public class MockWriterUtil {
 
 		if (identifierClass.equals(FirstEmbeddedId.class)) {
 			List<Operation> operations = Collections.singletonList(
-				new OperationImpl(DELETE, "delete-operation"));
+				new OperationImpl(HTTPMethod.DELETE, "delete-operation"));
 
 			return Optional.of(
 				new SingleModelImpl<>(

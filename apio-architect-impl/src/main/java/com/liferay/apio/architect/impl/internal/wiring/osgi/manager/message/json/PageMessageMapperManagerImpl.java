@@ -41,7 +41,7 @@ public class PageMessageMapperManagerImpl
 	public <T> Optional<PageMessageMapper<T>> getPageMessageMapperOptional(
 		Request request) {
 
-		return INSTANCE.getPageMessageMapperOptional(
+		return ManagerCache.INSTANCE.getPageMessageMapperOptional(
 			request, this::computeMessageMappers);
 	}
 

@@ -62,25 +62,26 @@ public class RepresentableManagerImpl
 	public <T extends Identifier> Optional<Class<T>> getIdentifierClassOptional(
 		String name) {
 
-		return INSTANCE.getIdentifierClassOptional(
+		return ManagerCache.INSTANCE.getIdentifierClassOptional(
 			name, this::_computeRepresentables);
 	}
 
 	@Override
 	public Optional<String> getNameOptional(String className) {
-		return INSTANCE.getNameOptional(
+		return ManagerCache.INSTANCE.getNameOptional(
 			className, this::_computeRepresentables);
 	}
 
 	@Override
 	public <T> Optional<Representor<T>> getRepresentorOptional(String name) {
-		return INSTANCE.getRepresentorOptional(
+		return ManagerCache.INSTANCE.getRepresentorOptional(
 			name, this::_computeRepresentables);
 	}
 
 	@Override
 	public Map<String, Representor> getRepresentors() {
-		return INSTANCE.getRepresentorMap(this::_computeRepresentables);
+		return ManagerCache.INSTANCE.getRepresentorMap(
+			this::_computeRepresentables);
 	}
 
 	@Override

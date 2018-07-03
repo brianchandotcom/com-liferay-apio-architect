@@ -48,14 +48,15 @@ public class ItemRouterManagerImpl
 
 	@Override
 	public Map<String, ItemRoutes> getItemRoutes() {
-		return INSTANCE.getItemRoutesMap(this::_computeItemRoutes);
+		return ManagerCache.INSTANCE.getItemRoutesMap(this::_computeItemRoutes);
 	}
 
 	@Override
 	public <T, S> Optional<ItemRoutes<T, S>> getItemRoutesOptional(
 		String name) {
 
-		return INSTANCE.getItemRoutesOptional(name, this::_computeItemRoutes);
+		return ManagerCache.INSTANCE.getItemRoutesOptional(
+			name, this::_computeItemRoutes);
 	}
 
 	private void _computeItemRoutes() {

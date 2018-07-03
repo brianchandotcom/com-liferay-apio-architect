@@ -41,7 +41,7 @@ public class ErrorMessageMapperManagerImpl
 	public Optional<ErrorMessageMapper> getErrorMessageMapperOptional(
 		Request request) {
 
-		return INSTANCE.getErrorMessageMapperOptional(
+		return ManagerCache.INSTANCE.getErrorMessageMapperOptional(
 			request, this::computeMessageMappers);
 	}
 

@@ -43,7 +43,7 @@ public class SingleModelMessageMapperManagerImpl
 	public <T> Optional<SingleModelMessageMapper<T>>
 		getSingleModelMessageMapperOptional(Request request) {
 
-		return INSTANCE.getSingleModelMessageMapperOptional(
+		return ManagerCache.INSTANCE.getSingleModelMessageMapperOptional(
 			request, this::computeMessageMappers);
 	}
 

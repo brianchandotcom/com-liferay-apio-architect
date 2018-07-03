@@ -56,7 +56,7 @@ public class NestedCollectionRouterManagerImpl
 	}
 
 	public Map<String, NestedCollectionRoutes> getNestedCollectionRoutes() {
-		return INSTANCE.getNestedCollectionRoutesMap(
+		return ManagerCache.INSTANCE.getNestedCollectionRoutesMap(
 			this::_computeNestedCollectionRoutes);
 	}
 
@@ -64,7 +64,7 @@ public class NestedCollectionRouterManagerImpl
 	public <T, S, U> Optional<NestedCollectionRoutes<T, S, U>>
 		getNestedCollectionRoutesOptional(String name, String nestedName) {
 
-		return INSTANCE.getNestedCollectionRoutesOptional(
+		return ManagerCache.INSTANCE.getNestedCollectionRoutesOptional(
 			name, nestedName, this::_computeNestedCollectionRoutes);
 	}
 

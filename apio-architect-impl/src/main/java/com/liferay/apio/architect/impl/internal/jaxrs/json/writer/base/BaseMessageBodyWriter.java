@@ -16,8 +16,6 @@ package com.liferay.apio.architect.impl.internal.jaxrs.json.writer.base;
 
 import static java.util.Collections.singletonList;
 
-import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
-
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.impl.internal.message.json.MessageMapper;
@@ -157,7 +155,8 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 
 		String result = write(t, s, requestInfo);
 
-		httpHeaders.put(CONTENT_TYPE, singletonList(s.getMediaType()));
+		httpHeaders.put(
+			HttpHeaders.CONTENT_TYPE, singletonList(s.getMediaType()));
 
 		printWriter.println(result);
 
