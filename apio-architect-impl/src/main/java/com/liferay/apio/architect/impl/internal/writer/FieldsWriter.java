@@ -107,7 +107,7 @@ public class FieldsWriter<T> {
 	 * consumer so each {@code javax.ws.rs.ext.MessageBodyWriter} can write each
 	 * field differently.
 	 *
-	 * @param biConsumer the consumer that writes each field
+	 * @param  biConsumer the consumer that writes each field
 	 * @review
 	 */
 	public void writeApplicationRelativeURLFields(
