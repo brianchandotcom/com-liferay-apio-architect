@@ -16,7 +16,6 @@ package com.liferay.apio.architect.impl.internal.wiring.osgi.manager.representab
 
 import static com.liferay.apio.architect.impl.internal.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
-import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getGenericClassFromProperty;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getTypeParamTry;
 
@@ -25,6 +24,7 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.impl.internal.representor.RepresentorImpl.BuilderImpl;
 import com.liferay.apio.architect.impl.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.base.BaseManager;
+import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.cache.ManagerCache;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
@@ -120,7 +120,7 @@ public class RepresentableManagerImpl
 				String name = representable.getName();
 
 				Optional<Map<String, String>> optional =
-					INSTANCE.getNamesOptional();
+					ManagerCache.INSTANCE.getNamesOptional();
 
 				Optional<String> classNameOptional = optional.map(
 					Map::entrySet
@@ -146,9 +146,9 @@ public class RepresentableManagerImpl
 					unsafeCast(representable), unsafeCast(clazz),
 					relatedCollections);
 
-				INSTANCE.putName(clazz.getName(), name);
-				INSTANCE.putIdentifierClass(name, clazz);
-				INSTANCE.putRepresentor(name, representor);
+				ManagerCache.INSTANCE.putName(clazz.getName(), name);
+				ManagerCache.INSTANCE.putIdentifierClass(name, clazz);
+				ManagerCache.INSTANCE.putRepresentor(name, representor);
 			});
 	}
 

@@ -15,10 +15,10 @@
 package com.liferay.apio.architect.impl.internal.wiring.osgi.manager.router;
 
 import static com.liferay.apio.architect.impl.internal.alias.ProvideFunction.curry;
-import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
 import com.liferay.apio.architect.impl.internal.routes.ItemRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.base.ClassNameBaseManager;
+import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.cache.ManagerCache;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
@@ -106,7 +106,7 @@ public class ItemRouterManagerImpl
 					return;
 				}
 
-				INSTANCE.putItemRoutes(name, itemRoutes);
+				ManagerCache.INSTANCE.putItemRoutes(name, itemRoutes);
 			});
 	}
 

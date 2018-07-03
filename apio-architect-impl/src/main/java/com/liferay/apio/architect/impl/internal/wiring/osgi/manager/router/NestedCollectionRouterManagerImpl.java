@@ -17,13 +17,13 @@ package com.liferay.apio.architect.impl.internal.wiring.osgi.manager.router;
 import static com.liferay.apio.architect.impl.internal.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.TypeArgumentProperties.KEY_PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
-import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getGenericClassFromProperty;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getTypeParamTry;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.internal.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.base.ClassNameBaseManager;
+import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.cache.ManagerCache;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
@@ -187,7 +187,7 @@ public class NestedCollectionRouterManagerImpl
 					return;
 				}
 
-				INSTANCE.putNestedCollectionRoutes(
+				ManagerCache.INSTANCE.putNestedCollectionRoutes(
 					name + "-" + nestedName, nestedCollectionRoutes);
 			});
 	}
