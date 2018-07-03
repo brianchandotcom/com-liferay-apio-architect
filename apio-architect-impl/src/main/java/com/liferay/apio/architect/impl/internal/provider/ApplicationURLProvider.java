@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.impl.internal.provider;
 
+import com.liferay.apio.architect.impl.internal.url.ApplicationServerURL;
 import com.liferay.apio.architect.impl.internal.url.ServerURL;
 import com.liferay.apio.architect.provider.Provider;
 
@@ -28,36 +29,23 @@ import org.osgi.service.component.annotations.Component;
  * @author Javier Gamarra
  */
 @Component
-public class ServerURLProvider implements Provider<ServerURL> {
+public class ApplicationURLProvider implements Provider<ApplicationServerURL> {
 
 	@Override
-	public ServerURL createContext(HttpServletRequest httpServletRequest) {
+	public ApplicationServerURL createContext(
+		HttpServletRequest httpServletRequest) {
+
 		return () -> {
-			StringBuilder sb = new StringBuilder();
+			ServerURLProvider serverURLProvider = new ServerURLProvider();
 
-			String forwardedProto = httpServletRequest.getHeader(
-				"X-Forwarded-Proto");
+			ServerURL serverURLContext = serverURLProvider.createContext(
+				httpServletRequest);
 
-			if (forwardedProto != null) {
-				sb.append(forwardedProto);
-			}
-			else {
-				sb.append(httpServletRequest.getScheme());
-			}
+			String serverURL = serverURLContext.get();
 
-			sb.append("://");
+			StringBuilder sb = new StringBuilder(serverURL);
 
-			String forwardedHost = httpServletRequest.getHeader(
-				"X-Forwarded-Host");
-
-			if (forwardedHost == null) {
-				sb.append(httpServletRequest.getServerName());
-				sb.append(":");
-				sb.append(httpServletRequest.getServerPort());
-			}
-			else {
-				sb.append(forwardedHost);
-			}
+			sb.append(httpServletRequest.getContextPath());
 
 			return sb.toString();
 		};
