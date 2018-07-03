@@ -14,8 +14,9 @@
 
 package com.liferay.apio.architect.impl.internal.provider;
 
+import static com.liferay.apio.architect.impl.internal.provider.util.URLProviderUtil.getServerURL;
+
 import com.liferay.apio.architect.impl.internal.url.ApplicationURL;
-import com.liferay.apio.architect.impl.internal.url.ServerURL;
 import com.liferay.apio.architect.provider.Provider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Creates the server's URL based on the HTTP request and the forwarded header,
+ * Creates the application's URL based on the HTTP request and the forwarded header,
  * to account for proxies.
  *
  * @author Javier Gamarra
@@ -34,18 +35,9 @@ public class ApplicationURLProvider implements Provider<ApplicationURL> {
 	@Override
 	public ApplicationURL createContext(HttpServletRequest httpServletRequest) {
 		return () -> {
-			ServerURLProvider serverURLProvider = new ServerURLProvider();
+			String serverURL = getServerURL(httpServletRequest);
 
-			ServerURL serverURLContext = serverURLProvider.createContext(
-				httpServletRequest);
-
-			String serverURL = serverURLContext.get();
-
-			StringBuilder sb = new StringBuilder(serverURL);
-
-			sb.append(httpServletRequest.getContextPath());
-
-			return sb.toString();
+			return serverURL + httpServletRequest.getContextPath();
 		};
 	}
 
