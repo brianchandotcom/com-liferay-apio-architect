@@ -62,7 +62,7 @@ public class FormWriter {
 		_formMessageMapper.onStart(
 			jsonObjectBuilder, _form, _requestInfo.getHttpHeaders());
 
-		String url = createFormURL(_requestInfo.getServerURL(), _form);
+		String url = createFormURL(_requestInfo.getApplicationURL(), _form);
 
 		_formMessageMapper.mapFormURL(jsonObjectBuilder, url);
 

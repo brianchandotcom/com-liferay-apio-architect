@@ -175,7 +175,8 @@ public class SingleModelWriter<T> {
 				Optional<Form> formOptional = operation.getFormOptional();
 
 				formOptional.map(
-					form -> createFormURL(_requestInfo.getServerURL(), form)
+					form -> createFormURL(
+						_requestInfo.getApplicationURL(), form)
 				).ifPresent(
 					url -> _singleModelMessageMapper.mapOperationFormURL(
 						_jsonObjectBuilder, operationJSONObjectBuilder, url)
@@ -326,7 +327,7 @@ public class SingleModelWriter<T> {
 				formOptional.ifPresent(
 					form -> {
 						String url = createFormURL(
-							_requestInfo.getServerURL(), form);
+							_requestInfo.getApplicationURL(), form);
 
 						_singleModelMessageMapper.mapEmbeddedOperationFormURL(
 							_jsonObjectBuilder, operationJSONObjectBuilder,

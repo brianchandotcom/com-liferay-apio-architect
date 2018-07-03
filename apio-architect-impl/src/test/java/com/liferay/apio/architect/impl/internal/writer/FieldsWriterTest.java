@@ -68,6 +68,11 @@ public class FieldsWriterTest {
 	@Before
 	public void setUp() {
 		Mockito.when(
+			_requestInfo.getApplicationURL()
+		).thenReturn(
+			() -> "www.liferay.com/o"
+		);
+		Mockito.when(
 			_requestInfo.getServerURL()
 		).thenReturn(
 			() -> "www.liferay.com"
@@ -126,12 +131,6 @@ public class FieldsWriterTest {
 
 	@Test
 	public void testWriteApplicationRelativeURLFields() {
-		Mockito.when(
-			_requestInfo.getApplicationURL()
-		).thenReturn(
-			() -> "localhost/o/api"
-		);
-
 		Map<String, String> strings = new HashMap<>();
 
 		_fieldsWriter.writeApplicationRelativeURLFields(strings::put);
@@ -139,17 +138,11 @@ public class FieldsWriterTest {
 		assertThat(strings, is(aMapWithSize(1)));
 		assertThat(
 			strings,
-			hasEntry("applicationRelativeURL1", "localhost/o/api/first"));
+			hasEntry("applicationRelativeURL1", "www.liferay.com/o/first"));
 	}
 
 	@Test
 	public void testWriteApplicationRelativeURLFieldsWithFilter() {
-		Mockito.when(
-			_requestInfo.getApplicationURL()
-		).thenReturn(
-			() -> "localhost/o/api"
-		);
-
 		Mockito.when(
 			_requestInfo.getFields()
 		).thenReturn(
@@ -163,7 +156,7 @@ public class FieldsWriterTest {
 		assertThat(strings, is(aMapWithSize(1)));
 		assertThat(
 			strings,
-			hasEntry("applicationRelativeURL1", "localhost/o/api/first"));
+			hasEntry("applicationRelativeURL1", "www.liferay.com/o/first"));
 	}
 
 	@Test
@@ -174,9 +167,11 @@ public class FieldsWriterTest {
 
 		assertThat(binaries, is(aMapWithSize(2)));
 		assertThat(
-			binaries, hasEntry("binary1", "www.liferay.com/b/name/id/binary1"));
+			binaries,
+			hasEntry("binary1", "www.liferay.com/o/b/name/id/binary1"));
 		assertThat(
-			binaries, hasEntry("binary2", "www.liferay.com/b/name/id/binary2"));
+			binaries,
+			hasEntry("binary2", "www.liferay.com/o/b/name/id/binary2"));
 	}
 
 	@Test
@@ -193,7 +188,8 @@ public class FieldsWriterTest {
 
 		assertThat(binaries, is(aMapWithSize(1)));
 		assertThat(
-			binaries, hasEntry("binary2", "www.liferay.com/b/name/id/binary2"));
+			binaries,
+			hasEntry("binary2", "www.liferay.com/o/b/name/id/binary2"));
 	}
 
 	@Test
@@ -295,12 +291,14 @@ public class FieldsWriterTest {
 		assertThat(
 			linkedRelatedModelURLs,
 			contains(
-				"www.liferay.com/p/name1/id1", "www.liferay.com/p/name3/id3",
-				"www.liferay.com/p/name4/id4"));
+				"www.liferay.com/o/p/name1/id1",
+				"www.liferay.com/o/p/name3/id3",
+				"www.liferay.com/o/p/name4/id4"));
 
 		assertThat(embeddedRelatedModelURLs, hasSize(equalTo(1)));
 		assertThat(
-			embeddedRelatedModelURLs, contains("www.liferay.com/p/name2/id2"));
+			embeddedRelatedModelURLs,
+			contains("www.liferay.com/o/p/name2/id2"));
 
 		assertThat(firstEmbeddedPathElementsList, hasSize(equalTo(1)));
 		assertThat(
@@ -355,7 +353,7 @@ public class FieldsWriterTest {
 
 		assertThat(linkedRelatedModelURLs, hasSize(equalTo(1)));
 		assertThat(
-			linkedRelatedModelURLs, contains("www.liferay.com/p/name2/id2"));
+			linkedRelatedModelURLs, contains("www.liferay.com/o/p/name2/id2"));
 
 		assertThat(
 			linkedPathElementsList,
@@ -396,8 +394,10 @@ public class FieldsWriterTest {
 		assertThat(
 			linkedRelatedModelURLs,
 			contains(
-				"www.liferay.com/p/name1/id1", "www.liferay.com/p/name2/id2",
-				"www.liferay.com/p/name3/id3", "www.liferay.com/p/name4/id4"));
+				"www.liferay.com/o/p/name1/id1",
+				"www.liferay.com/o/p/name2/id2",
+				"www.liferay.com/o/p/name3/id3",
+				"www.liferay.com/o/p/name4/id4"));
 
 		assertThat(
 			embeddedPathElementsList,
@@ -442,8 +442,10 @@ public class FieldsWriterTest {
 		assertThat(
 			linkedRelatedModelsURLs,
 			contains(
-				"www.liferay.com/p/name1/id1", "www.liferay.com/p/name2/id2",
-				"www.liferay.com/p/name3/id3", "www.liferay.com/p/name4/id4"));
+				"www.liferay.com/o/p/name1/id1",
+				"www.liferay.com/o/p/name2/id2",
+				"www.liferay.com/o/p/name3/id3",
+				"www.liferay.com/o/p/name4/id4"));
 
 		assertThat(
 			embeddedPathElementsList,
@@ -489,7 +491,7 @@ public class FieldsWriterTest {
 
 		assertThat(linkedRelatedModelsURLs, hasSize(equalTo(1)));
 		assertThat(
-			linkedRelatedModelsURLs, contains("www.liferay.com/p/name2/id2"));
+			linkedRelatedModelsURLs, contains("www.liferay.com/o/p/name2/id2"));
 
 		assertThat(
 			embeddedPathElementsList,
@@ -618,8 +620,8 @@ public class FieldsWriterTest {
 		assertThat(
 			relatedCollectionURLs,
 			contains(
-				"www.liferay.com/p/name/id/first",
-				"www.liferay.com/p/name/id/second"));
+				"www.liferay.com/o/p/name/id/first",
+				"www.liferay.com/o/p/name/id/second"));
 
 		assertThat(
 			embeddedPathElementsList,
@@ -660,7 +662,7 @@ public class FieldsWriterTest {
 		assertThat(relatedCollectionURLs, hasSize(equalTo(1)));
 		assertThat(
 			relatedCollectionURLs,
-			contains("www.liferay.com/p/name/id/second"));
+			contains("www.liferay.com/o/p/name/id/second"));
 
 		assertThat(
 			embeddedPathElementsList,
@@ -711,7 +713,7 @@ public class FieldsWriterTest {
 	@Test
 	public void testWriteSingleURL() {
 		_fieldsWriter.writeSingleURL(
-			url -> assertThat(url, is("www.liferay.com/p/name/id")));
+			url -> assertThat(url, is("www.liferay.com/o/p/name/id")));
 	}
 
 	@Test

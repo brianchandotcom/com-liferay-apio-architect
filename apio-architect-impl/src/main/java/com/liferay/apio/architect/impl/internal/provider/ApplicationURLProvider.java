@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * Creates the application's URL based on the HTTP request and the forwarded header,
- * to account for proxies.
+ * Creates the application's URL based on the HTTP request and the forwarded
+ * header, to account for proxies.
  *
  * @author Javier Gamarra
  */

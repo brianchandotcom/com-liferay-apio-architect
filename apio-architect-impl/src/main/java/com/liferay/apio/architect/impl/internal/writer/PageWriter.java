@@ -131,7 +131,8 @@ public class PageWriter<T> {
 				Optional<Form> formOptional = operation.getFormOptional();
 
 				formOptional.map(
-					form -> createFormURL(_requestInfo.getServerURL(), form)
+					form -> createFormURL(
+						_requestInfo.getApplicationURL(), form)
 				).ifPresent(
 					formURL -> _pageMessageMapper.mapOperationFormURL(
 						_jsonObjectBuilder, operationJSONObjectBuilder, formURL)
@@ -322,10 +323,10 @@ public class PageWriter<T> {
 
 		return optional.map(
 			path -> createNestedCollectionURL(
-				_requestInfo.getServerURL(), path, _page.getResourceName())
+				_requestInfo.getApplicationURL(), path, _page.getResourceName())
 		).orElseGet(
 			() -> createCollectionURL(
-				_requestInfo.getServerURL(), _page.getResourceName())
+				_requestInfo.getApplicationURL(), _page.getResourceName())
 		);
 	}
 

@@ -28,10 +28,10 @@ import javax.servlet.http.HttpServletRequest;
 public class URLProviderUtil {
 
 	/**
-	 * Returns the server's URL based on the HTTP request and the forwarded header,
-	 * to account for proxies.
+	 * Returns the server's URL based on the HTTP request and the forwarded
+	 * header, to account for proxies.
 	 *
-	 * @param httpServletRequest the current HTTP request
+	 * @param  httpServletRequest the current HTTP request
 	 * @return the server's URL
 	 * @review
 	 */

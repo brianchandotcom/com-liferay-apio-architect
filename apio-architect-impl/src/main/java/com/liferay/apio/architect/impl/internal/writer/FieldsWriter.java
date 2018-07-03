@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.impl.internal.writer;
 
 import static com.liferay.apio.architect.impl.internal.unsafe.Unsafe.unsafeCast;
+import static com.liferay.apio.architect.impl.internal.url.URLCreator.createAbsoluteURL;
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createSingleURL;
@@ -26,7 +27,6 @@ import com.liferay.apio.architect.impl.internal.list.FunctionalList;
 import com.liferay.apio.architect.impl.internal.request.RequestInfo;
 import com.liferay.apio.architect.impl.internal.response.control.Fields;
 import com.liferay.apio.architect.impl.internal.unsafe.Unsafe;
-import com.liferay.apio.architect.impl.internal.url.URLCreator;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
@@ -116,7 +116,7 @@ public class FieldsWriter<T> {
 		writeFields(
 			BaseRepresentor::getApplicationRelativeURLFunctions,
 			writeField(
-				relativeURL -> URLCreator.createAbsoluteURL(
+				relativeURL -> createAbsoluteURL(
 					_requestInfo.getApplicationURL(), relativeURL),
 				biConsumer));
 	}
@@ -130,7 +130,7 @@ public class FieldsWriter<T> {
 	 */
 	public void writeBinaries(BiConsumer<String, String> biConsumer) {
 		Function<String, String> urlFunction = binaryId -> createBinaryURL(
-			_requestInfo.getServerURL(), binaryId, _path);
+			_requestInfo.getApplicationURL(), binaryId, _path);
 
 		writeFields(
 			BaseRepresentor::getBinaryFunctions,
@@ -321,7 +321,7 @@ public class FieldsWriter<T> {
 		}
 
 		String url = createNestedCollectionURL(
-			_requestInfo.getServerURL(), _path, resourceName);
+			_requestInfo.getApplicationURL(), _path, resourceName);
 
 		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
 			parentEmbeddedPathElements, key);
@@ -455,7 +455,7 @@ public class FieldsWriter<T> {
 		optional.flatMap(
 			pathFunction
 		).map(
-			path -> createSingleURL(_requestInfo.getServerURL(), path)
+			path -> createSingleURL(_requestInfo.getApplicationURL(), path)
 		).ifPresent(
 			url -> biConsumer.accept(url, embeddedPathElements)
 		);
@@ -503,7 +503,7 @@ public class FieldsWriter<T> {
 		writeFields(
 			BaseRepresentor::getRelativeURLFunctions,
 			writeField(
-				relativeURL -> URLCreator.createAbsoluteURL(
+				relativeURL -> createAbsoluteURL(
 					_requestInfo.getServerURL(), relativeURL),
 				biConsumer));
 	}
@@ -516,7 +516,7 @@ public class FieldsWriter<T> {
 	 * @param urlConsumer the consumer that writes the URL
 	 */
 	public void writeSingleURL(Consumer<String> urlConsumer) {
-		String url = createSingleURL(_requestInfo.getServerURL(), _path);
+		String url = createSingleURL(_requestInfo.getApplicationURL(), _path);
 
 		urlConsumer.accept(url);
 	}
