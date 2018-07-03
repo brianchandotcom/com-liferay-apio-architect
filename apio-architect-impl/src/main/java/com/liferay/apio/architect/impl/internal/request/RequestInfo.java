@@ -154,12 +154,6 @@ public class RequestInfo {
 
 		public class EmbeddedStep {
 
-			public EmbeddedStep applicationServerURL(
-				ApplicationServerURL applicationServerURL) {
-
-				return null;
-			}
-
 			/**
 			 * Adds information about embedded resources to the builder.
 			 *
