@@ -64,6 +64,7 @@
 		"relatedCollection2": {"href": "localhost/p/model/first/models"},
 		"self": {"href": "localhost/p/model/first"}
 	},
+	"applicationRelativeURL1": "localhost/o/api/first",
 	"boolean1": true,
 	"boolean2": false,
 	"booleanList1": [true, true, false, false],

@@ -19,6 +19,7 @@ import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.impl.internal.response.control.Embedded;
 import com.liferay.apio.architect.impl.internal.response.control.Fields;
+import com.liferay.apio.architect.impl.internal.url.ApplicationServerURL;
 import com.liferay.apio.architect.impl.internal.url.ServerURL;
 import com.liferay.apio.architect.language.AcceptLanguage;
 
@@ -41,6 +42,7 @@ public class RequestInfoTest {
 		_httpHeaders = Mockito.mock(HttpHeaders.class);
 		_httpServletRequest = Mockito.mock(HttpServletRequest.class);
 		_serverURL = Mockito.mock(ServerURL.class);
+		_applicationServerURL = Mockito.mock(ApplicationServerURL.class);
 		_embedded = Mockito.mock(Embedded.class);
 		_fields = Mockito.mock(Fields.class);
 		_acceptLanguage = Mockito.mock(AcceptLanguage.class);
@@ -55,6 +57,8 @@ public class RequestInfoTest {
 				_httpServletRequest
 			).serverURL(
 				_serverURL
+			).applicationServerURL(
+				_applicationServerURL
 			).embedded(
 				_embedded
 			).fields(
@@ -70,9 +74,12 @@ public class RequestInfoTest {
 			requestInfo.getHttpServletRequest(), is(_httpServletRequest));
 		assertThat(requestInfo.getAcceptLanguage(), is(_acceptLanguage));
 		assertThat(requestInfo.getServerURL(), is(_serverURL));
+		assertThat(
+			requestInfo.getApplicationServerURL(), is(_applicationServerURL));
 	}
 
 	private AcceptLanguage _acceptLanguage;
+	private ApplicationServerURL _applicationServerURL;
 	private Embedded _embedded;
 	private Fields _fields;
 	private HttpHeaders _httpHeaders;

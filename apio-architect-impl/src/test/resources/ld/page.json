@@ -15,7 +15,11 @@
 				{"relatedCollection2": {"@type": "@id"}}
 			],
 			"@id": "localhost/p/model/1",
-			"@type": ["Type 1", "Type 2"],
+			"@type": [
+				"Type 1",
+				"Type 2"
+			],
+			"applicationRelativeURL1": "localhost/o/api/first",
 			"binary1": "localhost/b/model/1/binary1",
 			"binary2": "localhost/b/model/1/binary2",
 			"boolean1": true,
@@ -111,7 +115,11 @@
 				{"relatedCollection2": {"@type": "@id"}}
 			],
 			"@id": "localhost/p/model/2",
-			"@type": ["Type 1", "Type 2"],
+			"@type": [
+				"Type 1",
+				"Type 2"
+			],
+			"applicationRelativeURL1": "localhost/o/api/first",
 			"binary1": "localhost/b/model/2/binary1",
 			"binary2": "localhost/b/model/2/binary2",
 			"boolean1": true,
@@ -207,7 +215,11 @@
 				{"relatedCollection2": {"@type": "@id"}}
 			],
 			"@id": "localhost/p/model/3",
-			"@type": ["Type 1", "Type 2"],
+			"@type": [
+				"Type 1",
+				"Type 2"
+			],
+			"applicationRelativeURL1": "localhost/o/api/first",
 			"binary1": "localhost/b/model/3/binary1",
 			"binary2": "localhost/b/model/3/binary2",
 			"boolean1": true,

@@ -125,6 +125,48 @@ public class FieldsWriterTest {
 	}
 
 	@Test
+	public void testWriteApplicationRelativeURLFields() {
+		Mockito.when(
+			_requestInfo.getApplicationServerURL()
+		).thenReturn(
+			() -> "localhost/o/api"
+		);
+
+		Map<String, String> strings = new HashMap<>();
+
+		_fieldsWriter.writeApplicationRelativeURLFields(strings::put);
+
+		assertThat(strings, is(aMapWithSize(1)));
+		assertThat(
+			strings,
+			hasEntry("applicationRelativeURL1", "localhost/o/api/first"));
+	}
+
+	@Test
+	public void testWriteApplicationRelativeURLFieldsWithFilter() {
+		Mockito.when(
+			_requestInfo.getApplicationServerURL()
+		).thenReturn(
+			() -> "localhost/o/api"
+		);
+
+		Mockito.when(
+			_requestInfo.getFields()
+		).thenReturn(
+			list -> "applicationRelativeURL1"::equals
+		);
+
+		Map<String, String> strings = new HashMap<>();
+
+		_fieldsWriter.writeApplicationRelativeURLFields(strings::put);
+
+		assertThat(strings, is(aMapWithSize(1)));
+		assertThat(
+			strings,
+			hasEntry("applicationRelativeURL1", "localhost/o/api/first"));
+	}
+
+	@Test
 	public void testWriteBinaries() {
 		Map<String, String> binaries = new HashMap<>();
 

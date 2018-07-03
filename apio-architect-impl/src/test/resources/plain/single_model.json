@@ -1,4 +1,5 @@
 {
+	"applicationRelativeURL1": "localhost/o/api/first",
 	"binary1": "localhost/b/model/first/binary1",
 	"binary2": "localhost/b/model/first/binary2",
 	"boolean1": true,

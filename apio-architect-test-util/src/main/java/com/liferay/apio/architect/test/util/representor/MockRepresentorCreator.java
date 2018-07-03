@@ -102,6 +102,8 @@ public class MockRepresentorCreator {
 			"Type 1", "Type 2"
 		).identifier(
 			RootModel::getId
+		).addApplicationRelativeURL(
+			"applicationRelativeURL1", __ -> "/first"
 		).addBinary(
 			"binary1", __ -> null
 		).addBinary(
