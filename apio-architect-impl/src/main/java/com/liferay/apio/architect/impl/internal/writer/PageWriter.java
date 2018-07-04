@@ -18,7 +18,6 @@ import static com.liferay.apio.architect.impl.internal.url.URLCreator.createColl
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createCollectionURL;
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getFieldsWriter;
-import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getOperationWriter;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getPathOptional;
 
 import com.google.gson.JsonObject;
@@ -115,7 +114,7 @@ public class PageWriter<T> {
 
 		List<Operation> operations = _page.getOperations();
 
-		OperationWriter operationWriter = getOperationWriter(
+		OperationWriter operationWriter = new OperationWriter(
 			_pageMessageMapper, _requestInfo, _jsonObjectBuilder);
 
 		operations.forEach(operationWriter::write);

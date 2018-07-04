@@ -16,7 +16,6 @@ package com.liferay.apio.architect.impl.internal.writer;
 
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getFieldsWriter;
-import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getOperationWriter;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getPathOptional;
 
 import com.google.gson.JsonObject;
@@ -115,7 +114,7 @@ public class SingleModelWriter<T> {
 
 		List<Operation> operations = _singleModel.getOperations();
 
-		OperationWriter operationWriter = getOperationWriter(
+		OperationWriter operationWriter = new OperationWriter(
 			_singleModelMessageMapper, _requestInfo, _jsonObjectBuilder);
 
 		operations.forEach(operationWriter::write);
