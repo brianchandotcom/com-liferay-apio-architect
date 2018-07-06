@@ -416,7 +416,7 @@
 	"operation": [
 		{
 			"@id": "_:resource/create",
-			"@type": "Operation",
+			"@type": ["CreateAction", "Operation"],
 			"expects": "localhost/o/api/f/c/p",
 			"method": "POST"
 		}

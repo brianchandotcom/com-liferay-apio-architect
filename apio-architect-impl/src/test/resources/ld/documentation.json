@@ -27,19 +27,19 @@
 			"supportedOperation": [
 				{
 					"@id": "_:root/retrieve",
-					"@type": "Operation",
+					"@type": ["Operation"],
 					"method": "GET",
 					"returns": "Type 1"
 				},
 				{
 					"@id": "_:root/update",
-					"@type": "Operation",
+					"@type": ["ReplaceAction", "Operation"],
 					"method": "PUT",
 					"returns": "Type 1"
 				},
 				{
 					"@id": "_:root/delete",
-					"@type": "Operation",
+					"@type": ["DeleteAction", "Operation"],
 					"method": "DELETE",
 					"returns": "http://www.w3.org/2002/07/owl#Nothing"
 				}
@@ -190,19 +190,19 @@
 			"supportedOperation": [
 				{
 					"@id": "_:root/retrieve",
-					"@type": "Operation",
+					"@type": ["Operation"],
 					"method": "GET",
 					"returns": "Type 2"
 				},
 				{
 					"@id": "_:root/update",
-					"@type": "Operation",
+					"@type": ["ReplaceAction", "Operation"],
 					"method": "PUT",
 					"returns": "Type 2"
 				},
 				{
 					"@id": "_:root/delete",
-					"@type": "Operation",
+					"@type": ["DeleteAction", "Operation"],
 					"method": "DELETE",
 					"returns": "http://www.w3.org/2002/07/owl#Nothing"
 				}
@@ -355,13 +355,13 @@
 			"supportedOperation": [
 				{
 					"@id": "_:root/retrieve",
-					"@type": "Operation",
+					"@type": ["Operation"],
 					"method": "GET",
 					"returns": "Collection"
 				},
 				{
 					"@id": "_:root/create",
-					"@type": "Operation",
+					"@type": ["CreateAction", "Operation"],
 					"method": "POST",
 					"returns": "Type 1"
 				}
@@ -390,13 +390,13 @@
 			"supportedOperation": [
 				{
 					"@id": "_:root/retrieve",
-					"@type": "Operation",
+					"@type": ["Operation"],
 					"method": "GET",
 					"returns": "Collection"
 				},
 				{
 					"@id": "_:root/create",
-					"@type": "Operation",
+					"@type": ["CreateAction", "Operation"],
 					"method": "POST",
 					"returns": "Type 2"
 				}

@@ -28,10 +28,10 @@ import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.ME
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_API_DOCUMENTATION;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_CLASS;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_COLLECTION;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_OPERATION;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_SUPPORTED_PROPERTY;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.URL_HYDRA_PROFILE;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.URL_SCHEMA_ORG;
+import static com.liferay.apio.architect.impl.message.json.ld.JSONLDMessageMapperUtil.getOperationTypes;
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
@@ -89,8 +89,9 @@ public class JSONLDDocumentationMessageMapper
 
 		jsonObjectBuilder.field(
 			FIELD_NAME_TYPE
-		).stringValue(
-			TYPE_OPERATION
+		).arrayValue(
+		).addAllStrings(
+			getOperationTypes(operation)
 		);
 
 		jsonObjectBuilder.field(

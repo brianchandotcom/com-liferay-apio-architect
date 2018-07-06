@@ -25,9 +25,9 @@ import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FI
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.FIELD_NAME_VOCAB;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.MEDIA_TYPE;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_COLLECTION;
-import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.TYPE_OPERATION;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.URL_HYDRA_PROFILE;
 import static com.liferay.apio.architect.impl.message.json.ld.JSONLDConstants.URL_SCHEMA_ORG;
+import static com.liferay.apio.architect.impl.message.json.ld.JSONLDMessageMapperUtil.getOperationTypes;
 
 import com.liferay.apio.architect.impl.list.FunctionalList;
 import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
@@ -420,8 +420,9 @@ public class JSONLDSingleModelMessageMapper<T>
 
 		operationJSONObjectBuilder.field(
 			FIELD_NAME_TYPE
-		).stringValue(
-			TYPE_OPERATION
+		).arrayValue(
+		).addAllStrings(
+			getOperationTypes(operation)
 		);
 
 		resourceJSONObjectBuilder.field(
@@ -466,8 +467,9 @@ public class JSONLDSingleModelMessageMapper<T>
 
 		operationJSONObjectBuilder.field(
 			FIELD_NAME_TYPE
-		).stringValue(
-			TYPE_OPERATION
+		).arrayValue(
+		).addAllStrings(
+			getOperationTypes(operation)
 		);
 
 		singleModelJSONObjectBuilder.nestedField(

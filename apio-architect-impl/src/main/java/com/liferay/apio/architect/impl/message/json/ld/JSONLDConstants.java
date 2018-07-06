@@ -197,12 +197,6 @@ public class JSONLDConstants {
 	public static final String TYPE_COLLECTION = "Collection";
 
 	/**
-	 * The Hydra <a href="https://www.w3.org/ns/hydra/core#Operation">Operation
-	 * </a> property.
-	 */
-	public static final String TYPE_OPERATION = "Operation";
-
-	/**
 	 * The Hydra <a
 	 * href="https://www.w3.org/ns/hydra/core#PartialCollectionView">
 	 * PartialCollectionView </a> property.

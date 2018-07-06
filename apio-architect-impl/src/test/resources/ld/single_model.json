@@ -77,7 +77,7 @@
 		"operation": [
 			{
 				"@id": "_:resource/delete",
-				"@type": "Operation",
+				"@type": ["DeleteAction", "Operation"],
 				"method": "DELETE"
 			}
 		],
@@ -136,12 +136,12 @@
 	"operation": [
 		{
 			"@id": "_:resource/delete",
-			"@type": "Operation",
+			"@type": ["DeleteAction", "Operation"],
 			"method": "DELETE"
 		},
 		{
 			"@id": "_:resource/update",
-			"@type": "Operation",
+			"@type": ["ReplaceAction", "Operation"],
 			"expects": "localhost/o/api/f/u/r",
 			"method": "PUT"
 		}
