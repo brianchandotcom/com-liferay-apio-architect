@@ -288,7 +288,7 @@ public class JSONLDDocumentationMessageMapper
 		);
 	}
 
-	private String _getReturnValue(String resourceName, Operation operation) {
+	private String _getReturnValue(String type, Operation operation) {
 		String value = null;
 
 		HTTPMethod httpMethod = operation.getHttpMethod();
@@ -300,7 +300,7 @@ public class JSONLDDocumentationMessageMapper
 			value = "Collection";
 		}
 		else {
-			value = resourceName;
+			value = type;
 		}
 
 		return value;
