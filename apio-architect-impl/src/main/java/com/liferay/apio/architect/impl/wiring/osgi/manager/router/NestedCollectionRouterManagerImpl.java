@@ -17,6 +17,7 @@ package com.liferay.apio.architect.impl.wiring.osgi.manager.router;
 import static com.liferay.apio.architect.impl.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.impl.wiring.osgi.manager.TypeArgumentProperties.KEY_PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.impl.wiring.osgi.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
+import static com.liferay.apio.architect.impl.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.impl.wiring.osgi.manager.util.ManagerUtil.getGenericClassFromProperty;
 import static com.liferay.apio.architect.impl.wiring.osgi.manager.util.ManagerUtil.getTypeParamTry;
 
@@ -25,7 +26,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.impl.wiring.osgi.manager.cache.ManagerCache;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
@@ -60,7 +60,7 @@ public class NestedCollectionRouterManagerImpl
 	}
 
 	public Map<String, NestedCollectionRoutes> getNestedCollectionRoutes() {
-		return ManagerCache.INSTANCE.getNestedCollectionRoutesMap(
+		return INSTANCE.getNestedCollectionRoutesMap(
 			this::_computeNestedCollectionRoutes);
 	}
 
@@ -68,7 +68,7 @@ public class NestedCollectionRouterManagerImpl
 	public <T, S, U> Optional<NestedCollectionRoutes<T, S, U>>
 		getNestedCollectionRoutesOptional(String name, String nestedName) {
 
-		return ManagerCache.INSTANCE.getNestedCollectionRoutesOptional(
+		return INSTANCE.getNestedCollectionRoutesOptional(
 			name, nestedName, this::_computeNestedCollectionRoutes);
 	}
 
@@ -195,7 +195,7 @@ public class NestedCollectionRouterManagerImpl
 					return;
 				}
 
-				ManagerCache.INSTANCE.putNestedCollectionRoutes(
+				INSTANCE.putNestedCollectionRoutes(
 					name + "-" + nestedName, nestedCollectionRoutes);
 			});
 	}

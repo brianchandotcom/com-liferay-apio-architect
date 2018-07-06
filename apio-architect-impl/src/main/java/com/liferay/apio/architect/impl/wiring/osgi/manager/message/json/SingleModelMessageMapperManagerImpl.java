@@ -14,9 +14,10 @@
 
 package com.liferay.apio.architect.impl.wiring.osgi.manager.message.json;
 
+import static com.liferay.apio.architect.impl.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
 import com.liferay.apio.architect.impl.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.base.MessageMapperBaseManager;
-import com.liferay.apio.architect.impl.wiring.osgi.manager.cache.ManagerCache;
 
 import java.util.Optional;
 
@@ -35,14 +36,14 @@ public class SingleModelMessageMapperManagerImpl
 	public SingleModelMessageMapperManagerImpl() {
 		super(
 			SingleModelMessageMapper.class,
-			ManagerCache.INSTANCE::putSingleModelMessageMapper);
+			INSTANCE::putSingleModelMessageMapper);
 	}
 
 	@Override
 	public <T> Optional<SingleModelMessageMapper<T>>
 		getSingleModelMessageMapperOptional(Request request) {
 
-		return ManagerCache.INSTANCE.getSingleModelMessageMapperOptional(
+		return INSTANCE.getSingleModelMessageMapperOptional(
 			request, this::computeMessageMappers);
 	}
 

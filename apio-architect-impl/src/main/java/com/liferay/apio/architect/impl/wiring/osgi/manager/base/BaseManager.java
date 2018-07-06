@@ -14,7 +14,8 @@
 
 package com.liferay.apio.architect.impl.wiring.osgi.manager.base;
 
-import com.liferay.apio.architect.impl.wiring.osgi.manager.cache.ManagerCache;
+import static com.liferay.apio.architect.impl.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
 import com.liferay.apio.architect.impl.wiring.osgi.tracker.map.listener.ClearCacheServiceTrackerMapListener;
 import com.liferay.osgi.service.tracker.collections.internal.DefaultServiceTrackerCustomizer;
 import com.liferay.osgi.service.tracker.collections.internal.map.ServiceTrackerMapImpl;
@@ -51,13 +52,13 @@ public abstract class BaseManager<T, U> {
 			new SingleValueServiceTrackerBucketFactory<>(),
 			new ClearCacheServiceTrackerMapListener<>());
 
-		ManagerCache.INSTANCE.clear();
+		INSTANCE.clear();
 	}
 
 	@Deactivate
 	public void deactivate() {
 		serviceTrackerMap.close();
-		ManagerCache.INSTANCE.clear();
+		INSTANCE.clear();
 	}
 
 	public void forEachService(BiConsumer<U, T> biConsumer) {

@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.impl.wiring.osgi.manager.router;
 
 import static com.liferay.apio.architect.impl.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.impl.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -23,7 +24,6 @@ import com.liferay.apio.architect.impl.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.impl.url.ApplicationURL;
 import com.liferay.apio.architect.impl.url.ServerURL;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.impl.wiring.osgi.manager.cache.ManagerCache;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
@@ -59,22 +59,20 @@ public class CollectionRouterManagerImpl
 
 	@Override
 	public Map<String, CollectionRoutes> getCollectionRoutes() {
-		return ManagerCache.INSTANCE.getCollectionRoutes(
-			this::_computeCollectionRoutes);
+		return INSTANCE.getCollectionRoutes(this::_computeCollectionRoutes);
 	}
 
 	@Override
 	public <T, S> Optional<CollectionRoutes<T, S>> getCollectionRoutesOptional(
 		String name) {
 
-		return ManagerCache.INSTANCE.getCollectionRoutesOptional(
+		return INSTANCE.getCollectionRoutesOptional(
 			name, this::_computeCollectionRoutes);
 	}
 
 	@Override
 	public List<String> getResourceNames() {
-		return ManagerCache.INSTANCE.getRootResourceNames(
-			this::_computeCollectionRoutes);
+		return INSTANCE.getRootResourceNames(this::_computeCollectionRoutes);
 	}
 
 	private void _computeCollectionRoutes() {
@@ -133,9 +131,8 @@ public class CollectionRouterManagerImpl
 					return;
 				}
 
-				ManagerCache.INSTANCE.putRootResourceName(name);
-				ManagerCache.INSTANCE.putCollectionRoutes(
-					name, collectionRoutes);
+				INSTANCE.putRootResourceName(name);
+				INSTANCE.putCollectionRoutes(name, collectionRoutes);
 			});
 	}
 
