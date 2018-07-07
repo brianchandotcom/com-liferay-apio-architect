@@ -17,6 +17,7 @@ package com.liferay.apio.architect.impl.url;
 import static java.lang.String.join;
 
 import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.impl.operation.BatchCreateOperation;
 import com.liferay.apio.architect.impl.operation.CreateOperation;
 import com.liferay.apio.architect.impl.operation.DeleteOperation;
 import com.liferay.apio.architect.impl.operation.RetrieveOperation;
@@ -162,6 +163,10 @@ public final class URLCreator {
 			uri -> {
 				if (operation instanceof CreateOperation) {
 					return "p/" + uri;
+				}
+
+				if (operation instanceof BatchCreateOperation) {
+					return "batch/" + uri;
 				}
 
 				if (operation instanceof DeleteOperation) {
