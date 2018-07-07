@@ -34,6 +34,7 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.alias.ProvideFunction;
 import com.liferay.apio.architect.impl.form.FormImpl;
+import com.liferay.apio.architect.impl.operation.BatchCreateOperation;
 import com.liferay.apio.architect.impl.operation.CreateOperation;
 import com.liferay.apio.architect.impl.pagination.PageImpl;
 import com.liferay.apio.architect.impl.single.model.SingleModelImpl;
@@ -595,7 +596,12 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				_form, _name + "/" + _nestedName,
 				path.asURI() + "/" + _nestedName);
 
-			return Collections.singletonList(createOperation);
+			BatchCreateOperation batchCreateOperation =
+				new BatchCreateOperation(
+					_form, _name + "/" + _nestedName,
+					path.asURI() + "/" + _nestedName);
+
+			return Arrays.asList(createOperation, batchCreateOperation);
 		}
 
 		private <V> List<S> _transformList(

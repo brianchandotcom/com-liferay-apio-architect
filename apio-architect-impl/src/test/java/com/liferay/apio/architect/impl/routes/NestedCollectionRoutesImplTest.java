@@ -29,6 +29,7 @@ import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -41,6 +42,8 @@ import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.impl.operation.BatchCreateOperation;
+import com.liferay.apio.architect.impl.operation.CreateOperation;
 import com.liferay.apio.architect.impl.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
@@ -603,15 +606,29 @@ public class NestedCollectionRoutesImplTest {
 
 		List<Operation> operations = page.getOperations();
 
-		assertThat(operations, hasSize(1));
+		assertThat(operations, hasSize(2));
 
-		Operation operation = operations.get(0);
+		Operation createOperation = operations.get(0);
 
-		assertThat(operation.getFormOptional(), is(optionalWithValue()));
-		assertThat(operation.getHttpMethod(), is(POST));
-		assertThat(operation.getName(), is("name/nested/create"));
+		assertThat(createOperation, is(instanceOf(CreateOperation.class)));
+		assertThat(createOperation.getFormOptional(), is(optionalWithValue()));
+		assertThat(createOperation.getHttpMethod(), is(POST));
+		assertThat(createOperation.getName(), is("name/nested/create"));
 		assertThat(
-			operation.getURIOptional(),
+			createOperation.getURIOptional(),
+			is(optionalWithValue(equalTo("name/id/nested"))));
+
+		Operation batchCreateOperation = operations.get(1);
+
+		assertThat(
+			batchCreateOperation, is(instanceOf(BatchCreateOperation.class)));
+		assertThat(
+			batchCreateOperation.getFormOptional(), is(optionalWithValue()));
+		assertThat(batchCreateOperation.getHttpMethod(), is(POST));
+		assertThat(
+			batchCreateOperation.getName(), is("name/nested/batch-create"));
+		assertThat(
+			batchCreateOperation.getURIOptional(),
 			is(optionalWithValue(equalTo("name/id/nested"))));
 	}
 

@@ -33,6 +33,7 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.alias.ProvideFunction;
 import com.liferay.apio.architect.impl.form.FormImpl;
+import com.liferay.apio.architect.impl.operation.BatchCreateOperation;
 import com.liferay.apio.architect.impl.operation.CreateOperation;
 import com.liferay.apio.architect.impl.pagination.PageImpl;
 import com.liferay.apio.architect.impl.single.model.SingleModelImpl;
@@ -527,7 +528,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			CreateOperation createOperation = new CreateOperation(
 				_form, _name, _name);
 
-			return Collections.singletonList(createOperation);
+			BatchCreateOperation batchCreateOperation =
+				new BatchCreateOperation(_form, _name, _name);
+
+			return Arrays.asList(createOperation, batchCreateOperation);
 		}
 
 		private <U> List<S> _transformList(
