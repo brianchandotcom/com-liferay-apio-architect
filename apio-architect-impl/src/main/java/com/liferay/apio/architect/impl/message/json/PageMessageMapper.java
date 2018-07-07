@@ -604,6 +604,19 @@ public interface PageMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 	}
 
+	@Override
+	public default void mapOperationURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper ->
+				singleModelMessageMapper.mapOperationURL(
+					jsonObjectBuilder, url));
+	}
+
 	/**
 	 * Maps the page count to its JSON object representation.
 	 *
