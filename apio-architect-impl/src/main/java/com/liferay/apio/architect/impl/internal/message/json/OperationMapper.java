@@ -38,8 +38,8 @@ public interface OperationMapper {
 
 	/**
 	 * Maps a resource operation form's URL to its JSON object representation.
-	 *  @param jsonObjectBuilder the JSON object builder for the
-	 *        operation
+	 *
+	 * @param jsonObjectBuilder the JSON object builder for the operation
 	 * @param url the operation form's URL
 	 */
 	public default void mapFormURL(
@@ -48,8 +48,8 @@ public interface OperationMapper {
 
 	/**
 	 * Maps a resource operation's method to its JSON object representation.
-	 *  @param jsonObjectBuilder the JSON object builder for the
-	 *        operation
+	 *
+	 * @param jsonObjectBuilder the JSON object builder for the operation
 	 * @param httpMethod the operation's method
 	 */
 	public default void mapHTTPMethod(
