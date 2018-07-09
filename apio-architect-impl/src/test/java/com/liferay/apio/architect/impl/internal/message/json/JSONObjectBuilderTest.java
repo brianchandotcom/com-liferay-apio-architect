@@ -14,30 +14,11 @@
 
 package com.liferay.apio.architect.impl.internal.message.json;
 
-import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonArrayThat;
-import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonBoolean;
-import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonInt;
-import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWhere;
-import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonObjectWith;
-import static com.liferay.apio.architect.test.util.json.JsonMatchers.aJsonString;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import com.liferay.apio.architect.test.util.json.Conditions;
+import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
 import java.util.Arrays;
-import java.util.List;
 
-import org.hamcrest.Matcher;
+import org.json.JSONException;
 
 import org.junit.Test;
 
@@ -47,36 +28,27 @@ import org.junit.Test;
 public class JSONObjectBuilderTest {
 
 	@Test
-	public void testInvokingAddAllOnAnArrayValueCreatesAValidJsonArray() {
+	public void testInvokingAddAllOnAnArrayValueCreatesAValidJsonArray()
+		throws JSONException {
+
 		JSONObjectBuilder.ArrayValueStep arrayValueStep =
 			_jsonObjectBuilder.field(
 				"array"
 			).arrayValue();
 
-		JsonObject jsonObject = new JsonObject();
-
-		jsonObject.addProperty("solution", 42);
-
 		arrayValueStep.addAllBooleans(Arrays.asList(false, true));
 		arrayValueStep.addAllNumbers(Arrays.asList(21, 42));
 		arrayValueStep.addAllStrings(Arrays.asList("api", "apio"));
 
-		List<Matcher<? super JsonElement>> matchers = Arrays.asList(
-			aJsonBoolean(false), aJsonBoolean(true), aJsonInt(equalTo(21)),
-			aJsonInt(equalTo(42)), aJsonString(equalTo("api")),
-			aJsonString(equalTo("apio")));
+		String expected = "{'array': [false, true, 21, 42, 'api', 'apio']}";
 
-		Matcher<JsonElement> isAJsonArrayWithElements = is(
-			aJsonArrayThat(contains(matchers)));
-
-		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
-			aJsonObjectWhere("array", isAJsonArrayWithElements));
-
-		assertThat(getJsonObject(), isAJsonObjectWithAnArray);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingAddConsumerCreatesAValidJsonArray() {
+	public void testInvokingAddConsumerCreatesAValidJsonArray()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"array"
 		).arrayValue(
@@ -88,17 +60,15 @@ public class JSONObjectBuilderTest {
 			)
 		);
 
-		Matcher<JsonElement> isAJsonArrayWithElements = is(
-			aJsonArrayThat(contains(_aJsonObjectWithTheSolution)));
+		String expected = "{'array': [{'solution': 42}]}";
 
-		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
-			aJsonObjectWhere("array", isAJsonArrayWithElements));
-
-		assertThat(getJsonObject(), isAJsonObjectWithAnArray);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingAddJsonObjectBuilderCreatesAValidJsonArray() {
+	public void testInvokingAddJsonObjectBuilderCreatesAValidJsonArray()
+		throws JSONException {
+
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
 		jsonObjectBuilder.field(
@@ -114,17 +84,15 @@ public class JSONObjectBuilderTest {
 			jsonObjectBuilder
 		);
 
-		Matcher<JsonElement> isAJsonArrayWithElements = is(
-			aJsonArrayThat(contains(_aJsonObjectWithTheSolution)));
+		String expected = "{'array': [{'solution': 42}]}";
 
-		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
-			aJsonObjectWhere("array", isAJsonArrayWithElements));
-
-		assertThat(getJsonObject(), isAJsonObjectWithAnArray);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingAddOnAnArrayValueCreatesAValidJsonArray() {
+	public void testInvokingAddOnAnArrayValueCreatesAValidJsonArray()
+		throws JSONException {
+
 		JSONObjectBuilder.ArrayValueStep arrayValueStep =
 			_jsonObjectBuilder.field(
 				"array"
@@ -134,21 +102,15 @@ public class JSONObjectBuilderTest {
 		arrayValueStep.addNumber(42);
 		arrayValueStep.addString("apio");
 
-		List<Matcher<? super JsonElement>> matchers = Arrays.asList(
-			aJsonBoolean(true), aJsonInt(equalTo(42)),
-			aJsonString(equalTo("apio")));
+		String expected = "{'array': [true, 42, 'apio']}";
 
-		Matcher<JsonElement> isAJsonArrayWithElements = is(
-			aJsonArrayThat(contains(matchers)));
-
-		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
-			aJsonObjectWhere("array", isAJsonArrayWithElements));
-
-		assertThat(getJsonObject(), isAJsonObjectWithAnArray);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingAddVarargConsumersCreatesAValidJsonArray() {
+	public void testInvokingAddVarargConsumersCreatesAValidJsonArray()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"array"
 		).arrayValue(
@@ -165,33 +127,26 @@ public class JSONObjectBuilderTest {
 			)
 		);
 
-		@SuppressWarnings("unchecked")
-		Matcher<JsonElement> isAJsonArrayWithElements = is(
-			aJsonArrayThat(
-				contains(
-					_aJsonObjectWithTheSolution, _aJsonObjectWithTheSolution)));
+		String expected = "{'array': [{'solution': 42}, {'solution': 42}]}";
 
-		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
-			aJsonObjectWhere("array", isAJsonArrayWithElements));
-
-		assertThat(getJsonObject(), isAJsonObjectWithAnArray);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingArrayValueCreatesAJsonArray() {
+	public void testInvokingArrayValueCreatesAJsonArray() throws JSONException {
 		_jsonObjectBuilder.field(
 			"array"
 		).arrayValue();
 
-		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
-			aJsonObjectWhere(
-				"array", is(aJsonArrayThat(not(contains(anything()))))));
+		String expected = "{'array': []}";
 
-		assertThat(getJsonObject(), isAJsonObjectWithAnArray);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingArrayValueWithConsumersCreatesAValidJsonArray() {
+	public void testInvokingArrayValueWithConsumersCreatesAValidJsonArray()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"array"
 		).arrayValue(
@@ -199,36 +154,28 @@ public class JSONObjectBuilderTest {
 			arrayBuilder -> arrayBuilder.addString("second")
 		);
 
-		@SuppressWarnings("unchecked")
-		Matcher<Iterable<? extends JsonElement>> containsFirstAndSecond =
-			contains(
-				aJsonString(equalTo("first")), aJsonString(equalTo("second")));
+		String expected = "{'array': ['first', 'second']}";
 
-		Matcher<JsonElement> isAJsonArrayWithElements = is(
-			aJsonArrayThat(containsFirstAndSecond));
-
-		Matcher<JsonElement> isAJsonObjectWithAnArray = is(
-			aJsonObjectWhere("array", isAJsonArrayWithElements));
-
-		assertThat(getJsonObject(), isAJsonObjectWithAnArray);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingBooleanValueCreatesABoolean() {
+	public void testInvokingBooleanValueCreatesABoolean() throws JSONException {
 		_jsonObjectBuilder.field(
 			"solution"
 		).booleanValue(
 			true
 		);
 
-		Matcher<JsonElement> isAJsonObjectWithTheSolution = is(
-			aJsonObjectWhere("solution", is(aJsonBoolean(true))));
+		String expected = "{'solution': true}";
 
-		assertThat(getJsonObject(), isAJsonObjectWithTheSolution);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingFalseIfElseConditionCreatesACorrectField() {
+	public void testInvokingFalseIfElseConditionCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.ifElseCondition(
 			false, builder -> builder.field("true"),
 			builder -> builder.field("solution")
@@ -236,11 +183,15 @@ public class JSONObjectBuilderTest {
 			42
 		);
 
-		assertThat(getJsonObject(), is(_aJsonObjectWithTheSolution));
+		String expected = "{'solution': 42}";
+
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingFieldAndFalseIfConditionCreatesACorrectField() {
+	public void testInvokingFieldAndFalseIfConditionCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"first"
 		).ifCondition(
@@ -249,14 +200,15 @@ public class JSONObjectBuilderTest {
 			42
 		);
 
-		Matcher<JsonElement> isAJsonObjectWithTheFirst = is(
-			aJsonObjectWhere("first", is(aJsonInt(equalTo(42)))));
+		String expected = "{'first': 42}";
 
-		assertThat(getJsonObject(), isAJsonObjectWithTheFirst);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingFieldAndFalseIfElseConditionCreatesACorrectField() {
+	public void testInvokingFieldAndFalseIfElseConditionCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"first"
 		).ifElseCondition(
@@ -266,14 +218,15 @@ public class JSONObjectBuilderTest {
 			42
 		);
 
-		Matcher<JsonElement> isAJsonObjectWithTheFirst = is(
-			aJsonObjectWhere("first", is(is(_aJsonObjectWithTheSolution))));
+		String expected = "{'first': {'solution': 42}}";
 
-		assertThat(getJsonObject(), isAJsonObjectWithTheFirst);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingFieldAndNestedPrefixedFieldCreatesACorrectField() {
+	public void testInvokingFieldAndNestedPrefixedFieldCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"solution"
 		).nestedPrefixedField(
@@ -282,14 +235,17 @@ public class JSONObjectBuilderTest {
 			42
 		);
 
-		Matcher<JsonElement> isAJsonObjectWithTheSolution = is(
-			aJsonObjectWhere("solution", isAJsonObjectWithTheFirstPrefix()));
+		String expected =
+			"{'solution': {'prefix': {'first': {'prefix': {'second': {" +
+				"'prefix': {'third': 42}}}}}}}";
 
-		assertThat(getJsonObject(), isAJsonObjectWithTheSolution);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingFieldAndNestedSuffixedFieldCreatesACorrectField() {
+	public void testInvokingFieldAndNestedSuffixedFieldCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"solution"
 		).nestedSuffixedField(
@@ -298,13 +254,17 @@ public class JSONObjectBuilderTest {
 			42
 		);
 
-		assertThat(
-			getJsonObject(),
-			is(aJsonObjectWhere("solution", isAJsonObjectWithTheFirst())));
+		String expected =
+			"{'solution': {'first': {'suffix': {'second': {'suffix': {" +
+				"'third': {'suffix': 42}}}}}}}";
+
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingFieldAndTrueIfConditionCreatesACorrectField() {
+	public void testInvokingFieldAndTrueIfConditionCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"first"
 		).ifCondition(
@@ -313,14 +273,15 @@ public class JSONObjectBuilderTest {
 			42
 		);
 
-		Matcher<JsonElement> isAJsonObjectWithTheFirst = is(
-			aJsonObjectWhere("first", is(is(_aJsonObjectWithTheSolution))));
+		String expected = "{'first': {'solution': 42}}";
 
-		assertThat(getJsonObject(), isAJsonObjectWithTheFirst);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingFieldAndTrueIfElseConditionCreatesACorrectField() {
+	public void testInvokingFieldAndTrueIfElseConditionCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"first"
 		).ifElseCondition(
@@ -330,25 +291,28 @@ public class JSONObjectBuilderTest {
 			42
 		);
 
-		Matcher<JsonElement> isAJsonObjectWithTheFirst = is(
-			aJsonObjectWhere("first", is(is(_aJsonObjectWithTheSolution))));
+		String expected = "{'first': {'solution': 42}}";
 
-		assertThat(getJsonObject(), isAJsonObjectWithTheFirst);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingFieldCreatesACorrectField() {
+	public void testInvokingFieldCreatesACorrectField() throws JSONException {
 		_jsonObjectBuilder.field(
 			"solution"
 		).numberValue(
 			42
 		);
 
-		assertThat(getJsonObject(), is(_aJsonObjectWithTheSolution));
+		String expected = "{'solution': 42}";
+
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingFieldsWithConsumersCreatesAValidJsonObject() {
+	public void testInvokingFieldsWithConsumersCreatesAValidJsonObject()
+		throws JSONException {
+
 		_jsonObjectBuilder.field(
 			"object"
 		).fields(
@@ -364,82 +328,90 @@ public class JSONObjectBuilderTest {
 			)
 		);
 
-		Conditions.Builder builder = new Conditions.Builder();
+		String expected = "{'object': {'first': 42, 'second': 2018}}";
 
-		Conditions conditions = builder.where(
-			"first", is(aJsonInt(equalTo(42)))
-		).where(
-			"second", is(aJsonInt(equalTo(2018)))
-		).build();
-
-		assertThat(
-			getJsonObject(),
-			is(aJsonObjectWhere("object", is(aJsonObjectWith(conditions)))));
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingNestedFieldCreatesACorrectNestedField() {
+	public void testInvokingNestedFieldCreatesACorrectNestedField()
+		throws JSONException {
+
 		_jsonObjectBuilder.nestedField(
 			"the", "solution"
 		).numberValue(
 			42
 		);
 
-		assertThat(
-			getJsonObject(),
-			is(aJsonObjectWhere("the", is(_aJsonObjectWithTheSolution))));
+		String expected = "{'the': {'solution': 42}}";
+
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingNestedPrefixedFieldCreatesACorrectField() {
+	public void testInvokingNestedPrefixedFieldCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.nestedPrefixedField(
 			"prefix", "first", "second", "third"
 		).numberValue(
 			42
 		);
 
-		assertThat(getJsonObject(), isAJsonObjectWithTheFirstPrefix());
+		String expected =
+			"{'prefix': {'first': {'prefix': {'second': {'prefix': {" +
+				"'third': 42}}}}}}";
+
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingNestedSuffixedFieldCreatesACorrectField() {
+	public void testInvokingNestedSuffixedFieldCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.nestedSuffixedField(
 			"suffix", "first", "second", "third"
 		).numberValue(
 			42
 		);
 
-		assertThat(getJsonObject(), isAJsonObjectWithTheFirst());
+		String expected =
+			"{'first': {'suffix': {'second': {'suffix': {'third': {" +
+				"'suffix': 42}}}}}}";
+
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingNumberValueCreatesANumber() {
+	public void testInvokingNumberValueCreatesANumber() throws JSONException {
 		_jsonObjectBuilder.field(
 			"solution"
 		).numberValue(
 			42
 		);
 
-		assertThat(getJsonObject(), is(_aJsonObjectWithTheSolution));
+		String expected = "{'solution': 42}";
+
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingStringValueCreatesAString() {
+	public void testInvokingStringValueCreatesAString() throws JSONException {
 		_jsonObjectBuilder.field(
 			"solution"
 		).stringValue(
 			"forty-two"
 		);
 
-		Matcher<JsonElement> isAJsonObjectWithTheSolution = is(
-			aJsonObjectWhere(
-				"solution", is(aJsonString(equalTo("forty-two")))));
+		String expected = "{'solution': 'forty-two'}";
 
-		assertThat(getJsonObject(), isAJsonObjectWithTheSolution);
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
 	@Test
-	public void testInvokingTrueIfElseConditionCreatesACorrectField() {
+	public void testInvokingTrueIfElseConditionCreatesACorrectField()
+		throws JSONException {
+
 		_jsonObjectBuilder.ifElseCondition(
 			true, builder -> builder.field("solution"),
 			builder -> builder.field("false")
@@ -447,57 +419,11 @@ public class JSONObjectBuilderTest {
 			42
 		);
 
-		assertThat(getJsonObject(), is(_aJsonObjectWithTheSolution));
+		String expected = "{'solution': 42}";
+
+		assertEquals(expected, _jsonObjectBuilder.build(), true);
 	}
 
-	protected JsonObject getJsonObject() {
-		JsonParser jsonParser = new JsonParser();
-
-		JsonElement jsonElement = jsonParser.parse(_jsonObjectBuilder.build());
-
-		return jsonElement.getAsJsonObject();
-	}
-
-	protected Matcher<JsonElement> isAJsonObjectWithTheFirst() {
-		Matcher<JsonElement> isAJsonObjectWithTheThirdSuffix = is(
-			aJsonObjectWhere("suffix", is(aJsonInt(equalTo(42)))));
-
-		Matcher<JsonElement> isAJsonObjectWithTheThird = is(
-			aJsonObjectWhere("third", isAJsonObjectWithTheThirdSuffix));
-
-		Matcher<JsonElement> isAJsonObjectWithTheSecondSuffix = is(
-			aJsonObjectWhere("suffix", isAJsonObjectWithTheThird));
-
-		Matcher<JsonElement> isAJsonObjectWithTheSecond = is(
-			aJsonObjectWhere("second", isAJsonObjectWithTheSecondSuffix));
-
-		Matcher<JsonElement> isAJsonObjectWithTheFirstSuffix = is(
-			aJsonObjectWhere("suffix", isAJsonObjectWithTheSecond));
-
-		return is(aJsonObjectWhere("first", isAJsonObjectWithTheFirstSuffix));
-	}
-
-	protected Matcher<JsonElement> isAJsonObjectWithTheFirstPrefix() {
-		Matcher<JsonElement> isAJsonObjectWithTheThird = is(
-			aJsonObjectWhere("third", is(aJsonInt(equalTo(42)))));
-
-		Matcher<JsonElement> isAJsonObjectWithTheThirdPrefix = is(
-			aJsonObjectWhere("prefix", isAJsonObjectWithTheThird));
-
-		Matcher<JsonElement> isAJsonObjectWithTheSecond = is(
-			aJsonObjectWhere("second", isAJsonObjectWithTheThirdPrefix));
-
-		Matcher<JsonElement> isAJsonObjectWithTheSecondPrefix = is(
-			aJsonObjectWhere("prefix", isAJsonObjectWithTheSecond));
-
-		Matcher<JsonElement> isAJsonObjectWithTheFirst = is(
-			aJsonObjectWhere("first", isAJsonObjectWithTheSecondPrefix));
-
-		return is(aJsonObjectWhere("prefix", isAJsonObjectWithTheFirst));
-	}
-
-	private final Matcher<JsonElement> _aJsonObjectWithTheSolution =
-		aJsonObjectWhere("solution", is(aJsonInt(equalTo(42))));
 	private final JSONObjectBuilder _jsonObjectBuilder =
 		new JSONObjectBuilder();
 
