@@ -8,6 +8,7 @@
 		<suppress checks="VariableNameCheck" files="apio-architect-impl/src/main/java/com/liferay/apio/architect/impl/internal/routes/.*" />
 	</checkstyle>
 	<source-check>
+		<suppress checks="JavaDeprecatedJavadocCheck" files=".*" />
 		<suppress checks="JavaModuleInternalImportsCheck" files="apio-architect-impl/src/main/java/com/liferay/apio/architect/impl/internal/wiring/osgi/manager/base/BaseManager\.java" />
 		<suppress checks="JavaStaticImportsCheck" files=".*" />
 	</source-check>
