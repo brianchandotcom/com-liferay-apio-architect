@@ -57,15 +57,13 @@ public class JSONObjectBuilderTest {
 		jsonObject.addProperty("solution", 42);
 
 		arrayValueStep.addAllBooleans(Arrays.asList(false, true));
-		arrayValueStep.addAllJsonObjects(Arrays.asList(jsonObject, jsonObject));
 		arrayValueStep.addAllNumbers(Arrays.asList(21, 42));
 		arrayValueStep.addAllStrings(Arrays.asList("api", "apio"));
 
 		List<Matcher<? super JsonElement>> matchers = Arrays.asList(
-			aJsonBoolean(false), aJsonBoolean(true),
-			_aJsonObjectWithTheSolution, _aJsonObjectWithTheSolution,
-			aJsonInt(equalTo(21)), aJsonInt(equalTo(42)),
-			aJsonString(equalTo("api")), aJsonString(equalTo("apio")));
+			aJsonBoolean(false), aJsonBoolean(true), aJsonInt(equalTo(21)),
+			aJsonInt(equalTo(42)), aJsonString(equalTo("api")),
+			aJsonString(equalTo("apio")));
 
 		Matcher<JsonElement> isAJsonArrayWithElements = is(
 			aJsonArrayThat(contains(matchers)));

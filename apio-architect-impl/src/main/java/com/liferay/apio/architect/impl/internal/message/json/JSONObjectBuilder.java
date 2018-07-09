@@ -295,16 +295,6 @@ public class JSONObjectBuilder {
 		}
 
 		/**
-		 * Adds all elements of a JSON object collection as elements of the JSON
-		 * array.
-		 *
-		 * @param collection the JSON object collection to add to the JSON array
-		 */
-		public void addAllJsonObjects(Collection<JsonObject> collection) {
-			collection.forEach(_jsonArray::add);
-		}
-
-		/**
 		 * Adds all elements of a number collection as elements of the JSON
 		 * array.
 		 *
