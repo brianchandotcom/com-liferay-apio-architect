@@ -30,6 +30,7 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import com.liferay.apio.architect.test.util.json.Conditions;
 
@@ -450,7 +451,11 @@ public class JSONObjectBuilderTest {
 	}
 
 	protected JsonObject getJsonObject() {
-		return _jsonObjectBuilder.build();
+		JsonParser jsonParser = new JsonParser();
+
+		JsonElement jsonElement = jsonParser.parse(_jsonObjectBuilder.build());
+
+		return jsonElement.getAsJsonObject();
 	}
 
 	protected Matcher<JsonElement> isAJsonObjectWithTheFirst() {

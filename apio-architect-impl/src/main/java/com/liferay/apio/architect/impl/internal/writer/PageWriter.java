@@ -20,8 +20,6 @@ import static com.liferay.apio.architect.impl.internal.url.URLCreator.createNest
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getPathOptional;
 
-import com.google.gson.JsonObject;
-
 import com.liferay.apio.architect.impl.internal.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.impl.internal.alias.PathFunction;
 import com.liferay.apio.architect.impl.internal.alias.RepresentorFunction;
@@ -121,9 +119,7 @@ public class PageWriter<T> {
 
 		_pageMessageMapper.onFinish(_jsonObjectBuilder, _page);
 
-		JsonObject jsonObject = _jsonObjectBuilder.build();
-
-		return jsonObject.toString();
+		return _jsonObjectBuilder.build();
 	}
 
 	/**

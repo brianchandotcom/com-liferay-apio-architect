@@ -19,8 +19,6 @@ import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
-import com.google.gson.JsonObject;
-
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
@@ -133,9 +131,7 @@ public class DocumentationWriter {
 
 		_documentationMessageMapper.onFinish(jsonObjectBuilder, _documentation);
 
-		JsonObject jsonObject = jsonObjectBuilder.build();
-
-		return jsonObject.toString();
+		return jsonObjectBuilder.build();
 	}
 
 	/**

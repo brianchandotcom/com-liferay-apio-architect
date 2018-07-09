@@ -21,7 +21,6 @@ import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.impl.internal.documentation.Documentation;
 import com.liferay.apio.architect.impl.internal.message.json.DocumentationMessageMapper;
-import com.liferay.apio.architect.impl.internal.request.RequestInfo;
 import com.liferay.apio.architect.impl.internal.routes.CollectionRoutesImpl;
 import com.liferay.apio.architect.impl.internal.routes.ItemRoutesImpl;
 import com.liferay.apio.architect.impl.internal.routes.NestedCollectionRoutesImpl;
