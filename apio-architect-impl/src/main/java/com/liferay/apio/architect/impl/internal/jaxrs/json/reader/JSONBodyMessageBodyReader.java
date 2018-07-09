@@ -18,10 +18,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.functional.Try;
@@ -82,71 +82,76 @@ public class JSONBodyMessageBodyReader implements MessageBodyReader<Body> {
 	}
 
 	private static Body _getBody(InputStream entityStream) {
-		Gson gson = new Gson();
+		ObjectMapper objectMapper = new ObjectMapper();
 
-		return Try.fromFallibleWithResources(
+		JsonNode jsonNode = Try.fromFallibleWithResources(
 			() -> new InputStreamReader(entityStream, UTF_8),
-			streamReader -> gson.fromJson(streamReader, JsonObject.class)
-		).map(
-			JSONBodyMessageBodyReader::_getBody
-		).recover(
-			__ -> _getListBody(entityStream, gson)
+			objectMapper::readTree
+		).filter(
+			node -> node.isObject() || node.isArray()
+		).orElseThrow(
+			() -> new BadRequestException("Body is not a valid JSON")
 		);
+
+		if (jsonNode.isObject()) {
+			return _getBody((ObjectNode)jsonNode);
+		}
+
+		return _getListBody((ArrayNode)jsonNode);
 	}
 
-	private static Body _getBody(JsonObject jsonObject) {
+	private static Body _getBody(ObjectNode objectNode) {
 		return Body.create(
 			key -> Optional.ofNullable(
-				jsonObject.get(key)
+				objectNode.get(key)
 			).filter(
-				JsonElement::isJsonPrimitive
+				JsonNode::isValueNode
 			).map(
-				JsonElement::getAsString
+				JsonNode::asText
 			),
 			key -> Optional.ofNullable(
-				jsonObject.get(key)
+				objectNode.get(key)
 			).filter(
-				JsonElement::isJsonArray
+				JsonNode::isArray
 			).map(
-				JsonElement::getAsJsonArray
+				ArrayNode.class::cast
 			).map(
 				JSONBodyMessageBodyReader::_getJsonElements
 			).map(
 				List::stream
 			).map(
 				stream -> stream.filter(
-					JsonElement::isJsonPrimitive
+					JsonNode::isValueNode
 				).map(
-					JsonElement::getAsString
+					JsonNode::asText
 				).collect(
 					Collectors.toList()
 				)
 			));
 	}
 
-	private static List<JsonElement> _getJsonElements(JsonArray jsonArray) {
-		List<JsonElement> jsonElements = new ArrayList<>();
+	private static List<JsonNode> _getJsonElements(ArrayNode arrayNode) {
+		List<JsonNode> jsonNodes = new ArrayList<>();
 
-		Iterator<JsonElement> iterator = jsonArray.iterator();
+		Iterator<JsonNode> iterator = arrayNode.iterator();
 
-		iterator.forEachRemaining(jsonElements::add);
+		iterator.forEachRemaining(jsonNodes::add);
 
-		return jsonElements;
+		return jsonNodes;
 	}
 
-	private static Body _getListBody(InputStream entityStream, Gson gson) {
-		return Try.fromFallibleWithResources(
-			() -> new InputStreamReader(entityStream, UTF_8),
-			streamReader -> gson.fromJson(streamReader, JsonArray.class)
+	private static Body _getListBody(ArrayNode arrayNode) {
+		return Try.success(
+			arrayNode
 		).map(
 			JSONBodyMessageBodyReader::_getJsonElements
 		).map(
 			List::stream
 		).map(
 			stream -> stream.filter(
-				JsonElement::isJsonObject
+				JsonNode::isObject
 			).map(
-				JsonElement::getAsJsonObject
+				ObjectNode.class::cast
 			).map(
 				JSONBodyMessageBodyReader::_getBody
 			).collect(
@@ -155,7 +160,7 @@ public class JSONBodyMessageBodyReader implements MessageBodyReader<Body> {
 		).map(
 			Body::create
 		).orElseThrow(
-			() -> new BadRequestException("Body is not a valid JSON")
+			() -> new BadRequestException("Body is not a valid JSON Array")
 		);
 	}
 
