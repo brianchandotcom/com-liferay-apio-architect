@@ -37,7 +37,8 @@ public class ApioLoggerImpl implements ApioLogger {
 				_getExceptionMessage(apiError), apiError.getException());
 		}
 		else {
-			_logger.error(_getExceptionMessage(apiError));
+			_logger.error(
+				_getExceptionMessage(apiError), apiError.getException());
 		}
 	}
 
