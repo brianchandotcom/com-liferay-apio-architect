@@ -16,9 +16,6 @@ package com.liferay.apio.architect.test.util.internal.writer;
 
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import com.liferay.apio.architect.impl.internal.documentation.Documentation;
 import com.liferay.apio.architect.impl.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.impl.internal.routes.CollectionRoutesImpl;
@@ -50,13 +47,13 @@ public class MockDocumentationWriter {
 	/**
 	 * Writes a {@link Documentation} object.
 	 *
-	 * @param documentationMessageMapper the {@code DocumentationMessageMapper}
-	 *        to use for writing the JSON object
+	 * @param  documentationMessageMapper the {@code DocumentationMessageMapper}
+	 *         to use for writing the JSON object
+	 * @return the {@code String} containing the JSON Object.
+	 * @review
 	 */
-	public static JsonObject write(
+	public static String write(
 		DocumentationMessageMapper documentationMessageMapper) {
-
-		RequestInfo requestInfo = getRequestInfo();
 
 		CollectionRoutes.Builder<String, Object> collectionBuilder =
 			new CollectionRoutesImpl.BuilderImpl<>(
@@ -104,11 +101,10 @@ public class MockDocumentationWriter {
 			).documentationMessageMapper(
 				documentationMessageMapper
 			).requestInfo(
-				requestInfo
+				getRequestInfo()
 			).build());
 
-		return new Gson().fromJson(
-			documentationWriter.write(), JsonObject.class);
+		return documentationWriter.write();
 	}
 
 	private MockDocumentationWriter() {
