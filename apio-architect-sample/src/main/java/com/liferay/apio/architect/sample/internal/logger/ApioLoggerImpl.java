@@ -64,7 +64,7 @@ public class ApioLoggerImpl implements ApioLogger {
 					return message;
 				}
 
-				return apiError.toString();
+				return exception.toString();
 			});
 	}
 
