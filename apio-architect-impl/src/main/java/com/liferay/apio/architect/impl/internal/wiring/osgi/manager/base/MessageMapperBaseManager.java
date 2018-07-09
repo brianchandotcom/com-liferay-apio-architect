@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.impl.internal.wiring.osgi.manager.base;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.liferay.apio.architect.impl.internal.message.json.MessageMapper;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper;
 
@@ -22,6 +24,8 @@ import java.util.function.BiConsumer;
 import javax.ws.rs.core.MediaType;
 
 import org.osgi.framework.ServiceReference;
+
+import org.slf4j.Logger;
 
 /**
  * Manages message mappers.
@@ -53,7 +57,8 @@ public abstract class MessageMapperBaseManager<T extends MessageMapper>
 					_storeBiConsumer.accept(mediaType, messageMapper);
 				}
 				catch (IllegalArgumentException iae) {
-					warning("Message mapper has invalid media type: " + key);
+					_logger.warn(
+						"Message mapper has invalid media type: {}", key);
 				}
 			});
 	}
@@ -68,6 +73,7 @@ public abstract class MessageMapperBaseManager<T extends MessageMapper>
 		emitter.emit(t.getMediaType());
 	}
 
+	private Logger _logger = getLogger(getClass());
 	private final BiConsumer<MediaType, T> _storeBiConsumer;
 
 }

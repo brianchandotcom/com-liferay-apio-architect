@@ -16,14 +16,12 @@ package com.liferay.apio.architect.impl.internal.jaxrs.json.util;
 
 import static com.liferay.apio.architect.impl.internal.writer.ErrorWriter.writeError;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.impl.internal.message.json.ErrorMessageMapper;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.exception.mapper.ExceptionMapperManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.message.json.ErrorMessageMapperManager;
-import com.liferay.apio.architect.logger.ApioLogger;
 
 import java.util.Optional;
 
@@ -33,6 +31,8 @@ import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import org.slf4j.Logger;
 
 /**
  * Provides utility methods for transforming exceptions into responses.
@@ -54,16 +54,11 @@ public class ErrorUtil {
 			exception);
 
 		if (!apiErrorOptional.isPresent()) {
-			Class<? extends Exception> exceptionClass = exception.getClass();
+			Class<? extends Exception> clazz = exception.getClass();
 
-			if (_apioLogger != null) {
-				_apioLogger.warning(
-					"No exception mapper found for " + exceptionClass);
-			}
+			_logger.warn("No exception mapper found for {}", clazz);
 
-			if (exceptionClass.isAssignableFrom(
-					WebApplicationException.class)) {
-
+			if (clazz.isAssignableFrom(WebApplicationException.class)) {
 				WebApplicationException webApplicationException =
 					(WebApplicationException)exception;
 
@@ -75,9 +70,7 @@ public class ErrorUtil {
 
 		APIError apiError = apiErrorOptional.get();
 
-		if (_apioLogger != null) {
-			_apioLogger.error(apiError);
-		}
+		_logger.error(apiError.getMessage(), apiError.getException());
 
 		int statusCode = apiError.getStatusCode();
 
@@ -99,13 +92,12 @@ public class ErrorUtil {
 		);
 	}
 
-	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
-	private ApioLogger _apioLogger;
-
 	@Reference
 	private ErrorMessageMapperManager _errorMessageMapperManager;
 
 	@Reference
 	private ExceptionMapperManager _exceptionMapperManager;
+
+	private final Logger _logger = getLogger(getClass());
 
 }

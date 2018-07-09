@@ -16,6 +16,8 @@ package com.liferay.apio.architect.impl.internal.wiring.osgi.manager.router;
 
 import static com.liferay.apio.architect.impl.internal.alias.ProvideFunction.curry;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.impl.internal.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.impl.internal.url.ApplicationURL;
@@ -40,6 +42,8 @@ import java.util.TreeSet;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import org.slf4j.Logger;
 
 /**
  * @author Alejandro Hernández
@@ -74,13 +78,11 @@ public class CollectionRouterManagerImpl
 	}
 
 	private void _computeCollectionRoutes() {
-		List<String> missingMandatoryProviders =
-			_providerManager.getMissingProviders(_mandatoryClassNames);
+		List<String> list = _providerManager.getMissingProviders(
+			_mandatoryClassNames);
 
-		if (!missingMandatoryProviders.isEmpty()) {
-			warning(
-				"Missing providers for mandatory classes: " +
-					missingMandatoryProviders);
+		if (!list.isEmpty()) {
+			_logger.warn("Missing providers for mandatory classes: {}", list);
 
 			return;
 		}
@@ -91,9 +93,9 @@ public class CollectionRouterManagerImpl
 					className);
 
 				if (!nameOptional.isPresent()) {
-					warning(
-						"Unable to find a Representable for class name " +
-							className);
+					_logger.warn(
+						"Unable to find a Representable for class name {}",
+						className);
 
 					return;
 				}
@@ -115,8 +117,8 @@ public class CollectionRouterManagerImpl
 					_providerManager.getMissingProviders(neededProviders);
 
 				if (!missingProviders.isEmpty()) {
-					warning(
-						"Missing providers for classes: " + missingProviders);
+					_logger.warn(
+						"Missing providers for classes: {}", missingProviders);
 
 					return;
 				}
@@ -125,8 +127,8 @@ public class CollectionRouterManagerImpl
 					_itemRouterManager.getItemRoutesOptional(name);
 
 				if (!optional.isPresent()) {
-					warning(
-						"Missing item router for resource with name " + name);
+					_logger.warn(
+						"Missing item router for resource with name {}", name);
 
 					return;
 				}
@@ -143,6 +145,8 @@ public class CollectionRouterManagerImpl
 
 	@Reference
 	private ItemRouterManager _itemRouterManager;
+
+	private Logger _logger = getLogger(getClass());
 
 	@Reference
 	private NameManager _nameManager;

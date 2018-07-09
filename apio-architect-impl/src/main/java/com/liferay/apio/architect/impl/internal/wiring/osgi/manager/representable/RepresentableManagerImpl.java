@@ -19,6 +19,8 @@ import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.TypeA
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getGenericClassFromProperty;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getTypeParamTry;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.impl.internal.representor.RepresentorImpl.BuilderImpl;
@@ -45,6 +47,8 @@ import java.util.stream.Stream;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
+
+import org.slf4j.Logger;
 
 /**
  * @author Alejandro Hernández
@@ -104,9 +108,9 @@ public class RepresentableManagerImpl
 		).<Class<Identifier>>map(
 			Unsafe::unsafeCast
 		).voidFold(
-			__ -> warning(
-				"Unable to get identifier class from " +
-					representable.getClass()),
+			__ -> _logger.warn(
+				"Unable to get identifier class from: {}",
+				representable.getClass()),
 			emitter::emit
 		);
 	}
@@ -137,7 +141,11 @@ public class RepresentableManagerImpl
 				if (classNameOptional.isPresent()) {
 					String className = classNameOptional.get();
 
-					warning(_getDuplicateErrorMessage(clazz, name, className));
+					_logger.warn(
+						"Representable registered under {} has name {}, but " +
+							"it's already in use by Representable registered " +
+								"under {}",
+						clazz, name, className);
 
 					return;
 				}
@@ -150,26 +158,6 @@ public class RepresentableManagerImpl
 				ManagerCache.INSTANCE.putIdentifierClass(name, clazz);
 				ManagerCache.INSTANCE.putRepresentor(name, representor);
 			});
-	}
-
-	private String _getDuplicateErrorMessage(
-		Class<Identifier> clazz, String name, String className) {
-
-		StringBuilder stringBuilder = new StringBuilder();
-
-		return stringBuilder.append(
-			"Representable registered under "
-		).append(
-			clazz.getName()
-		).append(
-			" has name "
-		).append(
-			name
-		).append(
-			", but it's already in use by Representable registered under "
-		).append(
-			className
-		).toString();
 	}
 
 	private <T, S, U extends Identifier<S>> Representor<T> _getRepresentor(
@@ -193,5 +181,7 @@ public class RepresentableManagerImpl
 
 		return representable.representor(builder);
 	}
+
+	private Logger _logger = getLogger(getClass());
 
 }

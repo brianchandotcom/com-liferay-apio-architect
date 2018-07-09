@@ -20,6 +20,8 @@ import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.TypeA
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getGenericClassFromProperty;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getTypeParamTry;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.internal.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.base.ClassNameBaseManager;
@@ -42,6 +44,8 @@ import java.util.TreeSet;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import org.slf4j.Logger;
 
 /**
  * @author Alejandro Hernández
@@ -100,9 +104,9 @@ public class NestedCollectionRouterManagerImpl
 				parentClassName -> parentClassName + "-" + identifierClassName
 			)
 		).voidFold(
-			__ -> warning(
-				"Unable to get generic information from " +
-					nestedCollectionRouter.getClass()),
+			__ -> _logger.warn(
+				"Unable to get generic information from {}",
+				nestedCollectionRouter.getClass()),
 			emitter::emit
 		);
 	}
@@ -123,9 +127,10 @@ public class NestedCollectionRouterManagerImpl
 					parentClassName);
 
 				if (!nameOptional.isPresent()) {
-					warning(
+					_logger.warn(
 						"Unable to find a Representable for parent class " +
-							"name " + parentClassName);
+							"name {}",
+						parentClassName);
 
 					return;
 				}
@@ -136,9 +141,10 @@ public class NestedCollectionRouterManagerImpl
 					_nameManager.getNameOptional(nestedClassName);
 
 				if (!nestedNameOptional.isPresent()) {
-					warning(
+					_logger.warn(
 						"Unable to find a Representable for nested class " +
-							"name " + nestedClassName);
+							"name {}",
+						nestedClassName);
 
 					return;
 				}
@@ -160,8 +166,8 @@ public class NestedCollectionRouterManagerImpl
 					_providerManager.getMissingProviders(neededProviders);
 
 				if (!missingProviders.isEmpty()) {
-					warning(
-						"Missing providers for classes: " + missingProviders);
+					_logger.warn(
+						"Missing providers for classes: {}", missingProviders);
 
 					return;
 				}
@@ -170,9 +176,9 @@ public class NestedCollectionRouterManagerImpl
 					_itemRouterManager.getItemRoutesOptional(nestedName);
 
 				if (!nestedItemRoutes.isPresent()) {
-					warning(
-						"Missing item router for resource with name " +
-							nestedName);
+					_logger.warn(
+						"Missing item router for resource with name {}",
+						nestedName);
 
 					return;
 				}
@@ -181,8 +187,8 @@ public class NestedCollectionRouterManagerImpl
 					_itemRouterManager.getItemRoutesOptional(name);
 
 				if (!parentItemRoutes.isPresent()) {
-					warning(
-						"Missing item router for resource with name " + name);
+					_logger.warn(
+						"Missing item router for resource with name {}", name);
 
 					return;
 				}
@@ -194,6 +200,8 @@ public class NestedCollectionRouterManagerImpl
 
 	@Reference
 	private ItemRouterManager _itemRouterManager;
+
+	private Logger _logger = getLogger(getClass());
 
 	@Reference
 	private NameManager _nameManager;

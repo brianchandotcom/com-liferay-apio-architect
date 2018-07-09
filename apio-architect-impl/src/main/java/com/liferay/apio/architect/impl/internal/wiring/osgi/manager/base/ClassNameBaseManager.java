@@ -18,12 +18,16 @@ import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.TypeA
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getGenericClassFromProperty;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getTypeParamTry;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
 import java.util.Optional;
 
 import org.osgi.framework.ServiceReference;
+
+import org.slf4j.Logger;
 
 /**
  * Manages services that have a generic type using the generic type's class name
@@ -59,8 +63,8 @@ public abstract class ClassNameBaseManager<T> extends BaseManager<T, String> {
 		).map(
 			Class::getName
 		).voidFold(
-			__ -> warning(
-				"Unable to get generic information from " + t.getClass()),
+			__ -> _logger.warn(
+				"Unable to get generic information from {}", t.getClass()),
 			emitter::emit
 		);
 	}
@@ -77,6 +81,7 @@ public abstract class ClassNameBaseManager<T> extends BaseManager<T, String> {
 			serviceTrackerMap.getService(clazz.getName()));
 	}
 
+	private Logger _logger = getLogger(getClass());
 	private final Class<T> _managedClass;
 	private final int _principalTypeParamPosition;
 

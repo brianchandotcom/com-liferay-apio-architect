@@ -18,11 +18,9 @@ import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.TypeA
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.createServiceTracker;
 import static com.liferay.apio.architect.impl.internal.wiring.osgi.manager.util.ManagerUtil.getTypeParamTry;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
-import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.logger.ApioLogger;
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.resource.ItemResource;
 import com.liferay.apio.architect.router.ItemRouter;
@@ -32,8 +30,9 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
 import org.osgi.util.tracker.ServiceTracker;
+
+import org.slf4j.Logger;
 
 /**
  * Allow developers to register resources as {@link ItemResource}, instead of
@@ -56,9 +55,9 @@ public class ItemResourceRegistrar {
 					service, ItemResource.class, 2);
 
 				classTry.voidFold(
-					__ -> _warning(
-						"Unable to get identifier class from " +
-							service.getClass()),
+					__ -> _logger.warn(
+						"Unable to get identifier class from {}",
+						service.getClass()),
 					clazz -> properties.put(KEY_IDENTIFIER_CLASS, clazz));
 			});
 
@@ -70,15 +69,7 @@ public class ItemResourceRegistrar {
 		_serviceTracker.close();
 	}
 
-	private void _warning(String message) {
-		if (_apioLogger != null) {
-			_apioLogger.warning(message);
-		}
-	}
-
-	@Reference(cardinality = OPTIONAL, policyOption = GREEDY)
-	private ApioLogger _apioLogger;
-
+	private final Logger _logger = getLogger(getClass());
 	private ServiceTracker<ItemResource, ServiceRegistration<?>>
 		_serviceTracker;
 

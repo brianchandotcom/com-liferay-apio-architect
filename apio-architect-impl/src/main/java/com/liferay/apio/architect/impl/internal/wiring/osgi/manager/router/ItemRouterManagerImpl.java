@@ -16,6 +16,8 @@ package com.liferay.apio.architect.impl.internal.wiring.osgi.manager.router;
 
 import static com.liferay.apio.architect.impl.internal.alias.ProvideFunction.curry;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.liferay.apio.architect.impl.internal.routes.ItemRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.cache.ManagerCache;
@@ -34,6 +36,8 @@ import java.util.TreeSet;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import org.slf4j.Logger;
 
 /**
  * @author Alejandro Hernández
@@ -66,9 +70,9 @@ public class ItemRouterManagerImpl
 					className);
 
 				if (!nameOptional.isPresent()) {
-					warning(
-						"Unable to find a Representable for class name " +
-							className);
+					_logger.warn(
+						"Unable to find a Representable for class name {}",
+						className);
 
 					return;
 				}
@@ -89,8 +93,8 @@ public class ItemRouterManagerImpl
 					_providerManager.getMissingProviders(neededProviders);
 
 				if (!missingProviders.isEmpty()) {
-					warning(
-						"Missing providers for classes: " + missingProviders);
+					_logger.warn(
+						"Missing providers for classes: {}", missingProviders);
 
 					return;
 				}
@@ -99,9 +103,10 @@ public class ItemRouterManagerImpl
 					_pathIdentifierMapperManager.hasPathIdentifierMapper(name);
 
 				if (!hasPathIdentifierMapper) {
-					warning(
+					_logger.warn(
 						"Missing path identifier mapper for resource with " +
-							"name " + name);
+							"name {}",
+						name);
 
 					return;
 				}
@@ -109,6 +114,8 @@ public class ItemRouterManagerImpl
 				ManagerCache.INSTANCE.putItemRoutes(name, itemRoutes);
 			});
 	}
+
+	private Logger _logger = getLogger(getClass());
 
 	@Reference
 	private NameManager _nameManager;
