@@ -560,7 +560,15 @@ public class SingleModelWriter<T> {
 
 		_writeBasicFields(fieldsWriter, itemJsonObjectBuilder);
 
-		fieldsWriter.writeRelatedModels(
+		Optional<FieldsWriter<U>> fieldsWriterRelatedModelsOptional =
+			getFieldsWriter(
+				singleModel, null, _requestInfo, baseRepresentorFunction,
+				_singleModelFunction, pathOptional.get());
+
+		FieldsWriter<U> fieldsWriterRelatedModels =
+			fieldsWriterRelatedModelsOptional.get();
+
+		fieldsWriterRelatedModels.writeRelatedModels(
 			embeddedSingleModel -> getPathOptional(
 				embeddedSingleModel, _pathFunction,
 				_representorFunction::apply),
