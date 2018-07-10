@@ -21,8 +21,6 @@ import com.liferay.apio.architect.impl.pagination.PageType;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.uri.Path;
 
-import java.net.URI;
-
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -47,17 +45,7 @@ public final class URLCreator {
 	public static String createAbsoluteURL(
 		ApplicationURL applicationURL, String relativeURL) {
 
-		if ((relativeURL == null) || relativeURL.isEmpty()) {
-			return null;
-		}
-
-		URI uri = UriBuilder.fromUri(
-			applicationURL.get()
-		).path(
-			relativeURL
-		).build();
-
-		return uri.toString();
+		return _buildURL(applicationURL.get(), relativeURL);
 	}
 
 	/**
@@ -71,17 +59,7 @@ public final class URLCreator {
 	public static String createAbsoluteURL(
 		ServerURL serverURL, String relativeURL) {
 
-		if ((relativeURL == null) || relativeURL.isEmpty()) {
-			return null;
-		}
-
-		URI uri = UriBuilder.fromUri(
-			serverURL.get()
-		).path(
-			relativeURL
-		).build();
-
-		return uri.toString();
+		return _buildURL(serverURL.get(), relativeURL);
 	}
 
 	/**
@@ -193,6 +171,22 @@ public final class URLCreator {
 		}
 
 		return null;
+	}
+
+	private static String _buildURL(String baseUrl, String relativeURL) {
+		if ((relativeURL == null) || relativeURL.isEmpty()) {
+			return null;
+		}
+
+		if (baseUrl.endsWith("/")) {
+			baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+		}
+
+		if (relativeURL.startsWith("/")) {
+			relativeURL = relativeURL.substring(1);
+		}
+
+		return join("/", baseUrl, relativeURL);
 	}
 
 	private URLCreator() {
