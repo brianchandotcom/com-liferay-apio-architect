@@ -143,8 +143,8 @@ public class RepresentableManagerImpl
 
 					_logger.warn(
 						"Representable registered under {} has name {}, but " +
-							"it's already in use by Representable registered " +
-								"under {}",
+							"it is already in use by Representable " +
+								"registered under {}",
 						clazz, name, className);
 
 					return;
