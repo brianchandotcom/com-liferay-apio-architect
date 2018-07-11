@@ -378,31 +378,30 @@ public class PageWriter<T> {
 
 		_writeBasicFields(fieldsWriter, itemJsonObjectBuilder);
 
-		Optional<FieldsWriter<U>> fieldsWriterRelatedModelsOptional =
+		Optional<FieldsWriter<U>> relatedModelsFieldsWriterOptional =
 			getFieldsWriter(
 				singleModel, null, _requestInfo, baseRepresentorFunction,
 				_singleModelFunction, pathOptional.get());
 
-		FieldsWriter<U> fieldsWriterRelatedModels =
-			fieldsWriterRelatedModelsOptional.get();
-
-		fieldsWriterRelatedModels.writeRelatedModels(
-			embeddedSingleModel -> getPathOptional(
-				embeddedSingleModel, _pathFunction,
-				_representorFunction::apply),
-			(embeddedSingleModel, embeddedPathElements1) ->
-				_writeItemEmbeddedModelFields(
-					embeddedSingleModel, embeddedPathElements1,
-					itemJsonObjectBuilder, baseRepresentorFunction,
-					singleModel),
-			(resourceURL, embeddedPathElements1) ->
-				_pageMessageMapper.mapItemLinkedResourceURL(
-					_jsonObjectBuilder, itemJsonObjectBuilder,
-					embeddedPathElements1, resourceURL),
-			(resourceURL, embeddedPathElements1) ->
-				_pageMessageMapper.mapItemEmbeddedResourceURL(
-					_jsonObjectBuilder, itemJsonObjectBuilder,
-					embeddedPathElements1, resourceURL));
+		relatedModelsFieldsWriterOptional.ifPresent(
+			relatedModelFieldsWriter ->
+				relatedModelFieldsWriter.writeRelatedModels(
+					embeddedSingleModel -> getPathOptional(
+						embeddedSingleModel, _pathFunction,
+						_representorFunction::apply),
+					(embeddedSingleModel, embeddedPathElements1) ->
+						_writeItemEmbeddedModelFields(
+							embeddedSingleModel, embeddedPathElements1,
+							itemJsonObjectBuilder, baseRepresentorFunction,
+							singleModel),
+					(resourceURL, embeddedPathElements1) ->
+						_pageMessageMapper.mapItemLinkedResourceURL(
+							_jsonObjectBuilder, itemJsonObjectBuilder,
+							embeddedPathElements1, resourceURL),
+					(resourceURL, embeddedPathElements1) ->
+						_pageMessageMapper.mapItemEmbeddedResourceURL(
+							_jsonObjectBuilder, itemJsonObjectBuilder,
+							embeddedPathElements1, resourceURL)));
 
 		_writePageNestedResources(
 			baseRepresentorFunction, singleModel, itemJsonObjectBuilder,
