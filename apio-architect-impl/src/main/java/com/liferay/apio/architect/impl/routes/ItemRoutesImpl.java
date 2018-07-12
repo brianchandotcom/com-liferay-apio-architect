@@ -101,13 +101,13 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		public BuilderImpl(
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> identifierFunction) {
+			Function<Path, ?> pathToIdentifierFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
-			_identifierFunction = identifierFunction::apply;
+			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 		}
 
 		@Override
@@ -314,7 +314,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -347,7 +347,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -381,7 +381,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -412,7 +412,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -442,7 +442,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -502,9 +502,9 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		private Form _form;
 		private HasRemovePermissionFunction<S> _hasRemovePermissionFunction;
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
-		private final IdentifierFunction<?> _identifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
+		private final IdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
 		private GetItemFunction<T, S> _singleModelFunction;
 		private UpdateItemFunction<T, S> _updateItemFunction;

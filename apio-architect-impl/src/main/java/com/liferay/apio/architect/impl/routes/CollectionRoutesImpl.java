@@ -79,13 +79,13 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		public BuilderImpl(
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> identifierFunction) {
+			Function<Path, ?> pathToIdentifierFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
-			_identifierFunction = identifierFunction::apply;
+			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 		}
 
 		@Override
@@ -101,7 +101,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -127,7 +127,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -160,7 +160,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -192,7 +192,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -223,7 +223,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -385,9 +385,9 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
-		private final IdentifierFunction<?> _identifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
+		private final IdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
 
 	}
