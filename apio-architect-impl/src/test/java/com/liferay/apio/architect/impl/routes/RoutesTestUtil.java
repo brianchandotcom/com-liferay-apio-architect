@@ -24,6 +24,7 @@ import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.impl.alias.ProvideFunction;
 import com.liferay.apio.architect.impl.pagination.PaginationImpl;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.uri.Path;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +72,13 @@ public class RoutesTestUtil {
 	 */
 	public static final HasUpdatePermissionFunction<Long>
 		HAS_UPDATE_PERMISSION_FUNCTION = (credentials, aLong) -> true;
+
+	/**
+	 * An identifier to {@link Path} function that returns an {@link Optional}
+	 * containing a {@code Path("name", "id")}.
+	 */
+	public static final Function<Long, Optional<Path>>
+		IDENTIFIER_TO_PATH_FUNCTION = __ -> Optional.of(new Path("name", "id"));
 
 	/**
 	 * A mock {@code Pagination} object.

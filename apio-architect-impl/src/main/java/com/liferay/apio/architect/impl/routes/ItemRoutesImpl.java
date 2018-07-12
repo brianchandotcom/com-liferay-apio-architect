@@ -49,6 +49,7 @@ import com.liferay.apio.architect.uri.Path;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -468,31 +469,48 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		private List<Operation> _getOperations(
 			Credentials credentials, S identifier) {
 
+			Optional<Path> optional = _identifierToPathFunction.apply(
+				identifier);
+
+			if (!optional.isPresent()) {
+				return Collections.emptyList();
+			}
+
+			Path path = optional.get();
+
 			List<Operation> operations = new ArrayList<>();
 
-			Optional.ofNullable(
-				_hasRemovePermissionFunction
-			).filter(
-				function -> Try.fromFallible(
-					() -> function.apply(credentials, identifier)
+			if (_hasRemovePermissionFunction != null) {
+				Boolean canRemove = Try.fromFallible(
+					() -> _hasRemovePermissionFunction.apply(
+						credentials, identifier)
 				).orElse(
 					false
-				)
-			).ifPresent(
-				__ -> operations.add(new DeleteOperation(_name))
-			);
+				);
 
-			Optional.ofNullable(
-				_hasUpdatePermissionFunction
-			).filter(
-				function -> Try.fromFallible(
-					() -> function.apply(credentials, identifier)
+				if (canRemove) {
+					DeleteOperation deleteOperation = new DeleteOperation(
+						_name, path.asURI());
+
+					operations.add(deleteOperation);
+				}
+			}
+
+			if (_hasUpdatePermissionFunction != null) {
+				Boolean canUpdate = Try.fromFallible(
+					() -> _hasUpdatePermissionFunction.apply(
+						credentials, identifier)
 				).orElse(
 					false
-				)
-			).ifPresent(
-				__ -> operations.add(new UpdateOperation(_form, _name))
-			);
+				);
+
+				if (canUpdate) {
+					UpdateOperation updateOperation = new UpdateOperation(
+						_form, _name, path.asURI());
+
+					operations.add(updateOperation);
+				}
+			}
 
 			return operations;
 		}

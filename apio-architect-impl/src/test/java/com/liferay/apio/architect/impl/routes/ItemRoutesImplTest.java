@@ -17,6 +17,7 @@ package com.liferay.apio.architect.impl.routes;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.HAS_REMOVE_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.HAS_UPDATE_PERMISSION_FUNCTION;
+import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.IDENTIFIER_TO_PATH_FUNCTION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.keyValueFrom;
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
@@ -27,6 +28,7 @@ import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
@@ -61,7 +63,7 @@ public class ItemRoutesImplTest {
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null, __ -> Optional.empty());
+			__ -> null, IDENTIFIER_TO_PATH_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.build();
 
@@ -89,7 +91,7 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> Optional.empty());
+			IDENTIFIER_TO_PATH_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
@@ -120,7 +122,7 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> Optional.empty());
+			IDENTIFIER_TO_PATH_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
@@ -151,7 +153,7 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> Optional.empty());
+			IDENTIFIER_TO_PATH_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
@@ -176,7 +178,7 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> Optional.empty());
+			IDENTIFIER_TO_PATH_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
@@ -204,7 +206,7 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> Optional.empty());
+			IDENTIFIER_TO_PATH_FUNCTION);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
@@ -418,12 +420,18 @@ public class ItemRoutesImplTest {
 		assertThat(firstOperation.getFormOptional(), is(emptyOptional()));
 		assertThat(firstOperation.getHttpMethod(), is(DELETE));
 		assertThat(firstOperation.getName(), is("name/delete"));
+		assertThat(
+			firstOperation.getURIOptional(),
+			is(optionalWithValue(equalTo("name/id"))));
 
 		Operation secondOperation = operations.get(1);
 
 		assertThat(secondOperation.getFormOptional(), is(optionalWithValue()));
 		assertThat(secondOperation.getHttpMethod(), is(PUT));
 		assertThat(secondOperation.getName(), is("name/update"));
+		assertThat(
+			secondOperation.getURIOptional(),
+			is(optionalWithValue(equalTo("name/id"))));
 	}
 
 	private void _testOneParameterRemoverRoute(Long identifier, String string) {

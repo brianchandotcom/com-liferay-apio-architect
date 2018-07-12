@@ -28,7 +28,12 @@ import java.util.Optional;
 public class DeleteOperation implements Operation {
 
 	public DeleteOperation(String resourceName) {
+		this(resourceName, null);
+	}
+
+	public DeleteOperation(String resourceName, String uri) {
 		_resourceName = resourceName;
+		_uri = uri;
 	}
 
 	@Override
@@ -47,10 +52,16 @@ public class DeleteOperation implements Operation {
 	}
 
 	@Override
+	public Optional<String> getURIOptional() {
+		return Optional.ofNullable(_uri);
+	}
+
+	@Override
 	public boolean isCollection() {
 		return false;
 	}
 
 	private final String _resourceName;
+	private final String _uri;
 
 }

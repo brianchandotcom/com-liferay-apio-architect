@@ -28,8 +28,13 @@ import java.util.Optional;
 public class UpdateOperation implements Operation {
 
 	public UpdateOperation(Form form, String resourceName) {
+		this(form, resourceName, null);
+	}
+
+	public UpdateOperation(Form form, String resourceName, String uri) {
 		_form = form;
 		_resourceName = resourceName;
+		_uri = uri;
 	}
 
 	@Override
@@ -48,11 +53,17 @@ public class UpdateOperation implements Operation {
 	}
 
 	@Override
+	public Optional<String> getURIOptional() {
+		return Optional.ofNullable(_uri);
+	}
+
+	@Override
 	public boolean isCollection() {
 		return false;
 	}
 
 	private final Form _form;
 	private final String _resourceName;
+	private final String _uri;
 
 }

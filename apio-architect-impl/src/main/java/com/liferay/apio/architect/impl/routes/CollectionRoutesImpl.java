@@ -361,23 +361,20 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		private List<Operation> _getOperations(Credentials credentials) {
-			return Optional.ofNullable(
-				_form
-			).filter(
-				__ -> Try.fromFallible(
-					() -> _hasAddingPermissionFunction.apply(credentials)
-				).orElse(
-					false
-				)
-			).map(
-				form -> new CreateOperation(form, _name)
-			).map(
-				Operation.class::cast
-			).map(
-				Collections::singletonList
-			).orElseGet(
-				Collections::emptyList
+			Boolean canAdd = Try.fromFallible(
+				() -> _hasAddingPermissionFunction.apply(credentials)
+			).orElse(
+				false
 			);
+
+			if (!canAdd) {
+				return Collections.emptyList();
+			}
+
+			CreateOperation createOperation = new CreateOperation(
+				_form, _name, _name);
+
+			return Collections.singletonList(createOperation);
 		}
 
 		private CreateItemFunction<T> _createItemFunction;

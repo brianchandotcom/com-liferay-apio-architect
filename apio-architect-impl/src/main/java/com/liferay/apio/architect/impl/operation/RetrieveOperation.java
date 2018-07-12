@@ -28,8 +28,15 @@ import java.util.Optional;
 public class RetrieveOperation implements Operation {
 
 	public RetrieveOperation(String resourceName, boolean collection) {
+		this(resourceName, collection, null);
+	}
+
+	public RetrieveOperation(
+		String resourceName, boolean collection, String uri) {
+
 		_resourceName = resourceName;
 		_collection = collection;
+		_uri = uri;
 	}
 
 	@Override
@@ -48,11 +55,17 @@ public class RetrieveOperation implements Operation {
 	}
 
 	@Override
+	public Optional<String> getURIOptional() {
+		return Optional.ofNullable(_uri);
+	}
+
+	@Override
 	public boolean isCollection() {
 		return _collection;
 	}
 
 	private final boolean _collection;
 	private final String _resourceName;
+	private final String _uri;
 
 }
