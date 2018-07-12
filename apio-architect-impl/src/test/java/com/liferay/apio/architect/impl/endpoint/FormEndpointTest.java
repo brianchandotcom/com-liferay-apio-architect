@@ -51,7 +51,7 @@ public class FormEndpointTest {
 		FormEndpoint formEndpoint = new FormEndpoint(
 			__ -> _emptyCollectionRoutes(),
 			__ -> Optional.of(_emptyItemRoutes()),
-			(name, nestedName) -> Optional.of(_emptyNestedCollectionRoutes()));
+			(name, nestedName) -> _emptyNestedCollectionRoutes());
 
 		Try<Form> creatorFormTry = formEndpoint.creatorForm("");
 		Try<Form> nestedCreatorFormTry = formEndpoint.nestedCreatorForm("", "");
@@ -68,7 +68,10 @@ public class FormEndpointTest {
 			__ -> {
 				throw new NoSuchElementException();
 			},
-			__ -> Optional.empty(), (name, nestedName) -> Optional.empty());
+			__ -> Optional.empty(),
+			(name, nestedName) -> {
+				throw new NoSuchElementException();
+			});
 
 		Try<Form> creatorFormTry = formEndpoint.creatorForm("");
 		Try<Form> nestedCreatorFormTry = formEndpoint.nestedCreatorForm("", "");
@@ -98,7 +101,7 @@ public class FormEndpointTest {
 				names.add(name);
 				names.add(nestedName);
 
-				return Optional.empty();
+				return null;
 			});
 
 		formEndpoint.creatorForm("a");
@@ -112,7 +115,7 @@ public class FormEndpointTest {
 	public void testValidCreatorFormMethodReturnsSuccess() {
 		FormEndpoint formEndpoint = new FormEndpoint(
 			__ -> _collectionRoutes(),
-			__ -> Optional.empty(), (name, nestedName) -> Optional.empty());
+			__ -> Optional.empty(), (name, nestedName) -> null);
 
 		Try<Form> creatorFormTry = formEndpoint.creatorForm("");
 
@@ -127,7 +130,7 @@ public class FormEndpointTest {
 	public void testValidNestedCreatorFormMethodReturnsSuccess() {
 		FormEndpoint formEndpoint = new FormEndpoint(
 			__ -> null, __ -> Optional.empty(),
-			(name, nestedName) -> Optional.of(_nestedCollectionRoutes()));
+			(name, nestedName) -> _nestedCollectionRoutes());
 
 		Try<Form> nestedCreatorFormTry = formEndpoint.nestedCreatorForm("", "");
 
@@ -142,7 +145,7 @@ public class FormEndpointTest {
 	public void testValidUpdaterFormMethodReturnsSuccess() {
 		FormEndpoint formEndpoint = new FormEndpoint(
 			__ -> null, __ -> Optional.of(_itemRoutes()),
-			(name, nestedName) -> Optional.empty());
+			(name, nestedName) -> null);
 
 		Try<Form> updaterFormTry = formEndpoint.updaterForm("");
 

@@ -14,9 +14,10 @@
 
 package com.liferay.apio.architect.impl.endpoint;
 
-import static com.liferay.apio.architect.impl.internal.endpoint.ExceptionSupplierUtil.notFound;
+import static com.liferay.apio.architect.impl.endpoint.ExceptionSupplierUtil.notFound;
 
 import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.routes.CollectionRoutes;
@@ -24,7 +25,6 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.ws.rs.GET;
@@ -43,8 +43,8 @@ public class FormEndpoint {
 			collectionRoutesFunction,
 		Function<String, Optional<ItemRoutes<Object, Object>>>
 			itemRoutesFunction,
-		BiFunction<String, String, Optional
-			<NestedCollectionRoutes<Object, Object, Object>>>
+		ThrowableBiFunction
+			<String, String, NestedCollectionRoutes<Object, Object, Object>>
 				nestedCollectionRoutesFunction) {
 
 		_collectionRoutesFunction = collectionRoutesFunction;
@@ -86,10 +86,10 @@ public class FormEndpoint {
 		@PathParam("nestedName") String nestedName) {
 
 		return Try.fromOptional(
-			() -> _nestedCollectionRoutesFunction.apply(
-				name, nestedName
-			).flatMap(
+			() -> _nestedCollectionRoutesFunction.andThen(
 				NestedCollectionRoutes::getFormOptional
+			).apply(
+				name, nestedName
 			),
 			notFound(name, nestedName));
 	}
@@ -117,8 +117,8 @@ public class FormEndpoint {
 		_collectionRoutesFunction;
 	private final Function<String, Optional<ItemRoutes<Object, Object>>>
 		_itemRoutesFunction;
-	private final BiFunction<String, String,
-		Optional<NestedCollectionRoutes<Object, Object, Object>>>
+	private final ThrowableBiFunction
+		<String, String, NestedCollectionRoutes<Object, Object, Object>>
 			_nestedCollectionRoutesFunction;
 
 }
