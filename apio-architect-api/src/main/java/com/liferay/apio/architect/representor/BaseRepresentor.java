@@ -202,9 +202,15 @@ public interface BaseRepresentor<T> {
 		 * This field's value will be represented as an absolute URI, by
 		 * prefixing it with the application URL.
 		 *
+		 * <p>
+		 * URLs returned by this function should be already encoded (to check
+		 * for potential security holes).
+		 * </p>
+		 *
 		 * @param  key the field's name
 		 * @param  function the function used to get the relative url
 		 * @return the builder's step
+		 * @review
 		 */
 		public U addApplicationRelativeURL(
 			String key, Function<T, String> function);
@@ -340,8 +346,10 @@ public interface BaseRepresentor<T> {
 		 * value will be represented as an absolute URI, by prefixing it with
 		 * the server URL.
 		 *
-		 * URLs returned by this functions should be already encoded (to check
-		 * for potencial security holes)
+		 * <p>
+		 * URLs returned by this function should be already encoded (to check
+		 * for potential security holes).
+		 * </p>
 		 *
 		 * @param  key the field's name
 		 * @param  function the function used to get the relative url
