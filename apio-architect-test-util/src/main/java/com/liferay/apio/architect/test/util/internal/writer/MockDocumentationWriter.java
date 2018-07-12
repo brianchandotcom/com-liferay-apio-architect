@@ -66,14 +66,14 @@ public class MockDocumentationWriter {
 			"name", null,
 			__ -> {
 			},
-			__ -> null);
+			__ -> null, __ -> Optional.empty());
 
 		NestedCollectionRoutes.Builder nestedBuilder =
 			new NestedCollectionRoutesImpl.BuilderImpl<>(
 				"name", null, __ -> null,
 				__ -> {
 				},
-				__ -> null);
+				__ -> null, __ -> Optional.empty());
 
 		Representor<RootModel> rootModelRepresentor =
 			MockRepresentorCreator.createRootModelRepresentor(false);

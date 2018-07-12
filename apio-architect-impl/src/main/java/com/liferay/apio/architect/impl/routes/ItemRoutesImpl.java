@@ -100,13 +100,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		public BuilderImpl(
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> pathToIdentifierFunction) {
+			Function<Path, ?> pathToIdentifierFunction,
+			Function<S, Optional<Path>> identifierToPathFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
+			_identifierToPathFunction = identifierToPathFunction;
 		}
 
 		@Override
@@ -499,6 +501,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		private Form _form;
 		private HasRemovePermissionFunction<S> _hasRemovePermissionFunction;
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
+		private final Function<S, Optional<Path>> _identifierToPathFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private final IdentifierFunction<?> _pathToIdentifierFunction;

@@ -79,12 +79,26 @@ public class ItemRouterManagerImpl
 
 				String name = nameOptional.get();
 
+				boolean hasPathIdentifierMapper =
+					_pathIdentifierMapperManager.hasPathIdentifierMapper(name);
+
+				if (!hasPathIdentifierMapper) {
+					_logger.warn(
+						"Missing path identifier mapper for resource with " +
+							"name {}",
+						name);
+
+					return;
+				}
+
 				Set<String> neededProviders = new TreeSet<>();
 
 				Builder builder = new BuilderImpl<>(
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add,
-					_pathIdentifierMapperManager::mapToIdentifierOrFail);
+					_pathIdentifierMapperManager::mapToIdentifierOrFail,
+					identifier -> _pathIdentifierMapperManager.mapToPath(
+						name, identifier));
 
 				@SuppressWarnings("unchecked")
 				ItemRoutes itemRoutes = itemRouter.itemRoutes(builder);
@@ -95,18 +109,6 @@ public class ItemRouterManagerImpl
 				if (!missingProviders.isEmpty()) {
 					_logger.warn(
 						"Missing providers for classes: {}", missingProviders);
-
-					return;
-				}
-
-				boolean hasPathIdentifierMapper =
-					_pathIdentifierMapperManager.hasPathIdentifierMapper(name);
-
-				if (!hasPathIdentifierMapper) {
-					_logger.warn(
-						"Missing path identifier mapper for resource with " +
-							"name {}",
-						name);
 
 					return;
 				}

@@ -83,7 +83,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		public BuilderImpl(
 			String name, String nestedName, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> pathToIdentifierFunction) {
+			Function<Path, ?> pathToIdentifierFunction,
+			Function<S, Optional<Path>> identifierToPathFunction) {
 
 			_name = name;
 			_nestedName = nestedName;
@@ -91,6 +92,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_neededProviderConsumer = neededProviderConsumer;
 
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
+			_identifierToPathFunction = identifierToPathFunction;
 		}
 
 		@Override
@@ -420,6 +422,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		private Form _form;
 		private ThrowableBiFunction<Credentials, U, Boolean>
 			_hasNestedAddingPermissionFunction;
+		private final Function<S, Optional<Path>> _identifierToPathFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private NestedCreateItemFunction<T, U> _nestedCreateItemFunction;

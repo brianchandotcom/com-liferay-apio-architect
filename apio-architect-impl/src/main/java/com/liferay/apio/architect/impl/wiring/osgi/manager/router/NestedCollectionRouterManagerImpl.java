@@ -151,27 +151,6 @@ public class NestedCollectionRouterManagerImpl
 
 				String nestedName = nestedNameOptional.get();
 
-				Set<String> neededProviders = new TreeSet<>();
-
-				Builder builder = new BuilderImpl<>(
-					name, nestedName, curry(_providerManager::provideMandatory),
-					neededProviders::add,
-					_pathIdentifierMapperManager::mapToIdentifierOrFail);
-
-				@SuppressWarnings("unchecked")
-				NestedCollectionRoutes nestedCollectionRoutes =
-					nestedCollectionRouter.collectionRoutes(builder);
-
-				List<String> missingProviders =
-					_providerManager.getMissingProviders(neededProviders);
-
-				if (!missingProviders.isEmpty()) {
-					_logger.warn(
-						"Missing providers for classes: {}", missingProviders);
-
-					return;
-				}
-
 				Optional<ItemRoutes<Object, Object>> nestedItemRoutes =
 					_itemRouterManager.getItemRoutesOptional(nestedName);
 
@@ -189,6 +168,29 @@ public class NestedCollectionRouterManagerImpl
 				if (!parentItemRoutes.isPresent()) {
 					_logger.warn(
 						"Missing item router for resource with name {}", name);
+
+					return;
+				}
+
+				Set<String> neededProviders = new TreeSet<>();
+
+				Builder builder = new BuilderImpl<>(
+					name, nestedName, curry(_providerManager::provideMandatory),
+					neededProviders::add,
+					_pathIdentifierMapperManager::mapToIdentifierOrFail,
+					identifier -> _pathIdentifierMapperManager.mapToPath(
+						name, identifier));
+
+				@SuppressWarnings("unchecked")
+				NestedCollectionRoutes nestedCollectionRoutes =
+					nestedCollectionRouter.collectionRoutes(builder);
+
+				List<String> missingProviders =
+					_providerManager.getMissingProviders(neededProviders);
+
+				if (!missingProviders.isEmpty()) {
+					_logger.warn(
+						"Missing providers for classes: {}", missingProviders);
 
 					return;
 				}
