@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.FORM_BUILDER
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.PAGINATION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.hasNestedAddingPermissionFunction;
+import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.keyValueFrom;
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
@@ -33,6 +34,8 @@ import static org.hamcrest.core.Is.is;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedGetPageFunction;
 import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
@@ -225,9 +228,7 @@ public class NestedCollectionRoutesImplTest {
 
 		assertThat(identifier, is(42L));
 
-		Optional<String> optional = _body.getValueOptional("key");
-
-		assertThat(body.get("key"), is(optional.get()));
+		assertThat(body.get("key"), is(keyValueFrom(_singleBody)));
 
 		return "Apio";
 	}
@@ -297,49 +298,77 @@ public class NestedCollectionRoutesImplTest {
 	private void _testNestedCollectionRoutes(
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes) {
 
-		Optional<NestedCollectionRoutes<String, Long, Long>> optional =
-			Optional.of(nestedCollectionRoutes);
+		_testNestedCollectionRoutesCreator(nestedCollectionRoutes);
 
-		Map map = optional.flatMap(
-			NestedCollectionRoutes::getFormOptional
-		).map(
-			form -> {
-				assertThat(form.getId(), is("c/name/nested"));
+		_testNestedCollectionRoutesGetter(nestedCollectionRoutes);
+	}
 
-				return (Map)form.get(_body);
-			}
-		).get();
+	private void _testNestedCollectionRoutesCreator(
+		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes) {
 
-		Optional<String> valueOptional = _body.getValueOptional("key");
+		Optional<Form> formOptional = nestedCollectionRoutes.getFormOptional();
 
-		assertThat(map.get("key"), is(valueOptional.get()));
+		if (!formOptional.isPresent()) {
+			throw new AssertionError("Create Form not present");
+		}
 
-		SingleModel<String> singleModel = optional.flatMap(
-			NestedCollectionRoutes::getNestedCreateItemFunctionOptional
-		).get(
-		).apply(
+		Form form = formOptional.get();
+
+		assertThat(form.getId(), is("c/name/nested"));
+
+		Map map = (Map)form.get(_singleBody);
+
+		assertThat(map.get("key"), is(keyValueFrom(_singleBody)));
+
+		Optional<NestedCreateItemFunction<String, Long>>
+			nestedCreateItemFunctionOptional =
+				nestedCollectionRoutes.getNestedCreateItemFunctionOptional();
+
+		if (!nestedCreateItemFunctionOptional.isPresent()) {
+			throw new AssertionError("NestedCreateItemFunction not present");
+		}
+
+		NestedCreateItemFunction<String, Long> nestedCreateItemFunction =
+			nestedCreateItemFunctionOptional.get();
+
+		SingleModel<String> singleModel = nestedCreateItemFunction.apply(
 			null
 		).apply(
 			42L
+		).andThen(
+			Try::getUnchecked
 		).apply(
-			_body
-		).getUnchecked();
+			_singleBody
+		);
 
 		assertThat(singleModel.getResourceName(), is("nested"));
 		assertThat(singleModel.getModel(), is("Apio"));
+	}
+
+	private void _testNestedCollectionRoutesGetter(
+		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes) {
+
+		Optional<NestedGetPageFunction<String, Long>> optional =
+			nestedCollectionRoutes.getNestedGetPageFunctionOptional();
+
+		if (!optional.isPresent()) {
+			throw new AssertionError("NestedGetPageFunction not present");
+		}
+
+		NestedGetPageFunction<String, Long> nestedGetPageFunction =
+			optional.get();
 
 		Path path = new Path("name", "42");
 
-		Page<String> page = optional.flatMap(
-			NestedCollectionRoutes::getNestedGetPageFunctionOptional
-		).get(
-		).apply(
+		Page<String> page = nestedGetPageFunction.apply(
 			null
 		).apply(
 			path
+		).andThen(
+			Try::getUnchecked
 		).apply(
 			42L
-		).getUnchecked();
+		);
 
 		assertThat(page.getItems(), hasSize(1));
 		assertThat(page.getItems(), hasItem("Apio"));
@@ -350,13 +379,13 @@ public class NestedCollectionRoutesImplTest {
 
 		assertThat(operations, hasSize(1));
 
-		Operation secondOperation = operations.get(0);
+		Operation operation = operations.get(0);
 
-		assertThat(secondOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(secondOperation.getHttpMethod(), is(POST));
-		assertThat(secondOperation.getName(), is("name/nested/create"));
+		assertThat(operation.getFormOptional(), is(optionalWithValue()));
+		assertThat(operation.getHttpMethod(), is(POST));
+		assertThat(operation.getName(), is("name/nested/create"));
 	}
 
-	private final Body _body = __ -> Optional.of("Apio");
+	private static final Body _singleBody = __ -> Optional.of("Apio");
 
 }

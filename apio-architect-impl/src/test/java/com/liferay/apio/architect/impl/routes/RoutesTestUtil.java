@@ -20,12 +20,14 @@ import com.liferay.apio.architect.alias.routes.permission.HasNestedAddingPermiss
 import com.liferay.apio.architect.alias.routes.permission.HasRemovePermissionFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasUpdatePermissionFunction;
 import com.liferay.apio.architect.credentials.Credentials;
+import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.impl.alias.ProvideFunction;
 import com.liferay.apio.architect.impl.pagination.PaginationImpl;
 import com.liferay.apio.architect.pagination.Pagination;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.ws.rs.NotFoundException;
@@ -123,6 +125,21 @@ public class RoutesTestUtil {
 		hasNestedAddingPermissionFunction() {
 
 		return (credentials, s) -> true;
+	}
+
+	/**
+	 * Returns the value of the field with key {@code "key"} from the {@link
+	 * Body} or fails.
+	 *
+	 * @param  body the body to extract the value
+	 * @return the value of the key
+	 * @review
+	 */
+	public static String keyValueFrom(Body body) {
+		Optional<String> optional = body.getValueOptional("key");
+
+		return optional.orElseThrow(
+			() -> new AssertionError("Body does not contain field: \"key\""));
 	}
 
 }

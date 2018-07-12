@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.FORM_BUILDER
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.HAS_REMOVE_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.HAS_UPDATE_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.keyValueFrom;
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
@@ -33,6 +34,8 @@ import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
 import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.routes.ItemRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -248,9 +251,7 @@ public class ItemRoutesImplTest {
 
 		assertThat(identifier, is(42L));
 
-		Optional<String> optional = _body.getValueOptional("key");
-
-		assertThat(body.get("key"), is(optional.get()));
+		assertThat(body.get("key"), is(keyValueFrom(_body)));
 
 		return "Updated";
 	}
@@ -317,58 +318,93 @@ public class ItemRoutesImplTest {
 	private void _testItemRoutes(ItemRoutes<String, Long> itemRoutes)
 		throws Exception {
 
-		Optional<ItemRoutes<String, Long>> optional = Optional.of(itemRoutes);
+		_testItemRoutesGetter(itemRoutes);
 
-		Map map = optional.flatMap(
-			ItemRoutes::getFormOptional
-		).map(
-			form -> {
-				assertThat(form.getId(), is("u/name"));
+		_testItemRoutesUpdater(itemRoutes);
 
-				return (Map)form.get(_body);
-			}
-		).get();
+		_testItemRoutesDeleter(itemRoutes);
+	}
 
-		Optional<String> valueOptional = _body.getValueOptional("key");
+	private void _testItemRoutesDeleter(ItemRoutes<String, Long> itemRoutes)
+		throws Exception {
 
-		assertThat(map.get("key"), is(valueOptional.get()));
+		Optional<DeleteItemConsumer<Long>> optional =
+			itemRoutes.getDeleteConsumerOptional();
 
-		SingleModel<String> singleModel = optional.flatMap(
-			ItemRoutes::getItemFunctionOptional
-		).get(
-		).apply(
-			null
-		).apply(
-			42L
-		).getUnchecked();
+		if (!optional.isPresent()) {
+			throw new AssertionError("DeleteItemConsumer not present");
+		}
 
-		assertThat(singleModel.getResourceName(), is("name"));
-		assertThat(singleModel.getModel(), is("Apio"));
+		DeleteItemConsumer<Long> deleteItemConsumer = optional.get();
 
-		optional.flatMap(
-			ItemRoutes::getDeleteConsumerOptional
-		).get(
-		).apply(
+		deleteItemConsumer.apply(
 			null
 		).accept(
 			42L
 		);
+	}
 
-		SingleModel<String> updatedSingleModel = optional.flatMap(
-			ItemRoutes::getUpdateItemFunctionOptional
-		).get(
+	private void _testItemRoutesGetter(ItemRoutes<String, Long> itemRoutes) {
+		Optional<GetItemFunction<String, Long>> optional =
+			itemRoutes.getItemFunctionOptional();
+
+		if (!optional.isPresent()) {
+			throw new AssertionError("GetItemFunction not present");
+		}
+
+		GetItemFunction<String, Long> getItemFunction = optional.get();
+
+		SingleModel<String> singleModel = getItemFunction.apply(
+			null
+		).andThen(
+			Try::getUnchecked
 		).apply(
+			42L
+		);
+
+		assertThat(singleModel.getResourceName(), is("name"));
+		assertThat(singleModel.getModel(), is("Apio"));
+	}
+
+	private void _testItemRoutesUpdater(ItemRoutes<String, Long> itemRoutes) {
+		Optional<Form> formOptional = itemRoutes.getFormOptional();
+
+		if (!formOptional.isPresent()) {
+			throw new AssertionError("Update Form not present");
+		}
+
+		Form form = formOptional.get();
+
+		assertThat(form.getId(), is("u/name"));
+
+		Map map = (Map)form.get(_body);
+
+		assertThat(map.get("key"), is(keyValueFrom(_body)));
+
+		Optional<UpdateItemFunction<String, Long>> updateItemFunctionOptional =
+			itemRoutes.getUpdateItemFunctionOptional();
+
+		if (!updateItemFunctionOptional.isPresent()) {
+			throw new AssertionError("UpdateItemFunction not present");
+		}
+
+		UpdateItemFunction<String, Long> updateItemFunction =
+			updateItemFunctionOptional.get();
+
+		SingleModel<String> singleModel = updateItemFunction.apply(
 			null
 		).apply(
 			42L
+		).andThen(
+			Try::getUnchecked
 		).apply(
 			_body
-		).getUnchecked();
+		);
 
-		assertThat(updatedSingleModel.getResourceName(), is("name"));
-		assertThat(updatedSingleModel.getModel(), is("Updated"));
+		assertThat(singleModel.getResourceName(), is("name"));
+		assertThat(singleModel.getModel(), is("Updated"));
 
-		List<Operation> operations = updatedSingleModel.getOperations();
+		List<Operation> operations = singleModel.getOperations();
 
 		assertThat(operations, hasSize(2));
 

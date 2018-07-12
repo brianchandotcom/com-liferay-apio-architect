@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.FORM_BUILDER
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.PAGINATION;
 import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.keyValueFrom;
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
@@ -32,6 +33,8 @@ import static org.hamcrest.core.Is.is;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
@@ -57,13 +60,13 @@ public class CollectionRoutesImplTest {
 
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
 			__ -> null);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.build();
+		CollectionRoutes<String, Long> collectionRoutes = builder.build();
 
 		Optional<CreateItemFunction<String>> createItemFunctionOptional =
 			collectionRoutes.getCreateItemFunctionOptional();
@@ -80,10 +83,10 @@ public class CollectionRoutesImplTest {
 	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnFourParameterCreatorRoute, String.class,
 			Long.class, Boolean.class, Integer.class,
 			HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
@@ -105,10 +108,10 @@ public class CollectionRoutesImplTest {
 	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnThreeParameterCreatorRoute, String.class,
 			Long.class, Boolean.class, HAS_ADDING_PERMISSION_FUNCTION,
 			FORM_BUILDER_FUNCTION
@@ -130,10 +133,10 @@ public class CollectionRoutesImplTest {
 	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnNoParameterCreatorRoute,
 			HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
@@ -149,10 +152,10 @@ public class CollectionRoutesImplTest {
 	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnTwoParameterCreatorRoute, String.class,
 			Long.class, HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
@@ -171,10 +174,10 @@ public class CollectionRoutesImplTest {
 	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnOneParameterCreatorRoute, String.class,
 			HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
@@ -209,9 +212,7 @@ public class CollectionRoutesImplTest {
 	private String _testAndReturnNoParameterCreatorRoute(
 		Map<String, Object> body) {
 
-		Optional<String> optional = _body.getValueOptional("key");
-
-		assertThat(body.get("key"), is(optional.get()));
+		assertThat(body.get("key"), is(keyValueFrom(_body)));
 
 		return "Apio";
 	}
@@ -273,43 +274,69 @@ public class CollectionRoutesImplTest {
 	}
 
 	private void _testCollectionRoutes(
-		CollectionRoutes<String, ?> collectionRoutes) {
+		CollectionRoutes<String, Long> collectionRoutes) {
 
-		Optional<CollectionRoutes<String, ?>> optional = Optional.of(
-			collectionRoutes);
+		_testCollectionRoutesCreator(collectionRoutes);
 
-		Map map = optional.flatMap(
-			CollectionRoutes::getFormOptional
-		).map(
-			form -> {
-				assertThat(form.getId(), is("c/name"));
+		_testCollectionRoutesGetter(collectionRoutes);
+	}
 
-				return (Map)form.get(_body);
-			}
-		).get();
+	private void _testCollectionRoutesCreator(
+		CollectionRoutes<String, Long> collectionRoutes) {
 
-		Optional<String> valueOptional = _body.getValueOptional("key");
+		Optional<Form> formOptional = collectionRoutes.getFormOptional();
 
-		assertThat(map.get("key"), is(valueOptional.get()));
+		if (!formOptional.isPresent()) {
+			throw new AssertionError("Create Form not present");
+		}
 
-		SingleModel<String> singleModel = optional.flatMap(
-			CollectionRoutes::getCreateItemFunctionOptional
-		).get(
-		).apply(
+		Form form = formOptional.get();
+
+		assertThat(form.getId(), is("c/name"));
+
+		Map map = (Map)form.get(_body);
+
+		assertThat(map.get("key"), is(keyValueFrom(_body)));
+
+		Optional<CreateItemFunction<String>> createItemFunctionOptional =
+			collectionRoutes.getCreateItemFunctionOptional();
+
+		if (!createItemFunctionOptional.isPresent()) {
+			throw new AssertionError("CreateItemFunction not present");
+		}
+
+		CreateItemFunction<String> createItemFunction =
+			createItemFunctionOptional.get();
+
+		SingleModel<String> singleModel = createItemFunction.apply(
 			null
+		).andThen(
+			Try::getUnchecked
 		).apply(
 			_body
-		).getUnchecked();
+		);
 
 		assertThat(singleModel.getResourceName(), is("name"));
 		assertThat(singleModel.getModel(), is("Apio"));
+	}
 
-		Page<String> page = optional.flatMap(
-			CollectionRoutes::getGetPageFunctionOptional
-		).get(
+	private void _testCollectionRoutesGetter(
+		CollectionRoutes<String, Long> collectionRoutes) {
+
+		Optional<GetPageFunction<String>> optional =
+			collectionRoutes.getGetPageFunctionOptional();
+
+		if (!optional.isPresent()) {
+			throw new AssertionError("GetPageFunction not present");
+		}
+
+		GetPageFunction<String> getPageFunction = optional.get();
+
+		Page<String> page = getPageFunction.andThen(
+			Try::getUnchecked
 		).apply(
 			null
-		).getUnchecked();
+		);
 
 		assertThat(page.getItems(), hasSize(1));
 		assertThat(page.getItems(), hasItem("Apio"));
@@ -326,6 +353,6 @@ public class CollectionRoutesImplTest {
 		assertThat(operation.getName(), is("name/create"));
 	}
 
-	private final Body _body = __ -> Optional.of("Apio");
+	private static final Body _body = __ -> Optional.of("Apio");
 
 }
