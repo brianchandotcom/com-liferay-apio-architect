@@ -128,22 +128,23 @@ public class RootEndpointImpl implements RootEndpoint {
 		return optional.orElseThrow(notFound(name));
 	}
 
-	private <T, S> Try<SingleModel<T>> _getSingleModelTry(
+	private Try<SingleModel<Object>> _getSingleModelTry(
 		String name, String id) {
 
 		return Try.success(
 			name
-		).<ItemRoutes<T, S>>mapOptional(
+		).mapOptional(
 			_itemRouterManager::getItemRoutesOptional
 		).mapOptional(
 			ItemRoutes::getItemFunctionOptional, notFound(name, id)
+		).map(
+			requestFunction -> requestFunction.apply(_httpServletRequest)
+		).map(
+			identifierFunction -> identifierFunction.compose(
+				(Path path) ->
+					_pathIdentifierMapperManager.mapToIdentifierOrFail(path))
 		).flatMap(
-			function -> function.apply(
-				_httpServletRequest
-			).apply(
-				_pathIdentifierMapperManager.mapToIdentifierOrFail(
-					new Path(name, id))
-			)
+			pathFunction -> pathFunction.apply(new Path(name, id))
 		);
 	}
 

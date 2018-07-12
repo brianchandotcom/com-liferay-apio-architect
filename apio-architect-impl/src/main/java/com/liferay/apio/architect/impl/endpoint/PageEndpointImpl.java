@@ -77,9 +77,9 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 			CollectionRoutes::getCreateItemFunctionOptional,
 			notAllowed(POST, _name)
 		).map(
-			function -> function.apply(_httpServletRequest)
+			requestFunction -> requestFunction.apply(_httpServletRequest)
 		).flatMap(
-			function -> function.apply(body)
+			bodyFunction -> bodyFunction.apply(body)
 		);
 	}
 
@@ -112,17 +112,17 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 	@Override
 	public Response deleteCollectionItem(String id) throws Exception {
-		ThrowableConsumer<S> throwableConsumer = Try.fromOptional(
+		ThrowableConsumer<S> deleteItemThrowableConsumer = Try.fromOptional(
 			_itemRoutesSupplier::get, notFound(_name)
 		).mapOptional(
 			ItemRoutes::getDeleteConsumerOptional, notAllowed(DELETE, _name, id)
 		).map(
-			function -> function.apply(_httpServletRequest)
+			requestFunction -> requestFunction.apply(_httpServletRequest)
 		).getUnchecked();
 
-		Path path = new Path(_name, id);
+		S s = _pathToIdentifierFunction.apply(new Path(_name, id));
 
-		throwableConsumer.accept(_identifierFunction.apply(path));
+		deleteItemThrowableConsumer.accept(s);
 
 		return noContent().build();
 	}
@@ -139,7 +139,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		).mapOptional(
 			CollectionRoutes::getGetPageFunctionOptional, notFound(_name)
 		).flatMap(
-			function -> function.apply(_httpServletRequest)
+			requestFunction -> requestFunction.apply(_httpServletRequest)
 		);
 	}
 
@@ -178,16 +178,15 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		).mapOptional(
 			ItemRoutes::getUpdateItemFunctionOptional,
 			notAllowed(PUT, _name, id)
+		).map(
+			requestFunction -> requestFunction.apply(_httpServletRequest)
+		).map(
+			identifierFunction -> identifierFunction.compose(
+				_pathToIdentifierFunction)
+		).map(
+			pathFunction -> pathFunction.apply(new Path(_name, id))
 		).flatMap(
-			function -> function.apply(
-				_httpServletRequest
-			).compose(
-				_identifierFunction
-			).apply(
-				new Path(_name, id)
-			).apply(
-				body
-			)
+			bodyFunction -> bodyFunction.apply(body)
 		);
 	}
 
