@@ -25,11 +25,8 @@ import static javax.ws.rs.core.Response.noContent;
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.form.Body;
-import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.pagination.Page;
-import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -41,9 +38,7 @@ import com.liferay.apio.architect.uri.Path;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -56,7 +51,6 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 	public PageEndpointImpl(
 		String name, HttpServletRequest httpServletRequest,
-		Function<String, Optional<Class<Identifier>>> identifierClassFunction,
 		Function<String, Try<SingleModel<T>>> singleModelFunction,
 		Supplier<Optional<CollectionRoutes<T, S>>> collectionRoutesSupplier,
 		ThrowableSupplier<Representor<T>> representorSupplier,
@@ -67,7 +61,6 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 		_name = name;
 		_httpServletRequest = httpServletRequest;
-		_identifierClassFunction = identifierClassFunction;
 		_singleModelFunction = singleModelFunction;
 		_collectionRoutesSupplier = collectionRoutesSupplier;
 		_representorSupplier = representorSupplier;
@@ -99,23 +92,18 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 			notFound(_name, nestedName)
 		).mapOptional(
 			NestedCollectionRoutes::getNestedCreateItemFunctionOptional
+		).map(
+			requestFunction -> requestFunction.apply(_httpServletRequest)
 		).flatMap(
-			function -> {
-				Try<SingleModel<T>> singleModelTry =
-					getCollectionItemSingleModelTry(id);
-
-				return singleModelTry.mapOptional(
-					_getIdentifierFunction(nestedName)
-				).flatMap(
-					identifier -> function.apply(
-						_httpServletRequest
-					).apply(
-						identifier
-					).apply(
-						body
-					)
-				);
-			}
+			identifierFunction -> _singleModelFunction.apply(
+				id
+			).map(
+				this::_getIdentifierFunction
+			).map(
+				identifierFunction::apply
+			)
+		).flatMap(
+			bodyFunction -> bodyFunction.apply(body)
 		).mapFailMatching(
 			NoSuchElementException.class,
 			notAllowed(POST, _name, id, nestedName)
@@ -167,22 +155,17 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		).map(
 			Optional::get
 		).map(
-			function -> function.apply(_httpServletRequest)
+			requestFunction -> requestFunction.apply(_httpServletRequest)
 		).map(
-			function -> function.apply(new Path(_name, id))
+			pathFunction -> pathFunction.apply(new Path(_name, id))
 		).flatMap(
-			pageFunction -> {
-				Try<SingleModel<T>> parentSingleModelTry =
-					getCollectionItemSingleModelTry(id);
-
-				return parentSingleModelTry.map(
-					_getIdentifierFunction(nestedName)
-				).map(
-					optional -> optional.map(pageFunction)
-				);
-			}
-		).flatMap(
-			Optional::get
+			identifierFunction -> _singleModelFunction.apply(
+				id
+			).map(
+				this::_getIdentifierFunction
+			).flatMap(
+				identifierFunction::apply
+			)
 		).mapFailMatching(
 			NoSuchElementException.class, notFound(id, nestedName)
 		);
@@ -208,48 +191,17 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		);
 	}
 
-	private Predicate<RelatedCollection<?>>
-		_getFilterRelatedCollectionPredicate(String nestedName) {
-
-		return relatedCollection -> {
-			Class<?> relatedIdentifierClass =
-				relatedCollection.getIdentifierClass();
-
-			String className = relatedIdentifierClass.getName();
-
-			return _identifierClassFunction.apply(
-				nestedName
-			).map(
-				Class::getName
-			).map(
-				className::equals
-			).orElse(
-				false
-			);
-		};
-	}
-
-	private ThrowableFunction<SingleModel<T>, Optional<Object>>
-		_getIdentifierFunction(String nestedName) throws Exception {
+	private Object _getIdentifierFunction(SingleModel<T> singleModel)
+		throws Exception {
 
 		Representor<T> representor = _representorSupplier.get();
 
-		Stream<RelatedCollection<? extends Identifier>> stream =
-			representor.getRelatedCollections();
-
-		if (stream.anyMatch(_getFilterRelatedCollectionPredicate(nestedName))) {
-			return singleModel -> Optional.ofNullable(
-				representor.getIdentifier(singleModel.getModel()));
-		}
-
-		return __ -> Optional.empty();
+		return representor.getIdentifier(singleModel.getModel());
 	}
 
 	private final Supplier<Optional<CollectionRoutes<T, S>>>
 		_collectionRoutesSupplier;
 	private final HttpServletRequest _httpServletRequest;
-	private final Function<String, Optional<Class<Identifier>>>
-		_identifierClassFunction;
 	private final IdentifierFunction<S> _identifierFunction;
 	private final Supplier<Optional<ItemRoutes<T, S>>> _itemRoutesSupplier;
 	private final String _name;

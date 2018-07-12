@@ -24,7 +24,6 @@ import com.liferay.apio.architect.impl.documentation.Documentation;
 import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.impl.url.ApplicationURL;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.provider.ProviderManager;
-import com.liferay.apio.architect.impl.wiring.osgi.manager.representable.IdentifierClassManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.router.CollectionRouterManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.router.ItemRouterManager;
@@ -113,9 +112,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	@Override
 	public PageEndpointImpl pageEndpoint(String name) {
 		return new PageEndpointImpl<>(
-			name, _httpServletRequest,
-			_identifierClassManager::getIdentifierClassOptional,
-			id -> _getSingleModelTry(name, id),
+			name, _httpServletRequest, id -> _getSingleModelTry(name, id),
 			() -> _collectionRouterManager.getCollectionRoutesOptional(name),
 			() -> _getRepresentorOrFail(name),
 			() -> _itemRouterManager.getItemRoutesOptional(name),
@@ -161,9 +158,6 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Context
 	private HttpServletRequest _httpServletRequest;
-
-	@Reference
-	private IdentifierClassManager _identifierClassManager;
 
 	@Reference
 	private ItemRouterManager _itemRouterManager;
