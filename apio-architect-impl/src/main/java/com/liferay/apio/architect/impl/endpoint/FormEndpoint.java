@@ -17,6 +17,7 @@ package com.liferay.apio.architect.impl.endpoint;
 import static com.liferay.apio.architect.impl.internal.endpoint.ExceptionSupplierUtil.notFound;
 
 import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -38,7 +39,7 @@ import javax.ws.rs.PathParam;
 public class FormEndpoint {
 
 	public FormEndpoint(
-		Function<String, Optional<CollectionRoutes<Object, Object>>>
+		ThrowableFunction<String, CollectionRoutes<Object, Object>>
 			collectionRoutesFunction,
 		Function<String, Optional<ItemRoutes<Object, Object>>>
 			itemRoutesFunction,
@@ -62,10 +63,10 @@ public class FormEndpoint {
 	@Path("c/{name}")
 	public Try<Form> creatorForm(@PathParam("name") String name) {
 		return Try.fromOptional(
-			() -> _collectionRoutesFunction.apply(
-				name
-			).flatMap(
+			() -> _collectionRoutesFunction.andThen(
 				CollectionRoutes::getFormOptional
+			).apply(
+				name
 			),
 			notFound(name));
 	}
@@ -112,7 +113,7 @@ public class FormEndpoint {
 			notFound(name));
 	}
 
-	private final Function<String, Optional<CollectionRoutes<Object, Object>>>
+	private final ThrowableFunction<String, CollectionRoutes<Object, Object>>
 		_collectionRoutesFunction;
 	private final Function<String, Optional<ItemRoutes<Object, Object>>>
 		_itemRoutesFunction;

@@ -52,7 +52,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	public PageEndpointImpl(
 		String name, HttpServletRequest httpServletRequest,
 		Function<String, Try<SingleModel<T>>> singleModelFunction,
-		Supplier<Optional<CollectionRoutes<T, S>>> collectionRoutesSupplier,
+		ThrowableSupplier<CollectionRoutes<T, S>> collectionRoutesSupplier,
 		ThrowableSupplier<Representor<T>> representorSupplier,
 		Supplier<Optional<ItemRoutes<T, S>>> itemRoutesSupplier,
 		Function<String, Optional<NestedCollectionRoutes<T, S, Object>>>
@@ -71,8 +71,8 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 	@Override
 	public Try<SingleModel<T>> addCollectionItem(Body body) {
-		return Try.fromOptional(
-			_collectionRoutesSupplier::get, notFound(_name)
+		return Try.fromFallible(
+			_collectionRoutesSupplier
 		).mapOptional(
 			CollectionRoutes::getCreateItemFunctionOptional,
 			notAllowed(POST, _name)
@@ -134,8 +134,8 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 	@Override
 	public Try<Page<T>> getCollectionPageTry() {
-		return Try.fromOptional(
-			_collectionRoutesSupplier::get, notFound(_name)
+		return Try.fromFallible(
+			_collectionRoutesSupplier
 		).mapOptional(
 			CollectionRoutes::getGetPageFunctionOptional, notFound(_name)
 		).flatMap(
@@ -198,7 +198,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		return representor.getIdentifier(singleModel.getModel());
 	}
 
-	private final Supplier<Optional<CollectionRoutes<T, S>>>
+	private final ThrowableSupplier<CollectionRoutes<T, S>>
 		_collectionRoutesSupplier;
 	private final HttpServletRequest _httpServletRequest;
 	private final IdentifierFunction<S> _identifierFunction;

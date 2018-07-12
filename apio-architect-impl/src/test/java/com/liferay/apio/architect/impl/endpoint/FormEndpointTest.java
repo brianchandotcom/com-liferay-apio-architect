@@ -36,6 +36,7 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class FormEndpointTest {
 	@Test
 	public void testEmptyFormsMethodsReturnsFailure() {
 		FormEndpoint formEndpoint = new FormEndpoint(
-			__ -> Optional.of(_emptyCollectionRoutes()),
+			__ -> _emptyCollectionRoutes(),
 			__ -> Optional.of(_emptyItemRoutes()),
 			(name, nestedName) -> Optional.of(_emptyNestedCollectionRoutes()));
 
@@ -64,8 +65,10 @@ public class FormEndpointTest {
 	@Test
 	public void testEmptyRoutesReturnsFailure() {
 		FormEndpoint formEndpoint = new FormEndpoint(
-			__ -> Optional.empty(), __ -> Optional.empty(),
-			(name, nestedName) -> Optional.empty());
+			__ -> {
+				throw new NoSuchElementException();
+			},
+			__ -> Optional.empty(), (name, nestedName) -> Optional.empty());
 
 		Try<Form> creatorFormTry = formEndpoint.creatorForm("");
 		Try<Form> nestedCreatorFormTry = formEndpoint.nestedCreatorForm("", "");
@@ -84,7 +87,7 @@ public class FormEndpointTest {
 			name -> {
 				names.add(name);
 
-				return Optional.empty();
+				return null;
 			},
 			name -> {
 				names.add(name);
@@ -108,7 +111,7 @@ public class FormEndpointTest {
 	@Test
 	public void testValidCreatorFormMethodReturnsSuccess() {
 		FormEndpoint formEndpoint = new FormEndpoint(
-			__ -> Optional.of(_collectionRoutes()),
+			__ -> _collectionRoutes(),
 			__ -> Optional.empty(), (name, nestedName) -> Optional.empty());
 
 		Try<Form> creatorFormTry = formEndpoint.creatorForm("");
@@ -123,7 +126,7 @@ public class FormEndpointTest {
 	@Test
 	public void testValidNestedCreatorFormMethodReturnsSuccess() {
 		FormEndpoint formEndpoint = new FormEndpoint(
-			__ -> Optional.empty(), __ -> Optional.empty(),
+			__ -> null, __ -> Optional.empty(),
 			(name, nestedName) -> Optional.of(_nestedCollectionRoutes()));
 
 		Try<Form> nestedCreatorFormTry = formEndpoint.nestedCreatorForm("", "");
@@ -138,7 +141,7 @@ public class FormEndpointTest {
 	@Test
 	public void testValidUpdaterFormMethodReturnsSuccess() {
 		FormEndpoint formEndpoint = new FormEndpoint(
-			__ -> Optional.empty(), __ -> Optional.of(_itemRoutes()),
+			__ -> null, __ -> Optional.of(_itemRoutes()),
 			(name, nestedName) -> Optional.empty());
 
 		Try<Form> updaterFormTry = formEndpoint.updaterForm("");

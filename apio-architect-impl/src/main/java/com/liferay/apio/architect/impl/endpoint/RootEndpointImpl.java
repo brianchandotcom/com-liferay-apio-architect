@@ -80,7 +80,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	@Override
 	public FormEndpoint formEndpoint() {
 		return new FormEndpoint(
-			_collectionRouterManager::getCollectionRoutesOptional,
+			this::_getCollectionRoutesOrFail,
 			_itemRouterManager::getItemRoutesOptional,
 			_nestedCollectionRouterManager::getNestedCollectionRoutesOptional);
 	}
@@ -113,12 +113,21 @@ public class RootEndpointImpl implements RootEndpoint {
 	public PageEndpointImpl pageEndpoint(String name) {
 		return new PageEndpointImpl<>(
 			name, _httpServletRequest, id -> _getSingleModelTry(name, id),
-			() -> _collectionRouterManager.getCollectionRoutesOptional(name),
+			() -> _getCollectionRoutesOrFail(name),
 			() -> _getRepresentorOrFail(name),
 			() -> _itemRouterManager.getItemRoutesOptional(name),
 			nestedName -> _nestedCollectionRouterManager.
 				getNestedCollectionRoutesOptional(name, nestedName),
 			_pathIdentifierMapperManager::mapToIdentifierOrFail);
+	}
+
+	private CollectionRoutes<Object, Object> _getCollectionRoutesOrFail(
+		String name) {
+
+		Optional<CollectionRoutes<Object, Object>> optional =
+			_collectionRouterManager.getCollectionRoutesOptional(name);
+
+		return optional.orElseThrow(notFound(name));
 	}
 
 	private Representor<Object> _getRepresentorOrFail(String name) {
