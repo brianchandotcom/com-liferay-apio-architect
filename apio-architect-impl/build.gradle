@@ -1,3 +1,5 @@
+task deployConfigs(type: Copy)
+
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -32,4 +34,17 @@ dependencies {
 	testCompile group: "org.skyscreamer", name: "jsonassert", version: "1.5.0"
 	testCompile group: "pl.pragmatists", name: "JUnitParams", version: "1.1.0"
 	testCompile project(":apps:apio-architect:apio-architect-test-util")
+}
+
+deploy {
+	finalizedBy deployConfigs
+}
+
+deployConfigs {
+	ext {
+		autoClean = false
+	}
+
+	from "configs"
+	into new File(liferay.liferayHome, "osgi/configs")
 }
