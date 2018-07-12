@@ -35,6 +35,7 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.supplier.ThrowableSupplier;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.NoSuchElementException;
@@ -42,6 +43,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,7 +59,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		Function<String, Optional<Class<Identifier>>> identifierClassFunction,
 		Function<String, Try<SingleModel<T>>> singleModelFunction,
 		Supplier<Optional<CollectionRoutes<T, S>>> collectionRoutesSupplier,
-		Supplier<Optional<Representor<T>>> representorSupplier,
+		ThrowableSupplier<Representor<T>> representorSupplier,
 		Supplier<Optional<ItemRoutes<T, S>>> itemRoutesSupplier,
 		Function<String, Optional<NestedCollectionRoutes<T, S, Object>>>
 			nestedCollectionRoutesFunction,
@@ -228,21 +230,19 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	}
 
 	private ThrowableFunction<SingleModel<T>, Optional<Object>>
-		_getIdentifierFunction(String nestedName) {
+		_getIdentifierFunction(String nestedName) throws Exception {
 
-		Optional<Representor<T>> optional = _representorSupplier.get();
+		Representor<T> representor = _representorSupplier.get();
 
-		return parentSingleModel -> optional.map(
-			Representor::getRelatedCollections
-		).filter(
-			stream -> stream.anyMatch(
-				_getFilterRelatedCollectionPredicate(nestedName))
-		).flatMap(
-			__ -> _representorSupplier.get()
-		).map(
-			representor -> representor.getIdentifier(
-				parentSingleModel.getModel())
-		);
+		Stream<RelatedCollection<? extends Identifier>> stream =
+			representor.getRelatedCollections();
+
+		if (stream.anyMatch(_getFilterRelatedCollectionPredicate(nestedName))) {
+			return singleModel -> Optional.ofNullable(
+				representor.getIdentifier(singleModel.getModel()));
+		}
+
+		return __ -> Optional.empty();
 	}
 
 	private final Supplier<Optional<CollectionRoutes<T, S>>>
@@ -255,7 +255,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	private final String _name;
 	private final Function<String, Optional<NestedCollectionRoutes
 		<T, S, Object>>> _nestedCollectionRoutesFunction;
-	private final Supplier<Optional<Representor<T>>> _representorSupplier;
+	private final ThrowableSupplier<Representor<T>> _representorSupplier;
 	private final Function<String, Try<SingleModel<T>>> _singleModelFunction;
 
 }

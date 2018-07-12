@@ -30,6 +30,7 @@ import com.liferay.apio.architect.impl.wiring.osgi.manager.router.CollectionRout
 import com.liferay.apio.architect.impl.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
@@ -69,8 +70,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	@Override
 	public BinaryEndpoint binaryEndpoint() {
 		return new BinaryEndpoint(
-			_representableManager::getRepresentorOptional,
-			this::_getSingleModelTry);
+			this::_getRepresentorOrFail, this::_getSingleModelTry);
 	}
 
 	@Override
@@ -117,11 +117,18 @@ public class RootEndpointImpl implements RootEndpoint {
 			_identifierClassManager::getIdentifierClassOptional,
 			id -> _getSingleModelTry(name, id),
 			() -> _collectionRouterManager.getCollectionRoutesOptional(name),
-			() -> _representableManager.getRepresentorOptional(name),
+			() -> _getRepresentorOrFail(name),
 			() -> _itemRouterManager.getItemRoutesOptional(name),
 			nestedName -> _nestedCollectionRouterManager.
 				getNestedCollectionRoutesOptional(name, nestedName),
 			_pathIdentifierMapperManager::mapToIdentifierOrFail);
+	}
+
+	private Representor<Object> _getRepresentorOrFail(String name) {
+		Optional<Representor<Object>> optional =
+			_representableManager.getRepresentorOptional(name);
+
+		return optional.orElseThrow(notFound(name));
 	}
 
 	private <T, S> Try<SingleModel<T>> _getSingleModelTry(

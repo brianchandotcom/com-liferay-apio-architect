@@ -14,14 +14,15 @@
 
 package com.liferay.apio.architect.impl.endpoint;
 
+import static com.liferay.apio.architect.impl.endpoint.ExceptionSupplierUtil.notFound;
+
 import com.liferay.apio.architect.file.BinaryFile;
+import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -35,7 +36,7 @@ import javax.ws.rs.PathParam;
 public class BinaryEndpoint {
 
 	public BinaryEndpoint(
-		Function<String, Optional<Representor<Object>>> representorFunction,
+		ThrowableFunction<String, Representor<Object>> representorFunction,
 		BiFunction<String, String, Try<SingleModel<Object>>>
 			singleModelFunction) {
 
@@ -58,23 +59,23 @@ public class BinaryEndpoint {
 		@PathParam("name") String name, @PathParam("id") String id,
 		@PathParam("binaryId") String binaryId) {
 
-		return _singleModelFunction.apply(
-			name, id
-		).map(
-			SingleModel::getModel
+		return Try.fromFallible(
+			() -> _representorFunction.apply(name)
 		).mapOptional(
-			model -> _representorFunction.apply(
-				name
-			).flatMap(
-				representor -> representor.getBinaryFunction(binaryId)
+			representor -> representor.getBinaryFunction(binaryId),
+			notFound(name, id, binaryId)
+		).flatMap(
+			binaryFunction -> _singleModelFunction.apply(
+				name, id
 			).map(
-				function -> function.apply(model)
-			),
-			ExceptionSupplierUtil.notFound(name, id, binaryId)
+				SingleModel::getModel
+			).map(
+				binaryFunction::apply
+			)
 		);
 	}
 
-	private final Function<String, Optional<Representor<Object>>>
+	private final ThrowableFunction<String, Representor<Object>>
 		_representorFunction;
 	private final BiFunction<String, String, Try<SingleModel<Object>>>
 		_singleModelFunction;

@@ -18,6 +18,9 @@ import static com.liferay.apio.architect.test.util.result.TryMatchers.aFailTry;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import static java.util.Collections.emptyList;
+import static java.util.function.Function.identity;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -28,17 +31,14 @@ import com.liferay.apio.architect.impl.representor.RepresentorImpl.BuilderImpl;
 import com.liferay.apio.architect.impl.single.model.SingleModelImpl;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.Builder;
+import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 
 import org.junit.Test;
 
@@ -60,7 +60,7 @@ public class BinaryEndpointTest {
 	@Test
 	public void testBinaryEndpointWithFailSingleModelReturnsFailure() {
 		BinaryEndpoint binaryEndpoint = new BinaryEndpoint(
-			__ -> Optional.of(_representor()),
+			__ -> _representor(),
 			(name, id) -> Try.fail(new IllegalArgumentException()));
 
 		Try<BinaryFile> binaryFileTry =
@@ -80,7 +80,7 @@ public class BinaryEndpointTest {
 	}
 
 	@Test
-	public void testBinaryEndpointWithValidFunctionsReturnInputStream() {
+	public void testBinaryEndpointWithValidFunctionsReturnsBinaryFile() {
 		BinaryEndpoint binaryEndpoint = _getBinaryEndpoint(_representor());
 
 		Try<BinaryFile> binaryFileTry =
@@ -88,15 +88,9 @@ public class BinaryEndpointTest {
 
 		BinaryFile binaryFile = binaryFileTry.getUnchecked();
 
+		assertThat(_readBinaryFile(binaryFile), is("Apio"));
+		assertThat(binaryFile.getMimeType(), is("image/png"));
 		assertThat(binaryFile.getSize(), is(0L));
-
-		InputStream inputStream = binaryFile.getInputStream();
-
-		String result = Try.fromFallibleWithResources(
-			() -> new BufferedReader(new InputStreamReader(inputStream)),
-			BufferedReader::readLine).getUnchecked();
-
-		assertThat(result, is("Apio"));
 	}
 
 	@Test
@@ -107,29 +101,30 @@ public class BinaryEndpointTest {
 			name -> {
 				names.add(name);
 
-				return Optional.of(_representor());
+				return _representor();
 			},
 			(name, id) -> {
 				names.add(name);
 				names.add(id);
 
-				return Try.success(
-					new SingleModelImpl<>(
-						"apio", name, Collections.emptyList()));
+				return Try.success(_getSingleModel(name));
 			});
 
-		binaryEndpoint.getCollectionItemBinaryFileTry("a", "b", "binaryId");
+		binaryEndpoint.getCollectionItemBinaryFileTry("a", "b", "binary");
 
-		assertThat(names, contains("a", "b", "a"));
+		assertThat(names, contains("a", "a", "b"));
 	}
 
 	private static BinaryEndpoint _getBinaryEndpoint(
 		Representor<Object> representor) {
 
 		return new BinaryEndpoint(
-			__ -> Optional.ofNullable(representor),
-			(name, id) -> Try.success(
-				new SingleModelImpl<>("apio", name, Collections.emptyList())));
+			__ -> representor,
+			(name, id) -> Try.success(_getSingleModel(name)));
+	}
+
+	private static SingleModel<Object> _getSingleModel(String name) {
+		return new SingleModelImpl<>("apio", name, emptyList());
 	}
 
 	private static Representor<Object> _representor() {
@@ -138,13 +133,20 @@ public class BinaryEndpointTest {
 		return builder.types(
 			""
 		).identifier(
-			Function.identity()
+			identity()
 		).addBinary(
 			"binary",
 			__ -> new BinaryFile(
 				new ByteArrayInputStream("Apio".getBytes(UTF_8)), 0L,
 				"image/png")
 		).build();
+	}
+
+	private String _readBinaryFile(BinaryFile binaryFile) {
+		return Try.fromFallibleWithResources(
+			() -> new BufferedReader(new InputStreamReader(
+				binaryFile.getInputStream())),
+			BufferedReader::readLine).getUnchecked();
 	}
 
 }
