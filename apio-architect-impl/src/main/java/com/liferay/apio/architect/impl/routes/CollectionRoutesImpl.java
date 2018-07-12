@@ -90,7 +90,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 		@Override
 		public <A, R> Builder<T, S> addCreator(
-			ThrowableBiFunction<R, A, T> throwableBiFunction, Class<A> aClass,
+			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
+			Class<A> aClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
@@ -106,7 +107,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
-				a -> throwableBiFunction.andThen(
+				a -> creatorThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, Collections.emptyList())
 				).apply(
@@ -118,7 +119,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 		@Override
 		public <R> Builder<T, S> addCreator(
-			ThrowableFunction<R, T> throwableFunction,
+			ThrowableFunction<R, T> creatorThrowableFunction,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
@@ -132,7 +133,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_createItemFunction = httpServletRequest -> body ->
 				Try.fromFallible(
-					() -> throwableFunction.andThen(
+					() -> creatorThrowableFunction.andThen(
 						t -> new SingleModelImpl<>(
 							t, _name, Collections.emptyList())
 					).apply(
@@ -144,7 +145,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 		@Override
 		public <A, B, C, D, R> Builder<T, S> addCreator(
-			ThrowablePentaFunction<R, A, B, C, D, T> throwablePentaFunction,
+			ThrowablePentaFunction<R, A, B, C, D, T>
+				creatorThrowablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -165,7 +167,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass,
-				(a, b, c, d) -> throwablePentaFunction.andThen(
+				(a, b, c, d) -> creatorThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, Collections.emptyList())
 				).apply(
@@ -177,7 +179,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 		@Override
 		public <A, B, C, R> Builder<T, S> addCreator(
-			ThrowableTetraFunction<R, A, B, C, T> throwableTetraFunction,
+			ThrowableTetraFunction<R, A, B, C, T> creatorThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -197,7 +199,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass,
-				(a, b, c) -> throwableTetraFunction.andThen(
+				(a, b, c) -> creatorThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, Collections.emptyList())
 				).apply(
@@ -209,7 +211,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 		@Override
 		public <A, B, R> Builder<T, S> addCreator(
-			ThrowableTriFunction<R, A, B, T> throwableTriFunction,
+			ThrowableTriFunction<R, A, B, T> creatorThrowableTriFunction,
 			Class<A> aClass, Class<B> bClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -227,7 +229,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				(a, b) -> throwableTriFunction.andThen(
+				(a, b) -> creatorThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, Collections.emptyList())
 				).apply(
@@ -240,7 +242,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		@Override
 		public <A> Builder<T, S> addGetter(
 			ThrowableBiFunction<Pagination, A, PageItems<T>>
-				throwableBiFunction,
+				getterThrowableBiFunction,
 			Class<A> aClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -248,24 +250,27 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, Credentials.class,
-				(pagination, a, credentials) -> throwableBiFunction.andThen(
-					items -> new PageImpl<>(
-						_name, items, pagination, _getOperations(credentials))
-				).apply(
-					pagination, a
-				));
+				(pagination, a, credentials) ->
+					getterThrowableBiFunction.andThen(
+						items -> new PageImpl<>(
+							_name, items, pagination,
+							_getOperations(credentials))
+					).apply(
+						pagination, a
+					));
 
 			return this;
 		}
 
 		@Override
 		public Builder<T, S> addGetter(
-			ThrowableFunction<Pagination, PageItems<T>> throwableFunction) {
+			ThrowableFunction<Pagination, PageItems<T>>
+				getterThrowableFunction) {
 
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				Credentials.class,
-				(pagination, credentials) -> throwableFunction.andThen(
+				(pagination, credentials) -> getterThrowableFunction.andThen(
 					items -> new PageImpl<>(
 						_name, items, pagination, _getOperations(credentials))
 				).apply(
@@ -278,7 +283,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		@Override
 		public <A, B, C, D> Builder<T, S> addGetter(
 			ThrowablePentaFunction<Pagination, A, B, C, D, PageItems<T>>
-				throwablePentaFunction,
+				getterThrowablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
@@ -291,7 +296,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, cClass, dClass, Credentials.class,
 				(pagination, a, b, c, d, credentials) ->
-					throwablePentaFunction.andThen(
+					getterThrowablePentaFunction.andThen(
 						items -> new PageImpl<>(
 							_name, items, pagination,
 							_getOperations(credentials))
@@ -305,7 +310,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		@Override
 		public <A, B, C> Builder<T, S> addGetter(
 			ThrowableTetraFunction<Pagination, A, B, C, PageItems<T>>
-				throwableTetraFunction,
+				getterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -316,7 +321,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, cClass, Credentials.class,
 				(pagination, a, b, c, credentials) ->
-					throwableTetraFunction.andThen(
+					getterThrowableTetraFunction.andThen(
 						items -> new PageImpl<>(
 							_name, items, pagination,
 							_getOperations(credentials))
@@ -330,7 +335,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		@Override
 		public <A, B> Builder<T, S> addGetter(
 			ThrowableTriFunction<Pagination, A, B, PageItems<T>>
-				throwableTriFunction,
+				getterThrowableTriFunction,
 			Class<A> aClass, Class<B> bClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -339,12 +344,14 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_getPageFunction = httpServletRequest -> provide(
 				_provideFunction.apply(httpServletRequest), Pagination.class,
 				aClass, bClass, Credentials.class,
-				(pagination, a, b, credentials) -> throwableTriFunction.andThen(
-					items -> new PageImpl<>(
-						_name, items, pagination, _getOperations(credentials))
-				).apply(
-					pagination, a, b
-				));
+				(pagination, a, b, credentials) ->
+					getterThrowableTriFunction.andThen(
+						items -> new PageImpl<>(
+							_name, items, pagination,
+							_getOperations(credentials))
+					).apply(
+						pagination, a, b
+					));
 
 			return this;
 		}

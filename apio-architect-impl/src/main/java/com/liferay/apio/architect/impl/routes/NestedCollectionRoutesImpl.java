@@ -99,7 +99,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 		@Override
 		public <R> Builder<T, S, U> addCreator(
-			ThrowableBiFunction<U, R, T> throwableBiFunction,
+			ThrowableBiFunction<U, R, T> creatorThrowableBiFunction,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -116,7 +116,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> Try.fromFallible(
-					() -> throwableBiFunction.andThen(
+					() -> creatorThrowableBiFunction.andThen(
 						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
@@ -128,7 +128,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 		@Override
 		public <A, B, C, D, R> Builder<T, S, U> addCreator(
-			ThrowableHexaFunction<U, R, A, B, C, D, T> throwableHexaFunction,
+			ThrowableHexaFunction<U, R, A, B, C, D, T>
+				creatorThrowableHexaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
@@ -153,7 +154,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass, dClass,
-					(a, b, c, d) -> throwableHexaFunction.andThen(
+					(a, b, c, d) -> creatorThrowableHexaFunction.andThen(
 						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
@@ -165,7 +166,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 		@Override
 		public <A, B, C, R> Builder<T, S, U> addCreator(
-			ThrowablePentaFunction<U, R, A, B, C, T> throwablePentaFunction,
+			ThrowablePentaFunction<U, R, A, B, C, T>
+				creatorThrowablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
@@ -189,7 +191,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass,
-					(a, b, c) -> throwablePentaFunction.andThen(
+					(a, b, c) -> creatorThrowablePentaFunction.andThen(
 						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
@@ -201,7 +203,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 		@Override
 		public <A, B, R> Builder<T, S, U> addCreator(
-			ThrowableTetraFunction<U, R, A, B, T> throwableTetraFunction,
+			ThrowableTetraFunction<U, R, A, B, T> creatorThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
@@ -223,7 +225,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
-					(a, b) -> throwableTetraFunction.andThen(
+					(a, b) -> creatorThrowableTetraFunction.andThen(
 						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
@@ -235,7 +237,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 		@Override
 		public <A, R> Builder<T, S, U> addCreator(
-			ThrowableTriFunction<U, R, A, T> throwableTriFunction,
+			ThrowableTriFunction<U, R, A, T> creatorThrowableTriFunction,
 			Class<A> aClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
@@ -256,7 +258,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_nestedCreateItemFunction =
 				httpServletRequest -> identifier -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass,
-					a -> throwableTriFunction.andThen(
+					a -> creatorThrowableTriFunction.andThen(
 						t -> new SingleModelImpl<>(
 							t, _nestedName, Collections.emptyList())
 					).apply(
@@ -268,19 +270,21 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 		@Override
 		public Builder<T, S, U> addGetter(
-			ThrowableBiFunction<Pagination, U, PageItems<T>> biFunction) {
+			ThrowableBiFunction<Pagination, U, PageItems<T>>
+				getterThrowableBiFunction) {
 
 			_nestedGetPageFunction =
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, Credentials.class,
-					(pagination, credentials) -> biFunction.andThen(
-						items -> new PageImpl<>(
-							_nestedName, items, pagination, path,
-							_getOperations(credentials, identifier))
-					).apply(
-						pagination, identifier
-					));
+					(pagination, credentials) ->
+						getterThrowableBiFunction.andThen(
+							items -> new PageImpl<>(
+								_nestedName, items, pagination, path,
+								_getOperations(credentials, identifier))
+						).apply(
+							pagination, identifier
+						));
 
 			return this;
 		}
@@ -288,7 +292,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		@Override
 		public <A, B, C, D> Builder<T, S, U> addGetter(
 			ThrowableHexaFunction<Pagination, U, A, B, C, D, PageItems<T>>
-				hexaFunction,
+				getterThrowableHexaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
@@ -303,7 +307,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					Pagination.class, aClass, bClass, cClass, dClass,
 					Credentials.class,
 					(pagination, a, b, c, d, credentials) ->
-						hexaFunction.andThen(
+						getterThrowableHexaFunction.andThen(
 							items -> new PageImpl<>(
 								_nestedName, items, pagination, path,
 								_getOperations(credentials, identifier))
@@ -317,7 +321,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		@Override
 		public <A, B, C> Builder<T, S, U> addGetter(
 			ThrowablePentaFunction<Pagination, U, A, B, C, PageItems<T>>
-				pentaFunction,
+				getterThrowablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -328,13 +332,14 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, cClass, Credentials.class,
-					(pagination, a, b, c, credentials) -> pentaFunction.andThen(
-						items -> new PageImpl<>(
-							_nestedName, items, pagination, path,
-							_getOperations(credentials, identifier))
-					).apply(
-						pagination, identifier, a, b, c
-					));
+					(pagination, a, b, c, credentials) ->
+						getterThrowablePentaFunction.andThen(
+							items -> new PageImpl<>(
+								_nestedName, items, pagination, path,
+								_getOperations(credentials, identifier))
+						).apply(
+							pagination, identifier, a, b, c
+						));
 
 			return this;
 		}
@@ -342,7 +347,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		@Override
 		public <A, B> Builder<T, S, U> addGetter(
 			ThrowableTetraFunction<Pagination, U, A, B, PageItems<T>>
-				tetraFunction,
+				getterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -352,20 +357,22 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, Credentials.class,
-					(pagination, a, b, credentials) -> tetraFunction.andThen(
-						items -> new PageImpl<>(
-							_nestedName, items, pagination, path,
-							_getOperations(credentials, identifier))
-					).apply(
-						pagination, identifier, a, b
-					));
+					(pagination, a, b, credentials) ->
+						getterThrowableTetraFunction.andThen(
+							items -> new PageImpl<>(
+								_nestedName, items, pagination, path,
+								_getOperations(credentials, identifier))
+						).apply(
+							pagination, identifier, a, b
+						));
 
 			return this;
 		}
 
 		@Override
 		public <A> Builder<T, S, U> addGetter(
-			ThrowableTriFunction<Pagination, U, A, PageItems<T>> triFunction,
+			ThrowableTriFunction<Pagination, U, A, PageItems<T>>
+				getterThrowableTriFunction,
 			Class<A> aClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -374,13 +381,14 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				httpServletRequest -> path -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, Credentials.class,
-					(pagination, a, credentials) -> triFunction.andThen(
-						items -> new PageImpl<>(
-							_nestedName, items, pagination, path,
-							_getOperations(credentials, identifier))
-					).apply(
-						pagination, identifier, a
-					));
+					(pagination, a, credentials) ->
+						getterThrowableTriFunction.andThen(
+							items -> new PageImpl<>(
+								_nestedName, items, pagination, path,
+								_getOperations(credentials, identifier))
+						).apply(
+							pagination, identifier, a
+						));
 
 			return this;
 		}

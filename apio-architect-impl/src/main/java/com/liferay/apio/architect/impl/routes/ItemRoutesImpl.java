@@ -112,14 +112,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 		@Override
 		public <A> Builder<T, S> addGetter(
-			ThrowableBiFunction<S, A, T> throwableBiFunction, Class<A> aClass) {
+			ThrowableBiFunction<S, A, T> getterThrowableBiFunction,
+			Class<A> aClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
 				Credentials.class,
-				(a, credentials) -> throwableBiFunction.andThen(
+				(a, credentials) -> getterThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -131,11 +132,11 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 		@Override
 		public Builder<T, S> addGetter(
-			ThrowableFunction<S, T> throwableFunction) {
+			ThrowableFunction<S, T> getterThrowableFunction) {
 
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), Credentials.class,
-				credentials -> throwableFunction.andThen(
+				credentials -> getterThrowableFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -147,7 +148,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 		@Override
 		public <A, B, C, D> Builder<T, S> addGetter(
-			ThrowablePentaFunction<S, A, B, C, D, T> throwablePentaFunction,
+			ThrowablePentaFunction<S, A, B, C, D, T>
+				getterThrowablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
@@ -159,19 +161,20 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass, Credentials.class,
-				(a, b, c, d, credentials) -> throwablePentaFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
-				).apply(
-					s, a, b, c, d
-				));
+				(a, b, c, d, credentials) ->
+					getterThrowablePentaFunction.andThen(
+						t -> new SingleModelImpl<>(
+							t, _name, _getOperations(credentials, s))
+					).apply(
+						s, a, b, c, d
+					));
 
 			return this;
 		}
 
 		@Override
 		public <A, B, C> Builder<T, S> addGetter(
-			ThrowableTetraFunction<S, A, B, C, T> throwableTetraFunction,
+			ThrowableTetraFunction<S, A, B, C, T> getterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -181,7 +184,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, Credentials.class,
-				(a, b, c, credentials) -> throwableTetraFunction.andThen(
+				(a, b, c, credentials) -> getterThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -193,7 +196,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 		@Override
 		public <A, B> Builder<T, S> addGetter(
-			ThrowableTriFunction<S, A, B, T> throwableTriFunction,
+			ThrowableTriFunction<S, A, B, T> getterThrowableTriFunction,
 			Class<A> aClass, Class<B> bClass) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -202,7 +205,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_singleModelFunction = httpServletRequest -> s -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				Credentials.class,
-				(a, b, credentials) -> throwableTriFunction.andThen(
+				(a, b, credentials) -> getterThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -214,7 +217,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 		@Override
 		public <A> Builder<T, S> addRemover(
-			ThrowableBiConsumer<S, A> throwableBiConsumer, Class<A> aClass,
+			ThrowableBiConsumer<S, A> removerThrowableBiConsumer,
+			Class<A> aClass,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -223,26 +227,26 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
 				_provideFunction.apply(httpServletRequest), aClass,
-				a -> throwableBiConsumer.accept(s, a));
+				a -> removerThrowableBiConsumer.accept(s, a));
 
 			return this;
 		}
 
 		@Override
 		public Builder<T, S> addRemover(
-			ThrowableConsumer<S> throwableConsumer,
+			ThrowableConsumer<S> removerThrowableConsumer,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_deleteItemConsumer = __ -> throwableConsumer;
+			_deleteItemConsumer = __ -> removerThrowableConsumer;
 
 			return this;
 		}
 
 		@Override
 		public <A, B, C, D> Builder<T, S> addRemover(
-			ThrowablePentaConsumer<S, A, B, C, D> throwablePentaConsumer,
+			ThrowablePentaConsumer<S, A, B, C, D> removerThrowablePentaConsumer,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
@@ -256,14 +260,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass,
-				(a, b, c, d) -> throwablePentaConsumer.accept(s, a, b, c, d));
+				(a, b, c, d) -> removerThrowablePentaConsumer.accept(
+					s, a, b, c, d));
 
 			return this;
 		}
 
 		@Override
 		public <A, B, C> Builder<T, S> addRemover(
-			ThrowableTetraConsumer<S, A, B, C> throwableTetraConsumer,
+			ThrowableTetraConsumer<S, A, B, C> removerThrowableTetraConsumer,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
@@ -275,15 +280,16 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				cClass, (a, b, c) -> throwableTetraConsumer.accept(s, a, b, c));
+				cClass,
+				(a, b, c) -> removerThrowableTetraConsumer.accept(s, a, b, c));
 
 			return this;
 		}
 
 		@Override
 		public <A, B> Builder<T, S> addRemover(
-			ThrowableTriConsumer<S, A, B> throwableTriConsumer, Class<A> aClass,
-			Class<B> bClass,
+			ThrowableTriConsumer<S, A, B> removerThrowableTriConsumer,
+			Class<A> aClass, Class<B> bClass,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
@@ -293,14 +299,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				(a, b) -> throwableTriConsumer.accept(s, a, b));
+				(a, b) -> removerThrowableTriConsumer.accept(s, a, b));
 
 			return this;
 		}
 
 		@Override
 		public <R> Builder<T, S> addUpdater(
-			ThrowableBiFunction<S, R, T> throwableBiFunction,
+			ThrowableBiFunction<S, R, T> updaterThrowableBiFunction,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
@@ -314,7 +320,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_updateItemFunction = httpServletRequest -> s -> body -> provide(
 				_provideFunction.apply(httpServletRequest), Credentials.class,
-				credentials -> throwableBiFunction.andThen(
+				credentials -> updaterThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -326,7 +332,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 		@Override
 		public <A, B, C, D, R> Builder<T, S> addUpdater(
-			ThrowableHexaFunction<S, R, A, B, C, D, T> throwableHexaFunction,
+			ThrowableHexaFunction<S, R, A, B, C, D, T>
+				updaterThrowableHexaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -347,19 +354,21 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_updateItemFunction = httpServletRequest -> s -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass, Credentials.class,
-				(a, b, c, d, credentials) -> throwableHexaFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
-				).apply(
-					s, form.get(body), a, b, c, d
-				));
+				(a, b, c, d, credentials) ->
+					updaterThrowableHexaFunction.andThen(
+						t -> new SingleModelImpl<>(
+							t, _name, _getOperations(credentials, s))
+					).apply(
+						s, form.get(body), a, b, c, d
+					));
 
 			return this;
 		}
 
 		@Override
 		public <A, B, C, R> Builder<T, S> addUpdater(
-			ThrowablePentaFunction<S, R, A, B, C, T> throwablePentaFunction,
+			ThrowablePentaFunction<S, R, A, B, C, T>
+				updaterThrowablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -379,7 +388,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_updateItemFunction = httpServletRequest -> s -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, Credentials.class,
-				(a, b, c, credentials) -> throwablePentaFunction.andThen(
+				(a, b, c, credentials) -> updaterThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -391,7 +400,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 		@Override
 		public <A, B, R> Builder<T, S> addUpdater(
-			ThrowableTetraFunction<S, R, A, B, T> throwableTetraFunction,
+			ThrowableTetraFunction<S, R, A, B, T> updaterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -410,7 +419,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_updateItemFunction = httpServletRequest -> s -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				Credentials.class,
-				(a, b, credentials) -> throwableTetraFunction.andThen(
+				(a, b, credentials) -> updaterThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
@@ -422,7 +431,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 		@Override
 		public <A, R> Builder<T, S> addUpdater(
-			ThrowableTriFunction<S, R, A, T> throwableTriFunction,
+			ThrowableTriFunction<S, R, A, T> updaterThrowableTriFunction,
 			Class<A> aClass,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
@@ -440,7 +449,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_updateItemFunction = httpServletRequest -> s -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
 				Credentials.class,
-				(a, credentials) -> throwableTriFunction.andThen(
+				(a, credentials) -> updaterThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, _getOperations(credentials, s))
 				).apply(
