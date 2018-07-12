@@ -143,7 +143,7 @@ public class URLCreatorTest {
 		assertThat(path.getId(), is("id"));
 	}
 
-	private final ApplicationURL _applicationURL = () -> "www.liferay.com";
+	private final ApplicationURL _applicationURL = () -> "www.liferay.com/";
 	private final Path _path = new Path("name", "id");
 
 }
