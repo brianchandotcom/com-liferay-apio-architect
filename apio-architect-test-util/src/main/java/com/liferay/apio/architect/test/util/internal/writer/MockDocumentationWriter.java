@@ -16,12 +16,12 @@ package com.liferay.apio.architect.test.util.internal.writer;
 
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
-import com.liferay.apio.architect.impl.internal.documentation.Documentation;
-import com.liferay.apio.architect.impl.internal.message.json.DocumentationMessageMapper;
-import com.liferay.apio.architect.impl.internal.routes.CollectionRoutesImpl;
-import com.liferay.apio.architect.impl.internal.routes.ItemRoutesImpl;
-import com.liferay.apio.architect.impl.internal.routes.NestedCollectionRoutesImpl;
-import com.liferay.apio.architect.impl.internal.writer.DocumentationWriter;
+import com.liferay.apio.architect.impl.documentation.Documentation;
+import com.liferay.apio.architect.impl.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.impl.routes.CollectionRoutesImpl;
+import com.liferay.apio.architect.impl.routes.ItemRoutesImpl;
+import com.liferay.apio.architect.impl.routes.NestedCollectionRoutesImpl;
+import com.liferay.apio.architect.impl.writer.DocumentationWriter;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
