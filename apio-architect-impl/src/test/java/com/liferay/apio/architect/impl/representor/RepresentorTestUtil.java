@@ -106,9 +106,10 @@ public class RepresentorTestUtil {
 		assertThat(relatedModel.getKey(), is(key));
 		assertThat(relatedModel.getIdentifierClass(), is(identifierClass));
 
-		Function<Dummy, ?> function = relatedModel.getIdentifierFunction();
+		Function<Dummy, ?> modelToIdentifierFunction =
+			relatedModel.getModelToIdentifierFunction();
 
-		Integer id = function.andThen(
+		Integer id = modelToIdentifierFunction.andThen(
 			Integer.class::cast
 		).apply(
 			dummy

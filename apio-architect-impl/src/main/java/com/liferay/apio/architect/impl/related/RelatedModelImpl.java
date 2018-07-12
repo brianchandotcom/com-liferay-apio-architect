@@ -33,11 +33,11 @@ public class RelatedModelImpl<T, S> implements RelatedModel<T, S> {
 
 	public RelatedModelImpl(
 		String key, Class<? extends Identifier<S>> identifierClass,
-		Function<T, S> identifierFunction) {
+		Function<T, S> modelToIdentifierFunction) {
 
 		_key = key;
 		_identifierClass = identifierClass;
-		_identifierFunction = identifierFunction;
+		_modelToIdentifierFunction = modelToIdentifierFunction;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class RelatedModelImpl<T, S> implements RelatedModel<T, S> {
 
 	@Override
 	public Function<T, S> getIdentifierFunction() {
-		return _identifierFunction;
+		return _modelToIdentifierFunction;
 	}
 
 	@Override
@@ -55,8 +55,13 @@ public class RelatedModelImpl<T, S> implements RelatedModel<T, S> {
 		return _key;
 	}
 
+	@Override
+	public Function<T, S> getModelToIdentifierFunction() {
+		return _modelToIdentifierFunction;
+	}
+
 	private final Class<? extends Identifier<S>> _identifierClass;
-	private final Function<T, S> _identifierFunction;
 	private final String _key;
+	private final Function<T, S> _modelToIdentifierFunction;
 
 }
