@@ -24,6 +24,7 @@ import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.impl.message.json.EntryPointMessageMapper;
 import com.liferay.apio.architect.impl.message.json.ErrorMessageMapper;
 import com.liferay.apio.architect.impl.message.json.FormMessageMapper;
 import com.liferay.apio.architect.impl.message.json.MessageMapper;
@@ -31,6 +32,7 @@ import com.liferay.apio.architect.impl.message.json.PageMessageMapper;
 import com.liferay.apio.architect.impl.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.impl.writer.ErrorWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockDocumentationWriter;
+import com.liferay.apio.architect.test.util.internal.writer.MockEntryPointWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockFormWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockPageWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockSingleModelWriter;
@@ -214,6 +216,26 @@ public class MessageMapperTesterBuilder {
 
 		/**
 		 * Validates that the output created by the provided message mapper
+		 * matches the content of the {@code
+		 * /src/test/resources/entrypoint.json} file.
+		 *
+		 * @param  entryPointMessageMapper the message mapper
+		 * @return the next step of the builder
+		 * @review
+		 */
+		public MessageMapperStep validateEntryPointMessageMapper(
+			EntryPointMessageMapper entryPointMessageMapper) {
+
+			String actual = MockEntryPointWriter.write(entryPointMessageMapper);
+
+			_validateMessageMapper(
+				entryPointMessageMapper, actual, "entrypoint");
+
+			return this;
+		}
+
+		/**
+		 * Validates that the output created by the provided message mapper
 		 * matches the content of the {@code /src/test/resources/error.json}
 		 * file.
 		 *
@@ -355,8 +377,7 @@ public class MessageMapperTesterBuilder {
 				assertEquals(expected, actual, true);
 			}
 			catch (JSONException jsone) {
-				throw new AssertionError(
-					"An error occurred while parsing the file: " + file);
+				throw new AssertionError(jsone.getMessage());
 			}
 		}
 
