@@ -34,6 +34,8 @@ public class JSONLDMessageMapperTest {
 			"application/ld+json"
 		).validateDocumentationMessageMapper(
 			new JSONLDDocumentationMessageMapper()
+		).validateEntryPointMessageMapper(
+			new JSONLDEntryPointMessageMapper()
 		).validateErrorMessageMapper(
 			new JSONLDErrorMessageMapper()
 		).validateFormMessageMapper(
