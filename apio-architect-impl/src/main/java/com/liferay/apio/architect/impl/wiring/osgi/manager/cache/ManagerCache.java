@@ -18,6 +18,7 @@ import static javax.ws.rs.core.Variant.VariantListBuilder.newInstance;
 
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.impl.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.impl.message.json.EntryPointMessageMapper;
 import com.liferay.apio.architect.impl.message.json.ErrorMessageMapper;
 import com.liferay.apio.architect.impl.message.json.FormMessageMapper;
 import com.liferay.apio.architect.impl.message.json.PageMessageMapper;
@@ -66,6 +67,7 @@ public class ManagerCache {
 	public void clear() {
 		_collectionRoutes = null;
 		_documentationMessageMappers = null;
+		_entryPointMessageMappers = null;
 		_errorMessageMappers = null;
 		_formMessageMappers = null;
 		_identifierClasses = null;
@@ -132,6 +134,29 @@ public class ManagerCache {
 
 		Optional<DocumentationMessageMapper> optional =
 			_getMessageMapperOptional(request, _documentationMessageMappers);
+
+		return optional.map(Unsafe::unsafeCast);
+	}
+
+	/**
+	 * Returns the entry point message mapper, if present, for the current
+	 * request; {@code Optional#empty()} otherwise.
+	 *
+	 * @param  request the current request
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the entry point message mapper, if present; {@code
+	 *         Optional#empty()} otherwise
+	 */
+	public Optional<EntryPointMessageMapper> getEntryPointMessageMapperOptional(
+		Request request, EmptyFunction computeEmptyFunction) {
+
+		if (_entryPointMessageMappers == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		Optional<EntryPointMessageMapper> optional = _getMessageMapperOptional(
+			request, _entryPointMessageMappers);
 
 		return optional.map(Unsafe::unsafeCast);
 	}
@@ -449,6 +474,22 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Adds a entry point message mapper.
+	 *
+	 * @param mediaType the media type
+	 * @param entryPointMessageMapper the entry point message mapper
+	 */
+	public void putEntryPointMessageMapper(
+		MediaType mediaType, EntryPointMessageMapper entryPointMessageMapper) {
+
+		if (_entryPointMessageMappers == null) {
+			_entryPointMessageMappers = new HashMap<>();
+		}
+
+		_entryPointMessageMappers.put(mediaType, entryPointMessageMapper);
+	}
+
+	/**
 	 * Adds an error message mapper.
 	 *
 	 * @param mediaType the media type
@@ -654,6 +695,7 @@ public class ManagerCache {
 	private Map<String, CollectionRoutes> _collectionRoutes;
 	private Map<MediaType, DocumentationMessageMapper>
 		_documentationMessageMappers;
+	private Map<MediaType, EntryPointMessageMapper> _entryPointMessageMappers;
 	private Map<MediaType, ErrorMessageMapper> _errorMessageMappers;
 	private Map<MediaType, FormMessageMapper> _formMessageMappers;
 	private Map<String, Class<Identifier>> _identifierClasses;
