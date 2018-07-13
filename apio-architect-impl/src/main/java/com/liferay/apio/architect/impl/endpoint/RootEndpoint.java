@@ -15,11 +15,11 @@
 package com.liferay.apio.architect.impl.endpoint;
 
 import com.liferay.apio.architect.impl.documentation.Documentation;
+import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Response;
 
 /**
  * Declares the endpoint from which all of your APIs originate. There should
@@ -57,13 +57,13 @@ public interface RootEndpoint {
 	public FormEndpoint formEndpoint();
 
 	/**
-	 * Returns the string representation of the application's home.
+	 * Returns the entry point of the application.
 	 *
-	 * @return the string representation
+	 * @return the entry point
 	 */
 	@GET
 	@Path("/")
-	public Response home();
+	public EntryPoint home();
 
 	/**
 	 * Returns the endpoint for page operations.

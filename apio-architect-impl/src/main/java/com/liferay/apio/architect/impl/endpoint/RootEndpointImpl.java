@@ -15,14 +15,12 @@
 package com.liferay.apio.architect.impl.endpoint;
 
 import static com.liferay.apio.architect.impl.endpoint.ExceptionSupplierUtil.notFound;
-import static com.liferay.apio.architect.impl.url.URLCreator.createCollectionURL;
 
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.documentation.Documentation;
-import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
-import com.liferay.apio.architect.impl.url.ApplicationURL;
+import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.router.CollectionRouterManager;
@@ -36,14 +34,11 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -87,27 +82,8 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	@Override
-	public Response home() {
-		List<String> resourceNames =
-			_collectionRouterManager.getResourceNames();
-
-		ApplicationURL applicationURL = _providerManager.provideMandatory(
-			_httpServletRequest, ApplicationURL.class);
-
-		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
-
-		resourceNames.forEach(
-			name -> jsonObjectBuilder.nestedField(
-				"resources", name, "href"
-			).stringValue(
-				createCollectionURL(applicationURL, name)
-			));
-
-		return Response.ok(
-			jsonObjectBuilder.build()
-		).type(
-			MediaType.valueOf("application/json")
-		).build();
+	public EntryPoint home() {
+		return () -> _collectionRouterManager.getResourceNames();
 	}
 
 	@Override
