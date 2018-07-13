@@ -14,32 +14,33 @@
 
 package com.liferay.apio.architect.impl.message.json.plain;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import com.liferay.apio.architect.impl.message.json.EntryPointMessageMapper;
+import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
 
-import com.liferay.apio.architect.test.util.json.MessageMapperTesterBuilder;
-
-import java.nio.file.Paths;
-
-import org.junit.Test;
+import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Javier Gamarra
  * @author Alejandro Hernández
  */
-public class PlainJSONMessageMapperTest {
+@Component
+public class PlainJSONEntryPointMessageMapper
+	implements EntryPointMessageMapper {
 
-	@Test
-	public void testPlainJSONMessageMappers() {
-		MessageMapperTesterBuilder.path(
-			Paths.get("src", "test", "resources", "plain")
-		).mediaType(
-			APPLICATION_JSON
-		).validateEntryPointMessageMapper(
-			new PlainJSONEntryPointMessageMapper()
-		).validatePageMessageMapper(
-			new PlainJSONPageMessageMapper<>()
-		).validateSingleModelMessageMapper(
-			new PlainJSONSingleModelMessageMapper<>()
+	@Override
+	public String getMediaType() {
+		return "application/json";
+	}
+
+	@Override
+	public void mapItemSelfURL(
+		JSONObjectBuilder entryPointJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String resourceName,
+		String url) {
+
+		entryPointJSONObjectBuilder.field(
+			resourceName
+		).stringValue(
+			url
 		);
 	}
 
