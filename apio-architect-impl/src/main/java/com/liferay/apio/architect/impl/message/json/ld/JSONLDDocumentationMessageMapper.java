@@ -37,6 +37,7 @@ import org.osgi.service.component.annotations.Component;
  * </p>
  *
  * @author Alejandro Hernández
+ * @author Javier Gamarra
  * @author Zoltán Takács
  */
 @Component

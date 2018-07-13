@@ -20,7 +20,11 @@ import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
 import org.osgi.service.component.annotations.Component;
 
 /**
+ * Represents the entry point in <a
+ * href="http://stateless.co/hal_specification.html">HAL </a> format.
+ *
  * @author Alejandro Hernández
+ * @review
  */
 @Component
 public class HALEntryPointMessageMapper implements EntryPointMessageMapper {

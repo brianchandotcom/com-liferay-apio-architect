@@ -20,6 +20,8 @@ import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
 import org.osgi.service.component.annotations.Component;
 
 /**
+ * Represents the entry point in plain JSON.
+ *
  * @author Alejandro Hernández
  */
 @Component
