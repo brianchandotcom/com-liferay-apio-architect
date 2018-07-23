@@ -148,6 +148,22 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
+	public void mapSemantics(
+		JSONObjectBuilder jsonObjectBuilder, String semantics) {
+
+		jsonObjectBuilder.nestedField(
+			"manages", "property"
+		).stringValue(
+			"rdf:type"
+		);
+		jsonObjectBuilder.nestedField(
+			"manages", "object"
+		).stringValue(
+			"schema:" + semantics
+		);
+	}
+
+	@Override
 	public void onFinish(JSONObjectBuilder jsonObjectBuilder, Page<T> page) {
 		jsonObjectBuilder.field(
 			"@context"
