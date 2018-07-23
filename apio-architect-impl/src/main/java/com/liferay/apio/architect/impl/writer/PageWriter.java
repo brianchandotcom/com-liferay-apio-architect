@@ -112,6 +112,8 @@ public class PageWriter<T> {
 
 		List<Operation> operations = _page.getOperations();
 
+		_getCollectionType(resourceName);
+
 		OperationWriter operationWriter = new OperationWriter(
 			_pageMessageMapper, _requestInfo, _jsonObjectBuilder);
 
@@ -284,6 +286,31 @@ public class PageWriter<T> {
 		private ResourceNameFunction _resourceNameFunction;
 		private SingleModelFunction _singleModelFunction;
 
+	}
+
+	private void _getCollectionType(String resourceName) {
+		BaseRepresentorFunction baseRepresentorFunction =
+			_representorFunction::apply;
+
+		Optional<BaseRepresentor<T>> baseRepresentorOptional =
+			baseRepresentorFunction.apply(
+				resourceName
+			).<BaseRepresentor<T>>map(
+				Unsafe::unsafeCast
+			);
+
+		if (!baseRepresentorOptional.isPresent()) {
+			return;
+		}
+
+		BaseRepresentor<T> representor = baseRepresentorOptional.get();
+
+		List<String> types = representor.getTypes();
+
+		types.forEach(
+			type -> {
+				_pageMessageMapper.mapSemantics(_jsonObjectBuilder, type);
+			});
 	}
 
 	private String _getCollectionURL() {
