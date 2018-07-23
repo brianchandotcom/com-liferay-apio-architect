@@ -638,6 +638,16 @@ public interface PageMessageMapper<T>
 	}
 
 	/**
+	 * Maps the semantics to its JSON object representation.
+	 *
+	 * @param jsonObjectBuilder the JSON object builder for the page
+	 * @param semantics Semantics of each member provided by the collection
+	 */
+	public default void mapSemantics(
+		JSONObjectBuilder jsonObjectBuilder, String semantics) {
+	}
+
+	/**
 	 * Finishes the operation. This is the final operation-mapper method the
 	 * writer calls.
 	 *
