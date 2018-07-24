@@ -14,11 +14,14 @@
 
 package com.liferay.apio.architect.impl.jaxrs.json.writer;
 
+import static com.liferay.apio.architect.impl.unsafe.Unsafe.unsafeCast;
+
 import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
 import com.liferay.apio.architect.impl.jaxrs.json.writer.base.BaseMessageBodyWriter;
 import com.liferay.apio.architect.impl.message.json.EntryPointMessageMapper;
 import com.liferay.apio.architect.impl.request.RequestInfo;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.message.json.EntryPointMessageMapperManager;
+import com.liferay.apio.architect.impl.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.impl.writer.EntryPointWriter;
 import com.liferay.apio.architect.impl.writer.EntryPointWriter.Builder;
 
@@ -77,6 +80,9 @@ public class EntryPointMessageBodyWriter
 			entryPoint
 		).entryPointMessageMapper(
 			entryPointMessageMapper
+		).representorFunction(
+			name -> unsafeCast(
+				_representableManager.getRepresentorOptional(name))
 		).requestInfo(
 			requestInfo
 		).build();
@@ -86,5 +92,8 @@ public class EntryPointMessageBodyWriter
 
 	@Reference
 	private EntryPointMessageMapperManager _entryPointMessageMapperManager;
+
+	@Reference
+	private RepresentableManager _representableManager;
 
 }

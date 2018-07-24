@@ -16,13 +16,17 @@ package com.liferay.apio.architect.impl.writer;
 
 import static com.liferay.apio.architect.impl.url.URLCreator.createCollectionURL;
 
+import com.liferay.apio.architect.impl.alias.RepresentorFunction;
 import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
 import com.liferay.apio.architect.impl.message.json.EntryPointMessageMapper;
 import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.impl.request.RequestInfo;
 import com.liferay.apio.architect.impl.url.ApplicationURL;
+import com.liferay.apio.architect.representor.BaseRepresentor;
 
 import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Writes the API entrypoint.
@@ -30,6 +34,7 @@ import java.util.List;
  * @author Alejandro Hernández
  * @review
  */
+@Component
 public class EntryPointWriter {
 
 	/**
@@ -52,6 +57,8 @@ public class EntryPointWriter {
 
 			_entryPointMessageMapper.mapItemSelfURL(
 				_jsonObjectBuilder, itemJsonObjectBuilder, resourceName, url);
+
+			_getCollectionItemType(resourceName, itemJsonObjectBuilder);
 
 			_entryPointMessageMapper.onFinishItem(
 				_jsonObjectBuilder, itemJsonObjectBuilder);
@@ -76,9 +83,10 @@ public class EntryPointWriter {
 		public static EntryPointMessageMapperStep entryPoint(
 			EntryPoint entryPoint) {
 
-			return entryPointMessageMapper -> requestInfo ->
-				() -> new EntryPointWriter(
-					entryPoint, entryPointMessageMapper, requestInfo);
+			return entryPointMessageMapper -> representorFunction -> requestInfo
+				-> () -> new EntryPointWriter(
+					entryPoint, entryPointMessageMapper, representorFunction,
+					requestInfo);
 		}
 
 		public interface BuildStep {
@@ -103,8 +111,24 @@ public class EntryPointWriter {
 			 *         EntryPointMessageMapper}
 			 * @return the updated builder
 			 */
-			public RequestInfoStep entryPointMessageMapper(
+			public RepresentorFunctionStep entryPointMessageMapper(
 				EntryPointMessageMapper entryPointMessageMapper);
+
+		}
+
+		public interface RepresentorFunctionStep {
+
+			/**
+			 * Adds information to the builder about the function that gets a
+			 * class's {@link
+			 * com.liferay.apio.architect.representor.Representor}.
+			 *
+			 * @param  representorFunction the function that gets a class's
+			 *         {@code Representor}
+			 * @return the updated builder
+			 */
+			public RequestInfoStep representorFunction(
+				RepresentorFunction representorFunction);
 
 		}
 
@@ -126,18 +150,35 @@ public class EntryPointWriter {
 
 	private EntryPointWriter(
 		EntryPoint entryPoint, EntryPointMessageMapper entryPointMessageMapper,
-		RequestInfo requestInfo) {
+		RepresentorFunction representorFunction, RequestInfo requestInfo) {
 
 		_entryPoint = entryPoint;
 		_entryPointMessageMapper = entryPointMessageMapper;
+		_representorFunction = representorFunction;
 		_requestInfo = requestInfo;
 
 		_jsonObjectBuilder = new JSONObjectBuilder();
 	}
 
+	private void _getCollectionItemType(
+		String resourceName, JSONObjectBuilder itemJsonObjectBuilder) {
+
+		_representorFunction.apply(
+			resourceName
+		).map(
+			BaseRepresentor::getTypes
+		).map(
+			types -> types.get(0)
+		).ifPresent(
+			type -> _entryPointMessageMapper.mapSemantics(
+				itemJsonObjectBuilder, type)
+		);
+	}
+
 	private final EntryPoint _entryPoint;
 	private final EntryPointMessageMapper _entryPointMessageMapper;
 	private final JSONObjectBuilder _jsonObjectBuilder;
+	private final RepresentorFunction _representorFunction;
 	private final RequestInfo _requestInfo;
 
 }
