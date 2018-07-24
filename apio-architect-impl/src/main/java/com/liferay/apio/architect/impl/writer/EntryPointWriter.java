@@ -16,15 +16,15 @@ package com.liferay.apio.architect.impl.writer;
 
 import static com.liferay.apio.architect.impl.url.URLCreator.createCollectionURL;
 
-import com.liferay.apio.architect.impl.alias.RepresentorFunction;
 import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
 import com.liferay.apio.architect.impl.message.json.EntryPointMessageMapper;
 import com.liferay.apio.architect.impl.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.impl.request.RequestInfo;
 import com.liferay.apio.architect.impl.url.ApplicationURL;
-import com.liferay.apio.architect.representor.BaseRepresentor;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -32,6 +32,7 @@ import org.osgi.service.component.annotations.Component;
  * Writes the API entrypoint.
  *
  * @author Alejandro Hernández
+ * @author Zoltán Takács
  * @review
  */
 @Component
@@ -83,10 +84,10 @@ public class EntryPointWriter {
 		public static EntryPointMessageMapperStep entryPoint(
 			EntryPoint entryPoint) {
 
-			return entryPointMessageMapper -> representorFunction -> requestInfo
-				-> () -> new EntryPointWriter(
-					entryPoint, entryPointMessageMapper, representorFunction,
-					requestInfo);
+			return entryPointMessageMapper -> requestInfo -> typeFunction -> ()
+				-> new EntryPointWriter(
+					entryPoint, entryPointMessageMapper, requestInfo,
+					typeFunction);
 		}
 
 		public interface BuildStep {
@@ -111,24 +112,8 @@ public class EntryPointWriter {
 			 *         EntryPointMessageMapper}
 			 * @return the updated builder
 			 */
-			public RepresentorFunctionStep entryPointMessageMapper(
+			public RequestInfoStep entryPointMessageMapper(
 				EntryPointMessageMapper entryPointMessageMapper);
-
-		}
-
-		public interface RepresentorFunctionStep {
-
-			/**
-			 * Adds information to the builder about the function that gets a
-			 * class's {@link
-			 * com.liferay.apio.architect.representor.Representor}.
-			 *
-			 * @param  representorFunction the function that gets a class's
-			 *         {@code Representor}
-			 * @return the updated builder
-			 */
-			public RequestInfoStep representorFunction(
-				RepresentorFunction representorFunction);
 
 		}
 
@@ -142,7 +127,20 @@ public class EntryPointWriter {
 			 *         RequestInfo.Builder}
 			 * @return the updated builder
 			 */
-			public BuildStep requestInfo(RequestInfo requestInfo);
+			public TypeFunctionStep requestInfo(RequestInfo requestInfo);
+
+		}
+
+		public interface TypeFunctionStep {
+
+			/**
+			 * Adds information to the builder about the type of the Collection
+			 *
+			 * @param  typeFunction
+			 * @return the updated builder
+			 */
+			public BuildStep typeFunction(
+				Function<String, Optional<String>> typeFunction);
 
 		}
 
@@ -150,12 +148,13 @@ public class EntryPointWriter {
 
 	private EntryPointWriter(
 		EntryPoint entryPoint, EntryPointMessageMapper entryPointMessageMapper,
-		RepresentorFunction representorFunction, RequestInfo requestInfo) {
+		RequestInfo requestInfo,
+		Function<String, Optional<String>> typeFunction) {
 
 		_entryPoint = entryPoint;
 		_entryPointMessageMapper = entryPointMessageMapper;
-		_representorFunction = representorFunction;
 		_requestInfo = requestInfo;
+		_typeFunction = typeFunction;
 
 		_jsonObjectBuilder = new JSONObjectBuilder();
 	}
@@ -163,12 +162,8 @@ public class EntryPointWriter {
 	private void _getCollectionItemType(
 		String resourceName, JSONObjectBuilder itemJsonObjectBuilder) {
 
-		_representorFunction.apply(
+		_typeFunction.apply(
 			resourceName
-		).map(
-			BaseRepresentor::getTypes
-		).map(
-			types -> types.get(0)
 		).ifPresent(
 			type -> _entryPointMessageMapper.mapSemantics(
 				itemJsonObjectBuilder, type)
@@ -178,7 +173,7 @@ public class EntryPointWriter {
 	private final EntryPoint _entryPoint;
 	private final EntryPointMessageMapper _entryPointMessageMapper;
 	private final JSONObjectBuilder _jsonObjectBuilder;
-	private final RepresentorFunction _representorFunction;
 	private final RequestInfo _requestInfo;
+	private final Function<String, Optional<String>> _typeFunction;
 
 }
