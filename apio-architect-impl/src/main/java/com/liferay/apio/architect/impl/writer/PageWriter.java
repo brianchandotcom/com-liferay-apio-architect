@@ -289,28 +289,15 @@ public class PageWriter<T> {
 	}
 
 	private void _getCollectionType(String resourceName) {
-		BaseRepresentorFunction baseRepresentorFunction =
-			_representorFunction::apply;
-
-		Optional<BaseRepresentor<T>> baseRepresentorOptional =
-			baseRepresentorFunction.apply(
-				resourceName
-			).<BaseRepresentor<T>>map(
-				Unsafe::unsafeCast
-			);
-
-		if (!baseRepresentorOptional.isPresent()) {
-			return;
-		}
-
-		BaseRepresentor<T> representor = baseRepresentorOptional.get();
-
-		List<String> types = representor.getTypes();
-
-		types.forEach(
-			type -> {
-				_pageMessageMapper.mapSemantics(_jsonObjectBuilder, type);
-			});
+		_representorFunction.apply(
+			resourceName
+		).map(
+			BaseRepresentor::getTypes
+		).map(
+			types -> types.get(0)
+		).ifPresent(
+			type -> _pageMessageMapper.mapSemantics(_jsonObjectBuilder, type)
+		);
 	}
 
 	private String _getCollectionURL() {
