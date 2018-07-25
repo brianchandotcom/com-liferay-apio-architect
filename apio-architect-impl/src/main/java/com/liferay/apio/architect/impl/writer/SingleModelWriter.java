@@ -38,6 +38,7 @@ import com.liferay.apio.architect.uri.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -418,6 +419,17 @@ public class SingleModelWriter<T> {
 
 	}
 
+	private Consumer<BaseRepresentor> _mapPageSemantics(
+		JSONObjectBuilder jsonObjectBuilder) {
+
+		return baseRepresentor -> {
+			String type = baseRepresentor.getPrimaryType();
+
+			_singleModelMessageMapper.mapNestedPageSemantics(
+				jsonObjectBuilder, type);
+		};
+	}
+
 	private void _writeBasicFields(
 		FieldsWriter<?> fieldsWriter, JSONObjectBuilder jsonObjectBuilder) {
 
@@ -655,6 +667,12 @@ public class SingleModelWriter<T> {
 
 		_singleModelMessageMapper.mapNestedPageItemTotalCount(
 			pageJSONObjectBuilder, list.size());
+
+		baseRepresentorFunction.apply(
+			""
+		).ifPresent(
+			_mapPageSemantics(pageJSONObjectBuilder)
+		);
 
 		list.forEach(
 			model -> _writeItem(

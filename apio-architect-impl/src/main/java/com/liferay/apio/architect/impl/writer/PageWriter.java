@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -112,7 +113,11 @@ public class PageWriter<T> {
 
 		List<Operation> operations = _page.getOperations();
 
-		_getCollectionType(resourceName);
+		_representorFunction.apply(
+			resourceName
+		).ifPresent(
+			_mapPageSemantics(_jsonObjectBuilder)
+		);
 
 		OperationWriter operationWriter = new OperationWriter(
 			_pageMessageMapper, _requestInfo, _jsonObjectBuilder);
@@ -288,16 +293,6 @@ public class PageWriter<T> {
 
 	}
 
-	private void _getCollectionType(String resourceName) {
-		_representorFunction.apply(
-			resourceName
-		).map(
-			BaseRepresentor::getPrimaryType
-		).ifPresent(
-			type -> _pageMessageMapper.mapSemantics(_jsonObjectBuilder, type)
-		);
-	}
-
 	private String _getCollectionURL() {
 		Optional<Path> optional = _page.getPathOptional();
 
@@ -308,6 +303,16 @@ public class PageWriter<T> {
 			() -> createCollectionURL(
 				_requestInfo.getApplicationURL(), _page.getResourceName())
 		);
+	}
+
+	private Consumer<BaseRepresentor> _mapPageSemantics(
+		JSONObjectBuilder jsonObjectBuilder) {
+
+		return baseRepresentor -> {
+			String type = baseRepresentor.getPrimaryType();
+
+			_pageMessageMapper.mapSemantics(jsonObjectBuilder, type);
+		};
 	}
 
 	private void _writeBasicFields(
@@ -641,6 +646,12 @@ public class PageWriter<T> {
 
 		_pageMessageMapper.mapItemTotalCount(
 			nestedPageJSONObjectBuilder, nestedList.size());
+
+		baseRepresentorFunction.apply(
+			""
+		).ifPresent(
+			_mapPageSemantics(nestedPageJSONObjectBuilder)
+		);
 
 		nestedList.forEach(
 			model -> _writeItem(
