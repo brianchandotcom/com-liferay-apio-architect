@@ -106,17 +106,6 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
-	public void mapNestedPageItemTotalCount(
-		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
-
-		jsonObjectBuilder.field(
-			"totalItems"
-		).numberValue(
-			totalCount
-		);
-	}
-
-	@Override
 	public void mapNextPageURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 

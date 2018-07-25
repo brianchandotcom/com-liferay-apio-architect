@@ -631,25 +631,26 @@ public class PageWriter<T> {
 	}
 
 	private <U> void _writeNestedList(
-		String fieldName, List<U> list, JSONObjectBuilder jsonObjectBuilder,
+		String fieldName, List<U> nestedList,
+		JSONObjectBuilder jsonObjectBuilder,
 		FunctionalList<String> embeddedPathElements,
 		BaseRepresentorFunction baseRepresentorFunction,
 		SingleModel singleModel) {
 
-		JSONObjectBuilder pageJSONObjectBuilder = new JSONObjectBuilder();
+		JSONObjectBuilder nestedPageJSONObjectBuilder = new JSONObjectBuilder();
 
-		_pageMessageMapper.mapNestedPageItemTotalCount(
-			pageJSONObjectBuilder, list.size());
+		_pageMessageMapper.mapItemTotalCount(
+			nestedPageJSONObjectBuilder, nestedList.size());
 
-		list.forEach(
+		nestedList.forEach(
 			model -> _writeItem(
-				pageJSONObjectBuilder,
+				nestedPageJSONObjectBuilder,
 				new SingleModelImpl<>(model, "", Collections.emptyList()),
 				embeddedPathElements, baseRepresentorFunction, singleModel));
 
 		_pageMessageMapper.onFinishNestedCollection(
-			jsonObjectBuilder, pageJSONObjectBuilder, fieldName, list,
-			embeddedPathElements);
+			jsonObjectBuilder, nestedPageJSONObjectBuilder, fieldName,
+			nestedList, embeddedPathElements);
 	}
 
 	private <S> void _writeNestedLists(
