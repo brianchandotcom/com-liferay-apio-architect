@@ -292,9 +292,7 @@ public class PageWriter<T> {
 		_representorFunction.apply(
 			resourceName
 		).map(
-			BaseRepresentor::getTypes
-		).map(
-			types -> types.get(0)
+			BaseRepresentor::getPrimaryType
 		).ifPresent(
 			type -> _pageMessageMapper.mapSemantics(_jsonObjectBuilder, type)
 		);

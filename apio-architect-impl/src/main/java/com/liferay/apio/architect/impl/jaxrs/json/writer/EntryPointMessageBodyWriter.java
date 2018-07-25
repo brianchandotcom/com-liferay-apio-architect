@@ -86,9 +86,7 @@ public class EntryPointMessageBodyWriter
 			name -> _representableManager.getRepresentorOptional(
 				name
 			).map(
-				Representor::getTypes
-			).map(
-				types -> types.get(0)
+				Representor::getPrimaryType
 			)
 		).build();
 
