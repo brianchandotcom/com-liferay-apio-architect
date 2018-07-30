@@ -137,12 +137,12 @@ public class SingleModelWriter<T> {
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					_jsonObjectBuilder, embeddedPathElements, url));
 
-		fieldsWriter.writeNestedResources(_representorFunction::apply,
-			_singleModel, null,
-			(nestedSingleModel, nestedPathElements, nestedRepresentorFunction) ->
-				writeEmbeddedModelFields(
-					nestedSingleModel, _jsonObjectBuilder, nestedPathElements,
-					nestedRepresentorFunction));
+		fieldsWriter.writeNestedResources(
+			_representorFunction::apply, _singleModel, null,
+			(nestedSingleModel, nestedPathElements, nestedRepresentorFunction)
+				-> writeEmbeddedModelFields(
+				nestedSingleModel, _jsonObjectBuilder, nestedPathElements,
+				nestedRepresentorFunction));
 
 		fieldsWriter.writeNestedLists(
 			_representorFunction::apply, _singleModel,
@@ -249,12 +249,12 @@ public class SingleModelWriter<T> {
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					jsonObjectBuilder, resourceEmbeddedPathElements, url));
 
-		fieldsWriter.writeNestedResources(baseRepresentorFunction, singleModel,
-			embeddedPathElements,
-			(nestedSingleModel, nestedPathElements, nestedRepresentorFunction) ->
-				writeEmbeddedModelFields(
-					nestedSingleModel, jsonObjectBuilder, nestedPathElements,
-					nestedRepresentorFunction));
+		fieldsWriter.writeNestedResources(
+			baseRepresentorFunction, singleModel, embeddedPathElements,
+			(nestedSingleModel, nestedPathElements, nestedRepresentorFunction)
+				-> writeEmbeddedModelFields(
+				nestedSingleModel, jsonObjectBuilder, nestedPathElements,
+				nestedRepresentorFunction));
 
 		fieldsWriter.writeNestedLists(
 			baseRepresentorFunction, singleModel,
@@ -661,12 +661,12 @@ public class SingleModelWriter<T> {
 					itemJsonObjectBuilder, resourceEmbeddedPathElements,
 					resourceURL));
 
-		fieldsWriter.writeNestedResources(baseRepresentorFunction, singleModel,
-			embeddedPathElements,
-			(nestedSingleModel, nestedPathElements, nestedRepresentorFunction) ->
-				writeEmbeddedModelFields(
-					nestedSingleModel, itemJsonObjectBuilder, nestedPathElements,
-					nestedRepresentorFunction));
+		fieldsWriter.writeNestedResources(
+			baseRepresentorFunction, singleModel, embeddedPathElements,
+			(nestedSingleModel, nestedPathElements, nestedRepresentorFunction)
+				-> writeEmbeddedModelFields(
+				nestedSingleModel, itemJsonObjectBuilder, nestedPathElements,
+				nestedRepresentorFunction));
 
 		fieldsWriter.writeNestedLists(
 			baseRepresentorFunction, singleModel,
