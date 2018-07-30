@@ -20,6 +20,8 @@ import static com.liferay.apio.architect.impl.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.impl.url.URLCreator.createNestedCollectionURL;
 import static com.liferay.apio.architect.impl.url.URLCreator.createSingleURL;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
@@ -47,6 +49,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.slf4j.Logger;
 
 /**
  * Writes the different fields declared on a {@link Representor}.
@@ -240,11 +244,13 @@ public class FieldsWriter<T> {
 				return fieldsPredicate.test(fieldFunction.getKey());
 			}
 		).forEach(
-			fieldFunction -> {
-				U u = fieldFunction.apply(_singleModel.getModel());
+			fieldFunction -> _tryToWriteField(
+				fieldFunction.getKey(),
+				key -> {
+					U u = fieldFunction.apply(_singleModel.getModel());
 
-				biConsumer.accept(fieldFunction.getKey(), u);
-			}
+					biConsumer.accept(key, u);
+				})
 		);
 	}
 
@@ -419,7 +425,8 @@ public class FieldsWriter<T> {
 		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
 			parentEmbeddedPathElements, key);
 
-		biConsumer.accept(url, embeddedPathElements);
+		_tryToWriteField(
+			key, __ -> biConsumer.accept(url, embeddedPathElements));
 	}
 
 	/**
@@ -550,7 +557,8 @@ public class FieldsWriter<T> {
 		).map(
 			path -> createSingleURL(_requestInfo.getApplicationURL(), path)
 		).ifPresent(
-			url -> biConsumer.accept(url, embeddedPathElements)
+			url -> _tryToWriteField(
+				key, __ -> biConsumer.accept(url, embeddedPathElements))
 		);
 	}
 
@@ -650,8 +658,20 @@ public class FieldsWriter<T> {
 		consumer.accept(_baseRepresentor.getTypes());
 	}
 
+	private void _tryToWriteField(String key, Consumer<String> consumer) {
+		try {
+			consumer.accept(key);
+		}
+		catch (Exception e) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug("Can't write field" + key, e);
+			}
+		}
+	}
+
 	private final BaseRepresentor<T> _baseRepresentor;
 	private final FunctionalList<String> _embeddedPathElements;
+	private final Logger _logger = getLogger(getClass());
 	private final Path _path;
 	private final RequestInfo _requestInfo;
 	private final SingleModel<T> _singleModel;
