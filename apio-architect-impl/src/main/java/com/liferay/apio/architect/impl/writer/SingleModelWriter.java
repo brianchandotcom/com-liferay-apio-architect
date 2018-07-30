@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.impl.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.impl.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.impl.writer.util.WriterUtil.getPathOptional;
 
+import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.impl.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.impl.alias.PathFunction;
@@ -136,13 +137,17 @@ public class SingleModelWriter<T> {
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					_jsonObjectBuilder, embeddedPathElements, url));
 
-		_writeNestedResources(
-			_representorFunction::apply, _singleModel, _jsonObjectBuilder,
-			null);
+		fieldsWriter.writeNestedResources(_representorFunction::apply,
+			_singleModel, null,
+			(nestedSingleModel, nestedPathElements, nestedRepresentorFunction) ->
+				writeEmbeddedModelFields(
+					nestedSingleModel, _jsonObjectBuilder, nestedPathElements,
+					nestedRepresentorFunction));
 
-		_writeNestedLists(
-			_representorFunction::apply, _singleModel, _jsonObjectBuilder,
-			null);
+		fieldsWriter.writeNestedLists(
+			_representorFunction::apply, _singleModel,
+			(nestedListFieldFunction, list) -> _writeNestedList(
+				nestedListFieldFunction, list, _jsonObjectBuilder, null));
 
 		_singleModelMessageMapper.onFinish(_jsonObjectBuilder, _singleModel);
 
@@ -244,13 +249,18 @@ public class SingleModelWriter<T> {
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					jsonObjectBuilder, resourceEmbeddedPathElements, url));
 
-		_writeNestedResources(
-			baseRepresentorFunction, singleModel, jsonObjectBuilder,
-			embeddedPathElements);
+		fieldsWriter.writeNestedResources(baseRepresentorFunction, singleModel,
+			embeddedPathElements,
+			(nestedSingleModel, nestedPathElements, nestedRepresentorFunction) ->
+				writeEmbeddedModelFields(
+					nestedSingleModel, jsonObjectBuilder, nestedPathElements,
+					nestedRepresentorFunction));
 
-		_writeNestedLists(
-			baseRepresentorFunction, singleModel, jsonObjectBuilder,
-			embeddedPathElements);
+		fieldsWriter.writeNestedLists(
+			baseRepresentorFunction, singleModel,
+			(nestedListFieldFunction, list) -> _writeNestedList(
+				nestedListFieldFunction, list, _jsonObjectBuilder,
+				embeddedPathElements));
 	}
 
 	/**
@@ -599,8 +609,10 @@ public class SingleModelWriter<T> {
 		_writePageNestedResources(
 			baseRepresentorFunction, singleModel, itemJsonObjectBuilder);
 
-		_writeNestedLists(
-			baseRepresentorFunction, singleModel, itemJsonObjectBuilder, null);
+		fieldsWriter.writeNestedLists(
+			baseRepresentorFunction, singleModel,
+			(nestedListFieldFunction, list) -> _writeNestedList(
+				nestedListFieldFunction, list, _jsonObjectBuilder, null));
 
 		_singleModelMessageMapper.onFinishNestedCollectionItem(
 			collectionJSONObjectBuilder, itemJsonObjectBuilder, singleModel);
@@ -649,19 +661,33 @@ public class SingleModelWriter<T> {
 					itemJsonObjectBuilder, resourceEmbeddedPathElements,
 					resourceURL));
 
-		_writeNestedResources(
-			baseRepresentorFunction, singleModel, itemJsonObjectBuilder,
-			embeddedPathElements);
+		fieldsWriter.writeNestedResources(baseRepresentorFunction, singleModel,
+			embeddedPathElements,
+			(nestedSingleModel, nestedPathElements, nestedRepresentorFunction) ->
+				writeEmbeddedModelFields(
+					nestedSingleModel, itemJsonObjectBuilder, nestedPathElements,
+					nestedRepresentorFunction));
 
-		_writeNestedLists(
-			baseRepresentorFunction, singleModel, itemJsonObjectBuilder,
-			embeddedPathElements);
+		fieldsWriter.writeNestedLists(
+			baseRepresentorFunction, singleModel,
+			(nestedListFieldFunction, list) -> _writeNestedList(
+				nestedListFieldFunction, list, itemJsonObjectBuilder,
+				embeddedPathElements));
 	}
 
 	private <U> void _writeNestedList(
-		String fieldName, List<U> list, JSONObjectBuilder jsonObjectBuilder,
-		FunctionalList<String> embeddedPathElements,
-		BaseRepresentorFunction baseRepresentorFunction) {
+		NestedListFieldFunction nestedListFieldFunction, List<U> list,
+		JSONObjectBuilder jsonObjectBuilder,
+		FunctionalList<String> embeddedNestedPathElements) {
+
+		String key = nestedListFieldFunction.getKey();
+
+		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
+			embeddedNestedPathElements, key);
+
+		BaseRepresentorFunction baseRepresentorFunction =
+			__ -> (Optional)Optional.of(
+				nestedListFieldFunction.getNestedRepresentor());
 
 		JSONObjectBuilder pageJSONObjectBuilder = new JSONObjectBuilder();
 
@@ -681,83 +707,8 @@ public class SingleModelWriter<T> {
 				embeddedPathElements, baseRepresentorFunction));
 
 		_singleModelMessageMapper.onFinishNestedCollection(
-			jsonObjectBuilder, pageJSONObjectBuilder, fieldName, list,
+			jsonObjectBuilder, pageJSONObjectBuilder, key, list,
 			embeddedPathElements);
-	}
-
-	private <S> void _writeNestedLists(
-		BaseRepresentorFunction baseRepresentorFunction,
-		SingleModel<S> singleModel, JSONObjectBuilder jsonObjectBuilder,
-		FunctionalList<String> embeddedPathElements) {
-
-		baseRepresentorFunction.apply(
-			singleModel.getResourceName()
-		).<BaseRepresentor<S>>map(
-			Unsafe::unsafeCast
-		).map(
-			BaseRepresentor::getNestedListFieldFunctions
-		).map(
-			List::stream
-		).orElseGet(
-			Stream::empty
-		).forEach(
-			nestedListFieldFunction -> {
-				List<?> list = nestedListFieldFunction.apply(
-					singleModel.getModel());
-
-				if (list == null) {
-					return;
-				}
-
-				FunctionalList<String> embeddedNestedPathElements =
-					new FunctionalList<>(
-						embeddedPathElements, nestedListFieldFunction.getKey());
-
-				_writeNestedList(
-					nestedListFieldFunction.getKey(), list, jsonObjectBuilder,
-					embeddedNestedPathElements,
-					__ -> Optional.of(
-						nestedListFieldFunction.getNestedRepresentor()));
-			}
-		);
-	}
-
-	private <S> void _writeNestedResources(
-		BaseRepresentorFunction baseRepresentorFunction,
-		SingleModel<S> singleModel, JSONObjectBuilder jsonObjectBuilder,
-		FunctionalList<String> embeddedPathElements) {
-
-		baseRepresentorFunction.apply(
-			singleModel.getResourceName()
-		).<BaseRepresentor<S>>map(
-			Unsafe::unsafeCast
-		).map(
-			BaseRepresentor::getNestedFieldFunctions
-		).map(
-			List::stream
-		).orElseGet(
-			Stream::empty
-		).forEach(
-			nestedFieldFunction -> {
-				Object mappedModel = nestedFieldFunction.apply(
-					singleModel.getModel());
-
-				if (mappedModel == null) {
-					return;
-				}
-
-				FunctionalList<String> embeddedNestedPathElements =
-					new FunctionalList<>(
-						embeddedPathElements, nestedFieldFunction.getKey());
-
-				writeEmbeddedModelFields(
-					new SingleModelImpl<>(
-						mappedModel, "", Collections.emptyList()),
-					jsonObjectBuilder, embeddedNestedPathElements,
-					__ -> Optional.of(
-						nestedFieldFunction.getNestedRepresentor()));
-			}
-		);
 	}
 
 	private <U> void _writePageNestedResources(
