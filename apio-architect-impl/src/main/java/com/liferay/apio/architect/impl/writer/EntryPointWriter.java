@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * Writes the API entrypoint.
  *
@@ -35,7 +33,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Zoltán Takács
  * @review
  */
-@Component
 public class EntryPointWriter {
 
 	/**
