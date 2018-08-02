@@ -664,7 +664,7 @@ public class FieldsWriter<T> {
 		}
 		catch (Exception e) {
 			if (_logger.isDebugEnabled()) {
-				_logger.debug("Can't write field" + key, e);
+				_logger.debug("Unable to write field" + key, e);
 			}
 		}
 	}
