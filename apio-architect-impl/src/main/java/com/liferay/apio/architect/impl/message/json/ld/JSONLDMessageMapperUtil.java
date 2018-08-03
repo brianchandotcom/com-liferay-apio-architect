@@ -44,12 +44,12 @@ public class JSONLDMessageMapperUtil {
 	 * @review
 	 */
 	public static List<String> getOperationTypes(Operation operation) {
-		if (operation instanceof CreateOperation) {
-			return asList("CreateAction", "Operation");
-		}
-
 		if (operation instanceof BatchCreateOperation) {
 			return asList("BatchCreateAction", "Operation");
+		}
+
+		if (operation instanceof CreateOperation) {
+			return asList("CreateAction", "Operation");
 		}
 
 		if (operation instanceof DeleteOperation) {

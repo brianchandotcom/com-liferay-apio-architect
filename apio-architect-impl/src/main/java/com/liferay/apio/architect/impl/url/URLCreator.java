@@ -161,23 +161,23 @@ public final class URLCreator {
 
 		return optional.map(
 			uri -> {
-				if (operation instanceof CreateOperation) {
-					return "p/" + uri;
-				}
-
 				if (operation instanceof BatchCreateOperation) {
 					return "batch/" + uri;
+				}
+
+				if (operation instanceof CreateOperation) {
+					return "p/" + uri;
 				}
 
 				if (operation instanceof DeleteOperation) {
 					return "p/" + uri;
 				}
 
-				if (operation instanceof UpdateOperation) {
+				if (operation instanceof RetrieveOperation) {
 					return "p/" + uri;
 				}
 
-				if (operation instanceof RetrieveOperation) {
+				if (operation instanceof UpdateOperation) {
 					return "p/" + uri;
 				}
 
