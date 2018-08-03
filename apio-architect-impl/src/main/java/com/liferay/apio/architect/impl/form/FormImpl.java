@@ -143,6 +143,7 @@ public class FormImpl<T> implements Form<T> {
 			getOptionalFormFieldStream(_optionalDoubleLists, DOUBLE_LIST),
 			getOptionalFormFieldStream(_optionalFiles, FILE),
 			getOptionalFormFieldStream(_optionalFileLists, FILE_LIST),
+			getOptionalFormFieldStream(_optionalLinkedModel, LINKED_MODEL),
 			getOptionalFormFieldStream(
 				_optionalLinkedModelList, LINKED_MODEL_LIST),
 			getOptionalFormFieldStream(_optionalLongs, LONG),

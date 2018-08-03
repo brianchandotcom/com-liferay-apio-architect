@@ -636,7 +636,7 @@ public class FormUtilTest {
 	public void testGetRequiredLinkedModelFailsIfNotPresent() {
 		List<String> list = new ArrayList<>();
 
-		BiConsumer<String, Function<List<String>, Consumer>>
+		BiConsumer<String, Function<List<String>, Consumer<?>>>
 			requiredLinkedModel = getRequiredLinkedModel(
 				__ -> Optional.empty(), list, path -> "");
 
