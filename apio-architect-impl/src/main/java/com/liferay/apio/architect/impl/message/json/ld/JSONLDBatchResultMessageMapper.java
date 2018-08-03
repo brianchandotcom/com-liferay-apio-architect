@@ -32,6 +32,7 @@ import org.osgi.service.component.annotations.Component;
  * </p>
  *
  * @author Alejandro Hernández
+ * @review
  */
 @Component
 public class JSONLDBatchResultMessageMapper<T>

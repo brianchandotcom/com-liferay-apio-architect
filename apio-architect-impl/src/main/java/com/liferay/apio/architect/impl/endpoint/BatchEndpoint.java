@@ -32,6 +32,7 @@ import javax.ws.rs.PathParam;
  * @author Zoltán Takács
  * @param  <T> the type of the model's identifier (e.g., {@code Long}, {@code
  *         String}, etc.)
+ * @review
  */
 public interface BatchEndpoint<T> {
 
@@ -42,6 +43,7 @@ public interface BatchEndpoint<T> {
 	 *
 	 * @param  body the request's body
 	 * @return the batch result operation, or an exception if an error occurred
+	 * @review
 	 */
 	@Consumes(APPLICATION_JSON)
 	@Path("/")
@@ -57,6 +59,7 @@ public interface BatchEndpoint<T> {
 	 * @param  nestedName the nested resource's name, extracted from the URL
 	 * @param  body the request's body
 	 * @return the new single model, or an exception if an error occurred
+	 * @review
 	 */
 	@Consumes(APPLICATION_JSON)
 	@Path("{id}/{nestedName}")

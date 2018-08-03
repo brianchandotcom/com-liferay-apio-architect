@@ -59,6 +59,7 @@ public interface CollectionRoutes<T, S> {
 	 *
 	 * @return the function used to create a collection item, if the function
 	 *         exists; {@code Optional#empty()} otherwise
+	 * @review
 	 */
 	public Optional<BatchCreateItemFunction<S>>
 		getBatchCreateItemFunctionOptional();
@@ -128,6 +129,7 @@ public interface CollectionRoutes<T, S> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, R> Builder<T, S> addCreator(
 			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
@@ -162,6 +164,7 @@ public interface CollectionRoutes<T, S> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <R> Builder<T, S> addCreator(
 			ThrowableFunction<R, T> creatorThrowableFunction,
@@ -204,6 +207,7 @@ public interface CollectionRoutes<T, S> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C, D, R> Builder<T, S> addCreator(
 			ThrowablePentaFunction<R, A, B, C, D, T>
@@ -246,6 +250,7 @@ public interface CollectionRoutes<T, S> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C, R> Builder<T, S> addCreator(
 			ThrowableTetraFunction<R, A, B, C, T> creatorThrowableTetraFunction,
@@ -285,6 +290,7 @@ public interface CollectionRoutes<T, S> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, R> Builder<T, S> addCreator(
 			ThrowableTriFunction<R, A, B, T> creatorThrowableTriFunction,

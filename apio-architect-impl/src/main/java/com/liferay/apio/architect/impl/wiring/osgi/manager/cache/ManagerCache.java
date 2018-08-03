@@ -91,6 +91,7 @@ public class ManagerCache {
 	 *         the data
 	 * @return the batch result message mapper, if present; {@code
 	 *         Optional#empty()} otherwise
+	 * @review
 	 */
 	public <T> Optional<BatchResultMessageMapper<T>>
 		getBatchResultMessageMapperOptional(
@@ -469,8 +470,9 @@ public class ManagerCache {
 	/**
 	 * Adds a batch result message mapper.
 	 *
-	 * @param mediaType the media type
-	 * @param batchResultMessageMapper the batch result message mapper
+	 * @param  mediaType the media type
+	 * @param  batchResultMessageMapper the batch result message mapper
+	 * @review
 	 */
 	public void putBatchResultMessageMapper(
 		MediaType mediaType,

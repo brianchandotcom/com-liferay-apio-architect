@@ -72,6 +72,7 @@ public interface NestedCollectionRoutes<T, S, U> {
 	 *
 	 * @return the function used to create multiple collection items, if the
 	 *         function exists; {@code Optional#empty()} otherwise
+	 * @review
 	 */
 	public Optional<NestedBatchCreateItemFunction<S, U>>
 		getNestedBatchCreateItemFunctionOptional();
@@ -140,6 +141,7 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <R> Builder<T, S, U> addCreator(
 			ThrowableBiFunction<U, R, T> creatorThrowableBiFunction,
@@ -187,6 +189,7 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C, D, R> Builder<T, S, U> addCreator(
 			ThrowableHexaFunction<U, R, A, B, C, D, T>
@@ -234,6 +237,7 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, C, R> Builder<T, S, U> addCreator(
 			ThrowablePentaFunction<U, R, A, B, C, T>
@@ -278,6 +282,7 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, B, R> Builder<T, S, U> addCreator(
 			ThrowableTetraFunction<U, R, A, B, T> creatorThrowableTetraFunction,
@@ -319,6 +324,7 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
+		 * @review
 		 */
 		public <A, R> Builder<T, S, U> addCreator(
 			ThrowableTriFunction<U, R, A, T> creatorThrowableTriFunction,

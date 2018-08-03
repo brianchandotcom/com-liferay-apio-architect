@@ -37,14 +37,16 @@ import java.util.stream.LongStream;
  * </p>
  *
  * @author Alejandro Hernández
+ * @review
  */
 public class MockBatchResultWriter {
 
 	/**
 	 * Writes a {@link BatchResult}.
 	 *
-	 * @param batchResultMessageMapper the {@link BatchResultMessageMapper} to
-	 *        use for writing the JSON object
+	 * @param  batchResultMessageMapper the {@link BatchResultMessageMapper} to
+	 *         use for writing the JSON object
+	 * @review
 	 */
 	public static String write(
 		BatchResultMessageMapper<String> batchResultMessageMapper) {

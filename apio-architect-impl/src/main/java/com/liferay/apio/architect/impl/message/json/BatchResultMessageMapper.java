@@ -42,6 +42,7 @@ import java.util.Optional;
  * @author Alejandro Hernández
  * @param  <T> the type of the model's identifier (e.g., {@code Long}, {@code
  *         String}, etc.)
+ * @review
  */
 public interface BatchResultMessageMapper<T>
 	extends MessageMapper<BatchResult<T>> {
@@ -50,6 +51,7 @@ public interface BatchResultMessageMapper<T>
 	 * Returns the {@link SingleModelMessageMapper} used by the item methods.
 	 *
 	 * @return the {@code SingleModelMessageMapper}
+	 * @review
 	 */
 	public default Optional<SingleModelMessageMapper<T>>
 		getSingleModelMessageMapperOptional() {
@@ -60,8 +62,9 @@ public interface BatchResultMessageMapper<T>
 	/**
 	 * Maps a collection URL to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the batch result
-	 * @param url the collection's URL
+	 * @param  jsonObjectBuilder the JSON object builder for the batch result
+	 * @param  url the collection's URL
+	 * @review
 	 */
 	public default void mapCollectionURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
@@ -70,10 +73,11 @@ public interface BatchResultMessageMapper<T>
 	/**
 	 * Maps a resource URL to its JSON object representation.
 	 *
-	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
-	 *        result
-	 * @param itemJSONObjectBuilder the JSON object builder for the item
-	 * @param url the resource's URL
+	 * @param  batchResultJSONObjectBuilder the JSON object builder for the
+	 *         batch result
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  url the resource's URL
+	 * @review
 	 */
 	public default void mapItemSelfURL(
 		JSONObjectBuilder batchResultJSONObjectBuilder,
@@ -91,8 +95,9 @@ public interface BatchResultMessageMapper<T>
 	 * Maps the total number of elements in the collection to its JSON object
 	 * representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the batch result
-	 * @param totalCount the total number of elements in the collection
+	 * @param  jsonObjectBuilder the JSON object builder for the batch result
+	 * @param  totalCount the total number of elements in the collection
+	 * @review
 	 */
 	public default void mapItemTotalCount(
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
@@ -101,10 +106,11 @@ public interface BatchResultMessageMapper<T>
 	/**
 	 * Maps resource types to their JSON object representation.
 	 *
-	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
-	 *        result
-	 * @param itemJSONObjectBuilder the JSON object builder for the item
-	 * @param types the resource types
+	 * @param  batchResultJSONObjectBuilder the JSON object builder for the
+	 *         batch result
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  types the resource types
+	 * @review
 	 */
 	public default void mapItemTypes(
 		JSONObjectBuilder batchResultJSONObjectBuilder,
@@ -122,9 +128,10 @@ public interface BatchResultMessageMapper<T>
 	 * Finishes the item. This is the final batch result message mapper method
 	 * the writer calls for the item.
 	 *
-	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
-	 *        result
-	 * @param itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  batchResultJSONObjectBuilder the JSON object builder for the
+	 *         batch result
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @review
 	 */
 	public default void onFinishItem(
 		JSONObjectBuilder batchResultJSONObjectBuilder,
@@ -135,9 +142,10 @@ public interface BatchResultMessageMapper<T>
 	 * Starts the item. This is the first batch result message mapper method the
 	 * writer calls for the item.
 	 *
-	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
-	 *        result
-	 * @param itemJSONObjectBuilder the JSON object builder for the item
+	 * @param  batchResultJSONObjectBuilder the JSON object builder for the
+	 *         batch result
+	 * @param  itemJSONObjectBuilder the JSON object builder for the item
+	 * @review
 	 */
 	public default void onStartItem(
 		JSONObjectBuilder batchResultJSONObjectBuilder,

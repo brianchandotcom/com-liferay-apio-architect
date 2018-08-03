@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
  * Creates {@link BatchEndpoint} instances.
  *
  * @author Alejandro Hernández
+ * @review
  */
 public interface BatchEndpointBuilder {
 
@@ -44,6 +45,7 @@ public interface BatchEndpointBuilder {
 	 *
 	 * @param  name the resource's name
 	 * @return the builder's following step
+	 * @review
 	 */
 	public static <T, S> RequestStep<T, S> name(String name) {
 		return httpServletRequest -> singleModelFunction ->
@@ -144,6 +146,7 @@ public interface BatchEndpointBuilder {
 		 * provided to the builder.
 		 *
 		 * @return the {@code BatchEndpointImpl} instance
+		 * @review
 		 */
 		public BatchEndpoint<T> build();
 
@@ -159,6 +162,7 @@ public interface BatchEndpointBuilder {
 		 * @param  supplier the supplier that provides the {@code
 		 *         CollectionRoutes} of the current resource
 		 * @return the builder's following step
+		 * @review
 		 */
 		public NestedCollectionRoutesFunctionStep<T, S>
 			collectionRoutesSupplier(
@@ -178,6 +182,7 @@ public interface BatchEndpointBuilder {
 		 *         NestedCollectionRoutes} of a nested resource of the current
 		 *         resource
 		 * @return the builder's following step
+		 * @review
 		 */
 		public BuildStep<S> nestedCollectionRoutesFunction(
 			ThrowableFunction<String, NestedCollectionRoutes<T, S, Object>>
@@ -195,6 +200,7 @@ public interface BatchEndpointBuilder {
 		 * @param  supplier the supplier that provides the {@code Representor}
 		 *         of the current resource
 		 * @return the builder's following step
+		 * @review
 		 */
 		public CollectionRoutesSupplierStep<T, S> representorSupplier(
 			ThrowableSupplier<Representor<T>> supplier);
@@ -209,6 +215,7 @@ public interface BatchEndpointBuilder {
 		 *
 		 * @param  httpServletRequest the current HTTP request
 		 * @return the builder's following step
+		 * @review
 		 */
 		public SingleModelFunctionStep<T, S> httpServletRequest(
 			HttpServletRequest httpServletRequest);
@@ -225,6 +232,7 @@ public interface BatchEndpointBuilder {
 		 * @param  function the function that gets the {@code SingleModel} with
 		 *         a certain ID
 		 * @return the builder's following step
+		 * @review
 		 */
 		public RepresentorSupplierStep<T, S> singleModelFunction(
 			Function<String, Try<SingleModel<T>>> function);

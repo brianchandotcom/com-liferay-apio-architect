@@ -28,6 +28,7 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @author Zoltán Takács
  * @param  <T> the model's type
+ * @review
  */
 @FunctionalInterface
 public interface BatchCreateItemFunction<T>
