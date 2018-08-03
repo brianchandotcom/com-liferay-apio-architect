@@ -77,7 +77,7 @@ public class MockBatchResultWriter {
 		Optional<String> optional = batchResultWriter.write();
 
 		return optional.orElseThrow(
-			() -> new AssertionError("Writer failed to write"));
+			() -> new AssertionError("Unable to write"));
 	}
 
 	private MockBatchResultWriter() {
