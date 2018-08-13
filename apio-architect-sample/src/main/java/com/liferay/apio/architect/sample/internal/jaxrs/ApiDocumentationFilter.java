@@ -30,6 +30,7 @@ import org.osgi.service.component.annotations.Component;
  * discovered by a hypermedia consumer.
  *
  * @author Víctor Galán
+ * @review
  */
 @Component(
 	property = {
