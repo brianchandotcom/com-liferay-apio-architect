@@ -30,7 +30,7 @@ public class NameValidatorImpTest {
 	@Test
 	public void testValidatorErrorMessageIsCorrect() {
 		String error =
-			"Name can not be null and can only contains alphabetic " +
+			"Name cannot be null and can only contains alphabetic " +
 				"characters and hyphens";
 
 		assertThat(_nameValidator.getValidationError(), is(error));
