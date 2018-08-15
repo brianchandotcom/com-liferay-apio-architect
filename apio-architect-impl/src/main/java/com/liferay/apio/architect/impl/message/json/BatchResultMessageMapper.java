@@ -20,12 +20,13 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Maps {@link BatchResult} data to its representation in a JSON object.
- * Instances of this interface work like events. The {@code
- * javax.ws.rs.ext.MessageBodyWriter} of the {@code BatchResult} calls the
- * {@link BatchResultMessageMapper} methods. In each method, developers should
- * only map the provided part of the resource to its representation in a JSON
- * object. To enable this, each method receives a {@link JSONObjectBuilder}.
+ * Maps {@link BatchResult} data to its
+ * representation in a JSON object. Instances of this interface work like
+ * events. The {@code javax.ws.rs.ext.MessageBodyWriter} of the {@code
+ * BatchResult} calls the {@code BatchResultMessageMapper} methods. In each
+ * method, developers should only map the provided part of the resource to its
+ * representation in a JSON object. To enable this, each method receives a
+ * {@link JSONObjectBuilder}.
  *
  * <p>
  * The method {@link #onFinish} is called when the writer finishes writing the
@@ -36,13 +37,12 @@ import java.util.Optional;
  * <p>
  * By default, each item method calls {@link
  * #getSingleModelMessageMapperOptional()} to get a {@link
- * SingleModelMessageMapper} and call its correspondent method.
+ * SingleModelMessageMapper} and call its corresponding method.
  * </p>
  *
  * @author Alejandro Hernández
  * @param  <T> the type of the model's identifier (e.g., {@code Long}, {@code
  *         String}, etc.)
- * @review
  */
 public interface BatchResultMessageMapper<T>
 	extends MessageMapper<BatchResult<T>> {
@@ -51,7 +51,6 @@ public interface BatchResultMessageMapper<T>
 	 * Returns the {@link SingleModelMessageMapper} used by the item methods.
 	 *
 	 * @return the {@code SingleModelMessageMapper}
-	 * @review
 	 */
 	public default Optional<SingleModelMessageMapper<T>>
 		getSingleModelMessageMapperOptional() {
@@ -62,9 +61,8 @@ public interface BatchResultMessageMapper<T>
 	/**
 	 * Maps a collection URL to its JSON object representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the batch result
-	 * @param  url the collection's URL
-	 * @review
+	 * @param jsonObjectBuilder the JSON object builder for the batch result
+	 * @param url the collection's URL
 	 */
 	public default void mapCollectionURL(
 		JSONObjectBuilder jsonObjectBuilder, String url) {
@@ -73,11 +71,10 @@ public interface BatchResultMessageMapper<T>
 	/**
 	 * Maps a resource URL to its JSON object representation.
 	 *
-	 * @param  batchResultJSONObjectBuilder the JSON object builder for the
-	 *         batch result
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item
-	 * @param  url the resource's URL
-	 * @review
+	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
+	 *        result
+	 * @param itemJSONObjectBuilder the JSON object builder for the item
+	 * @param url the resource's URL
 	 */
 	public default void mapItemSelfURL(
 		JSONObjectBuilder batchResultJSONObjectBuilder,
@@ -95,9 +92,8 @@ public interface BatchResultMessageMapper<T>
 	 * Maps the total number of elements in the collection to its JSON object
 	 * representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the batch result
-	 * @param  totalCount the total number of elements in the collection
-	 * @review
+	 * @param jsonObjectBuilder the JSON object builder for the batch result
+	 * @param totalCount the total number of elements in the collection
 	 */
 	public default void mapItemTotalCount(
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
@@ -106,11 +102,10 @@ public interface BatchResultMessageMapper<T>
 	/**
 	 * Maps resource types to their JSON object representation.
 	 *
-	 * @param  batchResultJSONObjectBuilder the JSON object builder for the
-	 *         batch result
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item
-	 * @param  types the resource types
-	 * @review
+	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
+	 *        result
+	 * @param itemJSONObjectBuilder the JSON object builder for the item
+	 * @param types the resource types
 	 */
 	public default void mapItemTypes(
 		JSONObjectBuilder batchResultJSONObjectBuilder,
@@ -128,10 +123,9 @@ public interface BatchResultMessageMapper<T>
 	 * Finishes the item. This is the final batch result message mapper method
 	 * the writer calls for the item.
 	 *
-	 * @param  batchResultJSONObjectBuilder the JSON object builder for the
-	 *         batch result
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item
-	 * @review
+	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
+	 *        result
+	 * @param itemJSONObjectBuilder the JSON object builder for the item
 	 */
 	public default void onFinishItem(
 		JSONObjectBuilder batchResultJSONObjectBuilder,
@@ -142,10 +136,9 @@ public interface BatchResultMessageMapper<T>
 	 * Starts the item. This is the first batch result message mapper method the
 	 * writer calls for the item.
 	 *
-	 * @param  batchResultJSONObjectBuilder the JSON object builder for the
-	 *         batch result
-	 * @param  itemJSONObjectBuilder the JSON object builder for the item
-	 * @review
+	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
+	 *        result
+	 * @param itemJSONObjectBuilder the JSON object builder for the item
 	 */
 	public default void onStartItem(
 		JSONObjectBuilder batchResultJSONObjectBuilder,
