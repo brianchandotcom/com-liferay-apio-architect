@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.apio.architect.impl.internal.routes;
+package com.liferay.apio.architect.impl.routes;
 
-import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
-import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 
@@ -31,7 +31,7 @@ import com.liferay.apio.architect.custom.actions.GetRoute;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.impl.internal.routes.CollectionRoutesImpl.BuilderImpl;
+import com.liferay.apio.architect.impl.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
@@ -56,8 +56,8 @@ public class CollectionCustomRoutesImplTest {
 		_neededProviders = new TreeSet<>();
 
 		_builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, _neededProviders::add, __ -> null,
-			__ -> Optional.of("name"));
+			"name", REQUEST_PROVIDE_FUNCTION, _neededProviders::add,
+			__ -> null, __ -> null, __ -> Optional.of("name"));
 	}
 
 	@Test

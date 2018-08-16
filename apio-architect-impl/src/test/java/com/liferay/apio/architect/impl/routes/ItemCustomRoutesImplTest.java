@@ -12,10 +12,11 @@
  * details.
  */
 
-package com.liferay.apio.architect.impl.internal.routes;
+package com.liferay.apio.architect.impl.routes;
 
-import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
-import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.IDENTIFIER_TO_PATH_FUNCTION;
+import static com.liferay.apio.architect.impl.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 
@@ -31,7 +32,7 @@ import com.liferay.apio.architect.custom.actions.PutRoute;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.impl.internal.routes.ItemRoutesImpl.BuilderImpl;
+import com.liferay.apio.architect.impl.routes.ItemRoutesImpl;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
@@ -54,9 +55,9 @@ public class ItemCustomRoutesImplTest {
 	public void setUp() {
 		_neededProviders = new TreeSet<>();
 
-		_builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, _neededProviders::add, __ -> null,
-			__ -> Optional.of("name"));
+		_builder = new ItemRoutesImpl.BuilderImpl<>(
+			"name", REQUEST_PROVIDE_FUNCTION, _neededProviders::add,
+			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.of("name"));
 	}
 
 	@Test

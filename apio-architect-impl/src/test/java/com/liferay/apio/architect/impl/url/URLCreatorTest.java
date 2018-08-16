@@ -211,6 +211,10 @@ public class URLCreatorTest {
 				return false;
 			}
 
+			@Override
+			public boolean isCustom() {
+				return false;
+			}
 		};
 
 		_validateOperationURL(operation, "");
