@@ -675,10 +675,30 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			if (formBuilderFunction != null) {
 				Form<T> form = formBuilderFunction.apply(
 					new FormImpl.BuilderImpl<>(
-						Arrays.asList("p", _name, name), _pathToIdentifierFunction));
+						Arrays.asList("p", _name, name),
+						_pathToIdentifierFunction));
 
 				customRoute.setForm(form);
 			}
+		}
+
+		private Operation _createOperation(
+			Form form, HTTPMethod method, String name, String routeEntry) {
+
+			if (method == HTTPMethod.GET) {
+				return new CreateOperation(form, name, routeEntry, true);
+			}
+			else if (method == HTTPMethod.POST) {
+				return new RetrieveOperation(name, false, routeEntry, true);
+			}
+			else if (method == HTTPMethod.DELETE) {
+				return new DeleteOperation(name, routeEntry, true);
+			}
+			else if (method == HTTPMethod.PUT) {
+				return new UpdateOperation(form, name, routeEntry, true);
+			}
+
+			return null;
 		}
 
 		private T _getModel(Optional<Form<T>> formOptional, Body body) {
@@ -761,22 +781,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				});
 
 			return operations;
-		}
-
-		private Operation _createOperation(
-			Form form, HTTPMethod method, String name, String routeEntry) {
-
-			switch (method) {
-				case GET:
-					return new CreateOperation(form, name, routeEntry, true);
-				case POST:
-					return new RetrieveOperation(name, false, routeEntry, true);
-				case DELETE:
-					return new DeleteOperation(name, routeEntry, true);
-				case PUT:
-					return new UpdateOperation(form, name, routeEntry, true);
-			}
-			return null;
 		}
 
 		private <I extends Identifier<S>> String _getResourceName(

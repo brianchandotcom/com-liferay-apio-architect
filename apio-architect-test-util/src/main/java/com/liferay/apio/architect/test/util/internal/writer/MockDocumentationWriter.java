@@ -58,8 +58,10 @@ public class MockDocumentationWriter {
 
 		CollectionRoutes.Builder<String, Object> collectionBuilder =
 			new CollectionRoutesImpl.BuilderImpl<>(
-				"name", __ -> null, __ -> {}, __ -> null, __ -> null,
-				__ -> Optional.empty());
+				"name", __ -> null,
+				__ -> {
+				},
+				__ -> null, __ -> null, __ -> Optional.empty());
 
 		CustomDocumentation.Builder customDocumentationBuilder =
 			new CustomDocumentationImpl.BuilderImpl();
@@ -72,7 +74,8 @@ public class MockDocumentationWriter {
 		ItemRoutes.Builder itemBuilder = new ItemRoutesImpl.BuilderImpl<>(
 			"name", __ -> null,
 			__ -> {
-			}, __ -> null, __ -> Optional.empty(), __ -> Optional.empty());
+			},
+			__ -> null, __ -> Optional.empty(), __ -> Optional.empty());
 
 		NestedCollectionRoutes.Builder nestedBuilder =
 			new NestedCollectionRoutesImpl.BuilderImpl<>(

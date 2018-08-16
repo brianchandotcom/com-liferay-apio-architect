@@ -15,8 +15,8 @@
 package com.liferay.apio.architect.impl.endpoint;
 
 import com.liferay.apio.architect.impl.documentation.Documentation;
-import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
 import com.liferay.apio.architect.impl.entrypoint.CustomOperationsEndpoint;
+import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -215,6 +215,7 @@ public class URLCreatorTest {
 			public boolean isCustom() {
 				return false;
 			}
+
 		};
 
 		_validateOperationURL(operation, "");

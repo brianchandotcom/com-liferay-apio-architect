@@ -196,9 +196,16 @@ public final class URLCreator {
 	public static String createOperationURL(
 		ServerURL serverURL, Operation operation, Path path) {
 
-		String pathRoute = path == null &&
-						   operation.getURIOptional().isPresent() ?
-			operation.getURIOptional().get() : path.asURI();
+		Optional<String> uriOptional = operation.getURIOptional();
+
+		String pathRoute;
+
+		if ((path == null) && uriOptional.isPresent()) {
+			pathRoute = uriOptional.get();
+		}
+		else {
+			pathRoute = path.asURI();
+		}
 
 		String endPath = "";
 

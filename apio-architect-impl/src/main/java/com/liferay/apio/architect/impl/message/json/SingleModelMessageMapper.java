@@ -295,7 +295,8 @@ public interface SingleModelMessageMapper<T>
 	}
 
 	/**
-	 * add javadocs and move api methods:apio-architect-impl/src/main/java/com/liferay/apio/architect/impl/internal/message/json/SingleModelMessageMapper.java
+	 * add javadocs and move api
+	 * methods:apio-architect-impl/src/main/java/com/liferay/apio/architect/impl/internal/message/json/SingleModelMessageMapper.java
 	 * Maps a resource's URL to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the model

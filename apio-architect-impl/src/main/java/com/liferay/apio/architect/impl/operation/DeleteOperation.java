@@ -72,7 +72,6 @@ public class DeleteOperation implements Operation {
 	}
 
 	private boolean _custom;
-
 	private final String _resourceName;
 	private final String _uri;
 

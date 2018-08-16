@@ -16,6 +16,7 @@ package com.liferay.apio.architect.impl.entrypoint;
 
 import static com.liferay.apio.architect.impl.endpoint.ExceptionSupplierUtil.notAllowed;
 import static com.liferay.apio.architect.impl.endpoint.ExceptionSupplierUtil.notFound;
+
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
 

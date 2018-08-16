@@ -35,7 +35,9 @@ public class UpdateOperation implements Operation {
 		this(form, resourceName, uri, false);
 	}
 
-	public UpdateOperation(Form form, String resourceName, String uri, boolean custom) {
+	public UpdateOperation(
+		Form form, String resourceName, String uri, boolean custom) {
+
 		_form = form;
 		_resourceName = resourceName;
 		_uri = uri;
@@ -73,7 +75,6 @@ public class UpdateOperation implements Operation {
 	}
 
 	private boolean _custom;
-
 	private final Form _form;
 	private final String _resourceName;
 	private final String _uri;

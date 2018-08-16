@@ -35,7 +35,9 @@ public class CreateOperation implements Operation {
 		this(form, resourceName, uri, false);
 	}
 
-	public CreateOperation(Form form, String resourceName, String uri, boolean custom) {
+	public CreateOperation(
+		Form form, String resourceName, String uri, boolean custom) {
+
 		_form = form;
 		_resourceName = resourceName;
 		_uri = uri;
@@ -73,7 +75,6 @@ public class CreateOperation implements Operation {
 	}
 
 	private boolean _custom;
-
 	private final Form _form;
 	private final String _resourceName;
 	private final String _uri;

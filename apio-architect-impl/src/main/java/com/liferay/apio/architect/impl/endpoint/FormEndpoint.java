@@ -16,7 +16,6 @@ package com.liferay.apio.architect.impl.endpoint;
 
 import static com.liferay.apio.architect.impl.endpoint.ExceptionSupplierUtil.notFound;
 
-import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
@@ -25,11 +24,11 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
+import java.util.Optional;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Declares the endpoint for form operations.
@@ -93,7 +92,8 @@ public class FormEndpoint {
 			stringCustomRouteMap -> stringCustomRouteMap.get(nestedName)
 		).flatMap(
 			customRoute -> Try.fromOptional(
-				() -> (Optional<Form>) customRoute.getForm(), notFound(name, nestedName))
+				() -> (Optional<Form>)customRoute.getForm(),
+				notFound(name, nestedName))
 		);
 	}
 

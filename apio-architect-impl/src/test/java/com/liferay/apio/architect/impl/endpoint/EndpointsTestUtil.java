@@ -40,7 +40,8 @@ public class EndpointsTestUtil {
 			new CollectionRoutesImpl.BuilderImpl<>(
 				"name", REQUEST_PROVIDE_FUNCTION,
 				__ -> {
-				}, __ -> null, identity(), __ -> null);
+				},
+				__ -> null, identity(), __ -> null);
 
 		return builder.addCreator(
 			__ -> __.get("key"), HAS_ADDING_PERMISSION_FUNCTION,
@@ -53,7 +54,8 @@ public class EndpointsTestUtil {
 			new CollectionRoutesImpl.BuilderImpl<>(
 				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
-				}, __ -> null, __ -> null, __ -> null));
+				},
+				__ -> null, __ -> null, __ -> null));
 	}
 
 	public static <T, S> ItemRoutes<T, S> emptyItemRoutes() {
@@ -61,7 +63,8 @@ public class EndpointsTestUtil {
 			new ItemRoutesImpl.BuilderImpl<>(
 				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
-				}, __ -> null, __ -> null, __ -> Optional.empty()));
+				},
+				__ -> null, __ -> null, __ -> Optional.empty()));
 	}
 
 	public static <T, S, U> NestedCollectionRoutes<T, S, U>
@@ -79,7 +82,8 @@ public class EndpointsTestUtil {
 		ItemRoutes.Builder<T, S> builder = new ItemRoutesImpl.BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
-			}, __ -> null, __ -> Optional.empty(),  __ -> null);
+			},
+			__ -> null, __ -> Optional.empty(), __ -> null);
 
 		return builder.addUpdater(
 			(aLong, body) -> null, (credentials, s) -> true,

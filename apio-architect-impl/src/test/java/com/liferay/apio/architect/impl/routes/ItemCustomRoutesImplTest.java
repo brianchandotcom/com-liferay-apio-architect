@@ -32,7 +32,6 @@ import com.liferay.apio.architect.custom.actions.PutRoute;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.impl.routes.ItemRoutesImpl;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;

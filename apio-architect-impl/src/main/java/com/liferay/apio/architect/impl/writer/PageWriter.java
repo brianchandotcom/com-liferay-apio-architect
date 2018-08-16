@@ -32,8 +32,6 @@ import com.liferay.apio.architect.impl.message.json.PageMessageMapper;
 import com.liferay.apio.architect.impl.pagination.PageType;
 import com.liferay.apio.architect.impl.request.RequestInfo;
 import com.liferay.apio.architect.impl.single.model.SingleModelImpl;
-
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.representor.BaseRepresentor;

@@ -60,8 +60,10 @@ public class ItemRoutesImplTest {
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, __ -> {
-		}, __ -> null, IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty());
+			"name", REQUEST_PROVIDE_FUNCTION,
+			__ -> {
+			},
+			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty());
 
 		ItemRoutes<String, Long> itemRoutes = builder.build();
 

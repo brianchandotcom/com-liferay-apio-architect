@@ -69,8 +69,8 @@ public class BatchCreateOperation implements Operation {
 		return _custom;
 	}
 
-	private final Form _form;
 	private boolean _custom;
+	private final Form _form;
 	private final String _resourceName;
 	private final String _uri;
 

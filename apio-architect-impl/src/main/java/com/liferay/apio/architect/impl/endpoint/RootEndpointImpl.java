@@ -20,8 +20,8 @@ import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.documentation.Documentation;
-import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
 import com.liferay.apio.architect.impl.entrypoint.CustomOperationsEndpoint;
+import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
 import com.liferay.apio.architect.impl.url.ApplicationURL;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.documentation.contributor.CustomDocumentationManager;
 import com.liferay.apio.architect.impl.wiring.osgi.manager.provider.ProviderManager;
@@ -86,18 +86,18 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	@Override
+	public BinaryEndpoint binaryEndpoint() {
+		return new BinaryEndpoint(
+			this::_getRepresentorOrFail, this::_getSingleModelTry);
+	}
+
+	@Override
 	public CustomOperationsEndpoint customOperationsEndpoint(String name) {
 		return new CustomOperationsEndpoint<>(
 			name, _httpServletRequest,
 			() -> _collectionRouterManager.getCollectionRoutesOptional(name),
 			() -> _itemRouterManager.getItemRoutesOptional(name),
 			_pathIdentifierMapperManager::mapToIdentifierOrFail);
-	}
-
-	@Override
-	public BinaryEndpoint binaryEndpoint() {
-		return new BinaryEndpoint(
-			this::_getRepresentorOrFail, this::_getSingleModelTry);
 	}
 
 	@Override
