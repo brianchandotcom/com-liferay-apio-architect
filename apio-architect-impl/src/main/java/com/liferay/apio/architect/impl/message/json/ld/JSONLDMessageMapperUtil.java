@@ -37,8 +37,7 @@ import java.util.List;
 public class JSONLDMessageMapperUtil {
 
 	/**
-	 * Return the list of {@link Operation}
-	 * types.
+	 * Return the list of {@link Operation} types.
 	 *
 	 * @param  operation the operation
 	 * @return the list

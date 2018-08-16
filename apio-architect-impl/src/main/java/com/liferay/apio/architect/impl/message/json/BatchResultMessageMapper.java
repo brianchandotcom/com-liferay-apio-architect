@@ -20,13 +20,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Maps {@link BatchResult} data to its
- * representation in a JSON object. Instances of this interface work like
- * events. The {@code javax.ws.rs.ext.MessageBodyWriter} of the {@code
- * BatchResult} calls the {@code BatchResultMessageMapper} methods. In each
- * method, developers should only map the provided part of the resource to its
- * representation in a JSON object. To enable this, each method receives a
- * {@link JSONObjectBuilder}.
+ * Maps {@link BatchResult} data to its representation in a JSON object.
+ * Instances of this interface work like events. The {@code
+ * javax.ws.rs.ext.MessageBodyWriter} of the {@code BatchResult} calls the
+ * {@code BatchResultMessageMapper} methods. In each method, developers should
+ * only map the provided part of the resource to its representation in a JSON
+ * object. To enable this, each method receives a {@link JSONObjectBuilder}.
  *
  * <p>
  * The method {@link #onFinish} is called when the writer finishes writing the
