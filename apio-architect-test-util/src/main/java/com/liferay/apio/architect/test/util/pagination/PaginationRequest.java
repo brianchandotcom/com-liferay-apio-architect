@@ -18,20 +18,18 @@ import com.liferay.apio.architect.impl.pagination.PaginationImpl;
 import com.liferay.apio.architect.pagination.Pagination;
 
 /**
- * A utility for creating Pagination instances.
+ * Creates {@link Pagination} instances.
  *
  * @author Julio Camarero
- * @review
  */
 public class PaginationRequest {
 
 	/**
-	 * Creates a new {@link Pagination} instance.
+	 * Creates a new {@code Pagination} instance.
 	 *
 	 * @param  itemsPerPage the number of items per page
 	 * @param  pageNumber the page number
-	 * @return the {@link Pagination} instance
-	 * @review
+	 * @return the {@code Pagination} instance
 	 */
 	public static Pagination of(int itemsPerPage, int pageNumber) {
 		return new PaginationImpl(itemsPerPage, pageNumber);
