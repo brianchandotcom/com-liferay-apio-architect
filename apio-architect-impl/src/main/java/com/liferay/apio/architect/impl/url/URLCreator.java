@@ -162,6 +162,10 @@ public final class URLCreator {
 					return "batch/" + uri;
 				}
 
+				if (operation.isCustom()) {
+					return _createCustomOperationURL(operation, uri);
+				}
+
 				if (operation instanceof CreateOperation) {
 					return "p/" + uri;
 				}
@@ -183,40 +187,6 @@ public final class URLCreator {
 		).map(
 			uri -> createAbsoluteURL(applicationURL, uri)
 		);
-	}
-
-	/**
-	 * Returns the URL for an operation
-	 *
-	 * @param  serverURL the server URL
-	 * @param  operation the operation to represent
-	 * @param  path the single resource's {@link Path}
-	 * @return the collection URL
-	 */
-	public static String createOperationURL(
-		ServerURL serverURL, Operation operation, Path path) {
-
-		Optional<String> uriOptional = operation.getURIOptional();
-
-		String pathRoute;
-
-		if ((path == null) && uriOptional.isPresent()) {
-			pathRoute = uriOptional.get();
-		}
-		else {
-			pathRoute = path.asURI();
-		}
-
-		String endPath = "";
-
-		if (operation.isCustom()) {
-			endPath = String.join("/", "c" + pathRoute + operation.getName());
-		}
-		else {
-			endPath = String.join("/", "p" + pathRoute);
-		}
-
-		return String.join("/", serverURL.get(), endPath);
 	}
 
 	/**
@@ -268,6 +238,19 @@ public final class URLCreator {
 		}
 
 		return join("/", baseUrl, relativeURL);
+	}
+
+	private static String _createCustomOperationURL(
+		Operation operation, String uri) {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("c/");
+		sb.append(uri);
+		sb.append("/");
+		sb.append(operation.getCustom());
+
+		return sb.toString();
 	}
 
 	private URLCreator() {

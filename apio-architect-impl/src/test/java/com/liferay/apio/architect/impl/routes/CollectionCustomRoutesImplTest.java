@@ -29,7 +29,6 @@ import com.liferay.apio.architect.alias.routes.CustomPageFunction;
 import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.custom.actions.GetRoute;
 import com.liferay.apio.architect.form.Body;
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.impl.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -41,7 +40,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;

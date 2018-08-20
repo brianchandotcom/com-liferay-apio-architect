@@ -750,9 +750,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				customPermissionKeys.stream();
 
 			customPermissionKeysStream.filter(
-				key -> Try.fromFallible(
-					() -> _customPermissionFunctions.get(key).apply(
-						credentials)).orElse(false)).forEach(
+				key -> _getPermissionFunction(credentials, key)
+			).forEach(
 				routeEntry -> {
 					CustomRoute customRoute = _customRoutes.get(routeEntry);
 
@@ -761,28 +760,31 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					Form form = formOptional.orElse(null);
 
 					Operation operation = _createOperation(
-						form, customRoute.getMethod(), _name, routeEntry);
+						form, customRoute.getMethod(), _name, _name,
+						routeEntry);
 
 					operations.add(operation);
-				});
+				}
+			);
 
 			return operations;
 		}
 
 		private Operation _createOperation(
-			Form form, HTTPMethod method, String name, String routeEntry) {
+			Form form, HTTPMethod method, String name, String path,
+			String custom) {
 
 			if (method == HTTPMethod.GET) {
-				return new CreateOperation(form, name, routeEntry, true);
+				return new RetrieveOperation(name, true, path, custom);
 			}
 			else if (method == HTTPMethod.POST) {
-				return new RetrieveOperation(name, true, routeEntry, true);
+				return new CreateOperation(form, name, path, custom);
 			}
 			else if (method == HTTPMethod.DELETE) {
-				return new DeleteOperation(name, routeEntry, true);
+				return new DeleteOperation(name, path, custom);
 			}
 			else if (method == HTTPMethod.PUT) {
-				return new UpdateOperation(form, name, routeEntry, true);
+				return new UpdateOperation(form, name, path, custom);
 			}
 
 			return null;
@@ -833,18 +835,33 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				return Collections.emptyList();
 			}
 
+			List<Operation> operations = new ArrayList<>();
+
 			CreateOperation createOperation = new CreateOperation(
 				_form, _name, _name);
+
+			operations.add(createOperation);
 
 			BatchCreateOperation batchCreateOperation =
 				new BatchCreateOperation(_form, _name, _name);
 
-			List<Operation> operations = Arrays.asList(
-				createOperation, batchCreateOperation);
+			operations.add(batchCreateOperation);
 
 			operations.addAll(_createCustomOperations(credentials));
 
 			return operations;
+		}
+
+		private Boolean _getPermissionFunction(
+			Credentials credentials, String key) {
+
+			return Try.fromFallible(
+				() -> _customPermissionFunctions.get(key)
+			).map(
+				function -> function.apply(credentials)
+			).orElse(
+				false
+			);
 		}
 
 		private <I extends Identifier> String _getResourceName(

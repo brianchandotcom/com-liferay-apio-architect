@@ -685,19 +685,20 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		private Operation _createOperation(
-			Form form, HTTPMethod method, String name, String routeEntry) {
+			Form form, HTTPMethod method, String name, String path,
+			String custom) {
 
 			if (method == HTTPMethod.GET) {
-				return new CreateOperation(form, name, routeEntry, true);
+				return new RetrieveOperation(name, false, path, custom);
 			}
 			else if (method == HTTPMethod.POST) {
-				return new RetrieveOperation(name, false, routeEntry, true);
+				return new CreateOperation(form, name, path, custom);
 			}
 			else if (method == HTTPMethod.DELETE) {
-				return new DeleteOperation(name, routeEntry, true);
+				return new DeleteOperation(name, path, custom);
 			}
 			else if (method == HTTPMethod.PUT) {
-				return new UpdateOperation(form, name, routeEntry, true);
+				return new UpdateOperation(form, name, path, custom);
 			}
 
 			return null;
@@ -764,9 +765,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				customPermissionKeys.stream();
 
 			customPermissionKeysStream.filter(
-				key -> Try.fromFallible(
-					() -> _customPermissionFunctions.get(key).apply(
-						credentials, identifier)).orElse(false)).forEach(
+				key -> _getPermissionFunction(credentials, identifier, key)
+			).forEach(
 				routeEntry -> {
 					CustomRoute customRoute = _customRoutes.get(routeEntry);
 
@@ -777,12 +777,26 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					);
 
 					Operation operation = _createOperation(
-						form, customRoute.getMethod(), _name, routeEntry);
+						form, customRoute.getMethod(), _name, path.asURI(),
+						routeEntry);
 
 					operations.add(operation);
-				});
+				}
+			);
 
 			return operations;
+		}
+
+		private Boolean _getPermissionFunction(
+			Credentials credentials, S identifier, String key) {
+
+			return Try.fromFallible(
+				() -> _customPermissionFunctions.get(key)
+			).map(
+				function -> function.apply(credentials, identifier)
+			).orElse(
+				false
+			);
 		}
 
 		private <I extends Identifier<?>> String _getResourceName(

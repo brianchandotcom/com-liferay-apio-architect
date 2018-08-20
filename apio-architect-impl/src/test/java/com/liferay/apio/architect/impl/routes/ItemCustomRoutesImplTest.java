@@ -30,7 +30,6 @@ import com.liferay.apio.architect.alias.routes.CustomItemFunction;
 import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.custom.actions.PutRoute;
 import com.liferay.apio.architect.form.Body;
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
@@ -40,7 +39,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;

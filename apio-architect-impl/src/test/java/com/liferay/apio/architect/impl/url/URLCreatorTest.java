@@ -187,6 +187,11 @@ public class URLCreatorTest {
 		Operation operation = new Operation() {
 
 			@Override
+			public String getCustom() {
+				return null;
+			}
+
+			@Override
 			public Optional<Form> getFormOptional() {
 				return Optional.empty();
 			}
