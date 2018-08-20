@@ -220,7 +220,7 @@ public class CollectionCustomRoutesImplTest {
 		).map(
 			stringCustomRouteMap -> stringCustomRouteMap.get(_CUSTOM_ROUTE_NAME)
 		).flatMap(
-			(Function<CustomRoute, Optional<Form>>)CustomRoute::getForm
+			CustomRoute::getForm
 		).map(
 			form -> {
 				assertThat(form.getId(), is("p/name/" + _CUSTOM_ROUTE_NAME));
@@ -254,7 +254,7 @@ public class CollectionCustomRoutesImplTest {
 	private final Body _body = __ -> Optional.of("Apio");
 	private Builder<Map<String, Object>, ?> _builder;
 
-	private CustomRoute _customRoute = new GetRoute<Map<String, Object>>() {
+	private CustomRoute _customRoute = new GetRoute() {
 
 		@Override
 		public String getName() {
