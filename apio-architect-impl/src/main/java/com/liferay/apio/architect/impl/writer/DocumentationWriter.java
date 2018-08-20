@@ -17,6 +17,7 @@ package com.liferay.apio.architect.impl.writer;
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
+import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.impl.documentation.Documentation;
 import com.liferay.apio.architect.impl.message.json.DocumentationMessageMapper;
@@ -41,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -71,6 +71,8 @@ public class DocumentationWriter {
 		_documentation = builder._documentation;
 		_documentationMessageMapper = builder._documentationMessageMapper;
 		_requestInfo = builder._requestInfo;
+
+		_customDocumentation = _documentation.getCustomDocumentation();
 	}
 
 	/**
@@ -258,6 +260,17 @@ public class DocumentationWriter {
 		return Stream.concat(fieldNamesStream, nestedFieldNamesStream);
 	}
 
+	private String _getCustomDocumentation(String name) {
+		return Optional.ofNullable(
+			_customDocumentation.getDescriptionFunction(name)
+		).map(
+			localeFunction -> localeFunction.apply(
+				_requestInfo.getAcceptLanguage().getPreferredLocale())
+		).orElse(
+			null
+		);
+	}
+
 	private Optional<String> _getNestedCollectionRouteOptional(
 		Map<String, Representor> representorMap, Map<String, ?> nestedRoutesMap,
 		String name) {
@@ -334,7 +347,10 @@ public class DocumentationWriter {
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		_documentationMessageMapper.mapProperty(jsonObjectBuilder, fieldName);
+		String customDocumentation = _getCustomDocumentation(fieldName);
+
+		_documentationMessageMapper.mapProperty(
+			jsonObjectBuilder, fieldName, customDocumentation);
 
 		_documentationMessageMapper.onFinishProperty(
 			resourceJsonObjectBuilder, jsonObjectBuilder, fieldName);
@@ -380,8 +396,12 @@ public class DocumentationWriter {
 
 		JSONObjectBuilder operationJsonObjectBuilder = new JSONObjectBuilder();
 
+		String customDocumentation = _getCustomDocumentation(
+			operation.getName());
+
 		_documentationMessageMapper.mapOperation(
-			operationJsonObjectBuilder, resourceName, type, operation);
+			operationJsonObjectBuilder, resourceName, type, operation,
+			customDocumentation);
 
 		_documentationMessageMapper.onFinishOperation(
 			jsonObjectBuilder, operationJsonObjectBuilder, operation);
@@ -419,7 +439,7 @@ public class DocumentationWriter {
 	private void _writeRoute(
 		JSONObjectBuilder jsonObjectBuilder, String name,
 		Representor representor,
-		BiConsumer<JSONObjectBuilder, String> writeResourceBiConsumer,
+		TriConsumer<JSONObjectBuilder, String, String> writeResourceBiConsumer,
 		TriConsumer<String, String, JSONObjectBuilder>
 			writeOperationsTriConsumer,
 		Consumer<JSONObjectBuilder> writeFieldsRepresentor) {
@@ -431,7 +451,10 @@ public class DocumentationWriter {
 				JSONObjectBuilder resourceJsonObjectBuilder =
 					new JSONObjectBuilder();
 
-				writeResourceBiConsumer.accept(resourceJsonObjectBuilder, type);
+				String customDocumentation = _getCustomDocumentation(type);
+
+				writeResourceBiConsumer.accept(
+					resourceJsonObjectBuilder, type, customDocumentation);
 
 				writeOperationsTriConsumer.accept(
 					name, type, resourceJsonObjectBuilder);
@@ -443,6 +466,7 @@ public class DocumentationWriter {
 			});
 	}
 
+	private final CustomDocumentation _customDocumentation;
 	private final Documentation _documentation;
 	private final DocumentationMessageMapper _documentationMessageMapper;
 	private final RequestInfo _requestInfo;
