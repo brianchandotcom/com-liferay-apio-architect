@@ -423,26 +423,14 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return this;
 		}
 
-		public <R, I extends Identifier> CollectionRoutes.Builder<T, S>
-			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
-				Class<I> supplier,
-				Function<Credentials, Boolean> permissionFunction) {
-
-			return addCustomRoute(
-				customRoute, throwableBiFunction, supplier, permissionFunction,
-				null);
-		}
-
 		@Override
-		public <R, I extends Identifier> CollectionRoutes.Builder<T, S>
+		public <R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
+				CustomRoute customRoute,
+				ThrowableBiFunction<Pagination, R, U> throwableBiFunction,
 				Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction) {
+				FormBuilderFunction<R> formBuilderFunction) {
 
 			String name = customRoute.getName();
 
@@ -451,7 +439,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_customRoutes.put(name, customRoute);
 			_customPermissionFunctions.put(name, permissionFunction);
 
-			CustomPageFunction<R> requestFunction =
+			CustomPageFunction<U> requestFunction =
 				httpServletRequest -> body -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class,
@@ -468,15 +456,15 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		@Override
-		public <A, B, C, D, R, I extends Identifier>
+		public <A, B, C, D, R, U, I extends Identifier>
 			CollectionRoutes.Builder<T, S> addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableHexaFunction<Pagination, T, A, B, C, D, R>
+				CustomRoute customRoute,
+				ThrowableHexaFunction<Pagination, R, A, B, C, D, U>
 					throwableHexaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
 				Class<D> dClass, Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction) {
+				FormBuilderFunction<R> formBuilderFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
@@ -490,7 +478,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_customRoutes.put(name, customRoute);
 			_customPermissionFunctions.put(name, permissionFunction);
 
-			CustomPageFunction<R> requestFunction =
+			CustomPageFunction<U> requestFunction =
 				httpServletRequest -> body -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, cClass, dClass,
@@ -507,15 +495,15 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		@Override
-		public <A, B, C, R, I extends Identifier> CollectionRoutes.Builder<T, S>
-			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowablePentaFunction<Pagination, T, A, B, C, R>
+		public <A, B, C, R, U, I extends Identifier>
+			CollectionRoutes.Builder<T, S> addCustomRoute(
+				CustomRoute customRoute,
+				ThrowablePentaFunction<Pagination, R, A, B, C, U>
 					throwablePentaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
 				Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction) {
+				FormBuilderFunction<R> formBuilderFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
@@ -528,7 +516,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_customRoutes.put(name, customRoute);
 			_customPermissionFunctions.put(name, permissionFunction);
 
-			CustomPageFunction<R> requestFunction =
+			CustomPageFunction<U> requestFunction =
 				httpServletRequest -> body -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass, bClass, cClass,
@@ -545,14 +533,14 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		@Override
-		public <A, B, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+		public <A, B, R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableTetraFunction<Pagination, T, A, B, R>
+				CustomRoute customRoute,
+				ThrowableTetraFunction<Pagination, R, A, B, U>
 					throwableTetraFunction,
 				Class<A> aClass, Class<B> bClass, Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction) {
+				FormBuilderFunction<R> formBuilderFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
@@ -581,13 +569,13 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		@Override
-		public <A, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+		public <A, R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableTriFunction<Pagination, T, A, R> throwableTriFunction,
+				CustomRoute customRoute,
+				ThrowableTriFunction<Pagination, R, A, U> throwableTriFunction,
 				Class<A> aClass, Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction) {
+				FormBuilderFunction<R> formBuilderFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 
@@ -598,7 +586,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_customRoutes.put(name, customRoute);
 			_customPermissionFunctions.put(name, permissionFunction);
 
-			CustomPageFunction<R> requestFunction =
+			CustomPageFunction<U> requestFunction =
 				httpServletRequest -> body -> provide(
 					_provideFunction.apply(httpServletRequest),
 					Pagination.class, aClass,
@@ -736,12 +724,12 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return new CollectionRoutesImpl<>(this);
 		}
 
-		private void _calculateForm(
-			CustomRoute customRoute, FormBuilderFunction<T> formBuilderFunction,
+		private <R> void _calculateForm(
+			CustomRoute customRoute, FormBuilderFunction<R> formBuilderFunction,
 			String name) {
 
 			if (formBuilderFunction != null) {
-				Form<T> form = formBuilderFunction.apply(
+				Form<R> form = formBuilderFunction.apply(
 					new FormImpl.BuilderImpl<>(
 						Arrays.asList("p", _name, name),
 						_pathToIdentifierFunction));
@@ -768,7 +756,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				routeEntry -> {
 					CustomRoute customRoute = _customRoutes.get(routeEntry);
 
-					Optional<Form> formOptional = customRoute.getForm();
+					Optional<Form<?>> formOptional = customRoute.getForm();
 
 					Form form = formOptional.orElse(null);
 
@@ -816,10 +804,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			}
 		}
 
-		private T _getModel(CustomRoute<T> customRoute, Body body) {
-			Optional<Form<T>> form = customRoute.getForm();
+		private <R> R _getModel(CustomRoute customRoute, Body body) {
+			Optional<Form<?>> form = customRoute.getForm();
 
-			return form.map(
+			return (R)form.map(
 				f -> f.get(body)
 			).orElse(
 				null

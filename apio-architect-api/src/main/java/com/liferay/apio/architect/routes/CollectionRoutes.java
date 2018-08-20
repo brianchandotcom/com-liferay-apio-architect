@@ -333,13 +333,13 @@ public interface CollectionRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <R, I extends Identifier> CollectionRoutes.Builder<T, S>
+		public <R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
+				CustomRoute customRoute,
+				ThrowableBiFunction<Pagination, R, U> throwableBiFunction,
 				Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a custom route with the http method specified in customRoute and
@@ -359,15 +359,15 @@ public interface CollectionRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <A, B, C, D, R, I extends Identifier>
+		public <A, B, C, D, R, U, I extends Identifier>
 			CollectionRoutes.Builder<T, S> addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableHexaFunction<Pagination, T, A, B, C, D, R>
+				CustomRoute customRoute,
+				ThrowableHexaFunction<Pagination, R, A, B, C, D, U>
 					throwableHexaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
 				Class<D> dClass, Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a custom route with the http method specified in customRoute and
@@ -386,15 +386,15 @@ public interface CollectionRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <A, B, C, R, I extends Identifier> CollectionRoutes.Builder<T, S>
-			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowablePentaFunction<Pagination, T, A, B, C, R>
+		public <A, B, C, R, U, I extends Identifier>
+			CollectionRoutes.Builder<T, S> addCustomRoute(
+				CustomRoute customRoute,
+				ThrowablePentaFunction<Pagination, R, A, B, C, U>
 					throwablePentaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
 				Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a custom route with the http method specified in customRoute and
@@ -412,14 +412,14 @@ public interface CollectionRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <A, B, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+		public <A, B, R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableTetraFunction<Pagination, T, A, B, R>
+				CustomRoute customRoute,
+				ThrowableTetraFunction<Pagination, R, A, B, U>
 					throwableTetraFunction,
 				Class<A> aClass, Class<B> bClass, Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a custom route with the http method specified in customRoute and
@@ -436,13 +436,13 @@ public interface CollectionRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <A, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+		public <A, R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableTriFunction<Pagination, T, A, R> throwableTriFunction,
+				CustomRoute customRoute,
+				ThrowableTriFunction<Pagination, R, A, U> throwableTriFunction,
 				Class<A> aClass, Class<I> supplier,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<T> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a route to a collection page function with one extra parameter.

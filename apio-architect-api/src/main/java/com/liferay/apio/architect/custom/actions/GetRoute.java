@@ -21,7 +21,7 @@ import com.liferay.apio.architect.operation.HTTPMethod;
  *
  * @author Javier Gamarra
  */
-public abstract class GetRoute<T> extends CustomRoute<T> {
+public abstract class GetRoute extends CustomRoute {
 
 	@Override
 	public HTTPMethod getMethod() {

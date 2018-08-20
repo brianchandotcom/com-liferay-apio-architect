@@ -142,11 +142,11 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		@Override
-		public <R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
-			CustomRoute<T> customRoute,
-			ThrowableBiFunction<S, T, R> throwableBiFunction, Class<I> supplier,
+		public <R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
+			CustomRoute customRoute,
+			ThrowableBiFunction<S, R, U> throwableBiFunction, Class<I> supplier,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<T> formBuilderFunction) {
+			FormBuilderFunction<R> formBuilderFunction) {
 
 			String name = customRoute.getName();
 
@@ -156,7 +156,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_customPermissionFunctions.put(name, permissionBiFunction);
 
-			CustomItemFunction<R, S> customFunction =
+			CustomItemFunction<U, S> customFunction =
 				httpServletRequest -> s -> body -> Try.fromFallible(
 					() -> throwableBiFunction.andThen(
 						t -> new SingleModelImpl<>(
@@ -171,15 +171,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		@Override
-		public <A, B, C, D, R, I extends Identifier<S>> Builder<T, S>
+		public <A, B, C, D, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableHexaFunction<S, T, A, B, C, D, R>
+				CustomRoute customRoute,
+				ThrowableHexaFunction<S, R, A, B, C, D, U>
 					throwableHexaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
 				Class<D> dClass, Class<I> supplier,
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
-				FormBuilderFunction<T> formBuilderFunction) {
+				FormBuilderFunction<R> formBuilderFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
@@ -194,7 +194,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_customPermissionFunctions.put(name, permissionBiFunction);
 
-			CustomItemFunction<R, S> customFunction =
+			CustomItemFunction<U, S> customFunction =
 				httpServletRequest -> s -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass, dClass,
@@ -211,14 +211,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		@Override
-		public <A, B, C, R, I extends Identifier<S>> Builder<T, S>
+		public <A, B, C, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowablePentaFunction<S, T, A, B, C, R> throwablePentaFunction,
+				CustomRoute customRoute,
+				ThrowablePentaFunction<S, R, A, B, C, U> throwablePentaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
 				Class<I> supplier,
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
-				FormBuilderFunction<T> formBuilderFunction) {
+				FormBuilderFunction<R> formBuilderFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
@@ -232,12 +232,13 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_customPermissionFunctions.put(name, permissionBiFunction);
 
-			CustomItemFunction<R, S> customFunction =
+			CustomItemFunction<U, S> customFunction =
 				httpServletRequest -> s -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass,
 					(a, b, c) -> throwablePentaFunction.andThen(
-						t -> new SingleModelImpl(t, _getResourceName(supplier))
+						t -> new SingleModelImpl<>(
+							t, _getResourceName(supplier))
 					).apply(
 						s, _getModel(customRoute.getForm(), body), a, b, c
 					));
@@ -248,12 +249,13 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		@Override
-		public <A, B, R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
-			CustomRoute<T> customRoute,
-			ThrowableTetraFunction<S, T, A, B, R> throwableTetraFunction,
-			Class<A> aClass, Class<B> bClass, Class<I> supplier,
-			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<T> formBuilderFunction) {
+		public <A, B, R, U, I extends Identifier<?>> Builder<T, S>
+			addCustomRoute(
+				CustomRoute customRoute,
+				ThrowableTetraFunction<S, R, A, B, U> throwableTetraFunction,
+				Class<A> aClass, Class<B> bClass, Class<I> supplier,
+				BiFunction<Credentials, S, Boolean> permissionBiFunction,
+				FormBuilderFunction<R> formBuilderFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
@@ -266,7 +268,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_customPermissionFunctions.put(name, permissionBiFunction);
 
-			CustomItemFunction<R, S> customFunction =
+			CustomItemFunction<U, S> customFunction =
 				httpServletRequest -> s -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					(a, b) -> throwableTetraFunction.andThen(
@@ -282,12 +284,12 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		@Override
-		public <A, R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
-			CustomRoute<T> customRoute,
-			ThrowableTriFunction<S, T, A, R> throwableTriFunction,
+		public <A, R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
+			CustomRoute customRoute,
+			ThrowableTriFunction<S, R, A, U> throwableTriFunction,
 			Class<A> aClass, Class<I> supplier,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<T> formBuilderFunction) {
+			FormBuilderFunction<R> formBuilderFunction) {
 
 			_neededProviderConsumer.accept(aClass.getName());
 
@@ -299,7 +301,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_customPermissionFunctions.put(name, permissionBiFunction);
 
-			CustomItemFunction<R, S> customFunction =
+			CustomItemFunction<U, S> customFunction =
 				httpServletRequest -> s -> body -> provide(
 					_provideFunction.apply(httpServletRequest), aClass,
 					a -> throwableTriFunction.andThen(
@@ -669,11 +671,11 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		private void _calculateForm(
-			CustomRoute customRoute, FormBuilderFunction<T> formBuilderFunction,
+			CustomRoute customRoute, FormBuilderFunction<?> formBuilderFunction,
 			String name) {
 
 			if (formBuilderFunction != null) {
-				Form<T> form = formBuilderFunction.apply(
+				Form<?> form = formBuilderFunction.apply(
 					new FormImpl.BuilderImpl<>(
 						Arrays.asList("p", _name, name),
 						_pathToIdentifierFunction));
@@ -701,8 +703,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return null;
 		}
 
-		private T _getModel(Optional<Form<T>> formOptional, Body body) {
-			return formOptional.map(
+		private <R> R _getModel(Optional<Form<?>> formOptional, Body body) {
+			return (R)formOptional.map(
 				form -> form.get(body)
 			).orElse(
 				null
@@ -768,7 +770,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				routeEntry -> {
 					CustomRoute customRoute = _customRoutes.get(routeEntry);
 
-					Optional<Form> formOptional = customRoute.getForm();
+					Optional<Form<?>> formOptional = customRoute.getForm();
 
 					Form form = formOptional.orElse(
 						null
@@ -783,7 +785,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return operations;
 		}
 
-		private <I extends Identifier<S>> String _getResourceName(
+		private <I extends Identifier<?>> String _getResourceName(
 			Class<I> supplier) {
 
 			return _nameFunction.apply(

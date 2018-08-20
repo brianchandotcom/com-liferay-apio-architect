@@ -26,10 +26,10 @@ import java.util.function.Function;
  * item.
  *
  * @author Javier Gamarra
- * @param  <T> the model's type
+ * @param  <U> the model's type
  * @review
  */
 @FunctionalInterface
-public interface CustomPageFunction<T>
-	extends RequestFunction<Function<Body, Try<SingleModel<T>>>> {
+public interface CustomPageFunction<U>
+	extends RequestFunction<Function<Body, Try<SingleModel<U>>>> {
 }

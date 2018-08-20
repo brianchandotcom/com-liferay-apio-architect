@@ -22,7 +22,7 @@ import com.liferay.apio.architect.operation.HTTPMethod;
  * @author Javier Gamarra
  * @review
  */
-public abstract class PutRoute<T> extends CustomRoute<T> {
+public abstract class PutRoute extends CustomRoute {
 
 	@Override
 	public HTTPMethod getMethod() {

@@ -25,9 +25,9 @@ import java.util.Optional;
  * @author Javier Gamarra
  * @review
  */
-public abstract class CustomRoute<T> {
+public abstract class CustomRoute {
 
-	public Optional<Form<T>> getForm() {
+	public Optional<Form<?>> getForm() {
 		return Optional.ofNullable(_form);
 	}
 
@@ -35,10 +35,10 @@ public abstract class CustomRoute<T> {
 
 	public abstract String getName();
 
-	public void setForm(Form<T> form) {
+	public void setForm(Form<?> form) {
 		_form = form;
 	}
 
-	private Form<T> _form;
+	private Form<?> _form;
 
 }

@@ -146,11 +146,11 @@ public interface ItemRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
-			CustomRoute<T> customRoute,
-			ThrowableBiFunction<S, T, R> throwableBiFunction, Class<I> supplier,
+		public <R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
+			CustomRoute customRoute,
+			ThrowableBiFunction<S, R, U> throwableBiFunction, Class<I> supplier,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<T> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a custom route with the http method specified in customRoute and
@@ -170,15 +170,15 @@ public interface ItemRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <A, B, C, D, R, I extends Identifier<S>> Builder<T, S>
+		public <A, B, C, D, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowableHexaFunction<S, T, A, B, C, D, R>
+				CustomRoute customRoute,
+				ThrowableHexaFunction<S, R, A, B, C, D, U>
 					throwableHexaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
 				Class<D> dClass, Class<I> supplier,
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
-				FormBuilderFunction<T> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a custom route with the http method specified in customRoute and
@@ -197,14 +197,14 @@ public interface ItemRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <A, B, C, R, I extends Identifier<S>> Builder<T, S>
+		public <A, B, C, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
-				CustomRoute<T> customRoute,
-				ThrowablePentaFunction<S, T, A, B, C, R> throwablePentaFunction,
+				CustomRoute customRoute,
+				ThrowablePentaFunction<S, R, A, B, C, U> throwablePentaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
 				Class<I> supplier,
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
-				FormBuilderFunction<T> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a custom route with the http method specified in customRoute and
@@ -222,12 +222,13 @@ public interface ItemRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <A, B, R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
-			CustomRoute<T> customRoute,
-			ThrowableTetraFunction<S, T, A, B, R> throwableTetraFunction,
-			Class<A> aClass, Class<B> bClass, Class<I> supplier,
-			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<T> formBuilderFunction);
+		public <A, B, R, U, I extends Identifier<?>> Builder<T, S>
+			addCustomRoute(
+				CustomRoute customRoute,
+				ThrowableTetraFunction<S, R, A, B, U> throwableTetraFunction,
+				Class<A> aClass, Class<B> bClass, Class<I> supplier,
+				BiFunction<Credentials, S, Boolean> permissionBiFunction,
+				FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a custom route with the http method specified in customRoute and
@@ -244,12 +245,12 @@ public interface ItemRoutes<T, S> {
 		 * @return the updated builder
 		 * @review
 		 */
-		public <A, R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
-			CustomRoute<T> customRoute,
-			ThrowableTriFunction<S, T, A, R> throwableTriFunction,
+		public <A, R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
+			CustomRoute customRoute,
+			ThrowableTriFunction<S, R, A, U> throwableTriFunction,
 			Class<A> aClass, Class<I> supplier,
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<T> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a route to an item function with one extra parameter.

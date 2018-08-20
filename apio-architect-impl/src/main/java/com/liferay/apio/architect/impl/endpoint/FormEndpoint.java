@@ -24,8 +24,6 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
-import java.util.Optional;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -80,7 +78,7 @@ public class FormEndpoint {
 	 */
 	@GET
 	@Path("p/{name}/{nestedName}")
-	public Try<Form> customForm(
+	public Try<Form<?>> customForm(
 		@PathParam("name") String name,
 		@PathParam("nestedName") String nestedName) {
 
@@ -92,8 +90,7 @@ public class FormEndpoint {
 			stringCustomRouteMap -> stringCustomRouteMap.get(nestedName)
 		).flatMap(
 			customRoute -> Try.fromOptional(
-				() -> (Optional<Form>)customRoute.getForm(),
-				notFound(name, nestedName))
+				customRoute::getForm, notFound(name, nestedName))
 		);
 	}
 
