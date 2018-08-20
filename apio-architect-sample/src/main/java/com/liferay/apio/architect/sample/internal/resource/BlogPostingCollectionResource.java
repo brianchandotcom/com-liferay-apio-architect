@@ -17,6 +17,8 @@ package com.liferay.apio.architect.sample.internal.resource;
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 
 import com.liferay.apio.architect.credentials.Credentials;
+import com.liferay.apio.architect.custom.actions.CustomRoute;
+import com.liferay.apio.architect.custom.actions.PostRoute;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.representor.Representor;
@@ -25,16 +27,21 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingForm;
+import com.liferay.apio.architect.sample.internal.form.BlogSubscriptionForm;
 import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentIdentifier;
 import com.liferay.apio.architect.sample.internal.identifier.BlogPostingIdentifier;
+import com.liferay.apio.architect.sample.internal.identifier.BlogSubscriptionIdentifier;
 import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingModel;
+import com.liferay.apio.architect.sample.internal.model.BlogSubscriptionModel;
+import com.liferay.apio.architect.sample.internal.model.PersonModel;
 import com.liferay.apio.architect.sample.internal.model.RatingModel;
 import com.liferay.apio.architect.sample.internal.model.ReviewModel;
 
 import java.util.List;
 import java.util.Optional;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
@@ -59,6 +66,10 @@ public class BlogPostingCollectionResource
 
 		return builder.addGetter(
 			this::_getPageItems
+		).addCustomRoute(
+			_getSubscribeRoute(), this::_subscribePage,
+			BlogSubscriptionIdentifier.class, PermissionChecker::hasPermission,
+			BlogSubscriptionForm::buildForm
 		).addCreator(
 			this::_addBlogPostingModel, Credentials.class,
 			PermissionChecker::hasPermission, BlogPostingForm::buildForm
@@ -76,6 +87,11 @@ public class BlogPostingCollectionResource
 
 		return builder.addGetter(
 			this::_getBlogPostingModel
+		).addCustomRoute(
+			_getSubscribeRoute(), this::_subscribe,
+			BlogSubscriptionIdentifier.class,
+			(credentials, blogId) -> hasPermission(credentials),
+			BlogSubscriptionForm::buildForm
 		).addRemover(
 			this::_deleteBlogPostingModel, Credentials.class,
 			(credentials, id) -> hasPermission(credentials)
@@ -167,6 +183,53 @@ public class BlogPostingCollectionResource
 		int count = BlogPostingModel.getCount();
 
 		return new PageItems<>(blogPostingModels, count);
+	}
+
+	private CustomRoute _getSubscribeRoute() {
+		return new PostRoute() {
+
+			@Override
+			public String getName() {
+				return "subscribe";
+			}
+
+		};
+	}
+
+	private BlogSubscriptionModel _subscribe(
+		Long blogId, BlogSubscriptionForm blogSubscriptionForm) {
+
+		Optional<PersonModel> personModel = PersonModel.get(
+			blogSubscriptionForm.getPerson());
+
+		Optional<BlogPostingModel> blogPostingModel = BlogPostingModel.get(
+			blogId);
+
+		if (personModel.isPresent()) {
+			return BlogSubscriptionModel.create(
+				blogPostingModel.get(), personModel.get());
+		}
+
+		throw new BadRequestException();
+	}
+
+	private BlogSubscriptionModel _subscribePage(
+		Pagination pagination, BlogSubscriptionForm blogSubscriptionForm) {
+
+		Optional<PersonModel> personModel = PersonModel.get(
+			blogSubscriptionForm.getPerson());
+
+		Optional<Long> blog = blogSubscriptionForm.getBlog();
+
+		Optional<BlogPostingModel> blogPostingModel = blog.flatMap(
+			BlogPostingModel::get);
+
+		if (personModel.isPresent() && blogPostingModel.isPresent()) {
+			return BlogSubscriptionModel.create(
+				blogPostingModel.get(), personModel.get());
+		}
+
+		throw new BadRequestException();
 	}
 
 	private BlogPostingModel _updateBlogPostingModel(
