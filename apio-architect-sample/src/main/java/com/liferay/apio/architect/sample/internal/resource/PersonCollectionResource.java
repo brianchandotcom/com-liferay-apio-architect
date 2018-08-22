@@ -23,8 +23,9 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.sample.internal.converter.PersonConverter;
 import com.liferay.apio.architect.sample.internal.dao.PersonModelService;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
-import com.liferay.apio.architect.sample.internal.form.PersonForm;
+import com.liferay.apio.architect.sample.internal.dto.PostalAddressModel;
 import com.liferay.apio.architect.sample.internal.type.Person;
+import com.liferay.apio.architect.sample.internal.type.PostalAddress;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,16 +47,22 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true)
 public class PersonCollectionResource {
 
-	public Person addPerson(PersonForm personForm, Credentials credentials) {
+	public Person addPerson(Person person, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
 
+		PostalAddress postalAddress = person.getPostalAddress();
+
+		PostalAddressModel postalAddressModel = new PostalAddressModel(
+			postalAddress.getAddressCountry(), postalAddress.getAddressRegion(),
+			postalAddress.getAddressLocality(), postalAddress.getPostalCode(),
+			postalAddress.getStreetAddress());
+
 		PersonModel personModel = _personModelService.create(
-			personForm.getPostalAddressModel(), personForm.getImage(),
-			personForm.getBirthDate(), personForm.getEmail(),
-			personForm.getGivenName(), personForm.getJobTitles(),
-			personForm.getFamilyName());
+			postalAddressModel, person.getImage(), person.getBirthDate(),
+			person.getEmail(), person.getGivenName(), person.getJobTitle(),
+			person.getFamilyName());
 
 		return toPerson(personModel);
 	}
@@ -95,17 +102,23 @@ public class PersonCollectionResource {
 	}
 
 	public Person updatePerson(
-		long id, PersonForm personForm, Credentials credentials) {
+		long id, Person person, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
 
+		PostalAddress postalAddress = person.getPostalAddress();
+
+		PostalAddressModel postalAddressModel = new PostalAddressModel(
+			postalAddress.getAddressCountry(), postalAddress.getAddressRegion(),
+			postalAddress.getAddressLocality(), postalAddress.getPostalCode(),
+			postalAddress.getStreetAddress());
+
 		Optional<PersonModel> optional = _personModelService.update(
-			personForm.getPostalAddressModel(), personForm.getImage(),
-			personForm.getBirthDate(), personForm.getEmail(),
-			personForm.getGivenName(), personForm.getJobTitles(),
-			personForm.getFamilyName(), id);
+			postalAddressModel, person.getImage(), person.getBirthDate(),
+			person.getEmail(), person.getGivenName(), person.getJobTitle(),
+			person.getFamilyName(), id);
 
 		return optional.map(
 			PersonConverter::toPerson

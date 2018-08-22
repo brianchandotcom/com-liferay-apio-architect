@@ -23,8 +23,6 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.sample.internal.converter.CommentConverter;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingCommentModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
-import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
-import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentUpdaterForm;
 import com.liferay.apio.architect.sample.internal.type.Comment;
 
 import java.util.List;
@@ -49,9 +47,7 @@ import org.osgi.service.component.annotations.Reference;
 public class BlogPostingCommentNestedCollectionResource {
 
 	public Comment addBlogPostingComment(
-		Long blogPostingModelId,
-		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm,
-		Credentials credentials) {
+		Long blogPostingModelId, Comment comment, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
@@ -59,8 +55,7 @@ public class BlogPostingCommentNestedCollectionResource {
 
 		BlogPostingCommentModel blogPostingCommentModel =
 			_blogPostingCommentModelService.create(
-				blogPostingCommentCreatorForm.getAuthor(), blogPostingModelId,
-				blogPostingCommentCreatorForm.getText());
+				comment.getAuthor(), blogPostingModelId, comment.getText());
 
 		return toComment(blogPostingCommentModel);
 	}
@@ -108,8 +103,7 @@ public class BlogPostingCommentNestedCollectionResource {
 	}
 
 	public Comment updateBlogPostingComment(
-		long id, BlogPostingCommentUpdaterForm blogPostingCommentUpdaterForm,
-		Credentials credentials) {
+		long id, Comment blogPostingComment, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
@@ -117,7 +111,7 @@ public class BlogPostingCommentNestedCollectionResource {
 
 		Optional<BlogPostingCommentModel> optional =
 			_blogPostingCommentModelService.update(
-				id, blogPostingCommentUpdaterForm.getText());
+				id, blogPostingComment.getText());
 
 		return optional.map(
 			CommentConverter::toComment

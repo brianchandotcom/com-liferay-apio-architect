@@ -26,6 +26,14 @@ import com.liferay.apio.architect.identifier.Identifier;
 public interface BlogSubscription extends Identifier<Long> {
 
 	/**
+	 * Returns the blog's ID.
+	 *
+	 * @return the blog's ID
+	 * @review
+	 */
+	public Long getBlog();
+
+	/**
 	 * Returns the blog's title.
 	 *
 	 * @return the blog's title
@@ -40,6 +48,14 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * @review
 	 */
 	public Long getId();
+
+	/**
+	 * Returns the person's ID.
+	 *
+	 * @return the person's ID
+	 * @review
+	 */
+	public Long getPerson();
 
 	/**
 	 * Returns the person's name.

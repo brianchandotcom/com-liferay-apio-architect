@@ -28,8 +28,6 @@ import com.liferay.apio.architect.sample.internal.dao.PersonModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingModel;
 import com.liferay.apio.architect.sample.internal.dto.BlogSubscriptionModel;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
-import com.liferay.apio.architect.sample.internal.form.BlogPostingForm;
-import com.liferay.apio.architect.sample.internal.form.BlogSubscriptionForm;
 import com.liferay.apio.architect.sample.internal.type.BlogPosting;
 import com.liferay.apio.architect.sample.internal.type.BlogSubscription;
 
@@ -38,7 +36,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
@@ -57,16 +54,15 @@ import org.osgi.service.component.annotations.Reference;
 public class BlogPostingCollectionResource {
 
 	public BlogPosting addBlogPosting(
-		BlogPostingForm blogPostingForm, Credentials credentials) {
+		BlogPosting blogPosting, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
 
 		BlogPostingModel blogPostingModel = _blogPostingModelService.create(
-			blogPostingForm.getArticleBody(), blogPostingForm.getCreator(),
-			blogPostingForm.getAlternativeHeadline(),
-			blogPostingForm.getHeadline());
+			blogPosting.getArticleBody(), blogPosting.getCreator(),
+			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline());
 
 		return toBlogPosting(blogPostingModel);
 	}
@@ -107,62 +103,40 @@ public class BlogPostingCollectionResource {
 	}
 
 	public BlogSubscription subscribe(
-		Long blogId, BlogSubscriptionForm blogSubscriptionForm) {
+		Long blogId, BlogSubscription blogSubscription) {
 
 		Optional<PersonModel> personModelOptional = _personModelService.get(
-			blogSubscriptionForm.getPerson());
+			blogSubscription.getPerson());
+
+		PersonModel personModel = personModelOptional.orElseThrow(
+			NotFoundException::new);
 
 		Optional<BlogPostingModel> blogPostingModelOptional =
 			_blogPostingModelService.get(blogId);
 
-		if (personModelOptional.isPresent() &&
-			blogPostingModelOptional.isPresent()) {
+		BlogPostingModel blogPostingModel =
+			blogPostingModelOptional.orElseThrow(NotFoundException::new);
 
-			BlogSubscriptionModel blogSubscriptionModel =
-				_blogSubscriptionModelService.create(
-					blogPostingModelOptional.get(), personModelOptional.get());
+		BlogSubscriptionModel blogSubscriptionModel =
+			_blogSubscriptionModelService.create(blogPostingModel, personModel);
 
-			return toBlogSubscription(blogSubscriptionModel);
-		}
-
-		throw new BadRequestException();
+		return toBlogSubscription(blogSubscriptionModel);
 	}
 
-	public BlogSubscription subscribePage(
-		BlogSubscriptionForm blogSubscriptionForm) {
-
-		Optional<PersonModel> personModelOptional = _personModelService.get(
-			blogSubscriptionForm.getPerson());
-
-		Optional<Long> blog = blogSubscriptionForm.getBlog();
-
-		Optional<BlogPostingModel> blogPostingModelOptional = blog.flatMap(
-			_blogPostingModelService::get);
-
-		if (personModelOptional.isPresent() &&
-			blogPostingModelOptional.isPresent()) {
-
-			BlogSubscriptionModel blogSubscriptionModel =
-				_blogSubscriptionModelService.create(
-					blogPostingModelOptional.get(), personModelOptional.get());
-
-			return toBlogSubscription(blogSubscriptionModel);
-		}
-
-		throw new BadRequestException();
+	public BlogSubscription subscribePage(BlogSubscription blogSubscription) {
+		return subscribe(blogSubscription.getBlog(), blogSubscription);
 	}
 
 	public BlogPosting updateBlogPostingModel(
-		long id, BlogPostingForm blogPostingForm, Credentials credentials) {
+		long id, BlogPosting blogPosting, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
 
 		Optional<BlogPostingModel> optional = _blogPostingModelService.update(
-			id, blogPostingForm.getArticleBody(), blogPostingForm.getCreator(),
-			blogPostingForm.getAlternativeHeadline(),
-			blogPostingForm.getHeadline());
+			id, blogPosting.getArticleBody(), blogPosting.getCreator(),
+			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline());
 
 		return optional.map(
 			BlogPostingConverter::toBlogPosting

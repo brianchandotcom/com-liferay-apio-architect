@@ -41,6 +41,11 @@ public class BlogSubscriptionConverter {
 		return new BlogSubscription() {
 
 			@Override
+			public Long getBlog() {
+				throw new UnsupportedOperationException();
+			}
+
+			@Override
 			public String getBlogTitle() {
 				BlogPostingModel blogPostingModel =
 					blogSubscriptionModel.getBlogPostingModel();
@@ -51,6 +56,11 @@ public class BlogSubscriptionConverter {
 			@Override
 			public Long getId() {
 				return blogSubscriptionModel.getId();
+			}
+
+			@Override
+			public Long getPerson() {
+				throw new UnsupportedOperationException();
 			}
 
 			@Override
