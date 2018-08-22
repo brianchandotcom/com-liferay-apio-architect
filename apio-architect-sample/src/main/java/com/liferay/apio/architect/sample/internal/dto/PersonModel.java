@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.internal.model;
+package com.liferay.apio.architect.sample.internal.dto;
 
 import static java.util.Calendar.YEAR;
 import static java.util.concurrent.TimeUnit.DAYS;

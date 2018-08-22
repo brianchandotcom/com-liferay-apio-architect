@@ -16,9 +16,9 @@ package com.liferay.apio.architect.sample.internal.activator;
 
 import static java.util.concurrent.CompletableFuture.runAsync;
 
-import com.liferay.apio.architect.sample.internal.model.BlogPostingCommentModel;
-import com.liferay.apio.architect.sample.internal.model.BlogPostingModel;
-import com.liferay.apio.architect.sample.internal.model.PersonModel;
+import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
+import com.liferay.apio.architect.sample.internal.dto.BlogPostingModel;
+import com.liferay.apio.architect.sample.internal.dto.PersonModel;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.sample.internal.form;
 
 import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.sample.internal.model.PostalAddressModel;
+import com.liferay.apio.architect.sample.internal.dto.PostalAddressModel;
 
 import java.util.Collections;
 import java.util.Date;

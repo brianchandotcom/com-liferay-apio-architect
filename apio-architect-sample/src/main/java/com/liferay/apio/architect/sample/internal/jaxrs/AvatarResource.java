@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.sample.internal.jaxrs;
 
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.sample.internal.model.PersonModel;
+import com.liferay.apio.architect.sample.internal.dto.PersonModel;
 
 import java.net.URL;
 

@@ -16,9 +16,9 @@ package com.liferay.apio.architect.sample.internal.resource;
 
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.sample.internal.model.BlogPostingModel;
-import com.liferay.apio.architect.sample.internal.model.BlogSubscriptionModel;
-import com.liferay.apio.architect.sample.internal.model.PersonModel;
+import com.liferay.apio.architect.sample.internal.dto.BlogPostingModel;
+import com.liferay.apio.architect.sample.internal.dto.BlogSubscriptionModel;
+import com.liferay.apio.architect.sample.internal.dto.PersonModel;
 import com.liferay.apio.architect.sample.internal.type.BlogSubscription;
 
 import org.osgi.service.component.annotations.Component;

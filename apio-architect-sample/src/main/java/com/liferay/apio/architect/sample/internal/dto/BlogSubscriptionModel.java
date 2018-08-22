@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.internal.model;
+package com.liferay.apio.architect.sample.internal.dto;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

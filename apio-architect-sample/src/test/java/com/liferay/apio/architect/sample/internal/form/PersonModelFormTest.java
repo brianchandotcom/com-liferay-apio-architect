@@ -22,7 +22,7 @@ import static com.liferay.apio.architect.test.util.form.FormMatchers.isReturnedI
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.sample.internal.model.PostalAddressModel;
+import com.liferay.apio.architect.sample.internal.dto.PostalAddressModel;
 
 import java.util.function.Function;
 

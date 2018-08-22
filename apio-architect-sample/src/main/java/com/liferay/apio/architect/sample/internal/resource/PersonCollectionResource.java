@@ -24,9 +24,9 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
+import com.liferay.apio.architect.sample.internal.dto.PersonModel;
+import com.liferay.apio.architect.sample.internal.dto.PostalAddressModel;
 import com.liferay.apio.architect.sample.internal.form.PersonForm;
-import com.liferay.apio.architect.sample.internal.model.PersonModel;
-import com.liferay.apio.architect.sample.internal.model.PostalAddressModel;
 import com.liferay.apio.architect.sample.internal.type.Person;
 
 import java.util.List;

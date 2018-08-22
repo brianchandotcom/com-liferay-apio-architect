@@ -12,39 +12,39 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.internal.model;
+package com.liferay.apio.architect.sample.internal.dto;
 
 /**
- * Represents a rating. This is a mock class for sample purposes only.
+ * Represents a review. This is a mock class for sample purposes only.
  *
  * @author Alejandro Hernández
  */
-public class RatingModel {
+public class ReviewModel {
 
-	public RatingModel(long authorId, long value) {
-		_authorId = authorId;
-		_value = value;
+	public ReviewModel(String body, RatingModel ratingModel) {
+		_body = body;
+		_ratingModel = ratingModel;
 	}
 
 	/**
-	 * Returns the ID of the rating's author.
+	 * Returns the review's body.
 	 *
-	 * @return the ID of the rating's author
+	 * @return the review's body
 	 */
-	public long getAuthorId() {
-		return _authorId;
+	public String getBody() {
+		return _body;
 	}
 
 	/**
-	 * Returns the rating's value.
+	 * Returns the review's rating.
 	 *
-	 * @return the rating's value
+	 * @return the review's rating
 	 */
-	public long getValue() {
-		return _value;
+	public RatingModel getRatingModel() {
+		return _ratingModel;
 	}
 
-	private final long _authorId;
-	private final long _value;
+	private final String _body;
+	private final RatingModel _ratingModel;
 
 }
