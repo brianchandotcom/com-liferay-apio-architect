@@ -19,16 +19,9 @@ import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.resource.CollectionResource;
-import com.liferay.apio.architect.routes.CollectionRoutes;
-import com.liferay.apio.architect.routes.ItemRoutes;
-import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
 import com.liferay.apio.architect.sample.internal.dao.PersonModelService;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
-import com.liferay.apio.architect.sample.internal.dto.PostalAddressModel;
 import com.liferay.apio.architect.sample.internal.form.PersonForm;
-import com.liferay.apio.architect.sample.internal.type.Person;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,82 +39,8 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component(service = CollectionResource.class)
-public class PersonCollectionResource
-	implements CollectionResource<PersonModel, Long, Person> {
-
-	@Override
-	public CollectionRoutes<PersonModel, Long> collectionRoutes(
-		CollectionRoutes.Builder<PersonModel, Long> builder) {
-
-		return builder.addGetter(
-			this::_getPageItems
-		).addCreator(
-			this::_addPerson, Credentials.class,
-			PermissionChecker::hasPermission, PersonForm::buildForm
-		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "people";
-	}
-
-	@Override
-	public ItemRoutes<PersonModel, Long> itemRoutes(
-		ItemRoutes.Builder<PersonModel, Long> builder) {
-
-		return builder.addGetter(
-			this::_getPerson
-		).addRemover(
-			this::_deletePerson, Credentials.class,
-			(credentials, id) -> hasPermission(credentials)
-		).addUpdater(
-			this::_updatePerson, Credentials.class,
-			(credentials, id) -> hasPermission(credentials),
-			PersonForm::buildForm
-		).build();
-	}
-
-	@Override
-	public Representor<PersonModel> representor(
-		Representor.Builder<PersonModel, Long> builder) {
-
-		return builder.types(
-			"Person"
-		).identifier(
-			PersonModel::getId
-		).addDate(
-			"birthDate", PersonModel::getBirthDate
-		).addNested(
-			"address", PersonModel::getPostalAddressModel,
-			nestedBuilder -> nestedBuilder.types(
-				"PostalAddress"
-			).addString(
-				"addressCountry", PostalAddressModel::getCountryCode
-			).addString(
-				"addressLocality", PostalAddressModel::getCity
-			).addString(
-				"addressRegion", PostalAddressModel::getState
-			).addString(
-				"postalCode", PostalAddressModel::getZipCode
-			).addString(
-				"streetAddress", PostalAddressModel::getStreetAddress
-			).build()
-		).addApplicationRelativeURL(
-			"image", PersonModel::getAvatarRelativeURL
-		).addString(
-			"email", PersonModel::getEmail
-		).addString(
-			"familyName", PersonModel::getLastName
-		).addString(
-			"givenName", PersonModel::getFirstName
-		).addStringList(
-			"jobTitle", PersonModel::getJobTitles
-		).addString(
-			"name", PersonModel::getFullName
-		).build();
-	}
+@Component
+public class PersonCollectionResource {
 
 	private PersonModel _addPerson(
 		PersonForm personForm, Credentials credentials) {

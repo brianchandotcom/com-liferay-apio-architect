@@ -19,17 +19,10 @@ import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.resource.NestedCollectionResource;
-import com.liferay.apio.architect.routes.ItemRoutes;
-import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingCommentModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentUpdaterForm;
-import com.liferay.apio.architect.sample.internal.type.BlogPosting;
-import com.liferay.apio.architect.sample.internal.type.Comment;
-import com.liferay.apio.architect.sample.internal.type.Person;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,65 +40,8 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component(service = NestedCollectionResource.class)
-public class BlogPostingCommentNestedCollectionResource
-	implements NestedCollectionResource
-		<BlogPostingCommentModel, Long, Comment, Long, BlogPosting> {
-
-	@Override
-	public NestedCollectionRoutes<BlogPostingCommentModel, Long, Long>
-		collectionRoutes(
-			NestedCollectionRoutes.Builder<BlogPostingCommentModel, Long, Long>
-				builder) {
-
-		return builder.addGetter(
-			this::_getPageItems
-		).addCreator(
-			this::_addBlogPostingComment, Credentials.class,
-			(credentials, blogPostingModelId) -> hasPermission(credentials),
-			BlogPostingCommentCreatorForm::buildForm
-		).build();
-	}
-
-	@Override
-	public String getName() {
-		return "comments";
-	}
-
-	@Override
-	public ItemRoutes<BlogPostingCommentModel, Long> itemRoutes(
-		ItemRoutes.Builder<BlogPostingCommentModel, Long> builder) {
-
-		return builder.addGetter(
-			this::_getBlogPostingComment
-		).addRemover(
-			this::_deleteBlogPostingComment, Credentials.class,
-			(credentials, id) -> hasPermission(credentials)
-		).addUpdater(
-			this::_updateBlogPostingComment, Credentials.class,
-			(credentials, id) -> hasPermission(credentials),
-			BlogPostingCommentUpdaterForm::buildForm
-		).build();
-	}
-
-	@Override
-	public Representor<BlogPostingCommentModel> representor(
-		Representor.Builder<BlogPostingCommentModel, Long> builder) {
-
-		return builder.types(
-			"Comment"
-		).identifier(
-			BlogPostingCommentModel::getId
-		).addDate(
-			"dateCreated", BlogPostingCommentModel::getCreateDate
-		).addDate(
-			"dateModified", BlogPostingCommentModel::getModifiedDate
-		).addLinkedModel(
-			"author", Person.class, BlogPostingCommentModel::getAuthorId
-		).addString(
-			"text", BlogPostingCommentModel::getContent
-		).build();
-	}
+@Component
+public class BlogPostingCommentNestedCollectionResource {
 
 	private BlogPostingCommentModel _addBlogPostingComment(
 		Long blogPostingModelId,
