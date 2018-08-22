@@ -17,8 +17,6 @@ package com.liferay.apio.architect.sample.internal.resource;
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 
 import com.liferay.apio.architect.credentials.Credentials;
-import com.liferay.apio.architect.custom.actions.CustomRoute;
-import com.liferay.apio.architect.custom.actions.PostRoute;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingModelService;
@@ -48,10 +46,10 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(immediate = true)
 public class BlogPostingCollectionResource {
 
-	private BlogPostingModel _addBlogPostingModel(
+	public BlogPostingModel addBlogPostingModel(
 		BlogPostingForm blogPostingForm, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
@@ -64,7 +62,7 @@ public class BlogPostingCollectionResource {
 			blogPostingForm.getHeadline());
 	}
 
-	private void _deleteBlogPostingModel(long id, Credentials credentials) {
+	public void deleteBlogPostingModel(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -72,14 +70,14 @@ public class BlogPostingCollectionResource {
 		_blogPostingModelService.remove(id);
 	}
 
-	private BlogPostingModel _getBlogPostingModel(long id) {
+	public BlogPostingModel getBlogPostingModel(long id) {
 		Optional<BlogPostingModel> optional = _blogPostingModelService.get(id);
 
 		return optional.orElseThrow(
 			() -> new NotFoundException("Unable to get blog posting " + id));
 	}
 
-	private PageItems<BlogPostingModel> _getPageItems(Pagination pagination) {
+	public PageItems<BlogPostingModel> getPageItems(Pagination pagination) {
 		List<BlogPostingModel> blogPostingModels =
 			_blogPostingModelService.getPage(
 				pagination.getStartPosition(), pagination.getEndPosition());
@@ -88,18 +86,7 @@ public class BlogPostingCollectionResource {
 		return new PageItems<>(blogPostingModels, count);
 	}
 
-	private CustomRoute _getSubscribeRoute() {
-		return new PostRoute() {
-
-			@Override
-			public String getName() {
-				return "subscribe";
-			}
-
-		};
-	}
-
-	private BlogSubscriptionModel _subscribe(
+	public BlogSubscriptionModel subscribe(
 		Long blogId, BlogSubscriptionForm blogSubscriptionForm) {
 
 		Optional<PersonModel> personModelOptional = _personModelService.get(
@@ -116,7 +103,7 @@ public class BlogPostingCollectionResource {
 		throw new BadRequestException();
 	}
 
-	private BlogSubscriptionModel _subscribePage(
+	public BlogSubscriptionModel subscribePage(
 		BlogSubscriptionForm blogSubscriptionForm) {
 
 		Optional<PersonModel> personModelOptional = _personModelService.get(
@@ -137,7 +124,7 @@ public class BlogPostingCollectionResource {
 		throw new BadRequestException();
 	}
 
-	private BlogPostingModel _updateBlogPostingModel(
+	public BlogPostingModel updateBlogPostingModel(
 		long id, BlogPostingForm blogPostingForm, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {

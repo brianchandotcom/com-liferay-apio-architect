@@ -39,10 +39,10 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(immediate = true)
 public class PersonCollectionResource {
 
-	private PersonModel _addPerson(
+	public PersonModel addPerson(
 		PersonForm personForm, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
@@ -56,7 +56,7 @@ public class PersonCollectionResource {
 			personForm.getFamilyName());
 	}
 
-	private void _deletePerson(long id, Credentials credentials) {
+	public void deletePerson(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -64,7 +64,7 @@ public class PersonCollectionResource {
 		_personModelService.remove(id);
 	}
 
-	private PageItems<PersonModel> _getPageItems(Pagination pagination) {
+	public PageItems<PersonModel> getPageItems(Pagination pagination) {
 		List<PersonModel> personModels = _personModelService.getPage(
 			pagination.getStartPosition(), pagination.getEndPosition());
 		int count = _personModelService.getCount();
@@ -72,14 +72,14 @@ public class PersonCollectionResource {
 		return new PageItems<>(personModels, count);
 	}
 
-	private PersonModel _getPerson(long id) {
+	public PersonModel getPerson(long id) {
 		Optional<PersonModel> optional = _personModelService.get(id);
 
 		return optional.orElseThrow(
 			() -> new NotFoundException("Unable to get person " + id));
 	}
 
-	private PersonModel _updatePerson(
+	public PersonModel updatePerson(
 		long id, PersonForm personForm, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {

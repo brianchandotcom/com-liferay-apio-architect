@@ -40,10 +40,10 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(immediate = true)
 public class BlogPostingCommentNestedCollectionResource {
 
-	private BlogPostingCommentModel _addBlogPostingComment(
+	public BlogPostingCommentModel addBlogPostingComment(
 		Long blogPostingModelId,
 		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm,
 		Credentials credentials) {
@@ -57,7 +57,7 @@ public class BlogPostingCommentNestedCollectionResource {
 			blogPostingCommentCreatorForm.getText());
 	}
 
-	private void _deleteBlogPostingComment(long id, Credentials credentials) {
+	public void deleteBlogPostingComment(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -65,7 +65,7 @@ public class BlogPostingCommentNestedCollectionResource {
 		_blogPostingCommentModelService.remove(id);
 	}
 
-	private BlogPostingCommentModel _getBlogPostingComment(long id) {
+	public BlogPostingCommentModel getBlogPostingComment(long id) {
 		Optional<BlogPostingCommentModel> optional =
 			_blogPostingCommentModelService.get(id);
 
@@ -74,7 +74,7 @@ public class BlogPostingCommentNestedCollectionResource {
 				"Unable to get blog posting comment " + id));
 	}
 
-	private PageItems<BlogPostingCommentModel> _getPageItems(
+	public PageItems<BlogPostingCommentModel> getPageItems(
 		Pagination pagination, Long blogPostingModelId) {
 
 		List<BlogPostingCommentModel> blogPostingCommentModels =
@@ -87,7 +87,7 @@ public class BlogPostingCommentNestedCollectionResource {
 		return new PageItems<>(blogPostingCommentModels, count);
 	}
 
-	private BlogPostingCommentModel _updateBlogPostingComment(
+	public BlogPostingCommentModel updateBlogPostingComment(
 		long id, BlogPostingCommentUpdaterForm blogPostingCommentUpdaterForm,
 		Credentials credentials) {
 
