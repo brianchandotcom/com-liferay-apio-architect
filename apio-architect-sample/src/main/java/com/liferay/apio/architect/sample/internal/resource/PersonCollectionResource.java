@@ -24,6 +24,7 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
+import com.liferay.apio.architect.sample.internal.dao.PersonModelService;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
 import com.liferay.apio.architect.sample.internal.dto.PostalAddressModel;
 import com.liferay.apio.architect.sample.internal.form.PersonForm;
@@ -36,6 +37,7 @@ import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides all the information necessary to expose <a
@@ -128,7 +130,7 @@ public class PersonCollectionResource
 			throw new ForbiddenException();
 		}
 
-		return PersonModel.create(
+		return _personModelService.create(
 			personForm.getPostalAddressModel(), personForm.getImage(),
 			personForm.getBirthDate(), personForm.getEmail(),
 			personForm.getGivenName(), personForm.getJobTitles(),
@@ -140,19 +142,19 @@ public class PersonCollectionResource
 			throw new ForbiddenException();
 		}
 
-		PersonModel.remove(id);
+		_personModelService.remove(id);
 	}
 
 	private PageItems<PersonModel> _getPageItems(Pagination pagination) {
-		List<PersonModel> personModels = PersonModel.getPage(
+		List<PersonModel> personModels = _personModelService.getPage(
 			pagination.getStartPosition(), pagination.getEndPosition());
-		int count = PersonModel.getCount();
+		int count = _personModelService.getCount();
 
 		return new PageItems<>(personModels, count);
 	}
 
 	private PersonModel _getPerson(long id) {
-		Optional<PersonModel> optional = PersonModel.get(id);
+		Optional<PersonModel> optional = _personModelService.get(id);
 
 		return optional.orElseThrow(
 			() -> new NotFoundException("Unable to get person " + id));
@@ -165,7 +167,7 @@ public class PersonCollectionResource
 			throw new ForbiddenException();
 		}
 
-		Optional<PersonModel> optional = PersonModel.update(
+		Optional<PersonModel> optional = _personModelService.update(
 			personForm.getPostalAddressModel(), personForm.getImage(),
 			personForm.getBirthDate(), personForm.getEmail(),
 			personForm.getGivenName(), personForm.getJobTitles(),
@@ -174,5 +176,8 @@ public class PersonCollectionResource
 		return optional.orElseThrow(
 			() -> new NotFoundException("Unable to get person " + id));
 	}
+
+	@Reference
+	private PersonModelService _personModelService;
 
 }

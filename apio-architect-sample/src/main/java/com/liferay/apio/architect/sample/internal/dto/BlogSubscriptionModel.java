@@ -14,10 +14,6 @@
 
 package com.liferay.apio.architect.sample.internal.dto;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
-
 /**
  * Represents a subscription. This is a mock class for sample purposes only.
  *
@@ -25,16 +21,12 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class BlogSubscriptionModel {
 
-	public static BlogSubscriptionModel create(
-		BlogPostingModel blogPostingModel, PersonModel personModel) {
+	public BlogSubscriptionModel(
+		Long id, BlogPostingModel blogPostingModel, PersonModel personModel) {
 
-		BlogSubscriptionModel blogSubscriptionModel = new BlogSubscriptionModel(
-			blogPostingModel, personModel);
-
-		_blogSubscriptions.put(
-			blogSubscriptionModel._id, blogSubscriptionModel);
-
-		return blogSubscriptionModel;
+		_id = id;
+		_blogPostingModel = blogPostingModel;
+		_personModel = personModel;
 	}
 
 	public BlogPostingModel getBlogPostingModel() {
@@ -48,18 +40,6 @@ public class BlogSubscriptionModel {
 	public PersonModel getPersonModel() {
 		return _personModel;
 	}
-
-	private BlogSubscriptionModel(
-		BlogPostingModel blogPostingModel, PersonModel personModel) {
-
-		_blogPostingModel = blogPostingModel;
-		_personModel = personModel;
-		_id = _count.getAndIncrement();
-	}
-
-	private static final Map<Long, BlogSubscriptionModel> _blogSubscriptions =
-		new ConcurrentHashMap<>();
-	private static final AtomicLong _count = new AtomicLong(0);
 
 	private final BlogPostingModel _blogPostingModel;
 	private final long _id;

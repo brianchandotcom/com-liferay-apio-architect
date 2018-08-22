@@ -23,6 +23,7 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
+import com.liferay.apio.architect.sample.internal.dao.BlogPostingCommentModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentUpdaterForm;
@@ -37,6 +38,7 @@ import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides all the information necessary to expose <a
@@ -114,7 +116,7 @@ public class BlogPostingCommentNestedCollectionResource
 			throw new ForbiddenException();
 		}
 
-		return BlogPostingCommentModel.create(
+		return _blogPostingCommentModelService.create(
 			blogPostingCommentCreatorForm.getAuthor(), blogPostingModelId,
 			blogPostingCommentCreatorForm.getText());
 	}
@@ -124,12 +126,12 @@ public class BlogPostingCommentNestedCollectionResource
 			throw new ForbiddenException();
 		}
 
-		BlogPostingCommentModel.remove(id);
+		_blogPostingCommentModelService.remove(id);
 	}
 
 	private BlogPostingCommentModel _getBlogPostingComment(long id) {
 		Optional<BlogPostingCommentModel> optional =
-			BlogPostingCommentModel.get(id);
+			_blogPostingCommentModelService.get(id);
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
@@ -140,10 +142,11 @@ public class BlogPostingCommentNestedCollectionResource
 		Pagination pagination, Long blogPostingModelId) {
 
 		List<BlogPostingCommentModel> blogPostingCommentModels =
-			BlogPostingCommentModel.getPage(
+			_blogPostingCommentModelService.getPage(
 				blogPostingModelId, pagination.getStartPosition(),
 				pagination.getEndPosition());
-		int count = BlogPostingCommentModel.getCount(blogPostingModelId);
+		int count = _blogPostingCommentModelService.getCount(
+			blogPostingModelId);
 
 		return new PageItems<>(blogPostingCommentModels, count);
 	}
@@ -157,12 +160,15 @@ public class BlogPostingCommentNestedCollectionResource
 		}
 
 		Optional<BlogPostingCommentModel> optional =
-			BlogPostingCommentModel.update(
+			_blogPostingCommentModelService.update(
 				id, blogPostingCommentUpdaterForm.getText());
 
 		return optional.orElseThrow(
 			() -> new NotFoundException(
 				"Unable to get blog posting comment " + id));
 	}
+
+	@Reference
+	private BlogPostingCommentModelService _blogPostingCommentModelService;
 
 }

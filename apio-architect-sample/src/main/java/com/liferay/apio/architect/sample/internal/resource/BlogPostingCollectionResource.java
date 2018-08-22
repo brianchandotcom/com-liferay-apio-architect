@@ -26,6 +26,9 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
+import com.liferay.apio.architect.sample.internal.dao.BlogPostingModelService;
+import com.liferay.apio.architect.sample.internal.dao.BlogSubscriptionModelService;
+import com.liferay.apio.architect.sample.internal.dao.PersonModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingModel;
 import com.liferay.apio.architect.sample.internal.dto.BlogSubscriptionModel;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
@@ -46,6 +49,7 @@ import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * Provides all the information necessary to expose <a
@@ -153,7 +157,7 @@ public class BlogPostingCollectionResource
 			throw new ForbiddenException();
 		}
 
-		return BlogPostingModel.create(
+		return _blogPostingModelService.create(
 			blogPostingForm.getArticleBody(), blogPostingForm.getCreator(),
 			blogPostingForm.getAlternativeHeadline(),
 			blogPostingForm.getHeadline());
@@ -164,20 +168,21 @@ public class BlogPostingCollectionResource
 			throw new ForbiddenException();
 		}
 
-		BlogPostingModel.remove(id);
+		_blogPostingModelService.remove(id);
 	}
 
 	private BlogPostingModel _getBlogPostingModel(long id) {
-		Optional<BlogPostingModel> optional = BlogPostingModel.get(id);
+		Optional<BlogPostingModel> optional = _blogPostingModelService.get(id);
 
 		return optional.orElseThrow(
 			() -> new NotFoundException("Unable to get blog posting " + id));
 	}
 
 	private PageItems<BlogPostingModel> _getPageItems(Pagination pagination) {
-		List<BlogPostingModel> blogPostingModels = BlogPostingModel.getPage(
-			pagination.getStartPosition(), pagination.getEndPosition());
-		int count = BlogPostingModel.getCount();
+		List<BlogPostingModel> blogPostingModels =
+			_blogPostingModelService.getPage(
+				pagination.getStartPosition(), pagination.getEndPosition());
+		int count = _blogPostingModelService.getCount();
 
 		return new PageItems<>(blogPostingModels, count);
 	}
@@ -196,14 +201,14 @@ public class BlogPostingCollectionResource
 	private BlogSubscriptionModel _subscribe(
 		Long blogId, BlogSubscriptionForm blogSubscriptionForm) {
 
-		Optional<PersonModel> personModelOptional = PersonModel.get(
+		Optional<PersonModel> personModelOptional = _personModelService.get(
 			blogSubscriptionForm.getPerson());
 
 		Optional<BlogPostingModel> blogPostingModelOptional =
-			BlogPostingModel.get(blogId);
+			_blogPostingModelService.get(blogId);
 
 		if (personModelOptional.isPresent()) {
-			return BlogSubscriptionModel.create(
+			return _blogSubscriptionModelService.create(
 				blogPostingModelOptional.get(), personModelOptional.get());
 		}
 
@@ -213,18 +218,18 @@ public class BlogPostingCollectionResource
 	private BlogSubscriptionModel _subscribePage(
 		Pagination pagination, BlogSubscriptionForm blogSubscriptionForm) {
 
-		Optional<PersonModel> personModelOptional = PersonModel.get(
+		Optional<PersonModel> personModelOptional = _personModelService.get(
 			blogSubscriptionForm.getPerson());
 
 		Optional<Long> blog = blogSubscriptionForm.getBlog();
 
 		Optional<BlogPostingModel> blogPostingModelOptional = blog.flatMap(
-			BlogPostingModel::get);
+			_blogPostingModelService::get);
 
 		if (personModelOptional.isPresent() &&
 			blogPostingModelOptional.isPresent()) {
 
-			return BlogSubscriptionModel.create(
+			return _blogSubscriptionModelService.create(
 				blogPostingModelOptional.get(), personModelOptional.get());
 		}
 
@@ -238,7 +243,7 @@ public class BlogPostingCollectionResource
 			throw new ForbiddenException();
 		}
 
-		Optional<BlogPostingModel> optional = BlogPostingModel.update(
+		Optional<BlogPostingModel> optional = _blogPostingModelService.update(
 			id, blogPostingForm.getArticleBody(), blogPostingForm.getCreator(),
 			blogPostingForm.getAlternativeHeadline(),
 			blogPostingForm.getHeadline());
@@ -246,5 +251,14 @@ public class BlogPostingCollectionResource
 		return optional.orElseThrow(
 			() -> new NotFoundException("Unable to get blog posting " + id));
 	}
+
+	@Reference
+	private BlogPostingModelService _blogPostingModelService;
+
+	@Reference
+	private BlogSubscriptionModelService _blogSubscriptionModelService;
+
+	@Reference
+	private PersonModelService _personModelService;
 
 }
