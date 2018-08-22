@@ -15,9 +15,20 @@
 package com.liferay.apio.architect.internal.representor;
 
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.internal.related.RelatedCollectionImpl;
 import com.liferay.apio.architect.representor.NestedRepresentor;
 
 import java.util.function.Function;
+import com.liferay.apio.architect.related.RelatedCollection;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * @author Alejandro Hernández
@@ -28,6 +39,19 @@ public class NestedRepresentorImpl<T>
 	@Override
 	public boolean isNested() {
 		return true;
+	}
+
+	@Override
+	public Stream<RelatedCollection<? extends Identifier>>
+		getRelatedCollections() {
+
+		return Stream.of(
+			_relatedCollections, _supplier.get()
+		).filter(
+			Objects::nonNull
+		).flatMap(
+			Collection::stream
+		);
 	}
 
 	/**
@@ -41,9 +65,10 @@ public class NestedRepresentorImpl<T>
 		implements Builder<T> {
 
 		public BuilderImpl(
-			Function<Class<? extends Identifier<?>>, String> nameFunction) {
+			Function<Class<? extends Identifier<?>>, String> nameFunction,
+			Supplier<List<RelatedCollection<?>>> supplier) {
 
-			super(new NestedRepresentorImpl<>(nameFunction));
+			super(new NestedRepresentorImpl<>(nameFunction, supplier));
 		}
 
 		@Override
@@ -62,14 +87,44 @@ public class NestedRepresentorImpl<T>
 				return this;
 			}
 
+			@Override
+			public <V, S extends Identifier<V>> NestedRepresentor.FirstStep<T>
+				addRelatedCollection(
+					String key, Class<S> itemIdentifierClass,
+					Function<T, V> modelToIdentifierFunction) {
+
+				baseRepresentor._addRelatedCollection(key, itemIdentifierClass, modelToIdentifierFunction);
+
+				return this;
+			}
 		}
 
 	}
 
 	private NestedRepresentorImpl(
-		Function<Class<? extends Identifier<?>>, String> nameFunction) {
-
-		super(nameFunction);
+		Function<Class<? extends Identifier<?>>, String> nameFunction,
+		Supplier<List<RelatedCollection<?>>> supplier) {
+		super(nameFunction, supplier);
+		_relatedCollections = new ArrayList<>();
+		_modelToIdentifierFunctions = new HashMap<>();
 	}
+
+	public Map<String, Function<T, ?>> getModelToIdentifierFunctions() {
+		return _modelToIdentifierFunctions;
+	}
+
+	private <V, S extends Identifier<V>> void _addRelatedCollection(
+		String key, Class<S> itemIdentifierClass, Function<T, V> modelToIdentifierFunction) {
+
+		RelatedCollection<S> relatedCollection = new RelatedCollectionImpl<>(
+			key, itemIdentifierClass);
+
+		_relatedCollections.add(relatedCollection);
+
+		_modelToIdentifierFunctions.put(key, modelToIdentifierFunction);
+	}
+
+	private final List<RelatedCollection<?>> _relatedCollections;
+	private final Map<String, Function<T, ?>> _modelToIdentifierFunctions;
 
 }

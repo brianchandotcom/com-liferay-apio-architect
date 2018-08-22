@@ -46,14 +46,6 @@ public interface Representor<T> extends BaseRepresentor<T> {
 	public Object getIdentifier(T model);
 
 	/**
-	 * Returns the related collections.
-	 *
-	 * @return the related collections
-	 */
-	public Stream<RelatedCollection<? extends Identifier>>
-		getRelatedCollections();
-
-	/**
 	 * Creates generic representations of your domain models that Apio
 	 * hypermedia writers can understand.
 	 *

@@ -15,6 +15,9 @@
 package com.liferay.apio.architect.representor;
 
 import aQute.bnd.annotation.ProviderType;
+import com.liferay.apio.architect.identifier.Identifier;
+
+import java.util.function.Function;
 
 /**
  * Holds information about the metadata supported for a nested resource.
@@ -54,6 +57,19 @@ public interface NestedRepresentor<T> extends BaseRepresentor<T> {
 	@ProviderType
 	public interface FirstStep<T>
 		extends BaseFirstStep<T, NestedRepresentor<T>, FirstStep<T>> {
+
+		/**
+		 * Adds information about a related collection.
+		 *
+		 * @param  key the relation's name
+		 * @param  itemIdentifierClass the class of the collection items'
+		 *         identifier
+		 * @return the builder's step
+		 */
+		public <V, S extends Identifier<V>> NestedRepresentor.FirstStep<T>
+			addRelatedCollection(
+				String key, Class<S> itemIdentifierClass,
+				Function<T, V> modelToIdentifierFunction);
 	}
 
 }

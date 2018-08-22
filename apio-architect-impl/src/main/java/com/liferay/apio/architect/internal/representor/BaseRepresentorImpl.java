@@ -25,6 +25,7 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.related.RelatedModelImpl;
 import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.language.AcceptLanguage;
+import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.NestedRepresentor;
@@ -39,6 +40,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @author Alejandro Hernández
@@ -199,9 +201,8 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 	}
 
 	protected BaseRepresentorImpl(
-		Function<Class<? extends Identifier<?>>, String> nameFunction) {
-
-		_nameFunction = nameFunction;
+		Function<Class<? extends Identifier<?>>, String> nameFunction,
+		Supplier<List<RelatedCollection<?>>> supplier) {
 
 		binaryFunctions = new LinkedHashMap<>();
 		fieldFunctions = new LinkedHashMap<>();
@@ -209,6 +210,8 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		nestedListFieldFunctions = new ArrayList<>();
 		relatedModels = new ArrayList<>();
 		types = new ArrayList<>();
+		_nameFunction = nameFunction;
+		_supplier = supplier;
 	}
 
 	/**
@@ -322,7 +325,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 
 			}
 		).apply(
-			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction)
+			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction, _supplier)
 		);
 
 		nestedFieldFunctions.add(nestedFieldFunction);
@@ -362,7 +365,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 
 			}
 		).apply(
-			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction)
+			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction, _supplier)
 		);
 
 		nestedListFieldFunctions.add(nestedFieldFunction);
@@ -462,6 +465,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		Collections.addAll(this.types, types);
 	}
 
+	protected final Supplier<List<RelatedCollection<?>>> _supplier;
 	protected final Map<String, BinaryFunction<T>> binaryFunctions;
 	protected final Map<String, List<FieldFunction<T, ?>>> fieldFunctions;
 	protected final List<NestedFieldFunction<T, ?>> nestedFieldFunctions;

@@ -155,9 +155,7 @@ public class RepresentorImpl<T>
 		Supplier<List<RelatedCollection<?>>> supplier,
 		Function<Class<? extends Identifier<?>>, String> nameFunction) {
 
-		super(nameFunction);
-
-		_supplier = supplier;
+		super(nameFunction, supplier);
 
 		_relatedCollections = new ArrayList<>();
 	}
@@ -179,6 +177,5 @@ public class RepresentorImpl<T>
 
 	private Function<T, ?> _modelToIdentifierFunction;
 	private final List<RelatedCollection<?>> _relatedCollections;
-	private final Supplier<List<RelatedCollection<?>>> _supplier;
 
 }
