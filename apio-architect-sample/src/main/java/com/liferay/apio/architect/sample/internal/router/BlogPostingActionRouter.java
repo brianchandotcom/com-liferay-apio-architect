@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.internal.resource;
+package com.liferay.apio.architect.sample.internal.router;
 
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.BlogPostingConverter.toBlogPosting;
@@ -51,7 +51,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class BlogPostingCollectionResource {
+public class BlogPostingActionRouter {
 
 	public BlogPosting addBlogPosting(
 		BlogPosting blogPosting, Credentials credentials) {

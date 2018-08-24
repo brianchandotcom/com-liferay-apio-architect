@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.internal.resource;
+package com.liferay.apio.architect.sample.internal.router;
 
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.PersonConverter.toPerson;
@@ -45,7 +45,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class PersonCollectionResource {
+public class PersonActionRouter {
 
 	public Person addPerson(Person person, Credentials credentials) {
 		if (!hasPermission(credentials)) {

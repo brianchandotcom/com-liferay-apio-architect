@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.internal.resource;
+package com.liferay.apio.architect.sample.internal.router;
 
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.CommentConverter.toComment;
@@ -44,7 +44,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class BlogPostingCommentNestedCollectionResource {
+public class BlogPostingCommentActionRouter {
 
 	public Comment addBlogPostingComment(
 		Long blogPostingModelId, Comment comment, Credentials credentials) {
