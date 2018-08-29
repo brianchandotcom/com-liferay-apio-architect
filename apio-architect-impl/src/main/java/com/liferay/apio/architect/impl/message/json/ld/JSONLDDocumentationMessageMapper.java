@@ -89,10 +89,12 @@ public class JSONLDDocumentationMessageMapper
 			getOperationTypes(operation)
 		);
 
+		HTTPMethod httpMethod = operation.getHttpMethod();
+
 		jsonObjectBuilder.field(
 			"method"
 		).stringValue(
-			operation.getHttpMethod().toString()
+			httpMethod.toString()
 		);
 
 		jsonObjectBuilder.field(

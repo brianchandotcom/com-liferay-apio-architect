@@ -27,6 +27,7 @@ import com.liferay.apio.architect.impl.operation.DeleteOperation;
 import com.liferay.apio.architect.impl.operation.RetrieveOperation;
 import com.liferay.apio.architect.impl.operation.UpdateOperation;
 import com.liferay.apio.architect.impl.request.RequestInfo;
+import com.liferay.apio.architect.language.AcceptLanguage;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
@@ -264,8 +265,13 @@ public class DocumentationWriter {
 		return Optional.ofNullable(
 			_customDocumentation.getDescriptionFunction(name)
 		).map(
-			localeFunction -> localeFunction.apply(
-				_requestInfo.getAcceptLanguage().getPreferredLocale())
+			localeFunction -> {
+				AcceptLanguage acceptLanguage =
+					_requestInfo.getAcceptLanguage();
+
+				return localeFunction.apply(
+					acceptLanguage.getPreferredLocale());
+			}
 		).orElse(
 			null
 		);
@@ -338,7 +344,9 @@ public class DocumentationWriter {
 	private void _writeFields(
 		Stream<String> fields, JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		fields.distinct().forEach(
+		Stream<String> stream = fields.distinct();
+
+		stream.forEach(
 			field -> _writeFormField(resourceJsonObjectBuilder, field));
 	}
 

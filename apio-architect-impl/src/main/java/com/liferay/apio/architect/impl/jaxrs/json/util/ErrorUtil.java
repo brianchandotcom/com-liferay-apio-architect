@@ -65,7 +65,9 @@ public class ErrorUtil {
 				return webApplicationException.getResponse();
 			}
 
-			return Response.serverError().build();
+			Response.ResponseBuilder responseBuilder = Response.serverError();
+
+			return responseBuilder.build();
 		}
 
 		APIError apiError = apiErrorOptional.get();
