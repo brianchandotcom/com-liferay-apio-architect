@@ -78,9 +78,9 @@ public class CustomDocumentationManagerImpl
 		INSTANCE.putDocumentationContribution(customDocumentation);
 	}
 
-	private ServiceTrackerList<CustomDocumentationContributor,
-		CustomDocumentationContributor> _openServiceTrackerList(
-			BundleContext bundleContext) {
+	private ServiceTrackerList
+		<CustomDocumentationContributor, CustomDocumentationContributor>
+			_openServiceTrackerList(BundleContext bundleContext) {
 
 		return ServiceTrackerListFactory.open(
 			bundleContext, CustomDocumentationContributor.class, null,
@@ -110,7 +110,8 @@ public class CustomDocumentationManagerImpl
 			});
 	}
 
-	private ServiceTrackerList<CustomDocumentationContributor,
-		CustomDocumentationContributor> _serviceTrackerList;
+	private ServiceTrackerList
+		<CustomDocumentationContributor, CustomDocumentationContributor>
+			_serviceTrackerList;
 
 }
