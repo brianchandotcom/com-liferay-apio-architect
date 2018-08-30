@@ -31,11 +31,13 @@ public class CommentDocumentationContributor
 		CustomDocumentation.Builder builder) {
 
 		builder.addDescription(
+			"author", "The author of this content."
+		).addDescription(
+			"comments/delete", "Delete an existing comment."
+		).addDescription(
 			"comments/retrieve", "Return the list of comments."
 		).addDescription(
 			"comments/update", "Update an existing comment."
-		).addDescription(
-			"comments/delete", "Delete an existing comment."
 		).addDescription(
 			"dateCreated",
 			"The date on which the Comment was created or the" +
@@ -44,8 +46,6 @@ public class CommentDocumentationContributor
 			"dateModified", "The date on which the comment was modified."
 		).addDescription(
 			"text", "The content of the comment"
-		).addDescription(
-			"author", "The author of this content."
 		);
 
 		return builder.build();
