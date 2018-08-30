@@ -101,10 +101,13 @@ public class CustomDocumentationManagerImpl
 				public void removedService(
 					ServiceReference<CustomDocumentationContributor>
 						serviceReference,
-					CustomDocumentationContributor service) {
+					CustomDocumentationContributor
+						customDocumentationContributor) {
 
 					INSTANCE.clear();
-					super.removedService(serviceReference, service);
+
+					super.removedService(
+						serviceReference, customDocumentationContributor);
 				}
 
 			});
