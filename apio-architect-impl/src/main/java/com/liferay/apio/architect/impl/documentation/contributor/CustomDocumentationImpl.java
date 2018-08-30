@@ -28,7 +28,7 @@ public class CustomDocumentationImpl implements CustomDocumentation {
 
 	@Override
 	public Function<Locale, String> getDescriptionFunction(String name) {
-		return _descriptions.get(name);
+		return _descriptionFunctions.get(name);
 	}
 
 	public static class BuilderImpl implements Builder {
@@ -38,7 +38,7 @@ public class CustomDocumentationImpl implements CustomDocumentation {
 
 		@Override
 		public Builder addDescription(String name, String description) {
-			_documentationContributor._descriptions.put(
+			_documentationContributor._descriptionFunctions.put(
 				name, __ -> description);
 
 			return this;
@@ -48,7 +48,8 @@ public class CustomDocumentationImpl implements CustomDocumentation {
 		public Builder addLocalizedDescription(
 			String name, Function<Locale, String> stringFunction) {
 
-			_documentationContributor._descriptions.put(name, stringFunction);
+			_documentationContributor._descriptionFunctions.put(
+				name, stringFunction);
 
 			return this;
 		}
@@ -63,7 +64,7 @@ public class CustomDocumentationImpl implements CustomDocumentation {
 
 	}
 
-	private final Map<String, Function<Locale, String>> _descriptions =
+	private final Map<String, Function<Locale, String>> _descriptionFunctions =
 		new HashMap<>();
 
 }
