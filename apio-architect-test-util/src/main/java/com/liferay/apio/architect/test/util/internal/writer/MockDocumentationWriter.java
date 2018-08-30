@@ -66,10 +66,10 @@ public class MockDocumentationWriter {
 		CustomDocumentation.Builder customDocumentationBuilder =
 			new CustomDocumentationImpl.BuilderImpl();
 
-		customDocumentationBuilder.addLocalizedDescription(
-			"root/retrieve", __ -> "retrieve description");
 		customDocumentationBuilder.addDescription(
 			"binary1", "binary description");
+		customDocumentationBuilder.addLocalizedDescription(
+			"root/retrieve", __ -> "retrieve description");
 
 		ItemRoutes.Builder itemBuilder = new ItemRoutesImpl.BuilderImpl<>(
 			"name", null,
