@@ -16,6 +16,7 @@ package com.liferay.apio.architect.form;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.AcceptLanguage;
@@ -367,6 +368,48 @@ public interface Form<T> {
 				String key, BiConsumer<T, List<Long>> biConsumer);
 
 			/**
+			 * Requests an optional nested model from the HTTP request body.
+			 *
+			 * <p>
+			 * This method calls the provided consumer with the store instance
+			 * (provided with the {@link ConstructorStep#constructor} method)
+			 * and the field value, if the field is present. A {@code
+			 * BadRequestException} is thrown if the field is found but it isn't
+			 * a nested model.
+			 * </p>
+			 *
+			 * @param  key the field's key
+			 * @param  formBuilderFunction the function to build the form
+			 * @param  biConsumer the consumer to call if the field is found
+			 * @return the updated builder
+			 * @review
+			 */
+			public <U> FieldStep<T> addOptionalNestedModel(
+				String key, FormBuilderFunction<U> formBuilderFunction,
+				BiConsumer<T, U> biConsumer);
+
+			/**
+			 * Requests an optional nested model list from the HTTP request body.
+			 *
+			 * <p>
+			 * This method calls the provided consumer with the store instance
+			 * (provided with the {@link ConstructorStep#constructor} method)
+			 * and the field value, if the field is present. A {@code
+			 * BadRequestException} is thrown if the field is found but it isn't
+			 * a nested model list.
+			 * </p>
+			 *
+			 * @param  key the field's key
+			 * @param  formBuilderFunction the function to build the form
+			 * @param  biConsumer the consumer to call if the field is found
+			 * @return the updated builder
+			 * @review
+			 */
+			public <U> FieldStep<T> addOptionalNestedModelList(
+				String key, FormBuilderFunction<U> formBuilderFunction,
+				BiConsumer<T, List<U>> biConsumer);
+
+			/**
 			 * Requests an optional string from the HTTP request body.
 			 *
 			 * <p>
@@ -614,6 +657,48 @@ public interface Form<T> {
 			 */
 			public FieldStep<T> addRequiredLongList(
 				String key, BiConsumer<T, List<Long>> biConsumer);
+
+			/**
+			 * Requests a mandatory nested model from the HTTP request body.
+			 *
+			 * <p>
+			 * This method calls the provided consumer with the store instance
+			 * (provided with the {@link ConstructorStep#constructor} method)
+			 * and the field value, if the field is present. A {@code
+			 * BadRequestException} is thrown if the field is found but it isn't
+			 * a nested model.
+			 * </p>
+			 *
+			 * @param  key the field's key
+			 * @param  formBuilderFunction the function to build the form
+			 * @param  biConsumer the consumer to call if the field is found
+			 * @return the updated builder
+			 * @review
+			 */
+			public <U> FieldStep<T> addRequiredNestedModel(
+				String key, FormBuilderFunction<U> formBuilderFunction,
+				BiConsumer<T, U> biConsumer);
+
+			/**
+			 * Requests a mandatory nested model list from the HTTP request body.
+			 *
+			 * <p>
+			 * This method calls the provided consumer with the store instance
+			 * (provided with the {@link ConstructorStep#constructor} method)
+			 * and the field value, if the field is present. A {@code
+			 * BadRequestException} is thrown if the field is found but it isn't
+			 * a nested model list.
+			 * </p>
+			 *
+			 * @param  key the field's key
+			 * @param  formBuilderFunction the function to build the form
+			 * @param  biConsumer the consumer to call if the field is found
+			 * @return the updated builder
+			 * @review
+			 */
+			public <U> FieldStep<T> addRequiredNestedModelList(
+				String key, FormBuilderFunction<U> formBuilderFunction,
+				BiConsumer<T, List<U>> biConsumer);
 
 			/**
 			 * Requests a mandatory string from the HTTP request body.
