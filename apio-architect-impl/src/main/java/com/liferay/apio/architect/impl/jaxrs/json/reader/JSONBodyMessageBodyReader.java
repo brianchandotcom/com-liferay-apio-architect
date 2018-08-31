@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.impl.form.JsonBodyImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,12 +33,6 @@ import java.io.InputStreamReader;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
@@ -101,67 +96,11 @@ public class JSONBodyMessageBodyReader implements MessageBodyReader<Body> {
 	}
 
 	private static Body _getBody(ObjectNode objectNode) {
-		return Body.create(
-			key -> Optional.ofNullable(
-				objectNode.get(key)
-			).filter(
-				JsonNode::isValueNode
-			).map(
-				JsonNode::asText
-			),
-			key -> Optional.ofNullable(
-				objectNode.get(key)
-			).filter(
-				JsonNode::isArray
-			).map(
-				ArrayNode.class::cast
-			).map(
-				JSONBodyMessageBodyReader::_getJsonElements
-			).map(
-				List::stream
-			).map(
-				stream -> stream.filter(
-					JsonNode::isValueNode
-				).map(
-					JsonNode::asText
-				).collect(
-					Collectors.toList()
-				)
-			));
-	}
-
-	private static List<JsonNode> _getJsonElements(ArrayNode arrayNode) {
-		List<JsonNode> jsonNodes = new ArrayList<>();
-
-		Iterator<JsonNode> iterator = arrayNode.iterator();
-
-		iterator.forEachRemaining(jsonNodes::add);
-
-		return jsonNodes;
+		return new JsonBodyImpl(objectNode);
 	}
 
 	private static Body _getListBody(ArrayNode arrayNode) {
-		return Try.success(
-			arrayNode
-		).map(
-			JSONBodyMessageBodyReader::_getJsonElements
-		).map(
-			List::stream
-		).map(
-			stream -> stream.filter(
-				JsonNode::isObject
-			).map(
-				ObjectNode.class::cast
-			).map(
-				JSONBodyMessageBodyReader::_getBody
-			).collect(
-				Collectors.toList()
-			)
-		).map(
-			Body::create
-		).orElseThrow(
-			() -> new BadRequestException("Body is not a valid JSON Array")
-		);
+		return new JsonBodyImpl(arrayNode);
 	}
 
 }
