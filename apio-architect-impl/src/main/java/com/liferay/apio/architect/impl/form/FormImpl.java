@@ -60,6 +60,7 @@ import static com.liferay.apio.architect.impl.form.FormUtil.getRequiredString;
 import static com.liferay.apio.architect.impl.form.FormUtil.getRequiredStringList;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
+import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
@@ -342,6 +343,32 @@ public class FormImpl<T> implements Form<T> {
 		}
 
 		@Override
+		public <U> FieldStep<T> addOptionalNestedModel(
+			String key, FormBuilderFunction<U> formBuilderFunction,
+			BiConsumer<T, U> biConsumer) {
+
+			_form._optionalNestedModel.put(
+				key, t -> object -> biConsumer.accept(t, (U)object));
+
+			_form._formBuilderFunctionsMap.put(key, formBuilderFunction);
+
+			return this;
+		}
+
+		@Override
+		public <U> FieldStep<T> addOptionalNestedModelList(
+			String key, FormBuilderFunction<U> formBuilderFunction,
+			BiConsumer<T, List<U>> biConsumer) {
+
+			_form._optionalNestedModelLists.put(
+				key, t -> list -> biConsumer.accept(t, (List<U>)list));
+
+			_form._formBuilderFunctionsMap.put(key, formBuilderFunction);
+
+			return this;
+		}
+
+		@Override
 		public FieldStep<T> addOptionalString(
 			String key, BiConsumer<T, String> biConsumer) {
 
@@ -484,6 +511,32 @@ public class FormImpl<T> implements Form<T> {
 		}
 
 		@Override
+		public <U> FieldStep<T> addRequiredNestedModel(
+			String key, FormBuilderFunction<U> formBuilderFunction,
+			BiConsumer<T, U> biConsumer) {
+
+			_form._requiredNestedModel.put(
+				key, t -> object -> biConsumer.accept(t, (U)object));
+
+			_form._formBuilderFunctionsMap.put(key, formBuilderFunction);
+
+			return this;
+		}
+
+		@Override
+		public <U> FieldStep<T> addRequiredNestedModelList(
+			String key, FormBuilderFunction<U> formBuilderFunction,
+			BiConsumer<T, List<U>> biConsumer) {
+
+			_form._optionalNestedModelLists.put(
+				key, t -> list -> biConsumer.accept(t, (List<U>)list));
+
+			_form._formBuilderFunctionsMap.put(key, formBuilderFunction);
+
+			return this;
+		}
+
+		@Override
 		public FieldStep<T> addRequiredString(
 			String key, BiConsumer<T, String> biConsumer) {
 
@@ -545,6 +598,8 @@ public class FormImpl<T> implements Form<T> {
 	}
 
 	private Function<AcceptLanguage, String> _descriptionFunction;
+	private final Map<String, FormBuilderFunction<?>> _formBuilderFunctionsMap =
+		new HashMap<>();
 	private final String _id;
 	private final Map<String, Function<T, Consumer<List<Boolean>>>>
 		_optionalBooleanLists = new HashMap<>();
@@ -570,6 +625,10 @@ public class FormImpl<T> implements Form<T> {
 		_optionalLongLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Long>>> _optionalLongs =
 		new HashMap<>();
+	private final Map<String, Function<T, Consumer<Object>>>
+		_optionalNestedModel = new HashMap<>();
+	private final Map<String, Function<T, Consumer<List<Object>>>>
+		_optionalNestedModelLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<List<String>>>>
 		_optionalStringLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<String>>> _optionalStrings =
@@ -599,6 +658,10 @@ public class FormImpl<T> implements Form<T> {
 		_requiredLongLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Long>>> _requiredLongs =
 		new HashMap<>();
+	private final Map<String, Function<T, Consumer<Object>>>
+		_requiredNestedModel = new HashMap<>();
+	private final Map<String, Function<T, Consumer<List<Object>>>>
+		_requiredNestedModelLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<List<String>>>>
 		_requiredStringLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<String>>> _requiredStrings =
