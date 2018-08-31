@@ -389,7 +389,8 @@ public interface Form<T> {
 				BiConsumer<T, U> biConsumer);
 
 			/**
-			 * Requests an optional nested model list from the HTTP request body.
+			 * Requests an optional nested model list from the HTTP request
+			 * body.
 			 *
 			 * <p>
 			 * This method calls the provided consumer with the store instance
@@ -680,7 +681,8 @@ public interface Form<T> {
 				BiConsumer<T, U> biConsumer);
 
 			/**
-			 * Requests a mandatory nested model list from the HTTP request body.
+			 * Requests a mandatory nested model list from the HTTP request
+			 * body.
 			 *
 			 * <p>
 			 * This method calls the provided consumer with the store instance
