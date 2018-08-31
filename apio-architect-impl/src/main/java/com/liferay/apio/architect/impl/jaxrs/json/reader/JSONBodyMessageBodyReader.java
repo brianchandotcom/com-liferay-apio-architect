@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.impl.form.JsonBodyImpl;
+import com.liferay.apio.architect.impl.form.JSONBodyImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,11 +96,11 @@ public class JSONBodyMessageBodyReader implements MessageBodyReader<Body> {
 	}
 
 	private static Body _getBody(ObjectNode objectNode) {
-		return new JsonBodyImpl(objectNode);
+		return new JSONBodyImpl(objectNode);
 	}
 
 	private static Body _getListBody(ArrayNode arrayNode) {
-		return new JsonBodyImpl(arrayNode);
+		return new JSONBodyImpl(arrayNode);
 	}
 
 }
