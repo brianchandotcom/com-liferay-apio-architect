@@ -26,6 +26,8 @@ import static com.liferay.apio.architect.form.FieldType.LINKED_MODEL;
 import static com.liferay.apio.architect.form.FieldType.LINKED_MODEL_LIST;
 import static com.liferay.apio.architect.form.FieldType.LONG;
 import static com.liferay.apio.architect.form.FieldType.LONG_LIST;
+import static com.liferay.apio.architect.form.FieldType.NESTED_MODEL;
+import static com.liferay.apio.architect.form.FieldType.NESTED_MODEL_LIST;
 import static com.liferay.apio.architect.form.FieldType.STRING;
 import static com.liferay.apio.architect.form.FieldType.STRING_LIST;
 import static com.liferay.apio.architect.impl.form.FormUtil.getOptionalBoolean;
@@ -149,6 +151,9 @@ public class FormImpl<T> implements Form<T> {
 				_optionalLinkedModelList, LINKED_MODEL_LIST),
 			getOptionalFormFieldStream(_optionalLongs, LONG),
 			getOptionalFormFieldStream(_optionalLongLists, LONG_LIST),
+			getOptionalFormFieldStream(_optionalNestedModel, NESTED_MODEL),
+			getOptionalFormFieldStream(
+				_optionalNestedModelLists, NESTED_MODEL_LIST),
 			getOptionalFormFieldStream(_optionalStrings, STRING),
 			getOptionalFormFieldStream(_optionalStringLists, STRING_LIST),
 			getRequiredFormFieldStream(_requiredBooleans, BOOLEAN),
@@ -164,6 +169,9 @@ public class FormImpl<T> implements Form<T> {
 				_requiredLinkedModelList, LINKED_MODEL_LIST),
 			getRequiredFormFieldStream(_requiredLongs, LONG),
 			getRequiredFormFieldStream(_requiredLongLists, LONG_LIST),
+			getRequiredFormFieldStream(_requiredNestedModel, NESTED_MODEL),
+			getRequiredFormFieldStream(
+				_requiredNestedModelLists, NESTED_MODEL_LIST),
 			getRequiredFormFieldStream(_requiredStrings, STRING),
 			getRequiredFormFieldStream(_requiredStringLists, STRING_LIST)
 		).flatMap(
