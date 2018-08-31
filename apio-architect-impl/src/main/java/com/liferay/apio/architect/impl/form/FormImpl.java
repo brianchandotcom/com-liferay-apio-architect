@@ -94,38 +94,7 @@ public class FormImpl<T> implements Form<T> {
 	public T get(Body body) {
 		T t = _supplier.get();
 
-		_optionalBooleans.forEach(getOptionalBoolean(body, t));
-		_optionalDates.forEach(getOptionalDate(body, t));
-		_optionalDoubles.forEach(getOptionalDouble(body, t));
-		_optionalFiles.forEach(getOptionalFile(body, t));
-		_optionalLinkedModel.forEach(
-			getOptionalLinkedModel(body, t, _pathToIdentifierFunction));
-		_optionalLinkedModelList.forEach(
-			getOptionalLinkedModelList(body, t, _pathToIdentifierFunction));
-		_optionalLongs.forEach(getOptionalLong(body, t));
-		_optionalStrings.forEach(getOptionalString(body, t));
-		_requiredBooleans.forEach(getRequiredBoolean(body, t));
-		_requiredDates.forEach(getRequiredDate(body, t));
-		_requiredDoubles.forEach(getRequiredDouble(body, t));
-		_requiredFiles.forEach(getRequiredFile(body, t));
-		_requiredLinkedModel.forEach(
-			getRequiredLinkedModel(body, t, _pathToIdentifierFunction));
-		_requiredLinkedModelList.forEach(
-			getRequiredLinkedModelList(body, t, _pathToIdentifierFunction));
-		_requiredLongs.forEach(getRequiredLong(body, t));
-		_requiredStrings.forEach(getRequiredString(body, t));
-		_optionalBooleanLists.forEach(getOptionalBooleanList(body, t));
-		_optionalDateLists.forEach(getOptionalDateList(body, t));
-		_optionalDoubleLists.forEach(getOptionalDoubleList(body, t));
-		_optionalFileLists.forEach(getOptionalFileList(body, t));
-		_optionalLongLists.forEach(getOptionalLongList(body, t));
-		_optionalStringLists.forEach(getOptionalStringList(body, t));
-		_requiredBooleanLists.forEach(getRequiredBooleanList(body, t));
-		_requiredDateLists.forEach(getRequiredDateList(body, t));
-		_requiredDoubleLists.forEach(getRequiredDoubleList(body, t));
-		_requiredFileLists.forEach(getRequiredFileList(body, t));
-		_requiredLongLists.forEach(getRequiredLongList(body, t));
-		_requiredStringLists.forEach(getRequiredStringList(body, t));
+		_getFormFields(this, body, t);
 
 		return t;
 	}
@@ -603,6 +572,150 @@ public class FormImpl<T> implements Form<T> {
 
 		_id = String.join("/", paths);
 		_pathToIdentifierFunction = pathToIdentifierFunction;
+	}
+
+	private <U> void _getFormFields(FormImpl<U> formImpl, Body body, U u) {
+		formImpl._optionalBooleans.forEach(getOptionalBoolean(body, u));
+		formImpl._optionalBooleanLists.forEach(getOptionalBooleanList(body, u));
+		formImpl._optionalDates.forEach(getOptionalDate(body, u));
+		formImpl._optionalDateLists.forEach(getOptionalDateList(body, u));
+		formImpl._optionalDoubles.forEach(getOptionalDouble(body, u));
+		formImpl._optionalDoubleLists.forEach(getOptionalDoubleList(body, u));
+		formImpl._optionalFiles.forEach(getOptionalFile(body, u));
+		formImpl._optionalFileLists.forEach(getOptionalFileList(body, u));
+		formImpl._optionalLinkedModel.forEach(
+			getOptionalLinkedModel(body, u, _pathToIdentifierFunction));
+		formImpl._optionalLinkedModelList.forEach(
+			getOptionalLinkedModelList(body, u, _pathToIdentifierFunction));
+		formImpl._optionalLongs.forEach(getOptionalLong(body, u));
+		formImpl._optionalLongLists.forEach(getOptionalLongList(body, u));
+		formImpl._optionalNestedModel.forEach(_getOptionalNestedModel(body, u));
+		formImpl._optionalNestedModelLists.forEach(
+			_getOptionalNestedModelList(body, u));
+		formImpl._optionalStrings.forEach(getOptionalString(body, u));
+		formImpl._optionalStringLists.forEach(getOptionalStringList(body, u));
+		formImpl._requiredBooleans.forEach(getRequiredBoolean(body, u));
+		formImpl._requiredBooleanLists.forEach(getRequiredBooleanList(body, u));
+		formImpl._requiredDates.forEach(getRequiredDate(body, u));
+		formImpl._requiredDateLists.forEach(getRequiredDateList(body, u));
+		formImpl._requiredDoubles.forEach(getRequiredDouble(body, u));
+		formImpl._requiredDoubleLists.forEach(getRequiredDoubleList(body, u));
+		formImpl._requiredFiles.forEach(getRequiredFile(body, u));
+		formImpl._requiredFileLists.forEach(getRequiredFileList(body, u));
+		formImpl._requiredLinkedModel.forEach(
+			getRequiredLinkedModel(body, u, _pathToIdentifierFunction));
+		formImpl._requiredLinkedModelList.forEach(
+			getRequiredLinkedModelList(body, u, _pathToIdentifierFunction));
+		formImpl._requiredLongs.forEach(getRequiredLong(body, u));
+		formImpl._requiredLongLists.forEach(getRequiredLongList(body, u));
+		formImpl._requiredNestedModel.forEach(_getRequiredNestedModel(body, u));
+		formImpl._requiredNestedModelLists.forEach(
+			_getRequiredNestedModelList(body, u));
+		formImpl._requiredStrings.forEach(getRequiredString(body, u));
+		formImpl._requiredStringLists.forEach(getRequiredStringList(body, u));
+	}
+
+	private <V> FormImpl<V> _getNestedForm(String key) {
+		List<String> paths = Collections.singletonList(_id);
+
+		Builder<V> builder = new BuilderImpl<>(
+			paths, _pathToIdentifierFunction);
+
+		FormBuilderFunction<V> formBuilderFunction =
+			(FormBuilderFunction<V>)_formBuilderFunctionsMap.get(key);
+
+		return (FormImpl<V>)formBuilderFunction.apply(builder);
+	}
+
+	private <U, V> void _getNestedModel(
+		Body body, U u, String key, Function<U, Consumer<V>> consumerFunction,
+		boolean required) {
+
+		FormImpl<V> nestedForm = _getNestedForm(key);
+
+		V v = nestedForm._supplier.get();
+
+		Optional<Body> bodyOptional = body.getNestedBodyOptional(key);
+
+		if (bodyOptional.isPresent()) {
+			_getFormFields(nestedForm, bodyOptional.get(), v);
+		}
+		else if (required) {
+			throw new BadRequestException("Field \"" + key + "\" is required");
+		}
+
+		consumerFunction.apply(
+			u
+		).accept(
+			v
+		);
+	}
+
+	private <U, V> void _getNestedModelList(
+		Body body, U u, String key,
+		Function<U, Consumer<List<V>>> consumerFunction, boolean required) {
+
+		FormImpl<V> nestedForm = _getNestedForm(key);
+
+		Optional<List<Body>> bodyListOptional = body.getNestedBodyListOptional(
+			key);
+
+		if (bodyListOptional.isPresent()) {
+			List<Body> bodies = bodyListOptional.get();
+
+			Stream<Body> stream = bodies.stream();
+
+			List<V> models = stream.map(
+				nestedBody -> {
+					V v = nestedForm._supplier.get();
+
+					_getFormFields(nestedForm, nestedBody, v);
+
+					return v;
+				}
+			).collect(
+				Collectors.toList()
+			);
+
+			consumerFunction.apply(
+				u
+			).accept(
+				models
+			);
+		}
+		else if (required) {
+			throw new BadRequestException("Field \"" + key + "\" is required");
+		}
+	}
+
+	private <U> BiConsumer
+		<String, Function<U, Consumer<Object>>> _getOptionalNestedModel(
+			Body body, U u) {
+
+		return (key, consumerFunction) -> _getNestedModel(
+			body, u, key, consumerFunction, false);
+	}
+
+	private <U> BiConsumer<String, Function<U, Consumer<List<Object>>>>
+		_getOptionalNestedModelList(Body body, U u) {
+
+		return (key, consumerFunction) -> _getNestedModelList(
+			body, u, key, consumerFunction, false);
+	}
+
+	private <U> BiConsumer
+		<String, Function<U, Consumer<Object>>> _getRequiredNestedModel(
+			Body body, U u) {
+
+		return (key, consumerFunction) -> _getNestedModel(
+			body, u, key, consumerFunction, true);
+	}
+
+	private <U> BiConsumer<String, Function<U, Consumer<List<Object>>>>
+		_getRequiredNestedModelList(Body body, U u) {
+
+		return (key, consumerFunction) -> _getNestedModelList(
+			body, u, key, consumerFunction, true);
 	}
 
 	private Function<AcceptLanguage, String> _descriptionFunction;
