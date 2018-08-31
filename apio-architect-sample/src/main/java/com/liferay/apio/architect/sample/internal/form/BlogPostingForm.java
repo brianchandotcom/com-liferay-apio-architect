@@ -18,6 +18,8 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.Form.Builder;
 import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
 
+import java.util.List;
+
 /**
  * Represents the values extracted from a blog posting form.
  *
@@ -41,6 +43,12 @@ public class BlogPostingForm {
 			__ -> "This form can be used to create or update a blog posting"
 		).constructor(
 			BlogPostingForm::new
+		).addRequiredNestedModel(
+			"comment", BlogPostingCommentCreatorForm::buildForm,
+			BlogPostingForm::_setComment
+		).addOptionalNestedModelList(
+			"comments", BlogPostingCommentCreatorForm::buildForm,
+			BlogPostingForm::_setComments
 		).addRequiredLinkedModel(
 			"creator", PersonIdentifier.class, BlogPostingForm::_setCreator
 		).addRequiredString(
@@ -70,6 +78,14 @@ public class BlogPostingForm {
 		return _articleBody;
 	}
 
+	public BlogPostingCommentCreatorForm getComment() {
+		return _comment;
+	}
+
+	public List<BlogPostingCommentCreatorForm> getComments() {
+		return _comments;
+	}
+
 	/**
 	 * Returns the blog posting's creator ID.
 	 *
@@ -96,6 +112,14 @@ public class BlogPostingForm {
 		_articleBody = articleBody;
 	}
 
+	private void _setComment(BlogPostingCommentCreatorForm comment) {
+		_comment = comment;
+	}
+
+	private void _setComments(List<BlogPostingCommentCreatorForm> comments) {
+		_comments = comments;
+	}
+
 	private void _setCreator(Long creator) {
 		_creator = creator;
 	}
@@ -106,6 +130,8 @@ public class BlogPostingForm {
 
 	private String _alternativeHeadline;
 	private String _articleBody;
+	private BlogPostingCommentCreatorForm _comment;
+	private List<BlogPostingCommentCreatorForm> _comments;
 	private Long _creator;
 	private String _headline;
 

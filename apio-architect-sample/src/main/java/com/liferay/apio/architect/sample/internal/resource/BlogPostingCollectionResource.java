@@ -26,12 +26,14 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
+import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingForm;
 import com.liferay.apio.architect.sample.internal.form.BlogSubscriptionForm;
 import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentIdentifier;
 import com.liferay.apio.architect.sample.internal.identifier.BlogPostingIdentifier;
 import com.liferay.apio.architect.sample.internal.identifier.BlogSubscriptionIdentifier;
 import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
+import com.liferay.apio.architect.sample.internal.model.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingModel;
 import com.liferay.apio.architect.sample.internal.model.BlogSubscriptionModel;
 import com.liferay.apio.architect.sample.internal.model.PersonModel;
@@ -156,10 +158,27 @@ public class BlogPostingCollectionResource
 			throw new ForbiddenException();
 		}
 
-		return BlogPostingModel.create(
+		BlogPostingModel blogPostingModel = BlogPostingModel.create(
 			blogPostingForm.getArticleBody(), blogPostingForm.getCreator(),
 			blogPostingForm.getAlternativeHeadline(),
 			blogPostingForm.getHeadline());
+
+		BlogPostingCommentCreatorForm newComment = blogPostingForm.getComment();
+
+		BlogPostingCommentModel.create(
+			newComment.getAuthor(), blogPostingModel.getId(),
+			newComment.getText());
+
+		List<BlogPostingCommentCreatorForm> comments =
+			blogPostingForm.getComments();
+
+		for (BlogPostingCommentCreatorForm comment : comments) {
+			BlogPostingCommentModel.create(
+				comment.getAuthor(), blogPostingModel.getId(),
+				comment.getText());
+		}
+
+		return blogPostingModel;
 	}
 
 	private void _deleteBlogPostingModel(long id, Credentials credentials) {
