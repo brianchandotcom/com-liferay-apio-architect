@@ -165,9 +165,11 @@ public class BlogPostingCollectionResource
 
 		BlogPostingCommentCreatorForm newComment = blogPostingForm.getComment();
 
-		BlogPostingCommentModel.create(
-			newComment.getAuthor(), blogPostingModel.getId(),
-			newComment.getText());
+		if ((newComment != null) && (newComment.getAuthor() != null)) {
+			BlogPostingCommentModel.create(
+				newComment.getAuthor(), blogPostingModel.getId(),
+				newComment.getText());
+		}
 
 		List<BlogPostingCommentCreatorForm> comments =
 			blogPostingForm.getComments();

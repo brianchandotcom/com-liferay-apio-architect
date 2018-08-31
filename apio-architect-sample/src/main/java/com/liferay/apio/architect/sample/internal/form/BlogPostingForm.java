@@ -18,6 +18,7 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.Form.Builder;
 import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class BlogPostingForm {
 			__ -> "This form can be used to create or update a blog posting"
 		).constructor(
 			BlogPostingForm::new
-		).addRequiredNestedModel(
+		).addOptionalNestedModel(
 			"comment", BlogPostingCommentCreatorForm::buildForm,
 			BlogPostingForm::_setComment
 		).addOptionalNestedModelList(
@@ -131,7 +132,7 @@ public class BlogPostingForm {
 	private String _alternativeHeadline;
 	private String _articleBody;
 	private BlogPostingCommentCreatorForm _comment;
-	private List<BlogPostingCommentCreatorForm> _comments;
+	private List<BlogPostingCommentCreatorForm> _comments = new ArrayList<>();
 	private Long _creator;
 	private String _headline;
 
