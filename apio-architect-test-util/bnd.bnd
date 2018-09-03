@@ -30,6 +30,19 @@ Import-Package:\
 	com.liferay.apio.architect.impl.single.model,\
 	com.liferay.apio.architect.impl.unsafe,\
 	com.liferay.apio.architect.impl.url,\
-	com.liferay.apio.architect.impl.wiring.osgi.*,\
+	com.liferay.apio.architect.impl.wiring.osgi.alias,\
+	com.liferay.apio.architect.impl.wiring.osgi.error,\
+	com.liferay.apio.architect.impl.wiring.osgi.manager.base,\
+	com.liferay.apio.architect.impl.wiring.osgi.manager.cache,\
+	com.liferay.apio.architect.impl.wiring.osgi.manager.documentation.contributor,\
+	com.liferay.apio.architect.impl.wiring.osgi.manager.provider,\
+	com.liferay.apio.architect.impl.wiring.osgi.manager.representable,\
+	com.liferay.apio.architect.impl.wiring.osgi.manager.router,\
+	com.liferay.apio.architect.impl.wiring.osgi.manager.uri.mapper,\
+	com.liferay.apio.architect.impl.wiring.osgi.manager.util,\
+	com.liferay.apio.architect.impl.wiring.osgi.tracker.customizer,\
+	com.liferay.apio.architect.impl.wiring.osgi.tracker.map.listener,\
+	com.liferay.apio.architect.impl.wiring.osgi.util,\
+	com.liferay.apio.architect.impl.wiring.osgi.validator,\
 	com.liferay.apio.architect.impl.writer,\
 	com.liferay.apio.architect.impl.writer.util
