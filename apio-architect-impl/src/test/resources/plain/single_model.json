@@ -4,27 +4,46 @@
 	"binary2": "localhost/o/api/b/model/first/binary2",
 	"boolean1": true,
 	"boolean2": false,
-	"booleanList1": [true, true, false, false],
-	"booleanList2": [true, false, true, false],
+	"booleanList1": [
+		true,
+		true,
+		false,
+		false
+	],
+	"booleanList2": [
+		true,
+		false,
+		true,
+		false
+	],
 	"date1": "2016-06-15T09:00Z",
 	"date2": "2017-04-03T18:36Z",
 	"embedded1": {
 		"binary": "localhost/o/api/b/first-inner-model/first/binary",
 		"boolean": true,
-		"booleanList": [true, false],
+		"booleanList": [
+			true,
+			false
+		],
 		"embedded": {
 			"binary": "localhost/o/api/b/second-inner-model/first/binary",
 			"boolean": false,
-			"booleanList": [true],
+			"booleanList": [
+				true
+			],
 			"embedded": "localhost/o/api/p/third-inner-model/first",
 			"link": "community.liferay.com",
 			"linked": "localhost/o/api/p/third-inner-model/second",
 			"number": 2017,
-			"numberList": [1],
+			"numberList": [
+				1
+			],
 			"relatedCollection": "localhost/o/api/p/second-inner-model/first/models",
 			"self": "localhost/o/api/p/second-inner-model/first",
 			"string": "A string",
-			"stringList": ["a"]
+			"stringList": [
+				"a"
+			]
 		},
 		"link": "www.liferay.com",
 		"linked": "localhost/o/api/p/second-inner-model/second",
@@ -35,7 +54,8 @@
 					"number1": 2018,
 					"string1": "id 1",
 					"string2": "string3"
-				}, {
+				},
+				{
 					"number1": 2018,
 					"string1": "id 2",
 					"string2": "string3"
@@ -44,11 +64,17 @@
 			"numberOfItems": 2
 		},
 		"number": 42,
-		"numberList": [1, 2],
+		"numberList": [
+			1,
+			2
+		],
 		"relatedCollection": "localhost/o/api/p/first-inner-model/first/models",
 		"self": "localhost/o/api/p/first-inner-model/first",
 		"string": "A string",
-		"stringList": ["a", "b"]
+		"stringList": [
+			"a",
+			"b"
+		]
 	},
 	"embedded2": "localhost/o/api/p/first-inner-model/second",
 	"link1": "www.liferay.com",
@@ -78,7 +104,8 @@
 						"elements": [
 							{
 								"number1": 2017
-							}, {
+							},
+							{
 								"number1": 2017
 							}
 						],
@@ -89,31 +116,45 @@
 				"number1": 2017,
 				"string1": "id 1",
 				"string2": "string2"
-			}, {
-				"number1": 2017,
-				"string1": "id 2",
-				"string2": "string2",
+			},
+			{
 				"nested4": {
 					"nestedList": {
 						"elements": [
 							{
 								"number1": 2017
-							}, {
+							},
+							{
 								"number1": 2017
 							}
 						],
 						"numberOfItems": 2
 					},
 					"string1": "id 4"
-				}
+				},
+				"number1": 2017,
+				"string1": "id 2",
+				"string2": "string2"
 			}
 		],
 		"numberOfItems": 2
 	},
 	"number1": 2017,
 	"number2": 42,
-	"numberList1": [1, 2, 3, 4, 5],
-	"numberList2": [6, 7, 8, 9, 10],
+	"numberList1": [
+		1,
+		2,
+		3,
+		4,
+		5
+	],
+	"numberList2": [
+		6,
+		7,
+		8,
+		9,
+		10
+	],
 	"relatedCollection1": "localhost/o/api/p/model/first/models",
 	"relatedCollection2": "localhost/o/api/p/model/first/models",
 	"relativeURL1": "localhost/first",
@@ -121,6 +162,18 @@
 	"self": "localhost/o/api/p/model/first",
 	"string1": "Live long and prosper",
 	"string2": "Hypermedia",
-	"stringList1": ["a", "b", "c", "d", "e"],
-	"stringList2": ["f", "g", "h", "i", "j"]
+	"stringList1": [
+		"a",
+		"b",
+		"c",
+		"d",
+		"e"
+	],
+	"stringList2": [
+		"f",
+		"g",
+		"h",
+		"i",
+		"j"
+	]
 }

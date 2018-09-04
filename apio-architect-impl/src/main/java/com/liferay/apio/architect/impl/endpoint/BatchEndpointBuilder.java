@@ -61,8 +61,7 @@ public interface BatchEndpointBuilder {
 			return Try.fromFallible(
 				_collectionRoutesSupplier
 			).mapOptional(
-				CollectionRoutes::
-					getBatchCreateItemFunctionOptional,
+				CollectionRoutes::getBatchCreateItemFunctionOptional,
 				notAllowed(POST, _name)
 			).map(
 				requestFunction -> requestFunction.apply(_httpServletRequest)
