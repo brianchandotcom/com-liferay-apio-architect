@@ -65,6 +65,7 @@ import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.FieldType;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.identifier.Identifier;
@@ -76,6 +77,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -106,48 +108,7 @@ public class FormImpl<T> implements Form<T> {
 
 	@Override
 	public List<FormField> getFormFields() {
-		return Stream.of(
-			getOptionalFormFieldStream(_optionalBooleans, BOOLEAN),
-			getOptionalFormFieldStream(_optionalBooleanLists, BOOLEAN_LIST),
-			getOptionalFormFieldStream(_optionalDates, DATE),
-			getOptionalFormFieldStream(_optionalDateLists, DATE_LIST),
-			getOptionalFormFieldStream(_optionalDoubles, DOUBLE),
-			getOptionalFormFieldStream(_optionalDoubleLists, DOUBLE_LIST),
-			getOptionalFormFieldStream(_optionalFiles, FILE),
-			getOptionalFormFieldStream(_optionalFileLists, FILE_LIST),
-			getOptionalFormFieldStream(_optionalLinkedModel, LINKED_MODEL),
-			getOptionalFormFieldStream(
-				_optionalLinkedModelList, LINKED_MODEL_LIST),
-			getOptionalFormFieldStream(_optionalLongs, LONG),
-			getOptionalFormFieldStream(_optionalLongLists, LONG_LIST),
-			getOptionalFormFieldStream(_optionalNestedModel, NESTED_MODEL),
-			getOptionalFormFieldStream(
-				_optionalNestedModelLists, NESTED_MODEL_LIST),
-			getOptionalFormFieldStream(_optionalStrings, STRING),
-			getOptionalFormFieldStream(_optionalStringLists, STRING_LIST),
-			getRequiredFormFieldStream(_requiredBooleans, BOOLEAN),
-			getRequiredFormFieldStream(_requiredBooleanLists, BOOLEAN_LIST),
-			getRequiredFormFieldStream(_requiredDates, DATE),
-			getRequiredFormFieldStream(_requiredDateLists, DATE_LIST),
-			getRequiredFormFieldStream(_requiredDoubles, DOUBLE),
-			getRequiredFormFieldStream(_requiredDoubleLists, DOUBLE_LIST),
-			getRequiredFormFieldStream(_requiredFiles, FILE),
-			getRequiredFormFieldStream(_requiredFileLists, FILE_LIST),
-			getRequiredFormFieldStream(_requiredLinkedModel, LINKED_MODEL),
-			getRequiredFormFieldStream(
-				_requiredLinkedModelList, LINKED_MODEL_LIST),
-			getRequiredFormFieldStream(_requiredLongs, LONG),
-			getRequiredFormFieldStream(_requiredLongLists, LONG_LIST),
-			getRequiredFormFieldStream(_requiredNestedModel, NESTED_MODEL),
-			getRequiredFormFieldStream(
-				_requiredNestedModelLists, NESTED_MODEL_LIST),
-			getRequiredFormFieldStream(_requiredStrings, STRING),
-			getRequiredFormFieldStream(_requiredStringLists, STRING_LIST)
-		).flatMap(
-			Function.identity()
-		).collect(
-			Collectors.toList()
-		);
+		return _getFormFields(this);
 	}
 
 	@Override
@@ -574,6 +535,55 @@ public class FormImpl<T> implements Form<T> {
 		_pathToIdentifierFunction = pathToIdentifierFunction;
 	}
 
+	private List<FormField> _getFormFields(FormImpl<T> form) {
+		return Stream.of(
+			getOptionalFormFieldStream(form._optionalBooleans, BOOLEAN),
+			getOptionalFormFieldStream(
+				form._optionalBooleanLists, BOOLEAN_LIST),
+			getOptionalFormFieldStream(form._optionalDates, DATE),
+			getOptionalFormFieldStream(form._optionalDateLists, DATE_LIST),
+			getOptionalFormFieldStream(form._optionalDoubles, DOUBLE),
+			getOptionalFormFieldStream(form._optionalDoubleLists, DOUBLE_LIST),
+			getOptionalFormFieldStream(form._optionalFiles, FILE),
+			getOptionalFormFieldStream(form._optionalFileLists, FILE_LIST),
+			getOptionalFormFieldStream(form._optionalLinkedModel, LINKED_MODEL),
+			getOptionalFormFieldStream(
+				form._optionalLinkedModelList, LINKED_MODEL_LIST),
+			getOptionalFormFieldStream(form._optionalLongs, LONG),
+			getOptionalFormFieldStream(form._optionalLongLists, LONG_LIST),
+			_getNestedModelFormFieldStream(
+				form._optionalNestedModel, NESTED_MODEL, false),
+			_getNestedModelFormFieldStream(
+				form._optionalNestedModelLists, NESTED_MODEL_LIST, false),
+			getOptionalFormFieldStream(form._optionalStrings, STRING),
+			getOptionalFormFieldStream(form._optionalStringLists, STRING_LIST),
+			getRequiredFormFieldStream(form._requiredBooleans, BOOLEAN),
+			getRequiredFormFieldStream(
+				form._requiredBooleanLists, BOOLEAN_LIST),
+			getRequiredFormFieldStream(form._requiredDates, DATE),
+			getRequiredFormFieldStream(form._requiredDateLists, DATE_LIST),
+			getRequiredFormFieldStream(form._requiredDoubles, DOUBLE),
+			getRequiredFormFieldStream(form._requiredDoubleLists, DOUBLE_LIST),
+			getRequiredFormFieldStream(form._requiredFiles, FILE),
+			getRequiredFormFieldStream(form._requiredFileLists, FILE_LIST),
+			getRequiredFormFieldStream(form._requiredLinkedModel, LINKED_MODEL),
+			getRequiredFormFieldStream(
+				form._requiredLinkedModelList, LINKED_MODEL_LIST),
+			getRequiredFormFieldStream(form._requiredLongs, LONG),
+			getRequiredFormFieldStream(form._requiredLongLists, LONG_LIST),
+			_getNestedModelFormFieldStream(
+				form._requiredNestedModel, NESTED_MODEL, true),
+			_getNestedModelFormFieldStream(
+				form._requiredNestedModelLists, NESTED_MODEL_LIST, true),
+			getRequiredFormFieldStream(form._requiredStrings, STRING),
+			getRequiredFormFieldStream(form._requiredStringLists, STRING_LIST)
+		).flatMap(
+			Function.identity()
+		).collect(
+			Collectors.toList()
+		);
+	}
+
 	private <U> void _getFormFields(FormImpl<U> formImpl, Body body, U u) {
 		formImpl._optionalBooleans.forEach(getOptionalBoolean(body, u));
 		formImpl._optionalBooleanLists.forEach(getOptionalBooleanList(body, u));
@@ -649,6 +659,18 @@ public class FormImpl<T> implements Form<T> {
 		).accept(
 			v
 		);
+	}
+
+	private Stream<FormField> _getNestedModelFormFieldStream(
+		Map<String, ?> nestedModelMap, FieldType fieldType, boolean required) {
+
+		Set<String> nestedModelKeys = nestedModelMap.keySet();
+
+		Stream<String> stream = nestedModelKeys.stream();
+
+		return stream.map(
+			key -> new FormFieldImpl(
+				key, required, fieldType, _getNestedForm(key)));
 	}
 
 	private <U, V> void _getNestedModelList(

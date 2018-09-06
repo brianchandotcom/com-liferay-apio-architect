@@ -59,34 +59,27 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 		).arrayValue(
 		).add(
 			builder -> {
-				builder.field(
-					"@type"
-				).stringValue(
-					"SupportedProperty"
-				);
+				_addFormField(formField, builder);
+			}
+		);
+	}
+
+	@Override
+	public void mapFormField(
+		JSONObjectBuilder jsonObjectBuilder, FormField formField,
+		JSONObjectBuilder nestedJsonObjectBuilder) {
+
+		jsonObjectBuilder.field(
+			"supportedProperty"
+		).arrayValue(
+		).add(
+			builder -> {
+				_addFormField(formField, builder);
 
 				builder.field(
-					"property"
-				).stringValue(
-					formField.getName()
-				);
-
-				builder.field(
-					"readable"
-				).booleanValue(
-					false
-				);
-
-				builder.field(
-					"required"
-				).booleanValue(
-					formField.isRequired()
-				);
-
-				builder.field(
-					"writeable"
-				).booleanValue(
-					true
+					"value"
+				).objectValue(
+					nestedJsonObjectBuilder
 				);
 			}
 		);
@@ -131,6 +124,38 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 				)),
 			arrayBuilder -> arrayBuilder.addString(
 				"https://www.w3.org/ns/hydra/core#")
+		);
+	}
+
+	private void _addFormField(FormField formField, JSONObjectBuilder builder) {
+		builder.field(
+			"@type"
+		).stringValue(
+			"SupportedProperty"
+		);
+
+		builder.field(
+			"property"
+		).stringValue(
+			formField.getName()
+		);
+
+		builder.field(
+			"readable"
+		).booleanValue(
+			false
+		);
+
+		builder.field(
+			"required"
+		).booleanValue(
+			formField.isRequired()
+		);
+
+		builder.field(
+			"writeable"
+		).booleanValue(
+			true
 		);
 	}
 

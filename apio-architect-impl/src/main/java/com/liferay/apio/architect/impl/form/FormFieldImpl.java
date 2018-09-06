@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.impl.form;
 
 import com.liferay.apio.architect.form.FieldType;
+import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
 
 import java.util.Objects;
@@ -25,9 +26,16 @@ import java.util.Objects;
 public final class FormFieldImpl implements FormField {
 
 	public FormFieldImpl(String name, boolean required, FieldType fieldType) {
+		this(name, required, fieldType, null);
+	}
+
+	public FormFieldImpl(
+		String name, boolean required, FieldType fieldType, Form form) {
+
 		_name = name;
 		_required = required;
 		_fieldType = fieldType;
+		_form = form;
 	}
 
 	@Override
@@ -58,6 +66,11 @@ public final class FormFieldImpl implements FormField {
 	}
 
 	@Override
+	public Form getForm() {
+		return _form;
+	}
+
+	@Override
 	public String getName() {
 		return _name;
 	}
@@ -73,6 +86,7 @@ public final class FormFieldImpl implements FormField {
 	}
 
 	private final FieldType _fieldType;
+	private final Form _form;
 	private final String _name;
 	private final boolean _required;
 

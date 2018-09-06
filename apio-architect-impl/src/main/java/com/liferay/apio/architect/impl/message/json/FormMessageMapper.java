@@ -56,6 +56,19 @@ public interface FormMessageMapper extends MessageMapper<Form> {
 	}
 
 	/**
+	 * Maps a form field to its JSON object representation.
+	 *
+	 * @param  jsonObjectBuilder the JSON object builder for the form
+	 * @param  formField a form's field
+	 * @param  nestedJsonObjectBuilder a nested form
+	 * @review
+	 */
+	public default void mapFormField(
+		JSONObjectBuilder jsonObjectBuilder, FormField formField,
+		JSONObjectBuilder nestedJsonObjectBuilder) {
+	}
+
+	/**
 	 * Maps the {@code Form} title to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the form

@@ -55,28 +55,7 @@ public class FormWriter {
 	 * @return the JSON representation of the {@code Form}
 	 */
 	public String write() {
-		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
-
-		String url = createFormURL(_requestInfo.getApplicationURL(), _form);
-
-		_formMessageMapper.mapFormURL(jsonObjectBuilder, url);
-
-		String title = _form.getTitle(_requestInfo.getAcceptLanguage());
-
-		_formMessageMapper.mapFormTitle(jsonObjectBuilder, title);
-
-		String description = _form.getDescription(
-			_requestInfo.getAcceptLanguage());
-
-		_formMessageMapper.mapFormDescription(jsonObjectBuilder, description);
-
-		List<FormField> formFields = _form.getFormFields();
-
-		formFields.forEach(
-			formField -> _formMessageMapper.mapFormField(
-				jsonObjectBuilder, formField));
-
-		_formMessageMapper.onFinish(jsonObjectBuilder, _form);
+		JSONObjectBuilder jsonObjectBuilder = _writeForm();
 
 		return jsonObjectBuilder.build();
 	}
@@ -152,6 +131,64 @@ public class FormWriter {
 		private FormMessageMapper _formMessageMapper;
 		private RequestInfo _requestInfo;
 
+	}
+
+	private FormWriter _getFormWriter(Form form) {
+		return create(
+			builder -> builder.form(
+				form
+			).formMessageMapper(
+				_formMessageMapper
+			).requestInfo(
+				_requestInfo
+			).build());
+	}
+
+	private void _mapNestedForm(
+		JSONObjectBuilder jsonObjectBuilder, FormField formField, Form form) {
+
+		FormWriter formWriter = _getFormWriter(form);
+
+		JSONObjectBuilder nestedJsonObjectBuilder = formWriter._writeForm();
+
+		_formMessageMapper.mapFormField(
+			jsonObjectBuilder, formField, nestedJsonObjectBuilder);
+	}
+
+	private JSONObjectBuilder _writeForm() {
+		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
+
+		String url = createFormURL(_requestInfo.getApplicationURL(), _form);
+
+		_formMessageMapper.mapFormURL(jsonObjectBuilder, url);
+
+		String title = _form.getTitle(_requestInfo.getAcceptLanguage());
+
+		_formMessageMapper.mapFormTitle(jsonObjectBuilder, title);
+
+		String description = _form.getDescription(
+			_requestInfo.getAcceptLanguage());
+
+		_formMessageMapper.mapFormDescription(jsonObjectBuilder, description);
+
+		List<FormField> formFields = _form.getFormFields();
+
+		formFields.forEach(
+			formField -> {
+				Form form = formField.getForm();
+
+				if (form == null) {
+					_formMessageMapper.mapFormField(
+						jsonObjectBuilder, formField);
+				}
+				else {
+					_mapNestedForm(jsonObjectBuilder, formField, form);
+				}
+			});
+
+		_formMessageMapper.onFinish(jsonObjectBuilder, _form);
+
+		return jsonObjectBuilder;
 	}
 
 	private final Form<?> _form;
