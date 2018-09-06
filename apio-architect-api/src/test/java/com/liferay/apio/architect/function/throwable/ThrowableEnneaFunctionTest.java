@@ -30,11 +30,11 @@ public class ThrowableEnneaFunctionTest {
 
 		ThrowableEnneaFunction
 			<String, String, String, String, String, String,
-				String, String, String, String> throwableEnneaFunction = (
-					string1, string2, string3, string4, string5, string6,
-					string7, string8, string9) ->
-						string1 + string2 + string3 + string4 + string5 +
-							string6 + string7 + string8 + string9;
+			String, String, String, String> throwableEnneaFunction = (
+				string1, string2, string3, string4, string5, string6,
+				string7, string8, string9) ->
+					string1 + string2 + string3 + string4 + string5 + string6 +
+						string7 + string8 + string9;
 
 		ThrowableFunction<String, String> throwableFunction =
 			string -> string + "prosper";
@@ -52,11 +52,11 @@ public class ThrowableEnneaFunctionTest {
 	public void testOnInvokingAndThenWithNullAfterFunctionThrowsException() {
 		ThrowableEnneaFunction
 			<String, String, String, String, String, String,
-				String, String, String, String> throwableEnneaFunction = (
-					string1, string2, string3, string4, string5, string6,
-					string7, string8, string9) ->
-						string1 + string2 + string3 + string4 + string5 +
-							string6 + string7 + string8 + string9;
+			String, String, String, String> throwableEnneaFunction = (
+				string1, string2, string3, string4, string5, string6,
+				string7, string8, string9) ->
+					string1 + string2 + string3 + string4 + string5 + string6 +
+						string7 + string8 + string9;
 
 		throwableEnneaFunction.andThen(null);
 	}
