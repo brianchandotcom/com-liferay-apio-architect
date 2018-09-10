@@ -350,7 +350,7 @@ public class FormTest {
 	private static Form<Map<String, Object>> _mapForm(
 		Function
 			<Builder.FieldStep<Map<String, Object>>,
-				Builder.FieldStep<Map<String, Object>>> function) {
+			Builder.FieldStep<Map<String, Object>>> function) {
 
 		Builder<Map<String, Object>> builder = new BuilderImpl<>(
 			Collections.emptyList(), __ -> null);
