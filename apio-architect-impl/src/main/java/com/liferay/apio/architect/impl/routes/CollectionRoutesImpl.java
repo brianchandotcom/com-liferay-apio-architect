@@ -790,34 +790,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return null;
 		}
 
-		private Optional<Form<T>> _getFormOptional(
-			FormBuilderFunction<T> formBuilderFunction, String name) {
-
-			if (formBuilderFunction == null) {
-				return Optional.empty();
-			}
-			else {
-				Form<T> form = formBuilderFunction.apply(
-					new FormImpl.BuilderImpl<>(
-						Arrays.asList("p", _name, name),
-						_pathToIdentifierFunction));
-
-				return Optional.of(form);
-			}
-		}
-
 		private <R> R _getModel(CustomRoute customRoute, Body body) {
 			Optional<Form<?>> form = customRoute.getForm();
 
 			return (R)form.map(
-				f -> f.get(body)
-			).orElse(
-				null
-			);
-		}
-
-		private T _getModel(Optional<Form<T>> form, Body body) {
-			return form.map(
 				f -> f.get(body)
 			).orElse(
 				null
