@@ -10,6 +10,7 @@ Import-Package:\
 	\
 	*
 -conditionalpackage:\
+	com.liferay.osgi.service.tracker.collections.internal.*,\
 	com.liferay.apio.architect.impl.alias,\
 	com.liferay.apio.architect.impl.alias.form,\
 	com.liferay.apio.architect.impl.date,\
