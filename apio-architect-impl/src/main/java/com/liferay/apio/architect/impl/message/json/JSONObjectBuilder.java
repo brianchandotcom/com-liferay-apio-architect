@@ -604,14 +604,12 @@ public class JSONObjectBuilder {
 
 	}
 
-	private static final ObjectMapper _OBJECT_MAPPER;
-
-	static {
-		_OBJECT_MAPPER = new ObjectMapper();
-
-		_OBJECT_MAPPER.configure(SORT_PROPERTIES_ALPHABETICALLY, true);
-		_OBJECT_MAPPER.enable(INDENT_OUTPUT);
-	}
+	private static final ObjectMapper _OBJECT_MAPPER = new ObjectMapper() {
+		{
+			_OBJECT_MAPPER.configure(SORT_PROPERTIES_ALPHABETICALLY, true);
+			_OBJECT_MAPPER.enable(INDENT_OUTPUT);
+		}
+	};
 
 	private final ObjectNode _objectNode;
 
