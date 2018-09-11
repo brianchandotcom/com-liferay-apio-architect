@@ -10,7 +10,6 @@ Import-Package:\
 	\
 	*
 -conditionalpackage:\
-	com.liferay.osgi.service.tracker.collections.internal.*,\
 	com.liferay.apio.architect.impl.alias,\
 	com.liferay.apio.architect.impl.alias.form,\
 	com.liferay.apio.architect.impl.date,\
@@ -46,4 +45,6 @@ Import-Package:\
 	com.liferay.apio.architect.impl.wiring.osgi.util,\
 	com.liferay.apio.architect.impl.wiring.osgi.validator,\
 	com.liferay.apio.architect.impl.writer,\
-	com.liferay.apio.architect.impl.writer.util
+	com.liferay.apio.architect.impl.writer.util,\
+	com.liferay.osgi.service.tracker.collections.internal,\
+	com.liferay.osgi.service.tracker.collections.internal.map
