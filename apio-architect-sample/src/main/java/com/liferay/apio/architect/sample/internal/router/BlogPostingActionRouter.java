@@ -53,7 +53,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true)
 public class BlogPostingActionRouter {
 
-	public BlogPosting addBlogPosting(
+	public BlogPosting create(
 		BlogPosting blogPosting, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
@@ -67,7 +67,7 @@ public class BlogPostingActionRouter {
 		return toBlogPosting(blogPostingModel);
 	}
 
-	public void deleteBlogPosting(long id, Credentials credentials) {
+	public void remove(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -75,7 +75,25 @@ public class BlogPostingActionRouter {
 		_blogPostingModelService.remove(id);
 	}
 
-	public BlogPosting getBlogPosting(long id) {
+	public BlogPosting replace(
+		long id, BlogPosting blogPosting, Credentials credentials) {
+
+		if (!hasPermission(credentials)) {
+			throw new ForbiddenException();
+		}
+
+		Optional<BlogPostingModel> optional = _blogPostingModelService.update(
+			id, blogPosting.getArticleBody(), blogPosting.getCreator(),
+			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline());
+
+		return optional.map(
+			BlogPostingConverter::toBlogPosting
+		).orElseThrow(
+			() -> new NotFoundException("Unable to get blog posting " + id)
+		);
+	}
+
+	public BlogPosting retrieve(long id) {
 		Optional<BlogPostingModel> optional = _blogPostingModelService.get(id);
 
 		return optional.map(
@@ -85,7 +103,7 @@ public class BlogPostingActionRouter {
 		);
 	}
 
-	public PageItems<BlogPosting> getPageItems(Pagination pagination) {
+	public PageItems<BlogPosting> retrievePage(Pagination pagination) {
 		List<BlogPostingModel> blogPostingModels =
 			_blogPostingModelService.getPage(
 				pagination.getStartPosition(), pagination.getEndPosition());
@@ -125,24 +143,6 @@ public class BlogPostingActionRouter {
 
 	public BlogSubscription subscribePage(BlogSubscription blogSubscription) {
 		return subscribe(blogSubscription.getBlog(), blogSubscription);
-	}
-
-	public BlogPosting updateBlogPostingModel(
-		long id, BlogPosting blogPosting, Credentials credentials) {
-
-		if (!hasPermission(credentials)) {
-			throw new ForbiddenException();
-		}
-
-		Optional<BlogPostingModel> optional = _blogPostingModelService.update(
-			id, blogPosting.getArticleBody(), blogPosting.getCreator(),
-			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline());
-
-		return optional.map(
-			BlogPostingConverter::toBlogPosting
-		).orElseThrow(
-			() -> new NotFoundException("Unable to get blog posting " + id)
-		);
 	}
 
 	@Reference

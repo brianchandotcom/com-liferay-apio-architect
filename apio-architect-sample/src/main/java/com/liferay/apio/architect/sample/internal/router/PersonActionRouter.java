@@ -47,7 +47,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true)
 public class PersonActionRouter {
 
-	public Person addPerson(Person person, Credentials credentials) {
+	public Person create(Person person, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -67,7 +67,7 @@ public class PersonActionRouter {
 		return toPerson(personModel);
 	}
 
-	public void deletePerson(long id, Credentials credentials) {
+	public void remove(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -75,35 +75,7 @@ public class PersonActionRouter {
 		_personModelService.remove(id);
 	}
 
-	public PageItems<Person> getPageItems(Pagination pagination) {
-		List<PersonModel> personModels = _personModelService.getPage(
-			pagination.getStartPosition(), pagination.getEndPosition());
-		int count = _personModelService.getCount();
-
-		Stream<PersonModel> stream = personModels.stream();
-
-		List<Person> persons = stream.map(
-			PersonConverter::toPerson
-		).collect(
-			Collectors.toList()
-		);
-
-		return new PageItems<>(persons, count);
-	}
-
-	public Person getPerson(long id) {
-		Optional<PersonModel> optional = _personModelService.get(id);
-
-		return optional.map(
-			PersonConverter::toPerson
-		).orElseThrow(
-			() -> new NotFoundException("Unable to get person " + id)
-		);
-	}
-
-	public Person updatePerson(
-		long id, Person person, Credentials credentials) {
-
+	public Person replace(long id, Person person, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -125,6 +97,32 @@ public class PersonActionRouter {
 		).orElseThrow(
 			() -> new NotFoundException("Unable to get person " + id)
 		);
+	}
+
+	public Person retrieve(long id) {
+		Optional<PersonModel> optional = _personModelService.get(id);
+
+		return optional.map(
+			PersonConverter::toPerson
+		).orElseThrow(
+			() -> new NotFoundException("Unable to get person " + id)
+		);
+	}
+
+	public PageItems<Person> retrieveCollection(Pagination pagination) {
+		List<PersonModel> personModels = _personModelService.getPage(
+			pagination.getStartPosition(), pagination.getEndPosition());
+		int count = _personModelService.getCount();
+
+		Stream<PersonModel> stream = personModels.stream();
+
+		List<Person> persons = stream.map(
+			PersonConverter::toPerson
+		).collect(
+			Collectors.toList()
+		);
+
+		return new PageItems<>(persons, count);
 	}
 
 	@Reference

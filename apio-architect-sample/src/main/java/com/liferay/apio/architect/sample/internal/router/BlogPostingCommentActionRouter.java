@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true)
 public class BlogPostingCommentActionRouter {
 
-	public Comment addBlogPostingComment(
+	public Comment create(
 		Long blogPostingModelId, Comment comment, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
@@ -60,7 +60,7 @@ public class BlogPostingCommentActionRouter {
 		return toComment(blogPostingCommentModel);
 	}
 
-	public void deleteBlogPostingComment(long id, Credentials credentials) {
+	public void remove(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -68,7 +68,26 @@ public class BlogPostingCommentActionRouter {
 		_blogPostingCommentModelService.remove(id);
 	}
 
-	public Comment getBlogPostingComment(long id) {
+	public Comment replace(
+		long id, Comment blogPostingComment, Credentials credentials) {
+
+		if (!hasPermission(credentials)) {
+			throw new ForbiddenException();
+		}
+
+		Optional<BlogPostingCommentModel> optional =
+			_blogPostingCommentModelService.update(
+				id, blogPostingComment.getText());
+
+		return optional.map(
+			CommentConverter::toComment
+		).orElseThrow(
+			() -> new NotFoundException(
+				"Unable to get blog posting comment " + id)
+		);
+	}
+
+	public Comment retrieve(long id) {
 		Optional<BlogPostingCommentModel> optional =
 			_blogPostingCommentModelService.get(id);
 
@@ -80,7 +99,7 @@ public class BlogPostingCommentActionRouter {
 		);
 	}
 
-	public PageItems<Comment> getPageItems(
+	public PageItems<Comment> retrievePage(
 		Pagination pagination, Long blogPostingModelId) {
 
 		List<BlogPostingCommentModel> blogPostingCommentModels =
@@ -100,25 +119,6 @@ public class BlogPostingCommentActionRouter {
 		);
 
 		return new PageItems<>(blogPostingComments, count);
-	}
-
-	public Comment updateBlogPostingComment(
-		long id, Comment blogPostingComment, Credentials credentials) {
-
-		if (!hasPermission(credentials)) {
-			throw new ForbiddenException();
-		}
-
-		Optional<BlogPostingCommentModel> optional =
-			_blogPostingCommentModelService.update(
-				id, blogPostingComment.getText());
-
-		return optional.map(
-			CommentConverter::toComment
-		).orElseThrow(
-			() -> new NotFoundException(
-				"Unable to get blog posting comment " + id)
-		);
 	}
 
 	@Reference
