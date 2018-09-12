@@ -46,10 +46,10 @@ public class BlogPostingForm {
 			BlogPostingForm::new
 		).addOptionalNestedModel(
 			"comment", BlogPostingCommentCreatorForm::buildForm,
-			BlogPostingForm::_setComment
+			BlogPostingForm::_setBlogPostingCommentCreatorForm
 		).addOptionalNestedModelList(
 			"comments", BlogPostingCommentCreatorForm::buildForm,
-			BlogPostingForm::_setComments
+			BlogPostingForm::_setBlogPostingCommentCreatorForms
 		).addRequiredLinkedModel(
 			"creator", PersonIdentifier.class, BlogPostingForm::_setCreator
 		).addRequiredString(
@@ -79,12 +79,14 @@ public class BlogPostingForm {
 		return _articleBody;
 	}
 
-	public BlogPostingCommentCreatorForm getComment() {
-		return _comment;
+	public BlogPostingCommentCreatorForm getBlogPostingCommentCreatorForm() {
+		return _blogPostingCommentCreatorForm;
 	}
 
-	public List<BlogPostingCommentCreatorForm> getComments() {
-		return _comments;
+	public List<BlogPostingCommentCreatorForm>
+		getBlogPostingCommentCreatorForms() {
+
+		return _blogPostingCommentCreatorForms;
 	}
 
 	/**
@@ -113,12 +115,16 @@ public class BlogPostingForm {
 		_articleBody = articleBody;
 	}
 
-	private void _setComment(BlogPostingCommentCreatorForm comment) {
-		_comment = comment;
+	private void _setBlogPostingCommentCreatorForm(
+		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm) {
+
+		_blogPostingCommentCreatorForm = blogPostingCommentCreatorForm;
 	}
 
-	private void _setComments(List<BlogPostingCommentCreatorForm> comments) {
-		_comments = comments;
+	private void _setBlogPostingCommentCreatorForms(
+		List<BlogPostingCommentCreatorForm> blogPostingCommentCreatorForms) {
+
+		_blogPostingCommentCreatorForms = blogPostingCommentCreatorForms;
 	}
 
 	private void _setCreator(Long creator) {
@@ -131,8 +137,9 @@ public class BlogPostingForm {
 
 	private String _alternativeHeadline;
 	private String _articleBody;
-	private BlogPostingCommentCreatorForm _comment;
-	private List<BlogPostingCommentCreatorForm> _comments = new ArrayList<>();
+	private BlogPostingCommentCreatorForm _blogPostingCommentCreatorForm;
+	private List<BlogPostingCommentCreatorForm>
+		_blogPostingCommentCreatorForms = new ArrayList<>();
 	private Long _creator;
 	private String _headline;
 

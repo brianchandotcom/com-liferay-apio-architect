@@ -163,21 +163,28 @@ public class BlogPostingCollectionResource
 			blogPostingForm.getAlternativeHeadline(),
 			blogPostingForm.getHeadline());
 
-		BlogPostingCommentCreatorForm newComment = blogPostingForm.getComment();
+		BlogPostingCommentCreatorForm newBlogPostingCommentCreatorForm =
+			blogPostingForm.getBlogPostingCommentCreatorForm();
 
-		if ((newComment != null) && (newComment.getAuthor() != null)) {
+		if ((newBlogPostingCommentCreatorForm != null) &&
+			(newBlogPostingCommentCreatorForm.getAuthor() != null)) {
+
 			BlogPostingCommentModel.create(
-				newComment.getAuthor(), blogPostingModel.getId(),
-				newComment.getText());
+				newBlogPostingCommentCreatorForm.getAuthor(),
+				blogPostingModel.getId(),
+				newBlogPostingCommentCreatorForm.getText());
 		}
 
-		List<BlogPostingCommentCreatorForm> comments =
-			blogPostingForm.getComments();
+		List<BlogPostingCommentCreatorForm> blogPostingCommentCreatorForms =
+			blogPostingForm.getBlogPostingCommentCreatorForms();
 
-		for (BlogPostingCommentCreatorForm comment : comments) {
+		for (BlogPostingCommentCreatorForm blogPostingCommentCreatorForm :
+				blogPostingCommentCreatorForms) {
+
 			BlogPostingCommentModel.create(
-				comment.getAuthor(), blogPostingModel.getId(),
-				comment.getText());
+				blogPostingCommentCreatorForm.getAuthor(),
+				blogPostingModel.getId(),
+				blogPostingCommentCreatorForm.getText());
 		}
 
 		return blogPostingModel;
