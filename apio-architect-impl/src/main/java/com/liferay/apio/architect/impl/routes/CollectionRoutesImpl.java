@@ -792,9 +792,9 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		private <R> R _getModel(CustomRoute customRoute, Body body) {
-			Optional<Form<?>> form = customRoute.getFormOptional();
+			Optional<Form<?>> formOptional = customRoute.getFormOptional();
 
-			return (R)form.map(
+			return (R)formOptional.map(
 				f -> f.get(body)
 			).orElse(
 				null
