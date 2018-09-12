@@ -38,17 +38,17 @@ public class BatchCreateOperation implements Operation {
 	}
 
 	public BatchCreateOperation(
-		Form form, String resourceName, String uri, String custom) {
+		Form form, String resourceName, String uri, String customRoute) {
 
 		_form = form;
 		_resourceName = resourceName;
 		_uri = uri;
-		_custom = custom;
+		_customRoute = customRoute;
 	}
 
 	@Override
 	public String getCustomRoute() {
-		return _custom;
+		return _customRoute;
 	}
 
 	@Override
@@ -78,14 +78,14 @@ public class BatchCreateOperation implements Operation {
 
 	@Override
 	public boolean isCustom() {
-		if (_custom != null) {
+		if (_customRoute != null) {
 			return true;
 		}
 
 		return false;
 	}
 
-	private final String _custom;
+	private final String _customRoute;
 	private final Form _form;
 	private final String _resourceName;
 	private final String _uri;
