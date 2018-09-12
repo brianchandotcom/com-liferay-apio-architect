@@ -147,7 +147,7 @@ public class CustomOperationsEndpoint<T, S, R> {
 				if ((customRoute != null) &&
 					method.equals(customRoute.getMethod())) {
 
-					return routes.getCustomPageFunctions();
+					return routes.getCustomPageFunctionsOptional();
 				}
 
 				return Optional.empty();

@@ -27,7 +27,7 @@ import java.util.Optional;
  */
 public abstract class CustomRoute {
 
-	public Optional<Form<?>> getForm() {
+	public Optional<Form<?>> getFormOptional() {
 		return Optional.ofNullable(_form);
 	}
 

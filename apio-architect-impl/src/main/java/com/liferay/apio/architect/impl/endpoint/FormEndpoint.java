@@ -90,7 +90,7 @@ public class FormEndpoint {
 			stringCustomRouteMap -> stringCustomRouteMap.get(nestedName)
 		).flatMap(
 			customRoute -> Try.fromOptional(
-				customRoute::getForm, notFound(name, nestedName))
+				customRoute::getFormOptional, notFound(name, nestedName))
 		);
 	}
 

@@ -45,7 +45,7 @@ public class UpdateOperation implements Operation {
 	}
 
 	@Override
-	public String getCustom() {
+	public String getCustomRoute() {
 		return _custom;
 	}
 

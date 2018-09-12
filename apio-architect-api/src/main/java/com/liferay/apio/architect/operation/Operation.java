@@ -29,12 +29,12 @@ import java.util.Optional;
 public interface Operation {
 
 	/**
-	 * Returns the custom part of the operation
+	 * Returns the custom route of the operation
 	 *
-	 * @return the custom part of the operation
+	 * @return the custom route of the operation
 	 * @review
 	 */
-	public String getCustom();
+	public String getCustomRoute();
 
 	/**
 	 * Returns this operation's expected form, if present; returns {@code

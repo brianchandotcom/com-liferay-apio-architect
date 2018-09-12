@@ -162,7 +162,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						t -> new SingleModelImpl<>(
 							t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(customRoute.getForm(), body)
+						s, _getModel(customRoute.getFormOptional(), body)
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -202,7 +202,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						t -> new SingleModelImpl<>(
 							t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(customRoute.getForm(), body), a, b, c, d
+						s, _getModel(customRoute.getFormOptional(), body), a, b,
+						c, d
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -240,7 +241,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						t -> new SingleModelImpl<>(
 							t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(customRoute.getForm(), body), a, b, c
+						s, _getModel(customRoute.getFormOptional(), body), a, b,
+						c
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -275,7 +277,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						t -> new SingleModelImpl<>(
 							t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(customRoute.getForm(), body), a, b
+						s, _getModel(customRoute.getFormOptional(), body), a, b
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -308,7 +310,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						t -> new SingleModelImpl<>(
 							t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(customRoute.getForm(), body), a
+						s, _getModel(customRoute.getFormOptional(), body), a
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -770,7 +772,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				routeEntry -> {
 					CustomRoute customRoute = _customRoutes.get(routeEntry);
 
-					Optional<Form<?>> formOptional = customRoute.getForm();
+					Optional<Form<?>> formOptional =
+						customRoute.getFormOptional();
 
 					Form form = formOptional.orElse(
 						null

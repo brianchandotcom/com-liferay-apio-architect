@@ -93,7 +93,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 	@Override
 	public Optional<Map<String, CustomPageFunction<?>>>
-		getCustomPageFunctions() {
+		getCustomPageFunctionsOptional() {
 
 		return Optional.of(_customPageFunctions);
 	}
@@ -755,7 +755,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				routeEntry -> {
 					CustomRoute customRoute = _customRoutes.get(routeEntry);
 
-					Optional<Form<?>> formOptional = customRoute.getForm();
+					Optional<Form<?>> formOptional =
+						customRoute.getFormOptional();
 
 					Form form = formOptional.orElse(null);
 
@@ -791,7 +792,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		private <R> R _getModel(CustomRoute customRoute, Body body) {
-			Optional<Form<?>> form = customRoute.getForm();
+			Optional<Form<?>> form = customRoute.getFormOptional();
 
 			return (R)form.map(
 				f -> f.get(body)

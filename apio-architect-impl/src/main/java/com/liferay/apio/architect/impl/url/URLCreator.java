@@ -248,7 +248,7 @@ public final class URLCreator {
 		sb.append("c/");
 		sb.append(uri);
 		sb.append("/");
-		sb.append(operation.getCustom());
+		sb.append(operation.getCustomRoute());
 
 		return sb.toString();
 	}

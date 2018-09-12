@@ -187,7 +187,7 @@ public class URLCreatorTest {
 		Operation operation = new Operation() {
 
 			@Override
-			public String getCustom() {
+			public String getCustomRoute() {
 				return null;
 			}
 

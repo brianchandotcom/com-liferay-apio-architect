@@ -64,7 +64,7 @@ public class ItemCustomRoutesImplTest {
 
 		Optional<Map<String, CustomItemFunction<?, Long>>>
 			customItemFunctionsOptional =
-				collectionRoutes.getCustomItemFunctions();
+				collectionRoutes.getCustomItemFunctionsOptional();
 
 		assertThat(customItemFunctionsOptional, is(not(emptyOptional())));
 
@@ -219,7 +219,7 @@ public class ItemCustomRoutesImplTest {
 		).map(
 			stringCustomRouteMap -> stringCustomRouteMap.get(_CUSTOM_ROUTE_NAME)
 		).flatMap(
-			CustomRoute::getForm
+			CustomRoute::getFormOptional
 		).map(
 			form -> {
 				assertThat(form.getId(), is("p/name/" + _CUSTOM_ROUTE_NAME));
@@ -233,7 +233,7 @@ public class ItemCustomRoutesImplTest {
 		assertThat(map.get("key"), is(valueOptional.get()));
 
 		SingleModel singleModel = collectionRoutesOptional.flatMap(
-			ItemRoutes::getCustomItemFunctions
+			ItemRoutes::getCustomItemFunctionsOptional
 		).map(
 			stringCustomPageFunctionMap ->
 				stringCustomPageFunctionMap.get(_CUSTOM_ROUTE_NAME)
