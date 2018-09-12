@@ -15,17 +15,22 @@
 package com.liferay.apio.architect.sample.internal.resource;
 
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
+import static com.liferay.apio.architect.sample.internal.converter.CommentConverter.toComment;
 
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.sample.internal.converter.CommentConverter;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingCommentModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentUpdaterForm;
+import com.liferay.apio.architect.sample.internal.type.Comment;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
@@ -43,7 +48,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true)
 public class BlogPostingCommentNestedCollectionResource {
 
-	public BlogPostingCommentModel addBlogPostingComment(
+	public Comment addBlogPostingComment(
 		Long blogPostingModelId,
 		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm,
 		Credentials credentials) {
@@ -52,9 +57,12 @@ public class BlogPostingCommentNestedCollectionResource {
 			throw new ForbiddenException();
 		}
 
-		return _blogPostingCommentModelService.create(
-			blogPostingCommentCreatorForm.getAuthor(), blogPostingModelId,
-			blogPostingCommentCreatorForm.getText());
+		BlogPostingCommentModel blogPostingCommentModel =
+			_blogPostingCommentModelService.create(
+				blogPostingCommentCreatorForm.getAuthor(), blogPostingModelId,
+				blogPostingCommentCreatorForm.getText());
+
+		return toComment(blogPostingCommentModel);
 	}
 
 	public void deleteBlogPostingComment(long id, Credentials credentials) {
@@ -65,16 +73,19 @@ public class BlogPostingCommentNestedCollectionResource {
 		_blogPostingCommentModelService.remove(id);
 	}
 
-	public BlogPostingCommentModel getBlogPostingComment(long id) {
+	public Comment getBlogPostingComment(long id) {
 		Optional<BlogPostingCommentModel> optional =
 			_blogPostingCommentModelService.get(id);
 
-		return optional.orElseThrow(
+		return optional.map(
+			CommentConverter::toComment
+		).orElseThrow(
 			() -> new NotFoundException(
-				"Unable to get blog posting comment " + id));
+				"Unable to get blog posting comment " + id)
+		);
 	}
 
-	public PageItems<BlogPostingCommentModel> getPageItems(
+	public PageItems<Comment> getPageItems(
 		Pagination pagination, Long blogPostingModelId) {
 
 		List<BlogPostingCommentModel> blogPostingCommentModels =
@@ -84,10 +95,19 @@ public class BlogPostingCommentNestedCollectionResource {
 		int count = _blogPostingCommentModelService.getCount(
 			blogPostingModelId);
 
-		return new PageItems<>(blogPostingCommentModels, count);
+		Stream<BlogPostingCommentModel> stream =
+			blogPostingCommentModels.stream();
+
+		List<Comment> blogPostingComments = stream.map(
+			CommentConverter::toComment
+		).collect(
+			Collectors.toList()
+		);
+
+		return new PageItems<>(blogPostingComments, count);
 	}
 
-	public BlogPostingCommentModel updateBlogPostingComment(
+	public Comment updateBlogPostingComment(
 		long id, BlogPostingCommentUpdaterForm blogPostingCommentUpdaterForm,
 		Credentials credentials) {
 
@@ -99,9 +119,12 @@ public class BlogPostingCommentNestedCollectionResource {
 			_blogPostingCommentModelService.update(
 				id, blogPostingCommentUpdaterForm.getText());
 
-		return optional.orElseThrow(
+		return optional.map(
+			CommentConverter::toComment
+		).orElseThrow(
 			() -> new NotFoundException(
-				"Unable to get blog posting comment " + id));
+				"Unable to get blog posting comment " + id)
+		);
 	}
 
 	@Reference

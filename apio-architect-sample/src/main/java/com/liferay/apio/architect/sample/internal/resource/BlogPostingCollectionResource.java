@@ -15,10 +15,13 @@
 package com.liferay.apio.architect.sample.internal.resource;
 
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
+import static com.liferay.apio.architect.sample.internal.converter.BlogPostingConverter.toBlogPosting;
+import static com.liferay.apio.architect.sample.internal.converter.BlogSubscriptionConverter.toBlogSubscription;
 
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.sample.internal.converter.BlogPostingConverter;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingModelService;
 import com.liferay.apio.architect.sample.internal.dao.BlogSubscriptionModelService;
 import com.liferay.apio.architect.sample.internal.dao.PersonModelService;
@@ -27,9 +30,13 @@ import com.liferay.apio.architect.sample.internal.dto.BlogSubscriptionModel;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingForm;
 import com.liferay.apio.architect.sample.internal.form.BlogSubscriptionForm;
+import com.liferay.apio.architect.sample.internal.type.BlogPosting;
+import com.liferay.apio.architect.sample.internal.type.BlogSubscription;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ForbiddenException;
@@ -49,20 +56,22 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true)
 public class BlogPostingCollectionResource {
 
-	public BlogPostingModel addBlogPostingModel(
+	public BlogPosting addBlogPosting(
 		BlogPostingForm blogPostingForm, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
 
-		return _blogPostingModelService.create(
+		BlogPostingModel blogPostingModel = _blogPostingModelService.create(
 			blogPostingForm.getArticleBody(), blogPostingForm.getCreator(),
 			blogPostingForm.getAlternativeHeadline(),
 			blogPostingForm.getHeadline());
+
+		return toBlogPosting(blogPostingModel);
 	}
 
-	public void deleteBlogPostingModel(long id, Credentials credentials) {
+	public void deleteBlogPosting(long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -70,23 +79,34 @@ public class BlogPostingCollectionResource {
 		_blogPostingModelService.remove(id);
 	}
 
-	public BlogPostingModel getBlogPostingModel(long id) {
+	public BlogPosting getBlogPosting(long id) {
 		Optional<BlogPostingModel> optional = _blogPostingModelService.get(id);
 
-		return optional.orElseThrow(
-			() -> new NotFoundException("Unable to get blog posting " + id));
+		return optional.map(
+			BlogPostingConverter::toBlogPosting
+		).orElseThrow(
+			() -> new NotFoundException("Unable to get blog posting " + id)
+		);
 	}
 
-	public PageItems<BlogPostingModel> getPageItems(Pagination pagination) {
+	public PageItems<BlogPosting> getPageItems(Pagination pagination) {
 		List<BlogPostingModel> blogPostingModels =
 			_blogPostingModelService.getPage(
 				pagination.getStartPosition(), pagination.getEndPosition());
 		int count = _blogPostingModelService.getCount();
 
-		return new PageItems<>(blogPostingModels, count);
+		Stream<BlogPostingModel> stream = blogPostingModels.stream();
+
+		List<BlogPosting> blogPostings = stream.map(
+			BlogPostingConverter::toBlogPosting
+		).collect(
+			Collectors.toList()
+		);
+
+		return new PageItems<>(blogPostings, count);
 	}
 
-	public BlogSubscriptionModel subscribe(
+	public BlogSubscription subscribe(
 		Long blogId, BlogSubscriptionForm blogSubscriptionForm) {
 
 		Optional<PersonModel> personModelOptional = _personModelService.get(
@@ -95,15 +115,20 @@ public class BlogPostingCollectionResource {
 		Optional<BlogPostingModel> blogPostingModelOptional =
 			_blogPostingModelService.get(blogId);
 
-		if (personModelOptional.isPresent()) {
-			return _blogSubscriptionModelService.create(
-				blogPostingModelOptional.get(), personModelOptional.get());
+		if (personModelOptional.isPresent() &&
+			blogPostingModelOptional.isPresent()) {
+
+			BlogSubscriptionModel blogSubscriptionModel =
+				_blogSubscriptionModelService.create(
+					blogPostingModelOptional.get(), personModelOptional.get());
+
+			return toBlogSubscription(blogSubscriptionModel);
 		}
 
 		throw new BadRequestException();
 	}
 
-	public BlogSubscriptionModel subscribePage(
+	public BlogSubscription subscribePage(
 		BlogSubscriptionForm blogSubscriptionForm) {
 
 		Optional<PersonModel> personModelOptional = _personModelService.get(
@@ -117,14 +142,17 @@ public class BlogPostingCollectionResource {
 		if (personModelOptional.isPresent() &&
 			blogPostingModelOptional.isPresent()) {
 
-			return _blogSubscriptionModelService.create(
-				blogPostingModelOptional.get(), personModelOptional.get());
+			BlogSubscriptionModel blogSubscriptionModel =
+				_blogSubscriptionModelService.create(
+					blogPostingModelOptional.get(), personModelOptional.get());
+
+			return toBlogSubscription(blogSubscriptionModel);
 		}
 
 		throw new BadRequestException();
 	}
 
-	public BlogPostingModel updateBlogPostingModel(
+	public BlogPosting updateBlogPostingModel(
 		long id, BlogPostingForm blogPostingForm, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
@@ -136,8 +164,11 @@ public class BlogPostingCollectionResource {
 			blogPostingForm.getAlternativeHeadline(),
 			blogPostingForm.getHeadline());
 
-		return optional.orElseThrow(
-			() -> new NotFoundException("Unable to get blog posting " + id));
+		return optional.map(
+			BlogPostingConverter::toBlogPosting
+		).orElseThrow(
+			() -> new NotFoundException("Unable to get blog posting " + id)
+		);
 	}
 
 	@Reference
