@@ -795,7 +795,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			Optional<Form<?>> formOptional = customRoute.getFormOptional();
 
 			return (R)formOptional.map(
-				f -> f.get(body)
+				whatdoesfmean -> whatdoesfmean.get(body)
 			).orElse(
 				null
 			);
