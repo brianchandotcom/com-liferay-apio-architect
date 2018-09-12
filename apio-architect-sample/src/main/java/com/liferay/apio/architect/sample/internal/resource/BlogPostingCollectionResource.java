@@ -199,15 +199,15 @@ public class BlogPostingCollectionResource
 	private BlogSubscriptionModel _subscribe(
 		Long blogId, BlogSubscriptionForm blogSubscriptionForm) {
 
-		Optional<PersonModel> personModel = PersonModel.get(
+		Optional<PersonModel> personModelOptional = PersonModel.get(
 			blogSubscriptionForm.getPerson());
 
-		Optional<BlogPostingModel> blogPostingModel = BlogPostingModel.get(
-			blogId);
+		Optional<BlogPostingModel> blogPostingModelOptional =
+			BlogPostingModel.get(blogId);
 
-		if (personModel.isPresent()) {
+		if (personModelOptional.isPresent()) {
 			return BlogSubscriptionModel.create(
-				blogPostingModel.get(), personModel.get());
+				blogPostingModelOptional.get(), personModelOptional.get());
 		}
 
 		throw new BadRequestException();
@@ -216,17 +216,19 @@ public class BlogPostingCollectionResource
 	private BlogSubscriptionModel _subscribePage(
 		Pagination pagination, BlogSubscriptionForm blogSubscriptionForm) {
 
-		Optional<PersonModel> personModel = PersonModel.get(
+		Optional<PersonModel> personModelOptional = PersonModel.get(
 			blogSubscriptionForm.getPerson());
 
 		Optional<Long> blog = blogSubscriptionForm.getBlog();
 
-		Optional<BlogPostingModel> blogPostingModel = blog.flatMap(
+		Optional<BlogPostingModel> blogPostingModelOptional = blog.flatMap(
 			BlogPostingModel::get);
 
-		if (personModel.isPresent() && blogPostingModel.isPresent()) {
+		if (personModelOptional.isPresent() &&
+			blogPostingModelOptional.isPresent()) {
+
 			return BlogSubscriptionModel.create(
-				blogPostingModel.get(), personModel.get());
+				blogPostingModelOptional.get(), personModelOptional.get());
 		}
 
 		throw new BadRequestException();

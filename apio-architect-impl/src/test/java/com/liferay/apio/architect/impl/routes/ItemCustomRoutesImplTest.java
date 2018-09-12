@@ -62,13 +62,14 @@ public class ItemCustomRoutesImplTest {
 		ItemRoutes<Map<String, Object>, Long> collectionRoutes =
 			_builder.build();
 
-		Optional<Map<String, CustomItemFunction<?, Long>>> customRouteFunction =
-			collectionRoutes.getCustomItemFunctions();
+		Optional<Map<String, CustomItemFunction<?, Long>>>
+			customItemFunctionsOptional =
+				collectionRoutes.getCustomItemFunctions();
 
-		assertThat(customRouteFunction, is(not(emptyOptional())));
+		assertThat(customItemFunctionsOptional, is(not(emptyOptional())));
 
 		Map<String, CustomItemFunction<?, Long>> customRouteFunctions =
-			customRouteFunction.get();
+			customItemFunctionsOptional.get();
 
 		assertThat(customRouteFunctions, is(anEmptyMap()));
 

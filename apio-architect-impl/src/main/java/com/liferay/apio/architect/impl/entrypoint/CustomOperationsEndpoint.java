@@ -176,7 +176,7 @@ public class CustomOperationsEndpoint<T, S, R> {
 				CustomRoute customRoute = customRoutes.get(operation);
 
 				if (method.equals(customRoute.getMethod())) {
-					return routes.getCustomItemFunctions();
+					return routes.getCustomItemFunctionsOptional();
 				}
 
 				return Optional.empty();

@@ -84,7 +84,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 	@Override
 	public Optional<Map<String, CustomItemFunction<?, S>>>
-		getCustomItemFunctions() {
+		getCustomItemFunctionsOptional() {
 
 		return Optional.of(_customItemFunctions);
 	}

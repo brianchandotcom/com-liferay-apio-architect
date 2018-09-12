@@ -72,7 +72,7 @@ public interface ItemRoutes<T, S> {
 	 * @review
 	 */
 	public Optional<Map<String, CustomItemFunction<?, S>>>
-		getCustomItemFunctions();
+		getCustomItemFunctionsOptional();
 
 	/**
 	 * Returns the custom routes configured based on their paths

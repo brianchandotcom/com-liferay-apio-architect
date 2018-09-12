@@ -63,13 +63,14 @@ public class CollectionCustomRoutesImplTest {
 		CollectionRoutes<Map<String, Object>, ?> collectionRoutes =
 			_builder.build();
 
-		Optional<Map<String, CustomPageFunction<?>>> customRouteFunction =
-			collectionRoutes.getCustomPageFunctions();
+		Optional<Map<String, CustomPageFunction<?>>>
+			customPageFunctionsOptional =
+				collectionRoutes.getCustomPageFunctions();
 
-		assertThat(customRouteFunction, is(not(emptyOptional())));
+		assertThat(customPageFunctionsOptional, is(not(emptyOptional())));
 
 		Map<String, CustomPageFunction<?>> customRouteFunctions =
-			customRouteFunction.get();
+			customPageFunctionsOptional.get();
 
 		assertThat(customRouteFunctions, is(anEmptyMap()));
 
