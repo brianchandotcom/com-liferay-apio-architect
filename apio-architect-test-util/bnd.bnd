@@ -15,7 +15,6 @@ Import-Package:\
 	com.liferay.apio.architect.impl.date,\
 	com.liferay.apio.architect.impl.documentation,\
 	com.liferay.apio.architect.impl.documentation.contributor,\
-	com.liferay.apio.architect.impl.endpoint,\
 	com.liferay.apio.architect.impl.entrypoint,\
 	com.liferay.apio.architect.impl.form,\
 	com.liferay.apio.architect.impl.list,\
