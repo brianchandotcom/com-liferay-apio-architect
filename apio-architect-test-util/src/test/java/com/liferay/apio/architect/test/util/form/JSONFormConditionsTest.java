@@ -39,11 +39,12 @@ public class JSONFormConditionsTest {
 	public void testRetrievingAListReturnsTheJsonValue() throws IOException {
 		Body body = _createBody("{\"list\":[\"value\"]}");
 
-		Optional<List<String>> key = body.getValueListOptional("list");
+		Optional<List<String>> valueListOptional = body.getValueListOptional(
+			"list");
 
-		assertThat(key.isPresent(), is(true));
+		assertThat(valueListOptional.isPresent(), is(true));
 
-		String value = key.get().get(0);
+		String value = valueListOptional.get().get(0);
 
 		assertThat(value, is("value"));
 	}
@@ -63,10 +64,11 @@ public class JSONFormConditionsTest {
 
 		Body nestedBody = bodies.get(0);
 
-		Optional<String> nestedKey = nestedBody.getValueOptional("nestedKey");
+		Optional<String> valueOptional = nestedBody.getValueOptional(
+			"nestedKey");
 
-		assertThat(nestedKey.isPresent(), is(true));
-		assertThat(nestedKey.get(), is("true"));
+		assertThat(valueOptional.isPresent(), is(true));
+		assertThat(valueOptional.get(), is("true"));
 	}
 
 	@Test
@@ -79,28 +81,29 @@ public class JSONFormConditionsTest {
 
 		assertThat(nestedBodyOptional.isPresent(), is(true));
 
-		Body body1 = nestedBodyOptional.get();
+		Body nestedBody = nestedBodyOptional.get();
 
-		Optional<String> nestedKey = body1.getValueOptional("nestedKey");
+		Optional<String> valueOptional = nestedBody.getValueOptional(
+			"nestedKey");
 
-		assertThat(nestedKey.isPresent(), is(true));
-		assertThat(nestedKey.get(), is("true"));
+		assertThat(valueOptional.isPresent(), is(true));
+		assertThat(valueOptional.get(), is("true"));
 	}
 
 	@Test
 	public void testRetrievingAValueReturnsTheJsonValue() throws IOException {
 		Body body = _createBody("{\"key\":true}");
 
-		Optional<String> key = body.getValueOptional("key");
+		Optional<String> valueOptional = body.getValueOptional("key");
 
-		assertThat(key.isPresent(), is(true));
-		assertThat(key.get(), is("true"));
+		assertThat(valueOptional.isPresent(), is(true));
+		assertThat(valueOptional.get(), is("true"));
 	}
 
 	private Body _createBody(String s) throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper objectMapper = new ObjectMapper();
 
-		JsonNode jsonNode = mapper.readTree(s);
+		JsonNode jsonNode = objectMapper.readTree(s);
 
 		return new JSONBodyImpl(jsonNode);
 	}
