@@ -26,14 +26,12 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
-import com.liferay.apio.architect.sample.internal.form.BlogPostingCommentCreatorForm;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingForm;
 import com.liferay.apio.architect.sample.internal.form.BlogSubscriptionForm;
 import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentIdentifier;
 import com.liferay.apio.architect.sample.internal.identifier.BlogPostingIdentifier;
 import com.liferay.apio.architect.sample.internal.identifier.BlogSubscriptionIdentifier;
 import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
-import com.liferay.apio.architect.sample.internal.model.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingModel;
 import com.liferay.apio.architect.sample.internal.model.BlogSubscriptionModel;
 import com.liferay.apio.architect.sample.internal.model.PersonModel;
@@ -158,36 +156,10 @@ public class BlogPostingCollectionResource
 			throw new ForbiddenException();
 		}
 
-		BlogPostingModel blogPostingModel = BlogPostingModel.create(
+		return BlogPostingModel.create(
 			blogPostingForm.getArticleBody(), blogPostingForm.getCreator(),
 			blogPostingForm.getAlternativeHeadline(),
 			blogPostingForm.getHeadline());
-
-		BlogPostingCommentCreatorForm newBlogPostingCommentCreatorForm =
-			blogPostingForm.getBlogPostingCommentCreatorForm();
-
-		if ((newBlogPostingCommentCreatorForm != null) &&
-			(newBlogPostingCommentCreatorForm.getAuthor() != null)) {
-
-			BlogPostingCommentModel.create(
-				newBlogPostingCommentCreatorForm.getAuthor(),
-				blogPostingModel.getId(),
-				newBlogPostingCommentCreatorForm.getText());
-		}
-
-		List<BlogPostingCommentCreatorForm> blogPostingCommentCreatorForms =
-			blogPostingForm.getBlogPostingCommentCreatorForms();
-
-		for (BlogPostingCommentCreatorForm blogPostingCommentCreatorForm :
-				blogPostingCommentCreatorForms) {
-
-			BlogPostingCommentModel.create(
-				blogPostingCommentCreatorForm.getAuthor(),
-				blogPostingModel.getId(),
-				blogPostingCommentCreatorForm.getText());
-		}
-
-		return blogPostingModel;
 	}
 
 	private void _deleteBlogPostingModel(long id, Credentials credentials) {

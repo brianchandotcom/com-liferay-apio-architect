@@ -18,9 +18,6 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.Form.Builder;
 import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Represents the values extracted from a blog posting form.
  *
@@ -44,12 +41,6 @@ public class BlogPostingForm {
 			__ -> "This form can be used to create or update a blog posting"
 		).constructor(
 			BlogPostingForm::new
-		).addOptionalNestedModel(
-			"comment", BlogPostingCommentCreatorForm::buildForm,
-			BlogPostingForm::_setBlogPostingCommentCreatorForm
-		).addOptionalNestedModelList(
-			"comments", BlogPostingCommentCreatorForm::buildForm,
-			BlogPostingForm::_setBlogPostingCommentCreatorForms
 		).addRequiredLinkedModel(
 			"creator", PersonIdentifier.class, BlogPostingForm::_setCreator
 		).addRequiredString(
@@ -79,16 +70,6 @@ public class BlogPostingForm {
 		return _articleBody;
 	}
 
-	public BlogPostingCommentCreatorForm getBlogPostingCommentCreatorForm() {
-		return _blogPostingCommentCreatorForm;
-	}
-
-	public List<BlogPostingCommentCreatorForm>
-		getBlogPostingCommentCreatorForms() {
-
-		return _blogPostingCommentCreatorForms;
-	}
-
 	/**
 	 * Returns the blog posting's creator ID.
 	 *
@@ -115,18 +96,6 @@ public class BlogPostingForm {
 		_articleBody = articleBody;
 	}
 
-	private void _setBlogPostingCommentCreatorForm(
-		BlogPostingCommentCreatorForm blogPostingCommentCreatorForm) {
-
-		_blogPostingCommentCreatorForm = blogPostingCommentCreatorForm;
-	}
-
-	private void _setBlogPostingCommentCreatorForms(
-		List<BlogPostingCommentCreatorForm> blogPostingCommentCreatorForms) {
-
-		_blogPostingCommentCreatorForms = blogPostingCommentCreatorForms;
-	}
-
 	private void _setCreator(Long creator) {
 		_creator = creator;
 	}
@@ -137,9 +106,6 @@ public class BlogPostingForm {
 
 	private String _alternativeHeadline;
 	private String _articleBody;
-	private BlogPostingCommentCreatorForm _blogPostingCommentCreatorForm;
-	private List<BlogPostingCommentCreatorForm>
-		_blogPostingCommentCreatorForms = new ArrayList<>();
 	private Long _creator;
 	private String _headline;
 
