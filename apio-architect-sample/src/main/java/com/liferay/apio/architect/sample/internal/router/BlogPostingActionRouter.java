@@ -17,6 +17,7 @@ package com.liferay.apio.architect.sample.internal.router;
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.BlogPostingConverter.toBlogPosting;
 import static com.liferay.apio.architect.sample.internal.converter.BlogSubscriptionConverter.toBlogSubscription;
+import static com.liferay.apio.architect.sample.internal.converter.ReviewConverter.toReviewModels;
 
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -62,7 +63,8 @@ public class BlogPostingActionRouter {
 
 		BlogPostingModel blogPostingModel = _blogPostingModelService.create(
 			blogPosting.getArticleBody(), blogPosting.getCreator(),
-			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline());
+			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline(),
+			toReviewModels(blogPosting.getReviews()));
 
 		return toBlogPosting(blogPostingModel);
 	}
@@ -84,7 +86,8 @@ public class BlogPostingActionRouter {
 
 		Optional<BlogPostingModel> optional = _blogPostingModelService.update(
 			id, blogPosting.getArticleBody(), blogPosting.getCreator(),
-			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline());
+			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline(),
+			toReviewModels(blogPosting.getReviews()));
 
 		return optional.map(
 			BlogPostingConverter::toBlogPosting

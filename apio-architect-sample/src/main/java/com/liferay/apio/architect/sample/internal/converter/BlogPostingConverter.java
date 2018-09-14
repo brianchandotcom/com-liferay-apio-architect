@@ -86,7 +86,7 @@ public class BlogPostingConverter {
 			}
 
 			@Override
-			public List<Review> getReview() {
+			public List<Review> getReviews() {
 				List<ReviewModel> reviewModels =
 					blogPostingModel.getReviewModels();
 
@@ -118,7 +118,7 @@ public class BlogPostingConverter {
 			}
 
 			@Override
-			public Number getRatingValue() {
+			public Long getRatingValue() {
 				return ratingModel.getValue();
 			}
 

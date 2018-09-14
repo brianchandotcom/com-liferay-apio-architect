@@ -50,7 +50,7 @@ public interface Rating {
 	 * @see    <a href="https://schema.org/ratingValue">ratingValue</a>
 	 * @review
 	 */
-	public Number getRatingValue();
+	public Long getRatingValue();
 
 	/**
 	 * Returns the rating's worst possible value.

@@ -49,7 +49,7 @@ public class BlogPostingConverterTest {
 		assertThat(blogPosting.getHeadline(), is("title"));
 		assertThat(blogPosting.getId(), is(42L));
 
-		List<Review> reviews = blogPosting.getReview();
+		List<Review> reviews = blogPosting.getReviews();
 
 		assertThat(reviews, hasSize(2));
 

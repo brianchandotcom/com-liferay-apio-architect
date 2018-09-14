@@ -107,6 +107,6 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/review">review</a>
 	 * @review
 	 */
-	public List<Review> getReview();
+	public List<Review> getReviews();
 
 }

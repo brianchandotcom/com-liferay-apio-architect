@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.sample.internal.dto;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -38,15 +37,6 @@ public class BlogPostingModel {
 		_reviewModels = reviewModels;
 		_subtitle = subtitle;
 		_title = title;
-	}
-
-	public BlogPostingModel(
-		long id, String content, Date createDate, long creatorId,
-		Date modifiedDate, String subtitle, String title) {
-
-		this(
-			id, content, createDate, creatorId, modifiedDate,
-			Collections.emptyList(), subtitle, title);
 	}
 
 	/**

@@ -100,14 +100,16 @@ public class BlogPostingModelService {
 	 * @param  creatorId the ID of the blog posting's creator
 	 * @param  subtitle the blog posting's subtitle
 	 * @param  title the blog posting's title
+	 * @param  reviewModels the blog posting's reviews
 	 * @return the new blog posting
 	 */
 	public BlogPostingModel create(
-		String content, long creatorId, String subtitle, String title) {
+		String content, long creatorId, String subtitle, String title,
+		List<ReviewModel> reviewModels) {
 
 		BlogPostingModel blogPostingModel = new BlogPostingModel(
-			_count.get(), content, new Date(), creatorId, new Date(), subtitle,
-			title);
+			_count.get(), content, new Date(), creatorId, new Date(),
+			reviewModels, subtitle, title);
 
 		_blogPostings.put(_count.getAndIncrement(), blogPostingModel);
 
@@ -174,12 +176,13 @@ public class BlogPostingModelService {
 	 * @param  creatorId the ID of the user updating the blog posting
 	 * @param  subtitle the blog posting's new subtitle
 	 * @param  title the blog posting's new title
+	 * @param  reviewModels the blog posting's reviews
 	 * @return the updated blog posting, if present; {@code Optional#empty()}
 	 *         otherwise
 	 */
 	public Optional<BlogPostingModel> update(
-		long id, String content, long creatorId, String subtitle,
-		String title) {
+		long id, String content, long creatorId, String subtitle, String title,
+		List<ReviewModel> reviewModels) {
 
 		BlogPostingModel blogPostingModel = _blogPostings.get(id);
 
@@ -190,7 +193,8 @@ public class BlogPostingModelService {
 		Date createDate = blogPostingModel.getCreateDate();
 
 		blogPostingModel = new BlogPostingModel(
-			id, content, createDate, creatorId, new Date(), subtitle, title);
+			id, content, createDate, creatorId, new Date(), reviewModels,
+			subtitle, title);
 
 		_blogPostings.put(id, blogPostingModel);
 
