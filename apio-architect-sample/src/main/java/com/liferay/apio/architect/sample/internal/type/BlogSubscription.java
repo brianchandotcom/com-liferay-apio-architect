@@ -34,14 +34,6 @@ public interface BlogSubscription extends Identifier<Long> {
 	public Long getBlog();
 
 	/**
-	 * Returns the blog's title.
-	 *
-	 * @return the blog's title
-	 * @review
-	 */
-	public String getBlogTitle();
-
-	/**
 	 * Returns the subscription's ID.
 	 *
 	 * @return the subscription's ID
@@ -56,13 +48,5 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * @review
 	 */
 	public Long getPerson();
-
-	/**
-	 * Returns the person's name.
-	 *
-	 * @return the person's name
-	 * @review
-	 */
-	public String getPersonFullName();
 
 }

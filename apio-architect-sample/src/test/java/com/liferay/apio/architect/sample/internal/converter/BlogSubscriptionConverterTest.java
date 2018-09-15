@@ -39,9 +39,9 @@ public class BlogSubscriptionConverterTest {
 		BlogSubscription blogSubscription = toBlogSubscription(
 			blogSubscriptionModel);
 
-		assertThat(blogSubscription.getBlogTitle(), is("title"));
+		assertThat(blogSubscription.getBlog(), is(42L));
 		assertThat(blogSubscription.getId(), is(21L));
-		assertThat(blogSubscription.getPersonFullName(), is("Given Family"));
+		assertThat(blogSubscription.getPerson(), is(84L));
 	}
 
 }

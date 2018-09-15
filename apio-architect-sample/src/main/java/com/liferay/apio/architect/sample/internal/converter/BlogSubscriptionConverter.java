@@ -42,15 +42,10 @@ public class BlogSubscriptionConverter {
 
 			@Override
 			public Long getBlog() {
-				throw new UnsupportedOperationException();
-			}
-
-			@Override
-			public String getBlogTitle() {
 				BlogPostingModel blogPostingModel =
 					blogSubscriptionModel.getBlogPostingModel();
 
-				return blogPostingModel.getTitle();
+				return blogPostingModel.getId();
 			}
 
 			@Override
@@ -60,15 +55,10 @@ public class BlogSubscriptionConverter {
 
 			@Override
 			public Long getPerson() {
-				throw new UnsupportedOperationException();
-			}
-
-			@Override
-			public String getPersonFullName() {
 				PersonModel personModel =
 					blogSubscriptionModel.getPersonModel();
 
-				return personModel.getFullName();
+				return personModel.getId();
 			}
 
 		};

@@ -143,11 +143,7 @@ public class BlogPostingActionRouter {
 
 		return toBlogSubscription(blogSubscriptionModel);
 	}
-
-	public BlogSubscription subscribePage(BlogSubscription blogSubscription) {
-		return subscribe(blogSubscription.getBlog(), blogSubscription);
-	}
-
+	
 	@Reference
 	private BlogPostingModelService _blogPostingModelService;
 
