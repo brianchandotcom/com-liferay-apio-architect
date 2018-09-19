@@ -14,6 +14,13 @@
 
 package com.liferay.apio.architect.annotations;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 /**
  * This annotation provides namespace for action annotations. Use one of the
  * nested annotations.
@@ -23,4 +30,73 @@ package com.liferay.apio.architect.annotations;
  */
 public @interface Actions {
 
+	/**
+	 * Indicates that a method performs a generic action.
+	 *
+	 * <p>
+	 * The annotation can also be used on another annotations for creating alias
+	 * for semantic operations (see {@link Retrieve}).
+	 * </p>
+	 *
+	 * <p>
+	 * If used on a method, it must live inside a class implementing {@link
+	 * com.liferay.apio.architect.router.ActionRouter}.
+	 * </p>
+	 *
+	 * <p>
+	 * Annotation has attributes for setting the name for the action as well as
+	 * indicating the HTTP verb that must be used to execute this action.
+	 * </p>
+	 *
+	 * <p>
+	 * If the action is meant to be added on a root collection the method in
+	 * which the annotation is applied should not include an argument annotated
+	 * with {@link Id}.
+	 * </p>
+	 *
+	 * <p>
+	 * If the action is meant to be added on a nested collection the method in
+	 * which the annotation is applied must include an argument annotated with
+	 * {@link ParentId} with the type of the parent's ID.
+	 * </p>
+	 *
+	 * <p>
+	 * If the action is meant to be added on an individual item the method in
+	 * which the annotation is applied must include an argument annotated with
+	 * {@link Id} with the type of the resource's ID.
+	 * </p>
+	 *
+	 * <p>
+	 * If one of the action parameters represent information obtained from the
+	 * HTTP request body, that parameter must be annotated with {@link Body}.
+	 * </p>
+	 *
+	 * <p>
+	 * The rest of the action parameters will be provided from the request using
+	 * the appropriate {@link com.liferay.apio.architect.provider.Provider}.
+	 * </p>
+	 *
+	 * @review
+	 */
+	@Retention(RUNTIME)
+	@Target({METHOD, ANNOTATION_TYPE})
+	public @interface Action {
+
+		/**
+		 * Returns the HTTP method for executing this action.
+		 *
+		 * @return the HTTP method for executing this action
+		 * @review
+		 */
+		public String httpMethod();
+
+		/**
+		 * Returns the name of the action.
+		 *
+		 * @return the name of the action
+		 * @review
+		 */
+		public String name();
+
+	}
 }
