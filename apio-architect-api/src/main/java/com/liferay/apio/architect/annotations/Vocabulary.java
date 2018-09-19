@@ -137,6 +137,30 @@ public @interface Vocabulary {
 	}
 
 	/**
+	 * Indicates that a type has a link to another resource's page.
+	 *
+	 * <p>
+	 * Annotation has an attribute to indicate the type of the resource being
+	 * linked to.
+	 * </p>
+	 *
+	 * @review
+	 */
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface RelatedCollection {
+
+		/**
+		 * Returns the class of the resource being linked to.
+		 *
+		 * @return the class of the resource being linked to
+		 * @review
+		 */
+		public Class<? extends Identifier<?>> value();
+
+	}
+
+	/**
 	 * Provides information about a type. This annotation should always be used
 	 * on an interface.
 	 *
