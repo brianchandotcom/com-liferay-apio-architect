@@ -16,7 +16,7 @@ package com.liferay.apio.architect.sample.internal.form;
 
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.Form.Builder;
-import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
+import com.liferay.apio.architect.sample.internal.type.Person;
 
 /**
  * Represents the values extracted from a blog posting form.
@@ -42,7 +42,7 @@ public class BlogPostingForm {
 		).constructor(
 			BlogPostingForm::new
 		).addRequiredLinkedModel(
-			"creator", PersonIdentifier.class, BlogPostingForm::_setCreator
+			"creator", Person.class, BlogPostingForm::_setCreator
 		).addRequiredString(
 			"articleBody", BlogPostingForm::_setArticleBody
 		).addRequiredString(

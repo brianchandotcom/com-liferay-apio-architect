@@ -25,9 +25,9 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
 import com.liferay.apio.architect.sample.internal.form.PersonForm;
-import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
 import com.liferay.apio.architect.sample.internal.model.PersonModel;
 import com.liferay.apio.architect.sample.internal.model.PostalAddressModel;
+import com.liferay.apio.architect.sample.internal.type.Person;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(service = CollectionResource.class)
 public class PersonCollectionResource
-	implements CollectionResource<PersonModel, Long, PersonIdentifier> {
+	implements CollectionResource<PersonModel, Long, Person> {
 
 	@Override
 	public CollectionRoutes<PersonModel, Long> collectionRoutes(

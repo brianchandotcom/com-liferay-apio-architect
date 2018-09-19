@@ -28,15 +28,15 @@ import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
 import com.liferay.apio.architect.sample.internal.form.BlogPostingForm;
 import com.liferay.apio.architect.sample.internal.form.BlogSubscriptionForm;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingCommentIdentifier;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingIdentifier;
-import com.liferay.apio.architect.sample.internal.identifier.BlogSubscriptionIdentifier;
-import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingModel;
 import com.liferay.apio.architect.sample.internal.model.BlogSubscriptionModel;
 import com.liferay.apio.architect.sample.internal.model.PersonModel;
 import com.liferay.apio.architect.sample.internal.model.RatingModel;
 import com.liferay.apio.architect.sample.internal.model.ReviewModel;
+import com.liferay.apio.architect.sample.internal.type.BlogPosting;
+import com.liferay.apio.architect.sample.internal.type.BlogSubscription;
+import com.liferay.apio.architect.sample.internal.type.Comment;
+import com.liferay.apio.architect.sample.internal.type.Person;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,8 +57,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(service = CollectionResource.class)
 public class BlogPostingCollectionResource
-	implements CollectionResource
-		<BlogPostingModel, Long, BlogPostingIdentifier> {
+	implements CollectionResource<BlogPostingModel, Long, BlogPosting> {
 
 	@Override
 	public CollectionRoutes<BlogPostingModel, Long> collectionRoutes(
@@ -67,9 +66,8 @@ public class BlogPostingCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCustomRoute(
-			_getSubscribeRoute(), this::_subscribePage,
-			BlogSubscriptionIdentifier.class, PermissionChecker::hasPermission,
-			BlogSubscriptionForm::buildForm
+			_getSubscribeRoute(), this::_subscribePage, BlogSubscription.class,
+			PermissionChecker::hasPermission, BlogSubscriptionForm::buildForm
 		).addCreator(
 			this::_addBlogPostingModel, Credentials.class,
 			PermissionChecker::hasPermission, BlogPostingForm::buildForm
@@ -88,8 +86,7 @@ public class BlogPostingCollectionResource
 		return builder.addGetter(
 			this::_getBlogPostingModel
 		).addCustomRoute(
-			_getSubscribeRoute(), this::_subscribe,
-			BlogSubscriptionIdentifier.class,
+			_getSubscribeRoute(), this::_subscribe, BlogSubscription.class,
 			(credentials, blogId) -> hasPermission(credentials),
 			BlogSubscriptionForm::buildForm
 		).addRemover(
@@ -115,7 +112,7 @@ public class BlogPostingCollectionResource
 		).addDate(
 			"dateModified", BlogPostingModel::getModifiedDate
 		).addLinkedModel(
-			"creator", PersonIdentifier.class, BlogPostingModel::getCreatorId
+			"creator", Person.class, BlogPostingModel::getCreatorId
 		).addNestedList(
 			"review", BlogPostingModel::getReviewModels,
 			reviewBuilder -> reviewBuilder.types(
@@ -127,7 +124,7 @@ public class BlogPostingCollectionResource
 				ratingBuilder -> ratingBuilder.types(
 					"Rating"
 				).addLinkedModel(
-					"author", PersonIdentifier.class, RatingModel::getAuthorId
+					"author", Person.class, RatingModel::getAuthorId
 				).addNumber(
 					"bestRating", __ -> 5
 				).addNumber(
@@ -137,7 +134,7 @@ public class BlogPostingCollectionResource
 				).build()
 			).build()
 		).addRelatedCollection(
-			"comment", BlogPostingCommentIdentifier.class
+			"comment", Comment.class
 		).addString(
 			"alternativeHeadline", BlogPostingModel::getSubtitle
 		).addString(

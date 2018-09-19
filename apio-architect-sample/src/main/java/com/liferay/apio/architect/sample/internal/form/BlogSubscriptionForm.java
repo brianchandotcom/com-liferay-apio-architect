@@ -16,8 +16,8 @@ package com.liferay.apio.architect.sample.internal.form;
 
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.Form.Builder;
-import com.liferay.apio.architect.sample.internal.identifier.BlogPostingIdentifier;
-import com.liferay.apio.architect.sample.internal.identifier.PersonIdentifier;
+import com.liferay.apio.architect.sample.internal.type.BlogPosting;
+import com.liferay.apio.architect.sample.internal.type.Person;
 
 import java.util.Optional;
 
@@ -48,10 +48,9 @@ public class BlogSubscriptionForm {
 		).constructor(
 			BlogSubscriptionForm::new
 		).addOptionalLinkedModel(
-			"blogPosting", BlogPostingIdentifier.class,
-			BlogSubscriptionForm::setBlog
+			"blogPosting", BlogPosting.class, BlogSubscriptionForm::setBlog
 		).addRequiredLinkedModel(
-			"person", PersonIdentifier.class, BlogSubscriptionForm::setPerson
+			"person", Person.class, BlogSubscriptionForm::setPerson
 		).build();
 	}
 

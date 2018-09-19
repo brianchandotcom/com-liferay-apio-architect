@@ -16,10 +16,10 @@ package com.liferay.apio.architect.sample.internal.resource;
 
 import com.liferay.apio.architect.representor.Representable;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.sample.internal.identifier.BlogSubscriptionIdentifier;
 import com.liferay.apio.architect.sample.internal.model.BlogPostingModel;
 import com.liferay.apio.architect.sample.internal.model.BlogSubscriptionModel;
 import com.liferay.apio.architect.sample.internal.model.PersonModel;
+import com.liferay.apio.architect.sample.internal.type.BlogSubscription;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -30,8 +30,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(service = Representable.class)
 public class BlogSubscriptionRepresentable
-	implements
-		Representable<BlogSubscriptionModel, Long, BlogSubscriptionIdentifier> {
+	implements Representable<BlogSubscriptionModel, Long, BlogSubscription> {
 
 	@Override
 	public String getName() {
