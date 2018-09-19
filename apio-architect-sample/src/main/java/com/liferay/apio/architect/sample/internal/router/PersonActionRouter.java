@@ -51,7 +51,9 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component(
+	immediate = true, service = {ActionRouter.class, PersonActionRouter.class}
+)
 public class PersonActionRouter implements ActionRouter<Person> {
 
 	@Create
