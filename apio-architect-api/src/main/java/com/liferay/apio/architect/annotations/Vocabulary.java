@@ -18,6 +18,8 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import com.liferay.apio.architect.identifier.Identifier;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -105,6 +107,32 @@ public @interface Vocabulary {
 		 * @review
 		 */
 		public boolean writeOnly() default false;
+
+	}
+
+	/**
+	 * Indicates that a field should be expressed as a link to another resource.
+	 * For this to be possible, the method must provide information about
+	 * another resource's ID.
+	 *
+	 * <p>
+	 * Annotation has an attribute to indicate the type of the resource being
+	 * linked to.
+	 * </p>
+	 *
+	 * @review
+	 */
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface LinkedModel {
+
+		/**
+		 * Returns the class of the resource being linked to.
+		 *
+		 * @return the class of the resource being linked to
+		 * @review
+		 */
+		public Class<? extends Identifier<?>> value();
 
 	}
 
