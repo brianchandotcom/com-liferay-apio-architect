@@ -99,4 +99,31 @@ public @interface Actions {
 		public String name();
 
 	}
+
+	/**
+	 * Indicates that a method performs the action of retrieving elements.
+	 *
+	 * <p>
+	 * The annotation can be used on methods for retrieving single resources
+	 * (types annotated with {@link Vocabulary.Type}, {@link java.util.List},
+	 * or, for paginated resources, {@link
+	 * com.liferay.apio.architect.pagination.PageItems}. In the latter case, the
+	 * method must contain a {@link
+	 * com.liferay.apio.architect.pagination.Pagination} parameter that must be
+	 * used to create the {@code PageItems} instance.
+	 * </p>
+	 *
+	 * <p>
+	 * This annotation must be used on a method that lives inside a class
+	 * implementing {@link com.liferay.apio.architect.router.ActionRouter}.
+	 * </p>
+	 *
+	 * @review
+	 */
+	@Action(httpMethod = "GET", name = "retrieve")
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface Retrieve {
+	}
+
 }
