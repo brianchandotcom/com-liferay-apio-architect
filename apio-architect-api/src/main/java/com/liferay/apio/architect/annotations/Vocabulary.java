@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.annotations;
 
+import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -27,6 +28,85 @@ import java.lang.annotation.Target;
  * @author Alejandro Hernández
  */
 public @interface Vocabulary {
+
+	/**
+	 * Provides information about a field. This annotation should always be used
+	 * on an interface method.
+	 *
+	 * <p>
+	 * Annotation has attributes to customize the schema URL (<a
+	 * href="https://schema.org">schema.org</a> by default) and the description
+	 * of the field (in the case the field is a custom one).
+	 * </p>
+	 *
+	 * @review
+	 */
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface Field {
+		/**
+		 * Returns the field description, if it is a custom one. Returns empty
+		 * string otherwise.
+		 *
+		 * @return the field description, if it is a custom one; empty string
+		 *         otherwise
+		 * @review
+		 */
+		public String description() default "";
+
+		/**
+		 * Returns {@code true} if a field should only be used when representing
+		 * the type.
+		 *
+		 * <p>
+		 * If this attribute is {@code true}, it will be ignored when
+		 * instantiating the interface out of the HTTP request body.
+		 * </p>
+		 *
+		 * <p>
+		 * Opposite attribute to {@link #writeOnly()} ()}.
+		 * </p>
+		 *
+		 * @see    #writeOnly()
+		 * @review
+		 */
+		public boolean readOnly() default false;
+
+		/**
+		 * Returns the field's schema URL
+		 *
+		 * @return the field's schema URL
+		 * @review
+		 */
+		public String schemaURL() default "https://www.schema.org/";
+
+		/**
+		 * Returns the field's name
+		 *
+		 * @return the field's name
+		 * @review
+		 */
+		public String value();
+
+		/**
+		 * Returns {@code true} if a field should only be used when
+		 * instantiating the interface out of the HTTP request body.
+		 *
+		 * <p>
+		 * If this attribute is {@code true}, it will be ignored when
+		 * representing the type in any format.
+		 * </p>
+		 *
+		 * <p>
+		 * Opposite attribute to {@link #readOnly()}.
+		 * </p>
+		 *
+		 * @see    #readOnly()
+		 * @review
+		 */
+		public boolean writeOnly() default false;
+
+	}
 
 	/**
 	 * Provides information about a type. This annotation should always be used
