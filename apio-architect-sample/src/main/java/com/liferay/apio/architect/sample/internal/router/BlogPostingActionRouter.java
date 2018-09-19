@@ -19,9 +19,19 @@ import static com.liferay.apio.architect.sample.internal.converter.BlogPostingCo
 import static com.liferay.apio.architect.sample.internal.converter.BlogSubscriptionConverter.toBlogSubscription;
 import static com.liferay.apio.architect.sample.internal.converter.ReviewConverter.toReviewModels;
 
+import static javax.ws.rs.HttpMethod.PUT;
+
+import com.liferay.apio.architect.annotations.Actions.Action;
+import com.liferay.apio.architect.annotations.Actions.Create;
+import com.liferay.apio.architect.annotations.Actions.Remove;
+import com.liferay.apio.architect.annotations.Actions.Replace;
+import com.liferay.apio.architect.annotations.Actions.Retrieve;
+import com.liferay.apio.architect.annotations.Body;
+import com.liferay.apio.architect.annotations.Id;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.router.ActionRouter;
 import com.liferay.apio.architect.sample.internal.converter.BlogPostingConverter;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingModelService;
 import com.liferay.apio.architect.sample.internal.dao.BlogSubscriptionModelService;
@@ -52,10 +62,11 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class BlogPostingActionRouter {
+public class BlogPostingActionRouter implements ActionRouter<BlogPosting> {
 
+	@Create
 	public BlogPosting create(
-		BlogPosting blogPosting, Credentials credentials) {
+		@Body BlogPosting blogPosting, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
@@ -69,7 +80,8 @@ public class BlogPostingActionRouter {
 		return toBlogPosting(blogPostingModel);
 	}
 
-	public void remove(long id, Credentials credentials) {
+	@Remove
+	public void remove(@Id long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -77,8 +89,9 @@ public class BlogPostingActionRouter {
 		_blogPostingModelService.remove(id);
 	}
 
+	@Replace
 	public BlogPosting replace(
-		long id, BlogPosting blogPosting, Credentials credentials) {
+		@Id long id, @Body BlogPosting blogPosting, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
@@ -96,7 +109,8 @@ public class BlogPostingActionRouter {
 		);
 	}
 
-	public BlogPosting retrieve(long id) {
+	@Retrieve
+	public BlogPosting retrieve(@Id long id) {
 		Optional<BlogPostingModel> optional = _blogPostingModelService.get(id);
 
 		return optional.map(
@@ -106,6 +120,7 @@ public class BlogPostingActionRouter {
 		);
 	}
 
+	@Retrieve
 	public PageItems<BlogPosting> retrievePage(Pagination pagination) {
 		List<BlogPostingModel> blogPostingModels =
 			_blogPostingModelService.getPage(
@@ -123,8 +138,9 @@ public class BlogPostingActionRouter {
 		return new PageItems<>(blogPostings, count);
 	}
 
+	@Action(httpMethod = PUT, name = "subscribe")
 	public BlogSubscription subscribe(
-		Long blogId, BlogSubscription blogSubscription) {
+		@Id long id, @Body BlogSubscription blogSubscription) {
 
 		Optional<PersonModel> personModelOptional = _personModelService.get(
 			blogSubscription.getPerson());
@@ -133,7 +149,7 @@ public class BlogPostingActionRouter {
 			NotFoundException::new);
 
 		Optional<BlogPostingModel> blogPostingModelOptional =
-			_blogPostingModelService.get(blogId);
+			_blogPostingModelService.get(id);
 
 		BlogPostingModel blogPostingModel =
 			blogPostingModelOptional.orElseThrow(NotFoundException::new);
@@ -143,7 +159,7 @@ public class BlogPostingActionRouter {
 
 		return toBlogSubscription(blogSubscriptionModel);
 	}
-	
+
 	@Reference
 	private BlogPostingModelService _blogPostingModelService;
 

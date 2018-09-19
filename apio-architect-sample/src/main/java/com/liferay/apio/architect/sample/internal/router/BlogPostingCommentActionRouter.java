@@ -17,12 +17,21 @@ package com.liferay.apio.architect.sample.internal.router;
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.CommentConverter.toComment;
 
+import com.liferay.apio.architect.annotations.Actions.Create;
+import com.liferay.apio.architect.annotations.Actions.Remove;
+import com.liferay.apio.architect.annotations.Actions.Replace;
+import com.liferay.apio.architect.annotations.Actions.Retrieve;
+import com.liferay.apio.architect.annotations.Body;
+import com.liferay.apio.architect.annotations.Id;
+import com.liferay.apio.architect.annotations.ParentId;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.router.ActionRouter;
 import com.liferay.apio.architect.sample.internal.converter.CommentConverter;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingCommentModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
+import com.liferay.apio.architect.sample.internal.type.BlogPosting;
 import com.liferay.apio.architect.sample.internal.type.Comment;
 
 import java.util.List;
@@ -44,10 +53,12 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class BlogPostingCommentActionRouter {
+public class BlogPostingCommentActionRouter implements ActionRouter<Comment> {
 
+	@Create
 	public Comment create(
-		Long blogPostingModelId, Comment comment, Credentials credentials) {
+		@ParentId(BlogPosting.class) long id, @Body Comment comment,
+		Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
@@ -55,12 +66,13 @@ public class BlogPostingCommentActionRouter {
 
 		BlogPostingCommentModel blogPostingCommentModel =
 			_blogPostingCommentModelService.create(
-				comment.getAuthor(), blogPostingModelId, comment.getText());
+				comment.getAuthor(), id, comment.getText());
 
 		return toComment(blogPostingCommentModel);
 	}
 
-	public void remove(long id, Credentials credentials) {
+	@Remove
+	public void remove(@Id long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -68,16 +80,16 @@ public class BlogPostingCommentActionRouter {
 		_blogPostingCommentModelService.remove(id);
 	}
 
+	@Replace
 	public Comment replace(
-		long id, Comment blogPostingComment, Credentials credentials) {
+		@Id long id, @Body Comment comment, Credentials credentials) {
 
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
 
 		Optional<BlogPostingCommentModel> optional =
-			_blogPostingCommentModelService.update(
-				id, blogPostingComment.getText());
+			_blogPostingCommentModelService.update(id, comment.getText());
 
 		return optional.map(
 			CommentConverter::toComment
@@ -87,7 +99,8 @@ public class BlogPostingCommentActionRouter {
 		);
 	}
 
-	public Comment retrieve(long id) {
+	@Retrieve
+	public Comment retrieve(@Id long id) {
 		Optional<BlogPostingCommentModel> optional =
 			_blogPostingCommentModelService.get(id);
 
@@ -99,15 +112,14 @@ public class BlogPostingCommentActionRouter {
 		);
 	}
 
+	@Retrieve
 	public PageItems<Comment> retrievePage(
-		Pagination pagination, Long blogPostingModelId) {
+		@ParentId(BlogPosting.class) long id, Pagination pagination) {
 
 		List<BlogPostingCommentModel> blogPostingCommentModels =
 			_blogPostingCommentModelService.getPage(
-				blogPostingModelId, pagination.getStartPosition(),
-				pagination.getEndPosition());
-		int count = _blogPostingCommentModelService.getCount(
-			blogPostingModelId);
+				id, pagination.getStartPosition(), pagination.getEndPosition());
+		int count = _blogPostingCommentModelService.getCount(id);
 
 		Stream<BlogPostingCommentModel> stream =
 			blogPostingCommentModels.stream();

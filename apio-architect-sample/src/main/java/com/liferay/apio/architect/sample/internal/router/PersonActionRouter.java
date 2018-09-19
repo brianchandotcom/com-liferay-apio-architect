@@ -17,9 +17,16 @@ package com.liferay.apio.architect.sample.internal.router;
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.PersonConverter.toPerson;
 
+import com.liferay.apio.architect.annotations.Actions.Create;
+import com.liferay.apio.architect.annotations.Actions.Remove;
+import com.liferay.apio.architect.annotations.Actions.Replace;
+import com.liferay.apio.architect.annotations.Actions.Retrieve;
+import com.liferay.apio.architect.annotations.Body;
+import com.liferay.apio.architect.annotations.Id;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.router.ActionRouter;
 import com.liferay.apio.architect.sample.internal.converter.PersonConverter;
 import com.liferay.apio.architect.sample.internal.dao.PersonModelService;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
@@ -45,9 +52,10 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true)
-public class PersonActionRouter {
+public class PersonActionRouter implements ActionRouter<Person> {
 
-	public Person create(Person person, Credentials credentials) {
+	@Create
+	public Person create(@Body Person person, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -67,7 +75,8 @@ public class PersonActionRouter {
 		return toPerson(personModel);
 	}
 
-	public void remove(long id, Credentials credentials) {
+	@Remove
+	public void remove(@Id long id, Credentials credentials) {
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -75,7 +84,10 @@ public class PersonActionRouter {
 		_personModelService.remove(id);
 	}
 
-	public Person replace(long id, Person person, Credentials credentials) {
+	@Replace
+	public Person replace(
+		@Id long id, @Body Person person, Credentials credentials) {
+
 		if (!hasPermission(credentials)) {
 			throw new ForbiddenException();
 		}
@@ -99,7 +111,8 @@ public class PersonActionRouter {
 		);
 	}
 
-	public Person retrieve(long id) {
+	@Retrieve
+	public Person retrieve(@Id long id) {
 		Optional<PersonModel> optional = _personModelService.get(id);
 
 		return optional.map(
@@ -109,6 +122,7 @@ public class PersonActionRouter {
 		);
 	}
 
+	@Retrieve
 	public PageItems<Person> retrieveCollection(Pagination pagination) {
 		List<PersonModel> personModels = _personModelService.getPage(
 			pagination.getStartPosition(), pagination.getEndPosition());
