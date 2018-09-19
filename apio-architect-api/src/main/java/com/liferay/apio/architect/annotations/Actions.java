@@ -101,6 +101,22 @@ public @interface Actions {
 	}
 
 	/**
+	 * Indicates that a method performs the action of creating elements.
+	 *
+	 * <p>
+	 * This annotation must be used on a method that lives inside a class
+	 * implementing {@link com.liferay.apio.architect.router.ActionRouter}.
+	 * </p>
+	 *
+	 * @review
+	 */
+	@Action(httpMethod = "POST", name = "create")
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface Create {
+	}
+
+	/**
 	 * Indicates that a method performs the action of retrieving elements.
 	 *
 	 * <p>
