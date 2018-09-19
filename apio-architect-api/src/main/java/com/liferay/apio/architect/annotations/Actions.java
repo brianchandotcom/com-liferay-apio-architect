@@ -133,6 +133,22 @@ public @interface Actions {
 	}
 
 	/**
+	 * Indicates that a method performs the action of replacing an element.
+	 *
+	 * <p>
+	 * This annotation must be used on a method that lives inside a class
+	 * implementing {@link com.liferay.apio.architect.router.ActionRouter}.
+	 * </p>
+	 *
+	 * @review
+	 */
+	@Action(httpMethod = "PUT", name = "replace")
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface Replace {
+	}
+
+	/**
 	 * Indicates that a method performs the action of retrieving elements.
 	 *
 	 * <p>
