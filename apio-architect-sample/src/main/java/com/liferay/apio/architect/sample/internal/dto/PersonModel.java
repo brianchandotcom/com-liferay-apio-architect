@@ -27,7 +27,7 @@ public class PersonModel {
 	public PersonModel(
 		String avatar, Date birthDate, String email, String firstName,
 		List<String> jobTitles, String lastName,
-		PostalAddressModel postalAddressModel, long id) {
+		PostalAddressModel postalAddressModel, Long id) {
 
 		_avatar = avatar;
 		_birthDate = birthDate;
@@ -76,20 +76,11 @@ public class PersonModel {
 	}
 
 	/**
-	 * Returns the person's full name.
-	 *
-	 * @return the person's full name
-	 */
-	public String getFullName() {
-		return _firstName + " " + _lastName;
-	}
-
-	/**
 	 * Returns the person's ID.
 	 *
 	 * @return the person's ID
 	 */
-	public long getId() {
+	public Long getId() {
 		return _id;
 	}
 
@@ -124,7 +115,7 @@ public class PersonModel {
 	private final Date _birthDate;
 	private final String _email;
 	private final String _firstName;
-	private final long _id;
+	private final Long _id;
 	private final List<String> _jobTitles;
 	private final String _lastName;
 	private final PostalAddressModel _postalAddressModel;

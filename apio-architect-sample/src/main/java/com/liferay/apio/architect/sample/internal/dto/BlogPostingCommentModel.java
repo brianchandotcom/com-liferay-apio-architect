@@ -25,7 +25,7 @@ import java.util.Date;
 public class BlogPostingCommentModel {
 
 	public BlogPostingCommentModel(
-		long authorId, long id, long blogPostingModelId, String content,
+		Long authorId, Long id, Long blogPostingModelId, String content,
 		Date createDate, Date modifiedDate) {
 
 		_authorId = authorId;
@@ -41,7 +41,7 @@ public class BlogPostingCommentModel {
 	 *
 	 * @return the ID of the current blog posting comment's author
 	 */
-	public long getAuthorId() {
+	public Long getAuthorId() {
 		return _authorId;
 	}
 
@@ -50,7 +50,7 @@ public class BlogPostingCommentModel {
 	 *
 	 * @return the blog posting ID
 	 */
-	public long getBlogPostingModelId() {
+	public Long getBlogPostingModelId() {
 		return _blogPostingModelId;
 	}
 
@@ -77,7 +77,7 @@ public class BlogPostingCommentModel {
 	 *
 	 * @return the current blog posting comment's ID
 	 */
-	public long getId() {
+	public Long getId() {
 		return _id;
 	}
 
@@ -90,11 +90,11 @@ public class BlogPostingCommentModel {
 		return new Date(_modifiedDate.getTime());
 	}
 
-	private final long _authorId;
-	private final long _blogPostingModelId;
+	private final Long _authorId;
+	private final Long _blogPostingModelId;
 	private final String _content;
 	private final Date _createDate;
-	private final long _id;
+	private final Long _id;
 	private final Date _modifiedDate;
 
 }

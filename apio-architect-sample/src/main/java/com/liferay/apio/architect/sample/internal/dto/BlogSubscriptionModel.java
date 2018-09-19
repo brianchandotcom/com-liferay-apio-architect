@@ -42,7 +42,7 @@ public class BlogSubscriptionModel {
 	}
 
 	private final BlogPostingModel _blogPostingModel;
-	private final long _id;
+	private final Long _id;
 	private final PersonModel _personModel;
 
 }

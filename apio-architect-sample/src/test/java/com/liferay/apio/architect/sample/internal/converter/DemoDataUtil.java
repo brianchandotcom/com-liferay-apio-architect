@@ -84,17 +84,17 @@ public class DemoDataUtil {
 
 	static {
 		BLOG_POSTING_COMMENT_MODEL = new BlogPostingCommentModel(
-			1, 2, 3, "content", new Date(), new Date());
+			1L, 2L, 3L, "content", new Date(), new Date());
 
-		RATING_MODEL = new RatingModel(2, 3);
+		RATING_MODEL = new RatingModel(2L, 3L);
 
 		REVIEW_MODEL = new ReviewModel("body", RATING_MODEL);
 
 		REVIEW_MODELS = Arrays.asList(REVIEW_MODEL, REVIEW_MODEL);
 
 		BLOG_POSTING_MODEL = new BlogPostingModel(
-			42, "content", new Date(), 0, new Date(), REVIEW_MODELS, "subtitle",
-			"title");
+			42L, "content", new Date(), 0L, new Date(), REVIEW_MODELS,
+			"subtitle", "title");
 
 		POSTAL_ADDRESS_MODEL = new PostalAddressModel(
 			"country", "state", "city", "zip", "street");
@@ -102,7 +102,7 @@ public class DemoDataUtil {
 		PERSON_MODEL = new PersonModel(
 			"23", new Date(), "email@liferay.com", "Given",
 			Arrays.asList("Job 1", "Job 2"), "Family", POSTAL_ADDRESS_MODEL,
-			84);
+			84L);
 	}
 
 }

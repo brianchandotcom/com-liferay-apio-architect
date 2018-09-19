@@ -25,7 +25,7 @@ import java.util.List;
 public class BlogPostingModel {
 
 	public BlogPostingModel(
-		long id, String content, Date createDate, long creatorId,
+		Long id, String content, Date createDate, Long creatorId,
 		Date modifiedDate, List<ReviewModel> reviewModels, String subtitle,
 		String title) {
 
@@ -62,7 +62,7 @@ public class BlogPostingModel {
 	 *
 	 * @return the ID of the current blog posting's creator
 	 */
-	public long getCreatorId() {
+	public Long getCreatorId() {
 		return _creatorId;
 	}
 
@@ -71,7 +71,7 @@ public class BlogPostingModel {
 	 *
 	 * @return the current blog posting's ID
 	 */
-	public long getId() {
+	public Long getId() {
 		return _id;
 	}
 
@@ -113,8 +113,8 @@ public class BlogPostingModel {
 
 	private final String _content;
 	private final Date _createDate;
-	private final long _creatorId;
-	private final long _id;
+	private final Long _creatorId;
+	private final Long _id;
 	private final Date _modifiedDate;
 	private final List<ReviewModel> _reviewModels;
 	private final String _subtitle;
