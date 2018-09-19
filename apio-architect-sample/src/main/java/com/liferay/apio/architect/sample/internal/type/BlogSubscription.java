@@ -14,6 +14,10 @@
 
 package com.liferay.apio.architect.sample.internal.type;
 
+import com.liferay.apio.architect.annotations.Id;
+import com.liferay.apio.architect.annotations.Vocabulary.Field;
+import com.liferay.apio.architect.annotations.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotations.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 
 /**
@@ -23,6 +27,7 @@ import com.liferay.apio.architect.identifier.Identifier;
  * @author Alejandro Hernández
  * @review
  */
+@Type(description = "A blog-person subscription", value = "BlogSubscription")
 public interface BlogSubscription extends Identifier<Long> {
 
 	/**
@@ -31,6 +36,8 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * @return the blog's ID
 	 * @review
 	 */
+	@Field(readOnly = true, value = "blog")
+	@LinkedModel(BlogPosting.class)
 	public Long getBlog();
 
 	/**
@@ -39,6 +46,7 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * @return the subscription's ID
 	 * @review
 	 */
+	@Id
 	public Long getId();
 
 	/**
@@ -47,6 +55,8 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * @return the person's ID
 	 * @review
 	 */
+	@Field("person")
+	@LinkedModel(Person.class)
 	public Long getPerson();
 
 }

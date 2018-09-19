@@ -14,6 +14,9 @@
 
 package com.liferay.apio.architect.sample.internal.type;
 
+import com.liferay.apio.architect.annotations.Vocabulary.Field;
+import com.liferay.apio.architect.annotations.Vocabulary.Type;
+
 /**
  * Instances of this interface represent a postal address exposed through the
  * API.
@@ -22,6 +25,7 @@ package com.liferay.apio.architect.sample.internal.type;
  * @see    <a href="https://schema.org/PostalAddress">PostalAddress</a>
  * @review
  */
+@Type("PostalAddress")
 public interface PostalAddress {
 
 	/**
@@ -31,6 +35,7 @@ public interface PostalAddress {
 	 * @see    <a href="https://schema.org/addressCountry">addressCountry</a>
 	 * @review
 	 */
+	@Field("addressCountry")
 	public String getAddressCountry();
 
 	/**
@@ -40,6 +45,7 @@ public interface PostalAddress {
 	 * @see    <a href="https://schema.org/addressLocality">addressLocality</a>
 	 * @review
 	 */
+	@Field("addressLocality")
 	public String getAddressLocality();
 
 	/**
@@ -49,6 +55,7 @@ public interface PostalAddress {
 	 * @see    <a href="https://schema.org/addressRegion">addressRegion</a>
 	 * @review
 	 */
+	@Field("addressRegion")
 	public String getAddressRegion();
 
 	/**
@@ -58,6 +65,7 @@ public interface PostalAddress {
 	 * @see    <a href="https://schema.org/postalCode">postalCode</a>
 	 * @review
 	 */
+	@Field("postalCode")
 	public String getPostalCode();
 
 	/**
@@ -67,6 +75,7 @@ public interface PostalAddress {
 	 * @see    <a href="https://schema.org/streetAddress">streetAddress</a>
 	 * @review
 	 */
+	@Field("streetAddress")
 	public String getStreetAddress();
 
 }

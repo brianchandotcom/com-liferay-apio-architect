@@ -14,6 +14,11 @@
 
 package com.liferay.apio.architect.sample.internal.type;
 
+import com.liferay.apio.architect.annotations.Id;
+import com.liferay.apio.architect.annotations.Vocabulary.Field;
+import com.liferay.apio.architect.annotations.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotations.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotations.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 
 import java.util.Date;
@@ -26,6 +31,7 @@ import java.util.List;
  * @see    <a href="https://schema.org/BlogPosting">BlogPosting</a>
  * @review
  */
+@Type("BlogPosting")
 public interface BlogPosting extends Identifier<Long> {
 
 	/**
@@ -36,6 +42,7 @@ public interface BlogPosting extends Identifier<Long> {
 	 *         href="https://schema.org/alternativeHeadline">alternativeHeadline</a>
 	 * @review
 	 */
+	@Field("alternativeHeadline")
 	public String getAlternativeHeadline();
 
 	/**
@@ -45,7 +52,21 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/articleBody">articleBody</a>
 	 * @review
 	 */
+	@Field("articleBody")
 	public String getArticleBody();
+
+	/**
+	 * Returns the blog posting comments parent ID.
+	 *
+	 * @return the blog posting comments parent ID
+	 * @see    <a href="https://schema.org/comment">comment</a>
+	 * @review
+	 */
+	@Field("comment")
+	@RelatedCollection(Comment.class)
+	public default Long getCommentIds() {
+		return getId();
+	}
 
 	/**
 	 * Returns the blog posting's creator ID.
@@ -54,6 +75,8 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/creator">creator</a>
 	 * @review
 	 */
+	@Field("creator")
+	@LinkedModel(Person.class)
 	public Long getCreator();
 
 	/**
@@ -63,6 +86,7 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/dateCreated">dateCreated</a>
 	 * @review
 	 */
+	@Field("dateCreated")
 	public Date getDateCreated();
 
 	/**
@@ -72,6 +96,7 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/dateModified">dateModified</a>
 	 * @review
 	 */
+	@Field("dateModified")
 	public Date getDateModified();
 
 	/**
@@ -81,6 +106,7 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/fileFormat">fileFormat</a>
 	 * @review
 	 */
+	@Field("fileFormat")
 	public String getFileFormat();
 
 	/**
@@ -90,6 +116,7 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/headline">headline</a>
 	 * @review
 	 */
+	@Field("headline")
 	public String getHeadline();
 
 	/**
@@ -98,6 +125,7 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @return the blog posting's ID
 	 * @review
 	 */
+	@Id
 	public Long getId();
 
 	/**
@@ -107,6 +135,7 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/review">review</a>
 	 * @review
 	 */
+	@Field("review")
 	public List<Review> getReviews();
 
 }

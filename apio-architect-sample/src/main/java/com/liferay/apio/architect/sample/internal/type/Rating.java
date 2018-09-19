@@ -14,6 +14,10 @@
 
 package com.liferay.apio.architect.sample.internal.type;
 
+import com.liferay.apio.architect.annotations.Vocabulary.Field;
+import com.liferay.apio.architect.annotations.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotations.Vocabulary.Type;
+
 /**
  * Instances of this interface represent a rating exposed through the API.
  *
@@ -21,6 +25,7 @@ package com.liferay.apio.architect.sample.internal.type;
  * @see    <a href="https://schema.org/Rating">Rating</a>
  * @review
  */
+@Type("Rating")
 public interface Rating {
 
 	/**
@@ -30,6 +35,8 @@ public interface Rating {
 	 * @see    <a href="https://schema.org/author">author</a>
 	 * @review
 	 */
+	@Field("author")
+	@LinkedModel(Person.class)
 	public Long getAuthor();
 
 	/**
@@ -39,6 +46,7 @@ public interface Rating {
 	 * @see    <a href="https://schema.org/bestRating">bestRating</a>
 	 * @review
 	 */
+	@Field(readOnly = true, value = "bestRating")
 	public default Number getBestRating() {
 		return 5;
 	}
@@ -50,6 +58,7 @@ public interface Rating {
 	 * @see    <a href="https://schema.org/ratingValue">ratingValue</a>
 	 * @review
 	 */
+	@Field("ratingValue")
 	public Long getRatingValue();
 
 	/**
@@ -59,6 +68,7 @@ public interface Rating {
 	 * @see    <a href="https://schema.org/worstRating">worstRating</a>
 	 * @review
 	 */
+	@Field(readOnly = true, value = "worstRating")
 	public default Number getWorstRating() {
 		return 0;
 	}

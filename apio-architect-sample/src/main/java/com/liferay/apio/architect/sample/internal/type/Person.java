@@ -14,6 +14,10 @@
 
 package com.liferay.apio.architect.sample.internal.type;
 
+import com.liferay.apio.architect.annotations.Id;
+import com.liferay.apio.architect.annotations.Vocabulary.Field;
+import com.liferay.apio.architect.annotations.Vocabulary.RelativeURL;
+import com.liferay.apio.architect.annotations.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 
 import java.util.Date;
@@ -26,6 +30,7 @@ import java.util.List;
  * @see    <a href="https://schema.org/Person">Person</a>
  * @review
  */
+@Type("Person")
 public interface Person extends Identifier<Long> {
 
 	/**
@@ -35,6 +40,7 @@ public interface Person extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/birthDate">birthDate</a>
 	 * @review
 	 */
+	@Field("birthDate")
 	public Date getBirthDate();
 
 	/**
@@ -44,6 +50,7 @@ public interface Person extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/email">email</a>
 	 * @review
 	 */
+	@Field("email")
 	public String getEmail();
 
 	/**
@@ -53,6 +60,7 @@ public interface Person extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/familyName">familyName</a>
 	 * @review
 	 */
+	@Field("familyName")
 	public String getFamilyName();
 
 	/**
@@ -62,6 +70,7 @@ public interface Person extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/givenName">givenName</a>
 	 * @review
 	 */
+	@Field("givenName")
 	public String getGivenName();
 
 	/**
@@ -70,15 +79,18 @@ public interface Person extends Identifier<Long> {
 	 * @return the person's ID
 	 * @review
 	 */
+	@Id
 	public Long getId();
 
 	/**
-	 * Returns the person's image.
+	 * Returns the person's image URL.
 	 *
-	 * @return the person's image
+	 * @return the person's image URL
 	 * @see    <a href="https://schema.org/image">image</a>
 	 * @review
 	 */
+	@Field("image")
+	@RelativeURL(fromApplication = true)
 	public String getImage();
 
 	/**
@@ -88,6 +100,7 @@ public interface Person extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/jobTitle">jobTitle</a>
 	 * @review
 	 */
+	@Field("jobTitle")
 	public List<String> getJobTitle();
 
 	/**
@@ -97,6 +110,7 @@ public interface Person extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/name">name</a>
 	 * @review
 	 */
+	@Field("name")
 	public String getName();
 
 	/**
@@ -106,6 +120,7 @@ public interface Person extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/postalAddress">postalAddress</a>
 	 * @review
 	 */
+	@Field("postalAddress")
 	public PostalAddress getPostalAddress();
 
 }

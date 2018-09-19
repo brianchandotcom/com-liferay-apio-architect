@@ -14,6 +14,10 @@
 
 package com.liferay.apio.architect.sample.internal.type;
 
+import com.liferay.apio.architect.annotations.Id;
+import com.liferay.apio.architect.annotations.Vocabulary.Field;
+import com.liferay.apio.architect.annotations.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotations.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 
 import java.util.Date;
@@ -25,6 +29,7 @@ import java.util.Date;
  * @see    <a href="https://schema.org/Comment">Comment</a>
  * @review
  */
+@Type("Comment")
 public interface Comment extends Identifier<Long> {
 
 	/**
@@ -34,6 +39,8 @@ public interface Comment extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/author">author</a>
 	 * @review
 	 */
+	@Field("author")
+	@LinkedModel(Person.class)
 	public Long getAuthor();
 
 	/**
@@ -43,6 +50,7 @@ public interface Comment extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/dateCreated">dateCreated</a>
 	 * @review
 	 */
+	@Field("dateCreated")
 	public Date getDateCreated();
 
 	/**
@@ -52,6 +60,7 @@ public interface Comment extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/dateModified">dateModified</a>
 	 * @review
 	 */
+	@Field("dateModified")
 	public Date getDateModified();
 
 	/**
@@ -60,6 +69,7 @@ public interface Comment extends Identifier<Long> {
 	 * @return the comment's ID
 	 * @review
 	 */
+	@Id
 	public Long getId();
 
 	/**
@@ -69,6 +79,7 @@ public interface Comment extends Identifier<Long> {
 	 * @see    <a href="https://schema.org/text">text</a>
 	 * @review
 	 */
+	@Field("text")
 	public String getText();
 
 }

@@ -14,6 +14,9 @@
 
 package com.liferay.apio.architect.sample.internal.type;
 
+import com.liferay.apio.architect.annotations.Vocabulary.Field;
+import com.liferay.apio.architect.annotations.Vocabulary.Type;
+
 /**
  * Instances of this interface represent a review exposed through the API.
  *
@@ -21,6 +24,7 @@ package com.liferay.apio.architect.sample.internal.type;
  * @see    <a href="https://schema.org/Review">Review</a>
  * @review
  */
+@Type("Review")
 public interface Review {
 
 	/**
@@ -30,6 +34,7 @@ public interface Review {
 	 * @see    <a href="https://schema.org/rating">rating</a>
 	 * @review
 	 */
+	@Field("rating")
 	public Rating getRating();
 
 	/**
@@ -39,6 +44,7 @@ public interface Review {
 	 * @see    <a href="https://schema.org/body">body</a>
 	 * @review
 	 */
+	@Field("reviewBody")
 	public String getReviewBody();
 
 }
