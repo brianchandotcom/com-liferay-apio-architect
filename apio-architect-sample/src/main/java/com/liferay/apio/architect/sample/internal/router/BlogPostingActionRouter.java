@@ -19,9 +19,6 @@ import static com.liferay.apio.architect.sample.internal.converter.BlogPostingCo
 import static com.liferay.apio.architect.sample.internal.converter.BlogSubscriptionConverter.toBlogSubscription;
 import static com.liferay.apio.architect.sample.internal.converter.ReviewConverter.toReviewModels;
 
-import static javax.ws.rs.HttpMethod.PUT;
-
-import com.liferay.apio.architect.annotations.Actions.Action;
 import com.liferay.apio.architect.annotations.Actions.Create;
 import com.liferay.apio.architect.annotations.Actions.Remove;
 import com.liferay.apio.architect.annotations.Actions.Replace;
@@ -32,6 +29,7 @@ import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.router.ActionRouter;
+import com.liferay.apio.architect.sample.internal.action.Subscribe;
 import com.liferay.apio.architect.sample.internal.converter.BlogPostingConverter;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingModelService;
 import com.liferay.apio.architect.sample.internal.dao.BlogSubscriptionModelService;
@@ -138,7 +136,7 @@ public class BlogPostingActionRouter implements ActionRouter<BlogPosting> {
 		return new PageItems<>(blogPostings, count);
 	}
 
-	@Action(httpMethod = PUT, name = "subscribe")
+	@Subscribe
 	public BlogSubscription subscribe(
 		@Id long id, @Body BlogSubscription blogSubscription) {
 
