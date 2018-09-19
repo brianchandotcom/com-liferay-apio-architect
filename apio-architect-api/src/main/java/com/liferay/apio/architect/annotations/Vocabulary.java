@@ -161,6 +161,35 @@ public @interface Vocabulary {
 	}
 
 	/**
+	 * Indicates that a field contains a relative URL that should be expressed
+	 * as an absolute one.
+	 *
+	 * <p>
+	 * The annotated method must return the relative URL in the form of a {@code
+	 * String}. <p> <p> Annotation has an attribute to indicate if the URL is
+	 * relative to the JAX-RS application. By default, the URL is supposedly
+	 * relative to the server.
+	 * </p>
+	 *
+	 * @review
+	 */
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface RelativeURL {
+
+		/**
+		 * Returns {@code true} if the provided URL is relative to the JAX-RS
+		 * application.
+		 *
+		 * @return {@code true} if the provided URL is relative to the JAX-RS
+		 *         application; {@code false} otherwise
+		 * @review
+		 */
+		public boolean fromApplication() default false;
+
+	}
+
+	/**
 	 * Provides information about a type. This annotation should always be used
 	 * on an interface.
 	 *
