@@ -599,9 +599,10 @@ public class FormImpl<T> implements Form<T> {
 			getOptionalLinkedModelList(body, u, _pathToIdentifierFunction));
 		formImpl._optionalLongs.forEach(getOptionalLong(body, u));
 		formImpl._optionalLongLists.forEach(getOptionalLongList(body, u));
-		formImpl._optionalNestedModel.forEach(_getOptionalNestedModel(body, u));
+		formImpl._optionalNestedModel.forEach(
+			formImpl._getOptionalNestedModel(body, u));
 		formImpl._optionalNestedModelLists.forEach(
-			_getOptionalNestedModelList(body, u));
+			formImpl._getOptionalNestedModelList(body, u));
 		formImpl._optionalStrings.forEach(getOptionalString(body, u));
 		formImpl._optionalStringLists.forEach(getOptionalStringList(body, u));
 		formImpl._requiredBooleans.forEach(getRequiredBoolean(body, u));
@@ -618,9 +619,10 @@ public class FormImpl<T> implements Form<T> {
 			getRequiredLinkedModelList(body, u, _pathToIdentifierFunction));
 		formImpl._requiredLongs.forEach(getRequiredLong(body, u));
 		formImpl._requiredLongLists.forEach(getRequiredLongList(body, u));
-		formImpl._requiredNestedModel.forEach(_getRequiredNestedModel(body, u));
+		formImpl._requiredNestedModel.forEach(
+			formImpl._getRequiredNestedModel(body, u));
 		formImpl._requiredNestedModelLists.forEach(
-			_getRequiredNestedModelList(body, u));
+			formImpl._getRequiredNestedModelList(body, u));
 		formImpl._requiredStrings.forEach(getRequiredString(body, u));
 		formImpl._requiredStringLists.forEach(getRequiredStringList(body, u));
 	}
