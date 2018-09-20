@@ -82,7 +82,7 @@ public class PersonConverter {
 			}
 
 			@Override
-			public List<String> getJobTitle() {
+			public List<String> getJobTitles() {
 				return personModel.getJobTitles();
 			}
 

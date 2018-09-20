@@ -71,7 +71,7 @@ public class PersonActionRouter implements ActionRouter<Person> {
 
 		PersonModel personModel = _personModelService.create(
 			postalAddressModel, person.getImage(), person.getBirthDate(),
-			person.getEmail(), person.getGivenName(), person.getJobTitle(),
+			person.getEmail(), person.getGivenName(), person.getJobTitles(),
 			person.getFamilyName());
 
 		return toPerson(personModel);
@@ -103,7 +103,7 @@ public class PersonActionRouter implements ActionRouter<Person> {
 
 		Optional<PersonModel> optional = _personModelService.update(
 			postalAddressModel, person.getImage(), person.getBirthDate(),
-			person.getEmail(), person.getGivenName(), person.getJobTitle(),
+			person.getEmail(), person.getGivenName(), person.getJobTitles(),
 			person.getFamilyName(), id);
 
 		return optional.map(

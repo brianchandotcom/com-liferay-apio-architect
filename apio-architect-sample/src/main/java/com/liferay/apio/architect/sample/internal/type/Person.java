@@ -101,7 +101,7 @@ public interface Person extends Identifier<Long> {
 	 * @review
 	 */
 	@Field("jobTitle")
-	public List<String> getJobTitle();
+	public List<String> getJobTitles();
 
 	/**
 	 * Returns the person's full name.

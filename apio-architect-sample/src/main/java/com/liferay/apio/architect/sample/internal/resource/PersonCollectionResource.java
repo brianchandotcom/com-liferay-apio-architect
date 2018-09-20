@@ -110,7 +110,7 @@ public class PersonCollectionResource
 		).addString(
 			"givenName", Person::getGivenName
 		).addStringList(
-			"jobTitle", Person::getJobTitle
+			"jobTitle", Person::getJobTitles
 		).addString(
 			"name", Person::getName
 		).build();
@@ -204,7 +204,7 @@ public class PersonCollectionResource
 		}
 
 		@Override
-		public List<String> getJobTitle() {
+		public List<String> getJobTitles() {
 			return _jobTitle;
 		}
 

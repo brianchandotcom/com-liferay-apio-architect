@@ -43,7 +43,7 @@ public class PersonConverterTest {
 		assertThat(person.getGivenName(), is("Given"));
 		assertThat(person.getId(), is(84L));
 		assertThat(person.getImage(), is("/images/84"));
-		assertThat(person.getJobTitle(), contains("Job 1", "Job 2"));
+		assertThat(person.getJobTitles(), contains("Job 1", "Job 2"));
 		assertThat(person.getName(), is("Given Family"));
 
 		PostalAddress postalAddress = person.getPostalAddress();
