@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component
+@Component(service = Provider.class)
 public class PaginationProvider implements Provider<Pagination> {
 
 	@Override

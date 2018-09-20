@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = BatchResultMessageMapperManager.class)
 public class BatchResultMessageMapperManagerImpl
 	extends MessageMapperBaseManager<BatchResultMessageMapper>
 	implements BatchResultMessageMapperManager {

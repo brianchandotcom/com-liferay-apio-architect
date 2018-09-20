@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Víctor Galán
  */
-@Component
+@Component(service = NameValidator.class)
 public class NameValidatorImpl implements NameValidator {
 
 	@Override

@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component
+@Component(service = SingleModelMessageMapper.class)
 public class HALSingleModelMessageMapper<T>
 	implements SingleModelMessageMapper<T> {
 

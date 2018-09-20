@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = PageMessageMapperManager.class)
 public class PageMessageMapperManagerImpl
 	extends MessageMapperBaseManager<PageMessageMapper>
 	implements PageMessageMapperManager {

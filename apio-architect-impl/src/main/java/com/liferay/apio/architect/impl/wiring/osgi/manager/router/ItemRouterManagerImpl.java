@@ -42,7 +42,7 @@ import org.slf4j.Logger;
 /**
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = ItemRouterManager.class)
 public class ItemRouterManagerImpl
 	extends ClassNameBaseManager<ItemRouter> implements ItemRouterManager {
 

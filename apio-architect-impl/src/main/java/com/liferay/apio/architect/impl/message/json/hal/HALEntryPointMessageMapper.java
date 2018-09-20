@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = EntryPointMessageMapper.class)
 public class HALEntryPointMessageMapper implements EntryPointMessageMapper {
 
 	@Override

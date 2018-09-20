@@ -41,7 +41,7 @@ import org.slf4j.Logger;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component
+@Component(service = ProviderManager.class)
 public class ProviderManagerImpl
 	extends ClassNameBaseManager<Provider> implements ProviderManager {
 

@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Deactivate;
 /**
  * @author Víctor Galán
  */
-@Component
+@Component(service = CustomDocumentationManager.class)
 public class CustomDocumentationManagerImpl
 	implements CustomDocumentationManager {
 

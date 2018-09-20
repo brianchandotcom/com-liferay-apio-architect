@@ -43,7 +43,7 @@ import org.slf4j.Logger;
  *
  * @author Alejandro Hernández
  */
-@Component(immediate = true)
+@Component(immediate = true, service = {})
 public class NestedCollectionResourceRegistrar {
 
 	@Activate

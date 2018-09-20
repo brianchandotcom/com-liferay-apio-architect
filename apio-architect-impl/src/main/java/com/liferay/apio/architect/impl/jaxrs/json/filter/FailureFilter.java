@@ -44,7 +44,8 @@ import org.osgi.service.component.annotations.Reference;
 	property = {
 		"osgi.jaxrs.application.select=(liferay.apio.architect.application=true)",
 		"osgi.jaxrs.extension=true"
-	}
+	},
+	service = ContainerResponseFilter.class
 )
 public class FailureFilter implements ContainerResponseFilter {
 

@@ -52,7 +52,7 @@ import org.slf4j.Logger;
 /**
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = NestedCollectionRouterManager.class)
 public class NestedCollectionRouterManagerImpl
 	extends ClassNameBaseManager<NestedCollectionRouter>
 	implements NestedCollectionRouterManager {

@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = FormMessageMapper.class)
 public class JSONLDFormMessageMapper implements FormMessageMapper {
 
 	@Override

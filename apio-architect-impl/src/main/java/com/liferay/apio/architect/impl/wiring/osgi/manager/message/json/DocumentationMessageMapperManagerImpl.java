@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = DocumentationMessageMapperManager.class)
 public class DocumentationMessageMapperManagerImpl
 	extends MessageMapperBaseManager<DocumentationMessageMapper>
 	implements DocumentationMessageMapperManager {

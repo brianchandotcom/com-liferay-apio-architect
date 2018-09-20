@@ -52,7 +52,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@Component
+@Component(service = RootEndpoint.class)
 public class RootEndpointImpl implements RootEndpoint {
 
 	@Activate

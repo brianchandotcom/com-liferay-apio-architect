@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = EntryPointMessageMapperManager.class)
 public class EntryPointMessageMapperManagerImpl
 	extends MessageMapperBaseManager<EntryPointMessageMapper>
 	implements EntryPointMessageMapperManager {

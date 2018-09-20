@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = BatchResultMessageMapper.class)
 public class JSONLDBatchResultMessageMapper<T>
 	implements BatchResultMessageMapper<T> {
 

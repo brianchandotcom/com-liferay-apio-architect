@@ -71,7 +71,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"osgi.jaxrs.application.select=(liferay.apio.architect.application=true)",
 		"osgi.jaxrs.extension=true"
-	}
+	},
+	service = MessageBodyReader.class
 )
 @Consumes(MULTIPART_FORM_DATA)
 @Provider
