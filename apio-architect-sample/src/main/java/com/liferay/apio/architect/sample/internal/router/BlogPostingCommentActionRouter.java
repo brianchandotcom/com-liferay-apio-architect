@@ -69,7 +69,7 @@ public class BlogPostingCommentActionRouter implements ActionRouter<Comment> {
 
 		BlogPostingCommentModel blogPostingCommentModel =
 			_blogPostingCommentModelService.create(
-				comment.getAuthor(), id, comment.getText());
+				comment.getAuthorId(), id, comment.getText());
 
 		return toComment(blogPostingCommentModel);
 	}

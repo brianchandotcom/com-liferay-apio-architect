@@ -44,7 +44,7 @@ public class BlogSubscriptionRepresentable
 		).constructor(
 			BlogSubscriptionForm::new
 		).addRequiredLinkedModel(
-			"person", PersonIdentifier.class, BlogSubscriptionForm::setPerson
+			"person", PersonIdentifier.class, BlogSubscriptionForm::_setPersonId
 		).build();
 	}
 
@@ -62,16 +62,17 @@ public class BlogSubscriptionRepresentable
 		).identifier(
 			BlogSubscription::getId
 		).addLinkedModel(
-			"blog", BlogPostingIdentifier.class, BlogSubscription::getBlog
+			"blog", BlogPostingIdentifier.class,
+			BlogSubscription::getBlogPostingId
 		).addLinkedModel(
-			"person", PersonIdentifier.class, BlogSubscription::getPerson
+			"person", PersonIdentifier.class, BlogSubscription::getPersonId
 		).build();
 	}
 
 	public static class BlogSubscriptionForm implements BlogSubscription {
 
 		@Override
-		public Long getBlog() {
+		public Long getBlogPostingId() {
 			throw new UnsupportedOperationException();
 		}
 
@@ -81,15 +82,15 @@ public class BlogSubscriptionRepresentable
 		}
 
 		@Override
-		public Long getPerson() {
-			return _person;
+		public Long getPersonId() {
+			return _personId;
 		}
 
-		public void setPerson(Long person) {
-			_person = person;
+		private void _setPersonId(Long personId) {
+			_personId = personId;
 		}
 
-		private Long _person;
+		private Long _personId;
 
 	}
 

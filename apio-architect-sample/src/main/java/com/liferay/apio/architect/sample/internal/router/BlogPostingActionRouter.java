@@ -74,7 +74,7 @@ public class BlogPostingActionRouter implements ActionRouter<BlogPosting> {
 		}
 
 		BlogPostingModel blogPostingModel = _blogPostingModelService.create(
-			blogPosting.getArticleBody(), blogPosting.getCreator(),
+			blogPosting.getArticleBody(), blogPosting.getCreatorId(),
 			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline(),
 			toReviewModels(blogPosting.getReviews()));
 
@@ -99,7 +99,7 @@ public class BlogPostingActionRouter implements ActionRouter<BlogPosting> {
 		}
 
 		Optional<BlogPostingModel> optional = _blogPostingModelService.update(
-			id, blogPosting.getArticleBody(), blogPosting.getCreator(),
+			id, blogPosting.getArticleBody(), blogPosting.getCreatorId(),
 			blogPosting.getAlternativeHeadline(), blogPosting.getHeadline(),
 			toReviewModels(blogPosting.getReviews()));
 
@@ -144,7 +144,7 @@ public class BlogPostingActionRouter implements ActionRouter<BlogPosting> {
 		@Id long id, @Body BlogSubscription blogSubscription) {
 
 		Optional<PersonModel> personModelOptional = _personModelService.get(
-			blogSubscription.getPerson());
+			blogSubscription.getPersonId());
 
 		PersonModel personModel = personModelOptional.orElseThrow(
 			NotFoundException::new);

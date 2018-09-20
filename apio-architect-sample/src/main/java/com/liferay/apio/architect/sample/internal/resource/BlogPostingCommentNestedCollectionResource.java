@@ -92,7 +92,7 @@ public class BlogPostingCommentNestedCollectionResource
 		).addDate(
 			"dateModified", Comment::getDateModified
 		).addLinkedModel(
-			"author", PersonIdentifier.class, Comment::getAuthor
+			"author", PersonIdentifier.class, Comment::getAuthorId
 		).addString(
 			"text", Comment::getText
 		).build();
@@ -111,7 +111,7 @@ public class BlogPostingCommentNestedCollectionResource
 		).constructor(
 			CommentForm::new
 		).addRequiredLinkedModel(
-			"author", PersonIdentifier.class, CommentForm::_setAuthor
+			"author", PersonIdentifier.class, CommentForm::_setAuthorId
 		).addRequiredString(
 			"text", CommentForm::_setText
 		).build();
@@ -123,8 +123,8 @@ public class BlogPostingCommentNestedCollectionResource
 	private static class CommentForm implements Comment {
 
 		@Override
-		public Long getAuthor() {
-			return _author;
+		public Long getAuthorId() {
+			return _authorId;
 		}
 
 		@Override
@@ -147,15 +147,15 @@ public class BlogPostingCommentNestedCollectionResource
 			return _text;
 		}
 
-		private void _setAuthor(Long author) {
-			_author = author;
+		private void _setAuthorId(Long authorId) {
+			_authorId = authorId;
 		}
 
 		private void _setText(String text) {
 			_text = text;
 		}
 
-		private Long _author;
+		private Long _authorId;
 		private String _text;
 
 	}

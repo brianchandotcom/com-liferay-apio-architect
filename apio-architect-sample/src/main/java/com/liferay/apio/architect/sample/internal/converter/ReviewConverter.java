@@ -52,7 +52,7 @@ public class ReviewConverter {
 		Rating rating = review.getRating();
 
 		RatingModel ratingModel = new RatingModel(
-			rating.getAuthor(), rating.getRatingValue());
+			rating.getAuthorId(), rating.getRatingValue());
 
 		return new ReviewModel(review.getReviewBody(), ratingModel);
 	}

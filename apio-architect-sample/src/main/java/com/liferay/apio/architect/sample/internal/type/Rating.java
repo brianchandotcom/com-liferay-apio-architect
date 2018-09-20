@@ -37,7 +37,7 @@ public interface Rating {
 	 */
 	@Field("author")
 	@LinkedModel(Person.class)
-	public Long getAuthor();
+	public Long getAuthorId();
 
 	/**
 	 * Returns the rating's best possible rating.

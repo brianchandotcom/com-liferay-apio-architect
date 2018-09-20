@@ -77,7 +77,7 @@ public interface BlogPosting extends Identifier<Long> {
 	 */
 	@Field("creator")
 	@LinkedModel(Person.class)
-	public Long getCreator();
+	public Long getCreatorId();
 
 	/**
 	 * Returns the blog posting's creation date.

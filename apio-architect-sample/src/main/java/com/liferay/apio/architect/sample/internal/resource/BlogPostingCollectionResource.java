@@ -103,7 +103,7 @@ public class BlogPostingCollectionResource
 		).addDate(
 			"dateModified", BlogPosting::getDateModified
 		).addLinkedModel(
-			"creator", PersonIdentifier.class, BlogPosting::getCreator
+			"creator", PersonIdentifier.class, BlogPosting::getCreatorId
 		).addNestedList(
 			"review", BlogPosting::getReviews,
 			reviewBuilder -> reviewBuilder.types(
@@ -115,7 +115,7 @@ public class BlogPostingCollectionResource
 				ratingBuilder -> ratingBuilder.types(
 					"RatingOld"
 				).addLinkedModel(
-					"author", PersonIdentifier.class, Rating::getAuthor
+					"author", PersonIdentifier.class, Rating::getAuthorId
 				).addNumber(
 					"bestRating", Rating::getBestRating
 				).addNumber(
@@ -150,7 +150,7 @@ public class BlogPostingCollectionResource
 		).constructor(
 			BlogPostingForm::new
 		).addRequiredLinkedModel(
-			"creator", PersonIdentifier.class, BlogPostingForm::_setCreator
+			"creator", PersonIdentifier.class, BlogPostingForm::_setCreatorId
 		).addRequiredString(
 			"articleBody", BlogPostingForm::_setArticleBody
 		).addRequiredString(
@@ -173,7 +173,7 @@ public class BlogPostingCollectionResource
 		).constructor(
 			RatingForm::new
 		).addRequiredLinkedModel(
-			"author", PersonIdentifier.class, RatingForm::_setAuthor
+			"author", PersonIdentifier.class, RatingForm::_setAuthorId
 		).addRequiredLong(
 			"ratingValue", RatingForm::_setRatingValue
 		).build();
@@ -221,8 +221,8 @@ public class BlogPostingCollectionResource
 		}
 
 		@Override
-		public Long getCreator() {
-			return _creator;
+		public Long getCreatorId() {
+			return _creatorId;
 		}
 
 		@Override
@@ -263,8 +263,8 @@ public class BlogPostingCollectionResource
 			_articleBody = articleBody;
 		}
 
-		private void _setCreator(Long creator) {
-			_creator = creator;
+		private void _setCreatorId(Long creator) {
+			_creatorId = creator;
 		}
 
 		private void _setHeadline(String headline) {
@@ -283,7 +283,7 @@ public class BlogPostingCollectionResource
 
 		private String _alternativeHeadline;
 		private String _articleBody;
-		private Long _creator;
+		private Long _creatorId;
 		private String _headline;
 		private List<Review> _reviews;
 
@@ -292,8 +292,8 @@ public class BlogPostingCollectionResource
 	private static class RatingForm implements Rating {
 
 		@Override
-		public Long getAuthor() {
-			return _author;
+		public Long getAuthorId() {
+			return _authorId;
 		}
 
 		@Override
@@ -301,15 +301,15 @@ public class BlogPostingCollectionResource
 			return _ratingValue;
 		}
 
-		private void _setAuthor(Long author) {
-			_author = author;
+		private void _setAuthorId(Long authorId) {
+			_authorId = authorId;
 		}
 
 		private void _setRatingValue(Long ratingValue) {
 			_ratingValue = ratingValue;
 		}
 
-		private Long _author;
+		private Long _authorId;
 		private Long _ratingValue;
 
 	}

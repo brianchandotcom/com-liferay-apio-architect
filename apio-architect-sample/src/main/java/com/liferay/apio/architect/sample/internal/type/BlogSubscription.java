@@ -36,9 +36,9 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * @return the blog's ID
 	 * @review
 	 */
-	@Field(readOnly = true, value = "blog")
+	@Field(readOnly = true, value = "blog", description = "The blog being subscribed")
 	@LinkedModel(BlogPosting.class)
-	public Long getBlog();
+	public Long getBlogPostingId();
 
 	/**
 	 * Returns the subscription's ID.
@@ -55,8 +55,8 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * @return the person's ID
 	 * @review
 	 */
-	@Field("person")
+	@Field(value = "person", description = "The person being subscribed to the blog")
 	@LinkedModel(Person.class)
-	public Long getPerson();
+	public Long getPersonId();
 
 }

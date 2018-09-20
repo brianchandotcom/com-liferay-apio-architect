@@ -41,7 +41,7 @@ public interface Comment extends Identifier<Long> {
 	 */
 	@Field("author")
 	@LinkedModel(Person.class)
-	public Long getAuthor();
+	public Long getAuthorId();
 
 	/**
 	 * Returns the comment's creation date.

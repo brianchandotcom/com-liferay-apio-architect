@@ -41,7 +41,7 @@ public class BlogSubscriptionConverter {
 		return new BlogSubscription() {
 
 			@Override
-			public Long getBlog() {
+			public Long getBlogPostingId() {
 				BlogPostingModel blogPostingModel =
 					blogSubscriptionModel.getBlogPostingModel();
 
@@ -54,7 +54,7 @@ public class BlogSubscriptionConverter {
 			}
 
 			@Override
-			public Long getPerson() {
+			public Long getPersonId() {
 				PersonModel personModel =
 					blogSubscriptionModel.getPersonModel();
 

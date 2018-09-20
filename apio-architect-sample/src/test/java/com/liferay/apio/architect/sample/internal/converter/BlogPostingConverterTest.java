@@ -42,7 +42,7 @@ public class BlogPostingConverterTest {
 
 		assertThat(blogPosting.getAlternativeHeadline(), is("subtitle"));
 		assertThat(blogPosting.getArticleBody(), is("content"));
-		assertThat(blogPosting.getCreator(), is(0L));
+		assertThat(blogPosting.getCreatorId(), is(0L));
 		assertThat(blogPosting.getDateCreated(), isToday());
 		assertThat(blogPosting.getDateModified(), isToday());
 		assertThat(blogPosting.getFileFormat(), is("text/html"));
@@ -59,7 +59,7 @@ public class BlogPostingConverterTest {
 
 				Rating rating = review.getRating();
 
-				assertThat(rating.getAuthor(), is(2L));
+				assertThat(rating.getAuthorId(), is(2L));
 				assertThat(rating.getBestRating(), is(5));
 				assertThat(rating.getRatingValue(), is(3L));
 				assertThat(rating.getWorstRating(), is(0));
