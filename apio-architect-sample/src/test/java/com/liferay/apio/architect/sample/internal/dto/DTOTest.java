@@ -55,13 +55,37 @@ public class DTOTest {
 	}
 
 	@Test
-	public void testIdentifier() {
+	public void testBlogPostingCommentModel() {
 		_validator.validate(getPojoClass(BlogPostingCommentModel.class));
+	}
+
+	@Test
+	public void testBlogPostingModel() {
 		_validator.validate(getPojoClass(BlogPostingModel.class));
+	}
+
+	@Test
+	public void testBlogSubscriptionModel() {
 		_validator.validate(getPojoClass(BlogSubscriptionModel.class));
+	}
+
+	@Test
+	public void testPersonModel() {
 		_validator.validate(getPojoClass(PersonModel.class));
+	}
+
+	@Test
+	public void testPostalAddressModel() {
 		_validator.validate(getPojoClass(PostalAddressModel.class));
+	}
+
+	@Test
+	public void testRatingModel() {
 		_validator.validate(getPojoClass(RatingModel.class));
+	}
+
+	@Test
+	public void testReviewModel() {
 		_validator.validate(getPojoClass(ReviewModel.class));
 	}
 
