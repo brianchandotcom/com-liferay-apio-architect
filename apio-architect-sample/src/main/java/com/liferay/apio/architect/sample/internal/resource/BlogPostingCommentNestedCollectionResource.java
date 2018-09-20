@@ -60,7 +60,7 @@ public class BlogPostingCommentNestedCollectionResource
 
 	@Override
 	public String getName() {
-		return "comments-old";
+		return "comments-dsl";
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class BlogPostingCommentNestedCollectionResource
 		Representor.Builder<Comment, Long> builder) {
 
 		return builder.types(
-			"CommentOld"
+			"CommentDSL"
 		).identifier(
 			Comment::getId
 		).addDate(

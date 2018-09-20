@@ -66,7 +66,7 @@ public class BlogPostingCollectionResource
 
 	@Override
 	public String getName() {
-		return "blog-postings-old";
+		return "blog-postings-dsl";
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class BlogPostingCollectionResource
 		Representor.Builder<BlogPosting, Long> builder) {
 
 		return builder.types(
-			"BlogPostingOld"
+			"BlogPostingDSL"
 		).identifier(
 			BlogPosting::getId
 		).addDate(
@@ -107,13 +107,13 @@ public class BlogPostingCollectionResource
 		).addNestedList(
 			"review", BlogPosting::getReviews,
 			reviewBuilder -> reviewBuilder.types(
-				"ReviewOld"
+				"ReviewDSL"
 			).addString(
 				"reviewBody", Review::getReviewBody
 			).addNested(
 				"reviewRating", Review::getRating,
 				ratingBuilder -> ratingBuilder.types(
-					"RatingOld"
+					"RatingDSL"
 				).addLinkedModel(
 					"author", PersonIdentifier.class, Rating::getAuthorId
 				).addNumber(
