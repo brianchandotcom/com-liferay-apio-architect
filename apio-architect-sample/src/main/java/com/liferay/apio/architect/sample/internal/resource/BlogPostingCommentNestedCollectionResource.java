@@ -45,7 +45,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = NestedCollectionResource.class)
 public class BlogPostingCommentNestedCollectionResource
 	implements NestedCollectionResource
 		<BlogPostingCommentModel, Long, BlogPostingCommentIdentifier, Long,

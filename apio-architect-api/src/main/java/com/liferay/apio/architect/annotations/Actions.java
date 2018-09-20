@@ -51,7 +51,7 @@ public @interface Actions {
 	 * <p>
 	 * If the action is meant to be added on a root collection the method in
 	 * which the annotation is applied should not include an argument annotated
-	 * with {@link Id}.
+	 * with {@link ID}.
 	 * </p>
 	 *
 	 * <p>
@@ -63,7 +63,7 @@ public @interface Actions {
 	 * <p>
 	 * If the action is meant to be added on an individual item the method in
 	 * which the annotation is applied must include an argument annotated with
-	 * {@link Id} with the type of the resource's ID.
+	 * {@link ID} with the type of the resource's ID.
 	 * </p>
 	 *
 	 * <p>

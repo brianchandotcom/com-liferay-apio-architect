@@ -57,7 +57,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = CollectionResource.class)
 public class BlogPostingCollectionResource
 	implements CollectionResource
 		<BlogPostingModel, Long, BlogPostingIdentifier> {
