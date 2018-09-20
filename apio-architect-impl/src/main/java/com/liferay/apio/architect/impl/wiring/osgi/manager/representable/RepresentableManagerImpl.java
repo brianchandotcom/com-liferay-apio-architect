@@ -56,7 +56,10 @@ import org.slf4j.Logger;
  * @author Alejandro Hernández
  */
 @Component(
-	service = {IdentifierClassManager.class, NameManager.class, RepresentableManager.class}
+	service = {
+		IdentifierClassManager.class, NameManager.class,
+		RepresentableManager.class
+	}
 )
 public class RepresentableManagerImpl
 	extends BaseManager<Representable, Class<Identifier>>
