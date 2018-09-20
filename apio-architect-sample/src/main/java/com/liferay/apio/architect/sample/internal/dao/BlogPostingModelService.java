@@ -103,6 +103,7 @@ public class BlogPostingModelService {
 	 * @param  title the blog posting's title
 	 * @param  reviewModels the blog posting's reviews
 	 * @return the new blog posting
+	 * @review
 	 */
 	public BlogPostingModel create(
 		String content, long creatorId, String subtitle, String title,
@@ -180,6 +181,7 @@ public class BlogPostingModelService {
 	 * @param  reviewModels the blog posting's reviews
 	 * @return the updated blog posting, if present; {@code Optional#empty()}
 	 *         otherwise
+	 * @review
 	 */
 	public Optional<BlogPostingModel> update(
 		long id, String content, long creatorId, String subtitle, String title,
