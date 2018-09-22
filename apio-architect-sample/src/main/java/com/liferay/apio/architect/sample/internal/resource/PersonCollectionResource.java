@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = CollectionResource.class)
 public class PersonCollectionResource
 	implements CollectionResource
 		<Person, Long, PersonCollectionResource.PersonIdentifier> {

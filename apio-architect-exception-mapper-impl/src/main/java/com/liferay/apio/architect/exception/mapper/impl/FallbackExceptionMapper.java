@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Javier Gamarra
  */
-@Component
+@Component(service = ExceptionMapper.class)
 public class FallbackExceptionMapper implements ExceptionMapper<Exception> {
 
 	@Override

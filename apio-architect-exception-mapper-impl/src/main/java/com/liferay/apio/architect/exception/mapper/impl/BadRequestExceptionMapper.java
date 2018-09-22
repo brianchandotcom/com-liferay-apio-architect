@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = ExceptionMapper.class)
 public class BadRequestExceptionMapper
 	extends WebApplicationExceptionMapper
 	implements ExceptionMapper<BadRequestException> {

@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = ExceptionMapper.class)
 public class ForbiddenExceptionMapper
 	extends WebApplicationExceptionMapper
 	implements ExceptionMapper<ForbiddenException> {
