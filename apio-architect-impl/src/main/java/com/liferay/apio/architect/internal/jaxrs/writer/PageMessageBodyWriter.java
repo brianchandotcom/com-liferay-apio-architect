@@ -12,27 +12,26 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.json.writer;
+package com.liferay.apio.architect.internal.jaxrs.writer;
 
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.functional.Try.Success;
-import com.liferay.apio.architect.internal.jaxrs.json.writer.base.BaseMessageBodyWriter;
-import com.liferay.apio.architect.internal.message.json.SingleModelMessageMapper;
+import com.liferay.apio.architect.internal.jaxrs.writer.base.BaseMessageBodyWriter;
+import com.liferay.apio.architect.internal.message.json.PageMessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.SingleModelMessageMapperManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.PageMessageMapperManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil;
-import com.liferay.apio.architect.internal.writer.SingleModelWriter;
-import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.internal.writer.PageWriter;
+import com.liferay.apio.architect.pagination.Page;
 
 import java.lang.reflect.Type;
 
 import java.util.Optional;
 
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
@@ -41,7 +40,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Writes single models by using the {@link SingleModelMessageMapper} that
+ * Writes collection pages by using the {@link PageMessageMapper} that
  * corresponds to the media type.
  *
  * @author Alejandro Hernández
@@ -56,9 +55,8 @@ import org.osgi.service.component.annotations.Reference;
 	service = MessageBodyWriter.class
 )
 @Provider
-public class SingleModelMessageBodyWriter<T>
-	extends BaseMessageBodyWriter
-		<Success<SingleModel<T>>, SingleModelMessageMapper<T>> {
+public class PageMessageBodyWriter<T>
+	extends BaseMessageBodyWriter<Success<Page<T>>, PageMessageMapper<T>> {
 
 	@Override
 	public boolean canWrite(Class<?> clazz, Type genericType) {
@@ -67,29 +65,27 @@ public class SingleModelMessageBodyWriter<T>
 				genericType, Try.class);
 
 		return classTry.filter(
-			SingleModel.class::equals
+			Page.class::equals
 		).isSuccess();
 	}
 
 	@Override
-	public Optional<SingleModelMessageMapper<T>> getMessageMapperOptional(
+	public Optional<PageMessageMapper<T>> getMessageMapperOptional(
 		Request request) {
 
-		return _singleModelMessageMapperManager.
-			getSingleModelMessageMapperOptional(request);
+		return _pageMessageMapperManager.getPageMessageMapperOptional(request);
 	}
 
 	@Override
 	protected String write(
-		Success<SingleModel<T>> success,
-		SingleModelMessageMapper<T> singleModelMessageMapper,
+		Success<Page<T>> success, PageMessageMapper<T> pageMessageMapper,
 		RequestInfo requestInfo) {
 
-		SingleModelWriter<T> singleModelWriter = SingleModelWriter.create(
-			builder -> builder.singleModel(
+		PageWriter<T> pageWriter = PageWriter.create(
+			builder -> builder.page(
 				success.getValue()
-			).modelMessageMapper(
-				singleModelMessageMapper
+			).pageMessageMapper(
+				pageMessageMapper
 			).pathFunction(
 				_pathIdentifierMapperManager::mapToPath
 			).resourceNameFunction(
@@ -103,18 +99,16 @@ public class SingleModelMessageBodyWriter<T>
 				this::getSingleModelOptional
 			).build());
 
-		Optional<String> optional = singleModelWriter.write();
-
-		return optional.orElseThrow(NotFoundException::new);
+		return pageWriter.write();
 	}
+
+	@Reference
+	private PageMessageMapperManager _pageMessageMapperManager;
 
 	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 	@Reference
 	private RepresentableManager _representableManager;
-
-	@Reference
-	private SingleModelMessageMapperManager _singleModelMessageMapperManager;
 
 }

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.json.reader;
+package com.liferay.apio.architect.internal.jaxrs.reader;
 
 import static java.util.Map.Entry.comparingByKey;
 

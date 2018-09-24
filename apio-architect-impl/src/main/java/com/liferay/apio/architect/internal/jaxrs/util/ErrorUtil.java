@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.json.util;
+package com.liferay.apio.architect.internal.jaxrs.util;
 
 import static com.liferay.apio.architect.internal.writer.ErrorWriter.writeError;
 

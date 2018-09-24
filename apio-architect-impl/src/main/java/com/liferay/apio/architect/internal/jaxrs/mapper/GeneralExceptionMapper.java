@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.json.mapper;
+package com.liferay.apio.architect.internal.jaxrs.mapper;
 
-import com.liferay.apio.architect.internal.jaxrs.json.util.ErrorUtil;
+import com.liferay.apio.architect.internal.jaxrs.util.ErrorUtil;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;

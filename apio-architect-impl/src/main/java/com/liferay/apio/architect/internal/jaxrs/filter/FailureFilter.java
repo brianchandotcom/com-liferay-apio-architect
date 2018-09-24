@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.json.filter;
+package com.liferay.apio.architect.internal.jaxrs.filter;
 
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.functional.Try.Failure;
-import com.liferay.apio.architect.internal.jaxrs.json.util.ErrorUtil;
+import com.liferay.apio.architect.internal.jaxrs.util.ErrorUtil;
 
 import java.io.IOException;
 

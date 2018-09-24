@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.json.writer;
+package com.liferay.apio.architect.internal.jaxrs.writer;
 
 import static javax.ws.rs.core.HttpHeaders.CONTENT_LENGTH;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;

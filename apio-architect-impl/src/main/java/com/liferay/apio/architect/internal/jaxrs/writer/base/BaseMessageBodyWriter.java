@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.json.writer.base;
+package com.liferay.apio.architect.internal.jaxrs.writer.base;
 
 import static java.util.Collections.singletonList;
 

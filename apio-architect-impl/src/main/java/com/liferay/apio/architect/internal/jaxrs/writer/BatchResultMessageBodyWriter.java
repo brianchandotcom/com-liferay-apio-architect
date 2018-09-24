@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.json.writer;
+package com.liferay.apio.architect.internal.jaxrs.writer;
 
 import static com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil.getFirstGenericTypeArgumentFromTypeTry;
 
 import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.functional.Try.Success;
-import com.liferay.apio.architect.internal.jaxrs.json.writer.base.BaseMessageBodyWriter;
+import com.liferay.apio.architect.internal.jaxrs.writer.base.BaseMessageBodyWriter;
 import com.liferay.apio.architect.internal.message.json.BatchResultMessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.BatchResultMessageMapperManager;
