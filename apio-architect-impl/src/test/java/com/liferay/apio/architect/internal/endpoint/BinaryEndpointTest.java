@@ -90,6 +90,7 @@ public class BinaryEndpointTest {
 
 		assertThat(_readBinaryFile(binaryFile), is("Apio"));
 		assertThat(binaryFile.getMimeType(), is("image/png"));
+		assertThat(binaryFile.getName(), is("fileName"));
 		assertThat(binaryFile.getSize(), is(0L));
 	}
 
@@ -138,7 +139,7 @@ public class BinaryEndpointTest {
 			"binary",
 			__ -> new BinaryFile(
 				new ByteArrayInputStream("Apio".getBytes(UTF_8)), 0L,
-				"image/png")
+				"image/png", "fileName")
 		).build();
 	}
 

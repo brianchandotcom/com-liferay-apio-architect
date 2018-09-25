@@ -766,7 +766,8 @@ public class FormUtilTest {
 
 	private static Body _fileBody() {
 		BinaryFile binaryFile = new BinaryFile(
-			new ByteArrayInputStream("content".getBytes(UTF_8)), 0L, "type");
+			new ByteArrayInputStream("content".getBytes(UTF_8)), 0L, "type",
+			"fileName");
 
 		return Body.create(
 			__ -> Optional.empty(), __ -> Optional.empty(),
@@ -821,6 +822,7 @@ public class FormUtilTest {
 
 		assertThat(_readBinaryFile(binaryFile), is("content"));
 		assertThat(binaryFile.getMimeType(), is("type"));
+		assertThat(binaryFile.getName(), is("fileName"));
 	}
 
 	private void _validateLongList(List<Long> list) {

@@ -319,10 +319,10 @@ public class FormTest {
 
 		BinaryFile binaryFile1 = new BinaryFile(
 			new ByteArrayInputStream("Input Stream 1".getBytes(UTF_8)), 0L,
-			"mimetype1");
+			"mimetype1", "fileName1");
 		BinaryFile binaryFile2 = new BinaryFile(
 			new ByteArrayInputStream("Input Stream 2".getBytes(UTF_8)), 0L,
-			"mimetype2");
+			"mimetype2", "fileName2");
 
 		Map<String, BinaryFile> files = new HashMap<String, BinaryFile>() {
 			{
@@ -386,11 +386,13 @@ public class FormTest {
 
 		assertThat(_readBinaryFile(binaryFile1), is("Input Stream 1"));
 		assertThat(binaryFile1.getMimeType(), is("mimetype1"));
+		assertThat(binaryFile1.getName(), is("fileName1"));
 
 		BinaryFile binaryFile2 = (BinaryFile)map.get("f2");
 
 		assertThat(_readBinaryFile(binaryFile2), is("Input Stream 2"));
 		assertThat(binaryFile2.getMimeType(), is("mimetype2"));
+		assertThat(binaryFile2.getName(), is("fileName2"));
 	}
 
 	private Form<Object> _getEmptyObjectForm(Builder<Object> builder) {
