@@ -206,7 +206,7 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 		else {
 			BinaryFile binaryFile = new BinaryFile(
 				fileItem.getInputStream(), fileItem.getSize(),
-				fileItem.getContentType());
+				fileItem.getContentType(), fileItem.getName());
 
 			fileConsumer.accept(binaryFile);
 		}
