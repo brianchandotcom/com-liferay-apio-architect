@@ -37,7 +37,8 @@ import java.util.Optional;
 public class MockEntryPointWriter {
 
 	/**
-	 * Writes an {@code com.liferay.apio.architect.impl.entrypoint.EntryPoint}.
+	 * Writes an {@code
+	 * com.liferay.apio.architect.internal.entrypoint.EntryPoint}.
 	 *
 	 * @param  entryPointMessageMapper the {@code EntryPointMessageMapper} to
 	 *         use for writing the JSON object
