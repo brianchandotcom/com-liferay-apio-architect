@@ -16,9 +16,9 @@ package com.liferay.apio.architect.test.util.internal.writer;
 
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
-import com.liferay.apio.architect.impl.message.json.EntryPointMessageMapper;
-import com.liferay.apio.architect.impl.writer.EntryPointWriter;
-import com.liferay.apio.architect.impl.writer.EntryPointWriter.Builder;
+import com.liferay.apio.architect.internal.message.json.EntryPointMessageMapper;
+import com.liferay.apio.architect.internal.writer.EntryPointWriter;
+import com.liferay.apio.architect.internal.writer.EntryPointWriter.Builder;
 
 import java.util.Arrays;
 import java.util.Locale;
