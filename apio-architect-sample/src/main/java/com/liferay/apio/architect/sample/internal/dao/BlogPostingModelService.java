@@ -148,7 +148,8 @@ public class BlogPostingModelService {
 	 * @return the page of blog postings
 	 */
 	public List<BlogPostingModel> getPage(int start, int end) {
-		Collection<BlogPostingModel> blogPostingModels = _blogPostingModels.values();
+		Collection<BlogPostingModel> blogPostingModels =
+			_blogPostingModels.values();
 
 		Stream<BlogPostingModel> stream = blogPostingModels.stream();
 
