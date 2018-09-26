@@ -94,7 +94,7 @@ public class URLCreatorTest {
 
 		String url = createBinaryURL(_applicationURL, binaryId, _path);
 
-		assertThat(url, is("www.liferay.com/b/name/id/binary"));
+		assertThat(url, is("www.liferay.com/name/id/binary"));
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class URLCreatorTest {
 	public void testCreateCollectionURL() {
 		String url = createCollectionURL(_applicationURL, "resource");
 
-		assertThat(url, is("www.liferay.com/p/resource"));
+		assertThat(url, is("www.liferay.com/resource"));
 	}
 
 	@Test
@@ -135,7 +135,7 @@ public class URLCreatorTest {
 		String url = createNestedCollectionURL(
 			_applicationURL, _path, "related");
 
-		assertThat(url, is("www.liferay.com/p/name/id/related"));
+		assertThat(url, is("www.liferay.com/name/id/related"));
 	}
 
 	@Test(expected = NoSuchElementException.class)
@@ -149,14 +149,14 @@ public class URLCreatorTest {
 	public void testCreateOperationWithURIHasValidURL() {
 		CreateOperation createOperation = new CreateOperation(null, "", "name");
 
-		_validateOperationURL(createOperation, "www.liferay.com/p/name");
+		_validateOperationURL(createOperation, "www.liferay.com/name");
 	}
 
 	@Test
 	public void testCreateSingleURL() {
 		String url = createSingleURL(_applicationURL, _path);
 
-		assertThat(url, is("www.liferay.com/p/name/id"));
+		assertThat(url, is("www.liferay.com/name/id"));
 	}
 
 	@Test(expected = NoSuchElementException.class)
@@ -170,7 +170,7 @@ public class URLCreatorTest {
 	public void testDeleteOperationWithURIHasValidURL() {
 		DeleteOperation deleteOperation = new DeleteOperation("", "name");
 
-		_validateOperationURL(deleteOperation, "www.liferay.com/p/name");
+		_validateOperationURL(deleteOperation, "www.liferay.com/name");
 	}
 
 	@Test
@@ -238,7 +238,7 @@ public class URLCreatorTest {
 		RetrieveOperation retrieveOperation = new RetrieveOperation(
 			"", false, "name");
 
-		_validateOperationURL(retrieveOperation, "www.liferay.com/p/name");
+		_validateOperationURL(retrieveOperation, "www.liferay.com/name");
 	}
 
 	@Test(expected = NoSuchElementException.class)
@@ -252,7 +252,7 @@ public class URLCreatorTest {
 	public void testUpdateOperationWithURIHasValidURL() {
 		UpdateOperation updateOperation = new UpdateOperation(null, "", "name");
 
-		_validateOperationURL(updateOperation, "www.liferay.com/p/name");
+		_validateOperationURL(updateOperation, "www.liferay.com/name");
 	}
 
 	private void _validateOperationURL(

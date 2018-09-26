@@ -9,7 +9,7 @@
 	"@type": "EntryPoint",
 	"collection": [
 		{
-			"@id": "localhost/o/api/p/type1",
+			"@id": "localhost/o/api/type1",
 			"@type": [
 				"Collection"
 			],
@@ -19,7 +19,7 @@
 			}
 		},
 		{
-			"@id": "localhost/o/api/p/type2",
+			"@id": "localhost/o/api/type2",
 			"@type": [
 				"Collection"
 			],
@@ -29,7 +29,7 @@
 			}
 		},
 		{
-			"@id": "localhost/o/api/p/type3",
+			"@id": "localhost/o/api/type3",
 			"@type": [
 				"Collection"
 			],

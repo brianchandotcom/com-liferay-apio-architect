@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.url;
 
 import static java.lang.String.join;
 
+import com.liferay.apio.architect.internal.jaxrs.resource.NestedResource;
 import com.liferay.apio.architect.internal.jaxrs.resource.RootResource;
 import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
 import com.liferay.apio.architect.internal.operation.CreateOperation;
@@ -26,6 +27,8 @@ import com.liferay.apio.architect.internal.pagination.PageType;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.uri.Path;
+
+import java.net.URI;
 
 import java.util.Optional;
 
@@ -79,8 +82,21 @@ public final class URLCreator {
 	public static String createBinaryURL(
 		ApplicationURL applicationURL, String binaryId, Path path) {
 
-		return createAbsoluteURL(
-			applicationURL, join("/", "b", path.asURI(), binaryId));
+		URI uri = UriBuilder.fromMethod(
+			RootResource.class, "nestedResource"
+		).resolveTemplate(
+			"param", path.getName()
+		).path(
+			NestedResource.class, "nestedResource"
+		).resolveTemplate(
+			"param", path.getId()
+		).path(
+			NestedResource.class, "nestedResource"
+		).resolveTemplate(
+			"param", binaryId
+		).build();
+
+		return createAbsoluteURL(applicationURL, uri.toString());
 	}
 
 	/**
@@ -113,7 +129,13 @@ public final class URLCreator {
 	public static String createCollectionURL(
 		ApplicationURL applicationURL, String name) {
 
-		return createAbsoluteURL(applicationURL, "/p/" + name);
+		URI uri = UriBuilder.fromMethod(
+			RootResource.class, "nestedResource"
+		).resolveTemplate(
+			"param", name
+		).build();
+
+		return createAbsoluteURL(applicationURL, uri.toString());
 	}
 
 	/**
@@ -127,7 +149,21 @@ public final class URLCreator {
 	public static String createNestedCollectionURL(
 		ApplicationURL applicationURL, Path path, String name) {
 
-		return createAbsoluteURL(applicationURL, _getReusablePath(path, name));
+		URI uri = UriBuilder.fromMethod(
+			RootResource.class, "nestedResource"
+		).resolveTemplate(
+			"param", path.getName()
+		).path(
+			NestedResource.class, "nestedResource"
+		).resolveTemplate(
+			"param", path.getId()
+		).path(
+			NestedResource.class, "nestedResource"
+		).resolveTemplate(
+			"param", name
+		).build();
+
+		return createAbsoluteURL(applicationURL, uri.toString());
 	}
 
 	/**
@@ -145,27 +181,27 @@ public final class URLCreator {
 		return optional.map(
 			uri -> {
 				if (operation instanceof BatchCreateOperation) {
-					return "batch/" + uri;
+					return uri;
 				}
 
 				if (operation.isCustom()) {
-					return _createCustomOperationURL(operation, uri);
+					return uri + "/" + operation.getCustomRoute();
 				}
 
 				if (operation instanceof CreateOperation) {
-					return "p/" + uri;
+					return uri;
 				}
 
 				if (operation instanceof DeleteOperation) {
-					return "p/" + uri;
+					return uri;
 				}
 
 				if (operation instanceof RetrieveOperation) {
-					return "p/" + uri;
+					return uri;
 				}
 
 				if (operation instanceof UpdateOperation) {
-					return "p/" + uri;
+					return uri;
 				}
 
 				return null;
@@ -186,7 +222,17 @@ public final class URLCreator {
 	public static String createSingleURL(
 		ApplicationURL applicationURL, Path path) {
 
-		return createAbsoluteURL(applicationURL, "/p/" + path.asURI());
+		URI uri = UriBuilder.fromMethod(
+			RootResource.class, "nestedResource"
+		).resolveTemplate(
+			"param", path.getName()
+		).path(
+			NestedResource.class, "nestedResource"
+		).resolveTemplate(
+			"param", path.getId()
+		).build();
+
+		return createAbsoluteURL(applicationURL, uri.toString());
 	}
 
 	/**
@@ -224,27 +270,6 @@ public final class URLCreator {
 		}
 
 		return join("/", baseUrl, relativeURL);
-	}
-
-	private static String _createCustomOperationURL(
-		Operation operation, String uri) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("c/");
-		sb.append(uri);
-		sb.append("/");
-		sb.append(operation.getCustomRoute());
-
-		return sb.toString();
-	}
-
-	private static String _getReusablePath(Path path, String name) {
-		if (name.equals(path.getName())) {
-			return join("/", "p", "r", path.asURI());
-		}
-
-		return join("/", "p", path.asURI(), name);
 	}
 
 	private URLCreator() {

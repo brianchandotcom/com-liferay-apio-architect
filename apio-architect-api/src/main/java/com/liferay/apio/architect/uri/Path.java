@@ -16,7 +16,7 @@ package com.liferay.apio.architect.uri;
 
 /**
  * Represents a resource path. For example, the ID and name of a resource
- * obtained from the URL {@code /p/customers/2012} is {@code 2012} and {@code
+ * obtained from the URL {@code /customers/2012} is {@code 2012} and {@code
  * "customers"}, respectively.
  *
  * @author Alejandro Hernández
