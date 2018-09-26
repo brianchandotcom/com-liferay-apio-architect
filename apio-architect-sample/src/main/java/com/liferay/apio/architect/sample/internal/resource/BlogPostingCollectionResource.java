@@ -76,7 +76,7 @@ public class BlogPostingCollectionResource
 		return builder.addGetter(
 			_blogPostingActionRouter::retrieve
 		).addCustomRoute(
-			_SUBSCRIBE_ROUTE, _blogPostingActionRouter::subscribe,
+			_SUBSCRIBE_CUSTOM_ROUTE, _blogPostingActionRouter::subscribe,
 			BlogSubscriptionIdentifier.class,
 			(credentials, id) -> hasPermission(credentials),
 			BlogSubscriptionRepresentable::buildForm
@@ -196,7 +196,7 @@ public class BlogPostingCollectionResource
 		).build();
 	}
 
-	private static final CustomRoute _SUBSCRIBE_ROUTE = new PostRoute() {
+	private static final CustomRoute _SUBSCRIBE_CUSTOM_ROUTE = new PostRoute() {
 
 		@Override
 		public String getName() {
