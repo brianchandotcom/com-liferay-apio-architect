@@ -46,6 +46,7 @@ import org.osgi.service.component.annotations.Reference;
  * in an in-memory database with fake data.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @Component(immediate = true, service = BlogPostingModelService.class)
 public class BlogPostingModelService {
@@ -90,7 +91,7 @@ public class BlogPostingModelService {
 				_count.get(), lorem.paragraph(), date, creatorId, date,
 				reviewModels, lorem.sentence(), book.title());
 
-			_blogPostings.put(_count.getAndIncrement(), blogPostingModel);
+			_blogPostingModels.put(_count.getAndIncrement(), blogPostingModel);
 		}
 	}
 
@@ -113,7 +114,7 @@ public class BlogPostingModelService {
 			_count.get(), content, new Date(), creatorId, new Date(),
 			reviewModels, subtitle, title);
 
-		_blogPostings.put(_count.getAndIncrement(), blogPostingModel);
+		_blogPostingModels.put(_count.getAndIncrement(), blogPostingModel);
 
 		return blogPostingModel;
 	}
@@ -126,7 +127,7 @@ public class BlogPostingModelService {
 	 * @return the blog posting, if present; {@code Optional#empty()} otherwise
 	 */
 	public Optional<BlogPostingModel> get(long id) {
-		return Optional.ofNullable(_blogPostings.get(id));
+		return Optional.ofNullable(_blogPostingModels.get(id));
 	}
 
 	/**
@@ -135,7 +136,7 @@ public class BlogPostingModelService {
 	 * @return the total number of blog postings
 	 */
 	public int getCount() {
-		return _blogPostings.size();
+		return _blogPostingModels.size();
 	}
 
 	/**
@@ -147,7 +148,7 @@ public class BlogPostingModelService {
 	 * @return the page of blog postings
 	 */
 	public List<BlogPostingModel> getPage(int start, int end) {
-		Collection<BlogPostingModel> blogPostingModels = _blogPostings.values();
+		Collection<BlogPostingModel> blogPostingModels = _blogPostingModels.values();
 
 		Stream<BlogPostingModel> stream = blogPostingModels.stream();
 
@@ -166,7 +167,7 @@ public class BlogPostingModelService {
 	 * @param id the blog posting's ID
 	 */
 	public void remove(long id) {
-		_blogPostings.remove(id);
+		_blogPostingModels.remove(id);
 	}
 
 	/**
@@ -187,7 +188,7 @@ public class BlogPostingModelService {
 		long id, String content, long creatorId, String subtitle, String title,
 		List<ReviewModel> reviewModels) {
 
-		BlogPostingModel blogPostingModel = _blogPostings.get(id);
+		BlogPostingModel blogPostingModel = _blogPostingModels.get(id);
 
 		if (blogPostingModel == null) {
 			return Optional.empty();
@@ -199,12 +200,12 @@ public class BlogPostingModelService {
 			id, content, createDate, creatorId, new Date(), reviewModels,
 			subtitle, title);
 
-		_blogPostings.put(id, blogPostingModel);
+		_blogPostingModels.put(id, blogPostingModel);
 
 		return Optional.of(blogPostingModel);
 	}
 
-	private final Map<Long, BlogPostingModel> _blogPostings =
+	private final Map<Long, BlogPostingModel> _blogPostingModels =
 		new ConcurrentHashMap<>();
 	private final AtomicLong _count = new AtomicLong(0);
 

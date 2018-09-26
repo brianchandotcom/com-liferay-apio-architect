@@ -28,6 +28,7 @@ import org.osgi.service.component.annotations.Component;
  * Contains methods for creating blog subscriptions in an in-memory database.
  *
  * @author Alejandro Hernández
+ * @review
  */
 @Component(immediate = true, service = BlogSubscriptionModelService.class)
 public class BlogSubscriptionModelService {
@@ -45,14 +46,14 @@ public class BlogSubscriptionModelService {
 		BlogSubscriptionModel blogSubscriptionModel = new BlogSubscriptionModel(
 			_count.getAndIncrement(), blogPostingModel, personModel);
 
-		_blogSubscriptions.put(
+		_blogSubscriptionModels.put(
 			blogSubscriptionModel.getId(), blogSubscriptionModel);
 
 		return blogSubscriptionModel;
 	}
 
-	private static final Map<Long, BlogSubscriptionModel> _blogSubscriptions =
-		new ConcurrentHashMap<>();
+	private static final Map<Long, BlogSubscriptionModel>
+		_blogSubscriptionModels = new ConcurrentHashMap<>();
 	private static final AtomicLong _count = new AtomicLong(0);
 
 }

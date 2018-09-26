@@ -18,6 +18,7 @@ package com.liferay.apio.architect.sample.internal.dto;
  * Represents a postal address. This is a mock class for sample purposes only.
  *
  * @author Alejandro Hernández
+ * @review
  */
 public class PostalAddressModel {
 
