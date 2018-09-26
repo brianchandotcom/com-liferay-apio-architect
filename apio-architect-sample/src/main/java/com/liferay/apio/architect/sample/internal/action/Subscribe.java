@@ -19,7 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import static javax.ws.rs.HttpMethod.PUT;
 
-import com.liferay.apio.architect.annotations.Actions;
+import com.liferay.apio.architect.annotation.Actions;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

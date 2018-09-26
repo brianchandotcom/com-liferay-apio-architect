@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.annotations;
+package com.liferay.apio.architect.annotation;
 
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

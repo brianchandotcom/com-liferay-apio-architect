@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.annotations;
+package com.liferay.apio.architect.annotation;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.METHOD;

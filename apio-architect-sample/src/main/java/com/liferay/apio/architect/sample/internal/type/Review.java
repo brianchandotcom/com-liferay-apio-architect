@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.sample.internal.type;
 
-import com.liferay.apio.architect.annotations.Vocabulary.Field;
-import com.liferay.apio.architect.annotations.Vocabulary.Type;
+import com.liferay.apio.architect.annotation.Vocabulary.Field;
+import com.liferay.apio.architect.annotation.Vocabulary.Type;
 
 /**
  * Instances of this interface represent a review exposed through the API.

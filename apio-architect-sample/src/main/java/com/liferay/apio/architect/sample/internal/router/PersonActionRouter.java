@@ -17,12 +17,12 @@ package com.liferay.apio.architect.sample.internal.router;
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.PersonConverter.toPerson;
 
-import com.liferay.apio.architect.annotations.Actions.Create;
-import com.liferay.apio.architect.annotations.Actions.Remove;
-import com.liferay.apio.architect.annotations.Actions.Replace;
-import com.liferay.apio.architect.annotations.Actions.Retrieve;
-import com.liferay.apio.architect.annotations.Body;
-import com.liferay.apio.architect.annotations.Id;
+import com.liferay.apio.architect.annotation.Actions.Create;
+import com.liferay.apio.architect.annotation.Actions.Remove;
+import com.liferay.apio.architect.annotation.Actions.Replace;
+import com.liferay.apio.architect.annotation.Actions.Retrieve;
+import com.liferay.apio.architect.annotation.Body;
+import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
