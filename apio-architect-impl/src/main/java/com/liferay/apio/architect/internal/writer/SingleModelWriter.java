@@ -14,12 +14,10 @@
 
 package com.liferay.apio.architect.internal.writer;
 
-import static com.liferay.apio.architect.internal.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getPathOptional;
 
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.internal.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.alias.RepresentorFunction;
@@ -206,18 +204,6 @@ public class SingleModelWriter<T> {
 			operation -> {
 				JSONObjectBuilder operationJSONObjectBuilder =
 					new JSONObjectBuilder();
-
-				Optional<Form> formOptional = operation.getFormOptional();
-
-				formOptional.ifPresent(
-					form -> {
-						String url = createFormURL(
-							_requestInfo.getApplicationURL(), form);
-
-						_singleModelMessageMapper.mapEmbeddedOperationFormURL(
-							jsonObjectBuilder, operationJSONObjectBuilder,
-							embeddedPathElements, url);
-					});
 
 				_singleModelMessageMapper.mapEmbeddedOperationMethod(
 					jsonObjectBuilder, operationJSONObjectBuilder,

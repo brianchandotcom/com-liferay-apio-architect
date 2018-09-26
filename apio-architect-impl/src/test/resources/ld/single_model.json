@@ -325,7 +325,6 @@
 				"ReplaceAction",
 				"Operation"
 			],
-			"expects": "localhost/o/api/f/u/r",
 			"method": "PUT"
 		}
 	],

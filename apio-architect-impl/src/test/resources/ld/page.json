@@ -980,7 +980,6 @@
 				"CreateAction",
 				"Operation"
 			],
-			"expects": "localhost/o/api/f/c/p",
 			"method": "POST"
 		}
 	],

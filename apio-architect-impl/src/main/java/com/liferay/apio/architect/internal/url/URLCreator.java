@@ -16,7 +16,7 @@ package com.liferay.apio.architect.internal.url;
 
 import static java.lang.String.join;
 
-import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.internal.jaxrs.resource.RootResource;
 import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
 import com.liferay.apio.architect.internal.operation.CreateOperation;
 import com.liferay.apio.architect.internal.operation.DeleteOperation;
@@ -114,19 +114,6 @@ public final class URLCreator {
 		ApplicationURL applicationURL, String name) {
 
 		return createAbsoluteURL(applicationURL, "/p/" + name);
-	}
-
-	/**
-	 * Returns the URL for a {@code Form}.
-	 *
-	 * @param  applicationURL the application URL
-	 * @param  form the form
-	 * @return the URL for a {@code Form}
-	 */
-	public static String createFormURL(
-		ApplicationURL applicationURL, Form form) {
-
-		return createAbsoluteURL(applicationURL, join("/", "f", form.getId()));
 	}
 
 	/**

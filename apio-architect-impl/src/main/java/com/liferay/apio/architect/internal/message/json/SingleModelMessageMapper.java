@@ -67,22 +67,6 @@ public interface SingleModelMessageMapper<T>
 	}
 
 	/**
-	 * Maps an embedded resource operation form's URL to its JSON object
-	 * representation.
-	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param embeddedPathElements the current resource's embedded path elements
-	 * @param url the operation form's URL
-	 */
-	public default void mapEmbeddedOperationFormURL(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder,
-		FunctionalList<String> embeddedPathElements, String url) {
-	}
-
-	/**
 	 * Maps an embedded resource operation's method to its JSON object
 	 * representation.
 	 *

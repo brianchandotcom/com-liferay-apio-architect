@@ -93,24 +93,6 @@ public interface PageMessageMapper<T>
 	}
 
 	/**
-	 * Maps a resource operation form's URL to its JSON object representation.
-	 *
-	 * @param jsonObjectBuilder the JSON object builder for the operation
-	 * @param url the operation form's URL
-	 */
-	@Override
-	public default void mapFormURL(
-		JSONObjectBuilder jsonObjectBuilder, String url) {
-
-		Optional<SingleModelMessageMapper<T>> optional =
-			getSingleModelMessageMapperOptional();
-
-		optional.ifPresent(
-			singleModelMessageMapper -> singleModelMessageMapper.mapFormURL(
-				jsonObjectBuilder, url));
-	}
-
-	/**
 	 * Maps a resource operation's method to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the operation

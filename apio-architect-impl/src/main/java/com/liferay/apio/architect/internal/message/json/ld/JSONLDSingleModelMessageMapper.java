@@ -75,19 +75,6 @@ public class JSONLDSingleModelMessageMapper<T>
 	}
 
 	@Override
-	public void mapEmbeddedOperationFormURL(
-		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder,
-		FunctionalList<String> embeddedPathElements, String url) {
-
-		operationJSONObjectBuilder.field(
-			"expects"
-		).stringValue(
-			url
-		);
-	}
-
-	@Override
 	public void mapEmbeddedOperationMethod(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
 		JSONObjectBuilder operationJSONObjectBuilder,
@@ -232,15 +219,6 @@ public class JSONLDSingleModelMessageMapper<T>
 			embeddedPathElements.head(), _getTail(embeddedPathElements)
 		).field(
 			"@id"
-		).stringValue(
-			url
-		);
-	}
-
-	@Override
-	public void mapFormURL(JSONObjectBuilder jsonObjectBuilder, String url) {
-		jsonObjectBuilder.field(
-			"expects"
 		).stringValue(
 			url
 		);

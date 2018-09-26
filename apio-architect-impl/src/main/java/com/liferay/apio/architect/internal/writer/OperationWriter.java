@@ -14,10 +14,8 @@
 
 package com.liferay.apio.architect.internal.writer;
 
-import static com.liferay.apio.architect.internal.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createOperationURL;
 
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.internal.message.json.OperationMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
@@ -51,14 +49,6 @@ public class OperationWriter {
 		urlOptional.ifPresent(
 			url -> _operationMapper.mapOperationURL(
 				operationJSONObjectBuilder, url));
-
-		Optional<Form> formOptional = operation.getFormOptional();
-
-		formOptional.map(
-			form -> createFormURL(_requestInfo.getApplicationURL(), form)
-		).ifPresent(
-			url -> _operationMapper.mapFormURL(operationJSONObjectBuilder, url)
-		);
 
 		_operationMapper.mapHTTPMethod(
 			operationJSONObjectBuilder, operation.getHttpMethod());
