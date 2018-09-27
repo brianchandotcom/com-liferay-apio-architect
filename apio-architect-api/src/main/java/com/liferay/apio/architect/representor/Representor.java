@@ -17,10 +17,8 @@ package com.liferay.apio.architect.representor;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.related.RelatedCollection;
 
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * Holds information about the metadata supported for a resource.

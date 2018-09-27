@@ -211,7 +211,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		relatedModels = new ArrayList<>();
 		types = new ArrayList<>();
 		_nameFunction = nameFunction;
-		_supplier = supplier;
+		this.supplier = supplier;
 	}
 
 	/**
@@ -325,7 +325,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 
 			}
 		).apply(
-			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction, _supplier)
+			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction, supplier)
 		);
 
 		nestedFieldFunctions.add(nestedFieldFunction);
@@ -365,7 +365,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 
 			}
 		).apply(
-			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction, _supplier)
+			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction, supplier)
 		);
 
 		nestedListFieldFunctions.add(nestedFieldFunction);
@@ -465,7 +465,6 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		Collections.addAll(this.types, types);
 	}
 
-	protected final Supplier<List<RelatedCollection<?>>> _supplier;
 	protected final Map<String, BinaryFunction<T>> binaryFunctions;
 	protected final Map<String, List<FieldFunction<T, ?>>> fieldFunctions;
 	protected final List<NestedFieldFunction<T, ?>> nestedFieldFunctions;
@@ -473,6 +472,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		nestedListFieldFunctions;
 	protected String primaryType;
 	protected final List<RelatedModel<T, ?>> relatedModels;
+	protected final Supplier<List<RelatedCollection<?>>> supplier;
 	protected final List<String> types;
 
 	protected abstract static class BaseBuilderImpl

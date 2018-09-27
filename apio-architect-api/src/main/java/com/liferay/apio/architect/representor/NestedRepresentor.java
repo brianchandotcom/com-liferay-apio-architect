@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.representor;
 
 import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.apio.architect.identifier.Identifier;
 
 import java.util.function.Function;
@@ -70,6 +71,7 @@ public interface NestedRepresentor<T> extends BaseRepresentor<T> {
 			addRelatedCollection(
 				String key, Class<S> itemIdentifierClass,
 				Function<T, V> modelToIdentifierFunction);
+
 	}
 
 }

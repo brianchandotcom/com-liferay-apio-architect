@@ -55,7 +55,8 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
  */
 @ConsumerType
 @SuppressWarnings("unused")
-public interface ReusableNestedCollectionRouter<T, S, U extends Identifier<S>, W> {
+public interface ReusableNestedCollectionRouter
+	<T, S, U extends Identifier<S>, W> {
 
 	/**
 	 * Creates the {@link NestedCollectionRoutes} supported by the nested
@@ -66,6 +67,7 @@ public interface ReusableNestedCollectionRouter<T, S, U extends Identifier<S>, W
 	 *        NestedCollectionRoutes} instance
 	 * @see   NestedCollectionRoutes.Builder
 	 */
-	public NestedCollectionRoutes collectionRoutes(Builder builder);
+	public NestedCollectionRoutes<T, S, W> collectionRoutes(
+		Builder<T, S, W> builder);
 
 }

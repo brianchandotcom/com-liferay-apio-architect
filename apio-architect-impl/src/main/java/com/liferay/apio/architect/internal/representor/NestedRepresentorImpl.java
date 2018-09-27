@@ -37,9 +37,8 @@ import java.util.stream.Stream;
 public class NestedRepresentorImpl<T>
 	extends BaseRepresentorImpl<T> implements NestedRepresentor<T> {
 
-	@Override
-	public boolean isNested() {
-		return true;
+	public Map<String, Function<T, ?>> getModelToIdentifierFunctions() {
+		return _modelToIdentifierFunctions;
 	}
 
 	@Override
@@ -47,12 +46,17 @@ public class NestedRepresentorImpl<T>
 		getRelatedCollections() {
 
 		return Stream.of(
-			_relatedCollections, _supplier.get()
+			_relatedCollections, supplier.get()
 		).filter(
 			Objects::nonNull
 		).flatMap(
 			Collection::stream
 		);
+	}
+
+	@Override
+	public boolean isNested() {
+		return true;
 	}
 
 	/**
@@ -84,20 +88,22 @@ public class NestedRepresentorImpl<T>
 			implements FirstStep<T> {
 
 			@Override
-			public FirstStepImpl getThis() {
-				return this;
-			}
-
-			@Override
 			public <V, S extends Identifier<V>> NestedRepresentor.FirstStep<T>
 				addRelatedCollection(
 					String key, Class<S> itemIdentifierClass,
 					Function<T, V> modelToIdentifierFunction) {
 
-				baseRepresentor._addRelatedCollection(key, itemIdentifierClass, modelToIdentifierFunction);
+				baseRepresentor._addRelatedCollection(
+					key, itemIdentifierClass, modelToIdentifierFunction);
 
 				return this;
 			}
+
+			@Override
+			public FirstStepImpl getThis() {
+				return this;
+			}
+
 		}
 
 	}
@@ -110,12 +116,9 @@ public class NestedRepresentorImpl<T>
 		_modelToIdentifierFunctions = new HashMap<>();
 	}
 
-	public Map<String, Function<T, ?>> getModelToIdentifierFunctions() {
-		return _modelToIdentifierFunctions;
-	}
-
 	private <V, S extends Identifier<V>> void _addRelatedCollection(
-		String key, Class<S> itemIdentifierClass, Function<T, V> modelToIdentifierFunction) {
+		String key, Class<S> itemIdentifierClass,
+		Function<T, V> modelToIdentifierFunction) {
 
 		RelatedCollection<S> relatedCollection = new RelatedCollectionImpl<>(
 			key, itemIdentifierClass);
@@ -125,7 +128,7 @@ public class NestedRepresentorImpl<T>
 		_modelToIdentifierFunctions.put(key, modelToIdentifierFunction);
 	}
 
-	private final List<RelatedCollection<?>> _relatedCollections;
 	private final Map<String, Function<T, ?>> _modelToIdentifierFunctions;
+	private final List<RelatedCollection<?>> _relatedCollections;
 
 }

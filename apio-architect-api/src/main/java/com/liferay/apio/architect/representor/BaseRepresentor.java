@@ -150,6 +150,14 @@ public interface BaseRepresentor<T> {
 	public String getPrimaryType();
 
 	/**
+	 * Returns the related collections.
+	 *
+	 * @return the related collections
+	 */
+	public Stream<RelatedCollection<? extends Identifier>>
+		getRelatedCollections();
+
+	/**
 	 * Returns the related models.
 	 *
 	 * @return the related models
@@ -194,14 +202,6 @@ public interface BaseRepresentor<T> {
 	 *         {@code false} otherwise
 	 */
 	public boolean isNested();
-
-	/**
-	 * Returns the related collections.
-	 *
-	 * @return the related collections
-	 */
-	public Stream<RelatedCollection<? extends Identifier>>
-		getRelatedCollections();
 
 	@ProviderType
 	public interface BaseFirstStep

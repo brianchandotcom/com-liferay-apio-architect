@@ -45,7 +45,7 @@ public class RepresentorImpl<T>
 		getRelatedCollections() {
 
 		return Stream.of(
-			_relatedCollections, _supplier.get()
+			_relatedCollections, supplier.get()
 		).filter(
 			Objects::nonNull
 		).flatMap(
