@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.exception.mapper.internal;
 
+import static com.liferay.apio.architect.exception.mapper.internal.WebApplicationExceptionMapperUtil.getDescription;
+
 import com.liferay.apio.architect.error.APIError;
 
 import javax.ws.rs.WebApplicationException;
@@ -35,7 +37,8 @@ public abstract class WebApplicationExceptionMapper {
 	 * @return the exception's {@code APIError} representation
 	 */
 	protected APIError convert(WebApplicationException exception) {
-		String description = _getDescription(exception.getMessage());
+		String description = getDescription(
+			exception.getMessage(), getStatusType());
 
 		StatusType statusType = getStatusType();
 
@@ -58,20 +61,5 @@ public abstract class WebApplicationExceptionMapper {
 	 * @return the exception's type
 	 */
 	protected abstract String getType();
-
-	private String _getDescription(String message) {
-		StatusType statusType = getStatusType();
-
-		String statusCode = String.valueOf(statusType.getStatusCode());
-
-		String defaultMessage = String.join(
-			" ", "HTTP", statusCode, statusType.getReasonPhrase());
-
-		if (defaultMessage.equals(message)) {
-			return null;
-		}
-
-		return message;
-	}
 
 }

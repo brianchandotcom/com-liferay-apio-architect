@@ -14,11 +14,14 @@
 
 package com.liferay.apio.architect.exception.mapper.internal;
 
+import static com.liferay.apio.architect.exception.mapper.internal.WebApplicationExceptionMapperUtil.getDescription;
+
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.StatusType;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -36,10 +39,13 @@ public class ClientErrorExceptionMapper
 	public APIError map(ClientErrorException exception) {
 		Response response = exception.getResponse();
 
-		int status = response.getStatus();
+		StatusType statusType = response.getStatusInfo();
+
+		String description = getDescription(exception.getMessage(), statusType);
 
 		return new APIError(
-			exception, "General server error", "client-error", status);
+			exception, statusType.getReasonPhrase(), description,
+			"client-error", statusType.getStatusCode());
 	}
 
 }

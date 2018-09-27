@@ -1,0 +1,47 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.apio.architect.exception.mapper.internal;
+
+import javax.ws.rs.core.Response.StatusType;
+
+/**
+ * Provides utility functions for {@code WebApplicationException} mappers.
+ *
+ * <p>
+ * This class shouldn't be instantiated.
+ * </p>
+ *
+ * @author Alejandro Hernández
+ */
+public class WebApplicationExceptionMapperUtil {
+
+	public static String getDescription(String message, StatusType statusType) {
+		String statusCode = String.valueOf(statusType.getStatusCode());
+
+		String defaultMessage = String.join(
+			" ", "HTTP", statusCode, statusType.getReasonPhrase());
+
+		if (defaultMessage.equals(message)) {
+			return null;
+		}
+
+		return message;
+	}
+
+	private WebApplicationExceptionMapperUtil() {
+		throw new UnsupportedOperationException();
+	}
+
+}
