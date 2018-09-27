@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.representor;
 
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.related.RelatedCollectionImpl;
+import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.NestedRepresentor;
 
 import java.util.function.Function;

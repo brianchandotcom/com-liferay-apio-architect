@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.impl.wiring.osgi.manager.router;
+package com.liferay.apio.architect.internal.wiring.osgi.manager.router;
 
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
@@ -40,7 +40,7 @@ public interface ReusableNestedCollectionRouterManager {
 	 * @return the nested collection routes
 	 * @review
 	 */
-	public Optional<NestedCollectionRoutes>
-		getReusableCollectionRoutesOptional(String name);
+	public Optional<NestedCollectionRoutes> getReusableCollectionRoutesOptional(
+		String name);
 
 }
