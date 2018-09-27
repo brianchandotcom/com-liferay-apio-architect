@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper;
 
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Optional;
@@ -46,6 +47,12 @@ public interface PathIdentifierMapperManager {
 	 * @return the identifier
 	 */
 	public <T> T mapToIdentifierOrFail(Path path);
+
+	public default <T, R> T mapToIdentifierOrFail(
+		Path path, ClassNameBaseManager<R> classNameBaseManager) {
+
+		return mapToIdentifierOrFail(path);
+	}
 
 	/**
 	 * Converts an identifier to its equivalent {@code Path}, if a valid {@code

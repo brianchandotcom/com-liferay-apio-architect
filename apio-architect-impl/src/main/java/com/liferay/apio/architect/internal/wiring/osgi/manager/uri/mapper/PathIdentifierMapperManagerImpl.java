@@ -22,10 +22,12 @@ import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.internal.wiring.osgi.error.ApioDeveloperError.MustHavePathIdentifierMapper;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.IdentifierClassManager;
+import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.uri.mapper.PathIdentifierMapper;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -49,13 +51,21 @@ public class PathIdentifierMapperManagerImpl
 
 	@Override
 	public <T> T mapToIdentifierOrFail(Path path) {
+		return mapToIdentifierOrFail(path, null);
+	}
+
+	@Override
+	public <T, R> T mapToIdentifierOrFail(
+		Path path, ClassNameBaseManager<R> classNameBaseManager) {
+
 		Try<PathIdentifierMapper<T>> pathIdentifierMapperTry =
 			_getPathIdentifierMapperTry(path.getName());
 
 		return pathIdentifierMapperTry.map(
 			service -> service.map(path)
-		).orElseThrow(
-			() -> new MustHavePathIdentifierMapper(path)
+		).orElseGet(
+			() -> _getMapper(
+				path, _getPathIdentifierMapperTry(path, classNameBaseManager))
 		);
 	}
 
@@ -69,15 +79,53 @@ public class PathIdentifierMapperManagerImpl
 		).toOptional();
 	}
 
+	private <T, R> Try<Class<T>> _getClassTry(
+		ClassNameBaseManager<R> classNameBaseManager, Class clazz) {
+
+		Optional serviceOptional = classNameBaseManager.getServiceOptional(
+			clazz);
+
+		return (Try<Class<T>>)
+			serviceOptional.map(
+				o -> getGenericTypeArgumentTry(
+					o.getClass(), ReusableNestedCollectionRouter.class, 3)
+			).orElse(
+				null
+			);
+	}
+
+	private <T> T _getMapper(Path path, Try<PathIdentifierMapper<T>> map) {
+		return map.map(
+			service -> service.map(path)
+		).orElseThrow(
+			() -> new MustHavePathIdentifierMapper(path)
+		);
+	}
+
+	private <T, R> Try<PathIdentifierMapper<T>> _getPathIdentifierMapperTry(
+		Path path, ClassNameBaseManager<R> classNameBaseManager) {
+
+		return _getPathIdentifierMapperTry(
+			path.getName(), clazz -> _getClassTry(classNameBaseManager, clazz));
+	}
+
 	private <T> Try<PathIdentifierMapper<T>> _getPathIdentifierMapperTry(
 		String name) {
+
+		return _getPathIdentifierMapperTry(
+			name,
+			clazz -> getGenericTypeArgumentTry(clazz, Identifier.class, 0));
+	}
+
+	private <T> Try<PathIdentifierMapper<T>> _getPathIdentifierMapperTry(
+		String name, Function<Class, Try<Class<T>>> function) {
 
 		return Try.success(
 			name
 		).mapOptional(
 			_identifierClassManager::getIdentifierClassOptional
 		).flatMap(
-			clazz -> getGenericTypeArgumentTry(clazz, Identifier.class, 0)
+			function::apply
 		).mapOptional(
 			this::getServiceOptional
 		).map(
