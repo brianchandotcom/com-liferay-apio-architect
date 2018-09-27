@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.exception.mapper.internal;
 
+import java.util.function.Predicate;
+
 import javax.ws.rs.core.Response.StatusType;
 
 /**
@@ -24,20 +26,29 @@ import javax.ws.rs.core.Response.StatusType;
  * </p>
  *
  * @author Alejandro Hernández
+ * @review
  */
 public class WebApplicationExceptionMapperUtil {
 
-	public static String getDescription(String message, StatusType statusType) {
+	/**
+	 * Returns {@code true} if a {@code message} is equals to the default
+	 * message for the {@code statusType}. Returns {@<code>false</code>}
+	 * otherwise.
+	 *
+	 * @param  statusType the status type
+	 * @return {@code true} if the message is equals to the status type default
+	 *         message; {@code false} otherwise
+	 * @review
+	 */
+	public static Predicate<String> isNotDefaultMessage(StatusType statusType) {
+		return anObject -> !_getDefaultMessage(statusType).equals(anObject);
+	}
+
+	private static String _getDefaultMessage(StatusType statusType) {
 		String statusCode = String.valueOf(statusType.getStatusCode());
 
-		String defaultMessage = String.join(
+		return String.join(
 			" ", "HTTP", statusCode, statusType.getReasonPhrase());
-
-		if (defaultMessage.equals(message)) {
-			return null;
-		}
-
-		return message;
 	}
 
 	private WebApplicationExceptionMapperUtil() {

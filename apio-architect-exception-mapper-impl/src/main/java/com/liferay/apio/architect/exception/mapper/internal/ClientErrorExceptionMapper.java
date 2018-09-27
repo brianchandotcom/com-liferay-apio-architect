@@ -14,10 +14,12 @@
 
 package com.liferay.apio.architect.exception.mapper.internal;
 
-import static com.liferay.apio.architect.exception.mapper.internal.WebApplicationExceptionMapperUtil.getDescription;
+import static com.liferay.apio.architect.exception.mapper.internal.WebApplicationExceptionMapperUtil.isNotDefaultMessage;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
+
+import java.util.Optional;
 
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
@@ -41,7 +43,13 @@ public class ClientErrorExceptionMapper
 
 		StatusType statusType = response.getStatusInfo();
 
-		String description = getDescription(exception.getMessage(), statusType);
+		String description = Optional.ofNullable(
+			exception.getMessage()
+		).filter(
+			isNotDefaultMessage(statusType)
+		).orElse(
+			null
+		);
 
 		return new APIError(
 			exception, statusType.getReasonPhrase(), description,

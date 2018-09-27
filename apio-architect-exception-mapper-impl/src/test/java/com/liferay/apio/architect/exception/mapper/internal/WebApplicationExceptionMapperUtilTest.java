@@ -14,16 +14,17 @@
 
 package com.liferay.apio.architect.exception.mapper.internal;
 
-import static com.liferay.apio.architect.exception.mapper.internal.WebApplicationExceptionMapperUtil.getDescription;
+import static com.liferay.apio.architect.exception.mapper.internal.WebApplicationExceptionMapperUtil.isNotDefaultMessage;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import java.util.function.Predicate;
 
 import org.junit.Test;
 
@@ -49,21 +50,21 @@ public class WebApplicationExceptionMapperUtilTest {
 	}
 
 	@Test
-	public void testGetDescriptionReturnsMessageIfNotDefaultMessage() {
-		String message = "Other Message";
+	public void testIsNotDefaultMessageReturnsFalseIfEquals() {
+		String message = "HTTP 404 Not Found";
 
-		String description = getDescription(message, NOT_FOUND);
+		Predicate<String> predicate = isNotDefaultMessage(NOT_FOUND);
 
-		assertThat(description, is("Other Message"));
+		assertThat(predicate.test(message), is(false));
 	}
 
 	@Test
-	public void testGetDescriptionReturnsNullIfDefaultMessage() {
-		String message = "HTTP 404 Not Found";
+	public void testIsNotDefaultMessageReturnsTrueIfNotEquals() {
+		String message = "Other Message";
 
-		String description = getDescription(message, NOT_FOUND);
+		Predicate<String> predicate = isNotDefaultMessage(NOT_FOUND);
 
-		assertThat(description, is(nullValue()));
+		assertThat(predicate.test(message), is(true));
 	}
 
 }
