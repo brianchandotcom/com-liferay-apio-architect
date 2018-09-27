@@ -59,7 +59,7 @@ public class BlogPostingConverterTest {
 
 				Rating rating = review.getRating();
 
-				assertThat(rating.getAuthorId(), is(2L));
+				assertThat(rating.getCreatorId(), is(2L));
 				assertThat(rating.getBestRating(), is(5));
 				assertThat(rating.getRatingValue(), is(3L));
 				assertThat(rating.getWorstRating(), is(0));

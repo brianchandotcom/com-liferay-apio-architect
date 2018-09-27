@@ -115,7 +115,7 @@ public class BlogPostingCollectionResource
 				ratingBuilder -> ratingBuilder.types(
 					"RatingDSL"
 				).addLinkedModel(
-					"author", PersonIdentifier.class, Rating::getAuthorId
+					"creator", PersonIdentifier.class, Rating::getCreatorId
 				).addNumber(
 					"bestRating", Rating::getBestRating
 				).addNumber(
@@ -173,7 +173,7 @@ public class BlogPostingCollectionResource
 		).constructor(
 			RatingForm::new
 		).addRequiredLinkedModel(
-			"author", PersonIdentifier.class, RatingForm::_setAuthorId
+			"creator", PersonIdentifier.class, RatingForm::_setCreatorId
 		).addRequiredLong(
 			"ratingValue", RatingForm::_setRatingValue
 		).build();
@@ -292,8 +292,8 @@ public class BlogPostingCollectionResource
 	private static class RatingForm implements Rating {
 
 		@Override
-		public Long getAuthorId() {
-			return _authorId;
+		public Long getCreatorId() {
+			return _creatorId;
 		}
 
 		@Override
@@ -301,15 +301,15 @@ public class BlogPostingCollectionResource
 			return _ratingValue;
 		}
 
-		private void _setAuthorId(Long authorId) {
-			_authorId = authorId;
+		private void _setCreatorId(Long creatorId) {
+			_creatorId = creatorId;
 		}
 
 		private void _setRatingValue(Long ratingValue) {
 			_ratingValue = ratingValue;
 		}
 
-		private Long _authorId;
+		private Long _creatorId;
 		private Long _ratingValue;
 
 	}
