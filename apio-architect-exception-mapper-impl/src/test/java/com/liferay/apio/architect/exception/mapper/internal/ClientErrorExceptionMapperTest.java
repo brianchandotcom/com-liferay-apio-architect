@@ -43,14 +43,14 @@ public class ClientErrorExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(clientErrorException);
 
-		assertThat(apiError.getTitle(), is("Bad Request"));
-		assertThat(apiError.getMessage(), is("Message"));
-		assertThat(apiError.getStatusCode(), is(400));
-		assertThat(apiError.getType(), is("client-error"));
-		assertThat(apiError.getException(), is(clientErrorException));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Message"))));
+		assertThat(apiError.getException(), is(clientErrorException));
+		assertThat(apiError.getMessage(), is("Message"));
+		assertThat(apiError.getStatusCode(), is(400));
+		assertThat(apiError.getTitle(), is("Bad Request"));
+		assertThat(apiError.getType(), is("client-error"));
 	}
 
 	@Test
@@ -63,12 +63,12 @@ public class ClientErrorExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(clientErrorException);
 
-		assertThat(apiError.getTitle(), is("Bad Request"));
-		assertThat(apiError.getMessage(), is("HTTP 400 Bad Request"));
-		assertThat(apiError.getStatusCode(), is(400));
-		assertThat(apiError.getType(), is("client-error"));
 		assertThat(apiError.getException(), is(clientErrorException));
 		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getMessage(), is("HTTP 400 Bad Request"));
+		assertThat(apiError.getStatusCode(), is(400));
+		assertThat(apiError.getTitle(), is("Bad Request"));
+		assertThat(apiError.getType(), is("client-error"));
 	}
 
 }

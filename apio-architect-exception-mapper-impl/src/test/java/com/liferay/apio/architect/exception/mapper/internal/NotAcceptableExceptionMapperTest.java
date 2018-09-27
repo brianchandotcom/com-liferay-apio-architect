@@ -43,14 +43,14 @@ public class NotAcceptableExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notAcceptableException);
 
-		assertThat(apiError.getTitle(), is("Not Acceptable"));
-		assertThat(apiError.getMessage(), is("Message"));
-		assertThat(apiError.getStatusCode(), is(406));
-		assertThat(apiError.getType(), is("not-acceptable"));
-		assertThat(apiError.getException(), is(notAcceptableException));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Message"))));
+		assertThat(apiError.getException(), is(notAcceptableException));
+		assertThat(apiError.getMessage(), is("Message"));
+		assertThat(apiError.getStatusCode(), is(406));
+		assertThat(apiError.getTitle(), is("Not Acceptable"));
+		assertThat(apiError.getType(), is("not-acceptable"));
 	}
 
 	@Test
@@ -63,12 +63,12 @@ public class NotAcceptableExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notAcceptableException);
 
-		assertThat(apiError.getTitle(), is("Not Acceptable"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(notAcceptableException));
 		assertThat(apiError.getMessage(), is("HTTP 406 Not Acceptable"));
 		assertThat(apiError.getStatusCode(), is(406));
+		assertThat(apiError.getTitle(), is("Not Acceptable"));
 		assertThat(apiError.getType(), is("not-acceptable"));
-		assertThat(apiError.getException(), is(notAcceptableException));
-		assertThat(apiError.getDescription(), is(emptyOptional()));
 	}
 
 }

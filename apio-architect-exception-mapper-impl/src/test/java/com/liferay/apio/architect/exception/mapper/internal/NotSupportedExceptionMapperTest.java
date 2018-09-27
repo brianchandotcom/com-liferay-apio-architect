@@ -43,14 +43,14 @@ public class NotSupportedExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notSupportedException);
 
-		assertThat(apiError.getTitle(), is("Unsupported Media Type"));
-		assertThat(apiError.getMessage(), is("Message"));
-		assertThat(apiError.getStatusCode(), is(415));
-		assertThat(apiError.getType(), is("not-supported"));
-		assertThat(apiError.getException(), is(notSupportedException));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Message"))));
+		assertThat(apiError.getException(), is(notSupportedException));
+		assertThat(apiError.getMessage(), is("Message"));
+		assertThat(apiError.getStatusCode(), is(415));
+		assertThat(apiError.getTitle(), is("Unsupported Media Type"));
+		assertThat(apiError.getType(), is("not-supported"));
 	}
 
 	@Test
@@ -63,13 +63,13 @@ public class NotSupportedExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notSupportedException);
 
-		assertThat(apiError.getTitle(), is("Unsupported Media Type"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(notSupportedException));
 		assertThat(
 			apiError.getMessage(), is("HTTP 415 Unsupported Media Type"));
 		assertThat(apiError.getStatusCode(), is(415));
+		assertThat(apiError.getTitle(), is("Unsupported Media Type"));
 		assertThat(apiError.getType(), is("not-supported"));
-		assertThat(apiError.getException(), is(notSupportedException));
-		assertThat(apiError.getDescription(), is(emptyOptional()));
 	}
 
 }

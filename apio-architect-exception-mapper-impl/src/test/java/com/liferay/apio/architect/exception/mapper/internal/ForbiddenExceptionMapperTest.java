@@ -43,14 +43,14 @@ public class ForbiddenExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(forbiddenException);
 
-		assertThat(apiError.getTitle(), is("Forbidden"));
-		assertThat(apiError.getMessage(), is("Message"));
-		assertThat(apiError.getStatusCode(), is(403));
-		assertThat(apiError.getType(), is("forbidden"));
-		assertThat(apiError.getException(), is(forbiddenException));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Message"))));
+		assertThat(apiError.getException(), is(forbiddenException));
+		assertThat(apiError.getMessage(), is("Message"));
+		assertThat(apiError.getStatusCode(), is(403));
+		assertThat(apiError.getTitle(), is("Forbidden"));
+		assertThat(apiError.getType(), is("forbidden"));
 	}
 
 	@Test
@@ -62,12 +62,12 @@ public class ForbiddenExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(forbiddenException);
 
-		assertThat(apiError.getTitle(), is("Forbidden"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(forbiddenException));
 		assertThat(apiError.getMessage(), is("HTTP 403 Forbidden"));
 		assertThat(apiError.getStatusCode(), is(403));
+		assertThat(apiError.getTitle(), is("Forbidden"));
 		assertThat(apiError.getType(), is("forbidden"));
-		assertThat(apiError.getException(), is(forbiddenException));
-		assertThat(apiError.getDescription(), is(emptyOptional()));
 	}
 
 }

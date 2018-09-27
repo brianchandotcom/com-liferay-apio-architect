@@ -42,14 +42,14 @@ public class NotFoundExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notFoundException);
 
-		assertThat(apiError.getTitle(), is("Not Found"));
-		assertThat(apiError.getMessage(), is("Message"));
-		assertThat(apiError.getStatusCode(), is(404));
-		assertThat(apiError.getType(), is("not-found"));
-		assertThat(apiError.getException(), is(notFoundException));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Message"))));
+		assertThat(apiError.getException(), is(notFoundException));
+		assertThat(apiError.getMessage(), is("Message"));
+		assertThat(apiError.getStatusCode(), is(404));
+		assertThat(apiError.getTitle(), is("Not Found"));
+		assertThat(apiError.getType(), is("not-found"));
 	}
 
 	@Test
@@ -61,12 +61,12 @@ public class NotFoundExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notFoundException);
 
-		assertThat(apiError.getTitle(), is("Not Found"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(notFoundException));
 		assertThat(apiError.getMessage(), is("HTTP 404 Not Found"));
 		assertThat(apiError.getStatusCode(), is(404));
+		assertThat(apiError.getTitle(), is("Not Found"));
 		assertThat(apiError.getType(), is("not-found"));
-		assertThat(apiError.getException(), is(notFoundException));
-		assertThat(apiError.getDescription(), is(emptyOptional()));
 	}
 
 }

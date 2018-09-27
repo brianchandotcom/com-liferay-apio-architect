@@ -43,14 +43,14 @@ public class NotAllowedExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notAllowedException);
 
-		assertThat(apiError.getTitle(), is("Method Not Allowed"));
-		assertThat(apiError.getMessage(), is("Message"));
-		assertThat(apiError.getStatusCode(), is(405));
-		assertThat(apiError.getType(), is("not-allowed"));
-		assertThat(apiError.getException(), is(notAllowedException));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Message"))));
+		assertThat(apiError.getException(), is(notAllowedException));
+		assertThat(apiError.getMessage(), is("Message"));
+		assertThat(apiError.getStatusCode(), is(405));
+		assertThat(apiError.getTitle(), is("Method Not Allowed"));
+		assertThat(apiError.getType(), is("not-allowed"));
 	}
 
 	@Test
@@ -63,12 +63,12 @@ public class NotAllowedExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notAllowedException);
 
-		assertThat(apiError.getTitle(), is("Method Not Allowed"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(notAllowedException));
 		assertThat(apiError.getMessage(), is("HTTP 405 Method Not Allowed"));
 		assertThat(apiError.getStatusCode(), is(405));
+		assertThat(apiError.getTitle(), is("Method Not Allowed"));
 		assertThat(apiError.getType(), is("not-allowed"));
-		assertThat(apiError.getException(), is(notAllowedException));
-		assertThat(apiError.getDescription(), is(emptyOptional()));
 	}
 
 }

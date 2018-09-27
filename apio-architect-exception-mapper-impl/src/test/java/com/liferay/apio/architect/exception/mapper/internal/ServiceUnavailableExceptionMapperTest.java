@@ -43,14 +43,14 @@ public class ServiceUnavailableExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(serviceUnavailableException);
 
-		assertThat(apiError.getTitle(), is("Service Unavailable"));
-		assertThat(apiError.getMessage(), is("Message"));
-		assertThat(apiError.getStatusCode(), is(503));
-		assertThat(apiError.getType(), is("unavailable"));
-		assertThat(apiError.getException(), is(serviceUnavailableException));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Message"))));
+		assertThat(apiError.getException(), is(serviceUnavailableException));
+		assertThat(apiError.getMessage(), is("Message"));
+		assertThat(apiError.getStatusCode(), is(503));
+		assertThat(apiError.getTitle(), is("Service Unavailable"));
+		assertThat(apiError.getType(), is("unavailable"));
 	}
 
 	@Test
@@ -63,12 +63,12 @@ public class ServiceUnavailableExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(serviceUnavailableException);
 
-		assertThat(apiError.getTitle(), is("Service Unavailable"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(serviceUnavailableException));
 		assertThat(apiError.getMessage(), is("HTTP 503 Service Unavailable"));
 		assertThat(apiError.getStatusCode(), is(503));
+		assertThat(apiError.getTitle(), is("Service Unavailable"));
 		assertThat(apiError.getType(), is("unavailable"));
-		assertThat(apiError.getException(), is(serviceUnavailableException));
-		assertThat(apiError.getDescription(), is(emptyOptional()));
 	}
 
 }

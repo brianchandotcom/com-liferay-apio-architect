@@ -43,14 +43,14 @@ public class NotAuthorizedExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notAuthorizedException);
 
-		assertThat(apiError.getTitle(), is("Unauthorized"));
-		assertThat(apiError.getMessage(), is("Message"));
-		assertThat(apiError.getStatusCode(), is(401));
-		assertThat(apiError.getType(), is("not-authorized"));
-		assertThat(apiError.getException(), is(notAuthorizedException));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Message"))));
+		assertThat(apiError.getException(), is(notAuthorizedException));
+		assertThat(apiError.getMessage(), is("Message"));
+		assertThat(apiError.getStatusCode(), is(401));
+		assertThat(apiError.getTitle(), is("Unauthorized"));
+		assertThat(apiError.getType(), is("not-authorized"));
 	}
 
 	@Test
@@ -63,12 +63,12 @@ public class NotAuthorizedExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(notAuthorizedException);
 
-		assertThat(apiError.getTitle(), is("Unauthorized"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(notAuthorizedException));
 		assertThat(apiError.getMessage(), is("HTTP 401 Unauthorized"));
 		assertThat(apiError.getStatusCode(), is(401));
+		assertThat(apiError.getTitle(), is("Unauthorized"));
 		assertThat(apiError.getType(), is("not-authorized"));
-		assertThat(apiError.getException(), is(notAuthorizedException));
-		assertThat(apiError.getDescription(), is(emptyOptional()));
 	}
 
 }

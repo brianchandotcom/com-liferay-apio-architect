@@ -36,12 +36,12 @@ public class FallbackExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(exception);
 
-		assertThat(apiError.getTitle(), is("Internal Server Error"));
+		assertThat(apiError.getDescription(), emptyOptional());
+		assertThat(apiError.getException(), is(exception));
 		assertThat(apiError.getMessage(), is("Message"));
 		assertThat(apiError.getStatusCode(), is(500));
+		assertThat(apiError.getTitle(), is("Internal Server Error"));
 		assertThat(apiError.getType(), is("server-error"));
-		assertThat(apiError.getException(), is(exception));
-		assertThat(apiError.getDescription(), emptyOptional());
 	}
 
 	@Test
@@ -52,12 +52,12 @@ public class FallbackExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(exception);
 
-		assertThat(apiError.getTitle(), is("Internal Server Error"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(exception));
 		assertThat(apiError.getMessage(), is("java.lang.Exception"));
 		assertThat(apiError.getStatusCode(), is(500));
+		assertThat(apiError.getTitle(), is("Internal Server Error"));
 		assertThat(apiError.getType(), is("server-error"));
-		assertThat(apiError.getException(), is(exception));
-		assertThat(apiError.getDescription(), is(emptyOptional()));
 	}
 
 }

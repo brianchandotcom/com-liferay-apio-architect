@@ -43,14 +43,14 @@ public class InternalServerErrorExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(internalServerErrorException);
 
-		assertThat(apiError.getTitle(), is("Internal Server Error"));
-		assertThat(apiError.getMessage(), is("Message"));
-		assertThat(apiError.getStatusCode(), is(500));
-		assertThat(apiError.getType(), is("server-error"));
-		assertThat(apiError.getException(), is(internalServerErrorException));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Message"))));
+		assertThat(apiError.getException(), is(internalServerErrorException));
+		assertThat(apiError.getMessage(), is("Message"));
+		assertThat(apiError.getStatusCode(), is(500));
+		assertThat(apiError.getTitle(), is("Internal Server Error"));
+		assertThat(apiError.getType(), is("server-error"));
 	}
 
 	@Test
@@ -63,12 +63,12 @@ public class InternalServerErrorExceptionMapperTest {
 
 		APIError apiError = exceptionMapper.map(internalServerErrorException);
 
-		assertThat(apiError.getTitle(), is("Internal Server Error"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(internalServerErrorException));
 		assertThat(apiError.getMessage(), is("HTTP 500 Internal Server Error"));
 		assertThat(apiError.getStatusCode(), is(500));
+		assertThat(apiError.getTitle(), is("Internal Server Error"));
 		assertThat(apiError.getType(), is("server-error"));
-		assertThat(apiError.getException(), is(internalServerErrorException));
-		assertThat(apiError.getDescription(), is(emptyOptional()));
 	}
 
 }
