@@ -16,12 +16,12 @@ package com.liferay.apio.architect.sample.internal.resource;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.sample.internal.type.Rating;
-import com.liferay.apio.architect.sample.internal.type.Review;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.uri.mapper.PathIdentifierMapper;
-import org.osgi.service.component.annotations.Component;
 
 import javax.ws.rs.BadRequestException;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Javier Gamarra
@@ -38,29 +38,31 @@ public class RatingIdentifierMapper
 
 		if (components.length != 2) {
 			throw new BadRequestException(
-				id + " should be a string with the form \"creatorId:ratingValue\"");
+				id + " should be a string with the form \"creatorId:" +
+					"ratingValue\"");
 		}
 
 		long creatorId = _getAsLong(components[0]);
 		long ratingValue = _getAsLong(components[1]);
 
-		return RatingIdentifier.create(new Rating() {
-			@Override
-			public Long getCreatorId() {
-				return creatorId;
-			}
+		return RatingIdentifier.create(
+			new Rating() {
 
-			@Override
-			public Long getRatingValue() {
-				return ratingValue;
-			}
-		});
+				@Override
+				public Long getCreatorId() {
+					return creatorId;
+				}
+
+				@Override
+				public Long getRatingValue() {
+					return ratingValue;
+				}
+
+			});
 	}
 
 	@Override
-	public Path map(
-		String name, RatingIdentifier ratingIdentifier) {
-
+	public Path map(String name, RatingIdentifier ratingIdentifier) {
 		Rating rating = ratingIdentifier.getRating();
 
 		String id = rating.getCreatorId() + ":" + rating.getRatingValue();

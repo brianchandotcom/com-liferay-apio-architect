@@ -29,16 +29,17 @@ import java.util.function.Function;
 public class RelatedCollectionImpl<T extends Identifier>
 	implements RelatedCollection<T> {
 
-	private Function<T, ?> _modelToIdentifierFunction;
+	public RelatedCollectionImpl(String key, Class<T> identifierClass) {
+		this(key, identifierClass, null);
+	}
 
-	public RelatedCollectionImpl(String key, Class<T> identifierClass, Function<T, ?> modelToIdentifierFunction) {
+	public RelatedCollectionImpl(
+		String key, Class<T> identifierClass,
+		Function<T, ?> modelToIdentifierFunction) {
+
 		_key = key;
 		_identifierClass = identifierClass;
 		_modelToIdentifierFunction = modelToIdentifierFunction;
-	}
-
-	public RelatedCollectionImpl(String key, Class<T> identifierClass) {
-		this(key, identifierClass, null);
 	}
 
 	@Override
@@ -58,5 +59,6 @@ public class RelatedCollectionImpl<T extends Identifier>
 
 	private final Class<T> _identifierClass;
 	private final String _key;
+	private Function<T, ?> _modelToIdentifierFunction;
 
 }

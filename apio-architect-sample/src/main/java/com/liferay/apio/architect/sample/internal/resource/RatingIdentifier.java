@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.sample.internal.resource;
 
 import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.apio.architect.sample.internal.type.Rating;
 
 /**
@@ -23,9 +24,7 @@ import com.liferay.apio.architect.sample.internal.type.Rating;
 @ProviderType
 public interface RatingIdentifier {
 
-	public static RatingIdentifier create(
-		Rating rating) {
-
+	public static RatingIdentifier create(Rating rating) {
 		return () -> rating;
 	}
 

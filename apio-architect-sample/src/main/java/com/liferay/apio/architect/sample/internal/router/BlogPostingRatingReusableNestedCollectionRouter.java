@@ -24,12 +24,13 @@ import com.liferay.apio.architect.sample.internal.resource.BlogPostingCollection
 import com.liferay.apio.architect.sample.internal.resource.RatingIdentifier;
 import com.liferay.apio.architect.sample.internal.type.BlogPosting;
 import com.liferay.apio.architect.sample.internal.type.Rating;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Javier Gamarra
@@ -37,13 +38,13 @@ import java.util.stream.Stream;
 @Component
 public class BlogPostingRatingReusableNestedCollectionRouter
 	implements ReusableNestedCollectionRouter
-	<BlogPosting, Long, BlogPostingIdentifier, RatingIdentifier> {
+		<BlogPosting, Long, BlogPostingIdentifier, RatingIdentifier> {
 
 	@Override
 	public NestedCollectionRoutes
 		<BlogPosting, Long, RatingIdentifier> collectionRoutes(
-		NestedCollectionRoutes.Builder
-			<BlogPosting, Long, RatingIdentifier> builder) {
+			NestedCollectionRoutes.Builder
+				<BlogPosting, Long, RatingIdentifier> builder) {
 
 		return builder.addGetter(
 			(pagination, id) -> {
@@ -54,17 +55,21 @@ public class BlogPostingRatingReusableNestedCollectionRouter
 
 				Stream<BlogPostingModel> stream = page.stream();
 
-				List<BlogPosting> collect =
-					stream.filter(
-						blogPostingModel -> blogPostingModel.getCreatorId().equals(
-							rating.getCreatorId())).map(
-						BlogPostingConverter::toBlogPosting
-					).collect(Collectors.toList());
+				List<BlogPosting> collect = stream.filter(
+					blogPostingModel -> {
+						Long creatorId = blogPostingModel.getCreatorId();
+
+						return creatorId.equals(rating.getCreatorId());
+					}
+				).map(
+					BlogPostingConverter::toBlogPosting
+				).collect(
+					Collectors.toList()
+				);
 
 				return new PageItems<>(collect, collect.size());
 			}).build();
 	}
-
 
 	@Reference
 	private BlogPostingModelService _blogPostingModelService;

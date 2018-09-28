@@ -71,6 +71,7 @@ public interface NestedRepresentor<T> extends BaseRepresentor<T> {
 			addRelatedCollection(
 				String key, Class<S> itemIdentifierClass,
 				Function<T, V> modelToIdentifierFunction);
+
 	}
 
 }
