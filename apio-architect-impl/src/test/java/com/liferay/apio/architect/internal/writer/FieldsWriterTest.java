@@ -102,7 +102,7 @@ public class FieldsWriterTest {
 				() -> "first", "root", Collections.emptyList()),
 			_requestInfo, createRootModelRepresentor(true),
 			new Path("name", "id"), new FunctionalList<>(null, "first"),
-			MockWriterUtil::getSingleModel, pathFunction);
+			MockWriterUtil::getSingleModel, null);
 	}
 
 	@Test
