@@ -98,7 +98,7 @@ public class SingleModelWriter<T> {
 
 		Optional<FieldsWriter<T>> fieldsWriterOptional = getFieldsWriter(
 			_singleModel, null, _requestInfo, _representorFunction::apply,
-			_singleModelFunction, pathOptional.get());
+			_singleModelFunction, pathOptional.get(), _pathFunction);
 
 		if (!fieldsWriterOptional.isPresent()) {
 			return Optional.empty();
@@ -188,7 +188,8 @@ public class SingleModelWriter<T> {
 
 		Optional<FieldsWriter<S>> fieldsWriterOptional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo,
-			baseRepresentorFunction, _singleModelFunction, pathOptional.get());
+			baseRepresentorFunction, _singleModelFunction, pathOptional.get(),
+			_pathFunction);
 
 		if (!fieldsWriterOptional.isPresent()) {
 			return;
@@ -567,7 +568,8 @@ public class SingleModelWriter<T> {
 
 		Optional<FieldsWriter<U>> fieldsWriterOptional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo,
-			baseRepresentorFunction, _singleModelFunction, pathOptional.get());
+			baseRepresentorFunction, _singleModelFunction, pathOptional.get(),
+			_pathFunction);
 
 		if (!fieldsWriterOptional.isPresent()) {
 			return;
@@ -582,7 +584,7 @@ public class SingleModelWriter<T> {
 		Optional<FieldsWriter<U>> relatedModelsFieldsWriterOptional =
 			getFieldsWriter(
 				singleModel, null, _requestInfo, baseRepresentorFunction,
-				_singleModelFunction, pathOptional.get());
+				_singleModelFunction, pathOptional.get(), _pathFunction);
 
 		relatedModelsFieldsWriterOptional.ifPresent(
 			relatedModelFieldsWriter ->
@@ -600,6 +602,12 @@ public class SingleModelWriter<T> {
 						_singleModelMessageMapper.mapEmbeddedResourceURL(
 							itemJsonObjectBuilder, embeddedPathElements1,
 							resourceURL)));
+
+		fieldsWriter.writeRelatedCollections(
+			_resourceNameFunction,
+			(url, embeddedPathElements1) ->
+				_singleModelMessageMapper.mapLinkedResourceURL(
+					itemJsonObjectBuilder, embeddedPathElements1, url));
 
 		_writePageNestedResources(
 			baseRepresentorFunction, singleModel, itemJsonObjectBuilder);
@@ -628,7 +636,8 @@ public class SingleModelWriter<T> {
 
 		Optional<FieldsWriter<S>> fieldsWriterOptional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo,
-			baseRepresentorFunction, _singleModelFunction, pathOptional.get());
+			baseRepresentorFunction, _singleModelFunction, pathOptional.get(),
+			_pathFunction);
 
 		if (!fieldsWriterOptional.isPresent()) {
 			return;
@@ -653,6 +662,12 @@ public class SingleModelWriter<T> {
 				_singleModelMessageMapper.mapEmbeddedResourceURL(
 					itemJsonObjectBuilder, resourceEmbeddedPathElements,
 					resourceURL));
+
+		fieldsWriter.writeRelatedCollections(
+			_resourceNameFunction,
+			(url, embeddedPathElements1) ->
+				_singleModelMessageMapper.mapLinkedResourceURL(
+					itemJsonObjectBuilder, embeddedPathElements1, url));
 
 		fieldsWriter.writeNestedResources(
 			baseRepresentorFunction, singleModel, embeddedPathElements,

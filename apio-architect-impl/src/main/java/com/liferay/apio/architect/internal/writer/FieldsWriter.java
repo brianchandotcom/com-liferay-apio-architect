@@ -37,7 +37,6 @@ import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
-import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
@@ -88,7 +87,7 @@ public class FieldsWriter<T> {
 		SingleModel<T> singleModel, RequestInfo requestInfo,
 		BaseRepresentor<T> baseRepresentor, Path path,
 		FunctionalList<String> embeddedPathElements,
-		SingleModelFunction singleModelFunction) {
+		SingleModelFunction singleModelFunction, PathFunction pathFunction) {
 
 		_singleModel = singleModel;
 		_requestInfo = requestInfo;
@@ -96,6 +95,7 @@ public class FieldsWriter<T> {
 		_path = path;
 		_embeddedPathElements = embeddedPathElements;
 		_singleModelFunction = singleModelFunction;
+		_pathFunction = pathFunction;
 	}
 
 	/**
@@ -420,14 +420,26 @@ public class FieldsWriter<T> {
 			return;
 		}
 
-		String url = createNestedCollectionURL(
-			_requestInfo.getApplicationURL(), _path, resourceName);
+		if (relatedCollection.getModelToIdentifierFunction() != null) {
+			Function<U, Object> modelToIdentifierFunction =
+				relatedCollection.getModelToIdentifierFunction();
 
-		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
-			parentEmbeddedPathElements, key);
+			Object model = modelToIdentifierFunction.apply(
+				(U)_singleModel.getModel());
 
-		_tryToWriteField(
-			key, __ -> biConsumer.accept(url, embeddedPathElements));
+			Optional<Path> pathOptional = _pathFunction.apply(
+				resourceName, model);
+
+			pathOptional.ifPresent(
+				path -> _writeCollectionPath(
+					resourceName, parentEmbeddedPathElements, biConsumer, key,
+					path));
+		}
+		else {
+			_writeCollectionPath(
+				resourceName, parentEmbeddedPathElements, biConsumer, key,
+				_path);
+		}
 	}
 
 	/**
@@ -444,11 +456,7 @@ public class FieldsWriter<T> {
 		Function<String, Optional<String>> nameFunction,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
-		if (_baseRepresentor.isNested()) {
-			return;
-		}
-
-		Representor<T> representor = (Representor<T>)_baseRepresentor;
+		BaseRepresentor<T> representor = _baseRepresentor;
 
 		Stream<RelatedCollection<?>> stream =
 			representor.getRelatedCollections();
@@ -671,10 +679,26 @@ public class FieldsWriter<T> {
 		}
 	}
 
+	private void _writeCollectionPath(
+		String resourceName, FunctionalList<String> parentEmbeddedPathElements,
+		BiConsumer<String, FunctionalList<String>> biConsumer, String key,
+		Path path) {
+
+		String url = createNestedCollectionURL(
+			_requestInfo.getApplicationURL(), path, resourceName);
+
+		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
+			parentEmbeddedPathElements, key);
+
+		_tryToWriteField(
+			key, __ -> biConsumer.accept(url, embeddedPathElements));
+	}
+
 	private final BaseRepresentor<T> _baseRepresentor;
 	private final FunctionalList<String> _embeddedPathElements;
 	private final Logger _logger = getLogger(getClass());
 	private final Path _path;
+	private final PathFunction _pathFunction;
 	private final RequestInfo _requestInfo;
 	private final SingleModel<T> _singleModel;
 	private final SingleModelFunction _singleModelFunction;
