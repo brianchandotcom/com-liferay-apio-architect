@@ -67,11 +67,10 @@ public interface NestedRepresentor<T> extends BaseRepresentor<T> {
 		 *         identifier
 		 * @return the builder's step
 		 */
-		public <V, S extends Identifier<V>> NestedRepresentor.FirstStep<T>
+		public <V, S extends Identifier<?>> NestedRepresentor.FirstStep<T>
 			addRelatedCollection(
 				String key, Class<S> itemIdentifierClass,
 				Function<T, V> modelToIdentifierFunction);
-
 	}
 
 }

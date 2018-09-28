@@ -37,10 +37,6 @@ import java.util.stream.Stream;
 public class NestedRepresentorImpl<T>
 	extends BaseRepresentorImpl<T> implements NestedRepresentor<T> {
 
-	public Map<String, Function<T, ?>> getModelToIdentifierFunctions() {
-		return _modelToIdentifierFunctions;
-	}
-
 	@Override
 	public Stream<RelatedCollection<? extends Identifier>>
 		getRelatedCollections() {
@@ -88,7 +84,7 @@ public class NestedRepresentorImpl<T>
 			implements FirstStep<T> {
 
 			@Override
-			public <V, S extends Identifier<V>> NestedRepresentor.FirstStep<T>
+			public <V, S extends Identifier<?>> NestedRepresentor.FirstStep<T>
 				addRelatedCollection(
 					String key, Class<S> itemIdentifierClass,
 					Function<T, V> modelToIdentifierFunction) {
@@ -113,22 +109,18 @@ public class NestedRepresentorImpl<T>
 		Supplier<List<RelatedCollection<?>>> supplier) {
 		super(nameFunction, supplier);
 		_relatedCollections = new ArrayList<>();
-		_modelToIdentifierFunctions = new HashMap<>();
 	}
 
-	private <V, S extends Identifier<V>> void _addRelatedCollection(
+	private <S extends Identifier<?>> void _addRelatedCollection(
 		String key, Class<S> itemIdentifierClass,
-		Function<T, V> modelToIdentifierFunction) {
+		Function<T, ?> modelToIdentifierFunction) {
 
-		RelatedCollection<S> relatedCollection = new RelatedCollectionImpl<>(
-			key, itemIdentifierClass);
+		RelatedCollection<S> relatedCollection = new RelatedCollectionImpl(
+			key, itemIdentifierClass, modelToIdentifierFunction);
 
 		_relatedCollections.add(relatedCollection);
-
-		_modelToIdentifierFunctions.put(key, modelToIdentifierFunction);
 	}
 
-	private final Map<String, Function<T, ?>> _modelToIdentifierFunctions;
 	private final List<RelatedCollection<?>> _relatedCollections;
 
 }

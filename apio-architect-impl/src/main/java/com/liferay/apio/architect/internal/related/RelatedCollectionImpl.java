@@ -17,6 +17,8 @@ package com.liferay.apio.architect.internal.related;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 
+import java.util.function.Function;
+
 /**
  * Represents the relation between a resource and a collection. The type of the
  * resource's identifier must be a subclass of {@code Identifier}.
@@ -27,9 +29,16 @@ import com.liferay.apio.architect.related.RelatedCollection;
 public class RelatedCollectionImpl<T extends Identifier>
 	implements RelatedCollection<T> {
 
-	public RelatedCollectionImpl(String key, Class<T> identifierClass) {
+	private Function<T, ?> _modelToIdentifierFunction;
+
+	public RelatedCollectionImpl(String key, Class<T> identifierClass, Function<T, ?> modelToIdentifierFunction) {
 		_key = key;
 		_identifierClass = identifierClass;
+		_modelToIdentifierFunction = modelToIdentifierFunction;
+	}
+
+	public RelatedCollectionImpl(String key, Class<T> identifierClass) {
+		this(key, identifierClass, null);
 	}
 
 	@Override
@@ -40,6 +49,11 @@ public class RelatedCollectionImpl<T extends Identifier>
 	@Override
 	public String getKey() {
 		return _key;
+	}
+
+	@Override
+	public Function<T, ?> getModelToIdentifierFunction() {
+		return _modelToIdentifierFunction;
 	}
 
 	private final Class<T> _identifierClass;

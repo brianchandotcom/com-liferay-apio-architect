@@ -18,6 +18,8 @@ import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.apio.architect.identifier.Identifier;
 
+import java.util.function.Function;
+
 /**
  * Represents the relation between a resource and a collection. The type of the
  * resource's identifier must be a subclass of {@code Identifier}.
@@ -41,5 +43,13 @@ public interface RelatedCollection<T extends Identifier> {
 	 * @return the relation's key
 	 */
 	public String getKey();
+
+	/**
+	 * Returns the function you can use to retrieve the related resource's
+	 * identifier.
+	 *
+	 * @return the function that calculates the related resource's identifier
+	 */
+	public <S> Function<T, S> getModelToIdentifierFunction();
 
 }
