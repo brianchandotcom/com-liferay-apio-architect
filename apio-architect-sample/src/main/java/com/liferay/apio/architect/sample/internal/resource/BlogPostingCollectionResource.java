@@ -123,6 +123,9 @@ public class BlogPostingCollectionResource
 				).addNumber(
 					"worstRating", Rating::getWorstRating
 				).build()
+			).addRelatedCollection(
+				"similarItems", BlogPostingIdentifier.class,
+				review -> RatingIdentifier.create(review.getRating())
 			).build()
 		).addRelatedCollection(
 			"comment", BlogPostingCommentIdentifier.class
