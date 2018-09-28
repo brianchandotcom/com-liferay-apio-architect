@@ -24,7 +24,7 @@ import com.liferay.apio.architect.sample.internal.dao.PersonModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingModel;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
-import com.liferay.apio.architect.sample.internal.resource.AuthorableModelIdentifier;
+import com.liferay.apio.architect.sample.internal.resource.ModelNameModelIdIdentifier;
 import com.liferay.apio.architect.sample.internal.resource.PersonCollectionResource.PersonIdentifier;
 import com.liferay.apio.architect.sample.internal.type.Person;
 
@@ -42,13 +42,13 @@ import org.osgi.service.component.annotations.Reference;
 @Component
 public class PersonReusableNestedCollectionRouter
 	implements ReusableNestedCollectionRouter
-		<Person, Long, PersonIdentifier, AuthorableModelIdentifier> {
+		<Person, Long, PersonIdentifier, ModelNameModelIdIdentifier> {
 
 	@Override
 	public NestedCollectionRoutes
-		<Person, Long, AuthorableModelIdentifier> collectionRoutes(
+		<Person, Long, ModelNameModelIdIdentifier> collectionRoutes(
 			NestedCollectionRoutes.Builder
-				<Person, Long, AuthorableModelIdentifier> builder) {
+				<Person, Long, ModelNameModelIdIdentifier> builder) {
 
 		return builder.addGetter(
 			(pagination, id) -> {

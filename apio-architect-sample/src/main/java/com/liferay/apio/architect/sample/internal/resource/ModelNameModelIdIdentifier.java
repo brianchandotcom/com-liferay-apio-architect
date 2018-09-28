@@ -20,12 +20,12 @@ import aQute.bnd.annotation.ProviderType;
  * @author Javier Gamarra
  */
 @ProviderType
-public interface AuthorableModelIdentifier {
+public interface ModelNameModelIdIdentifier {
 
-	public static AuthorableModelIdentifier create(
+	public static ModelNameModelIdIdentifier create(
 		String modelName, long modelId) {
 
-		return new AuthorableModelIdentifier() {
+		return new ModelNameModelIdIdentifier() {
 
 			@Override
 			public long getModelId() {

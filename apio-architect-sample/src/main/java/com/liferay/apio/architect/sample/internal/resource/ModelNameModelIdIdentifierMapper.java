@@ -26,11 +26,11 @@ import org.osgi.service.component.annotations.Component;
  * @author Javier Gamarra
  */
 @Component(immediate = true)
-public class BlogPostingCommentIdMapper
-	implements PathIdentifierMapper<AuthorableModelIdentifier> {
+public class ModelNameModelIdIdentifierMapper
+	implements PathIdentifierMapper<ModelNameModelIdIdentifier> {
 
 	@Override
-	public AuthorableModelIdentifier map(Path path) {
+	public ModelNameModelIdIdentifier map(Path path) {
 		String id = path.getId();
 
 		String[] components = id.split(":");
@@ -43,16 +43,16 @@ public class BlogPostingCommentIdMapper
 		String modelName = components[0];
 		long modelId = _getAsLong(components[1]);
 
-		return AuthorableModelIdentifier.create(modelName, modelId);
+		return ModelNameModelIdIdentifier.create(modelName, modelId);
 	}
 
 	@Override
 	public Path map(
-		String name, AuthorableModelIdentifier authorableModelIdentifier) {
+		String name, ModelNameModelIdIdentifier modelNameModelIdIdentifier) {
 
-		String modelName = authorableModelIdentifier.getModelName();
+		String modelName = modelNameModelIdIdentifier.getModelName();
 
-		String id = modelName + ":" + authorableModelIdentifier.getModelId();
+		String id = modelName + ":" + modelNameModelIdIdentifier.getModelId();
 
 		return new Path(name, id);
 	}
