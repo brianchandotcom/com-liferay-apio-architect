@@ -25,6 +25,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
+import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.internal.alias.PathFunction;
@@ -420,26 +421,20 @@ public class FieldsWriter<T> {
 			return;
 		}
 
-		if (relatedCollection.getModelToIdentifierFunction() != null) {
-			Function<U, Object> modelToIdentifierFunction =
-				relatedCollection.getModelToIdentifierFunction();
+		Path path = Try.fromFallible(
+			relatedCollection::getModelToIdentifierFunction
+		).map(
+			function -> function.apply(_singleModel.getModel())
+		).map(
+			model -> _pathFunction.apply(resourceName, model)
+		).map(
+			Optional::get
+		).orElse(
+			_path
+		);
 
-			Object model = modelToIdentifierFunction.apply(
-				(U)_singleModel.getModel());
-
-			Optional<Path> pathOptional = _pathFunction.apply(
-				resourceName, model);
-
-			pathOptional.ifPresent(
-				path -> _writeCollectionPath(
-					resourceName, parentEmbeddedPathElements, biConsumer, key,
-					path));
-		}
-		else {
-			_writeCollectionPath(
-				resourceName, parentEmbeddedPathElements, biConsumer, key,
-				_path);
-		}
+		_writeCollectionPath(
+			resourceName, parentEmbeddedPathElements, biConsumer, key, path);
 	}
 
 	/**
