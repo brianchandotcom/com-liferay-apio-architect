@@ -65,12 +65,12 @@ public class ContactPointModelService {
 
 				Company company = faker.company();
 				Internet internet = faker.internet();
-				PhoneNumber number = faker.phoneNumber();
+				PhoneNumber phoneNumber = faker.phoneNumber();
 
 				String contactPointType = company.name();
 				String email = internet.safeEmailAddress();
-				String faxNumber = number.cellPhone();
-				String phoneNumber = number.cellPhone();
+				String faxNumber = phoneNumber.cellPhone();
+				String phoneNumber = phoneNumber.cellPhone();
 
 				ContactPointModel contactPointModel = new ContactPointModel(
 					index, _count.get(), email, faxNumber, phoneNumber,
