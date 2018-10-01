@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.sample.internal.converter;
 
+import static java.util.Arrays.asList;
+
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingModel;
 import com.liferay.apio.architect.sample.internal.dto.ContactPointModel;
@@ -22,7 +24,7 @@ import com.liferay.apio.architect.sample.internal.dto.PostalAddressModel;
 import com.liferay.apio.architect.sample.internal.dto.RatingModel;
 import com.liferay.apio.architect.sample.internal.dto.ReviewModel;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -101,7 +103,8 @@ public class DemoDataUtil {
 
 		REVIEW_MODEL = new ReviewModel("body", RATING_MODEL);
 
-		REVIEW_MODELS = Arrays.asList(REVIEW_MODEL, REVIEW_MODEL);
+		REVIEW_MODELS = Collections.unmodifiableList(
+			asList(REVIEW_MODEL, REVIEW_MODEL));
 
 		BLOG_POSTING_MODEL = new BlogPostingModel(
 			42L, "content", new Date(), 0L, new Date(), REVIEW_MODELS,
@@ -112,8 +115,7 @@ public class DemoDataUtil {
 
 		PERSON_MODEL = new PersonModel(
 			"23", new Date(), "email@liferay.com", "Given",
-			Arrays.asList("Job 1", "Job 2"), "Family", POSTAL_ADDRESS_MODEL,
-			84L);
+			asList("Job 1", "Job 2"), "Family", POSTAL_ADDRESS_MODEL, 84L);
 	}
 
 }

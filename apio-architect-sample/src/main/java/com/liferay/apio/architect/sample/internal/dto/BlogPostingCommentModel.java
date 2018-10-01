@@ -33,8 +33,8 @@ public class BlogPostingCommentModel {
 		_id = id;
 		_blogPostingModelId = blogPostingModelId;
 		_content = content;
-		_createDate = createDate;
-		_modifiedDate = modifiedDate;
+		_createDate = new Date(createDate.getTime());
+		_modifiedDate = new Date(modifiedDate.getTime());
 	}
 
 	/**
