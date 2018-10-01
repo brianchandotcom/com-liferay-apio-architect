@@ -16,6 +16,7 @@ package com.liferay.apio.architect.sample.internal.converter;
 
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingModel;
+import com.liferay.apio.architect.sample.internal.dto.ContactPointModel;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
 import com.liferay.apio.architect.sample.internal.dto.PostalAddressModel;
 import com.liferay.apio.architect.sample.internal.dto.RatingModel;
@@ -46,6 +47,13 @@ public class DemoDataUtil {
 	 * @review
 	 */
 	public static final BlogPostingModel BLOG_POSTING_MODEL;
+
+	/**
+	 * Demo {@link ContactPointModel}.
+	 *
+	 * @review
+	 */
+	public static final ContactPointModel CONTACT_POINT_MODEL;
 
 	/**
 	 * Demo {@link PersonModel}.
@@ -85,6 +93,9 @@ public class DemoDataUtil {
 	static {
 		BLOG_POSTING_COMMENT_MODEL = new BlogPostingCommentModel(
 			1L, 2L, 3L, "content", new Date(), new Date());
+
+		CONTACT_POINT_MODEL = new ContactPointModel(
+			1L, 2L, "email@liferay.com", "123", "456", "office");
 
 		RATING_MODEL = new RatingModel(2L, 3L);
 
