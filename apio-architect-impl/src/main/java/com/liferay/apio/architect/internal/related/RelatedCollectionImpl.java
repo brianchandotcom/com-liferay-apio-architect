@@ -35,7 +35,7 @@ public class RelatedCollectionImpl<T extends Identifier>
 
 	public RelatedCollectionImpl(
 		String key, Class<T> identifierClass,
-		Function<T, ?> modelToIdentifierFunction) {
+		Function modelToIdentifierFunction) {
 
 		_key = key;
 		_identifierClass = identifierClass;
@@ -53,12 +53,12 @@ public class RelatedCollectionImpl<T extends Identifier>
 	}
 
 	@Override
-	public Function<T, ?> getModelToIdentifierFunction() {
+	public Function getModelToIdentifierFunction() {
 		return _modelToIdentifierFunction;
 	}
 
 	private final Class<T> _identifierClass;
 	private final String _key;
-	private Function<T, ?> _modelToIdentifierFunction;
+	private Function _modelToIdentifierFunction;
 
 }

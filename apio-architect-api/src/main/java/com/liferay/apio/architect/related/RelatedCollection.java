@@ -50,6 +50,8 @@ public interface RelatedCollection<T extends Identifier> {
 	 *
 	 * @return the function that calculates the related resource's identifier
 	 */
-	public <S> Function<T, S> getModelToIdentifierFunction();
+	public default Function getModelToIdentifierFunction() {
+		return null;
+	}
 
 }
