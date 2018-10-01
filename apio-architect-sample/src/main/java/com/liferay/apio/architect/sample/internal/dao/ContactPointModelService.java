@@ -63,9 +63,9 @@ public class ContactPointModelService {
 			for (int i = 0; i < random.nextInt(5); i++) {
 				Faker faker = new Faker();
 
-				Company company = faker.company();
 				Internet internet = faker.internet();
 				PhoneNumber phoneNumber = faker.phoneNumber();
+				Company company = faker.company();
 
 				ContactPointModel contactPointModel = new ContactPointModel(
 					index, _count.get(), internet.safeEmailAddress(),
