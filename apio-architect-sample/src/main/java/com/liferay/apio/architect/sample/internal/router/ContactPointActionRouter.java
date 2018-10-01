@@ -70,7 +70,6 @@ public class ContactPointActionRouter implements ActionRouter<ContactPoint> {
 		List<ContactPointModel> contactPointModels =
 			_contactPointModelService.getPage(
 				id, pagination.getStartPosition(), pagination.getEndPosition());
-
 		int count = _contactPointModelService.getCount(id);
 
 		Stream<ContactPointModel> stream = contactPointModels.stream();
