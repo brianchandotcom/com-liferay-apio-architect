@@ -401,7 +401,8 @@ public class PageWriter<T> {
 				_singleModelFunction, pathOptional.get(), _pathFunction);
 
 		relatedModelsFieldsWriterOptional.ifPresent(
-			relatedModelFieldsWriter ->
+			relatedModelFieldsWriter -> {
+
 				relatedModelFieldsWriter.writeRelatedModels(
 					_pathFunction,
 					(embeddedSingleModel, embeddedPathElements1) ->
@@ -416,7 +417,15 @@ public class PageWriter<T> {
 					(resourceURL, embeddedPathElements1) ->
 						_pageMessageMapper.mapItemEmbeddedResourceURL(
 							_jsonObjectBuilder, itemJsonObjectBuilder,
-							embeddedPathElements1, resourceURL)));
+							embeddedPathElements1, resourceURL));
+
+				relatedModelFieldsWriter.writeRelatedCollections(
+					_resourceNameFunction,
+					(url, embeddedPathElements1) ->
+						_pageMessageMapper.mapItemLinkedResourceURL(
+							_jsonObjectBuilder, itemJsonObjectBuilder,
+							embeddedPathElements1, url));
+			});
 
 		fieldsWriter.writeNestedResources(
 			baseRepresentorFunction, singleModel, null,
