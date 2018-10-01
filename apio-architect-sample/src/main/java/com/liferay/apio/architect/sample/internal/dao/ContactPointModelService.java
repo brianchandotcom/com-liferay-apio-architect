@@ -67,14 +67,10 @@ public class ContactPointModelService {
 				Internet internet = faker.internet();
 				PhoneNumber phoneNumber = faker.phoneNumber();
 
-				String contactPointType = company.name();
-				String email = internet.safeEmailAddress();
-				String faxNumber = phoneNumber.cellPhone();
-				String phoneNumber = phoneNumber.cellPhone();
-
 				ContactPointModel contactPointModel = new ContactPointModel(
-					index, _count.get(), email, faxNumber, phoneNumber,
-					contactPointType);
+					index, _count.get(), internet.safeEmailAddress(),
+					phoneNumber.cellPhone(), phoneNumber.cellPhone(),
+					company.name());
 
 				contactPointModels.put(
 					_count.getAndIncrement(), contactPointModel);
