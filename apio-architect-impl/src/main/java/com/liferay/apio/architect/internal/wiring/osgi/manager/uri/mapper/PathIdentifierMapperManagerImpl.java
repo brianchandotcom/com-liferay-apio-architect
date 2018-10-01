@@ -64,23 +64,33 @@ public class PathIdentifierMapperManagerImpl
 		return pathIdentifierMapperTry.map(
 			service -> service.map(path)
 		).orElseGet(
-			() -> _getMapper(
-				path, _getPathIdentifierMapperTry(path, classNameBaseManager))
+			() -> _getReusablePathIdentifierMapper(path, classNameBaseManager)
 		);
 	}
 
 	@Override
 	public <T> Optional<Path> mapToPath(String name, T identifier) {
+		return mapToPath(name, identifier, null);
+	}
+
+	public <R, T> Optional<Path> mapToPath(
+		String name, T identifier,
+		ClassNameBaseManager<R> classNameBaseManager) {
+
 		Try<PathIdentifierMapper<T>> pathIdentifierMapperTry =
 			_getPathIdentifierMapperTry(name);
 
-		return pathIdentifierMapperTry.map(
+		Path value = pathIdentifierMapperTry.map(
 			service -> service.map(name, identifier)
-		).toOptional();
+		).orElseGet(
+			() -> _getReusablePath(name, identifier, classNameBaseManager)
+		);
+
+		return Optional.ofNullable(value);
 	}
 
 	private <T, R> Try<Class<T>> _getClassTry(
-		ClassNameBaseManager<R> classNameBaseManager, Class clazz) {
+		Class clazz, ClassNameBaseManager<R> classNameBaseManager) {
 
 		Optional serviceOptional = classNameBaseManager.getServiceOptional(
 			clazz);
@@ -92,21 +102,6 @@ public class PathIdentifierMapperManagerImpl
 			).orElse(
 				null
 			);
-	}
-
-	private <T> T _getMapper(Path path, Try<PathIdentifierMapper<T>> map) {
-		return map.map(
-			service -> service.map(path)
-		).orElseThrow(
-			() -> new MustHavePathIdentifierMapper(path)
-		);
-	}
-
-	private <T, R> Try<PathIdentifierMapper<T>> _getPathIdentifierMapperTry(
-		Path path, ClassNameBaseManager<R> classNameBaseManager) {
-
-		return _getPathIdentifierMapperTry(
-			path.getName(), clazz -> _getClassTry(classNameBaseManager, clazz));
 	}
 
 	private <T> Try<PathIdentifierMapper<T>> _getPathIdentifierMapperTry(
@@ -130,6 +125,36 @@ public class PathIdentifierMapperManagerImpl
 			this::getServiceOptional
 		).map(
 			Unsafe::unsafeCast
+		);
+	}
+
+	private <R, T> Path _getReusablePath(
+		String name, T identifier,
+		ClassNameBaseManager<R> classNameBaseManager) {
+
+		Try<PathIdentifierMapper<T>> pathIdentifierMapperTry =
+			_getPathIdentifierMapperTry(
+				name, clazz -> _getClassTry(clazz, classNameBaseManager));
+
+		return pathIdentifierMapperTry.map(
+			pathIdentifierMapper -> pathIdentifierMapper.map(name, identifier)
+		).orElse(
+			null
+		);
+	}
+
+	private <R, T> T _getReusablePathIdentifierMapper(
+		Path path, ClassNameBaseManager<R> classNameBaseManager) {
+
+		Try<PathIdentifierMapper<T>> pathIdentifierMapperTry =
+			_getPathIdentifierMapperTry(
+				path.getName(),
+				clazz -> _getClassTry(clazz, classNameBaseManager));
+
+		return pathIdentifierMapperTry.map(
+			service -> service.map(path)
+		).orElseThrow(
+			() -> new MustHavePathIdentifierMapper(path)
 		);
 	}
 

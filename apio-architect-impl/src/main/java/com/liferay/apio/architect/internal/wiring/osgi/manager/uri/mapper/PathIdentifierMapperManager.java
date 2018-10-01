@@ -48,6 +48,18 @@ public interface PathIdentifierMapperManager {
 	 */
 	public <T> T mapToIdentifierOrFail(Path path);
 
+	/**
+	 * Converts a {@code Path} to its equivalent identifier of type {@code T},
+	 * if a valid {@link
+	 * com.liferay.apio.architect.uri.mapper.PathIdentifierMapper} can be found;
+	 * throws a {@code MustHavePathIdentifierMapper} exception otherwise.
+	 *
+	 * @param  path the {@code Path}
+	 * @param  classNameBaseManager the classNameBaseManager to look for
+	 *         reusable routes
+	 * @return the identifier
+	 * @review
+	 */
 	public default <T, R> T mapToIdentifierOrFail(
 		Path path, ClassNameBaseManager<R> classNameBaseManager) {
 
@@ -65,5 +77,25 @@ public interface PathIdentifierMapperManager {
 	 *         present; {@code Optional#empty()} otherwise
 	 */
 	public <T> Optional<Path> mapToPath(String name, T identifier);
+
+	/**
+	 * Converts an identifier to its equivalent {@code Path}, if a valid {@code
+	 * PathIdentifierMapper} can be found. Returns {@code Optional#empty()}
+	 * otherwise.
+	 *
+	 * @param  name the resource's name
+	 * @param  identifier the identifier
+	 * @param  classNameBaseManager the classNameBaseManager to look for
+	 *         reusable routes
+	 * @return the {@code Path}, if a valid {@code PathIdentifierMapper} is
+	 *         present; {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	public default <R, T> Optional<Path> mapToPath(
+		String name, T identifier,
+		ClassNameBaseManager<R> classNameBaseManager) {
+
+		return mapToPath(name, identifier);
+	}
 
 }
