@@ -125,7 +125,12 @@ public class BlogPostingCollectionResource
 				).build()
 			).addRelatedCollection(
 				"similarItems", BlogPostingIdentifier.class,
-				this::_getRatingIdentifier
+				review -> {
+					Rating rating = review.getRating();
+
+					return RatingIdentifier.create(
+						rating.getCreatorId(), rating.getRatingValue());
+				}
 			).build()
 		).addRelatedCollection(
 			"comment", BlogPostingCommentIdentifier.class
@@ -197,10 +202,6 @@ public class BlogPostingCollectionResource
 			"rating", BlogPostingCollectionResource::_buildRatingForm,
 			ReviewForm::_setRating
 		).build();
-	}
-
-	private RatingIdentifier _getRatingIdentifier(Review review) {
-		return RatingIdentifier.create(review.getRating());
 	}
 
 	private static final CustomRoute _SUBSCRIBE_CUSTOM_ROUTE = new PostRoute() {

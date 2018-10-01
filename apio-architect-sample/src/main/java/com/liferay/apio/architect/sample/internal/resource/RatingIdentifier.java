@@ -24,8 +24,20 @@ import com.liferay.apio.architect.sample.internal.type.Rating;
 @ProviderType
 public interface RatingIdentifier {
 
-	public static RatingIdentifier create(Rating rating) {
-		return () -> rating;
+	public static RatingIdentifier create(Long creatorId, Long ratingValue) {
+		return () -> new Rating() {
+
+			@Override
+			public Long getCreatorId() {
+				return creatorId;
+			}
+
+			@Override
+			public Long getRatingValue() {
+				return ratingValue;
+			}
+
+		};
 	}
 
 	public Rating getRating();

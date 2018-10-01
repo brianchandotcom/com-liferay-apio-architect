@@ -45,20 +45,7 @@ public class RatingIdentifierMapper
 		long creatorId = _getAsLong(components[0]);
 		long ratingValue = _getAsLong(components[1]);
 
-		return RatingIdentifier.create(
-			new Rating() {
-
-				@Override
-				public Long getCreatorId() {
-					return creatorId;
-				}
-
-				@Override
-				public Long getRatingValue() {
-					return ratingValue;
-				}
-
-			});
+		return RatingIdentifier.create(creatorId, ratingValue);
 	}
 
 	@Override
