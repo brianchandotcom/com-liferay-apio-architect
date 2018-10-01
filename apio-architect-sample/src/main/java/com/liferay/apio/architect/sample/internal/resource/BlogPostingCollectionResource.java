@@ -26,6 +26,7 @@ import com.liferay.apio.architect.resource.CollectionResource;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.sample.internal.auth.PermissionChecker;
+import com.liferay.apio.architect.sample.internal.identifier.RatingIdentifier;
 import com.liferay.apio.architect.sample.internal.resource.BlogPostingCommentNestedCollectionResource.BlogPostingCommentIdentifier;
 import com.liferay.apio.architect.sample.internal.resource.BlogSubscriptionRepresentable.BlogSubscriptionIdentifier;
 import com.liferay.apio.architect.sample.internal.resource.PersonCollectionResource.PersonIdentifier;

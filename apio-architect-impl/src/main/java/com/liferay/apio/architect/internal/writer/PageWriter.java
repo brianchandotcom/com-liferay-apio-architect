@@ -402,7 +402,6 @@ public class PageWriter<T> {
 
 		relatedModelsFieldsWriterOptional.ifPresent(
 			relatedModelFieldsWriter -> {
-
 				relatedModelFieldsWriter.writeRelatedModels(
 					_pathFunction,
 					(embeddedSingleModel, embeddedPathElements1) ->

@@ -20,8 +20,8 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.sample.internal.converter.BlogPostingConverter;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingModel;
+import com.liferay.apio.architect.sample.internal.identifier.RatingIdentifier;
 import com.liferay.apio.architect.sample.internal.resource.BlogPostingCollectionResource.BlogPostingIdentifier;
-import com.liferay.apio.architect.sample.internal.resource.RatingIdentifier;
 import com.liferay.apio.architect.sample.internal.type.BlogPosting;
 import com.liferay.apio.architect.sample.internal.type.Rating;
 

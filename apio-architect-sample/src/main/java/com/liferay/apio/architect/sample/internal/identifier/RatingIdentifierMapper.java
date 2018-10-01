@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.sample.internal.resource;
+package com.liferay.apio.architect.sample.internal.identifier;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.sample.internal.type.Rating;

@@ -24,7 +24,7 @@ import com.liferay.apio.architect.sample.internal.dao.PersonModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingModel;
 import com.liferay.apio.architect.sample.internal.dto.PersonModel;
-import com.liferay.apio.architect.sample.internal.resource.ModelNameModelIdIdentifier;
+import com.liferay.apio.architect.sample.internal.identifier.ModelNameModelIdIdentifier;
 import com.liferay.apio.architect.sample.internal.resource.PersonCollectionResource.PersonIdentifier;
 import com.liferay.apio.architect.sample.internal.type.Person;
 
