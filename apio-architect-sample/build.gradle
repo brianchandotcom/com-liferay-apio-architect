@@ -1,4 +1,5 @@
 import aQute.bnd.gradle.Bndrun
+import aQute.bnd.gradle.Resolve
 
 buildscript {
 	repositories {
@@ -13,6 +14,14 @@ buildscript {
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
+
+task resolve(type: Resolve) {
+	description 'Updates the sample.bndrun "runBundles" section.'
+
+	group 'sample'
+
+	bndrun 'sample.bndrun'
+}
 
 task run(type: Bndrun) {
 	description 'Runs the Apio Architect Sample.'
