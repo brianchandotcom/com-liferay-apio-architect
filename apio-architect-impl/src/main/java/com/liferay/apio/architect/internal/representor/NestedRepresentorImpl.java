@@ -36,7 +36,7 @@ public class NestedRepresentorImpl<T>
 	extends BaseRepresentorImpl<T> implements NestedRepresentor<T> {
 
 	@Override
-	public Stream<RelatedCollection<? extends Identifier>>
+	public Stream<RelatedCollection<T, ? extends Identifier>>
 		getRelatedCollections() {
 
 		return Stream.of(
@@ -65,7 +65,7 @@ public class NestedRepresentorImpl<T>
 
 		public BuilderImpl(
 			Function<Class<? extends Identifier<?>>, String> nameFunction,
-			Supplier<List<RelatedCollection<?>>> supplier) {
+			Supplier<List<RelatedCollection<T, ?>>> supplier) {
 
 			super(new NestedRepresentorImpl<>(nameFunction, supplier));
 		}
@@ -104,8 +104,10 @@ public class NestedRepresentorImpl<T>
 
 	private NestedRepresentorImpl(
 		Function<Class<? extends Identifier<?>>, String> nameFunction,
-		Supplier<List<RelatedCollection<?>>> supplier) {
+		Supplier<List<RelatedCollection<T, ?>>> supplier) {
+
 		super(nameFunction, supplier);
+
 		_relatedCollections = new ArrayList<>();
 	}
 
@@ -113,12 +115,12 @@ public class NestedRepresentorImpl<T>
 		String key, Class<S> itemIdentifierClass,
 		Function<T, ?> modelToIdentifierFunction) {
 
-		RelatedCollection<S> relatedCollection = new RelatedCollectionImpl(
+		RelatedCollection<T, ?> relatedCollection = new RelatedCollectionImpl(
 			key, itemIdentifierClass, modelToIdentifierFunction);
 
 		_relatedCollections.add(relatedCollection);
 	}
 
-	private final List<RelatedCollection<?>> _relatedCollections;
+	private final List<RelatedCollection<T, ?>> _relatedCollections;
 
 }

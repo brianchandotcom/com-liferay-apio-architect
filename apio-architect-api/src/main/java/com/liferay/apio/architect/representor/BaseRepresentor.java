@@ -154,7 +154,7 @@ public interface BaseRepresentor<T> {
 	 *
 	 * @return the related collections
 	 */
-	public Stream<RelatedCollection<? extends Identifier>>
+	public Stream<RelatedCollection<T, ? extends Identifier>>
 		getRelatedCollections();
 
 	/**

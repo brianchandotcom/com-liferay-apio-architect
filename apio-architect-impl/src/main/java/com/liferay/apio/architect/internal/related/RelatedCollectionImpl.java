@@ -24,18 +24,18 @@ import java.util.function.Function;
  * resource's identifier must be a subclass of {@code Identifier}.
  *
  * @author Alejandro Hernández
- * @param  <T> the type of the resource's identifier
+ * @param  <S> the type of the resource's identifier
  */
-public class RelatedCollectionImpl<T extends Identifier>
-	implements RelatedCollection<T> {
+public class RelatedCollectionImpl<T, S extends Identifier>
+	implements RelatedCollection<T, S> {
 
-	public RelatedCollectionImpl(String key, Class<T> identifierClass) {
+	public RelatedCollectionImpl(String key, Class<S> identifierClass) {
 		this(key, identifierClass, null);
 	}
 
 	public RelatedCollectionImpl(
-		String key, Class<T> identifierClass,
-		Function modelToIdentifierFunction) {
+		String key, Class<S> identifierClass,
+		Function<T, ?> modelToIdentifierFunction) {
 
 		_key = key;
 		_identifierClass = identifierClass;
@@ -43,7 +43,7 @@ public class RelatedCollectionImpl<T extends Identifier>
 	}
 
 	@Override
-	public Class<T> getIdentifierClass() {
+	public Class<S> getIdentifierClass() {
 		return _identifierClass;
 	}
 
@@ -53,12 +53,12 @@ public class RelatedCollectionImpl<T extends Identifier>
 	}
 
 	@Override
-	public Function getModelToIdentifierFunction() {
+	public Function<T, ?> getModelToIdentifierFunction() {
 		return _modelToIdentifierFunction;
 	}
 
-	private final Class<T> _identifierClass;
+	private final Class<S> _identifierClass;
 	private final String _key;
-	private Function _modelToIdentifierFunction;
+	private Function<T, ?> _modelToIdentifierFunction;
 
 }

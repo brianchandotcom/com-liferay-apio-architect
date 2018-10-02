@@ -41,7 +41,7 @@ public class RepresentorImpl<T>
 	}
 
 	@Override
-	public Stream<RelatedCollection<? extends Identifier>>
+	public Stream<RelatedCollection<T, ? extends Identifier>>
 		getRelatedCollections() {
 
 		return Stream.of(
@@ -76,10 +76,10 @@ public class RepresentorImpl<T>
 		public BuilderImpl(
 			Class<? extends Identifier<S>> identifierClass,
 			Function<Class<? extends Identifier<?>>, String> nameFunction,
-			BiConsumer<Class<?>, RelatedCollection<?>> biConsumer,
-			Supplier<List<RelatedCollection<?>>> supplier) {
+			BiConsumer<Class<?>, RelatedCollection<T, ?>> biConsumer,
+			Supplier<List<RelatedCollection<T, ?>>> supplier) {
 
-			super(new RepresentorImpl<>(supplier, nameFunction));
+			super(new RepresentorImpl<>(nameFunction, supplier));
 
 			_identifierClass = identifierClass;
 			_biConsumer = biConsumer;
@@ -102,7 +102,7 @@ public class RepresentorImpl<T>
 				Class<? extends Identifier<U>> identifierClass,
 				Function<T, U> modelToIdentifierFunction) {
 
-				RelatedCollection<?> relatedCollection =
+				RelatedCollection<T, ?> relatedCollection =
 					new RelatedCollectionImpl<>(relatedKey, _identifierClass);
 
 				_biConsumer.accept(identifierClass, relatedCollection);
@@ -146,14 +146,14 @@ public class RepresentorImpl<T>
 
 		}
 
-		private final BiConsumer<Class<?>, RelatedCollection<?>> _biConsumer;
+		private final BiConsumer<Class<?>, RelatedCollection<T, ?>> _biConsumer;
 		private final Class<? extends Identifier> _identifierClass;
 
 	}
 
 	private RepresentorImpl(
-		Supplier<List<RelatedCollection<?>>> supplier,
-		Function<Class<? extends Identifier<?>>, String> nameFunction) {
+		Function<Class<? extends Identifier<?>>, String> nameFunction,
+		Supplier<List<RelatedCollection<T, ?>>> supplier) {
 
 		super(nameFunction, supplier);
 
@@ -163,7 +163,7 @@ public class RepresentorImpl<T>
 	private <S extends Identifier> void _addRelatedCollection(
 		String key, Class<S> itemIdentifierClass) {
 
-		RelatedCollection<S> relatedCollection = new RelatedCollectionImpl<>(
+		RelatedCollection<T, ?> relatedCollection = new RelatedCollectionImpl<>(
 			key, itemIdentifierClass);
 
 		_relatedCollections.add(relatedCollection);
@@ -176,6 +176,6 @@ public class RepresentorImpl<T>
 	}
 
 	private Function<T, ?> _modelToIdentifierFunction;
-	private final List<RelatedCollection<?>> _relatedCollections;
+	private final List<RelatedCollection<T, ?>> _relatedCollections;
 
 }

@@ -28,14 +28,14 @@ import java.util.function.Function;
  * @param  <T> the type of the resource's identifier
  */
 @ProviderType
-public interface RelatedCollection<T extends Identifier> {
+public interface RelatedCollection<T, S extends Identifier> {
 
 	/**
 	 * Returns the class of the collection items' identifier.
 	 *
 	 * @return the class of the collection items' identifier
 	 */
-	public Class<T> getIdentifierClass();
+	public Class<S> getIdentifierClass();
 
 	/**
 	 * Returns the relation's key.
@@ -50,7 +50,7 @@ public interface RelatedCollection<T extends Identifier> {
 	 *
 	 * @return the function that calculates the related resource's identifier
 	 */
-	public default Function getModelToIdentifierFunction() {
+	public default Function<T, ?> getModelToIdentifierFunction() {
 		return null;
 	}
 

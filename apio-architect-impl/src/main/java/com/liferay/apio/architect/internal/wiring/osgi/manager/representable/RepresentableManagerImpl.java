@@ -123,7 +123,7 @@ public class RepresentableManagerImpl
 	}
 
 	private void _computeRepresentables() {
-		Map<String, List<RelatedCollection<?>>> relatedCollections =
+		Map<String, List<RelatedCollection<?, ?>>> relatedCollections =
 			new HashMap<>();
 
 		forEachService(
@@ -167,7 +167,7 @@ public class RepresentableManagerImpl
 
 				Representor<Object> representor = _getRepresentor(
 					unsafeCast(representable), unsafeCast(clazz),
-					relatedCollections);
+					unsafeCast(relatedCollections));
 
 				INSTANCE.putName(clazz.getName(), name);
 				INSTANCE.putIdentifierClass(name, clazz);
@@ -185,14 +185,14 @@ public class RepresentableManagerImpl
 
 	private <T, S, U extends Identifier<S>> Representor<T> _getRepresentor(
 		Representable<T, S, U> representable, Class<U> clazz,
-		Map<String, List<RelatedCollection<?>>> relatedCollections) {
+		Map<String, List<RelatedCollection<T, ?>>> relatedCollections) {
 
-		Supplier<List<RelatedCollection<?>>> relatedCollectionSupplier =
+		Supplier<List<RelatedCollection<T, ?>>> relatedCollectionSupplier =
 			() -> relatedCollections.get(clazz.getName());
 
-		BiConsumer<Class<?>, RelatedCollection<?>> biConsumer =
+		BiConsumer<Class<?>, RelatedCollection<T, ?>> biConsumer =
 			(identifierClass, relatedCollection) -> {
-				List<RelatedCollection<?>> list =
+				List<RelatedCollection<T, ?>> list =
 					relatedCollections.computeIfAbsent(
 						identifierClass.getName(), __ -> new ArrayList<>());
 

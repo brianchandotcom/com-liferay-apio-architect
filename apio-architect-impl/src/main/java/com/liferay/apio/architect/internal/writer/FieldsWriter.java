@@ -409,7 +409,7 @@ public class FieldsWriter<T> {
 	 *        collection URL
 	 */
 	public <U extends Identifier> void writeRelatedCollection(
-		RelatedCollection<U> relatedCollection, String resourceName,
+		RelatedCollection<T, U> relatedCollection, String resourceName,
 		FunctionalList<String> parentEmbeddedPathElements,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
@@ -453,7 +453,7 @@ public class FieldsWriter<T> {
 
 		BaseRepresentor<T> representor = _baseRepresentor;
 
-		Stream<RelatedCollection<?>> stream =
+		Stream<RelatedCollection<T, ?>> stream =
 			representor.getRelatedCollections();
 
 		stream.forEach(
