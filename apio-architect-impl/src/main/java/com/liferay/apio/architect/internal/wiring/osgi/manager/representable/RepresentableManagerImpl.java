@@ -179,7 +179,8 @@ public class RepresentableManagerImpl
 		Optional<String> optional = getNameOptional(clazz.getName());
 
 		return optional.orElseThrow(
-			() -> new ApioDeveloperError.MustHaveNameFunction(clazz.getName()));
+			() -> new ApioDeveloperError.IdentifierNameNotFoundInPathFunction(
+				clazz.getName()));
 	}
 
 	private <T, S, U extends Identifier<S>> Representor<T> _getRepresentor(
