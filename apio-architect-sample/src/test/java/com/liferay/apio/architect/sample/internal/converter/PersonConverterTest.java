@@ -26,6 +26,10 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import com.liferay.apio.architect.sample.internal.type.Person;
 import com.liferay.apio.architect.sample.internal.type.PostalAddress;
 
+import javax.ws.rs.ext.RuntimeDelegate;
+
+import org.glassfish.jersey.internal.RuntimeDelegateImpl;
+
 import org.junit.Test;
 
 /**
@@ -35,6 +39,8 @@ public class PersonConverterTest {
 
 	@Test
 	public void testToPerson() {
+		RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
+
 		Person person = toPerson(PERSON_MODEL);
 
 		assertThat(person.getBirthDate(), isToday());
