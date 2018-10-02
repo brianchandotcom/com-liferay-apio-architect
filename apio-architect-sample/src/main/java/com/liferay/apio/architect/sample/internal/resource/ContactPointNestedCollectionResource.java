@@ -48,7 +48,7 @@ public class ContactPointNestedCollectionResource
 
 	@Override
 	public String getName() {
-		return "contact-point-dsl";
+		return "contact-point";
 	}
 
 	@Override

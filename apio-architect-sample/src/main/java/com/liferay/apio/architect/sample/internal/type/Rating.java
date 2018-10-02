@@ -25,7 +25,7 @@ import com.liferay.apio.architect.annotation.Vocabulary.Type;
  * @see    <a href="https://schema.org/Rating">Rating</a>
  * @review
  */
-@Type("Rating")
+@Type("RatingAnnotated")
 public interface Rating {
 
 	/**

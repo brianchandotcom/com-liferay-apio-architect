@@ -28,7 +28,7 @@ import com.liferay.apio.architect.identifier.Identifier;
  * @see    <a href="https://schema.org/ContactPoint">ContactPoint</a>
  * @review
  */
-@Type("ContactPoint")
+@Type("ContactPointAnnotated")
 public interface ContactPoint extends Identifier<Long> {
 
 	/**

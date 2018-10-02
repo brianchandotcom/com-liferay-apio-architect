@@ -29,7 +29,7 @@ import java.util.Date;
  * @see    <a href="https://schema.org/Comment">Comment</a>
  * @review
  */
-@Type("Comment")
+@Type("CommentAnnotated")
 public interface Comment extends Identifier<Long> {
 
 	/**
