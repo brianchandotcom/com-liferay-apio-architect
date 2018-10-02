@@ -30,3 +30,5 @@
     osgi.identity;filter:='(osgi.identity=ch.qos.logback.classic)'
 
 -runsystemcapabilities: ${native_capability}
+
+-runvm: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
