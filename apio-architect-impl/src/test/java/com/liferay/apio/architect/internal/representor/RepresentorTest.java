@@ -58,7 +58,7 @@ public class RepresentorTest {
 		_relatedCollectionsClasses = new ArrayList<>();
 
 		Builder<Dummy, Integer> builder = new RepresentorImpl.BuilderImpl<>(
-			IntegerIdentifier.class,
+			IntegerIdentifier.class, __ -> "",
 			(clazz, relatedCollection) -> {
 				_classes.add(clazz);
 				_keys.add(relatedCollection.getKey());

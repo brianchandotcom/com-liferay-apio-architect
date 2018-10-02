@@ -62,9 +62,12 @@ public class RepresentorImpl<T>
 		extends BaseBuilderImpl<T, RepresentorImpl<T>>
 		implements Builder<T, S> {
 
-		public BuilderImpl(Class<? extends Identifier<S>> identifierClass) {
+		public BuilderImpl(
+			Class<? extends Identifier<S>> identifierClass,
+			Function<Class<? extends Identifier<?>>, String> nameFunction) {
+
 			this(
-				identifierClass, null,
+				identifierClass, nameFunction,
 				(clazz, relatedCollection) -> {
 				},
 				Collections::emptyList);
