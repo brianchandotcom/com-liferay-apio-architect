@@ -27,6 +27,7 @@ import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.alias.BaseRepresentorFunction;
+import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.alias.SingleModelFunction;
 import com.liferay.apio.architect.internal.list.FunctionalList;
 import com.liferay.apio.architect.internal.request.RequestInfo;
@@ -484,8 +485,7 @@ public class FieldsWriter<T> {
 	 *        model's url
 	 */
 	public <U> void writeRelatedModel(
-		RelatedModel<T, U> relatedModel,
-		Function<SingleModel<?>, Optional<Path>> pathFunction,
+		RelatedModel<T, U> relatedModel, PathFunction pathFunction,
 		BiConsumer<SingleModel<?>, FunctionalList<String>> modelBiConsumer,
 		BiConsumer<String, FunctionalList<String>> linkedURLBiConsumer,
 		BiConsumer<String, FunctionalList<String>> embeddedURLBiConsumer) {
@@ -535,8 +535,7 @@ public class FieldsWriter<T> {
 	 *        embedded path elements
 	 */
 	public <U> void writeRelatedModel(
-		RelatedModel<T, U> relatedModel,
-		Function<SingleModel<?>, Optional<Path>> pathFunction,
+		RelatedModel<T, U> relatedModel, PathFunction pathFunction,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
 		Predicate<String> fieldsPredicate = getFieldsPredicate();
@@ -547,14 +546,17 @@ public class FieldsWriter<T> {
 			return;
 		}
 
-		Optional<SingleModel<U>> optional = getSingleModel(
-			relatedModel, _singleModel, unsafeCast(_singleModelFunction));
-
 		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
 			_embeddedPathElements, key);
 
-		optional.flatMap(
-			pathFunction
+		Function<T, U> modelToIdentifierFunction =
+			relatedModel.getModelToIdentifierFunction();
+
+		U relatedIdentifier = modelToIdentifierFunction.apply(
+			_singleModel.getModel());
+
+		pathFunction.apply(
+			relatedModel.getIdentifierName(), relatedIdentifier
 		).map(
 			path -> createSingleURL(_requestInfo.getApplicationURL(), path)
 		).ifPresent(
@@ -571,7 +573,6 @@ public class FieldsWriter<T> {
 	 * each {@code javax.ws.rs.ext.MessageBodyWriter} can write the related
 	 * model differently.
 	 *
-	 * @param pathFunction the function that gets a single model's path
 	 * @param modelBiConsumer the consumer that writes the related model's
 	 *        information
 	 * @param linkedURLBiConsumer the consumer that writes a linked related
@@ -580,7 +581,7 @@ public class FieldsWriter<T> {
 	 *        model's URL
 	 */
 	public void writeRelatedModels(
-		Function<SingleModel<?>, Optional<Path>> pathFunction,
+		PathFunction pathFunction,
 		BiConsumer<SingleModel<?>, FunctionalList<String>> modelBiConsumer,
 		BiConsumer<String, FunctionalList<String>> linkedURLBiConsumer,
 		BiConsumer<String, FunctionalList<String>> embeddedURLBiConsumer) {

@@ -26,6 +26,7 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.representor.RepresentorImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.unsafe.Unsafe;
+import com.liferay.apio.architect.internal.wiring.osgi.error.ApioDeveloperError;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.BaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.validator.NameValidator;
 import com.liferay.apio.architect.related.RelatedCollection;
@@ -174,6 +175,13 @@ public class RepresentableManagerImpl
 			});
 	}
 
+	private String _getNameOrFail(Class<? extends Identifier<?>> clazz) {
+		Optional<String> optional = getNameOptional(clazz.getName());
+
+		return optional.orElseThrow(
+			() -> new ApioDeveloperError.MustHaveNameFunction(clazz.getName()));
+	}
+
 	private <T, S, U extends Identifier<S>> Representor<T> _getRepresentor(
 		Representable<T, S, U> representable, Class<U> clazz,
 		Map<String, List<RelatedCollection<?>>> relatedCollections) {
@@ -191,7 +199,7 @@ public class RepresentableManagerImpl
 			};
 
 		Builder<T, S> builder = new BuilderImpl<>(
-			clazz, biConsumer, relatedCollectionSupplier);
+			clazz, this::_getNameOrFail, biConsumer, relatedCollectionSupplier);
 
 		return representable.representor(builder);
 	}

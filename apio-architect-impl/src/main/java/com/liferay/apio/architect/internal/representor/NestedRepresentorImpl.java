@@ -14,7 +14,10 @@
 
 package com.liferay.apio.architect.internal.representor;
 
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.representor.NestedRepresentor;
+
+import java.util.function.Function;
 
 /**
  * @author Alejandro Hernández
@@ -37,8 +40,10 @@ public class NestedRepresentorImpl<T>
 		extends BaseBuilderImpl<T, NestedRepresentorImpl<T>>
 		implements Builder<T> {
 
-		public BuilderImpl() {
-			super(new NestedRepresentorImpl<>());
+		public BuilderImpl(
+			Function<Class<? extends Identifier<?>>, String> nameFunction) {
+
+			super(new NestedRepresentorImpl<>(nameFunction));
 		}
 
 		@Override
@@ -61,7 +66,10 @@ public class NestedRepresentorImpl<T>
 
 	}
 
-	private NestedRepresentorImpl() {
+	private NestedRepresentorImpl(
+		Function<Class<? extends Identifier<?>>, String> nameFunction) {
+
+		super(nameFunction);
 	}
 
 }

@@ -120,8 +120,7 @@ public class SingleModelWriter<T> {
 		operations.forEach(operationWriter::write);
 
 		fieldsWriter.writeRelatedModels(
-			singleModel -> getPathOptional(
-				singleModel, _pathFunction, _representorFunction::apply),
+			_pathFunction,
 			(singleModel, embeddedPathElements) -> writeEmbeddedModelFields(
 				singleModel, _jsonObjectBuilder, embeddedPathElements),
 			(resourceURL, embeddedPathElements) ->
@@ -229,9 +228,7 @@ public class SingleModelWriter<T> {
 			});
 
 		fieldsWriter.writeRelatedModels(
-			embeddedSingleModel -> getPathOptional(
-				embeddedSingleModel, _pathFunction,
-				_representorFunction::apply),
+			_pathFunction,
 			(singleModel1, stringFunctionalList) -> writeEmbeddedModelFields(
 				singleModel1, jsonObjectBuilder, stringFunctionalList),
 			(resourceURL, resourceEmbeddedPathElements) ->
@@ -590,9 +587,7 @@ public class SingleModelWriter<T> {
 		relatedModelsFieldsWriterOptional.ifPresent(
 			relatedModelFieldsWriter ->
 				relatedModelFieldsWriter.writeRelatedModels(
-					embeddedSingleModel -> getPathOptional(
-						embeddedSingleModel, _pathFunction,
-						_representorFunction::apply),
+					_pathFunction,
 					(embeddedSingleModel, embeddedPathElements1) ->
 						_writeItemEmbeddedModelFields(
 							embeddedSingleModel, embeddedPathElements1,
@@ -645,9 +640,7 @@ public class SingleModelWriter<T> {
 			fieldsWriter, itemJsonObjectBuilder, embeddedPathElements);
 
 		fieldsWriter.writeRelatedModels(
-			embeddedSingleModel -> getPathOptional(
-				embeddedSingleModel, _pathFunction,
-				_representorFunction::apply),
+			_pathFunction,
 			(embeddedSingleModel, embeddedModelEmbeddedPathElements) ->
 				_writeItemEmbeddedModelFields(
 					embeddedSingleModel, embeddedModelEmbeddedPathElements,

@@ -64,7 +64,7 @@ public class RepresentorImpl<T>
 
 		public BuilderImpl(Class<? extends Identifier<S>> identifierClass) {
 			this(
-				identifierClass,
+				identifierClass, null,
 				(clazz, relatedCollection) -> {
 				},
 				Collections::emptyList);
@@ -72,10 +72,11 @@ public class RepresentorImpl<T>
 
 		public BuilderImpl(
 			Class<? extends Identifier<S>> identifierClass,
+			Function<Class<? extends Identifier<?>>, String> nameFunction,
 			BiConsumer<Class<?>, RelatedCollection<?>> biConsumer,
 			Supplier<List<RelatedCollection<?>>> supplier) {
 
-			super(new RepresentorImpl<>(supplier));
+			super(new RepresentorImpl<>(supplier, nameFunction));
 
 			_identifierClass = identifierClass;
 			_biConsumer = biConsumer;
@@ -147,7 +148,12 @@ public class RepresentorImpl<T>
 
 	}
 
-	private RepresentorImpl(Supplier<List<RelatedCollection<?>>> supplier) {
+	private RepresentorImpl(
+		Supplier<List<RelatedCollection<?>>> supplier,
+		Function<Class<? extends Identifier<?>>, String> nameFunction) {
+
+		super(nameFunction);
+
 		_supplier = supplier;
 
 		_relatedCollections = new ArrayList<>();

@@ -402,9 +402,7 @@ public class PageWriter<T> {
 		relatedModelsFieldsWriterOptional.ifPresent(
 			relatedModelFieldsWriter ->
 				relatedModelFieldsWriter.writeRelatedModels(
-					embeddedSingleModel -> getPathOptional(
-						embeddedSingleModel, _pathFunction,
-						_representorFunction::apply),
+					_pathFunction,
 					(embeddedSingleModel, embeddedPathElements1) ->
 						_writeItemEmbeddedModelFields(
 							embeddedSingleModel, embeddedPathElements1,
@@ -463,9 +461,7 @@ public class PageWriter<T> {
 				_jsonObjectBuilder, itemJsonObjectBuilder, url));
 
 		fieldsWriter.writeRelatedModels(
-			embeddedSingleModel -> getPathOptional(
-				embeddedSingleModel, _pathFunction,
-				_representorFunction::apply),
+			_pathFunction,
 			(embeddedSingleModel, embeddedPathElements1) ->
 				_writeItemEmbeddedModelFields(
 					embeddedSingleModel, embeddedPathElements1,
@@ -612,9 +608,7 @@ public class PageWriter<T> {
 				field, value));
 
 		fieldsWriter.writeRelatedModels(
-			embeddedSingleModel -> getPathOptional(
-				embeddedSingleModel, _pathFunction,
-				_representorFunction::apply),
+			_pathFunction,
 			(embeddedSingleModel, embeddedModelEmbeddedPathElements) ->
 				_writeItemEmbeddedModelFields(
 					embeddedSingleModel, embeddedModelEmbeddedPathElements,

@@ -198,7 +198,11 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		return types;
 	}
 
-	protected BaseRepresentorImpl() {
+	protected BaseRepresentorImpl(
+		Function<Class<? extends Identifier<?>>, String> nameFunction) {
+
+		_nameFunction = nameFunction;
+
 		binaryFunctions = new LinkedHashMap<>();
 		fieldFunctions = new LinkedHashMap<>();
 		nestedFieldFunctions = new ArrayList<>();
@@ -318,7 +322,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 
 			}
 		).apply(
-			new NestedRepresentorImpl.BuilderImpl<>()
+			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction)
 		);
 
 		nestedFieldFunctions.add(nestedFieldFunction);
@@ -358,7 +362,7 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 
 			}
 		).apply(
-			new NestedRepresentorImpl.BuilderImpl<>()
+			new NestedRepresentorImpl.BuilderImpl<>(_nameFunction)
 		);
 
 		nestedListFieldFunctions.add(nestedFieldFunction);
@@ -401,7 +405,8 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		Function<T, S> modelToIdentifierFunction) {
 
 		RelatedModel<T, S> relatedModel = new RelatedModelImpl<>(
-			key, identifierClass, modelToIdentifierFunction);
+			key, identifierClass, modelToIdentifierFunction,
+			() -> _nameFunction.apply(identifierClass));
 
 		relatedModels.add(relatedModel);
 	}
@@ -680,5 +685,8 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 
 		list.add(fieldFunction);
 	}
+
+	private final Function<Class<? extends Identifier<?>>, String>
+		_nameFunction;
 
 }
