@@ -31,6 +31,10 @@ allprojects {
 		delete 'out'
 	}
 
+	check {
+		dependsOn checkSourceFormatting
+	}
+
 	repositories {
 		mavenLocal()
 
