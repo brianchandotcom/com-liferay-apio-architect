@@ -26,6 +26,18 @@ import com.liferay.apio.architect.uri.Path;
 public class ApioDeveloperError extends Error {
 
 	/**
+	 * Represents the error the developer should throw when a name function
+	 * doesn't find the path
+	 */
+	public static class MustHaveNameFunction extends ApioDeveloperError {
+
+		public MustHaveNameFunction(String name) {
+			super(name + " does not have a valid name function");
+		}
+
+	}
+
+	/**
 	 * Represents the error the developer should throw when an identifier's path
 	 * mapper is missing.
 	 */
