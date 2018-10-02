@@ -1,3 +1,5 @@
+import aQute.bnd.gradle.Bndrun
+
 buildscript {
 	repositories {
 		maven {
@@ -11,6 +13,14 @@ buildscript {
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
+
+task run(type: Bndrun) {
+	description 'Runs the Apio Architect Sample.'
+
+	group 'sample'
+
+	bndrun 'sample.bndrun'
+}
 
 dependencies {
 	compileInclude group: "com.github.javafaker", name: "javafaker", version: "0.13"

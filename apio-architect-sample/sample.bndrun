@@ -1,0 +1,7 @@
+-resolve.effective: resolve, active
+
+-runee: JavaSE-1.8
+
+-runfw: org.eclipse.osgi;version=3.13.0
+
+-runsystemcapabilities: ${native_capability}
