@@ -21,7 +21,7 @@ import static org.exparity.hamcrest.date.DateMatchers.isToday;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 
 import com.liferay.apio.architect.sample.internal.type.Person;
 import com.liferay.apio.architect.sample.internal.type.PostalAddress;
@@ -43,7 +43,7 @@ public class PersonConverterTest {
 		assertThat(person.getGivenName(), is("Given"));
 		assertThat(person.getId(), is(84L));
 		assertThat(person.getImage(), is("/images/84"));
-		assertThat(person.getJobTitles(), contains("Job 1", "Job 2"));
+		assertThat(person.getJobTitles(), hasItems("Job 1", "Job 2"));
 		assertThat(person.getName(), is("Given Family"));
 
 		PostalAddress postalAddress = person.getPostalAddress();

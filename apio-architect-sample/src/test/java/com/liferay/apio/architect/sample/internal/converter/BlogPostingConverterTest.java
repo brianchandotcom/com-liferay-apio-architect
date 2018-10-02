@@ -21,7 +21,6 @@ import static org.exparity.hamcrest.date.DateMatchers.isToday;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 import com.liferay.apio.architect.sample.internal.type.BlogPosting;
 import com.liferay.apio.architect.sample.internal.type.Rating;
@@ -51,7 +50,7 @@ public class BlogPostingConverterTest {
 
 		List<Review> reviews = blogPosting.getReviews();
 
-		assertThat(reviews, hasSize(2));
+		assertThat(reviews.size(), is(2));
 
 		reviews.forEach(
 			review -> {
