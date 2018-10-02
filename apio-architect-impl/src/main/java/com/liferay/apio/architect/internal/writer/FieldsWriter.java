@@ -493,17 +493,7 @@ public class FieldsWriter<T> {
 		writeRelatedModel(
 			relatedModel, pathFunction,
 			(url, embeddedPathElements) -> {
-				Optional<SingleModel<U>> singleModelOptional = getSingleModel(
-					relatedModel, _singleModel,
-					unsafeCast(_singleModelFunction));
-
-				if (!singleModelOptional.isPresent()) {
-					return;
-				}
-
 				Predicate<String> embedded = _requestInfo.getEmbedded();
-
-				SingleModel<U> singleModel = singleModelOptional.get();
 
 				Stream<String> stream = Stream.concat(
 					Stream.of(embeddedPathElements.head()),
@@ -513,6 +503,17 @@ public class FieldsWriter<T> {
 					".", stream.collect(Collectors.toList()));
 
 				if (embedded.test(embeddedPath)) {
+					Optional<SingleModel<U>> singleModelOptional =
+						getSingleModel(
+							relatedModel, _singleModel,
+							unsafeCast(_singleModelFunction));
+
+					if (!singleModelOptional.isPresent()) {
+						return;
+					}
+
+					SingleModel<U> singleModel = singleModelOptional.get();
+
 					embeddedURLBiConsumer.accept(url, embeddedPathElements);
 					modelBiConsumer.accept(singleModel, embeddedPathElements);
 				}
