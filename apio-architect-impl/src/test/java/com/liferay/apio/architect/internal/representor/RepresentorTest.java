@@ -225,7 +225,7 @@ public class RepresentorTest {
 
 	@Test
 	public void testRelatedCollections() {
-		Stream<RelatedCollection<?>> relatedCollections =
+		Stream<RelatedCollection<Dummy, ?>> relatedCollections =
 			_representor.getRelatedCollections();
 
 		List<?> list0 = relatedCollections.filter(
