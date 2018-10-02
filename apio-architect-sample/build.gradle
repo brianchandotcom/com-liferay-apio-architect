@@ -1,3 +1,14 @@
+buildscript {
+	repositories {
+		maven {
+			url 'https://bndtools.ci.cloudbees.com/job/bnd.master/lastSuccessfulBuild/artifact/dist/bundles'
+		}
+	}
+	dependencies {
+		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:+'
+	}
+}
+
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
