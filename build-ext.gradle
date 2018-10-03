@@ -45,6 +45,9 @@ allprojects {
 }
 
 configure(subprojects.findAll {!it.childProjects}) {
+	sourceCompatibility = "1.8"
+	targetCompatibility = "1.8"
+
 	task copyJacocoAgent(type: Copy) {
 		configurations.jacocoAgent.asFileTree.each {
 			from(zipTree(it))
