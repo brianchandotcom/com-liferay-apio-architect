@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Javier Gamarra
  */
-@Component(immediate = true)
+@Component(immediate = true, service = PathIdentifierMapper.class)
 public class ModelNameModelIdIdentifierMapper
 	implements PathIdentifierMapper<ModelNameModelIdIdentifier> {
 

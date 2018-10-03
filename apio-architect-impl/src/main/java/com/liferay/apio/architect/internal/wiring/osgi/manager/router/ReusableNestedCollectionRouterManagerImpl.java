@@ -45,7 +45,7 @@ import org.slf4j.Logger;
 /**
  * @author Alejandro Hernández
  */
-@Component
+@Component(service = ReusableNestedCollectionRouterManager.class)
 public class ReusableNestedCollectionRouterManagerImpl
 	extends ClassNameBaseManager<ReusableNestedCollectionRouter>
 	implements ReusableNestedCollectionRouterManager {

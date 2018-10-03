@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Javier Gamarra
  */
-@Component
+@Component(service = ReusableNestedCollectionRouter.class)
 public class BlogPostingRatingReusableNestedCollectionRouter
 	implements ReusableNestedCollectionRouter
 		<BlogPosting, Long, BlogPostingIdentifier, RatingIdentifier> {
