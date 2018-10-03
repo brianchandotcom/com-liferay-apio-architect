@@ -14,14 +14,11 @@
 
 package com.liferay.apio.architect.sample.internal.identifier;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.apio.architect.sample.internal.type.Rating;
 
 /**
  * @author Javier Gamarra
  */
-@ProviderType
 public interface RatingIdentifier {
 
 	public static RatingIdentifier create(Long creatorId, Long ratingValue) {

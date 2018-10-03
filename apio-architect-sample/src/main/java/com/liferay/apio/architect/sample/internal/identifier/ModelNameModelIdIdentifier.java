@@ -14,12 +14,9 @@
 
 package com.liferay.apio.architect.sample.internal.identifier;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * @author Javier Gamarra
  */
-@ProviderType
 public interface ModelNameModelIdIdentifier {
 
 	public static ModelNameModelIdIdentifier create(
