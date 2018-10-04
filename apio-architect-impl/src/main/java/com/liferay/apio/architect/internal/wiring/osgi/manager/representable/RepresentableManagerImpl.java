@@ -24,6 +24,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.internal.annotation.ActionRouterRepresentorManager;
 import com.liferay.apio.architect.internal.representor.RepresentorImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.internal.wiring.osgi.error.ApioDeveloperError;
@@ -173,6 +174,9 @@ public class RepresentableManagerImpl
 				INSTANCE.putIdentifierClass(name, clazz);
 				INSTANCE.putRepresentor(name, representor);
 			});
+
+		_actionRouterRepresentorManager.computeRepresentors(
+			this::_getNameOrFail, relatedCollections);
 	}
 
 	private String _getNameOrFail(Class<? extends Identifier<?>> clazz) {
@@ -204,6 +208,9 @@ public class RepresentableManagerImpl
 
 		return representable.representor(builder);
 	}
+
+	@Reference
+	private ActionRouterRepresentorManager _actionRouterRepresentorManager;
 
 	private Logger _logger = getLogger(getClass());
 
