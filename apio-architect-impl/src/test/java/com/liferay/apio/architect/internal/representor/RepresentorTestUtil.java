@@ -14,13 +14,15 @@
 
 package com.liferay.apio.architect.internal.representor;
 
+import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.internal.representor.dummy.Dummy;
+import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.related.RelatedModel;
 
 import java.util.List;
