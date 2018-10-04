@@ -59,7 +59,6 @@ dependencies {
 	runtime group: "org.apache.felix", name: "org.apache.felix.configadmin", version: "1.8.14"
 	runtime group: "org.apache.felix", name: "org.apache.felix.eventadmin", version: "1.4.8"
 	runtime group: "org.apache.felix", name: "org.apache.felix.http.jetty", version: "3.4.0"
-	runtime group: "org.apache.felix", name: "org.apache.felix.scr", version: "2.0.8"
 	runtime group: "org.eclipse.platform", name: "org.eclipse.osgi", version: "3.13.0"
 
 	testCompile group: "com.github.stefanbirkner", name: "system-rules", version: "1.17.0"
