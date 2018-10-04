@@ -45,7 +45,7 @@ import org.slf4j.Logger;
 /**
  * @author Víctor Galán
  */
-@Component(immediate = true)
+@Component(service = ActionRouterRepresentorManager.class)
 public class ActionRouterRepresentorManagerImpl
 	implements ActionRouterRepresentorManager {
 
