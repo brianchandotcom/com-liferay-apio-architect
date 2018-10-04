@@ -22,7 +22,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.related.RelatedModel;
 
 import java.util.List;
@@ -91,31 +90,27 @@ public class RepresentorTestUtil {
 	}
 
 	/**
-	 * Tests a {@code RelatedModel} with the provided {@link Dummy}, key,
+	 * Tests a {@code RelatedModel} with the provided t, key,
 	 * identifier class, and ID.
 	 *
 	 * @param relatedModel the related model
-	 * @param dummy the dummy instance
+	 * @param t the t instance
 	 * @param key the related model's key
 	 * @param identifierClass the related model's identifier class
 	 * @param value the value of the related model's ID
 	 */
-	public static void testRelatedModel(
-		RelatedModel<Dummy, ?> relatedModel, Dummy dummy, String key,
-		Class<? extends Identifier> identifierClass, Integer value) {
+	public static <T, S> void testRelatedModel(
+		RelatedModel<T, ?> relatedModel, T t, String key,
+		Class<? extends Identifier<S>> identifierClass, S value) {
 
 		assertThat(relatedModel.getKey(), is(key));
 		assertThat(
 			relatedModel.getIdentifierClass(), is(equalTo(identifierClass)));
 
-		Function<Dummy, ?> modelToIdentifierFunction =
-			relatedModel.getModelToIdentifierFunction();
+		Function<T, S> modelToIdentifierFunction = unsafeCast(
+			relatedModel.getModelToIdentifierFunction());
 
-		Integer id = modelToIdentifierFunction.andThen(
-			Integer.class::cast
-		).apply(
-			dummy
-		);
+		S id = modelToIdentifierFunction.apply(t);
 
 		assertThat(id, is(value));
 	}
