@@ -12,12 +12,18 @@ buildscript {
 	}
 }
 
+configurations {
+	framework.extendsFrom runtime
+}
+
 task resolve(type: Resolve) {
 	description 'Updates the sample.bndrun "runBundles" section.'
 
 	group 'sample'
 
 	bndrun 'sample.bndrun'
+
+	bundles configurations.compileOnly
 }
 
 task run(type: Bndrun) {
@@ -26,6 +32,8 @@ task run(type: Bndrun) {
 	group 'sample'
 
 	bndrun 'sample.bndrun'
+
+	bundles configurations.compileOnly
 }
 
 dependencies {
