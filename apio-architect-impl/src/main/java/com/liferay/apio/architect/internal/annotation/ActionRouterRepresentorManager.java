@@ -71,6 +71,10 @@ public class ActionRouterRepresentorManager {
 		Function<Class<? extends Identifier<?>>, String> nameFunction,
 		Map<String, List<RelatedCollection<?, ?>>> relatedCollections) {
 
+		if (_actionRouters == null) {
+			return;
+		}
+
 		Stream<ActionRouter<?>> actionRouterStream = _actionRouters.stream();
 
 		actionRouterStream.map(
