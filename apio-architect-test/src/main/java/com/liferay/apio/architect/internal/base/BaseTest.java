@@ -14,6 +14,20 @@
 
 package com.liferay.apio.architect.internal.base;
 
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static io.vavr.Predicates.instanceOf;
+import static io.vavr.Predicates.is;
+
+import io.vavr.collection.List;
+import io.vavr.collection.Traversable;
+import io.vavr.control.Try;
+
+import java.net.URI;
+
+import java.util.function.Function;
+
 import javax.ws.rs.client.ClientBuilder;
 
 import org.osgi.framework.Bundle;
@@ -41,6 +55,18 @@ public class BaseTest {
 		return _clientBuilders.getService();
 	}
 
+	protected static final URI WHITEBOARD_URI;
+
+	@SuppressWarnings({"Convert2MethodRef", "unchecked"})
+	private static final Function<Object, List<String>> _TO_LIST = v -> Match(
+		v
+	).of(
+		Case($(is(null)), List.empty()),
+		Case($(instanceOf(String[].class)), array -> List.of(array)),
+		Case($(instanceOf(Iterable.class)), iterable -> List.ofAll(iterable)),
+		Case($(), value -> List.of(value.toString()))
+	);
+
 	private static final BundleContext _bundleContext;
 	private static final ServiceObjects<ClientBuilder> _clientBuilders;
 
@@ -54,6 +80,24 @@ public class BaseTest {
 
 		_clientBuilders = _bundleContext.getServiceObjects(
 			clientBuilderServiceReference);
+
+		WHITEBOARD_URI = Try.of(
+			() -> _bundleContext.getServiceReference(
+				"org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime")
+		).map(
+			serviceReference -> serviceReference.getProperty(
+				"osgi.jaxrs.endpoint")
+		).map(
+			_TO_LIST
+		).filter(
+			endpoints -> endpoints.size() != 0,
+			() -> new IllegalStateException(
+				"Unable to find endpoints in \"osgi.jaxrs.endpoint\" property")
+		).map(
+			Traversable::head
+		).mapTry(
+			URI::new
+		).get();
 	}
 
 }

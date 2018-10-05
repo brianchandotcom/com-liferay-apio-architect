@@ -71,7 +71,7 @@ public class AvatarResourceTest extends BaseTest {
 
 		return clientBuilder.build(
 		).target(
-			"http://localhost:9000"
+			WHITEBOARD_URI
 		).path(
 			"images/{id}"
 		).resolveTemplate(

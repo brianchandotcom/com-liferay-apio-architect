@@ -33,8 +33,7 @@
 
 -runproperties: \
 	logback.configurationFile=file:${.}/logback.xml,\
-	osgi.console.enable.builtin=false,\
-	org.osgi.service.http.port=9000
+	osgi.console.enable.builtin=false
 
 -runrequires: \
     osgi.identity;filter:='(osgi.identity=org.apache.aries.jax.rs.whiteboard)',\
