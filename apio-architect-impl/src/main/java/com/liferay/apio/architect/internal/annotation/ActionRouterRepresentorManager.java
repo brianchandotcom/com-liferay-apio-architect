@@ -14,20 +14,90 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
+import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
+import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
+
+import static org.slf4j.LoggerFactory.getLogger;
+
+import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.internal.annotation.representor.ActionRouterTypeExtractor;
+import com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformer;
 import com.liferay.apio.architect.related.RelatedCollection;
+import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.router.ActionRouter;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
+
+import org.slf4j.Logger;
 
 /**
  * @author Víctor Galán
  */
-public interface ActionRouterRepresentorManager {
+@Component(service = ActionRouterRepresentorManager.class)
+public class ActionRouterRepresentorManager {
+
+	@Activate
+	public void activate() {
+		INSTANCE.clear();
+	}
 
 	public void computeRepresentors(
 		Function<Class<? extends Identifier<?>>, String> nameFunction,
-		Map<String, List<RelatedCollection<?, ?>>> relatedCollections);
+		Map<String, List<RelatedCollection<?, ?>>> relatedCollections) {
+
+		Stream<ActionRouter<?>> actionRouterStream = _actionRouters.stream();
+
+		actionRouterStream.map(
+			ActionRouterTypeExtractor::extractTypeClass
+		).forEach(
+			typeClassTry -> typeClassTry.voidFold(
+				__ -> _logger.warn(
+					"Unable to extract class from action router"),
+				typeClass -> _computeRepresentor(
+					typeClass, nameFunction, relatedCollections))
+		);
+	}
+
+	@Deactivate
+	public void deactivate() {
+		INSTANCE.clear();
+	}
+
+	private <T extends Identifier<S>, S> void _computeRepresentor(
+		Class<T> typeClass,
+		Function<Class<? extends Identifier<?>>, String> nameFunction,
+		Map<String, List<RelatedCollection<?, ?>>> relatedCollections) {
+
+		Representor<T> representor = RepresentorTransformer.toRepresentor(
+			typeClass, nameFunction, relatedCollections);
+
+		Type type = typeClass.getAnnotation(Type.class);
+
+		String name = toLowercaseSlug(type.value());
+
+		INSTANCE.putName(typeClass.getName(), name);
+		INSTANCE.putIdentifierClass(name, (Class)typeClass);
+		INSTANCE.putRepresentor(name, representor);
+	}
+
+	@Reference(
+		cardinality = AT_LEAST_ONE, policyOption = ReferencePolicyOption.GREEDY,
+		service = ActionRouter.class
+	)
+	private List<ActionRouter<?>> _actionRouters;
+
+	private final Logger _logger = getLogger(getClass());
 
 }
