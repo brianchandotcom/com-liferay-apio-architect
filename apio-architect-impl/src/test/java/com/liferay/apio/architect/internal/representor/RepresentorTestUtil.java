@@ -90,8 +90,8 @@ public class RepresentorTestUtil {
 	}
 
 	/**
-	 * Tests a {@code RelatedModel} with the provided t, key,
-	 * identifier class, and ID.
+	 * Tests a {@code RelatedModel} with the provided t, key, identifier class,
+	 * and ID.
 	 *
 	 * @param relatedModel the related model
 	 * @param t the t instance

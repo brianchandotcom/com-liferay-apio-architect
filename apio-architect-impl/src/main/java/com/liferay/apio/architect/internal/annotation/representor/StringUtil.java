@@ -15,10 +15,20 @@
 package com.liferay.apio.architect.internal.annotation.representor;
 
 /**
+ * Provides utility functions for transforming {@code String}.
+ *
+ * <p>
+ * This class shouldn't be instantiated.
+ * </p>
+ *
  * @author Alejandro Hernández
  */
 public class StringUtil {
 
+	/**
+	 * Transforms a string into its "slug" version. For example: transforms
+	 * {@code "BlogPosting"} into {@code "blog-posting"}.
+	 */
 	public static String toLowercaseSlug(String string) {
 		String sluggedString = String.join("-", string.split("(?=[A-Z])"));
 

@@ -42,11 +42,24 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
+ * Provides utility function to transform a class annotated with {@link Type}
+ * into a representor
+ *
  * @author Alejandro Hernandez
  * @author Víctor Galán
  */
 public class RepresentorTransformer {
 
+	/**
+	 * Transform a class annotated with {@link Type} into a representor
+	 *
+	 * @param  typeClass the class annotated with {@link Type}
+	 * @param  nameFunction the function that gets a class's {@link
+	 *         com.liferay.apio.architect.resource.CollectionResource} name
+	 * @param  relatedCollections list of the related collections of all
+	 *         representors
+	 * @return the instance of representor created
+	 */
 	public static <T extends Identifier<S>, S> Representor<T> toRepresentor(
 		Class<T> typeClass,
 		Function<Class<? extends Identifier<?>>, String> nameFunction,
@@ -122,10 +135,10 @@ public class RepresentorTransformer {
 			firstStep.addRelatedCollection(key, relatedCollection.value());
 		}
 		else if (bidirectionalModel != null) {
-			Field bidireccionalField = bidirectionalModel.field();
+			Field bidirectionalField = bidirectionalModel.field();
 
 			firstStep.addBidirectionalModel(
-				key, bidireccionalField.value(),
+				key, bidirectionalField.value(),
 				unsafeCast(bidirectionalModel.modelClass()),
 				getMethodFunction(method));
 		}

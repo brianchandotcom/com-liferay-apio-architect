@@ -33,10 +33,22 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
+ * Provides utility functions to fill a representor builder using an instance of
+ * an annotated method
+ *
  * @author Víctor Galán
  */
 public class RepresentorTransformerUtil {
 
+	/**
+	 * Fills the builder using the method provided
+	 *
+	 * @param firstStep the firstStep of the builder
+	 * @param method the method to be parsed, annotated with {@link
+	 *        com.liferay.apio.architect.annotation.Vocabulary.Field}
+	 * @param returnType the return type of the method
+	 * @param key the key of the field
+	 */
 	public static void addCommonFields(
 		BaseRepresentor.BaseFirstStep<?, ?, ?> firstStep, Method method,
 		Class<?> returnType, String key) {

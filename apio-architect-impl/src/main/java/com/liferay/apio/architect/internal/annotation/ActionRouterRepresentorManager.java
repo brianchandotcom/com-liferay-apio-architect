@@ -43,6 +43,9 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.slf4j.Logger;
 
 /**
+ * Keep track of all {@link ActionRouter} registered and provides a method to
+ * compute the representors from each action router.
+ *
  * @author Víctor Galán
  */
 @Component(service = ActionRouterRepresentorManager.class)
@@ -53,6 +56,15 @@ public class ActionRouterRepresentorManager {
 		INSTANCE.clear();
 	}
 
+	/**
+	 * create a representors for each {@link ActionRouter} registered, for this
+	 * it uses its type.
+	 *
+	 * @param nameFunction the function that gets a class's {@link
+	 *        CollectionResource} name
+	 * @param relatedCollections list of the related collections of all
+	 *        representors
+	 */
 	public void computeRepresentors(
 		Function<Class<? extends Identifier<?>>, String> nameFunction,
 		Map<String, List<RelatedCollection<?, ?>>> relatedCollections) {
