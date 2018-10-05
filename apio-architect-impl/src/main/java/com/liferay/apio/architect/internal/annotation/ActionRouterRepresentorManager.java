@@ -17,7 +17,8 @@ package com.liferay.apio.architect.internal.annotation;
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
-import static org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE;
+import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -38,7 +39,6 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import org.slf4j.Logger;
 
@@ -58,7 +58,7 @@ public class ActionRouterRepresentorManager {
 	}
 
 	/**
-	 * create a representors for each {@link ActionRouter} registered, for this
+	 * Create a representors for each {@link ActionRouter} registered, for this
 	 * it uses its type.
 	 *
 	 * @param  nameFunction the function that gets a class's {@link
@@ -107,7 +107,7 @@ public class ActionRouterRepresentorManager {
 	}
 
 	@Reference(
-		cardinality = AT_LEAST_ONE, policyOption = ReferencePolicyOption.GREEDY,
+		cardinality = MULTIPLE, policyOption = GREEDY,
 		service = ActionRouter.class
 	)
 	private List<ActionRouter<?>> _actionRouters;
