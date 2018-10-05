@@ -20,6 +20,15 @@ configure(subprojects.findAll {!it.childProjects}) {
 	sourceCompatibility = "1.8"
 	targetCompatibility = "1.8"
 
+
+	configurations {
+		framework
+		whiteboard
+
+		framework.extendsFrom runtime
+		compileOnly.extendsFrom whiteboard
+	}
+
 	test {
 		ignoreFailures = false
 	}

@@ -12,14 +12,6 @@ buildscript {
 	}
 }
 
-configurations {
-	framework
-	whiteboard
-
-	framework.extendsFrom runtime
-	compileOnly.extendsFrom whiteboard
-}
-
 task resolve(type: Resolve) {
 	description 'Updates the sample.bndrun "runBundles" section.'
 
