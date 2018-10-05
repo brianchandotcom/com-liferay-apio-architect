@@ -29,6 +29,7 @@ task testOSGi(type: TestOSGi) {
 
 	bndrun 'test.bndrun'
 
+	dependsOn copyJacocoAgent
 	dependsOn resolve
 
 	bundles configurations.compileOnly, configurations.framework, configurations.whiteboard
