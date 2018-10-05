@@ -1,4 +1,5 @@
 import aQute.bnd.gradle.Resolve
+import aQute.bnd.gradle.TestOSGi
 
 buildscript {
 	repositories {
@@ -19,6 +20,26 @@ task resolve(type: Resolve) {
 	failOnChanges true
 
 	bundles configurations.compileOnly, configurations.framework, configurations.whiteboard
+}
+
+task testOSGi(type: TestOSGi) {
+	description 'Runs the Apio Architect integration tests.'
+
+	group 'verification'
+
+	bndrun 'test.bndrun'
+
+	dependsOn resolve
+
+	bundles configurations.compileOnly, configurations.framework, configurations.whiteboard
+}
+
+check {
+	dependsOn testOSGi
+}
+
+testIntegration {
+	dependsOn testOSGi
 }
 
 dependencies {
