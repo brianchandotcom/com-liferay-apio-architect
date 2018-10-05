@@ -33,6 +33,7 @@ import java.util.List;
  * into a nested representor
  *
  * @author Víctor Galán
+ * @review
  */
 public class NestedRepresentorTransformer {
 
@@ -43,6 +44,7 @@ public class NestedRepresentorTransformer {
 	 * @param  typeClass the class annotated with {@link Type}
 	 * @param  builder the nested representor builder
 	 * @return the instance of representor created
+	 * @review
 	 */
 	public static NestedRepresentor<?> toRepresentor(
 		Class<?> typeClass, NestedRepresentor.Builder<?> builder) {

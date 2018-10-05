@@ -47,6 +47,7 @@ import org.slf4j.Logger;
  * compute the representors from each action router.
  *
  * @author Víctor Galán
+ * @review
  */
 @Component(service = ActionRouterRepresentorManager.class)
 public class ActionRouterRepresentorManager {
@@ -60,10 +61,11 @@ public class ActionRouterRepresentorManager {
 	 * create a representors for each {@link ActionRouter} registered, for this
 	 * it uses its type.
 	 *
-	 * @param nameFunction the function that gets a class's {@link
-	 *        CollectionResource} name
-	 * @param relatedCollections list of the related collections of all
-	 *        representors
+	 * @param  nameFunction the function that gets a class's {@link
+	 *         com.liferay.apio.architect.resource.CollectionResource} name
+	 * @param  relatedCollections list of the related collections of all
+	 *         representors
+	 * @review
 	 */
 	public void computeRepresentors(
 		Function<Class<? extends Identifier<?>>, String> nameFunction,

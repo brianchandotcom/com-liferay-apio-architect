@@ -22,12 +22,15 @@ package com.liferay.apio.architect.internal.annotation.representor;
  * </p>
  *
  * @author Alejandro Hernández
+ * @review
  */
 public class StringUtil {
 
 	/**
 	 * Transforms a string into its "slug" version. For example: transforms
 	 * {@code "BlogPosting"} into {@code "blog-posting"}.
+	 *
+	 * @review
 	 */
 	public static String toLowercaseSlug(String string) {
 		String sluggedString = String.join("-", string.split("(?=[A-Z])"));

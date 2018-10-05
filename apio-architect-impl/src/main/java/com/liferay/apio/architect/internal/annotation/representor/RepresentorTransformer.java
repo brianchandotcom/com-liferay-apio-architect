@@ -47,6 +47,7 @@ import java.util.function.Supplier;
  *
  * @author Alejandro Hernandez
  * @author Víctor Galán
+ * @review
  */
 public class RepresentorTransformer {
 
@@ -59,6 +60,7 @@ public class RepresentorTransformer {
 	 * @param  relatedCollections list of the related collections of all
 	 *         representors
 	 * @return the instance of representor created
+	 * @review
 	 */
 	public static <T extends Identifier<S>, S> Representor<T> toRepresentor(
 		Class<T> typeClass,

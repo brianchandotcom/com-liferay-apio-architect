@@ -37,17 +37,19 @@ import java.util.function.Function;
  * an annotated method
  *
  * @author Víctor Galán
+ * @review
  */
 public class RepresentorTransformerUtil {
 
 	/**
 	 * Fills the builder using the method provided
 	 *
-	 * @param firstStep the firstStep of the builder
-	 * @param method the method to be parsed, annotated with {@link
-	 *        com.liferay.apio.architect.annotation.Vocabulary.Field}
-	 * @param returnType the return type of the method
-	 * @param key the key of the field
+	 * @param  firstStep the firstStep of the builder
+	 * @param  method the method to be parsed, annotated with {@link
+	 *         com.liferay.apio.architect.annotation.Vocabulary.Field}
+	 * @param  returnType the return type of the method
+	 * @param  key the key of the field
+	 * @review
 	 */
 	public static void addCommonFields(
 		BaseRepresentor.BaseFirstStep<?, ?, ?> firstStep, Method method,
