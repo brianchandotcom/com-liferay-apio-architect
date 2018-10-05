@@ -9,6 +9,7 @@
 	com.liferay.apio.architect.exception.mapper.impl;version='[2.0.0,2.0.1)',\
 	com.liferay.apio.architect.impl;version='[2.0.0,2.0.1)',\
 	com.liferay.apio.architect.sample;version='[2.0.0,2.0.1)',\
+	com.liferay.apio.architect.test;version='[1.0.0,1.0.1)',\
 	com.liferay.apio.architect.uri.mapper.impl;version='[2.0.0,2.0.1)',\
 	org.apache.aries.javax.jax.rs-api;version='[1.0.0,1.0.1)',\
 	org.apache.aries.jax.rs.whiteboard;version='[1.0.0,1.0.1)',\
@@ -22,6 +23,8 @@
 	org.osgi.service.jaxrs;version='[1.0.0,1.0.1)',\
 	org.osgi.util.function;version='[1.1.0,1.1.1)',\
 	org.osgi.util.promise;version='[1.1.0,1.1.1)',\
+	osgi.enroute.hamcrest.wrapper;version='[1.3.0,1.3.1)',\
+	osgi.enroute.junit.wrapper;version='[4.12.0,4.12.1)',\
 	slf4j.api;version='[1.7.25,1.7.26)'
 
 -runee: JavaSE-1.8
@@ -38,6 +41,7 @@
     osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.exception.mapper.impl)',\
     osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.impl)',\
     osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.sample)',\
+    osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.test)',\
     osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.uri.mapper.impl)',\
     osgi.identity;filter:='(osgi.identity=ch.qos.logback.classic)'
 

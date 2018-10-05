@@ -45,6 +45,8 @@ testIntegration {
 dependencies {
 	compileOnly group: "javax.servlet", name: "javax.servlet-api", version: "3.0.1"
 	compileOnly group: "org.apache.felix", name: "org.apache.felix.scr", version: "2.0.8"
+	compileOnly group: "org.osgi", name: "osgi.enroute.hamcrest.wrapper", version: "1.3.0"
+	compileOnly group: "org.osgi", name: "osgi.enroute.junit.wrapper", version: "4.12.0"
 	compileOnly project(":apps:apio-architect:apio-architect-api")
 	compileOnly project(":apps:apio-architect:apio-architect-exception-mapper-impl")
 	compileOnly project(":apps:apio-architect:apio-architect-impl")
