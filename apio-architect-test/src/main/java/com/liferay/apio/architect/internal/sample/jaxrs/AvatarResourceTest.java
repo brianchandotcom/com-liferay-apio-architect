@@ -39,7 +39,7 @@ import org.junit.Test;
 public class AvatarResourceTest extends BaseTest {
 
 	@Test
-	public void testAvatarResourceReturns404OnNonExistentAvatar()
+	public void testAvatarResourceReturns404OnNonexistentAvatar()
 		throws IOException {
 
 		Response response = _requestAvatarForId(9999);
