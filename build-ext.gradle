@@ -29,14 +29,6 @@ configure(subprojects.findAll {!it.childProjects}) {
 		dependsOn subprojects.findAll {!it.childProjects}.copyJacocoAgent
 	}
 
-	configurations {
-		framework
-		whiteboard
-
-		framework.extendsFrom runtime
-		compileOnly.extendsFrom whiteboard
-	}
-
 	test {
 		ignoreFailures = false
 	}
