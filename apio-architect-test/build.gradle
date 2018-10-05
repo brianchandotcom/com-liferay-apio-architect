@@ -1,3 +1,5 @@
+import aQute.bnd.gradle.Resolve
+
 buildscript {
 	repositories {
 		mavenCentral()
@@ -5,6 +7,18 @@ buildscript {
 	dependencies {
 		classpath group: "biz.aQute.bnd", name: "biz.aQute.bnd.gradle", version: "4.0.0"
 	}
+}
+
+task resolve(type: Resolve) {
+	description 'Checks if the test.bndrun "runBundles" section is up-to-date.'
+
+	group 'verification'
+
+	bndrun 'test.bndrun'
+
+	failOnChanges true
+
+	bundles configurations.compileOnly, configurations.framework, configurations.whiteboard
 }
 
 dependencies {
