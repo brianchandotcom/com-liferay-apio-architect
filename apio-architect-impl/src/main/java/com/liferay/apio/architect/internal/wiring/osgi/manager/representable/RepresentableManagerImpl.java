@@ -191,7 +191,7 @@ public class RepresentableManagerImpl
 		Representable<T, S, U> representable, Class<U> clazz,
 		Map<String, List<RelatedCollection<T, ?>>> relatedCollections) {
 
-		Supplier<List<RelatedCollection<T, ?>>> relatedCollectionSupplier =
+		Supplier<List<RelatedCollection<T, ?>>> relatedCollectionsSupplier =
 			() -> relatedCollections.get(clazz.getName());
 
 		BiConsumer<Class<?>, RelatedCollection<T, ?>> biConsumer =
@@ -204,7 +204,7 @@ public class RepresentableManagerImpl
 			};
 
 		Builder<T, S> builder = new BuilderImpl<>(
-			clazz, this::_getNameOrFail, biConsumer, relatedCollectionSupplier);
+			clazz, this::_getNameOrFail, biConsumer, relatedCollectionsSupplier);
 
 		return representable.representor(builder);
 	}

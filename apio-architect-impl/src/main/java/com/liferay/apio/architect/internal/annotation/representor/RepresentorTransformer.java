@@ -87,7 +87,7 @@ public class RepresentorTransformer {
 			Function<Class<? extends Identifier<?>>, String> nameFunction,
 			Map<String, List<RelatedCollection<T, ?>>> relatedCollections) {
 
-		Supplier<List<RelatedCollection<T, ?>>> relatedCollectionSupplier =
+		Supplier<List<RelatedCollection<T, ?>>> relatedCollectionsSupplier =
 			() -> relatedCollections.get(typeClass.getName());
 
 		BiConsumer<Class<?>, RelatedCollection<T, ?>> biConsumer =
@@ -100,7 +100,7 @@ public class RepresentorTransformer {
 			};
 
 		return new RepresentorImpl.BuilderImpl<>(
-			typeClass, nameFunction, biConsumer, relatedCollectionSupplier);
+			typeClass, nameFunction, biConsumer, relatedCollectionsSupplier);
 	}
 
 	private static <T extends Identifier<S>, S> void _processMethod(
