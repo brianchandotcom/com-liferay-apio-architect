@@ -72,19 +72,19 @@ public class RepresentorTransformerUtil {
 		}
 	}
 
-	public static <T, S> Function<T, S> getMethodFunction(Method method) {
-		return t -> Try.fromFallible(
-			() -> (S)method.invoke(t)
+	public static <A, T, S> BiFunction<T, A, S> getMethodBiFunction(
+		Method method) {
+
+		return (t, a) -> Try.fromFallible(
+			() -> (S)method.invoke(t, a)
 		).orElse(
 			null
 		);
 	}
 
-	public static <A, T, S> BiFunction<T, A, S> getMethodFunction1(
-		Method method) {
-
-		return (t, a) -> Try.fromFallible(
-			() -> (S)method.invoke(t, a)
+	public static <T, S> Function<T, S> getMethodFunction(Method method) {
+		return t -> Try.fromFallible(
+			() -> (S)method.invoke(t)
 		).orElse(
 			null
 		);
@@ -133,11 +133,11 @@ public class RepresentorTransformerUtil {
 
 			if (firstParameter == Locale.class) {
 				firstStep.addLocalizedStringByLocale(
-					key, getMethodFunction1(method));
+					key, getMethodBiFunction(method));
 			}
 			else if (firstParameter == AcceptLanguage.class) {
 				firstStep.addLocalizedStringByLanguage(
-					key, getMethodFunction1(method));
+					key, getMethodBiFunction(method));
 			}
 		}
 		else {

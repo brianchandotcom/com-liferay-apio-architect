@@ -58,7 +58,7 @@ public class ActionRouterTypeExtractorTest {
 	}
 
 	@Test
-	public void testExtractRouterWithTypeParameterNotedAnnotated() {
+	public void testExtractRouterWithTypeParameterAnnotated() {
 		class Dummy implements Identifier<Long> {
 		}
 

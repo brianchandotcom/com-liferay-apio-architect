@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 public @interface Vocabulary {
 
 	/**
-	 * Indicates that a type has a bidireccional link to another resource's
+	 * Indicates that a type has a bidirectional link to another resource's
 	 * page.
 	 *
 	 * <p>

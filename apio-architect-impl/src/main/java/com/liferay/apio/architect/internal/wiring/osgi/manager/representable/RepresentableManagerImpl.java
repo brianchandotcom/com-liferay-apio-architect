@@ -204,7 +204,8 @@ public class RepresentableManagerImpl
 			};
 
 		Builder<T, S> builder = new BuilderImpl<>(
-			clazz, this::_getNameOrFail, biConsumer, relatedCollectionsSupplier);
+			clazz, this::_getNameOrFail, biConsumer,
+			relatedCollectionsSupplier);
 
 		return representable.representor(builder);
 	}

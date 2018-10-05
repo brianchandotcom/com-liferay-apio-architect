@@ -86,11 +86,11 @@ public class RepresentorTransformerTest {
 		MatcherAssert.assertThat(relatedModels, hasSize(4));
 
 		testRelatedModel(
-			relatedModels.get(0), _dummy, "bidireccional1",
+			relatedModels.get(0), _dummy, "bidirectional1",
 			IntegerIdentifier.class, 3);
 
 		testRelatedModel(
-			relatedModels.get(1), _dummy, "bidireccional2",
+			relatedModels.get(1), _dummy, "bidirectional2",
 			StringIdentifier.class, "2d1d");
 
 		testRelatedModel(
@@ -133,7 +133,7 @@ public class RepresentorTransformerTest {
 		Stream<RelatedCollection<Dummy, ?>> relatedCollections =
 			_representor.getRelatedCollections();
 
-		List<?> list0 = relatedCollections.filter(
+		List<?> list = relatedCollections.filter(
 			relatedCollection ->
 				(relatedCollection.getIdentifierClass() ==
 					IntegerIdentifier.class) ||
@@ -147,7 +147,7 @@ public class RepresentorTransformerTest {
 			Collectors.toList()
 		);
 
-		MatcherAssert.assertThat(list0, hasSize(2));
+		MatcherAssert.assertThat(list, hasSize(2));
 	}
 
 	@Test

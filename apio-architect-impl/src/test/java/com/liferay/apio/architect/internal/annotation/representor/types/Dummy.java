@@ -43,16 +43,16 @@ public interface Dummy extends Identifier<Long> {
 	@BidirectionalModel(
 		field = @Field("linked1"), modelClass = IntegerIdentifier.class
 	)
-	@Field("bidireccional1")
-	public default Integer getBidireccional1() {
+	@Field("bidirectional1")
+	public default Integer getBidirectional1() {
 		return 3;
 	}
 
 	@BidirectionalModel(
 		field = @Field("linked2"), modelClass = StringIdentifier.class
 	)
-	@Field("bidireccional2")
-	public default String getBidireccional2() {
+	@Field("bidirectional2")
+	public default String getBidirectional2() {
 		return "2d1d";
 	}
 
