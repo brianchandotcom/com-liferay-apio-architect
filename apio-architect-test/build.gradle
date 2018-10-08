@@ -29,14 +29,9 @@ task testOSGi(type: TestOSGi) {
 
 	bndrun 'test.bndrun'
 
-	dependsOn copyJacocoAgent
 	dependsOn resolve
 
 	bundles configurations.compileOnly
-}
-
-check {
-	dependsOn testOSGi
 }
 
 testIntegration {
