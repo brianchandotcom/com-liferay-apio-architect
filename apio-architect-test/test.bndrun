@@ -30,7 +30,7 @@
 
 -runfw: org.eclipse.osgi;version=3.13.0
 
--runvm: -javaagent:build/jacoco/jacocoagent.jar=destfile=build/jacoco/test.exec
+-runvm: -javaagent:${.}/build/jacoco/jacocoagent.jar=destfile=${.}/build/jacoco/test.exec
 
 -runproperties: \
 	logback.configurationFile=file:${.}/logback.xml,\
