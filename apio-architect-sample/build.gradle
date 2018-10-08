@@ -71,7 +71,7 @@ dependencies {
 }
 
 deploy {
-	false
+	enabled = false
 }
 
 sourceCompatibility = "1.8"
