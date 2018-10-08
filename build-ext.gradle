@@ -17,18 +17,6 @@ allprojects {
 }
 
 configure(subprojects.findAll {!it.childProjects}) {
-	task copyJacocoAgent(type: Copy) {
-		from {
-			zipTree(configurations.jacocoAgent.singleFile)
-		}
-
-		into "${rootDir}/build/jacoco"
-	}
-
-	check {
-		dependsOn subprojects.findAll {!it.childProjects}.copyJacocoAgent
-	}
-
 	test {
 		ignoreFailures = false
 	}

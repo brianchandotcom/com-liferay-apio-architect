@@ -10,6 +10,14 @@ buildscript {
 	}
 }
 
+task copyJacocoAgent(type: Copy) {
+	from {
+		zipTree(configurations.jacocoAgent.singleFile)
+	}
+
+	into "build/jacoco"
+}
+
 task resolve(type: Resolve) {
 	description 'Checks if the test.bndrun "runBundles" section is up-to-date.'
 
@@ -29,6 +37,7 @@ task testOSGi(type: TestOSGi) {
 
 	bndrun 'test.bndrun'
 
+	dependsOn copyJacocoAgent
 	dependsOn resolve
 
 	bundles configurations.compileOnly
