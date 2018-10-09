@@ -63,7 +63,7 @@ public class BlogPostingRatingReusableNestedCollectionRouter
 					}
 				).map(
 					BlogPostingConverter::toBlogPosting
-				).blogPostings(
+				).collect(
 					Collectors.toList()
 				);
 
