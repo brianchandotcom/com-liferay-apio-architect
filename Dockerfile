@@ -1,8 +1,4 @@
-FROM gradle:4.2.1-jdk8-alpine
-
-LABEL maintainer="alejandro.hernandez@liferay.com"
-
-EXPOSE 8080 6666
+FROM gradle:4.2.1-jdk8-alpine AS BUILDER
 
 WORKDIR /sample
 
@@ -14,4 +10,13 @@ RUN chown -R gradle /sample
 
 USER gradle
 
-ENTRYPOINT ["./gradlew", "run"]
+RUN gradle export
+
+FROM openjdk:8-jre-alpine
+
+WORKDIR /root
+
+COPY --from=BUILDER /sample/apio-architect-sample/build/distributions/executable/sample.jar .
+COPY --from=BUILDER /sample/apio-architect-sample/logback.xml .
+
+ENTRYPOINT ["java", "-jar", "sample.jar"]
