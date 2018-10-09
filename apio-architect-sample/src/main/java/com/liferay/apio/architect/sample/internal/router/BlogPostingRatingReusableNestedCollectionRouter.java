@@ -55,7 +55,7 @@ public class BlogPostingRatingReusableNestedCollectionRouter
 
 				Stream<BlogPostingModel> stream = page.stream();
 
-				List<BlogPosting> collect = stream.filter(
+				List<BlogPosting> blogPostings = stream.filter(
 					blogPostingModel -> {
 						Long creatorId = blogPostingModel.getCreatorId();
 
@@ -63,11 +63,11 @@ public class BlogPostingRatingReusableNestedCollectionRouter
 					}
 				).map(
 					BlogPostingConverter::toBlogPosting
-				).collect(
+				).blogPostings(
 					Collectors.toList()
 				);
 
-				return new PageItems<>(collect, collect.size());
+				return new PageItems<>(blogPostings, blogPostings.size());
 			}).build();
 	}
 
