@@ -2,11 +2,12 @@ import aQute.bnd.gradle.Resolve
 import aQute.bnd.gradle.TestOSGi
 
 buildscript {
-	repositories {
-		mavenCentral()
-	}
 	dependencies {
 		classpath group: "biz.aQute.bnd", name: "biz.aQute.bnd.gradle", version: "4.0.0"
+	}
+
+	repositories {
+		mavenCentral()
 	}
 }
 

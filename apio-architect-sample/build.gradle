@@ -1,14 +1,13 @@
-import aQute.bnd.gradle.Bndrun
+import aQute.bnd.gradle.Export
 import aQute.bnd.gradle.Resolve
 
 buildscript {
-	repositories {
-		maven {
-			url 'https://bndtools.ci.cloudbees.com/job/bnd.master/lastSuccessfulBuild/artifact/dist/bundles'
-		}
-	}
 	dependencies {
-		classpath group: "biz.aQute.bnd", name: "biz.aQute.bnd.gradle", version: "+"
+		classpath group: "biz.aQute.bnd", name: "biz.aQute.bnd.gradle", version: "4.0.0"
+	}
+
+	repositories {
+		mavenCentral()
 	}
 }
 
