@@ -22,6 +22,7 @@ import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.internal.related.RelatedCollectionImpl;
 import com.liferay.apio.architect.internal.related.RelatedModelImpl;
 import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.language.AcceptLanguage;
@@ -31,16 +32,19 @@ import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.NestedRepresentor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * @author Alejandro Hernández
@@ -155,6 +159,19 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 	@Override
 	public String getPrimaryType() {
 		return primaryType;
+	}
+
+	@Override
+	public Stream<RelatedCollection<T, ? extends Identifier>>
+		getRelatedCollections() {
+
+		return Stream.of(
+			relatedCollections, supplier.get()
+		).filter(
+			Objects::nonNull
+		).flatMap(
+			Collection::stream
+		);
 	}
 
 	@Override
@@ -389,6 +406,16 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 		_addFieldFunction(key, function, "NUMBER_LIST");
 	}
 
+	protected <S extends Identifier<?>> void addRelatedCollection(
+		String key, Class<S> itemIdentifierClass,
+		Function<T, ?> modelToIdentifierFunction) {
+
+		RelatedCollection<T, ?> relatedCollection = new RelatedCollectionImpl(
+			key, itemIdentifierClass, modelToIdentifierFunction);
+
+		relatedCollections.add(relatedCollection);
+	}
+
 	/**
 	 * Adds information about a related model.
 	 *
@@ -468,6 +495,8 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 	protected final List<NestedListFieldFunction<T, ?>>
 		nestedListFieldFunctions = new ArrayList<>();
 	protected String primaryType;
+	protected final List<RelatedCollection<T, ?>> relatedCollections =
+		new ArrayList<>();
 	protected final List<RelatedModel<T, ?>> relatedModels = new ArrayList<>();
 	protected final Supplier<List<RelatedCollection<T, ?>>> supplier;
 	protected final List<String> types = new ArrayList<>();
@@ -605,6 +634,17 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 				String key, Function<T, List<Number>> function) {
 
 				baseRepresentor.addNumberListFunction(key, function);
+
+				return _this;
+			}
+
+			@Override
+			public <W, S extends Identifier<?>> V addRelatedCollection(
+				String key, Class<S> itemIdentifierClass,
+				Function<T, W> modelToIdentifierFunction) {
+
+				baseRepresentor.addRelatedCollection(
+					key, itemIdentifierClass, modelToIdentifierFunction);
 
 				return _this;
 			}
