@@ -11,6 +11,16 @@ buildscript {
 	}
 }
 
+task export(type: Export) {
+	description 'Exports the sample.bndrun into a runnable jar.'
+
+	group 'sample'
+
+	bndrun 'sample.bndrun'
+
+	bundles configurations.compileOnly
+}
+
 task resolve(type: Resolve) {
 	description 'Updates the sample.bndrun "runBundles" section.'
 
@@ -21,14 +31,14 @@ task resolve(type: Resolve) {
 	bundles configurations.compileOnly
 }
 
-task run(type: Bndrun) {
-	description 'Runs the Apio Architect Sample.'
+task run() {
+	dependsOn export
 
-	group 'sample'
-
-	bndrun 'sample.bndrun'
-
-	bundles configurations.compileOnly
+	doLast {
+		javaexec {
+			main = "-jar"; args "build/distributions/executable/sample.jar"
+		}
+	}
 }
 
 dependencies {
