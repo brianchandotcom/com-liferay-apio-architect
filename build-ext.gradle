@@ -34,7 +34,9 @@ configure(subprojects.findAll {!it.childProjects}) {
 	}
 }
 
-task codeCoverageReport(type: JacocoReport) {
+task codeCoverageReport(type: JacocoReport)
+
+codeCoverageReport {
 	executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
 	subprojects.findAll { !it.childProjects }.each {
