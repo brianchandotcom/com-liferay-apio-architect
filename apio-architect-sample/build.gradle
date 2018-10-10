@@ -31,14 +31,12 @@ task resolve(type: Resolve) {
 	bundles configurations.compileOnly
 }
 
-task run() {
+task run(type: JavaExec) {
 	dependsOn export
 
-	doLast {
-		javaexec {
-			main = "-jar"; args "build/distributions/executable/sample.jar"
-		}
-	}
+	main = "-jar"
+
+	args 'build/distributions/executable/sample.jar'
 }
 
 dependencies {
