@@ -157,7 +157,14 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		).map(
 			requestFunction -> requestFunction.apply(_httpServletRequest)
 		).map(
-			pathFunction -> pathFunction.apply(new Path(_name, id))
+			pathFunction -> {
+				if (_name.equals("r")) {
+					return pathFunction.apply(new Path(id, nestedName));
+				}
+				else {
+					return pathFunction.apply(new Path(_name, id));
+				}
+			}
 		).flatMap(
 			_getIdFunction(id, nestedName)
 		).mapFailMatching(
