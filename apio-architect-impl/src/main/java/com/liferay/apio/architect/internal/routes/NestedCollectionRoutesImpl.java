@@ -592,14 +592,24 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				return Collections.emptyList();
 			}
 
+			String resourceName;
+			String uri;
+
+			if (_name.equals("r")) {
+				resourceName = _nestedName;
+				uri = _name + "/" + resourceName + "/" + path.getId();
+			}
+			else {
+				resourceName = _name + "/" + _nestedName;
+				uri = path.asURI() + "/" + _nestedName;
+			}
+
 			CreateOperation createOperation = new CreateOperation(
-				_form, _name + "/" + _nestedName,
-				path.asURI() + "/" + _nestedName);
+				_form, resourceName, uri);
 
 			BatchCreateOperation batchCreateOperation =
 				new BatchCreateOperation(
-					_form, _name + "/" + _nestedName,
-					path.asURI() + "/" + _nestedName);
+					_form, resourceName, uri);
 
 			return Arrays.asList(createOperation, batchCreateOperation);
 		}
