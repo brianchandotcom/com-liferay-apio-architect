@@ -194,7 +194,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		if (_name.equals("r")) {
 			return Try.fromFallible(
 				() -> identifierFunction.apply(
-				_pathToIdentifierFunction.apply(new Path(id, nestedName))));
+					_pathToIdentifierFunction.apply(new Path(id, nestedName))));
 		}
 		else {
 			return _singleModelFunction.apply(
