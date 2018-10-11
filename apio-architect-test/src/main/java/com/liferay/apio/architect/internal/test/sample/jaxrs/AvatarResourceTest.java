@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.sample.jaxrs;
+package com.liferay.apio.architect.internal.test.sample.jaxrs;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 
-import com.liferay.apio.architect.internal.base.BaseTest;
+import com.liferay.apio.architect.internal.test.base.BaseTest;
 
 import java.io.IOException;
 import java.io.InputStream;

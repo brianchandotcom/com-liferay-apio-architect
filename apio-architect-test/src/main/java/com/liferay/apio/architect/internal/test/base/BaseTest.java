@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.base;
+package com.liferay.apio.architect.internal.test.base;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
