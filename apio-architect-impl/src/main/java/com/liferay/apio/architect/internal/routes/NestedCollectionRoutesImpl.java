@@ -592,8 +592,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				return Collections.emptyList();
 			}
 
-			String resourceName;
-			String uri;
+			String resourceName = null;
+			String uri = null;
 
 			if (_name.equals("r")) {
 				resourceName = _nestedName;
