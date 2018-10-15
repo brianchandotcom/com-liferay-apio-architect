@@ -19,12 +19,16 @@ import static com.liferay.apio.architect.internal.endpoint.ExceptionSupplierUtil
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.internal.annotation.Action;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.annotation.ActionRouterManager;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.CustomOperationsEndpoint;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
+import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.documentation.contributor.CustomDocumentationManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.CollectionRouterManager;
@@ -32,12 +36,14 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ItemRouter
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
-import com.liferay.apio.architect.uri.Path;
+
+import io.vavr.control.Either;
 
 import java.util.Optional;
 
@@ -59,17 +65,10 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Activate
 	public void activate() {
-		_documentation = new Documentation(
+		_documentation = _actionManager.getDocumentation(
 			() -> _provide(APITitle.class),
 			() -> _provide(APIDescription.class),
-			() -> _provide(ApplicationURL.class),
-			() -> _representableManager.getRepresentors(),
-			() -> _collectionRouterManager.getCollectionRoutes(),
-			() -> _itemRouterManager.getItemRoutes(),
-			() -> _nestedCollectionRouterManager.getNestedCollectionRoutes(),
-			() -> _reusableNestedCollectionRouterManager.
-				getReusableCollectionRoutes(),
-			() -> _customDocumentationManager.getCustomDocumentation());
+			() -> _provide(ApplicationURL.class));
 	}
 
 	@Override
@@ -131,7 +130,14 @@ public class RootEndpointImpl implements RootEndpoint {
 			this::_getNestedCollectionRoutesOrFail,
 			path -> _pathIdentifierMapperManager.mapToIdentifierOrFail(
 				path,
-				(ClassNameBaseManager)_reusableNestedCollectionRouterManager));
+				(ClassNameBaseManager)_reusableNestedCollectionRouterManager),
+			() -> _getActionManager(), _providerManager);
+	}
+
+	private ActionManager _getActionManager() {
+		_actionRouterManager.computeActionRouters();
+
+		return _actionManager;
 	}
 
 	private CollectionRoutes<Object, Object> _getCollectionRoutesOrFail(
@@ -184,18 +190,18 @@ public class RootEndpointImpl implements RootEndpoint {
 	private Try<SingleModel<Object>> _getSingleModelTry(
 		String name, String id) {
 
+		Either<Action.Error, Action> get = _actionManager.getAction(
+			HTTPMethod.GET.name(), name, id);
+
 		return Try.fromFallible(
-			() -> _getItemRoutesOrFail(name)
-		).mapOptional(
-			ItemRoutes::getItemFunctionOptional, notFound(name, id)
-		).map(
-			requestFunction -> requestFunction.apply(_httpServletRequest)
-		).map(
-			identifierFunction -> identifierFunction.compose(
-				(Path path) ->
-					_pathIdentifierMapperManager.mapToIdentifierOrFail(path))
-		).flatMap(
-			pathFunction -> pathFunction.apply(new Path(name, id))
+			() -> get.map(
+				action -> action.apply(_httpServletRequest)
+			).map(
+				model -> new SingleModelImpl<>(
+					model, name,
+					_actionManager.getActions(
+						new ActionKey(HTTPMethod.GET.name(), name, id), null))
+			).get()
 		);
 	}
 
@@ -204,10 +210,13 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	@Reference
-	private CollectionRouterManager _collectionRouterManager;
+	private ActionManager _actionManager;
 
 	@Reference
-	private CustomDocumentationManager _customDocumentationManager;
+	private ActionRouterManager _actionRouterManager;
+
+	@Reference
+	private CollectionRouterManager _collectionRouterManager;
 
 	private Documentation _documentation;
 
