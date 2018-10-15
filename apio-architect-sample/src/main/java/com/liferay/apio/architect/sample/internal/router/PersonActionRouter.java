@@ -17,6 +17,7 @@ package com.liferay.apio.architect.sample.internal.router;
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.PersonConverter.toPerson;
 
+import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.annotation.Actions.Create;
 import com.liferay.apio.architect.annotation.Actions.Remove;
 import com.liferay.apio.architect.annotation.Actions.Replace;
@@ -75,6 +76,15 @@ public class PersonActionRouter implements ActionRouter<Person> {
 			person.getFamilyName());
 
 		return toPerson(personModel);
+	}
+
+	@Actions.Action(httpMethod = "GET", name = "recover_first_user")
+	public Person recoverFirstTenUsers() {
+		List<PersonModel> personModels = _personModelService.getPage(0, 1);
+
+		PersonModel personModel = personModels.get(0);
+
+		return PersonConverter.toPerson(personModel);
 	}
 
 	@Remove
