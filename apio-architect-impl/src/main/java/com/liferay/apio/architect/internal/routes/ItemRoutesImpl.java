@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.internal.routes;
 
 import static com.liferay.apio.architect.internal.routes.RoutesBuilderUtil.provide;
-import static com.liferay.apio.architect.internal.routes.RoutesBuilderUtil.provideConsumer;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -43,6 +42,8 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.operation.CreateOperation;
 import com.liferay.apio.architect.internal.operation.DeleteOperation;
@@ -73,11 +74,8 @@ import java.util.stream.Stream;
 public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 	public ItemRoutesImpl(BuilderImpl<T, S> builderImpl) {
-		_deleteItemConsumer = builderImpl._deleteItemConsumer;
 		_form = builderImpl._form;
-		_singleModelFunction = builderImpl._singleModelFunction;
 		_updateItemFunction = builderImpl._updateItemFunction;
-
 		_customItemFunctions = builderImpl._customItemFunctions;
 		_customRoutes = builderImpl._customRoutes;
 	}
@@ -94,9 +92,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		return _customRoutes;
 	}
 
+	/**
+	 * @return
+	 * @deprecated use
+	 */
+	@Deprecated
 	@Override
 	public Optional<DeleteItemConsumer<S>> getDeleteConsumerOptional() {
-		return Optional.ofNullable(_deleteItemConsumer);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -106,7 +109,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 	@Override
 	public Optional<GetItemFunction<T, S>> getItemFunctionOptional() {
-		return Optional.ofNullable(_singleModelFunction);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -130,7 +133,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
 			Function<S, Optional<Path>> identifierToPathFunction,
-			Function<String, Optional<String>> nameFunction) {
+			Function<String, Optional<String>> nameFunction,
+			ActionManager actionManager) {
 
 			_name = name;
 			_provideFunction = provideFunction;
@@ -139,6 +143,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 			_identifierToPathFunction = identifierToPathFunction;
 			_nameFunction = nameFunction;
+			_actionManager = (ActionManagerImpl)actionManager;
 		}
 
 		@Override
@@ -323,17 +328,13 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			ThrowableBiFunction<S, A, T> getterThrowableBiFunction,
 			Class<A> aClass) {
 
-			_neededProviderConsumer.accept(aClass.getName());
+			_actionManager.addItemGetter(
+				_name,
+				(id, body, list) -> getterThrowableBiFunction.apply(
+					(S)id, (A)list.get(0)),
+				aClass);
 
-			_singleModelFunction = httpServletRequest -> s -> provide(
-				_provideFunction.apply(httpServletRequest), aClass,
-				Credentials.class,
-				(a, credentials) -> getterThrowableBiFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
-				).apply(
-					s, a
-				));
+			_neededProviderConsumer.accept(aClass.getName());
 
 			return this;
 		}
@@ -342,14 +343,9 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		public Builder<T, S> addGetter(
 			ThrowableFunction<S, T> getterThrowableFunction) {
 
-			_singleModelFunction = httpServletRequest -> s -> provide(
-				_provideFunction.apply(httpServletRequest), Credentials.class,
-				credentials -> getterThrowableFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
-				).apply(
-					s
-				));
+			_actionManager.addItemGetter(
+				_name,
+				(id, body, list) -> getterThrowableFunction.apply((S)id));
 
 			return this;
 		}
@@ -361,21 +357,17 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
+			_actionManager.addItemGetter(
+				_name,
+				(id, body, list) -> getterThrowablePentaFunction.apply(
+					(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2),
+					(D)list.get(3)),
+				aClass, bClass, cClass, dClass);
+
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 			_neededProviderConsumer.accept(cClass.getName());
 			_neededProviderConsumer.accept(dClass.getName());
-
-			_singleModelFunction = httpServletRequest -> s -> provide(
-				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				cClass, dClass, Credentials.class,
-				(a, b, c, d, credentials) ->
-					getterThrowablePentaFunction.andThen(
-						t -> new SingleModelImpl<>(
-							t, _name, _getOperations(credentials, s))
-					).apply(
-						s, a, b, c, d
-					));
 
 			return this;
 		}
@@ -385,19 +377,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			ThrowableTetraFunction<S, A, B, C, T> getterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
+			_actionManager.addItemGetter(
+				_name,
+				(id, body, list) -> getterThrowableTetraFunction.apply(
+					(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2)),
+				aClass, bClass, cClass);
+
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 			_neededProviderConsumer.accept(cClass.getName());
-
-			_singleModelFunction = httpServletRequest -> s -> provide(
-				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				cClass, Credentials.class,
-				(a, b, c, credentials) -> getterThrowableTetraFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
-				).apply(
-					s, a, b, c
-				));
 
 			return this;
 		}
@@ -410,15 +398,11 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 
-			_singleModelFunction = httpServletRequest -> s -> provide(
-				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				Credentials.class,
-				(a, b, credentials) -> getterThrowableTriFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
-				).apply(
-					s, a, b
-				));
+			_actionManager.addItemGetter(
+				_name,
+				(id, body, list) -> getterThrowableTriFunction.apply(
+					(S)id, (A)list.get(0), (B)list.get(1)),
+				aClass, bClass);
 
 			return this;
 		}
@@ -433,9 +417,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
-				_provideFunction.apply(httpServletRequest), aClass,
-				a -> removerThrowableBiConsumer.accept(s, a));
+			_actionManager.addItemRemover(
+				_name,
+				(id, body, list) -> {
+					removerThrowableBiConsumer.accept((S)id, (A)list.get(0));
+
+					return null;
+				},
+				aClass);
 
 			return this;
 		}
@@ -447,7 +436,13 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_deleteItemConsumer = __ -> removerThrowableConsumer;
+			_actionManager.addItemRemover(
+				_name,
+				(id, body, list) -> {
+					removerThrowableConsumer.accept((S)id);
+
+					return null;
+				});
 
 			return this;
 		}
@@ -465,11 +460,16 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
-				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				cClass, dClass,
-				(a, b, c, d) -> removerThrowablePentaConsumer.accept(
-					s, a, b, c, d));
+			_actionManager.addItemRemover(
+				_name,
+				(id, body, list) -> {
+					removerThrowablePentaConsumer.accept(
+						(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2),
+						(D)list.get(3));
+
+					return null;
+				},
+				aClass, bClass, cClass, dClass);
 
 			return this;
 		}
@@ -486,10 +486,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
-				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				cClass,
-				(a, b, c) -> removerThrowableTetraConsumer.accept(s, a, b, c));
+			_actionManager.addItemRemover(
+				_name,
+				(id, body, list) -> {
+					removerThrowableTetraConsumer.accept(
+						(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2));
+
+					return null;
+				},
+				aClass, bClass, cClass);
 
 			return this;
 		}
@@ -505,9 +510,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_deleteItemConsumer = httpServletRequest -> s -> provideConsumer(
-				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				(a, b) -> removerThrowableTriConsumer.accept(s, a, b));
+			_actionManager.addItemRemover(
+				_name,
+				(id, body, list) -> {
+					removerThrowableTriConsumer.accept(
+						(S)id, (A)list.get(0), (B)list.get(1));
+
+					return null;
+				},
+				aClass, bClass);
 
 			return this;
 		}
@@ -812,12 +823,12 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			);
 		}
 
+		private final ActionManagerImpl _actionManager;
 		private Map<String, CustomItemFunction<?, S>> _customItemFunctions =
 			new HashMap<>();
 		private Map<String, BiFunction<Credentials, S, Boolean>>
 			_customPermissionFunctions = new HashMap<>();
 		private final Map<String, CustomRoute> _customRoutes = new HashMap<>();
-		private DeleteItemConsumer<S> _deleteItemConsumer;
 		private Form _form;
 		private HasRemovePermissionFunction<S> _hasRemovePermissionFunction;
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
@@ -827,16 +838,13 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		private final Consumer<String> _neededProviderConsumer;
 		private final IdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
-		private GetItemFunction<T, S> _singleModelFunction;
 		private UpdateItemFunction<T, S> _updateItemFunction;
 
 	}
 
 	private final Map<String, CustomItemFunction<?, S>> _customItemFunctions;
 	private final Map<String, CustomRoute> _customRoutes;
-	private final DeleteItemConsumer<S> _deleteItemConsumer;
 	private final Form _form;
-	private final GetItemFunction<T, S> _singleModelFunction;
 	private final UpdateItemFunction<T, S> _updateItemFunction;
 
 }

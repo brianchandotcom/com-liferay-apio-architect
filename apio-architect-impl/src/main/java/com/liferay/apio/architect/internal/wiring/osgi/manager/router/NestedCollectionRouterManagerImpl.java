@@ -24,6 +24,7 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.util.Manag
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
@@ -195,7 +196,7 @@ public class NestedCollectionRouterManagerImpl
 					_pathIdentifierMapperManager::mapToIdentifierOrFail,
 					identifier -> _pathIdentifierMapperManager.mapToPath(
 						name, identifier),
-					representor::getIdentifier);
+					representor::getIdentifier, _actionManager);
 
 				@SuppressWarnings("unchecked")
 				NestedCollectionRoutes nestedCollectionRoutes =
@@ -215,6 +216,9 @@ public class NestedCollectionRouterManagerImpl
 					name + "-" + nestedName, nestedCollectionRoutes);
 			});
 	}
+
+	@Reference
+	private ActionManager _actionManager;
 
 	@Reference
 	private ItemRouterManager _itemRouterManager;

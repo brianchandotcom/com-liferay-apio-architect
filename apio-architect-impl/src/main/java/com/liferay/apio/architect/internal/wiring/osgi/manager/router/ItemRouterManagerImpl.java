@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.Mana
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.routes.ItemRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
@@ -98,7 +99,7 @@ public class ItemRouterManagerImpl
 					_pathIdentifierMapperManager::mapToIdentifierOrFail,
 					identifier -> _pathIdentifierMapperManager.mapToPath(
 						name, identifier),
-					_nameManager::getNameOptional);
+					_nameManager::getNameOptional, _actionManager);
 
 				@SuppressWarnings("unchecked")
 				ItemRoutes itemRoutes = itemRouter.itemRoutes(builder);
@@ -116,6 +117,9 @@ public class ItemRouterManagerImpl
 				INSTANCE.putItemRoutes(name, itemRoutes);
 			});
 	}
+
+	@Reference
+	private ActionManager _actionManager;
 
 	private Logger _logger = getLogger(getClass());
 

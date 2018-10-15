@@ -33,10 +33,11 @@ import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
 import com.liferay.apio.architect.internal.operation.CreateOperation;
-import com.liferay.apio.architect.internal.pagination.PageImpl;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -63,7 +64,6 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		_nestedCreateItemFunction = builderImpl._nestedCreateItemFunction;
 		_nestedBatchCreateItemFunction =
 			builderImpl._nestedBatchCreateItemFunction;
-		_nestedGetPageFunction = builderImpl._nestedGetPageFunction;
 	}
 
 	@Override
@@ -85,11 +85,16 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		return Optional.ofNullable(_nestedCreateItemFunction);
 	}
 
+	/**
+	 * @return
+	 * @deprecated use
+	 */
+	@Deprecated
 	@Override
 	public Optional<NestedGetPageFunction<T, U>>
 		getNestedGetPageFunctionOptional() {
 
-		return Optional.ofNullable(_nestedGetPageFunction);
+		throw new UnsupportedOperationException();
 	}
 
 	public static class BuilderImpl<T, S, U> implements Builder<T, S, U> {
@@ -99,7 +104,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
 			Function<U, Optional<Path>> identifierToPathFunction,
-			Function<T, S> modelToIdentifierFunction) {
+			Function<T, S> modelToIdentifierFunction,
+			ActionManager actionManager) {
 
 			_name = name;
 			_nestedName = nestedName;
@@ -110,6 +116,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 			_identifierToPathFunction = identifierToPathFunction;
 			_modelToIdentifierFunction = modelToIdentifierFunction;
+			_actionManager = (ActionManagerImpl)actionManager;
 		}
 
 		@Override
@@ -444,18 +451,11 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			ThrowableBiFunction<Pagination, U, PageItems<T>>
 				getterThrowableBiFunction) {
 
-			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provide(
-					_provideFunction.apply(httpServletRequest),
-					Pagination.class, Credentials.class,
-					(pagination, credentials) ->
-						getterThrowableBiFunction.andThen(
-							items -> new PageImpl<>(
-								_nestedName, items, pagination, path,
-								_getOperations(credentials, identifier))
-						).apply(
-							pagination, identifier
-						));
+			_actionManager.addNestedGetter(
+				_name, _nestedName,
+				(id, body, list) -> getterThrowableBiFunction.apply(
+					(Pagination)list.get(0), (U)id),
+				Pagination.class);
 
 			return this;
 		}
@@ -472,19 +472,12 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_neededProviderConsumer.accept(cClass.getName());
 			_neededProviderConsumer.accept(dClass.getName());
 
-			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provide(
-					_provideFunction.apply(httpServletRequest),
-					Pagination.class, aClass, bClass, cClass, dClass,
-					Credentials.class,
-					(pagination, a, b, c, d, credentials) ->
-						getterThrowableHexaFunction.andThen(
-							items -> new PageImpl<>(
-								_nestedName, items, pagination, path,
-								_getOperations(credentials, identifier))
-						).apply(
-							pagination, identifier, a, b, c, d
-						));
+			_actionManager.addNestedGetter(
+				_name, _nestedName,
+				(id, body, list) -> getterThrowableHexaFunction.apply(
+					(Pagination)list.get(0), (U)id, (A)list.get(1),
+					(B)list.get(2), (C)list.get(3), (D)list.get(4)),
+				Pagination.class, aClass, bClass, cClass, dClass);
 
 			return this;
 		}
@@ -499,18 +492,12 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_neededProviderConsumer.accept(bClass.getName());
 			_neededProviderConsumer.accept(cClass.getName());
 
-			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provide(
-					_provideFunction.apply(httpServletRequest),
-					Pagination.class, aClass, bClass, cClass, Credentials.class,
-					(pagination, a, b, c, credentials) ->
-						getterThrowablePentaFunction.andThen(
-							items -> new PageImpl<>(
-								_nestedName, items, pagination, path,
-								_getOperations(credentials, identifier))
-						).apply(
-							pagination, identifier, a, b, c
-						));
+			_actionManager.addNestedGetter(
+				_name, _nestedName,
+				(id, body, list) -> getterThrowablePentaFunction.apply(
+					(Pagination)list.get(0), (U)id, (A)list.get(1),
+					(B)list.get(2), (C)list.get(3)),
+				Pagination.class, aClass, bClass, cClass);
 
 			return this;
 		}
@@ -524,18 +511,12 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 
-			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provide(
-					_provideFunction.apply(httpServletRequest),
-					Pagination.class, aClass, bClass, Credentials.class,
-					(pagination, a, b, credentials) ->
-						getterThrowableTetraFunction.andThen(
-							items -> new PageImpl<>(
-								_nestedName, items, pagination, path,
-								_getOperations(credentials, identifier))
-						).apply(
-							pagination, identifier, a, b
-						));
+			_actionManager.addNestedGetter(
+				_name, _nestedName,
+				(id, body, list) -> getterThrowableTetraFunction.apply(
+					(Pagination)list.get(0), (U)id, (A)list.get(1),
+					(B)list.get(2)),
+				Pagination.class, aClass, bClass);
 
 			return this;
 		}
@@ -548,18 +529,11 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 			_neededProviderConsumer.accept(aClass.getName());
 
-			_nestedGetPageFunction =
-				httpServletRequest -> path -> identifier -> provide(
-					_provideFunction.apply(httpServletRequest),
-					Pagination.class, aClass, Credentials.class,
-					(pagination, a, credentials) ->
-						getterThrowableTriFunction.andThen(
-							items -> new PageImpl<>(
-								_nestedName, items, pagination, path,
-								_getOperations(credentials, identifier))
-						).apply(
-							pagination, identifier, a
-						));
+			_actionManager.addNestedGetter(
+				_name, _nestedName,
+				(id, body, list) -> getterThrowableTriFunction.apply(
+					(Pagination)list.get(0), (U)id, (A)list.get(1)),
+				Pagination.class, aClass);
 
 			return this;
 		}
@@ -633,6 +607,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			return newList;
 		}
 
+		private final ActionManagerImpl _actionManager;
 		private Form _form;
 		private ThrowableBiFunction<Credentials, U, Boolean>
 			_hasNestedAddingPermissionFunction;
@@ -643,7 +618,6 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		private NestedBatchCreateItemFunction<S, U>
 			_nestedBatchCreateItemFunction;
 		private NestedCreateItemFunction<T, U> _nestedCreateItemFunction;
-		private NestedGetPageFunction<T, U> _nestedGetPageFunction;
 		private final String _nestedName;
 		private final IdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
@@ -654,6 +628,5 @@ public class NestedCollectionRoutesImpl<T, S, U>
 	private final NestedBatchCreateItemFunction<S, U>
 		_nestedBatchCreateItemFunction;
 	private final NestedCreateItemFunction<T, U> _nestedCreateItemFunction;
-	private final NestedGetPageFunction<T, U> _nestedGetPageFunction;
 
 }

@@ -37,16 +37,10 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.form.FormImpl;
-import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
-import com.liferay.apio.architect.internal.operation.DeleteOperation;
-import com.liferay.apio.architect.internal.operation.RetrieveOperation;
-import com.liferay.apio.architect.internal.operation.UpdateOperation;
-import com.liferay.apio.architect.internal.pagination.PageImpl;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
-import com.liferay.apio.architect.operation.HTTPMethod;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.routes.CollectionRoutes;
@@ -59,10 +53,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * @author Alejandro Hernández
@@ -73,7 +65,6 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		_batchCreateItemFunction = builderImpl._batchCreateItemFunction;
 		_createItemFunction = builderImpl._createItemFunction;
 		_form = builderImpl._form;
-		_getPageFunction = builderImpl._getPageFunction;
 
 		_customRoutes = builderImpl._customRoutes;
 		_customPageFunctions = builderImpl._customRouteFunctions;
@@ -108,9 +99,13 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		return Optional.ofNullable(_form);
 	}
 
+	/**
+	 * @deprecated use annotation SDK
+	 */
+	@Deprecated
 	@Override
 	public Optional<GetPageFunction<T>> getGetPageFunctionOptional() {
-		return Optional.ofNullable(_getPageFunction);
+		throw new UnsupportedOperationException();
 	}
 
 	public static class BuilderImpl<T, S> implements Builder<T, S> {
@@ -120,7 +115,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
 			Function<T, S> modelToIdentifierFunction,
-			Function<String, Optional<String>> nameFunction) {
+			Function<String, Optional<String>> nameFunction,
+			ActionManager actionManager) {
 
 			_name = name;
 			_provideFunction = provideFunction;
@@ -129,6 +125,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 			_modelToIdentifierFunction = modelToIdentifierFunction;
 			_nameFunction = nameFunction;
+
+			_actionManager = (ActionManagerImpl)actionManager;
 		}
 
 		@Override
@@ -610,17 +608,11 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_neededProviderConsumer.accept(aClass.getName());
 
-			_getPageFunction = httpServletRequest -> provide(
-				_provideFunction.apply(httpServletRequest), Pagination.class,
-				aClass, Credentials.class,
-				(pagination, a, credentials) ->
-					getterThrowableBiFunction.andThen(
-						items -> new PageImpl<>(
-							_name, items, pagination,
-							_getOperations(credentials))
-					).apply(
-						pagination, a
-					));
+			_actionManager.addCollectionGetter(
+				_name,
+				(id, body, list) -> getterThrowableBiFunction.apply(
+					(Pagination)list.get(0), (A)list.get(1)),
+				Pagination.class, aClass);
 
 			return this;
 		}
@@ -630,15 +622,11 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			ThrowableFunction<Pagination, PageItems<T>>
 				getterThrowableFunction) {
 
-			_getPageFunction = httpServletRequest -> provide(
-				_provideFunction.apply(httpServletRequest), Pagination.class,
-				Credentials.class,
-				(pagination, credentials) -> getterThrowableFunction.andThen(
-					items -> new PageImpl<>(
-						_name, items, pagination, _getOperations(credentials))
-				).apply(
-					pagination
-				));
+			_actionManager.addCollectionGetter(
+				_name,
+				(id, body, list) -> getterThrowableFunction.apply(
+					(Pagination)list.get(0)),
+				Pagination.class);
 
 			return this;
 		}
@@ -655,17 +643,12 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(cClass.getName());
 			_neededProviderConsumer.accept(dClass.getName());
 
-			_getPageFunction = httpServletRequest -> provide(
-				_provideFunction.apply(httpServletRequest), Pagination.class,
-				aClass, bClass, cClass, dClass, Credentials.class,
-				(pagination, a, b, c, d, credentials) ->
-					getterThrowablePentaFunction.andThen(
-						items -> new PageImpl<>(
-							_name, items, pagination,
-							_getOperations(credentials))
-					).apply(
-						pagination, a, b, c, d
-					));
+			_actionManager.addCollectionGetter(
+				_name,
+				(id, body, list) -> getterThrowablePentaFunction.apply(
+					(Pagination)list.get(0), (A)list.get(1), (B)list.get(2),
+					(C)list.get(3), (D)list.get(4)),
+				Pagination.class, aClass, bClass, cClass, dClass);
 
 			return this;
 		}
@@ -680,17 +663,12 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(bClass.getName());
 			_neededProviderConsumer.accept(cClass.getName());
 
-			_getPageFunction = httpServletRequest -> provide(
-				_provideFunction.apply(httpServletRequest), Pagination.class,
-				aClass, bClass, cClass, Credentials.class,
-				(pagination, a, b, c, credentials) ->
-					getterThrowableTetraFunction.andThen(
-						items -> new PageImpl<>(
-							_name, items, pagination,
-							_getOperations(credentials))
-					).apply(
-						pagination, a, b, c
-					));
+			_actionManager.addCollectionGetter(
+				_name,
+				(id, body, list) -> getterThrowableTetraFunction.apply(
+					(Pagination)list.get(0), (A)list.get(1), (B)list.get(2),
+					(C)list.get(3)),
+				Pagination.class, aClass, bClass, cClass);
 
 			return this;
 		}
@@ -704,17 +682,11 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 
-			_getPageFunction = httpServletRequest -> provide(
-				_provideFunction.apply(httpServletRequest), Pagination.class,
-				aClass, bClass, Credentials.class,
-				(pagination, a, b, credentials) ->
-					getterThrowableTriFunction.andThen(
-						items -> new PageImpl<>(
-							_name, items, pagination,
-							_getOperations(credentials))
-					).apply(
-						pagination, a, b
-					));
+			_actionManager.addCollectionGetter(
+				_name,
+				(id, body, list) -> getterThrowableTriFunction.apply(
+					(Pagination)list.get(0), (A)list.get(1), (B)list.get(2)),
+				Pagination.class, aClass, bClass);
 
 			return this;
 		}
@@ -738,59 +710,6 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			}
 		}
 
-		private List<Operation> _createCustomOperations(
-			Credentials credentials) {
-
-			List<Operation> operations = new ArrayList<>();
-
-			Set<String> customPermissionKeys =
-				_customPermissionFunctions.keySet();
-
-			Stream<String> customPermissionKeysStream =
-				customPermissionKeys.stream();
-
-			customPermissionKeysStream.filter(
-				key -> _getPermissionFunction(credentials, key)
-			).forEach(
-				routeEntry -> {
-					CustomRoute customRoute = _customRoutes.get(routeEntry);
-
-					Optional<Form<?>> formOptional =
-						customRoute.getFormOptional();
-
-					Form form = formOptional.orElse(null);
-
-					Operation operation = _createOperation(
-						form, customRoute.getMethod(), _name, _name,
-						routeEntry);
-
-					operations.add(operation);
-				}
-			);
-
-			return operations;
-		}
-
-		private Operation _createOperation(
-			Form form, HTTPMethod method, String name, String path,
-			String custom) {
-
-			if (method == HTTPMethod.GET) {
-				return new RetrieveOperation(name, true, path, custom);
-			}
-			else if (method == HTTPMethod.POST) {
-				return new CreateOperation(form, name, path, custom);
-			}
-			else if (method == HTTPMethod.DELETE) {
-				return new DeleteOperation(name, path, custom);
-			}
-			else if (method == HTTPMethod.PUT) {
-				return new UpdateOperation(form, name, path, custom);
-			}
-
-			return null;
-		}
-
 		private <R> R _getModel(CustomRoute customRoute, Body body) {
 			Optional<Form<?>> formOptional = customRoute.getFormOptional();
 
@@ -798,46 +717,6 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				form -> form.get(body)
 			).orElse(
 				null
-			);
-		}
-
-		private List<Operation> _getOperations(Credentials credentials) {
-			Boolean canAdd = Try.fromFallible(
-				() -> _hasAddingPermissionFunction.apply(credentials)
-			).orElse(
-				false
-			);
-
-			if (!canAdd) {
-				return Collections.emptyList();
-			}
-
-			List<Operation> operations = new ArrayList<>();
-
-			CreateOperation createOperation = new CreateOperation(
-				_form, _name, _name);
-
-			operations.add(createOperation);
-
-			BatchCreateOperation batchCreateOperation =
-				new BatchCreateOperation(_form, _name, _name);
-
-			operations.add(batchCreateOperation);
-
-			operations.addAll(_createCustomOperations(credentials));
-
-			return operations;
-		}
-
-		private Boolean _getPermissionFunction(
-			Credentials credentials, String key) {
-
-			return Try.fromFallible(
-				() -> _customPermissionFunctions.get(key)
-			).map(
-				function -> function.apply(credentials)
-			).orElse(
-				false
 			);
 		}
 
@@ -871,6 +750,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return newList;
 		}
 
+		private final ActionManagerImpl _actionManager;
 		private BatchCreateItemFunction<S> _batchCreateItemFunction;
 		private CreateItemFunction<T> _createItemFunction;
 		private final Map<String, Function<Credentials, Boolean>>
@@ -879,7 +759,6 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			new HashMap<>();
 		private final Map<String, CustomRoute> _customRoutes = new HashMap<>();
 		private Form _form;
-		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
 		private final Function<T, S> _modelToIdentifierFunction;
 		private final String _name;
@@ -895,6 +774,5 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 	private final Map<String, CustomPageFunction<?>> _customPageFunctions;
 	private final Map<String, CustomRoute> _customRoutes;
 	private final Form _form;
-	private final GetPageFunction<T> _getPageFunction;
 
 }

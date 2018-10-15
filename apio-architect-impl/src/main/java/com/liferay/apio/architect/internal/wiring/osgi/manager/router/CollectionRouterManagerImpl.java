@@ -20,6 +20,7 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.Mana
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.credentials.Credentials;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.url.ServerURL;
@@ -121,7 +122,8 @@ public class CollectionRouterManagerImpl
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add,
 					_pathIdentifierMapperManager::mapToIdentifierOrFail,
-					representor::getIdentifier, _nameManager::getNameOptional);
+					representor::getIdentifier, _nameManager::getNameOptional,
+					_actionManager);
 
 				@SuppressWarnings("unchecked")
 				CollectionRoutes collectionRoutes =
@@ -155,6 +157,9 @@ public class CollectionRouterManagerImpl
 	private static final List<String> _mandatoryClassNames = Arrays.asList(
 		ApplicationURL.class.getName(), Credentials.class.getName(),
 		Pagination.class.getName(), ServerURL.class.getName());
+
+	@Reference
+	private ActionManager _actionManager;
 
 	@Reference
 	private ItemRouterManager _itemRouterManager;
