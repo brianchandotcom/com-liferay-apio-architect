@@ -26,19 +26,19 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.js
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.RELATED_COLLECTION;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING_LIST;
+import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
-import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
-import com.liferay.apio.architect.internal.operation.DeleteOperation;
-import com.liferay.apio.architect.internal.operation.RetrieveOperation;
-import com.liferay.apio.architect.internal.operation.UpdateOperation;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType;
@@ -48,10 +48,8 @@ import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.routes.CollectionRoutes;
-import com.liferay.apio.architect.routes.ItemRoutes;
-import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +57,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -104,45 +103,31 @@ public class DocumentationWriter {
 		Map<String, Representor> representors =
 			_documentation.getRepresentors();
 
-		Map<String, ItemRoutes> itemRoutesMap = _documentation.getItemRoutes();
+		Supplier<ActionManager> actionManagerSupplier =
+			_documentation.getActionManagerSupplier();
 
-		itemRoutesMap.forEach(
-			(name, itemRoutes) -> _writeRoute(
-				jsonObjectBuilder, name, representors.get(name),
-				_documentationMessageMapper::mapResource,
-				this::_writeItemOperations,
-				resourceJsonObjectBuilder -> _writeAllFields(
-					representors.get(name), resourceJsonObjectBuilder)));
+		ActionManagerImpl actionManager =
+			(ActionManagerImpl)actionManagerSupplier.get();
 
-		Map<String, NestedCollectionRoutes> nestedCollectionRoutesMap =
-			_documentation.getNestedCollectionRoutes();
+		Map<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
+			actions = actionManager.getActions();
 
-		Map<String, CollectionRoutes> collectionRoutes =
-			_documentation.getCollectionRoutes();
+		Set<ActionKey> actionKeys = actions.keySet();
 
-		Set<String> collectionResources = new HashSet<>(
-			collectionRoutes.keySet());
+		Stream<ActionKey> stream = actionKeys.stream();
 
-		Set<String> nestedRoutes = new HashSet<>(itemRoutesMap.keySet());
-
-		nestedRoutes.addAll(collectionRoutes.keySet());
-
-		nestedRoutes.forEach(
-			name -> {
-				Optional<String> nestedCollectionRoute =
-					_getNestedCollectionRouteOptional(
-						representors, nestedCollectionRoutesMap, name);
-
-				nestedCollectionRoute.ifPresent(collectionResources::add);
-			});
-
-		collectionResources.forEach(
+		stream.map(
+			ActionKey::getParam1
+		).distinct(
+		).forEach(
 			name -> _writeRoute(
 				jsonObjectBuilder, name, representors.get(name),
-				_documentationMessageMapper::mapResourceCollection,
-				this::_writePageOperations,
-				__ -> {
-				}));
+				_documentationMessageMapper::mapResource,
+				(resource, type, jsonObjectBuilder1) -> _writeOperations(
+					actionManager, resource, type, jsonObjectBuilder),
+				resourceJsonObjectBuilder -> _writeAllFields(
+					representors.get(name), resourceJsonObjectBuilder))
+		);
 
 		_documentationMessageMapper.onFinish(jsonObjectBuilder, _documentation);
 
@@ -454,40 +439,6 @@ public class DocumentationWriter {
 			documentationField.getName());
 	}
 
-	private void _writeItemOperations(
-		String name, String type, JSONObjectBuilder resourceJsonObjectBuilder) {
-
-		Map<String, ItemRoutes> itemRoutesMap = _documentation.getItemRoutes();
-
-		Optional.ofNullable(
-			itemRoutesMap.getOrDefault(name, null)
-		).ifPresent(
-			itemRoutes -> {
-				RetrieveOperation retrieveOperation = new RetrieveOperation(
-					name, false);
-
-				_writeOperation(
-					retrieveOperation, resourceJsonObjectBuilder, name, type);
-
-				Optional<Form> optional = itemRoutes.getFormOptional();
-
-				UpdateOperation updateOperation = optional.map(
-					form -> new UpdateOperation(form, name)
-				).orElse(
-					new UpdateOperation(null, name)
-				);
-
-				_writeOperation(
-					updateOperation, resourceJsonObjectBuilder, name, type);
-
-				DeleteOperation deleteOperation = new DeleteOperation(name);
-
-				_writeOperation(
-					deleteOperation, resourceJsonObjectBuilder, name, type);
-			}
-		);
-	}
-
 	private void _writeOperation(
 		Operation operation, JSONObjectBuilder jsonObjectBuilder,
 		String resourceName, String type) {
@@ -505,33 +456,16 @@ public class DocumentationWriter {
 			jsonObjectBuilder, operationJsonObjectBuilder, operation);
 	}
 
-	private void _writePageOperations(
-		String resource, String type,
+	private void _writeOperations(
+		ActionManager actionManager, String resource, String type,
 		JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		Map<String, CollectionRoutes> collectionRoutesMap =
-			_documentation.getCollectionRoutes();
+		List<Operation> actions = actionManager.getActions(
+			new ActionKey(GET.name(), resource), null);
 
-		Optional.ofNullable(
-			collectionRoutesMap.getOrDefault(resource, null)
-		).ifPresent(
-			collectionRoutes -> {
-				_writeOperation(
-					new RetrieveOperation(resource, true),
-					resourceJsonObjectBuilder, resource, type);
-
-				Optional<Form> optional = collectionRoutes.getFormOptional();
-
-				CreateOperation createOperation = optional.map(
-					form -> new CreateOperation(form, resource)
-				).orElse(
-					new CreateOperation(null, resource)
-				);
-
-				_writeOperation(
-					createOperation, resourceJsonObjectBuilder, resource, type);
-			}
-		);
+		actions.forEach(
+			operation -> _writeOperation(
+				operation, resourceJsonObjectBuilder, resource, type));
 	}
 
 	private void _writeRoute(
