@@ -15,19 +15,24 @@
 package com.liferay.apio.architect.internal.endpoint;
 
 import static com.liferay.apio.architect.internal.endpoint.ExceptionSupplierUtil.notAllowed;
-import static com.liferay.apio.architect.internal.endpoint.ExceptionSupplierUtil.notFound;
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
 import static javax.ws.rs.core.Response.noContent;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
-import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.internal.annotation.Action;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.pagination.PageImpl;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.pagination.PageItems;
+import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -36,9 +41,11 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.supplier.ThrowableSupplier;
 import com.liferay.apio.architect.uri.Path;
 
+import io.vavr.control.Either;
+
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,7 +65,9 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		ThrowableTriFunction
 			<String, String, String, NestedCollectionRoutes<T, S, Object>>
 				nestedCollectionRoutesFunction,
-		IdentifierFunction<S> pathToIdentifierFunction) {
+		IdentifierFunction<S> pathToIdentifierFunction,
+		Supplier<ActionManager> actionManagerSupplier,
+		ProviderManager providerManager) {
 
 		_name = name;
 		_httpServletRequest = httpServletRequest;
@@ -68,6 +77,9 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		_itemRoutesSupplier = itemRoutesSupplier;
 		_nestedCollectionRoutesFunction = nestedCollectionRoutesFunction;
 		_pathToIdentifierFunction = pathToIdentifierFunction;
+
+		_actionManagerSupplier = actionManagerSupplier;
+		_providerManager = providerManager;
 	}
 
 	@Override
@@ -106,18 +118,13 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	}
 
 	@Override
-	public Response deleteCollectionItem(String id) throws Exception {
-		ThrowableConsumer<S> deleteItemThrowableConsumer = Try.fromFallible(
-			_itemRoutesSupplier
-		).mapOptional(
-			ItemRoutes::getDeleteConsumerOptional, notAllowed(DELETE, _name, id)
-		).map(
-			requestFunction -> requestFunction.apply(_httpServletRequest)
-		).getUnchecked();
+	public Response deleteCollectionItem(String id) {
+		ActionManager actionManager = _actionManagerSupplier.get();
 
-		S s = _pathToIdentifierFunction.apply(new Path(_name, id));
+		Either<Action.Error, Action> eitherAction = actionManager.getAction(
+			HTTPMethod.DELETE.name(), _name, id);
 
-		deleteItemThrowableConsumer.accept(s);
+		eitherAction.forEach(action -> action.apply(_httpServletRequest));
 
 		return noContent().build();
 	}
@@ -129,42 +136,32 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 	@Override
 	public Try<Page<T>> getCollectionPageTry() {
-		return Try.fromFallible(
-			_collectionRoutesSupplier
-		).mapOptional(
-			CollectionRoutes::getGetPageFunctionOptional, notFound(_name)
-		).flatMap(
-			requestFunction -> requestFunction.apply(_httpServletRequest)
-		);
+		ActionManager actionManager = _actionManagerSupplier.get();
+
+		Either<Action.Error, Action> eitherAction = actionManager.getAction(
+			HTTPMethod.GET.name(), _name);
+
+		return _getPageTry(eitherAction, _name);
 	}
 
 	@Override
 	public Try<Page<T>> getNestedCollectionPageTry(
 		String id, String nestedName) {
 
-		return Try.fromFallible(
+		Try.fromFallible(
 			() -> _nestedCollectionRoutesFunction.apply(_name, nestedName, id)
-		).map(
-			NestedCollectionRoutes::getNestedGetPageFunctionOptional
-		).map(
-			Optional::get
-		).map(
-			requestFunction -> requestFunction.apply(_httpServletRequest)
-		).map(
-			pathFunction -> {
-				if (_name.equals("r")) {
-					return pathFunction.apply(new Path(id, nestedName));
-				}
-				else {
-					return pathFunction.apply(new Path(_name, id));
-				}
-			}
-		).flatMap(
-			identifierFunction -> _getPageTry(
-				id, nestedName, identifierFunction)
-		).mapFailMatching(
-			NoSuchElementException.class, notFound(id, nestedName)
+		).mapOptional(
+			NestedCollectionRoutes::getNestedCreateItemFunctionOptional
+		).orElse(
+			null
 		);
+
+		ActionManager actionManager = _actionManagerSupplier.get();
+
+		Either<Action.Error, Action> eitherAction = actionManager.getAction(
+			HTTPMethod.GET.name(), _name, id, nestedName);
+
+		return _getPageTry(eitherAction, nestedName);
 	}
 
 	@Override
@@ -216,24 +213,32 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	}
 
 	private Try<Page<T>> _getPageTry(
-		String id, String nestedName,
-		Function<Object, Try<Page<T>>> identifierFunction) {
+		Either<Action.Error, Action> eitherAction, String name) {
 
-		if (_name.equals("r")) {
-			return identifierFunction.apply(
-				_pathToIdentifierFunction.apply(new Path(id, nestedName)));
-		}
-		else {
-			return _singleModelFunction.apply(
-				id
+		return Try.fromFallible(
+			() -> eitherAction.map(
+				action -> action.apply(_httpServletRequest)
 			).map(
-				this::_getIdentifierFunction
-			).flatMap(
-				identifierFunction::apply
-			);
-		}
+				pageItems -> {
+					ActionManager actionManager = _actionManagerSupplier.get();
+
+					return new PageImpl(
+						name, (PageItems<T>)pageItems, _getPagination(),
+						actionManager.getActions(
+							new ActionKey(HTTPMethod.GET.name(), name), null));
+				}
+			).getOrElseThrow(
+				notAllowed(HTTPMethod.GET, _name)
+			)
+		);
 	}
 
+	private Pagination _getPagination() {
+		return _providerManager.provideMandatory(
+			_httpServletRequest, Pagination.class);
+	}
+
+	private final Supplier<ActionManager> _actionManagerSupplier;
 	private final ThrowableSupplier<CollectionRoutes<T, S>>
 		_collectionRoutesSupplier;
 	private final HttpServletRequest _httpServletRequest;
@@ -243,6 +248,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		<String, String, String, NestedCollectionRoutes<T, S, Object>>
 			_nestedCollectionRoutesFunction;
 	private final IdentifierFunction<S> _pathToIdentifierFunction;
+	private final ProviderManager _providerManager;
 	private final ThrowableSupplier<Representor<T>> _representorSupplier;
 	private final Function<String, Try<SingleModel<T>>> _singleModelFunction;
 
