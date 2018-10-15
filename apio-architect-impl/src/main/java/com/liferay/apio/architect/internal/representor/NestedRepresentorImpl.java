@@ -18,6 +18,7 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.NestedRepresentor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -44,10 +45,9 @@ public class NestedRepresentorImpl<T>
 		implements Builder<T> {
 
 		public BuilderImpl(
-			Function<Class<? extends Identifier<?>>, String> nameFunction,
-			Supplier<List<RelatedCollection<T, ?>>> supplier) {
+			Function<Class<? extends Identifier<?>>, String> nameFunction) {
 
-			super(new NestedRepresentorImpl<>(nameFunction, supplier));
+			super(new NestedRepresentorImpl<>(nameFunction));
 		}
 
 		@Override
@@ -71,10 +71,9 @@ public class NestedRepresentorImpl<T>
 	}
 
 	private NestedRepresentorImpl(
-		Function<Class<? extends Identifier<?>>, String> nameFunction,
-		Supplier<List<RelatedCollection<T, ?>>> supplier) {
+		Function<Class<? extends Identifier<?>>, String> nameFunction) {
 
-		super(nameFunction, supplier);
+		super(nameFunction, Collections::emptyList);
 	}
 
 }
