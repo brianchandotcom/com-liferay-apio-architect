@@ -20,14 +20,8 @@ import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.documentation.contributor.CustomDocumentationImpl;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
-import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl;
-import com.liferay.apio.architect.internal.routes.ItemRoutesImpl;
-import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl;
 import com.liferay.apio.architect.internal.writer.DocumentationWriter;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.routes.CollectionRoutes;
-import com.liferay.apio.architect.routes.ItemRoutes;
-import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
 
@@ -56,13 +50,6 @@ public class MockDocumentationWriter {
 	public static String write(
 		DocumentationMessageMapper documentationMessageMapper) {
 
-		CollectionRoutes.Builder<String, Object> collectionBuilder =
-			new CollectionRoutesImpl.BuilderImpl<>(
-				"name", __ -> null,
-				__ -> {
-				},
-				__ -> null, __ -> null, __ -> Optional.empty());
-
 		CustomDocumentation.Builder customDocumentationBuilder =
 			new CustomDocumentationImpl.BuilderImpl();
 
@@ -71,43 +58,19 @@ public class MockDocumentationWriter {
 		customDocumentationBuilder.addLocalizedDescription(
 			"root/retrieve", __ -> "retrieve description");
 
-		ItemRoutes.Builder itemBuilder = new ItemRoutesImpl.BuilderImpl<>(
-			"name", __ -> null,
-			__ -> {
-			},
-			__ -> null, __ -> Optional.empty(), __ -> Optional.empty());
-
-		NestedCollectionRoutes.Builder nestedBuilder =
-			new NestedCollectionRoutesImpl.BuilderImpl<>(
-				"name", null, __ -> null,
-				__ -> {
-				},
-				__ -> null, __ -> Optional.empty(), __ -> null);
-
 		Representor<RootModel> rootModelRepresentor =
 			MockRepresentorCreator.createRootModelRepresentor(false);
 
 		Map<String, Representor> root = Collections.singletonMap(
 			"root", rootModelRepresentor);
 
-		CollectionRoutes<String, Object> collectionRoutes =
-			collectionBuilder.build();
-
 		CustomDocumentation customDocumentation =
 			customDocumentationBuilder.build();
-
-		ItemRoutes itemRoutes = itemBuilder.build();
-
-		NestedCollectionRoutes nestedCollectionRoutes = nestedBuilder.build();
 
 		Documentation documentation = new Documentation(
 			() -> Optional.of(() -> "Title"),
 			() -> Optional.of(() -> "Description"),
-			() -> Optional.of(() -> "Entrypoint"), () -> root,
-			() -> Collections.singletonMap("root", collectionRoutes),
-			() -> Collections.singletonMap("root", itemRoutes),
-			() -> Collections.singletonMap("root", nestedCollectionRoutes),
-			() -> Collections.singletonMap("root", nestedCollectionRoutes),
+			() -> Optional.of(() -> "Entrypoint"), () -> root, () -> null,
 			() -> customDocumentation);
 
 		DocumentationWriter documentationWriter = DocumentationWriter.create(
