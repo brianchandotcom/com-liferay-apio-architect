@@ -14,6 +14,13 @@
 
 package com.liferay.apio.architect.internal.annotation.router;
 
+import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
+import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
+import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.getAnnotationFromMethodParameters;
+import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.hasAnnotation;
+
+import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnnotation;
+
 import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.annotation.Actions.Action;
 import com.liferay.apio.architect.annotation.Body;
@@ -28,16 +35,11 @@ import com.liferay.apio.architect.router.ActionRouter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
-import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
-import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil._getAnnotationFromMethodParameters;
-import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil._hasAnnotation;
-import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnnotation;
 
 /**
  * Provides utility function to transform a class annotated with actions
@@ -47,10 +49,6 @@ import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnn
  * @review
  */
 public class RouterTransformer {
-
-	private static List<Class<? extends Annotation>> _annotationsToSearch =
-		Arrays.asList(
-			Action.class, Actions.Retrieve.class, Actions.Remove.class);
 
 	/**
 	 * Transform a class annotated with @Action into routes in the ActionManager
@@ -68,9 +66,10 @@ public class RouterTransformer {
 			).forEach(
 				method -> {
 					Action annotation = method.getAnnotation(Action.class);
+
 					if (annotation == null) {
-						annotation =
-							annotationClass.getAnnotation(Action.class);
+						annotation = annotationClass.getAnnotation(
+							Action.class);
 					}
 
 					ActionKey actionKey = _getActionKey(
@@ -108,25 +107,13 @@ public class RouterTransformer {
 				httpMethodName, nestedNameOptional.get(), ANY_ROUTE, name,
 				customName);
 		}
-		else if (_getAnnotationFromMethodParameters(method, Id.class)
-			.isPresent()) {
+		else if (getAnnotationFromMethodParameters(
+					method, Id.class).isPresent()) {
+
 			return new ActionKey(httpMethodName, name, ANY_ROUTE, customName);
 		}
 
 		return new ActionKey(httpMethodName, name, customName);
-	}
-
-	private static Optional<String> _getNestedNameOptional(Method method) {
-		Optional<Annotation> parentIdAnnotation =
-			_getAnnotationFromMethodParameters(method, ParentId.class);
-
-		return parentIdAnnotation.map(
-			annotation -> ((ParentId) annotation).value()
-		).map(
-			resource -> resource.getAnnotation(Vocabulary.Type.class)
-		).map(
-			type -> toLowercaseSlug(type.value())
-		);
 	}
 
 	private static String _getCustomAction(Method method) {
@@ -139,37 +126,55 @@ public class RouterTransformer {
 		);
 	}
 
-	private static Object[] _getParameters(
-		Method method, Object id, Object body, List<Object> providers) {
+	private static Optional<String> _getNestedNameOptional(Method method) {
+		Optional<Annotation> parentIdAnnotation =
+			getAnnotationFromMethodParameters(method, ParentId.class);
 
-		return Arrays.stream(
-			method.getParameters()
+		return parentIdAnnotation.map(
+			annotation -> ((ParentId)annotation).value()
 		).map(
-			parameter -> _getParameter(parameter, id, body, providers)
-		).toArray();
+			resource -> resource.getAnnotation(Vocabulary.Type.class)
+		).map(
+			type -> toLowercaseSlug(type.value())
+		);
 	}
 
 	private static Object _getParameter(
 		Parameter parameter, Object id, Object body, List<Object> providers) {
-		if (_hasAnnotation(parameter, Id.class) ||
-			_hasAnnotation(parameter, ParentId.class)) {
+
+		if (hasAnnotation(parameter, Id.class) ||
+			hasAnnotation(parameter, ParentId.class)) {
 
 			return id;
 		}
-		else if (_hasAnnotation(parameter, Body.class)) {
+		else if (hasAnnotation(parameter, Body.class)) {
 			return body;
 		}
 
 		return _findProvider(providers, parameter.getType());
 	}
 
+	private static Object[] _getParameters(
+		Method method, Object id, Object body, List<Object> providers) {
+
+		Stream<Parameter> stream = Arrays.stream(method.getParameters());
+
+		return stream.map(
+			parameter -> _getParameter(parameter, id, body, providers)
+		).toArray();
+	}
+
 	private static Class[] _getProviders(Method method) {
-		return Arrays.stream(
-			method.getParameters()
-		).filter(
-			parameter -> parameter.getAnnotations().length == 0
+		Stream<Parameter> stream = Arrays.stream(method.getParameters());
+
+		return stream.filter(
+			parameter -> {
+				Annotation[] annotations = parameter.getAnnotations();
+
+				return annotations.length == 0;
+			}
 		).map(
-			parameter -> (Class) parameter.getType()
+			parameter -> (Class)parameter.getType()
 		).toArray(
 			Class[]::new
 		);
@@ -177,10 +182,14 @@ public class RouterTransformer {
 
 	private static ThrowableTriFunction
 		<Object, Object, List<Object>, Object> _getThrowableTriFunction(
-		Method method, ActionRouter actionRouter) {
+			Method method, ActionRouter actionRouter) {
 
 		return (id, body, providers) -> method.invoke(
 			actionRouter, _getParameters(method, id, body, providers));
 	}
+
+	private static final List<Class<? extends Annotation>>
+		_annotationsToSearch = Arrays.asList(
+			Action.class, Actions.Retrieve.class, Actions.Remove.class);
 
 }

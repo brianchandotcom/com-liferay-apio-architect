@@ -11,11 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 package com.liferay.apio.architect.internal.annotation.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -24,19 +26,8 @@ import java.util.stream.Stream;
  */
 public class AnnotationUtil {
 
-	private AnnotationUtil() {
-		super();
-	}
-
-	public static boolean _hasAnnotation(
-		Parameter parameter, Class<? extends Annotation> annotation) {
-
-		return parameter.getAnnotation(annotation) != null;
-	}
-
-	public static Optional<Annotation> _getAnnotationFromMethodParameters(
-		Method method,
-		Class<? extends Annotation> annotation) {
+	public static Optional<Annotation> getAnnotationFromMethodParameters(
+		Method method, Class<? extends Annotation> annotation) {
 
 		return Stream.of(
 			method.getParameterAnnotations()
@@ -47,4 +38,18 @@ public class AnnotationUtil {
 				annotationType.getClass())
 		).findFirst();
 	}
+
+	public static boolean hasAnnotation(
+		Parameter parameter, Class<? extends Annotation> annotation) {
+
+		if (parameter.getAnnotation(annotation) != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private AnnotationUtil() {
+	}
+
 }

@@ -52,11 +52,6 @@ public class ActionKey {
 		_param4 = param4;
 	}
 
-	public ActionKey getActionKeyWithHttpMethodName(String httpMethodName) {
-		return new ActionKey(
-			httpMethodName, _param1, _param2, _param3, _param4);
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -79,6 +74,11 @@ public class ActionKey {
 		}
 
 		return false;
+	}
+
+	public ActionKey getActionKeyWithHttpMethodName(String httpMethodName) {
+		return new ActionKey(
+			httpMethodName, _param1, _param2, _param3, _param4);
 	}
 
 	public ActionKey getGenericActionKey() {
