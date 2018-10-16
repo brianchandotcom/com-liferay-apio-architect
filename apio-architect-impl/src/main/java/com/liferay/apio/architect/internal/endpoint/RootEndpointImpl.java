@@ -45,6 +45,7 @@ import com.liferay.apio.architect.single.model.SingleModel;
 
 import io.vavr.control.Either;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -118,7 +119,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public EntryPoint home() {
-		return () -> _collectionRouterManager.getResourceNames();
+		return _actionManager.getEntryPoint();
 	}
 
 	@Override
@@ -135,7 +136,11 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	private ActionManager _getActionManager() {
-		_actionRouterManager.computeActionRouters();
+		List<String> resourceNames = _actionRouterManager.getResourceNames();
+
+		if (resourceNames.isEmpty()) {
+			_actionRouterManager.computeActionRouters();
+		}
 
 		return _actionManager;
 	}

@@ -75,7 +75,7 @@ public class CollectionRouterManagerImpl
 
 	@Override
 	public List<String> getResourceNames() {
-		return INSTANCE.getRootResourceNames(this::_computeCollectionRoutes);
+		return INSTANCE.getRootResourceNamesSdk(this::_computeCollectionRoutes);
 	}
 
 	private void _computeCollectionRoutes() {
@@ -149,7 +149,7 @@ public class CollectionRouterManagerImpl
 					return;
 				}
 
-				INSTANCE.putRootResourceName(name);
+				INSTANCE.putRootResourceNameSdk(name);
 				INSTANCE.putCollectionRoutes(name, collectionRoutes);
 			});
 	}

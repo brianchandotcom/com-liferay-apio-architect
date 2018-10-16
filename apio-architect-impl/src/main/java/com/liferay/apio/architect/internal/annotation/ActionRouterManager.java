@@ -18,12 +18,14 @@ import static com.liferay.apio.architect.internal.annotation.representor.StringU
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getActionKey;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParameters;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getProviders;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
 import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnnotation;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.annotation.Actions;
+import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.functional.Try;
@@ -37,9 +39,11 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.router.ActionRouter;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -82,17 +86,20 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 						String name = toLowercaseSlug(type.value());
 
 						_registerActionRouter(actionRouter, name);
+
+						_registerEntryPoint(actionRouter, name);
 					});
 			});
 	}
 
-	private void _registerActionRouter(ActionRouter actionRouter, String name) {
-		Class<? extends ActionRouter> actionRouterClass =
-			actionRouter.getClass();
+	public List<String> getResourceNames() {
+		return INSTANCE.getRootResourceNames(this::computeActionRouters);
+	}
 
+	private void _registerActionRouter(ActionRouter actionRouter, String name) {
 		_annotationsToSearch.forEach(
 			annotationClass -> getMethodsListWithAnnotation(
-				actionRouterClass, annotationClass
+				actionRouter.getClass(), annotationClass
 			).forEach(
 				method -> {
 					Actions.Action annotation = method.getAnnotation(
@@ -114,6 +121,16 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 						getProviders(method));
 				}
 			)
+		);
+	}
+
+	private void _registerEntryPoint(ActionRouter actionRouter, String name) {
+		Stream<Method> stream = getMethodsListWithAnnotation(
+			actionRouter.getClass(), EntryPoint.class).stream();
+
+		stream.distinct(
+		).forEach(
+			method -> INSTANCE.putRootResourceName(name)
 		);
 	}
 

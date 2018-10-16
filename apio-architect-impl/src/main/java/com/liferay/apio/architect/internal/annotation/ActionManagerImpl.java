@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import com.liferay.apio.architect.credentials.Credentials;
@@ -199,7 +200,20 @@ public class ActionManagerImpl implements ActionManager {
 
 	@Override
 	public EntryPoint getEntryPoint() {
-		return null;
+		return () -> {
+			List<String> list = new ArrayList<>();
+
+			list.addAll(
+				INSTANCE.getRootResourceNamesSdk(
+					() -> {
+					}));
+			list.addAll(
+				INSTANCE.getRootResourceNames(
+					() -> {
+					}));
+
+			return list;
+		};
 	}
 
 	private Action _getAction(ActionKey actionKey, Object id) {

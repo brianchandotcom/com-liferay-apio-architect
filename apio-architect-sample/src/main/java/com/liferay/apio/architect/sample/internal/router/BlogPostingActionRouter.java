@@ -24,6 +24,7 @@ import com.liferay.apio.architect.annotation.Actions.Remove;
 import com.liferay.apio.architect.annotation.Actions.Replace;
 import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.annotation.Body;
+import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -121,6 +122,7 @@ public class BlogPostingActionRouter implements ActionRouter<BlogPosting> {
 		);
 	}
 
+	@EntryPoint
 	@Retrieve
 	public PageItems<BlogPosting> retrievePage(Pagination pagination) {
 		List<BlogPostingModel> blogPostingModels =

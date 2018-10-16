@@ -80,7 +80,7 @@ public class ManagerCache {
 		_batchResultMessageMappers = null;
 		_representors = null;
 		_reusableNestedCollectionRoutes = null;
-		_rootResourceNames = null;
+		_rootResourceNamesSdk = null;
 		_singleModelMessageMappers = null;
 	}
 
@@ -475,6 +475,7 @@ public class ManagerCache {
 	 * @param  computeEmptyFunction the function that can be called to compute
 	 *         the data
 	 * @return the list of root resources
+	 * @review
 	 */
 	public List<String> getRootResourceNames(
 		EmptyFunction computeEmptyFunction) {
@@ -485,6 +486,28 @@ public class ManagerCache {
 
 		return Optional.ofNullable(
 			_rootResourceNames
+		).orElseGet(
+			Collections::emptyList
+		);
+	}
+
+	/**
+	 * Returns a list containing the names of the root resources with routes.
+	 *
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the list of root resources
+	 * @review
+	 */
+	public List<String> getRootResourceNamesSdk(
+		EmptyFunction computeEmptyFunction) {
+
+		if (_rootResourceNamesSdk == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		return Optional.ofNullable(
+			_rootResourceNamesSdk
 		).orElseGet(
 			Collections::emptyList
 		);
@@ -741,6 +764,20 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Adds a root resource name.
+	 *
+	 * @param  rootResourceNameSdk the root resource name
+	 * @review
+	 */
+	public void putRootResourceNameSdk(String rootResourceNameSdk) {
+		if (_rootResourceNamesSdk == null) {
+			_rootResourceNamesSdk = new ArrayList<>();
+		}
+
+		_rootResourceNamesSdk.add(rootResourceNameSdk);
+	}
+
+	/**
 	 * Adds a single model message mapper.
 	 *
 	 * @param mediaType the media type
@@ -824,6 +861,7 @@ public class ManagerCache {
 	private Map<String, Representor> _representors;
 	private Map<String, NestedCollectionRoutes> _reusableNestedCollectionRoutes;
 	private List<String> _rootResourceNames;
+	private List<String> _rootResourceNamesSdk;
 	private Map<MediaType, SingleModelMessageMapper> _singleModelMessageMappers;
 
 }
