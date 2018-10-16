@@ -35,7 +35,6 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.Rep
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
-import com.liferay.apio.architect.router.ActionRouter;
 import com.liferay.apio.architect.uri.Path;
 
 import io.vavr.control.Either;

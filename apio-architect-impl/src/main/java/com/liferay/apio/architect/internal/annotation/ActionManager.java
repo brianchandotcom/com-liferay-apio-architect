@@ -50,12 +50,12 @@ public interface ActionManager {
 
 	/**
 	 * Adds an action with the key specified by the actionKey parameter, that
-	 * calls a throwableTriFunction with id, body and parameters based on a
+	 * calls a throwableTriFunction with ID, body and parameters based on a
 	 * varags of providers
 	 *
-	 * @param actionKey the path parameters to add an Action
-	 * @param throwableTriFunction the method to call in that path
-	 * @param providers the list of providers to supply to the action
+	 * @param  actionKey the path parameters to add an Action
+	 * @param  throwableTriFunction the method to call in that path
+	 * @param  providers the list of providers to supply to the action
 	 * @review
 	 */
 	public void add(
@@ -128,8 +128,8 @@ public interface ActionManager {
 	/**
 	 * Return the list of operations that are valid in that path
 	 *
-	 * @param actionKey the path parameters to add an Action
-	 * @param credentials the user logged in to calculate the right operations
+	 * @param  actionKey the path parameters to add an Action
+	 * @param  credentials the user logged in to calculate the right operations
 	 * @review
 	 */
 	public List<Operation> getActions(

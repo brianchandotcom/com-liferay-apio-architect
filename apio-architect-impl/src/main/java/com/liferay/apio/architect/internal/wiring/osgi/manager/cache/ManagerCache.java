@@ -729,7 +729,8 @@ public class ManagerCache {
 	/**
 	 * Adds a root resource name.
 	 *
-	 * @param rootResourceName the root resource name
+	 * @param  rootResourceName the root resource name
+	 * @review
 	 */
 	public void putRootResourceName(String rootResourceName) {
 		if (_rootResourceNames == null) {
