@@ -21,9 +21,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a type has an action that will be listed in the entry
- * point of the application.
+ * Indicates that a type has an action that will be listed in the entry point of
+ * the application.
  *
+ * @author Javier Gamarra
  * @review
  */
 @Retention(RUNTIME)

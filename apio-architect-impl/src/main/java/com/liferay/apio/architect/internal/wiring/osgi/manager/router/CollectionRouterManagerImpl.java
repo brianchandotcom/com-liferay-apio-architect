@@ -73,11 +73,6 @@ public class CollectionRouterManagerImpl
 			name, this::_computeCollectionRoutes);
 	}
 
-	@Override
-	public List<String> getResourceNames() {
-		return INSTANCE.getRootResourceNamesSdk(this::_computeCollectionRoutes);
-	}
-
 	private void _computeCollectionRoutes() {
 		List<String> list = _providerManager.getMissingProviders(
 			_mandatoryClassNames);

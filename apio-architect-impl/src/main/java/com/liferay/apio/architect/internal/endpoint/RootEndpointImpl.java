@@ -119,7 +119,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Override
 	public EntryPoint home() {
-		return _actionManager.getEntryPoint();
+		return _getActionManager().getEntryPoint();
 	}
 
 	@Override
@@ -139,7 +139,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		List<String> resourceNames = _actionRouterManager.getResourceNames();
 
 		if (resourceNames.isEmpty()) {
-			_actionRouterManager.computeActionRouters();
+			_actionRouterManager.getResourceNames();
 		}
 
 		return _actionManager;
@@ -195,7 +195,7 @@ public class RootEndpointImpl implements RootEndpoint {
 	private Try<SingleModel<Object>> _getSingleModelTry(
 		String name, String id) {
 
-		Either<Action.Error, Action> get = _actionManager.getAction(
+		Either<Action.Error, Action> get = _getActionManager().getAction(
 			HTTPMethod.GET.name(), name, id);
 
 		return Try.fromFallible(
@@ -204,7 +204,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			).map(
 				model -> new SingleModelImpl<>(
 					model, name,
-					_actionManager.getActions(
+					_getActionManager().getActions(
 						new ActionKey(HTTPMethod.GET.name(), name, id), null))
 			).get()
 		);

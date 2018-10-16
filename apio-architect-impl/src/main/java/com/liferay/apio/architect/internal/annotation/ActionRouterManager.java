@@ -35,6 +35,9 @@ import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.url.ServerURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.router.CollectionRouterManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.router.NestedCollectionRouterManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.router.ActionRouter;
 
@@ -64,36 +67,14 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 		super(ActionRouter.class, 0);
 	}
 
-	public void computeActionRouters() {
-		List<String> list = _providerManager.getMissingProviders(
-			_mandatoryClassNames);
-
-		if (!list.isEmpty()) {
-			_logger.warn("Missing providers for mandatory classes: {}", list);
-
-			return;
-		}
-
-		forEachService(
-			(className, actionRouter) -> {
-				Try<Class<? extends Identifier>> classTry =
-					ActionRouterTypeExtractor.extractTypeClass(actionRouter);
-
-				classTry.ifSuccess(
-					typeClass -> {
-						Type type = typeClass.getAnnotation(Type.class);
-
-						String name = toLowercaseSlug(type.value());
-
-						_registerActionRouter(actionRouter, name);
-
-						_registerEntryPoint(actionRouter, name);
-					});
-			});
+	public List<String> getResourceNames() {
+		return INSTANCE.getRootResourceNames(this::_computeActionRouters);
 	}
 
-	public List<String> getResourceNames() {
-		return INSTANCE.getRootResourceNames(this::computeActionRouters);
+	private void _initializeRouterManagers() {
+		_collectionRouterManager.getCollectionRoutes();
+		_nestedCollectionRouterManager.getNestedCollectionRoutes();
+		_reusableNestedCollectionRouterManager.getReusableCollectionRoutes();
 	}
 
 	private void _registerActionRouter(ActionRouter actionRouter, String name) {
@@ -134,6 +115,36 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 		);
 	}
 
+	private void _computeActionRouters() {
+		List<String> list = _providerManager.getMissingProviders(
+			_mandatoryClassNames);
+
+		if (!list.isEmpty()) {
+			_logger.warn("Missing providers for mandatory classes: {}", list);
+
+			return;
+		}
+
+		forEachService(
+			(className, actionRouter) -> {
+				Try<Class<? extends Identifier>> classTry =
+					ActionRouterTypeExtractor.extractTypeClass(actionRouter);
+
+				classTry.ifSuccess(
+					typeClass -> {
+						Type type = typeClass.getAnnotation(Type.class);
+
+						String name = toLowercaseSlug(type.value());
+
+						_registerActionRouter(actionRouter, name);
+
+						_registerEntryPoint(actionRouter, name);
+					});
+			});
+
+		_initializeRouterManagers();
+	}
+
 	private static final List<Class<? extends Annotation>>
 		_annotationsToSearch = Arrays.asList(
 			Actions.Action.class, Actions.Retrieve.class, Actions.Remove.class);
@@ -144,9 +155,19 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 	@Reference
 	private ActionManager _actionManager;
 
+	@Reference
+	private CollectionRouterManager _collectionRouterManager;
+
 	private Logger _logger = getLogger(getClass());
 
 	@Reference
+	private NestedCollectionRouterManager _nestedCollectionRouterManager;
+
+	@Reference
 	private ProviderManager _providerManager;
+
+	@Reference
+	private ReusableNestedCollectionRouterManager
+		_reusableNestedCollectionRouterManager;
 
 }

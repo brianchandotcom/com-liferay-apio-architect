@@ -148,14 +148,6 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	public Try<Page<T>> getNestedCollectionPageTry(
 		String id, String nestedName) {
 
-		Try.fromFallible(
-			() -> _nestedCollectionRoutesFunction.apply(_name, nestedName, id)
-		).mapOptional(
-			NestedCollectionRoutes::getNestedCreateItemFunctionOptional
-		).orElse(
-			null
-		);
-
 		ActionManager actionManager = _actionManagerSupplier.get();
 
 		Either<Action.Error, Action> eitherAction = actionManager.getAction(

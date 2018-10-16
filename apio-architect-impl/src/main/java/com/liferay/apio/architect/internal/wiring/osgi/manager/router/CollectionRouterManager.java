@@ -16,7 +16,6 @@ package com.liferay.apio.architect.internal.wiring.osgi.manager.router;
 
 import com.liferay.apio.architect.routes.CollectionRoutes;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,14 +38,5 @@ public interface CollectionRouterManager {
 	 */
 	public <T, S> Optional<CollectionRoutes<T, S>> getCollectionRoutesOptional(
 		String name);
-
-	/**
-	 * Returns a list containing the names of the resources with routes in this
-	 * manager.
-	 *
-	 * @return a list containing the names of the resources with routes in this
-	 *         manager
-	 */
-	public List<String> getResourceNames();
 
 }
