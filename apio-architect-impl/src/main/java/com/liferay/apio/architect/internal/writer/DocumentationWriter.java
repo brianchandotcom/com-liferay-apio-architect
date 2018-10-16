@@ -53,10 +53,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -119,6 +121,8 @@ public class DocumentationWriter {
 		stream.map(
 			ActionKey::getParam1
 		).distinct(
+		).filter(
+			representors::containsKey
 		).forEach(
 			name -> _writeRoute(
 				jsonObjectBuilder, name, representors.get(name),
