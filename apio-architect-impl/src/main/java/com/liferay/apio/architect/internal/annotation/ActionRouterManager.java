@@ -15,16 +15,20 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
-import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getActionKey;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParameters;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getProviders;
+
+import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnnotation;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.annotation.representor.ActionRouterTypeExtractor;
-import com.liferay.apio.architect.internal.annotation.router.RouterTransformer;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.url.ServerURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
@@ -32,7 +36,8 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.Provider
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.router.ActionRouter;
 
-import java.util.ArrayList;
+import java.lang.annotation.Annotation;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -76,19 +81,45 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 
 						String name = toLowercaseSlug(type.value());
 
-						RouterTransformer.toActionRouter(
-							actionRouter, name, _actionManager);
-
-						INSTANCE.putRootResourceName(name);
+						_registerActionRouter(actionRouter, name);
 					});
 			});
 	}
 
-	public List<String> getResourceNames() {
-		return new ArrayList<>(
-			INSTANCE.getRootResourceNames(this::computeActionRouters));
+	private void _registerActionRouter(ActionRouter actionRouter, String name) {
+		Class<? extends ActionRouter> actionRouterClass =
+			actionRouter.getClass();
+
+		_annotationsToSearch.forEach(
+			annotationClass -> getMethodsListWithAnnotation(
+				actionRouterClass, annotationClass
+			).forEach(
+				method -> {
+					Actions.Action annotation = method.getAnnotation(
+						Actions.Action.class);
+
+					if (annotation == null) {
+						annotation = annotationClass.getAnnotation(
+							Actions.Action.class);
+					}
+
+					ActionKey actionKey = getActionKey(
+						method, name, annotation.httpMethod());
+
+					_actionManager.add(
+						actionKey,
+						(id, body, providers) -> method.invoke(
+							actionRouter,
+							getParameters(method, id, body, providers)),
+						getProviders(method));
+				}
+			)
+		);
 	}
 
+	private static final List<Class<? extends Annotation>>
+		_annotationsToSearch = Arrays.asList(
+			Actions.Action.class, Actions.Retrieve.class, Actions.Remove.class);
 	private static final List<String> _mandatoryClassNames = Arrays.asList(
 		ApplicationURL.class.getName(), Credentials.class.getName(),
 		Pagination.class.getName(), ServerURL.class.getName());

@@ -18,6 +18,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -25,6 +26,19 @@ import java.util.stream.Stream;
  * @author Javier Gamarra
  */
 public class AnnotationUtil {
+
+	public static Object findObjectOfClass(
+		List<Object> objects, Class<?> clazz) {
+
+		Stream<Object> stream = objects.stream();
+
+		return stream.filter(
+			object -> clazz.isAssignableFrom(object.getClass())
+		).findFirst(
+		).orElse(
+			null
+		);
+	}
 
 	public static Optional<Annotation> getAnnotationFromMethodParameters(
 		Method method, Class<? extends Annotation> annotation) {
