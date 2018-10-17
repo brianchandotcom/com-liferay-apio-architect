@@ -1,0 +1,5 @@
+Bundle-Name: Liferay Apio Architect Test Fragment
+Bundle-SymbolicName: com.liferay.apio.architect.test.fragment
+Bundle-Version: 1.0.0
+Fragment-Host: com.liferay.apio.architect.impl
+-fixupmessages: Exporting an empty package...;is:=ignore

@@ -10,6 +10,7 @@
 	com.liferay.apio.architect.impl;version='[2.0.0,2.0.1)',\
 	com.liferay.apio.architect.sample;version='[2.0.0,2.0.1)',\
 	com.liferay.apio.architect.test;version='[1.0.0,1.0.1)',\
+	com.liferay.apio.architect.test.fragment;version='[1.0.0,1.0.1)',\
 	com.liferay.apio.architect.uri.mapper.impl;version='[2.0.0,2.0.1)',\
 	io.vavr;version='[0.9.2,0.9.3)',\
 	org.apache.aries.javax.jax.rs-api;version='[1.0.2,1.0.3)',\
@@ -41,6 +42,7 @@
     osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.impl)',\
     osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.sample)',\
     osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.test)',\
+    osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.test.fragment)',\
     osgi.identity;filter:='(osgi.identity=com.liferay.apio.architect.uri.mapper.impl)',\
     osgi.identity;filter:='(osgi.identity=ch.qos.logback.classic)'
 

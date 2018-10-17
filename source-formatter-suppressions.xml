@@ -9,6 +9,7 @@
 		<suppress checks="VariableNameCheck" files="apio-architect-impl/src/main/java/com/liferay/apio/architect/internal/routes/.*" />
 	</checkstyle>
 	<source-check>
+		<suppress checks="BNDExportsCheck" files="apio-architect-test-fragment/bnd\.bnd" />
 		<suppress checks="JavaDeprecatedJavadocCheck" files=".*" />
 		<suppress checks="JavaIllegalImportsCheck" files="apio-architect-impl/src/main/java/com/liferay/apio/architect/internal/.*" />
 		<suppress checks="JavaModuleInternalImportsCheck" files="apio-architect-impl/src/main/java/com/liferay/apio/architect/internal/wiring/osgi/manager/base/BaseManager\.java" />
