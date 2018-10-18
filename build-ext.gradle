@@ -17,21 +17,27 @@ allprojects {
 }
 
 configure(subprojects.findAll {!it.childProjects}) {
-	test {
-		ignoreFailures = false
-	}
+	test.ignoreFailures = false
 
-	setUpTestableTomcat {
-		enabled = false
-	}
+	buildCSS.enabled = false
 
-	startTestableTomcat {
-		enabled = false
-	}
+	processResources.enabled = false
 
-	stopTestableTomcat {
-		enabled = false
-	}
+	transpileJS.enabled = false
+
+	configJSModules.enabled = false
+
+	copyLibs.enabled = false
+
+	replaceSoyTranslation.enabled = false
+
+	wrapSoyAlloyTemplate.enabled = false
+
+	setUpTestableTomcat.enabled = false
+
+	startTestableTomcat.enabled = false
+
+	stopTestableTomcat.enabled = false
 }
 
 task codeCoverageReport(type: JacocoReport)
