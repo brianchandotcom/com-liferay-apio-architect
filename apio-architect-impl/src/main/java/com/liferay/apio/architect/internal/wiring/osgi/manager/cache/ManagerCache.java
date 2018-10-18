@@ -80,6 +80,7 @@ public class ManagerCache {
 		_batchResultMessageMappers = null;
 		_representors = null;
 		_reusableNestedCollectionRoutes = null;
+		_rootResourceNames = null;
 		_rootResourceNamesSdk = null;
 		_singleModelMessageMappers = null;
 	}
@@ -472,17 +473,10 @@ public class ManagerCache {
 	/**
 	 * Returns a list containing the names of the root resources with routes.
 	 *
-	 * @param  computeEmptyFunction the function that can be called to compute
-	 *         the data
 	 * @return the list of root resources
 	 * @review
 	 */
-	public List<String> getRootResourceNames(
-		EmptyFunction computeEmptyFunction) {
-
-		if (_rootResourceNames == null) {
-			computeEmptyFunction.invoke();
-		}
+	public List<String> getRootResourceNames() {
 
 		return Optional.ofNullable(
 			_rootResourceNames
@@ -494,17 +488,10 @@ public class ManagerCache {
 	/**
 	 * Returns a list containing the names of the root resources with routes.
 	 *
-	 * @param  computeEmptyFunction the function that can be called to compute
-	 *         the data
 	 * @return the list of root resources
 	 * @review
 	 */
-	public List<String> getRootResourceNamesSdk(
-		EmptyFunction computeEmptyFunction) {
-
-		if (_rootResourceNamesSdk == null) {
-			computeEmptyFunction.invoke();
-		}
+	public List<String> getRootResourceNamesSdk() {
 
 		return Optional.ofNullable(
 			_rootResourceNamesSdk

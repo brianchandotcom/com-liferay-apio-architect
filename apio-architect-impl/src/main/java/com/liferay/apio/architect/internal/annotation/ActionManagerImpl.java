@@ -203,14 +203,8 @@ public class ActionManagerImpl implements ActionManager {
 		return () -> {
 			List<String> list = new ArrayList<>();
 
-			list.addAll(
-				INSTANCE.getRootResourceNamesSdk(
-					() -> {
-					}));
-			list.addAll(
-				INSTANCE.getRootResourceNames(
-					() -> {
-					}));
+			list.addAll(INSTANCE.getRootResourceNamesSdk());
+			list.addAll(INSTANCE.getRootResourceNames());
 
 			return list;
 		};

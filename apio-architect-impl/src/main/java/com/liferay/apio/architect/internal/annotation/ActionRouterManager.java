@@ -36,6 +36,7 @@ import com.liferay.apio.architect.internal.url.ServerURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.CollectionRouterManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -68,13 +69,15 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 	}
 
 	public List<String> getResourceNames() {
-		return INSTANCE.getRootResourceNames(this::_computeActionRouters);
+		return INSTANCE.getRootResourceNames();
 	}
 
-	private void _initializeRouterManagers() {
-		_collectionRouterManager.getCollectionRoutes();
-		_nestedCollectionRouterManager.getNestedCollectionRoutes();
+	public void _initializeRouterManagers() {
+		_computeActionRouters();
+		_itemRouterManager.getItemRoutes();
 		_reusableNestedCollectionRouterManager.getReusableCollectionRoutes();
+		_nestedCollectionRouterManager.getNestedCollectionRoutes();
+		_collectionRouterManager.getCollectionRoutes();
 	}
 
 	private void _registerActionRouter(ActionRouter actionRouter, String name) {
@@ -141,8 +144,6 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 						_registerEntryPoint(actionRouter, name);
 					});
 			});
-
-		_initializeRouterManagers();
 	}
 
 	private static final List<Class<? extends Annotation>>
@@ -169,5 +170,8 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 	@Reference
 	private ReusableNestedCollectionRouterManager
 		_reusableNestedCollectionRouterManager;
+
+	@Reference
+	private ItemRouterManager _itemRouterManager;
 
 }

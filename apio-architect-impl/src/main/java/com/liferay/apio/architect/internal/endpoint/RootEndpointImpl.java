@@ -66,7 +66,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 	@Activate
 	public void activate() {
-		_documentation = _actionManager.getDocumentation(
+		_documentation = _getActionManager().getDocumentation(
 			() -> _provide(APITitle.class),
 			() -> _provide(APIDescription.class),
 			() -> _provide(ApplicationURL.class));
@@ -139,7 +139,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		List<String> resourceNames = _actionRouterManager.getResourceNames();
 
 		if (resourceNames.isEmpty()) {
-			_actionRouterManager.getResourceNames();
+			_actionRouterManager._initializeRouterManagers();
 		}
 
 		return _actionManager;
