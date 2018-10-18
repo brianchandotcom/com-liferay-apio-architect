@@ -49,6 +49,7 @@ public class RelatedModelImpl<T, S> implements RelatedModel<T, S> {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public Function<T, S> getIdentifierFunction() {
 		return _modelToIdentifierFunction;
 	}
