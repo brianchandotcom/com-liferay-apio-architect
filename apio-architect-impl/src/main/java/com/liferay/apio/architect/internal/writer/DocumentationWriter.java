@@ -49,8 +49,6 @@ import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -348,26 +346,6 @@ public class DocumentationWriter {
 		return stream.map(
 			fieldFunction -> DocumentationField.of(
 				fieldFunction.getKey(), fieldType));
-	}
-
-	private Optional<String> _getNestedCollectionRouteOptional(
-		Map<String, Representor> representorMap, Map<String, ?> nestedRoutesMap,
-		String name) {
-
-		Set<String> nestedRoutes = nestedRoutesMap.keySet();
-
-		Stream<String> nestedRoutesStream = nestedRoutes.stream();
-
-		return nestedRoutesStream.map(
-			nestedRoute -> nestedRoute.split(name + "-")
-		).filter(
-			routes ->
-				routes.length == 2 && !routes[0].equals("") &&
-				!routes[0].equals(routes[1]) &&
-				representorMap.containsKey(routes[1])
-		).map(
-			routes -> routes[1]
-		).findFirst();
 	}
 
 	private void _writeAllFields(

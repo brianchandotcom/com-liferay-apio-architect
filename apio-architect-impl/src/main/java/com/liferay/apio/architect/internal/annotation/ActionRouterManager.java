@@ -24,7 +24,11 @@ import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnn
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import com.liferay.apio.architect.annotation.Actions;
+import com.liferay.apio.architect.annotation.Actions.Action;
+import com.liferay.apio.architect.annotation.Actions.Retrieve;
+import com.liferay.apio.architect.annotation.Actions.Remove;
+import com.liferay.apio.architect.annotation.Actions.Replace;
+import com.liferay.apio.architect.annotation.Actions.Create;
 import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
@@ -86,12 +90,11 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 				actionRouter.getClass(), annotationClass
 			).forEach(
 				method -> {
-					Actions.Action annotation = method.getAnnotation(
-						Actions.Action.class);
+					Action annotation = method.getAnnotation(Action.class);
 
 					if (annotation == null) {
 						annotation = annotationClass.getAnnotation(
-							Actions.Action.class);
+							Action.class);
 					}
 
 					ActionKey actionKey = getActionKey(
@@ -148,7 +151,7 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 
 	private static final List<Class<? extends Annotation>>
 		_annotationsToSearch = Arrays.asList(
-			Actions.Action.class, Actions.Retrieve.class, Actions.Remove.class);
+			Action.class, Retrieve.class, Remove.class);
 	private static final List<String> _mandatoryClassNames = Arrays.asList(
 		ApplicationURL.class.getName(), Credentials.class.getName(),
 		Pagination.class.getName(), ServerURL.class.getName());
