@@ -176,8 +176,7 @@ public class ActionManagerImpl implements ActionManager {
 			httpMethod -> actionKey.getActionKeyWithHttpMethodName(
 				httpMethod.name())
 		).filter(
-			actionKeyHttpMethod ->
-				_getActionThrowableTriFunction(actionKeyHttpMethod) != null
+			this::_getActionKeyPredicate
 		).map(
 			this::_getOperation
 		).collect(
@@ -220,6 +219,18 @@ public class ActionManagerImpl implements ActionManager {
 		).orElseThrow(
 			NotFoundException::new
 		);
+	}
+
+	private boolean _getActionKeyPredicate(ActionKey actionKey) {
+		if (actionKey.isCollection()) {
+			return _actions.containsKey(actionKey);
+		}
+
+		if (_getActionThrowableTriFunction(actionKey) != null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private ThrowableTriFunction

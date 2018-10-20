@@ -26,7 +26,6 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.js
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.RELATED_COLLECTION;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING_LIST;
-import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
@@ -114,19 +113,26 @@ public class DocumentationWriter {
 
 		Stream<ActionKey> stream = actionKeys.stream();
 
-		stream.map(
-			ActionKey::getParam1
-		).distinct(
+		stream.filter(
+			actionKey -> representors.containsKey(actionKey.getParam1())
 		).filter(
-			representors::containsKey
+			actionKey -> actionKey.isGetRequest() && !actionKey.isNested() &&
+			 !actionKey.isCustom()
 		).forEach(
-			name -> _writeRoute(
-				jsonObjectBuilder, name, representors.get(name),
-				_documentationMessageMapper::mapResource,
-				(resource, type, jsonObjectBuilder1) -> _writeOperations(
-					actionManager, resource, type, jsonObjectBuilder),
-				resourceJsonObjectBuilder -> _writeAllFields(
-					representors.get(name), resourceJsonObjectBuilder))
+			actionKey -> {
+				String name = actionKey.getParam1();
+
+				Representor representor = representors.get(name);
+
+				_writeRoute(
+					jsonObjectBuilder, name, representor,
+					_getResourceMapperTriConsumer(actionKey),
+					(resource, type, resourceJsonObjectBuilder) ->
+						_writeOperations(
+							actionManager, resource, type, actionKey,
+							resourceJsonObjectBuilder),
+					_getWriteFieldsRepresentorConsumer(actionKey, representor));
+			}
 		);
 
 		_documentationMessageMapper.onFinish(jsonObjectBuilder, _documentation);
@@ -348,6 +354,28 @@ public class DocumentationWriter {
 				fieldFunction.getKey(), fieldType));
 	}
 
+	private TriConsumer<JSONObjectBuilder, String, String>
+		_getResourceMapperTriConsumer(ActionKey actionKey) {
+
+		if (actionKey.isCollection()) {
+			return _documentationMessageMapper::mapResourceCollection;
+		}
+
+		return _documentationMessageMapper::mapResource;
+	}
+
+	private Consumer<JSONObjectBuilder> _getWriteFieldsRepresentorConsumer(
+		ActionKey actionKey, Representor representor) {
+
+		if (actionKey.isCollection()) {
+			return __ -> {
+			};
+		}
+
+		return resourceJsonObjectBuilder -> _writeAllFields(
+			representor, resourceJsonObjectBuilder);
+	}
+
 	private void _writeAllFields(
 		Representor representor, JSONObjectBuilder resourceJsonObjectBuilder) {
 
@@ -438,10 +466,9 @@ public class DocumentationWriter {
 
 	private void _writeOperations(
 		ActionManager actionManager, String resource, String type,
-		JSONObjectBuilder resourceJsonObjectBuilder) {
+		ActionKey actionKey, JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		List<Operation> actions = actionManager.getActions(
-			new ActionKey(GET.name(), resource), null);
+		List<Operation> actions = actionManager.getActions(actionKey, null);
 
 		actions.forEach(
 			operation -> _writeOperation(
@@ -451,7 +478,7 @@ public class DocumentationWriter {
 	private void _writeRoute(
 		JSONObjectBuilder jsonObjectBuilder, String name,
 		Representor representor,
-		TriConsumer<JSONObjectBuilder, String, String> writeResourceBiConsumer,
+		TriConsumer<JSONObjectBuilder, String, String> writeResourceTriConsumer,
 		TriConsumer<String, String, JSONObjectBuilder>
 			writeOperationsTriConsumer,
 		Consumer<JSONObjectBuilder> writeFieldsRepresentor) {
@@ -465,7 +492,7 @@ public class DocumentationWriter {
 
 				String customDocumentation = _getCustomDocumentation(type);
 
-				writeResourceBiConsumer.accept(
+				writeResourceTriConsumer.accept(
 					resourceJsonObjectBuilder, type, customDocumentation);
 
 				writeOperationsTriConsumer.accept(

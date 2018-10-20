@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
+import static com.liferay.apio.architect.operation.HTTPMethod.GET;
+
 import java.util.Objects;
 
 /**
@@ -110,6 +112,34 @@ public class ActionKey {
 	public int hashCode() {
 		return Objects.hash(
 			_httpMethodName, _param1, _param2, _param3, _param4);
+	}
+
+	public boolean isCollection() {
+		if (_param2 == null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isCustom() {
+		if ((_param2 != null) && !_param2.equals(ActionKey.ANY_ROUTE)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isGetRequest() {
+		return _httpMethodName.equals(GET.name());
+	}
+
+	public boolean isNested() {
+		if (_param3 != null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
