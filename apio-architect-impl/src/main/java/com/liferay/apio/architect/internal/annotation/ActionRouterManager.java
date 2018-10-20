@@ -25,10 +25,8 @@ import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnn
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.annotation.Actions.Action;
-import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.annotation.Actions.Remove;
-import com.liferay.apio.architect.annotation.Actions.Replace;
-import com.liferay.apio.architect.annotation.Actions.Create;
+import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
@@ -76,12 +74,40 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 		return INSTANCE.getRootResourceNames();
 	}
 
-	public void _initializeRouterManagers() {
+	public void initializeRouterManagers() {
 		_computeActionRouters();
 		_itemRouterManager.getItemRoutes();
 		_reusableNestedCollectionRouterManager.getReusableCollectionRoutes();
 		_nestedCollectionRouterManager.getNestedCollectionRoutes();
 		_collectionRouterManager.getCollectionRoutes();
+	}
+
+	private void _computeActionRouters() {
+		List<String> list = _providerManager.getMissingProviders(
+			_mandatoryClassNames);
+
+		if (!list.isEmpty()) {
+			_logger.warn("Missing providers for mandatory classes: {}", list);
+
+			return;
+		}
+
+		forEachService(
+			(className, actionRouter) -> {
+				Try<Class<? extends Identifier>> classTry =
+					ActionRouterTypeExtractor.extractTypeClass(actionRouter);
+
+				classTry.ifSuccess(
+					typeClass -> {
+						Type type = typeClass.getAnnotation(Type.class);
+
+						String name = toLowercaseSlug(type.value());
+
+						_registerActionRouter(actionRouter, name);
+
+						_registerEntryPoint(actionRouter, name);
+					});
+			});
 	}
 
 	private void _registerActionRouter(ActionRouter actionRouter, String name) {
@@ -121,34 +147,6 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 		);
 	}
 
-	private void _computeActionRouters() {
-		List<String> list = _providerManager.getMissingProviders(
-			_mandatoryClassNames);
-
-		if (!list.isEmpty()) {
-			_logger.warn("Missing providers for mandatory classes: {}", list);
-
-			return;
-		}
-
-		forEachService(
-			(className, actionRouter) -> {
-				Try<Class<? extends Identifier>> classTry =
-					ActionRouterTypeExtractor.extractTypeClass(actionRouter);
-
-				classTry.ifSuccess(
-					typeClass -> {
-						Type type = typeClass.getAnnotation(Type.class);
-
-						String name = toLowercaseSlug(type.value());
-
-						_registerActionRouter(actionRouter, name);
-
-						_registerEntryPoint(actionRouter, name);
-					});
-			});
-	}
-
 	private static final List<Class<? extends Annotation>>
 		_annotationsToSearch = Arrays.asList(
 			Action.class, Retrieve.class, Remove.class);
@@ -162,6 +160,9 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 	@Reference
 	private CollectionRouterManager _collectionRouterManager;
 
+	@Reference
+	private ItemRouterManager _itemRouterManager;
+
 	private Logger _logger = getLogger(getClass());
 
 	@Reference
@@ -173,8 +174,5 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 	@Reference
 	private ReusableNestedCollectionRouterManager
 		_reusableNestedCollectionRouterManager;
-
-	@Reference
-	private ItemRouterManager _itemRouterManager;
 
 }

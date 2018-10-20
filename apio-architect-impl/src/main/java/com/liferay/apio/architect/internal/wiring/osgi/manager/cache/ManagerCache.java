@@ -477,7 +477,6 @@ public class ManagerCache {
 	 * @review
 	 */
 	public List<String> getRootResourceNames() {
-
 		return Optional.ofNullable(
 			_rootResourceNames
 		).orElseGet(
@@ -492,7 +491,6 @@ public class ManagerCache {
 	 * @review
 	 */
 	public List<String> getRootResourceNamesSdk() {
-
 		return Optional.ofNullable(
 			_rootResourceNamesSdk
 		).orElseGet(

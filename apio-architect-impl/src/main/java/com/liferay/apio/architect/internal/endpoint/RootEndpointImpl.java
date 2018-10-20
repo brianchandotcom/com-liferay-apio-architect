@@ -139,7 +139,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		List<String> resourceNames = _actionRouterManager.getResourceNames();
 
 		if (resourceNames.isEmpty()) {
-			_actionRouterManager._initializeRouterManagers();
+			_actionRouterManager.initializeRouterManagers();
 		}
 
 		return _actionManager;
