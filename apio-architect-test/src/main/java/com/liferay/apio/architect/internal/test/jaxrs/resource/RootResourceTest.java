@@ -80,6 +80,26 @@ public class RootResourceTest extends BaseTest {
 	}
 
 	@Test
+	public void testCustomEndpoint() {
+		Response response = _makeRequestTo("hi", "SUBSCRIBE");
+
+		String expected = "Endpoint = hi, Method = SUBSCRIBE";
+
+		assertThat(response.getStatus(), is(200));
+		assertThat(response.readEntity(String.class), is(expected));
+	}
+
+	@Test
+	public void testCustomNestedEndpoint() {
+		Response response = _makeRequestTo("hi/hello", "SUBSCRIBE");
+
+		String expected = "Endpoint = hi/hello, Method = SUBSCRIBE";
+
+		assertThat(response.getStatus(), is(200));
+		assertThat(response.readEntity(String.class), is(expected));
+	}
+
+	@Test
 	public void testDocumentationEndpoint() {
 		Response response = _makeRequestTo("doc", "GET");
 
