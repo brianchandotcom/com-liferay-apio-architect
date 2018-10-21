@@ -26,17 +26,12 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
-import com.liferay.apio.architect.internal.operation.DeleteOperation;
-import com.liferay.apio.architect.internal.operation.RetrieveOperation;
-import com.liferay.apio.architect.internal.operation.UpdateOperation;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.documentation.contributor.CustomDocumentationManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.operation.HTTPMethod;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.uri.Path;
 
 import io.vavr.control.Either;
@@ -147,7 +142,7 @@ public class ActionManagerImpl implements ActionManager {
 
 		ActionKey actionKey = new ActionKey(method, param1, param2);
 
-		return _getActionsWithId(param1, param2, actionKey);
+		return _getActionsWithId(actionKey);
 	}
 
 	@Override
@@ -156,7 +151,7 @@ public class ActionManagerImpl implements ActionManager {
 
 		ActionKey actionKey = new ActionKey(method, param1, param2, param3);
 
-		return _getActionsWithId(param1, param2, actionKey);
+		return _getActionsWithId(actionKey);
 	}
 
 	@Override
@@ -167,7 +162,7 @@ public class ActionManagerImpl implements ActionManager {
 		ActionKey actionKey = new ActionKey(
 			method, param1, param2, param3, param4);
 
-		return _getActionsWithId(param1, param2, actionKey);
+		return _getActionsWithId(actionKey);
 	}
 
 	public Map<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
@@ -177,7 +172,7 @@ public class ActionManagerImpl implements ActionManager {
 	}
 
 	@Override
-	public List<Operation> getActions(
+	public List<Action> getActions(
 		ActionKey actionKey, Credentials credentials) {
 
 		return Stream.of(
@@ -186,9 +181,14 @@ public class ActionManagerImpl implements ActionManager {
 			httpMethod -> actionKey.getActionKeyWithHttpMethodName(
 				httpMethod.name())
 		).filter(
-			this::_isValidOperation
+			this::_isValidAction
 		).map(
-			this::_getOperation
+			actionKey1 -> {
+				Object id = _getId(
+					actionKey.getResource(), actionKey.getIdOrAction());
+
+				return _getAction(actionKey1, id);
+			}
 		).collect(
 			Collectors.toList()
 		);
@@ -226,21 +226,44 @@ public class ActionManagerImpl implements ActionManager {
 	protected ProviderManager providerManager;
 
 	private Action _getAction(ActionKey actionKey, Object id) {
-		return httpServletRequest -> Try.fromFallible(
-			() -> _getActionThrowableTriFunction(actionKey)
-		).map(
-			action -> action.apply(
-				id, null,
-				(List<Object>)_getProviders(httpServletRequest, actionKey))
-		).orElseThrow(
-			NotFoundException::new
-		);
+		return new Action() {
+
+			@Override
+			public Object apply(HttpServletRequest httpServletRequest) {
+				return Try.fromFallible(
+					() -> _getActionThrowableTriFunction(actionKey)
+				).map(
+					action -> action.apply(
+						id, null,
+						(List<Object>)_getProviders(
+							httpServletRequest, actionKey))
+				).orElseThrow(
+					NotFoundException::new
+				);
+			}
+
+			@Override
+			public ActionKey getActionKey() {
+				return actionKey;
+			}
+
+			@Override
+			public Optional<String> getURIOptional() {
+				Optional<Path> optionalPath =
+					pathIdentifierMapperManager.mapToPath(
+						actionKey.getResource(), actionKey.getIdOrAction());
+
+				return optionalPath.map(
+					path -> path.asURI() + "/" + actionKey.getNestedResource());
+			}
+
+		};
 	}
 
 	private Either<Action.Error, Action> _getActionsWithId(
-		String param1, String param2, ActionKey actionKey) {
+		ActionKey actionKey) {
 
-		Object id = _getId(param1, param2);
+		Object id = _getId(actionKey.getResource(), actionKey.getIdOrAction());
 
 		return Either.right(_getAction(actionKey, id));
 	}
@@ -264,29 +287,6 @@ public class ActionManagerImpl implements ActionManager {
 		catch (Error e) {
 			return null;
 		}
-	}
-
-	private Operation _getOperation(ActionKey actionKey) {
-		String resourceName = actionKey.getResourceName();
-
-		String uri = _getUri(actionKey, resourceName);
-
-		if ("GET".equals(actionKey.getHttpMethodName()) &&
-			actionKey.isCollection()) {
-
-			return new RetrieveOperation(resourceName, true, uri, null);
-		}
-		else if ("POST".equals(actionKey.getHttpMethodName())) {
-			return new CreateOperation(null, resourceName, uri, null);
-		}
-		else if ("DELETE".equals(actionKey.getHttpMethodName())) {
-			return new DeleteOperation(resourceName, uri, null);
-		}
-		else if ("PUT".equals(actionKey.getHttpMethodName())) {
-			return new UpdateOperation(null, resourceName, uri, null);
-		}
-
-		return new RetrieveOperation(resourceName, false, uri, null);
 	}
 
 	private List<Object> _getProvidedObjects(
@@ -322,18 +322,7 @@ public class ActionManagerImpl implements ActionManager {
 		return _providers.get(actionKey.getGenericActionKey());
 	}
 
-	private String _getUri(ActionKey actionKey, String resourceName) {
-		Optional<Path> optionalPath = pathIdentifierMapperManager.mapToPath(
-			actionKey.getResource(), actionKey.getIdOrAction());
-
-		return optionalPath.map(
-			path -> path.asURI() + "/" + actionKey.getNestedResource()
-		).orElse(
-			resourceName
-		);
-	}
-
-	private boolean _isValidOperation(ActionKey actionKey) {
+	private boolean _isValidAction(ActionKey actionKey) {
 		if (actionKey.isCollection()) {
 			return _actions.containsKey(actionKey);
 		}

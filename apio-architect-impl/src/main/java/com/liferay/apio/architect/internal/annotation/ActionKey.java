@@ -92,6 +92,10 @@ public class ActionKey {
 		return _httpMethodName;
 	}
 
+	public String getIdName() {
+		return _param1 + "/" + (isCustom() ? _param2 : _getOperationVerb());
+	}
+
 	public String getIdOrAction() {
 		return _param2;
 	}
@@ -152,6 +156,20 @@ public class ActionKey {
 			"\'", "_httpMethodName='", _httpMethodName, ", _param1='", _param1,
 			", _param2='", _param2, ", _param3='", _param3, ", _param4='",
 			_param4);
+	}
+
+	private String _getOperationVerb() {
+		if ("DELETE".equals(_httpMethodName)) {
+			return "delete";
+		}
+		else if ("PUT".equals(_httpMethodName)) {
+			return "update";
+		}
+		else if ("POST".equals(_httpMethodName)) {
+			return "create";
+		}
+
+		return "retrieve";
 	}
 
 	private final String _httpMethodName;
