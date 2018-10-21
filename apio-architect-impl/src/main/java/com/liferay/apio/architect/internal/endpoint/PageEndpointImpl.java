@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.internal.endpoint;
 
 import static com.liferay.apio.architect.internal.endpoint.ExceptionSupplierUtil.notAllowed;
+import static com.liferay.apio.architect.internal.operation.util.OperationUtil.toOperations;
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
@@ -216,8 +217,10 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 					return new PageImpl(
 						name, (PageItems<T>)pageItems, _getPagination(),
-						actionManager.getActions(
-							new ActionKey(HTTPMethod.GET.name(), name), null));
+						toOperations(
+							actionManager.getActions(
+								new ActionKey(HTTPMethod.GET.name(), name),
+								null)));
 				}
 			).getOrElseThrow(
 				notAllowed(HTTPMethod.GET, _name)

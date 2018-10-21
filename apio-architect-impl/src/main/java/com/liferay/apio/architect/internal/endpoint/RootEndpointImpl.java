@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.internal.endpoint;
 
 import static com.liferay.apio.architect.internal.endpoint.ExceptionSupplierUtil.notFound;
+import static com.liferay.apio.architect.internal.operation.util.OperationUtil.toOperations;
 
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
@@ -204,8 +205,10 @@ public class RootEndpointImpl implements RootEndpoint {
 			).map(
 				model -> new SingleModelImpl<>(
 					model, name,
-					_getActionManager().getActions(
-						new ActionKey(HTTPMethod.GET.name(), name, id), null))
+					toOperations(
+						_getActionManager().getActions(
+							new ActionKey(HTTPMethod.GET.name(), name, id),
+							null)))
 			).get()
 		);
 	}
