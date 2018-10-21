@@ -27,15 +27,6 @@
 			"@type": "Class",
 			"supportedOperation": [
 				{
-					"@id": "_:root/delete",
-					"@type": [
-						"DeleteAction",
-						"Operation"
-					],
-					"method": "DELETE",
-					"returns": "http://www.w3.org/2002/07/owl#Nothing"
-				},
-				{
 					"@id": "_:root/retrieve",
 					"@type": [
 						"Operation"
@@ -43,6 +34,15 @@
 					"comment": "retrieve description",
 					"method": "GET",
 					"returns": "Type 1"
+				},
+				{
+					"@id": "_:root/delete",
+					"@type": [
+						"DeleteAction",
+						"Operation"
+					],
+					"method": "DELETE",
+					"returns": "http://www.w3.org/2002/07/owl#Nothing"
 				}
 			],
 			"supportedProperty": [
@@ -306,15 +306,6 @@
 			"@type": "Class",
 			"supportedOperation": [
 				{
-					"@id": "_:root/delete",
-					"@type": [
-						"DeleteAction",
-						"Operation"
-					],
-					"method": "DELETE",
-					"returns": "http://www.w3.org/2002/07/owl#Nothing"
-				},
-				{
 					"@id": "_:root/retrieve",
 					"@type": [
 						"Operation"
@@ -322,6 +313,15 @@
 					"comment": "retrieve description",
 					"method": "GET",
 					"returns": "Type 2"
+				},
+				{
+					"@id": "_:root/delete",
+					"@type": [
+						"DeleteAction",
+						"Operation"
+					],
+					"method": "DELETE",
+					"returns": "http://www.w3.org/2002/07/owl#Nothing"
 				}
 			],
 			"supportedProperty": [

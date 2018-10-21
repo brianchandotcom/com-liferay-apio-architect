@@ -130,7 +130,7 @@ public class MockDocumentationWriter {
 			_getEmptyThrowableTriFunction());
 
 		actionManager.add(
-			new ActionKey("GET", "root", ActionKey.ANY_ROUTE, "nested"),
+			new ActionKey("DELETE", "root", ActionKey.ANY_ROUTE),
 			_getEmptyThrowableTriFunction());
 	}
 

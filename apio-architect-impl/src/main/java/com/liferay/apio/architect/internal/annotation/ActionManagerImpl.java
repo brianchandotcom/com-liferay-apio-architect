@@ -330,7 +330,9 @@ public class ActionManagerImpl implements ActionManager {
 	private boolean _isCustomActionOfCollection(
 		ActionKey actionKey, ActionKey childActionKey) {
 
-		if (actionKey.isCollection() && childActionKey.isCustom()) {
+		if (actionKey.isCollection() &&
+			(childActionKey.isCollection() || childActionKey.isCustom())) {
+
 			return true;
 		}
 
