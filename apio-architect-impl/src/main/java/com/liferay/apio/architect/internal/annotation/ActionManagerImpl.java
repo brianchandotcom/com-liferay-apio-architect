@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import com.liferay.apio.architect.credentials.Credentials;
@@ -80,7 +81,7 @@ public class ActionManagerImpl implements ActionManager {
 		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
 		Class... providers) {
 
-		getActions().put(actionKey, throwableTriFunction);
+		_actions.put(actionKey, throwableTriFunction);
 
 		_providers.put(actionKey, providers);
 	}
@@ -111,7 +112,7 @@ public class ActionManagerImpl implements ActionManager {
 		Class... providers) {
 
 		ActionKey actionKey = new ActionKey(
-			HTTPMethod.DELETE.name(), name, ANY_ROUTE);
+			DELETE.name(), name, ANY_ROUTE);
 
 		add(actionKey, throwableTriFunction, providers);
 	}
@@ -245,11 +246,11 @@ public class ActionManagerImpl implements ActionManager {
 		<Object, ?, List<Object>, ?> _getActionThrowableTriFunction(
 			ActionKey actionKey) {
 
-		if (getActions().containsKey(actionKey)) {
-			return getActions().get(actionKey);
+		if (_actions.containsKey(actionKey)) {
+			return _actions.get(actionKey);
 		}
 
-		return getActions().get(actionKey.getGenericActionKey());
+		return _actions.get(actionKey.getGenericActionKey());
 	}
 
 	private Object _getId(String param1, String param2) {
