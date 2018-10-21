@@ -111,8 +111,7 @@ public class ActionManagerImpl implements ActionManager {
 		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
 		Class... providers) {
 
-		ActionKey actionKey = new ActionKey(
-			DELETE.name(), name, ANY_ROUTE);
+		ActionKey actionKey = new ActionKey(DELETE.name(), name, ANY_ROUTE);
 
 		add(actionKey, throwableTriFunction, providers);
 	}
@@ -142,9 +141,8 @@ public class ActionManagerImpl implements ActionManager {
 		String method, String param1, String param2) {
 
 		ActionKey actionKey = new ActionKey(method, param1, param2);
-		Object id = _getId(param1, param2);
 
-		return Either.right(_getAction(actionKey, id));
+		return _getActionsWithId(param1, param2, actionKey);
 	}
 
 	@Override
@@ -152,9 +150,8 @@ public class ActionManagerImpl implements ActionManager {
 		String method, String param1, String param2, String param3) {
 
 		ActionKey actionKey = new ActionKey(method, param1, param2, param3);
-		Object id = _getId(param1, param2);
 
-		return Either.right(_getAction(actionKey, id));
+		return _getActionsWithId(param1, param2, actionKey);
 	}
 
 	@Override
@@ -164,9 +161,8 @@ public class ActionManagerImpl implements ActionManager {
 
 		ActionKey actionKey = new ActionKey(
 			method, param1, param2, param3, param4);
-		Object id = _getId(param1, param2);
 
-		return Either.right(_getAction(actionKey, id));
+		return _getActionsWithId(param1, param2, actionKey);
 	}
 
 	public Map<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
@@ -185,7 +181,7 @@ public class ActionManagerImpl implements ActionManager {
 			httpMethod -> actionKey.getActionKeyWithHttpMethodName(
 				httpMethod.name())
 		).filter(
-			this::_getActionKeyPredicate
+			this::_isValidOperation
 		).map(
 			this::_getOperation
 		).collect(
@@ -230,16 +226,12 @@ public class ActionManagerImpl implements ActionManager {
 		);
 	}
 
-	private boolean _getActionKeyPredicate(ActionKey actionKey) {
-		if (actionKey.isCollection()) {
-			return _actions.containsKey(actionKey);
-		}
+	private Either<Action.Error, Action> _getActionsWithId(
+		String param1, String param2, ActionKey actionKey) {
 
-		if (_getActionThrowableTriFunction(actionKey) != null) {
-			return true;
-		}
+		Object id = _getId(param1, param2);
 
-		return false;
+		return Either.right(_getAction(actionKey, id));
 	}
 
 	private ThrowableTriFunction
@@ -328,6 +320,18 @@ public class ActionManagerImpl implements ActionManager {
 		).orElse(
 			resourceName
 		);
+	}
+
+	private boolean _isValidOperation(ActionKey actionKey) {
+		if (actionKey.isCollection()) {
+			return _actions.containsKey(actionKey);
+		}
+
+		if (_getActionThrowableTriFunction(actionKey) != null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private final Map

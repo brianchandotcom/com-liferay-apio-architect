@@ -92,24 +92,24 @@ public class ActionKey {
 		return _httpMethodName;
 	}
 
-	public String getResourceName() {
-		if (_param3 == null) {
-			return _param1;
-		}
-
-		return _param1 + ("/" + _param3);
-	}
-
-	public String getResource() {
-		return _param1;
-	}
-
 	public String getIdOrAction() {
 		return _param2;
 	}
 
 	public String getNestedResource() {
 		return _param3;
+	}
+
+	public String getResource() {
+		return _param1;
+	}
+
+	public String getResourceName() {
+		if (_param3 == null) {
+			return _param1;
+		}
+
+		return _param1 + ("/" + _param3);
 	}
 
 	@Override
