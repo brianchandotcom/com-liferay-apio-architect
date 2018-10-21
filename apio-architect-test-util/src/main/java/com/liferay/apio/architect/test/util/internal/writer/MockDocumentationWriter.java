@@ -14,20 +14,31 @@
 
 package com.liferay.apio.architect.test.util.internal.writer;
 
-import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
-
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.documentation.contributor.CustomDocumentationImpl;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl;
+import com.liferay.apio.architect.internal.routes.ItemRoutesImpl;
+import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.internal.writer.DocumentationWriter;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.routes.CollectionRoutes;
+import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
+import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
 /**
  * Provides methods that test {@code DocumentationMessageMapper} objects.
@@ -64,13 +75,49 @@ public class MockDocumentationWriter {
 		Map<String, Representor> root = Collections.singletonMap(
 			"root", rootModelRepresentor);
 
+		ActionManager actionManager = new ActionManagerImpl(
+			new PathIdentifierMapperManager() {
+				@Override
+				public boolean hasPathIdentifierMapper(String name) {
+					return false;
+				}
+
+				@Override
+				public <T> T mapToIdentifierOrFail(Path path) {
+					return null;
+				}
+
+				@Override
+				public <T> Optional<Path> mapToPath(
+					String name, T identifier) {
+					return Optional.empty();
+				}
+			});
+
 		CustomDocumentation customDocumentation =
 			customDocumentationBuilder.build();
+
+		actionManager.add(
+			new ActionKey("GET", "root"),
+			(o, o2, objects) -> null);
+
+		actionManager.add(
+			new ActionKey("DELETE", "root", ActionKey.ANY_ROUTE),
+			(o, o2, objects) -> null);
+
+		actionManager.add(
+			new ActionKey("GET", "root", ActionKey.ANY_ROUTE),
+			(o, o2, objects) -> null);
+
+		actionManager.add(
+			new ActionKey("GET", "root", ActionKey.ANY_ROUTE, "nested"),
+			(o, o2, objects) -> null);
 
 		Documentation documentation = new Documentation(
 			() -> Optional.of(() -> "Title"),
 			() -> Optional.of(() -> "Description"),
-			() -> Optional.of(() -> "Entrypoint"), () -> root, () -> null,
+			() -> Optional.of(() -> "Entrypoint"), () -> root,
+			() -> actionManager,
 			() -> customDocumentation);
 
 		DocumentationWriter documentationWriter = DocumentationWriter.create(

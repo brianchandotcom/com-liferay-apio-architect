@@ -27,24 +27,6 @@
 			"@type": "Class",
 			"supportedOperation": [
 				{
-					"@id": "_:root/retrieve",
-					"@type": [
-						"Operation"
-					],
-					"comment": "retrieve description",
-					"method": "GET",
-					"returns": "Type 1"
-				},
-				{
-					"@id": "_:root/update",
-					"@type": [
-						"ReplaceAction",
-						"Operation"
-					],
-					"method": "PUT",
-					"returns": "Type 1"
-				},
-				{
 					"@id": "_:root/delete",
 					"@type": [
 						"DeleteAction",
@@ -52,6 +34,15 @@
 					],
 					"method": "DELETE",
 					"returns": "http://www.w3.org/2002/07/owl#Nothing"
+				},
+				{
+					"@id": "_:root/retrieve",
+					"@type": [
+						"Operation"
+					],
+					"comment": "retrieve description",
+					"method": "GET",
+					"returns": "Type 1"
 				}
 			],
 			"supportedProperty": [
@@ -315,24 +306,6 @@
 			"@type": "Class",
 			"supportedOperation": [
 				{
-					"@id": "_:root/retrieve",
-					"@type": [
-						"Operation"
-					],
-					"comment": "retrieve description",
-					"method": "GET",
-					"returns": "Type 2"
-				},
-				{
-					"@id": "_:root/update",
-					"@type": [
-						"ReplaceAction",
-						"Operation"
-					],
-					"method": "PUT",
-					"returns": "Type 2"
-				},
-				{
 					"@id": "_:root/delete",
 					"@type": [
 						"DeleteAction",
@@ -340,6 +313,15 @@
 					],
 					"method": "DELETE",
 					"returns": "http://www.w3.org/2002/07/owl#Nothing"
+				},
+				{
+					"@id": "_:root/retrieve",
+					"@type": [
+						"Operation"
+					],
+					"comment": "retrieve description",
+					"method": "GET",
+					"returns": "Type 2"
 				}
 			],
 			"supportedProperty": [
@@ -612,15 +594,6 @@
 					"comment": "retrieve description",
 					"method": "GET",
 					"returns": "Collection"
-				},
-				{
-					"@id": "_:root/create",
-					"@type": [
-						"CreateAction",
-						"Operation"
-					],
-					"method": "POST",
-					"returns": "Type 1"
 				}
 			],
 			"supportedProperty": [
@@ -655,15 +628,6 @@
 					"comment": "retrieve description",
 					"method": "GET",
 					"returns": "Collection"
-				},
-				{
-					"@id": "_:root/create",
-					"@type": [
-						"CreateAction",
-						"Operation"
-					],
-					"method": "POST",
-					"returns": "Type 2"
 				}
 			],
 			"supportedProperty": [
