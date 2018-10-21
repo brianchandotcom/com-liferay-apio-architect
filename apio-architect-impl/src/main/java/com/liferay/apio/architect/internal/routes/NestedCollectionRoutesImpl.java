@@ -36,10 +36,7 @@ import com.liferay.apio.architect.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.form.FormImpl;
-import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
@@ -541,50 +538,6 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		@Override
 		public NestedCollectionRoutes<T, S, U> build() {
 			return new NestedCollectionRoutesImpl<>(this);
-		}
-
-		private List<Operation> _getOperations(
-			Credentials credentials, U identifier) {
-
-			Optional<Path> optional = _identifierToPathFunction.apply(
-				identifier);
-
-			if (!optional.isPresent()) {
-				return Collections.emptyList();
-			}
-
-			Path path = optional.get();
-
-			Boolean canAdd = Try.fromFallible(
-				() -> _hasNestedAddingPermissionFunction.apply(
-					credentials, identifier)
-			).orElse(
-				false
-			);
-
-			if (!canAdd) {
-				return Collections.emptyList();
-			}
-
-			String resourceName = null;
-			String uri = null;
-
-			if (_name.equals("r")) {
-				resourceName = _nestedName;
-				uri = String.join("/", _name, _nestedName, path.getId());
-			}
-			else {
-				resourceName = _name + "/" + _nestedName;
-				uri = path.asURI() + "/" + _nestedName;
-			}
-
-			CreateOperation createOperation = new CreateOperation(
-				_form, resourceName, uri);
-
-			BatchCreateOperation batchCreateOperation =
-				new BatchCreateOperation(_form, resourceName, uri);
-
-			return Arrays.asList(createOperation, batchCreateOperation);
 		}
 
 		private <V> List<S> _transformList(

@@ -66,6 +66,12 @@ import org.osgi.service.component.annotations.Reference;
 @Component(service = ActionManager.class)
 public class ActionManagerImpl implements ActionManager {
 
+	public ActionManagerImpl(
+		PathIdentifierMapperManager pathIdentifierMapperManager) {
+
+		this._pathIdentifierMapperManager = pathIdentifierMapperManager;
+	}
+
 	@Override
 	public void add(
 		ActionKey actionKey,
@@ -103,7 +109,7 @@ public class ActionManagerImpl implements ActionManager {
 		Class... providers) {
 
 		ActionKey actionKey = new ActionKey(
-			HTTPMethod.DELETE.name(), name, null);
+			HTTPMethod.DELETE.name(), name, ANY_ROUTE);
 
 		add(actionKey, throwableTriFunction, providers);
 	}
@@ -209,6 +215,12 @@ public class ActionManagerImpl implements ActionManager {
 		};
 	}
 
+	@Reference
+	protected PathIdentifierMapperManager _pathIdentifierMapperManager;
+
+	@Reference
+	protected ProviderManager providerManager;
+
 	private Action _getAction(ActionKey actionKey, Object id) {
 		return httpServletRequest -> Try.fromFallible(
 			() -> _getActionThrowableTriFunction(actionKey)
@@ -260,7 +272,7 @@ public class ActionManagerImpl implements ActionManager {
 		return Stream.of(
 			value
 		).map(
-			provider -> _providerManager.provideMandatory(
+			provider -> providerManager.provideMandatory(
 				httpServletRequest, provider)
 		).collect(
 			Collectors.toList()
@@ -270,20 +282,32 @@ public class ActionManagerImpl implements ActionManager {
 	private Operation _getOperation(ActionKey actionKey) {
 		String param1 = actionKey.getParam1();
 
-		if ("GET".equals(actionKey.getHttpMethodName())) {
-			return new RetrieveOperation(param1, true);
+		String resourceName = param1 + (actionKey.getParam3() == null ?
+			"" : "/" + actionKey.getParam3());
+
+		String uri = _pathIdentifierMapperManager.mapToPath(
+			param1, actionKey.getParam2()).map(
+			path -> path.asURI() + "/" + actionKey.getParam3()
+		).orElse(
+			resourceName
+		);
+
+		if ("GET".equals(actionKey.getHttpMethodName()) &&
+			actionKey.isCollection()) {
+
+			return new RetrieveOperation(resourceName, true, uri, null);
 		}
 		else if ("POST".equals(actionKey.getHttpMethodName())) {
-			return new CreateOperation(null, param1, param1, null);
+			return new CreateOperation(null, resourceName, uri, null);
 		}
 		else if ("DELETE".equals(actionKey.getHttpMethodName())) {
-			return new DeleteOperation(param1, param1, null);
+			return new DeleteOperation(resourceName, uri, null);
 		}
 		else if ("PUT".equals(actionKey.getHttpMethodName())) {
-			return new UpdateOperation(null, param1, param1, null);
+			return new UpdateOperation(null, resourceName, uri, null);
 		}
 
-		return new RetrieveOperation(param1, false);
+		return new RetrieveOperation(resourceName, false, uri, null);
 	}
 
 	private List _getProviders(
@@ -312,12 +336,6 @@ public class ActionManagerImpl implements ActionManager {
 
 	@Reference
 	private CustomDocumentationManager _customDocumentationManager;
-
-	@Reference
-	private PathIdentifierMapperManager _pathIdentifierMapperManager;
-
-	@Reference
-	private ProviderManager _providerManager;
 
 	private final Map<ActionKey, Class[]> _providers = new HashMap<>();
 
