@@ -18,9 +18,7 @@ import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_REMOVE_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_UPDATE_PERMISSION_FUNCTION;
-import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_TO_PATH_FUNCTION;
-import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.keyValueFrom;
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
@@ -37,15 +35,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
-import static org.mockito.Matchers.any;
-
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.routes.ItemRoutesImpl.BuilderImpl;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -62,48 +56,12 @@ import java.util.TreeSet;
 
 import javax.ws.rs.NotFoundException;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import org.mockito.Mockito;
 
 /**
  * @author Alejandro Hernández
  */
-public class ItemRoutesImplTest {
-
-	@Before
-	public void setUp() {
-		PathIdentifierMapperManager pathIdentifierMapperManager = Mockito.mock(
-			PathIdentifierMapperManager.class);
-
-		Mockito.when(
-			pathIdentifierMapperManager.mapToIdentifierOrFail(any())
-		).thenAnswer(
-			invocation -> IDENTIFIER_FUNCTION.apply(null)
-		);
-
-		Mockito.when(
-			pathIdentifierMapperManager.mapToPath(any(), any())
-		).thenAnswer(
-			invocation -> IDENTIFIER_TO_PATH_FUNCTION.apply(null)
-		);
-
-		_actionManagerImpl = new ActionManagerImpl(null);
-
-		ProviderManager providerManager = Mockito.mock(ProviderManager.class);
-
-		Mockito.when(
-			providerManager.provideMandatory(any(), any())
-		).thenAnswer(
-			invocation -> PROVIDE_FUNCTION.apply(
-				invocation.getArgumentAt(1, Class.class))
-		);
-
-		_actionManagerImpl.providerManager = providerManager;
-		_actionManagerImpl._pathIdentifierMapperManager =
-			pathIdentifierMapperManager;
-	}
+public class ItemRoutesImplTest extends BaseRoutesTest {
 
 	@Test(expected = NotFoundException.class)
 	public void testEmptyBuilderBuildsEmptyRoutes() {
@@ -111,12 +69,13 @@ public class ItemRoutesImplTest {
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), _actionManagerImpl);
+			__ -> null, IDENTIFIER_TO_PATH_FUNCTION,
+			__ -> Optional.empty(), actionManager);
 
-		ItemRoutes<String, Long> itemRoutes = builder.build();
+		builder.build();
 
-		Either<Action.Error, Action> actionEither =
-			_actionManagerImpl.getAction(GET.name(), "name", ANY_ROUTE);
+		Either<Action.Error, Action> actionEither = actionManager.getAction(
+			GET.name(), "name", ANY_ROUTE);
 
 		assertThat(actionEither.isRight(), is(true));
 
@@ -131,12 +90,13 @@ public class ItemRoutesImplTest {
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), _actionManagerImpl);
+			__ -> null, IDENTIFIER_TO_PATH_FUNCTION,
+			__ -> Optional.empty(), actionManager);
 
-		ItemRoutes<String, Long> itemRoutes = builder.build();
+		builder.build();
 
-		Either<Action.Error, Action> actionEither =
-			_actionManagerImpl.getAction(DELETE.name(), "name", ANY_ROUTE);
+		Either<Action.Error, Action> actionEither = actionManager.getAction(
+			DELETE.name(), "name", ANY_ROUTE);
 
 		assertThat(actionEither.isRight(), is(true));
 
@@ -151,8 +111,7 @@ public class ItemRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION,
-			__ -> Optional.empty(), _actionManagerImpl);
+			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
@@ -176,15 +135,12 @@ public class ItemRoutesImplTest {
 	}
 
 	@Test
-	public void testFourParameterBuilderMethodsCreatesValidRoutes()
-		throws Exception {
-
+	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION,
-			__ -> Optional.empty(), _actionManagerImpl);
+			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
@@ -208,15 +164,12 @@ public class ItemRoutesImplTest {
 	}
 
 	@Test
-	public void testOneParameterBuilderMethodsCreatesValidRoutes()
-		throws Exception {
-
+	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION,
-			__ -> Optional.empty(), _actionManagerImpl);
+			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
@@ -234,15 +187,12 @@ public class ItemRoutesImplTest {
 	}
 
 	@Test
-	public void testThreeParameterBuilderMethodsCreatesValidRoutes()
-		throws Exception {
-
+	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION,
-			__ -> Optional.empty(), _actionManagerImpl);
+			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
@@ -263,15 +213,12 @@ public class ItemRoutesImplTest {
 	}
 
 	@Test
-	public void testTwoParameterBuilderMethodsCreatesValidRoutes()
-		throws Exception {
-
+	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION,
-			__ -> Optional.empty(), _actionManagerImpl);
+			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
@@ -396,9 +343,8 @@ public class ItemRoutesImplTest {
 	}
 
 	private void _testItemRoutesDeleter() {
-		Either<Action.Error, Action> actionEither =
-			_actionManagerImpl.getAction(
-				HTTPMethod.DELETE.name(), "name", "42");
+		Either<Action.Error, Action> actionEither = actionManager.getAction(
+			HTTPMethod.DELETE.name(), "name", "42");
 
 		if (actionEither.isLeft()) {
 			throw new AssertionError("Action not present");
@@ -412,8 +358,8 @@ public class ItemRoutesImplTest {
 	}
 
 	private void _testItemRoutesGetter() {
-		Either<Action.Error, Action> actionEither =
-			_actionManagerImpl.getAction(HTTPMethod.GET.name(), "name", "42");
+		Either<Action.Error, Action> actionEither = actionManager.getAction(
+			HTTPMethod.GET.name(), "name", "42");
 
 		if (actionEither.isLeft()) {
 			throw new AssertionError("Action not present");
@@ -508,8 +454,6 @@ public class ItemRoutesImplTest {
 
 		_testOneParameterRemoverRoute(identifier, string);
 	}
-
-	private static ActionManagerImpl _actionManagerImpl;
 
 	private final Body _body = __ -> Optional.of("Apio");
 

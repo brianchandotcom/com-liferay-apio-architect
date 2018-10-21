@@ -17,9 +17,7 @@ package com.liferay.apio.architect.internal.annotation;
 import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
-import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_TO_PATH_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.PAGINATION;
-import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.hasNestedAddingPermissionFunction;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.keyValueFrom;
@@ -38,8 +36,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
-import static org.mockito.Matchers.any;
-
 import com.liferay.apio.architect.alias.routes.NestedBatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.batch.BatchResult;
@@ -48,8 +44,6 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.operation.RetrieveOperation;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl.BuilderImpl;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -70,48 +64,12 @@ import java.util.TreeSet;
 
 import javax.ws.rs.NotFoundException;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import org.mockito.Mockito;
 
 /**
  * @author Alejandro Hernández
  */
-public class NestedCollectionRoutesImplTest {
-
-	@Before
-	public void setUp() {
-		_actionManagerImpl = new ActionManagerImpl(null);
-
-		ProviderManager providerManager = Mockito.mock(ProviderManager.class);
-
-		Mockito.when(
-			providerManager.provideMandatory(any(), any())
-		).thenAnswer(
-			invocation -> PROVIDE_FUNCTION.apply(
-				invocation.getArgumentAt(1, Class.class))
-		);
-
-		PathIdentifierMapperManager pathIdentifierMapperManager = Mockito.mock(
-			PathIdentifierMapperManager.class);
-
-		Mockito.when(
-			pathIdentifierMapperManager.mapToIdentifierOrFail(any())
-		).thenAnswer(
-			invocation -> IDENTIFIER_FUNCTION.apply(null)
-		);
-
-		Mockito.when(
-			pathIdentifierMapperManager.mapToPath(any(), any())
-		).thenAnswer(
-			invocation -> IDENTIFIER_TO_PATH_FUNCTION.apply(null)
-		);
-
-		_actionManagerImpl.providerManager = providerManager;
-		_actionManagerImpl._pathIdentifierMapperManager =
-			pathIdentifierMapperManager;
-	}
+public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 	@Test(expected = NotFoundException.class)
 	public void testEmptyBuilderBuildsEmptyRoutes() {
@@ -119,8 +77,7 @@ public class NestedCollectionRoutesImplTest {
 			"name", "nested", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.build();
@@ -130,9 +87,8 @@ public class NestedCollectionRoutesImplTest {
 
 		assertThat(optional1, is(emptyOptional()));
 
-		Either<Action.Error, Action> actionEither =
-			_actionManagerImpl.getAction(
-				GET.name(), "name", ANY_ROUTE, "nested");
+		Either<Action.Error, Action> actionEither = actionManager.getAction(
+			GET.name(), "name", ANY_ROUTE, "nested");
 
 		assertThat(actionEither.isRight(), is(true));
 
@@ -147,8 +103,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -174,8 +129,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -202,8 +156,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -229,8 +182,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -257,8 +209,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -279,8 +230,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -301,8 +251,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -326,8 +275,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -352,8 +300,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -374,8 +321,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, IDENTIFIER_FUNCTION,
-				_actionManagerImpl);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -635,9 +581,8 @@ public class NestedCollectionRoutesImplTest {
 	}
 
 	private void _testNestedCollectionRoutesGetter() {
-		Either<Action.Error, Action> actionEither =
-			_actionManagerImpl.getAction(
-				HTTPMethod.GET.name(), "name", ANY_ROUTE, "nested");
+		Either<Action.Error, Action> actionEither = actionManager.getAction(
+			HTTPMethod.GET.name(), "name", ANY_ROUTE, "nested");
 
 		if (actionEither.isLeft()) {
 			throw new AssertionError("Action not present");
@@ -651,7 +596,7 @@ public class NestedCollectionRoutesImplTest {
 		assertThat(pageItems.getItems(), hasItem("Apio"));
 		assertThat(pageItems.getTotalCount(), is(1));
 
-		List<Operation> operations = _actionManagerImpl.getActions(
+		List<Operation> operations = actionManager.getActions(
 			new ActionKey(GET.name(), "name", ANY_ROUTE, "nested"), null);
 
 		assertThat(operations, hasSize(1));
@@ -666,7 +611,6 @@ public class NestedCollectionRoutesImplTest {
 			is(optionalWithValue(equalTo("name/id/nested"))));
 	}
 
-	private static ActionManagerImpl _actionManagerImpl;
 	private static final Body _batchBody;
 	private static final Body _singleBody;
 
