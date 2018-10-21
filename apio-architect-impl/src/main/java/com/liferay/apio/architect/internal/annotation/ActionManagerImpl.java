@@ -67,12 +67,17 @@ import org.osgi.service.component.annotations.Reference;
 @Component(service = ActionManager.class)
 public class ActionManagerImpl implements ActionManager {
 
-	public ActionManagerImpl(
+	public static ActionManager newTestInstance(
 		PathIdentifierMapperManager pathIdentifierMapperManager,
 		ProviderManager providerManager) {
 
-		_pathIdentifierMapperManager = pathIdentifierMapperManager;
-		_providerManager = providerManager;
+		ActionManagerImpl actionManagerImpl = new ActionManagerImpl();
+
+		actionManagerImpl.pathIdentifierMapperManager =
+			pathIdentifierMapperManager;
+		actionManagerImpl.providerManager = providerManager;
+
+		return actionManagerImpl;
 	}
 
 	@Override
@@ -214,6 +219,12 @@ public class ActionManagerImpl implements ActionManager {
 		};
 	}
 
+	@Reference
+	protected PathIdentifierMapperManager pathIdentifierMapperManager;
+
+	@Reference
+	protected ProviderManager providerManager;
+
 	private Action _getAction(ActionKey actionKey, Object id) {
 		return httpServletRequest -> Try.fromFallible(
 			() -> _getActionThrowableTriFunction(actionKey)
@@ -247,25 +258,12 @@ public class ActionManagerImpl implements ActionManager {
 
 	private Object _getId(String param1, String param2) {
 		try {
-			return _pathIdentifierMapperManager.mapToIdentifierOrFail(
+			return pathIdentifierMapperManager.mapToIdentifierOrFail(
 				new Path(param1, param2));
 		}
 		catch (Error e) {
 			return null;
 		}
-	}
-
-	private List<Object> _getListThrowableFunction(
-		Class<Object>[] value, HttpServletRequest httpServletRequest) {
-
-		return Stream.of(
-			value
-		).map(
-			provider -> _providerManager.provideMandatory(
-				httpServletRequest, provider)
-		).collect(
-			Collectors.toList()
-		);
 	}
 
 	private Operation _getOperation(ActionKey actionKey) {
@@ -291,13 +289,26 @@ public class ActionManagerImpl implements ActionManager {
 		return new RetrieveOperation(resourceName, false, uri, null);
 	}
 
-	private List _getProviders(
+	private List<Object> _getProvidedObjects(
+		Class<Object>[] value, HttpServletRequest httpServletRequest) {
+
+		return Stream.of(
+			value
+		).map(
+			provider -> providerManager.provideMandatory(
+				httpServletRequest, provider)
+		).collect(
+			Collectors.toList()
+		);
+	}
+
+	private List<Object> _getProviders(
 		HttpServletRequest httpServletRequest, ActionKey actionKey) {
 
 		return Try.fromFallible(
 			() -> _getProvidersByParam(actionKey)
 		).map(
-			value -> _getListThrowableFunction(value, httpServletRequest)
+			value -> _getProvidedObjects(value, httpServletRequest)
 		).orElseGet(
 			ArrayList::new
 		);
@@ -312,7 +323,7 @@ public class ActionManagerImpl implements ActionManager {
 	}
 
 	private String _getUri(ActionKey actionKey, String resourceName) {
-		Optional<Path> optionalPath = _pathIdentifierMapperManager.mapToPath(
+		Optional<Path> optionalPath = pathIdentifierMapperManager.mapToPath(
 			actionKey.getResource(), actionKey.getIdOrAction());
 
 		return optionalPath.map(
@@ -340,12 +351,6 @@ public class ActionManagerImpl implements ActionManager {
 
 	@Reference
 	private CustomDocumentationManager _customDocumentationManager;
-
-	@Reference
-	private PathIdentifierMapperManager _pathIdentifierMapperManager;
-
-	@Reference
-	private ProviderManager _providerManager;
 
 	private final Map<ActionKey, Class[]> _providers = new HashMap<>();
 

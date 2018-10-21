@@ -71,7 +71,7 @@ public class MockDocumentationWriter {
 		Map<String, Representor> root = Collections.singletonMap(
 			"root", rootModelRepresentor);
 
-		ActionManager actionManager = new ActionManagerImpl(
+		ActionManager actionManager = ActionManagerImpl.newTestInstance(
 			new PathIdentifierMapperManager() {
 
 				@Override

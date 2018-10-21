@@ -58,7 +58,7 @@ public class BaseRoutesTest {
 				invocation.getArgumentAt(1, Class.class))
 		);
 
-		actionManager = new ActionManagerImpl(
+		actionManager = ActionManagerImpl.newTestInstance(
 			pathIdentifierMapperManager, providerManager);
 	}
 
