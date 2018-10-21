@@ -114,13 +114,13 @@ public class DocumentationWriter {
 		Stream<ActionKey> stream = actionKeys.stream();
 
 		stream.filter(
-			actionKey -> representors.containsKey(actionKey.getParam1())
+			actionKey -> representors.containsKey(actionKey.getResource())
 		).filter(
 			actionKey -> actionKey.isGetRequest() && !actionKey.isNested() &&
 			 !actionKey.isCustom()
 		).forEach(
 			actionKey -> {
-				String name = actionKey.getParam1();
+				String name = actionKey.getResource();
 
 				Representor representor = representors.get(name);
 

@@ -276,7 +276,7 @@ public class ActionManagerImpl implements ActionManager {
 	}
 
 	private Operation _getOperation(ActionKey actionKey) {
-		String resourceName = _getResourceName(actionKey);
+		String resourceName = actionKey.getResourceName();
 
 		String uri = _getUri(actionKey, resourceName);
 
@@ -318,20 +318,12 @@ public class ActionManagerImpl implements ActionManager {
 		return _providers.get(actionKey.getGenericActionKey());
 	}
 
-	private String _getResourceName(ActionKey actionKey) {
-		if (actionKey.getParam3() == null) {
-			return actionKey.getParam1();
-		}
-
-		return actionKey.getParam1() + ("/" + actionKey.getParam3());
-	}
-
 	private String _getUri(ActionKey actionKey, String resourceName) {
 		Optional<Path> optionalPath = _pathIdentifierMapperManager.mapToPath(
-			actionKey.getParam1(), actionKey.getParam2());
+			actionKey.getResource(), actionKey.getIdOrAction());
 
 		return optionalPath.map(
-			path -> path.asURI() + "/" + actionKey.getParam3()
+			path -> path.asURI() + "/" + actionKey.getNestedResource()
 		).orElse(
 			resourceName
 		);
