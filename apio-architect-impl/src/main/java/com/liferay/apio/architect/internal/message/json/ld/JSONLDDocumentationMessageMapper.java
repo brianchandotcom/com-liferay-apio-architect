@@ -30,13 +30,13 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.js
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
+import com.liferay.apio.architect.internal.annotation.Action;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType;
-import com.liferay.apio.architect.operation.HTTPMethod;
-import com.liferay.apio.architect.operation.Operation;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -65,6 +65,41 @@ public class JSONLDDocumentationMessageMapper
 	}
 
 	@Override
+	public void mapAction(
+		JSONObjectBuilder jsonObjectBuilder, String resourceName, String type,
+		Action action, String description) {
+
+		ActionKey actionKey = action.getActionKey();
+
+		jsonObjectBuilder.field(
+			"@id"
+		).stringValue(
+			"_:" + actionKey.getIdName()
+		);
+
+		jsonObjectBuilder.field(
+			"@type"
+		).arrayValue(
+		).addAllStrings(
+			getOperationTypes(action)
+		);
+
+		jsonObjectBuilder.field(
+			"method"
+		).stringValue(
+			actionKey.getHttpMethodName()
+		);
+
+		jsonObjectBuilder.field(
+			"returns"
+		).stringValue(
+			_getReturnValue(type, action)
+		);
+
+		_addDescription(jsonObjectBuilder, description);
+	}
+
+	@Override
 	public void mapDescription(
 		JSONObjectBuilder jsonObjectBuilder, String description) {
 
@@ -84,41 +119,6 @@ public class JSONLDDocumentationMessageMapper
 		).stringValue(
 			entryPoint
 		);
-	}
-
-	@Override
-	public void mapOperation(
-		JSONObjectBuilder jsonObjectBuilder, String resourceName, String type,
-		Operation operation, String description) {
-
-		jsonObjectBuilder.field(
-			"@id"
-		).stringValue(
-			"_:" + operation.getName()
-		);
-
-		jsonObjectBuilder.field(
-			"@type"
-		).arrayValue(
-		).addAllStrings(
-			getOperationTypes(operation)
-		);
-
-		HTTPMethod httpMethod = operation.getHttpMethod();
-
-		jsonObjectBuilder.field(
-			"method"
-		).stringValue(
-			httpMethod.toString()
-		);
-
-		jsonObjectBuilder.field(
-			"returns"
-		).stringValue(
-			_getReturnValue(type, operation)
-		);
-
-		_addDescription(jsonObjectBuilder, description);
 	}
 
 	@Override
@@ -303,9 +303,9 @@ public class JSONLDDocumentationMessageMapper
 	}
 
 	@Override
-	public void onFinishOperation(
+	public void onFinishAction(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder operationJsonObjectBuilder, Operation operation) {
+		JSONObjectBuilder operationJsonObjectBuilder, Action action) {
 
 		documentationJsonObjectBuilder.field(
 			"supportedOperation"
@@ -432,15 +432,19 @@ public class JSONLDDocumentationMessageMapper
 		}
 	}
 
-	private String _getReturnValue(String type, Operation operation) {
+	private String _getReturnValue(String type, Action action) {
 		String value = null;
 
-		HTTPMethod httpMethod = operation.getHttpMethod();
+		ActionKey actionKey = action.getActionKey();
 
-		if (DELETE.equals(httpMethod)) {
+		String httpMethodName = actionKey.getHttpMethodName();
+
+		if (httpMethodName.equals(DELETE.name())) {
 			value = "http://www.w3.org/2002/07/owl#Nothing";
 		}
-		else if (operation.isCollection() && httpMethod.equals(GET)) {
+		else if (actionKey.isCollection() &&
+				 httpMethodName.equals(GET.name())) {
+
 			value = "Collection";
 		}
 		else {

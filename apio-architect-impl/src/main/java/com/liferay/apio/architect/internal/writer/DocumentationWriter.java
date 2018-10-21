@@ -32,6 +32,7 @@ import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
+import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
@@ -42,7 +43,6 @@ import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType;
 import com.liferay.apio.architect.language.AcceptLanguage;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
@@ -376,6 +376,25 @@ public class DocumentationWriter {
 			representor, resourceJsonObjectBuilder);
 	}
 
+	private void _writeAction(
+		Action action, JSONObjectBuilder jsonObjectBuilder, String resourceName,
+		String type) {
+
+		JSONObjectBuilder operationJsonObjectBuilder = new JSONObjectBuilder();
+
+		ActionKey actionKey = action.getActionKey();
+
+		String customDocumentation = _getCustomDocumentation(
+			actionKey.getIdName());
+
+		_documentationMessageMapper.mapAction(
+			operationJsonObjectBuilder, resourceName, type, action,
+			customDocumentation);
+
+		_documentationMessageMapper.onFinishAction(
+			jsonObjectBuilder, operationJsonObjectBuilder, action);
+	}
+
 	private void _writeAllFields(
 		Representor representor, JSONObjectBuilder resourceJsonObjectBuilder) {
 
@@ -447,32 +466,15 @@ public class DocumentationWriter {
 			documentationField.getName());
 	}
 
-	private void _writeOperation(
-		Operation operation, JSONObjectBuilder jsonObjectBuilder,
-		String resourceName, String type) {
-
-		JSONObjectBuilder operationJsonObjectBuilder = new JSONObjectBuilder();
-
-		String customDocumentation = _getCustomDocumentation(
-			operation.getName());
-
-		_documentationMessageMapper.mapOperation(
-			operationJsonObjectBuilder, resourceName, type, operation,
-			customDocumentation);
-
-		_documentationMessageMapper.onFinishOperation(
-			jsonObjectBuilder, operationJsonObjectBuilder, operation);
-	}
-
 	private void _writeOperations(
 		ActionManager actionManager, String resource, String type,
 		ActionKey actionKey, JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		List<Operation> actions = actionManager.getActions(actionKey, null);
+		List<Action> actions = actionManager.getActions(actionKey, null);
 
 		actions.forEach(
-			operation -> _writeOperation(
-				operation, resourceJsonObjectBuilder, resource, type));
+			action -> _writeAction(
+				action, resourceJsonObjectBuilder, resource, type));
 	}
 
 	private void _writeRoute(
