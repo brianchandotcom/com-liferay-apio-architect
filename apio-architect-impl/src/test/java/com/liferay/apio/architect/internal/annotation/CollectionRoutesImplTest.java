@@ -12,44 +12,50 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.routes;
+package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_TO_PATH_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.PAGINATION;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.keyValueFrom;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
-import static com.liferay.apio.architect.operation.HTTPMethod.POST;
+import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
-import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
+import static org.mockito.Matchers.any;
+
 import com.liferay.apio.architect.alias.routes.BatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
-import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
+import com.liferay.apio.architect.internal.operation.RetrieveOperation;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl.BuilderImpl;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
-import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
+
+import io.vavr.control.Either;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -59,20 +65,58 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.ws.rs.NotFoundException;
+
+import org.junit.Before;
 import org.junit.Test;
+
+import org.mockito.Mockito;
 
 /**
  * @author Alejandro Hernández
  */
 public class CollectionRoutesImplTest {
 
-	@Test
+	@Before
+	public void setUp() {
+		_actionManagerImpl = new ActionManagerImpl(null);
+
+		ProviderManager providerManager = Mockito.mock(ProviderManager.class);
+
+		Mockito.when(
+			providerManager.provideMandatory(any(), any())
+		).thenAnswer(
+			invocation -> PROVIDE_FUNCTION.apply(
+				invocation.getArgumentAt(1, Class.class))
+		);
+
+		PathIdentifierMapperManager pathIdentifierMapperManager = Mockito.mock(
+			PathIdentifierMapperManager.class);
+
+		Mockito.when(
+			pathIdentifierMapperManager.mapToIdentifierOrFail(any())
+		).thenAnswer(
+			invocation -> IDENTIFIER_FUNCTION.apply(null)
+		);
+
+		Mockito.when(
+			pathIdentifierMapperManager.mapToPath(any(), any())
+		).thenAnswer(
+			invocation -> IDENTIFIER_TO_PATH_FUNCTION.apply(null)
+		);
+
+		_actionManagerImpl.providerManager = providerManager;
+		_actionManagerImpl._pathIdentifierMapperManager =
+			pathIdentifierMapperManager;
+	}
+
+	@Test(expected = NotFoundException.class)
 	public void testEmptyBuilderBuildsEmptyRoutes() {
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null, IDENTIFIER_FUNCTION, __ -> null, null);
+			__ -> null, IDENTIFIER_FUNCTION, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.build();
 
@@ -81,10 +125,14 @@ public class CollectionRoutesImplTest {
 
 		assertThat(createItemFunctionOptional, is(emptyOptional()));
 
-		Optional<GetPageFunction<String>> getPageFunctionOptional =
-			collectionRoutes.getGetPageFunctionOptional();
+		Either<Action.Error, Action> actionEither =
+			_actionManagerImpl.getAction(GET.name(), "name");
 
-		assertThat(getPageFunctionOptional, is(emptyOptional()));
+		assertThat(actionEither.isRight(), is(true));
+
+		Object object = actionEither.get().apply(null);
+
+		assertThat(object, is(nullValue()));
 	}
 
 	@Test
@@ -93,7 +141,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, __ -> null, null);
+			__ -> null, IDENTIFIER_FUNCTION, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnFourParameterCreatorRoute,
@@ -118,7 +166,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, __ -> null, null);
+			__ -> null, IDENTIFIER_FUNCTION, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnFourParameterCreatorRoute, String.class,
@@ -144,7 +192,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, __ -> null, null);
+			__ -> null, IDENTIFIER_FUNCTION, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnThreeParameterCreatorRoute,
@@ -169,7 +217,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, __ -> null, null);
+			__ -> null, IDENTIFIER_FUNCTION, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnThreeParameterCreatorRoute, String.class,
@@ -195,7 +243,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, __ -> null, null);
+			__ -> null, IDENTIFIER_FUNCTION, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnNoParameterCreatorRoute,
@@ -215,7 +263,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, __ -> null, null);
+			__ -> null, IDENTIFIER_FUNCTION, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnNoParameterCreatorRoute,
@@ -235,7 +283,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> null, __ -> null, null);
+			__ -> null, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnTwoParameterCreatorRoute,
@@ -257,7 +305,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_FUNCTION, __ -> null, null);
+			IDENTIFIER_FUNCTION, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnTwoParameterCreatorRoute, String.class,
@@ -280,7 +328,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> null, __ -> null, null);
+			__ -> null, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnOneParameterCreatorRoute,
@@ -300,7 +348,7 @@ public class CollectionRoutesImplTest {
 
 		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_FUNCTION, __ -> null, null);
+			IDENTIFIER_FUNCTION, __ -> null, _actionManagerImpl);
 
 		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnOneParameterCreatorRoute, String.class,
@@ -452,7 +500,7 @@ public class CollectionRoutesImplTest {
 
 		_testCollectionRoutesBatchCreator(collectionRoutes);
 
-		_testCollectionRoutesGetter(collectionRoutes);
+		_testCollectionRoutesGetter();
 	}
 
 	private void _testCollectionRoutesBatchCreator(
@@ -542,49 +590,35 @@ public class CollectionRoutesImplTest {
 		assertThat(singleModel.getModel(), is("Apio"));
 	}
 
-	private void _testCollectionRoutesGetter(
-		CollectionRoutes<String, Long> collectionRoutes) {
+	private void _testCollectionRoutesGetter() {
+		Either<Action.Error, Action> actionEither =
+			_actionManagerImpl.getAction(HTTPMethod.GET.name(), "name");
 
-		Optional<GetPageFunction<String>> optional =
-			collectionRoutes.getGetPageFunctionOptional();
-
-		if (!optional.isPresent()) {
-			throw new AssertionError("GetPageFunction not present");
+		if (actionEither.isLeft()) {
+			throw new AssertionError("Action not present");
 		}
 
-		GetPageFunction<String> getPageFunction = optional.get();
+		Action action = actionEither.get();
 
-		Page<String> page = getPageFunction.andThen(
-			Try::getUnchecked
-		).apply(
-			null
-		);
+		PageItems<String> pageItems = (PageItems)action.apply(null);
 
-		assertThat(page.getItems(), hasSize(1));
-		assertThat(page.getItems(), hasItem("Apio"));
-		assertThat(page.getTotalCount(), is(1));
+		assertThat(pageItems.getItems(), hasSize(1));
+		assertThat(pageItems.getItems(), hasItem("Apio"));
+		assertThat(pageItems.getTotalCount(), is(1));
 
-		List<Operation> operations = page.getOperations();
+		List<Operation> operations = _actionManagerImpl.getActions(
+			new ActionKey(GET.name(), "name"), null);
 
-		assertThat(operations, hasSize(2));
+		assertThat(operations, hasSize(1));
 
 		Operation createOperation = operations.get(0);
 
-		assertThat(createOperation, is(instanceOf(CreateOperation.class)));
-		assertThat(createOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(createOperation.getHttpMethod(), is(POST));
-		assertThat(createOperation.getName(), is("name/create"));
-
-		Operation batchCreateOperation = operations.get(1);
-
-		assertThat(
-			batchCreateOperation, is(instanceOf(BatchCreateOperation.class)));
-		assertThat(
-			batchCreateOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(batchCreateOperation.getHttpMethod(), is(POST));
-		assertThat(batchCreateOperation.getName(), is("name/batch-create"));
+		assertThat(createOperation, is(instanceOf(RetrieveOperation.class)));
+		assertThat(createOperation.getHttpMethod(), is(GET));
+		assertThat(createOperation.getName(), is("name/retrieve"));
 	}
 
+	private static ActionManagerImpl _actionManagerImpl;
 	private static final Body _batchBody;
 	private static final Body _singleBody;
 
@@ -593,5 +627,7 @@ public class CollectionRoutesImplTest {
 
 		_batchBody = Body.create(Arrays.asList(_singleBody, _singleBody));
 	}
+
+	private PathIdentifierMapperManager pathIdentifierMapperManager;
 
 }
