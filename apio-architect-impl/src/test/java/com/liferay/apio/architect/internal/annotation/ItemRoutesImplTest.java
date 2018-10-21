@@ -28,6 +28,7 @@ import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -72,16 +73,20 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 			__ -> null, IDENTIFIER_TO_PATH_FUNCTION,
 			__ -> Optional.empty(), actionManager);
 
-		builder.build();
+		ItemRoutes<String, Long> itemRoutes = builder.build();
+
+		assertThat(itemRoutes, is(notNullValue()));
 
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
 			GET.name(), "name", ANY_ROUTE);
 
 		assertThat(actionEither.isRight(), is(true));
 
-		Object object = actionEither.get().apply(null);
+		Action action = actionEither.get();
 
-		assertThat(object, is(nullValue()));
+		Object result = action.apply(null);
+
+		assertThat(result, is(nullValue()));
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -93,16 +98,20 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 			__ -> null, IDENTIFIER_TO_PATH_FUNCTION,
 			__ -> Optional.empty(), actionManager);
 
-		builder.build();
+		ItemRoutes<String, Long> itemRoutes = builder.build();
+
+		assertThat(itemRoutes, is(notNullValue()));
 
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
 			DELETE.name(), "name", ANY_ROUTE);
 
 		assertThat(actionEither.isRight(), is(true));
 
-		Object object = actionEither.get().apply(null);
+		Action action = actionEither.get();
 
-		assertThat(object, is(nullValue()));
+		Object result = action.apply(null);
+
+		assertThat(result, is(nullValue()));
 	}
 
 	@Test

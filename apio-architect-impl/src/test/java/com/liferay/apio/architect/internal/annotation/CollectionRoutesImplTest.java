@@ -88,9 +88,11 @@ public class CollectionRoutesImplTest extends BaseRoutesTest {
 
 		assertThat(actionEither.isRight(), is(true));
 
-		Object object = actionEither.get().apply(null);
+		Action action = actionEither.get();
 
-		assertThat(object, is(nullValue()));
+		Object result = action.apply(null);
+
+		assertThat(result, is(nullValue()));
 	}
 
 	@Test
