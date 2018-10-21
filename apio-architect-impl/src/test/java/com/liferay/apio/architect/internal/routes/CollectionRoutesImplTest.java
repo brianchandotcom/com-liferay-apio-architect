@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.internal.routes;
 
+import static com.liferay.apio.architect.internal.operation.util.OperationUtil.toOperations;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
@@ -568,8 +569,8 @@ public class CollectionRoutesImplTest extends BaseRoutesTest {
 		assertThat(pageItems.getItems(), hasItem("Apio"));
 		assertThat(pageItems.getTotalCount(), is(1));
 
-		List<Operation> operations = actionManager.getActions(
-			new ActionKey(GET.name(), "name"), null);
+		List<Operation> operations = toOperations(
+			actionManager.getActions(new ActionKey(GET.name(), "name"), null));
 
 		assertThat(operations, hasSize(1));
 

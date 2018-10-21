@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.internal.routes;
 
 import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
+import static com.liferay.apio.architect.internal.operation.util.OperationUtil.toOperations;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.PAGINATION;
@@ -600,8 +601,9 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 		assertThat(pageItems.getItems(), hasItem("Apio"));
 		assertThat(pageItems.getTotalCount(), is(1));
 
-		List<Operation> operations = actionManager.getActions(
-			new ActionKey(GET.name(), "name", ANY_ROUTE, "nested"), null);
+		List<Operation> operations = toOperations(
+			actionManager.getActions(
+				new ActionKey(GET.name(), "name", ANY_ROUTE, "nested"), null));
 
 		assertThat(operations, hasSize(1));
 
