@@ -22,7 +22,6 @@ import com.liferay.apio.architect.internal.annotation.Action.Error;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
-import com.liferay.apio.architect.operation.Operation;
 
 import io.vavr.control.Either;
 
@@ -126,13 +125,13 @@ public interface ActionManager {
 		String param4);
 
 	/**
-	 * Return the list of operations that are valid in that path
+	 * Return the list of actions that are valid in that path
 	 *
 	 * @param  actionKey the path parameters to add an Action
 	 * @param  credentials the user logged in to calculate the right operations
 	 * @review
 	 */
-	public List<Operation> getActions(
+	public List<Action> getActions(
 		ActionKey actionKey, Credentials credentials);
 
 	/**
