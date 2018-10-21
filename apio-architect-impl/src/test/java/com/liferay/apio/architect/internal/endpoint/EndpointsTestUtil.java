@@ -75,7 +75,7 @@ public class EndpointsTestUtil {
 				"", "", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				__ -> null, __ -> Optional.empty(), __ -> null, null));
+				__ -> Optional.empty(), __ -> null, null));
 	}
 
 	public static <T, S> ItemRoutes<T, S> itemRoutes() {
@@ -99,7 +99,7 @@ public class EndpointsTestUtil {
 				"name", "nestedName", REQUEST_PROVIDE_FUNCTION,
 				__ -> {
 				},
-				__ -> null, __ -> Optional.empty(), identity(), null);
+				__ -> Optional.empty(), identity(), null);
 
 		return builder.addCreator(
 			(parentId, map) -> map.get("key"),

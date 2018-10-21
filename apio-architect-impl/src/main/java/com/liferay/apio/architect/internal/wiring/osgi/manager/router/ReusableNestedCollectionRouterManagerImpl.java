@@ -97,8 +97,6 @@ public class ReusableNestedCollectionRouterManagerImpl
 				Builder builder = new NestedCollectionRoutesImpl.BuilderImpl<>(
 					"r", name, curry(_providerManager::provideMandatory),
 					neededProviders::add,
-					path -> _pathIdentifierMapperManager.mapToIdentifierOrFail(
-						path),
 					identifier -> _pathIdentifierMapperManager.mapToPath(
 						name, identifier, this),
 					representor::getIdentifier, _actionManager);

@@ -54,8 +54,8 @@ public class ItemCustomRoutesImplTest {
 
 		_builder = new ItemRoutesImpl.BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, _neededProviders::add,
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.of(
-				"name"), null);
+			__ -> null, IDENTIFIER_TO_PATH_FUNCTION,
+			__ -> Optional.of("name"), null);
 	}
 
 	@Test

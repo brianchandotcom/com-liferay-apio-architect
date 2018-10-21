@@ -100,7 +100,6 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			String name, String nestedName, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
-			Function<U, Optional<Path>> identifierToPathFunction,
 			Function<T, S> modelToIdentifierFunction,
 			ActionManager actionManager) {
 
@@ -111,7 +110,6 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 
-			_identifierToPathFunction = identifierToPathFunction;
 			_modelToIdentifierFunction = modelToIdentifierFunction;
 			_actionManager = (ActionManagerImpl)actionManager;
 		}
@@ -564,7 +562,6 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		private Form _form;
 		private ThrowableBiFunction<Credentials, U, Boolean>
 			_hasNestedAddingPermissionFunction;
-		private final Function<U, Optional<Path>> _identifierToPathFunction;
 		private final Function<T, S> _modelToIdentifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;

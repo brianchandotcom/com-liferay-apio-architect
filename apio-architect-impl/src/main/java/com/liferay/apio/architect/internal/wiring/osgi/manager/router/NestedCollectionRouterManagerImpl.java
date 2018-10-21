@@ -193,7 +193,6 @@ public class NestedCollectionRouterManagerImpl
 				Builder builder = new BuilderImpl<>(
 					name, nestedName, curry(_providerManager::provideMandatory),
 					neededProviders::add,
-					_pathIdentifierMapperManager::mapToIdentifierOrFail,
 					identifier -> _pathIdentifierMapperManager.mapToPath(
 						name, identifier),
 					representor::getIdentifier, _actionManager);
