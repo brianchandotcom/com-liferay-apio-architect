@@ -121,10 +121,10 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	public Response deleteCollectionItem(String id) {
 		ActionManager actionManager = _actionManagerSupplier.get();
 
-		Either<Action.Error, Action> eitherAction = actionManager.getAction(
+		Either<Action.Error, Action> actionEither = actionManager.getAction(
 			HTTPMethod.DELETE.name(), _name, id);
 
-		eitherAction.forEach(action -> action.apply(_httpServletRequest));
+		actionEither.forEach(action -> action.apply(_httpServletRequest));
 
 		return noContent().build();
 	}
@@ -138,10 +138,10 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	public Try<Page<T>> getCollectionPageTry() {
 		ActionManager actionManager = _actionManagerSupplier.get();
 
-		Either<Action.Error, Action> eitherAction = actionManager.getAction(
+		Either<Action.Error, Action> actionEither = actionManager.getAction(
 			HTTPMethod.GET.name(), _name);
 
-		return _getPageTry(eitherAction, _name);
+		return _getPageTry(actionEither, _name);
 	}
 
 	@Override
@@ -150,10 +150,10 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 		ActionManager actionManager = _actionManagerSupplier.get();
 
-		Either<Action.Error, Action> eitherAction = actionManager.getAction(
+		Either<Action.Error, Action> actionEither = actionManager.getAction(
 			HTTPMethod.GET.name(), _name, id, nestedName);
 
-		return _getPageTry(eitherAction, nestedName);
+		return _getPageTry(actionEither, nestedName);
 	}
 
 	@Override
@@ -205,10 +205,10 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	}
 
 	private Try<Page<T>> _getPageTry(
-		Either<Action.Error, Action> eitherAction, String name) {
+		Either<Action.Error, Action> actionEither, String name) {
 
 		return Try.fromFallible(
-			() -> eitherAction.map(
+			() -> actionEither.map(
 				action -> action.apply(_httpServletRequest)
 			).map(
 				pageItems -> {

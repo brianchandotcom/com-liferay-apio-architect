@@ -17,7 +17,7 @@ package com.liferay.apio.architect.internal.annotation.util;
 import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findObjectOfClass;
-import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.getAnnotationFromMethodParameters;
+import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.getAnnotationFromParametersOptional;
 import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.hasAnnotation;
 
 import com.liferay.apio.architect.annotation.Actions.Action;
@@ -57,7 +57,7 @@ public class ActionRouterUtil {
 				httpMethodName, nestedNameOptional.get(), ANY_ROUTE, name,
 				customActionName);
 		}
-		else if (getAnnotationFromMethodParameters(
+		else if (getAnnotationFromParametersOptional(
 					method, Id.class).isPresent()) {
 
 			return new ActionKey(
@@ -105,7 +105,7 @@ public class ActionRouterUtil {
 
 	private static Optional<String> _getNestedNameOptional(Method method) {
 		Optional<Annotation> parentIdAnnotation =
-			getAnnotationFromMethodParameters(method, ParentId.class);
+			getAnnotationFromParametersOptional(method, ParentId.class);
 
 		return parentIdAnnotation.map(
 			annotation -> ((ParentId)annotation).value()

@@ -40,7 +40,7 @@ public class AnnotationUtil {
 		);
 	}
 
-	public static Optional<Annotation> getAnnotationFromMethodParameters(
+	public static Optional<Annotation> getAnnotationFromParametersOptional(
 		Method method, Class<? extends Annotation> annotation) {
 
 		return Stream.of(
