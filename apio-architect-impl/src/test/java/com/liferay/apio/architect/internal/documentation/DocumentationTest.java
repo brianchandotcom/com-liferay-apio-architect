@@ -46,7 +46,6 @@ public class DocumentationTest {
 	public void testDocumentationWithEmptyValuesReturnEmpty() {
 		Documentation documentation = new Documentation(
 			Optional::empty, Optional::empty, Optional::empty,
-			Collections::emptyMap, Collections::emptyMap, Collections::emptyMap,
 			Collections::emptyMap, null, null);
 
 		Optional<String> optionalTitle = documentation.getAPITitleOptional();
@@ -58,9 +57,6 @@ public class DocumentationTest {
 		assertThat(optionalDescription, is(emptyOptional()));
 
 		assertThat(documentation.getRepresentors(), is(anEmptyMap()));
-		assertThat(documentation.getCollectionRoutes(), is(anEmptyMap()));
-		assertThat(documentation.getItemRoutes(), is(anEmptyMap()));
-		assertThat(documentation.getNestedCollectionRoutes(), is(anEmptyMap()));
 	}
 
 	@Test
@@ -73,11 +69,7 @@ public class DocumentationTest {
 		Documentation documentation = new Documentation(
 			() -> Optional.of(() -> "A"), () -> Optional.of(() -> "B"),
 			() -> Optional.of(() -> "C"),
-			() -> Collections.singletonMap("r", null),
-			() -> Collections.singletonMap("c", null),
-			() -> Collections.singletonMap("i", null),
-			() -> Collections.singletonMap("n", null),
-			() -> Collections.singletonMap("r", null),
+			() -> Collections.singletonMap("r", null), () -> null,
 			dummyCustomDocumentationBuilder::build);
 
 		Optional<String> optionalTitle = documentation.getAPITitleOptional();
@@ -97,12 +89,6 @@ public class DocumentationTest {
 		assertThat(optionalApplicationURL, is(optionalWithValue(equalTo("C"))));
 		assertThat(documentation.getRepresentors(), _HAS_SIZE_ONE);
 		assertThat(documentation.getRepresentors(), hasKey("r"));
-		assertThat(documentation.getCollectionRoutes(), _HAS_SIZE_ONE);
-		assertThat(documentation.getCollectionRoutes(), hasKey("c"));
-		assertThat(documentation.getItemRoutes(), _HAS_SIZE_ONE);
-		assertThat(documentation.getItemRoutes(), hasKey("i"));
-		assertThat(documentation.getNestedCollectionRoutes(), _HAS_SIZE_ONE);
-		assertThat(documentation.getNestedCollectionRoutes(), hasKey("n"));
 		assertThat(descriptionFunction.apply(null), is("value"));
 	}
 

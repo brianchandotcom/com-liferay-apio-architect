@@ -41,7 +41,7 @@ public class EndpointsTestUtil {
 				"name", REQUEST_PROVIDE_FUNCTION,
 				__ -> {
 				},
-				__ -> null, identity(), __ -> null);
+				__ -> null, identity(), __ -> null, null);
 
 		return builder.addCreator(
 			__ -> __.get("key"), HAS_ADDING_PERMISSION_FUNCTION,
@@ -55,7 +55,7 @@ public class EndpointsTestUtil {
 				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				__ -> null, __ -> null, __ -> null));
+				__ -> null, __ -> null, __ -> null, null));
 	}
 
 	public static <T, S> ItemRoutes<T, S> emptyItemRoutes() {
@@ -64,7 +64,7 @@ public class EndpointsTestUtil {
 				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				__ -> null, __ -> null, __ -> Optional.empty()));
+				__ -> null, __ -> null, __ -> Optional.empty(), null));
 	}
 
 	public static <T, S, U> NestedCollectionRoutes<T, S, U>
@@ -75,7 +75,7 @@ public class EndpointsTestUtil {
 				"", "", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				__ -> null, __ -> Optional.empty(), __ -> null));
+				__ -> null, __ -> Optional.empty(), __ -> null, null));
 	}
 
 	public static <T, S> ItemRoutes<T, S> itemRoutes() {
@@ -83,7 +83,7 @@ public class EndpointsTestUtil {
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null, __ -> Optional.empty(), __ -> null);
+			__ -> null, __ -> Optional.empty(), __ -> null, null);
 
 		return builder.addUpdater(
 			(aLong, body) -> null, (credentials, s) -> true,
@@ -99,7 +99,7 @@ public class EndpointsTestUtil {
 				"name", "nestedName", REQUEST_PROVIDE_FUNCTION,
 				__ -> {
 				},
-				__ -> null, __ -> Optional.empty(), identity());
+				__ -> null, __ -> Optional.empty(), identity(), null);
 
 		return builder.addCreator(
 			(parentId, map) -> map.get("key"),

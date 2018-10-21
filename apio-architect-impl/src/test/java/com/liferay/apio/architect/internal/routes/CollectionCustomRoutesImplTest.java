@@ -55,7 +55,7 @@ public class CollectionCustomRoutesImplTest {
 
 		_builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, _neededProviders::add,
-			__ -> null, __ -> null, __ -> Optional.of("name"));
+			__ -> null, __ -> null, __ -> Optional.of("name"), null);
 	}
 
 	@Test
