@@ -14,31 +14,27 @@
 
 package com.liferay.apio.architect.test.util.internal.writer;
 
+import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
+
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
+import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.documentation.contributor.CustomDocumentationImpl;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
-import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl;
-import com.liferay.apio.architect.internal.routes.ItemRoutesImpl;
-import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.internal.writer.DocumentationWriter;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.routes.CollectionRoutes;
-import com.liferay.apio.architect.routes.ItemRoutes;
-import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
 /**
  * Provides methods that test {@code DocumentationMessageMapper} objects.
@@ -77,6 +73,7 @@ public class MockDocumentationWriter {
 
 		ActionManager actionManager = new ActionManagerImpl(
 			new PathIdentifierMapperManager() {
+
 				@Override
 				public boolean hasPathIdentifierMapper(String name) {
 					return false;
@@ -88,37 +85,23 @@ public class MockDocumentationWriter {
 				}
 
 				@Override
-				public <T> Optional<Path> mapToPath(
-					String name, T identifier) {
+				public <T> Optional<Path> mapToPath(String name, T identifier) {
 					return Optional.empty();
 				}
-			});
+
+			},
+			null);
 
 		CustomDocumentation customDocumentation =
 			customDocumentationBuilder.build();
 
-		actionManager.add(
-			new ActionKey("GET", "root"),
-			(o, o2, objects) -> null);
-
-		actionManager.add(
-			new ActionKey("DELETE", "root", ActionKey.ANY_ROUTE),
-			(o, o2, objects) -> null);
-
-		actionManager.add(
-			new ActionKey("GET", "root", ActionKey.ANY_ROUTE),
-			(o, o2, objects) -> null);
-
-		actionManager.add(
-			new ActionKey("GET", "root", ActionKey.ANY_ROUTE, "nested"),
-			(o, o2, objects) -> null);
+		_addActions(actionManager);
 
 		Documentation documentation = new Documentation(
 			() -> Optional.of(() -> "Title"),
 			() -> Optional.of(() -> "Description"),
 			() -> Optional.of(() -> "Entrypoint"), () -> root,
-			() -> actionManager,
-			() -> customDocumentation);
+			() -> actionManager, () -> customDocumentation);
 
 		DocumentationWriter documentationWriter = DocumentationWriter.create(
 			builder -> builder.documentation(
@@ -132,6 +115,29 @@ public class MockDocumentationWriter {
 			).build());
 
 		return documentationWriter.write();
+	}
+
+	private static void _addActions(ActionManager actionManager) {
+		actionManager.add(
+			new ActionKey("GET", "root"), _getEmptyThrowableTriFunction());
+
+		actionManager.add(
+			new ActionKey("DELETE", "root", ActionKey.ANY_ROUTE),
+			_getEmptyThrowableTriFunction());
+
+		actionManager.add(
+			new ActionKey("GET", "root", ActionKey.ANY_ROUTE),
+			_getEmptyThrowableTriFunction());
+
+		actionManager.add(
+			new ActionKey("GET", "root", ActionKey.ANY_ROUTE, "nested"),
+			_getEmptyThrowableTriFunction());
+	}
+
+	private static ThrowableTriFunction<Object, Object, List<Object>, Object>
+		_getEmptyThrowableTriFunction() {
+
+		return (id, body, providers) -> null;
 	}
 
 	private MockDocumentationWriter() {

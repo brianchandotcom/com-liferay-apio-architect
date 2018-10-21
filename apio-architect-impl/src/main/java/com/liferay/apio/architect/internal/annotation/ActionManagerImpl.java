@@ -67,9 +67,11 @@ import org.osgi.service.component.annotations.Reference;
 public class ActionManagerImpl implements ActionManager {
 
 	public ActionManagerImpl(
-		PathIdentifierMapperManager pathIdentifierMapperManager) {
+		PathIdentifierMapperManager pathIdentifierMapperManager,
+		ProviderManager providerManager) {
 
-		this._pathIdentifierMapperManager = pathIdentifierMapperManager;
+		_pathIdentifierMapperManager = pathIdentifierMapperManager;
+		_providerManager = providerManager;
 	}
 
 	@Override
@@ -215,12 +217,6 @@ public class ActionManagerImpl implements ActionManager {
 		};
 	}
 
-	@Reference
-	protected PathIdentifierMapperManager _pathIdentifierMapperManager;
-
-	@Reference
-	protected ProviderManager providerManager;
-
 	private Action _getAction(ActionKey actionKey, Object id) {
 		return httpServletRequest -> Try.fromFallible(
 			() -> _getActionThrowableTriFunction(actionKey)
@@ -272,7 +268,7 @@ public class ActionManagerImpl implements ActionManager {
 		return Stream.of(
 			value
 		).map(
-			provider -> providerManager.provideMandatory(
+			provider -> _providerManager.provideMandatory(
 				httpServletRequest, provider)
 		).collect(
 			Collectors.toList()
@@ -280,17 +276,9 @@ public class ActionManagerImpl implements ActionManager {
 	}
 
 	private Operation _getOperation(ActionKey actionKey) {
-		String param1 = actionKey.getParam1();
+		String resourceName = _getResourceName(actionKey);
 
-		String resourceName = param1 + (actionKey.getParam3() == null ?
-			"" : "/" + actionKey.getParam3());
-
-		String uri = _pathIdentifierMapperManager.mapToPath(
-			param1, actionKey.getParam2()).map(
-			path -> path.asURI() + "/" + actionKey.getParam3()
-		).orElse(
-			resourceName
-		);
+		String uri = _getUri(actionKey, resourceName);
 
 		if ("GET".equals(actionKey.getHttpMethodName()) &&
 			actionKey.isCollection()) {
@@ -330,12 +318,37 @@ public class ActionManagerImpl implements ActionManager {
 		return _providers.get(actionKey.getGenericActionKey());
 	}
 
+	private String _getResourceName(ActionKey actionKey) {
+		if (actionKey.getParam3() == null) {
+			return actionKey.getParam1();
+		}
+
+		return actionKey.getParam1() + ("/" + actionKey.getParam3());
+	}
+
+	private String _getUri(ActionKey actionKey, String resourceName) {
+		Optional<Path> optionalPath = _pathIdentifierMapperManager.mapToPath(
+			actionKey.getParam1(), actionKey.getParam2());
+
+		return optionalPath.map(
+			path -> path.asURI() + "/" + actionKey.getParam3()
+		).orElse(
+			resourceName
+		);
+	}
+
 	private final Map
 		<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
 			_actions = new HashMap<>();
 
 	@Reference
 	private CustomDocumentationManager _customDocumentationManager;
+
+	@Reference
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
+
+	@Reference
+	private ProviderManager _providerManager;
 
 	private final Map<ActionKey, Class[]> _providers = new HashMap<>();
 
