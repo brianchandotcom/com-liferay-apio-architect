@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.annotation;
+package com.liferay.apio.architect.internal.routes;
 
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
@@ -39,6 +39,8 @@ import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.internal.annotation.Action;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.operation.RetrieveOperation;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.operation.HTTPMethod;

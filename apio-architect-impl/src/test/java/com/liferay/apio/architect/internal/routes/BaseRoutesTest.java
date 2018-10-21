@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.annotation;
+package com.liferay.apio.architect.internal.routes;
 
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_TO_PATH_FUNCTION;
@@ -20,6 +20,8 @@ import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.PROVIDE_
 
 import static org.mockito.Matchers.any;
 
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 
