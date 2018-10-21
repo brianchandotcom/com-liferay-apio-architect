@@ -107,7 +107,7 @@ public class DocumentationWriter {
 			(ActionManagerImpl)actionManagerSupplier.get();
 
 		Map<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
-			actions = actionManager.getActions();
+			actions = actionManager.getActionsMap();
 
 		Set<ActionKey> actionKeys = actions.keySet();
 

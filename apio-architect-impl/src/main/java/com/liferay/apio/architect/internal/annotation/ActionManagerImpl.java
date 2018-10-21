@@ -31,7 +31,6 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.documentation.con
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
-import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.uri.Path;
 
 import io.vavr.control.Either;
@@ -41,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -81,7 +81,7 @@ public class ActionManagerImpl implements ActionManager {
 		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
 		Class... providers) {
 
-		_actions.put(actionKey, throwableTriFunction);
+		_actionsMap.put(actionKey, throwableTriFunction);
 
 		_providers.put(actionKey, providers);
 	}
@@ -165,33 +165,38 @@ public class ActionManagerImpl implements ActionManager {
 		return _getActionsWithId(actionKey);
 	}
 
-	public Map<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
-		getActions() {
-
-		return _actions;
-	}
-
 	@Override
 	public List<Action> getActions(
 		ActionKey actionKey, Credentials credentials) {
 
-		return Stream.of(
-			HTTPMethod.values()
-		).map(
-			httpMethod -> actionKey.getActionKeyWithHttpMethodName(
-				httpMethod.name())
+		Set<ActionKey> actionKeys = _actionsMap.keySet();
+
+		Stream<ActionKey> stream = actionKeys.stream();
+
+		return stream.filter(
+			childActionKey ->
+				_sameResource(actionKey, childActionKey) &&
+				 (_isCustomActionOfCollection(actionKey, childActionKey) ||
+				  _isCustomActionOfItem(actionKey, childActionKey) ||
+				  _isCustomOfActionNested(actionKey, childActionKey))
 		).filter(
 			this::_isValidAction
 		).map(
-			actionKey1 -> {
+			childActionKey -> {
 				Object id = _getId(
 					actionKey.getResource(), actionKey.getIdOrAction());
 
-				return _getAction(actionKey1, id);
+				return _getAction(childActionKey, id);
 			}
 		).collect(
 			Collectors.toList()
 		);
+	}
+
+	public Map<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
+		getActionsMap() {
+
+		return _actionsMap;
 	}
 
 	@Override
@@ -272,11 +277,11 @@ public class ActionManagerImpl implements ActionManager {
 		<Object, ?, List<Object>, ?> _getActionThrowableTriFunction(
 			ActionKey actionKey) {
 
-		if (_actions.containsKey(actionKey)) {
-			return _actions.get(actionKey);
+		if (_actionsMap.containsKey(actionKey)) {
+			return _actionsMap.get(actionKey);
 		}
 
-		return _actions.get(actionKey.getGenericActionKey());
+		return _actionsMap.get(actionKey.getGenericActionKey());
 	}
 
 	private Object _getId(String param1, String param2) {
@@ -322,9 +327,48 @@ public class ActionManagerImpl implements ActionManager {
 		return _providers.get(actionKey.getGenericActionKey());
 	}
 
+	private boolean _isCustomActionOfCollection(
+		ActionKey actionKey, ActionKey childActionKey) {
+
+		if (actionKey.isCollection() && childActionKey.isCustom()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean _isCustomActionOfItem(
+		ActionKey actionKey, ActionKey childActionKey) {
+
+		if (!actionKey.isNested() && actionKey.isItem() &&
+			childActionKey.isItem() &&
+			(_getActionThrowableTriFunction(
+				new ActionKey("GET", childActionKey.getNestedResource())) ==
+					null)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean _isCustomOfActionNested(
+		ActionKey actionKey, ActionKey childActionKey) {
+
+		String nestedResource = actionKey.getNestedResource();
+
+		if (actionKey.isNested() &&
+			nestedResource.equals(childActionKey.getNestedResource())) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private boolean _isValidAction(ActionKey actionKey) {
 		if (actionKey.isCollection()) {
-			return _actions.containsKey(actionKey);
+			return _actionsMap.containsKey(actionKey);
 		}
 
 		if (_getActionThrowableTriFunction(actionKey) != null) {
@@ -334,9 +378,17 @@ public class ActionManagerImpl implements ActionManager {
 		return false;
 	}
 
+	private boolean _sameResource(
+		ActionKey actionKey, ActionKey childActionKey) {
+
+		String resource = childActionKey.getResource();
+
+		return resource.equals(actionKey.getResource());
+	}
+
 	private final Map
 		<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
-			_actions = new HashMap<>();
+			_actionsMap = new HashMap<>();
 
 	@Reference
 	private CustomDocumentationManager _customDocumentationManager;

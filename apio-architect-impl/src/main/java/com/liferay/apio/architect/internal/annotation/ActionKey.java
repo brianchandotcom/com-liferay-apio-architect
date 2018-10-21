@@ -78,11 +78,6 @@ public class ActionKey {
 		return false;
 	}
 
-	public ActionKey getActionKeyWithHttpMethodName(String httpMethodName) {
-		return new ActionKey(
-			httpMethodName, _param1, _param2, _param3, _param4);
-	}
-
 	public ActionKey getGenericActionKey() {
 		return new ActionKey(
 			_httpMethodName, _param1, ANY_ROUTE, _param3, _param4);
@@ -140,6 +135,14 @@ public class ActionKey {
 
 	public boolean isGetRequest() {
 		return _httpMethodName.equals(GET.name());
+	}
+
+	public boolean isItem() {
+		if ((_param2 != null) && _param2.equals(ActionKey.ANY_ROUTE)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public boolean isNested() {
