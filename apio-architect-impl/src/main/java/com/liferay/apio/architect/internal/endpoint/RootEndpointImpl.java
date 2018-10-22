@@ -29,7 +29,6 @@ import com.liferay.apio.architect.internal.entrypoint.CustomOperationsEndpoint;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.CollectionRouterManager;
@@ -130,10 +129,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			() -> _getCollectionRoutesOrFail(name),
 			() -> _getRepresentorOrFail(name), () -> _getItemRoutesOrFail(name),
 			this::_getNestedCollectionRoutesOrFail,
-			path -> _pathIdentifierMapperManager.mapToIdentifierOrFail(
-				path,
-				(ClassNameBaseManager)_reusableNestedCollectionRouterManager),
-			() -> _getActionManager(), _providerManager);
+			_pathIdentifierMapperManager::mapToIdentifierOrFail,
+			this::_getActionManager, _providerManager);
 	}
 
 	private ActionManager _getActionManager() {

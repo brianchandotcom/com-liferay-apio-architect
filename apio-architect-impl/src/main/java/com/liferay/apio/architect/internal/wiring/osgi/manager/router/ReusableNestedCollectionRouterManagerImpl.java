@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.wiring.osgi.manager.router;
 
 import static com.liferay.apio.architect.internal.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+import static com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -98,7 +99,7 @@ public class ReusableNestedCollectionRouterManagerImpl
 					"r", name, curry(_providerManager::provideMandatory),
 					neededProviders::add,
 					identifier -> _pathIdentifierMapperManager.mapToPath(
-						name, identifier, this),
+						name, identifier),
 					representor::getIdentifier, _actionManager);
 
 				NestedCollectionRoutes nestedCollectionRoutes =
@@ -132,6 +133,14 @@ public class ReusableNestedCollectionRouterManagerImpl
 
 				INSTANCE.putReusableNestedCollectionRoutes(
 					name, nestedCollectionRoutes);
+
+				getGenericTypeArgumentTry(
+					reusableNestedCollectionRouter.getClass(),
+					ReusableNestedCollectionRouter.class, 3
+				).ifSuccess(
+					objectClass -> INSTANCE.putReusableIdentifierClass(
+						name, objectClass)
+				);
 			});
 	}
 

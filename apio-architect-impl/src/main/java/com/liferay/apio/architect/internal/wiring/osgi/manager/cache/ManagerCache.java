@@ -73,6 +73,7 @@ public class ManagerCache {
 		_errorMessageMappers = null;
 		_formMessageMappers = null;
 		_identifierClasses = null;
+		_reusableIdentifierClasses = null;
 		_itemRoutes = null;
 		_names = null;
 		_nestedCollectionRoutes = null;
@@ -444,6 +445,16 @@ public class ManagerCache {
 		return _reusableNestedCollectionRoutes;
 	}
 
+	public Optional<Class<?>> getReusableIdentifierClassOptional(String name) {
+		return Optional.ofNullable(
+			_reusableIdentifierClasses
+		).map(
+			map -> map.get(name)
+		).map(
+			Unsafe::unsafeCast
+		);
+	}
+
 	/**
 	 * Returns the nested collection routes for the reusable nested collection
 	 * resource's name.
@@ -716,6 +727,16 @@ public class ManagerCache {
 		_representors.put(key, representor);
 	}
 
+	public void putReusableIdentifierClass(
+		String key, Class<?> identifierClass) {
+
+		if (_reusableIdentifierClasses == null) {
+			_reusableIdentifierClasses = new HashMap<>();
+		}
+
+		_reusableIdentifierClasses.put(key, identifierClass);
+	}
+
 	/**
 	 * Adds reusable nested collection routes.
 	 *
@@ -844,6 +865,7 @@ public class ManagerCache {
 	private Map<String, NestedCollectionRoutes> _nestedCollectionRoutes;
 	private Map<MediaType, PageMessageMapper> _pageMessageMappers;
 	private Map<String, Representor> _representors;
+	private Map<String, Class<?>> _reusableIdentifierClasses;
 	private Map<String, NestedCollectionRoutes> _reusableNestedCollectionRoutes;
 	private List<String> _rootResourceNames;
 	private List<String> _rootResourceNamesSdk;

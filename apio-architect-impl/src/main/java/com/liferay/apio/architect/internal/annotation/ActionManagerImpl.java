@@ -121,8 +121,7 @@ public class ActionManagerImpl implements ActionManager {
 		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
 		Class... providers) {
 
-		ActionKey actionKey = new ActionKey(
-			GET.name(), name, ANY_ROUTE, nestedName);
+		ActionKey actionKey = _getActionKeyForNested(name, nestedName);
 
 		add(actionKey, throwableTriFunction, providers);
 	}
@@ -176,15 +175,14 @@ public class ActionManagerImpl implements ActionManager {
 		return stream.filter(
 			childActionKey ->
 				_sameResource(actionKey, childActionKey) &&
-				 (_isCustomActionOfCollection(actionKey, childActionKey) ||
-				  _isCustomActionOfItem(actionKey, childActionKey) ||
-				  _isCustomOfActionNested(actionKey, childActionKey))
+				(_isCustomActionOfCollection(actionKey, childActionKey) ||
+				 _isCustomActionOfItem(actionKey, childActionKey) ||
+				 _isCustomOfActionNested(actionKey, childActionKey))
 		).filter(
 			this::_isValidAction
 		).map(
 			childActionKey -> {
-				Object id = _getId(
-					actionKey.getResource(), actionKey.getIdOrAction());
+				Object id = _getId(actionKey.getPath());
 
 				return _getAction(childActionKey, id);
 			}
@@ -265,10 +263,18 @@ public class ActionManagerImpl implements ActionManager {
 		};
 	}
 
+	private ActionKey _getActionKeyForNested(String name, String nestedName) {
+		if (name.equals("r")) {
+			return new ActionKey(GET.name(), name, nestedName, ANY_ROUTE);
+		}
+
+		return new ActionKey(GET.name(), name, ANY_ROUTE, nestedName);
+	}
+
 	private Either<Action.Error, Action> _getActionsWithId(
 		ActionKey actionKey) {
 
-		Object id = _getId(actionKey.getResource(), actionKey.getIdOrAction());
+		Object id = _getId(actionKey.getPath());
 
 		return Either.right(_getAction(actionKey, id));
 	}
@@ -284,10 +290,9 @@ public class ActionManagerImpl implements ActionManager {
 		return _actionsMap.get(actionKey.getGenericActionKey());
 	}
 
-	private Object _getId(String param1, String param2) {
+	private Object _getId(Path path) {
 		try {
-			return pathIdentifierMapperManager.mapToIdentifierOrFail(
-				new Path(param1, param2));
+			return pathIdentifierMapperManager.mapToIdentifierOrFail(path);
 		}
 		catch (Error e) {
 			return null;

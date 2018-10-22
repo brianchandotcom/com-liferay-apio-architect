@@ -16,6 +16,8 @@ package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
+import com.liferay.apio.architect.uri.Path;
+
 import java.util.Objects;
 
 /**
@@ -79,6 +81,11 @@ public class ActionKey {
 	}
 
 	public ActionKey getGenericActionKey() {
+		if (isReusable()) {
+			return new ActionKey(
+				_httpMethodName, _param1, _param2, ANY_ROUTE, _param4);
+		}
+
 		return new ActionKey(
 			_httpMethodName, _param1, ANY_ROUTE, _param3, _param4);
 	}
@@ -97,6 +104,14 @@ public class ActionKey {
 
 	public String getNestedResource() {
 		return _param3;
+	}
+
+	public Path getPath() {
+		if (_param1.equals("r")) {
+			return new Path(_param2, _param3);
+		}
+
+		return new Path(_param1, _param2);
 	}
 
 	public String getResource() {
@@ -147,6 +162,14 @@ public class ActionKey {
 
 	public boolean isNested() {
 		if (_param3 != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isReusable() {
+		if ((_param1 != null) && _param1.equals("r")) {
 			return true;
 		}
 
