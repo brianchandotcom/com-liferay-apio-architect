@@ -15,8 +15,11 @@
 package com.liferay.apio.architect.internal.annotation.representor.types;
 
 import com.liferay.apio.architect.annotation.Actions;
+import com.liferay.apio.architect.annotation.Body;
 import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.annotation.Id;
+import com.liferay.apio.architect.annotation.ParentId;
+import com.liferay.apio.architect.annotation.Vocabulary;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -40,13 +43,32 @@ public class DummyRouter implements ActionRouter<DummyRouter.DummyIdentifier> {
 		return () -> 0;
 	}
 
-	@EntryPoint
 	@Actions.Retrieve
-	public PageItems<DummyIdentifier> retrievePage(Pagination pagination) {
+	public DummyIdentifier retrieveChild(
+		@ParentId(value = DummyIdentifier.class) Long id) {
+
+		return () -> 0;
+	}
+
+	@Actions.Action(httpMethod = "GET", name = "first-ten-elements")
+	public PageItems<DummyIdentifier> retrieveFirstTenElements(
+		Pagination pagination, Credentials credentials, @Id Long id,
+		@Body String body) {
+
 		List<DummyIdentifier> dummyIdentifiers = Arrays.asList(() -> 0);
+
 		return new PageItems<>(dummyIdentifiers, dummyIdentifiers.size());
 	}
 
+	@Actions.Retrieve
+	@EntryPoint
+	public PageItems<DummyIdentifier> retrievePage(Pagination pagination) {
+		List<DummyIdentifier> dummyIdentifiers = Arrays.asList(() -> 0);
+
+		return new PageItems<>(dummyIdentifiers, dummyIdentifiers.size());
+	}
+
+	@Vocabulary.Type("dummy")
 	public interface DummyIdentifier extends Identifier<Long> {
 
 		public long getId();

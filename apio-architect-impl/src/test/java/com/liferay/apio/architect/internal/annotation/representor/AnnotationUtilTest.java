@@ -14,23 +14,27 @@
 
 package com.liferay.apio.architect.internal.annotation.representor;
 
+import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findObjectOfClass;
+import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.getAnnotationFromParametersOptional;
+import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.hasAnnotation;
+
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+
+import static org.junit.Assert.assertThat;
+
 import com.liferay.apio.architect.annotation.Body;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyRouter;
-import com.liferay.apio.architect.internal.annotation.util.AnnotationUtil;
-import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findObjectOfClass;
-import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.hasAnnotation;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
 /**
  * @author Javier Gamarra
@@ -38,49 +42,34 @@ import static org.junit.Assert.assertThat;
 public class AnnotationUtilTest {
 
 	@Test
-	public void testFindObjectInList() {
-
-		List<Object> objects = Arrays.asList("apio", 0L);
-
-		Object objectOfClass =
-			findObjectOfClass(objects, Long.class);
-
-		assertThat(objectOfClass, is(0L));
-	}
-
-	@Test
-	public void testReturnsNullIfFailsToFindObjectInList() {
-
-		List<Object> objects = Arrays.asList("apio", 0L);
-
-		Object objectOfClass =
-			findObjectOfClass(objects, Integer.class);
-
-		assertThat(objectOfClass, is(nullValue()));
-	}
-
-	@Test
-	public void testParameterHasAnnotation()
-		throws NoSuchMethodException {
-
-		Method retrieve = DummyRouter.class.getMethod("retrieve", Long.class);
-
-		boolean hasAnnotation =
-			hasAnnotation(retrieve.getParameters()[0], Id.class);
-
-		assertThat(hasAnnotation, is(true));
-	}
-
-	@Test
 	public void testFailsIfParameterDoesNotHaveAnnotation()
 		throws NoSuchMethodException {
 
 		Method retrieve = DummyRouter.class.getMethod("retrieve", Long.class);
 
-		boolean hasAnnotation =
-			hasAnnotation(retrieve.getParameters()[0], Body.class);
+		boolean hasAnnotation = hasAnnotation(
+			retrieve.getParameters()[0], Body.class);
 
 		assertThat(hasAnnotation, is(false));
+	}
+
+	@Test
+	public void testFindObjectInList() {
+		List<Object> objects = Arrays.asList("apio", 0L);
+
+		Object objectOfClass = findObjectOfClass(objects, Long.class);
+
+		assertThat(objectOfClass, is(0L));
+	}
+
+	@Test
+	public void testParameterHasAnnotation() throws NoSuchMethodException {
+		Method retrieve = DummyRouter.class.getMethod("retrieve", Long.class);
+
+		boolean hasAnnotation = hasAnnotation(
+			retrieve.getParameters()[0], Id.class);
+
+		assertThat(hasAnnotation, is(true));
 	}
 
 	@Test
@@ -90,11 +79,24 @@ public class AnnotationUtilTest {
 		Method retrieve = DummyRouter.class.getMethod("retrieve", Long.class);
 
 		Optional<Annotation> annotationFromParametersOptional =
-			AnnotationUtil.getAnnotationFromParametersOptional(retrieve,
-				Id.class);
+			getAnnotationFromParametersOptional(retrieve, Id.class);
 
 		assertThat(annotationFromParametersOptional.isPresent(), is(true));
-		assertThat(annotationFromParametersOptional.get().annotationType().getName(), is(Id.class.getName()));
+
+		Annotation annotation = annotationFromParametersOptional.get();
+
+		Class<? extends Annotation> clazz = annotation.annotationType();
+
+		assertThat(clazz.getName(), is(Id.class.getName()));
+	}
+
+	@Test
+	public void testReturnsNullIfFailsToFindObjectInList() {
+		List<Object> objects = Arrays.asList("apio", 0L);
+
+		Object objectOfClass = findObjectOfClass(objects, Integer.class);
+
+		assertThat(objectOfClass, is(nullValue()));
 	}
 
 }
