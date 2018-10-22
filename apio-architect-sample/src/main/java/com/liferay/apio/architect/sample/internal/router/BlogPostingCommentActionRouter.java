@@ -17,6 +17,7 @@ package com.liferay.apio.architect.sample.internal.router;
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.CommentConverter.toComment;
 
+import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.annotation.Actions.Create;
 import com.liferay.apio.architect.annotation.Actions.Remove;
 import com.liferay.apio.architect.annotation.Actions.Replace;
@@ -31,15 +32,18 @@ import com.liferay.apio.architect.router.ActionRouter;
 import com.liferay.apio.architect.sample.internal.converter.CommentConverter;
 import com.liferay.apio.architect.sample.internal.dao.BlogPostingCommentModelService;
 import com.liferay.apio.architect.sample.internal.dto.BlogPostingCommentModel;
+import com.liferay.apio.architect.sample.internal.identifier.ModelNameModelIdIdentifier;
 import com.liferay.apio.architect.sample.internal.type.BlogPosting;
 import com.liferay.apio.architect.sample.internal.type.Comment;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
@@ -114,6 +118,14 @@ public class BlogPostingCommentActionRouter implements ActionRouter<Comment> {
 				"Unable to get blog posting comment " + id)
 		);
 	}
+
+	@Actions.Action(name = "reusable", httpMethod = "GET")
+	public PageItems<Comment> retrieveReusable(
+		@Id ModelNameModelIdIdentifier modelNameModelIdIdentifier) {
+
+		return new PageItems<>(new ArrayList<>(), 0);
+	}
+
 
 	@Retrieve
 	public PageItems<Comment> retrievePage(

@@ -20,6 +20,7 @@ import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
 import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.sample.internal.identifier.ModelNameModelIdIdentifier;
 
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,22 @@ public interface BlogPosting extends Identifier<Long> {
 	 */
 	@Field("articleBody")
 	public String getArticleBody();
+
+	@Field("people")
+	@RelatedCollection(value = Comment.class, reusable=true)
+	public default ModelNameModelIdIdentifier getModelNameModelIdIdentifier() {
+		return new ModelNameModelIdIdentifier() {
+			@Override
+			public long getModelId() {
+				return 0;
+			}
+
+			@Override
+			public String getModelName() {
+				return "0";
+			}
+		};
+	}
 
 	/**
 	 * Returns the parent ID of the blog posting's comments. See <a
