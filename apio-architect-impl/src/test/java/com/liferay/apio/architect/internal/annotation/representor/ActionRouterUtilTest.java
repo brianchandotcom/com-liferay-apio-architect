@@ -26,6 +26,8 @@ import static org.hamcrest.core.Is.isA;
 
 import static org.junit.Assert.assertThat;
 
+import com.liferay.apio.architect.annotation.Actions.Action;
+import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyRouter;
@@ -52,7 +54,11 @@ public class ActionRouterUtilTest {
 		Method method = DummyRouter.class.getMethod(
 			"retrievePage", Pagination.class);
 
-		ActionKey actionKey = getActionKey(method, "blog", "GET");
+		Retrieve annotation = method.getAnnotation(Retrieve.class);
+
+		ActionKey actionKey = getActionKey(
+			method, annotation.annotationType().getAnnotation(Action.class),
+			"blog");
 
 		assertThat(actionKey.getHttpMethodName(), is("GET"));
 		assertThat(actionKey.getResource(), is("blog"));
@@ -68,7 +74,8 @@ public class ActionRouterUtilTest {
 			"retrieveFirstTenElements", Pagination.class, Credentials.class,
 			Long.class, String.class);
 
-		ActionKey actionKey = getActionKey(method, "blog", "GET");
+		ActionKey actionKey = getActionKey(
+			method, method.getAnnotation(Action.class), "blog");
 
 		assertThat(actionKey.getHttpMethodName(), is("GET"));
 		assertThat(actionKey.getResource(), is("blog"));
@@ -83,7 +90,11 @@ public class ActionRouterUtilTest {
 		Method method = DummyRouter.class.getMethod(
 			"retrieveChild", Long.class);
 
-		ActionKey actionKey = getActionKey(method, "blog", "GET");
+		Retrieve annotation = method.getAnnotation(Retrieve.class);
+
+		ActionKey actionKey = getActionKey(
+			method, annotation.annotationType().getAnnotation(Action.class),
+			"blog");
 
 		assertThat(actionKey.getHttpMethodName(), is("GET"));
 		assertThat(actionKey.getResource(), is("dummy"));
@@ -97,7 +108,11 @@ public class ActionRouterUtilTest {
 
 		Method method = DummyRouter.class.getMethod("retrieve", Long.class);
 
-		ActionKey actionKey = getActionKey(method, "blog", "GET");
+		Retrieve annotation = method.getAnnotation(Retrieve.class);
+
+		ActionKey actionKey = getActionKey(
+			method, annotation.annotationType().getAnnotation(Action.class),
+			"blog");
 
 		assertThat(actionKey.getHttpMethodName(), is("GET"));
 		assertThat(actionKey.getResource(), is("blog"));
