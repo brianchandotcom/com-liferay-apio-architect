@@ -87,7 +87,9 @@ public interface ItemRoutes<T, S> {
 	 *
 	 * @return the function that deletes the item, if the function exists;
 	 *         {@code Optional#empty()} otherwise
+	 * @deprecated use annotation builder instead
 	 */
+	@Deprecated
 	public Optional<DeleteItemConsumer<S>> getDeleteConsumerOptional();
 
 	/**

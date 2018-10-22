@@ -82,11 +82,6 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		return Optional.ofNullable(_nestedCreateItemFunction);
 	}
 
-	/**
-	 * @return
-	 * @deprecated use
-	 */
-	@Deprecated
 	@Override
 	public Optional<NestedGetPageFunction<T, U>>
 		getNestedGetPageFunctionOptional() {

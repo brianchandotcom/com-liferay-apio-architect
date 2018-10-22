@@ -92,11 +92,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		return _customRoutes;
 	}
 
-	/**
-	 * @return
-	 * @deprecated use
-	 */
-	@Deprecated
 	@Override
 	public Optional<DeleteItemConsumer<S>> getDeleteConsumerOptional() {
 		throw new UnsupportedOperationException();

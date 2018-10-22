@@ -99,10 +99,6 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		return Optional.ofNullable(_form);
 	}
 
-	/**
-	 * @deprecated use annotation SDK
-	 */
-	@Deprecated
 	@Override
 	public Optional<GetPageFunction<T>> getGetPageFunctionOptional() {
 		throw new UnsupportedOperationException();

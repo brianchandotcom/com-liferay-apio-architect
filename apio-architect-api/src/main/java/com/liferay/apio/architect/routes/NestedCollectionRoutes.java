@@ -93,7 +93,9 @@ public interface NestedCollectionRoutes<T, S, U> {
 	 *
 	 * @return the function used to obtain the page, if the function exists;
 	 *         {@code Optional#empty()} otherwise
+	 * @deprecated use annotation builder instead
 	 */
+	@Deprecated
 	public Optional<NestedGetPageFunction<T, U>>
 		getNestedGetPageFunctionOptional();
 
