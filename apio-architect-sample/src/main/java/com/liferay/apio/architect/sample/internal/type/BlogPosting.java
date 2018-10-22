@@ -54,22 +54,6 @@ public interface BlogPosting extends Identifier<Long> {
 	@Field("articleBody")
 	public String getArticleBody();
 
-	@Field("people")
-	@RelatedCollection(value = Comment.class, reusable=true)
-	public default ModelNameModelIdIdentifier getModelNameModelIdIdentifier() {
-		return new ModelNameModelIdIdentifier() {
-			@Override
-			public long getModelId() {
-				return 0;
-			}
-
-			@Override
-			public String getModelName() {
-				return "0";
-			}
-		};
-	}
-
 	/**
 	 * Returns the parent ID of the blog posting's comments. See <a
 	 * href="https://schema.org/comment">comment </a> for more information.
@@ -138,6 +122,32 @@ public interface BlogPosting extends Identifier<Long> {
 	 */
 	@Id
 	public Long getId();
+
+	/**
+	 * Returns the ModelNameModelIdIdentifier for this blog.
+	 *
+	 * @return the ModelNameModelIdIdentifier for this blog
+	 * @review
+	 */
+	@Field("comment-for-this-blog")
+	@RelatedCollection(reusable = true, value = Comment.class)
+	public default ModelNameModelIdIdentifier getModelNameModelIdIdentifier() {
+		return new ModelNameModelIdIdentifier() {
+
+			@Override
+			public long getModelId() {
+				return getId();
+			}
+
+			@Override
+			public String getModelName() {
+				String simpleName = BlogPosting.class.getSimpleName();
+
+				return simpleName.toLowerCase();
+			}
+
+		};
+	}
 
 	/**
 	 * Returns the list of the blog posting's reviews. See <a

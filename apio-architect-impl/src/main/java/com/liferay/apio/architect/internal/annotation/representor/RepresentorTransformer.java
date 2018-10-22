@@ -16,10 +16,10 @@ package com.liferay.apio.architect.internal.annotation.representor;
 
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.addCommonFields;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.getMethodFunction;
+import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
-
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
-import static com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
+
 import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnnotation;
 
 import com.liferay.apio.architect.annotation.Id;
@@ -30,13 +30,10 @@ import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.representor.RepresentorImpl;
-import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.FirstStep;
-import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
@@ -99,6 +96,10 @@ public class RepresentorTransformer {
 		return firstStep.build();
 	}
 
+	private static void _addReusableClass(String name, Class returnType) {
+		INSTANCE.putReusableIdentifierClass(name, returnType);
+	}
+
 	private static <T extends Identifier<S>, S> Representor.Builder<T, S>
 		_createBuilder(
 			Class<T> typeClass,
@@ -137,28 +138,25 @@ public class RepresentorTransformer {
 			BidirectionalModel.class);
 
 		if (relatedCollection != null) {
-
 			if (relatedCollection.reusable()) {
-				firstStep.addRelatedCollection(key, relatedCollection.value(),
-					t -> {
-						try {
-							return method.invoke(t);
-						}
-						catch (IllegalAccessException | InvocationTargetException e) {
-							e.printStackTrace();
-							return null;
-						}
-					});
+				firstStep.addRelatedCollection(
+					key, relatedCollection.value(),
+					model -> Try.fromFallible(
+						() -> method.invoke(model)
+					).orElse(
+						null
+					));
 
 				Class<? extends Identifier<?>> typeClass =
 					relatedCollection.value();
 
 				Type type = typeClass.getAnnotation(Type.class);
 
-				String s = StringUtil.toLowercaseSlug(type.value());
+				String name = toLowercaseSlug(type.value());
 
-				INSTANCE.putReusableIdentifierClass(s, method.getReturnType());
-			} else {
+				_addReusableClass(name, method.getReturnType());
+			}
+			else {
 				firstStep.addRelatedCollection(key, relatedCollection.value());
 			}
 		}

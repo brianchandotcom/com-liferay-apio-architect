@@ -24,12 +24,10 @@ import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnn
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.annotation.Actions.Action;
 import com.liferay.apio.architect.annotation.Actions.Remove;
 import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.annotation.EntryPoint;
-import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.functional.Try;
@@ -43,7 +41,6 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.router.Collection
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
-import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.router.ActionRouter;
 
@@ -127,24 +124,14 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 					}
 
 					ActionKey actionKey = getActionKey(
-						method, name, annotation.httpMethod());
+						method, annotation, name);
 
-					if (annotation.name().contains("reusable")) {
-
-						((ActionManagerImpl)_actionManager)
-							.addNestedGetter("r", name, (id, body, providers) -> method.invoke(
-								actionRouter,
-								getParameters(method, id, body, providers)),
-								getProviders(method));
-
-					} else {
-						_actionManager.add(
-							actionKey,
-							(id, body, providers) -> method.invoke(
-								actionRouter,
-								getParameters(method, id, body, providers)),
-							getProviders(method));
-					}
+					_actionManager.add(
+						actionKey,
+						(id, body, providers) -> method.invoke(
+							actionRouter,
+							getParameters(method, id, body, providers)),
+						getProviders(method));
 				}
 			)
 		);

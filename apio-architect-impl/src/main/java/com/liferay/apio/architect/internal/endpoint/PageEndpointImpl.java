@@ -154,7 +154,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
 			HTTPMethod.GET.name(), _name, id, nestedName);
 
-		return _getPageTry(actionEither, nestedName);
+		return _getPageTry(actionEither, _getNestedName(id, nestedName));
 	}
 
 	@Override
@@ -203,6 +203,14 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		Representor<T> representor = _representorSupplier.get();
 
 		return representor.getIdentifier(singleModel.getModel());
+	}
+
+	private String _getNestedName(String id, String nestedName) {
+		if ("r".equals(_name)) {
+			return id;
+		}
+
+		return nestedName;
 	}
 
 	private Try<Page<T>> _getPageTry(

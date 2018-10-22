@@ -36,14 +36,12 @@ import com.liferay.apio.architect.sample.internal.identifier.ModelNameModelIdIde
 import com.liferay.apio.architect.sample.internal.type.BlogPosting;
 import com.liferay.apio.architect.sample.internal.type.Comment;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
@@ -119,13 +117,25 @@ public class BlogPostingCommentActionRouter implements ActionRouter<Comment> {
 		);
 	}
 
-	@Actions.Action(name = "reusable", httpMethod = "GET")
-	public PageItems<Comment> retrieveReusable(
+	@Actions.Action(httpMethod = "GET", name = "comments", reusable = true)
+	public PageItems<Comment> retrieveCommentsForAModel(
 		@Id ModelNameModelIdIdentifier modelNameModelIdIdentifier) {
 
-		return new PageItems<>(new ArrayList<>(), 0);
-	}
+		List<BlogPostingCommentModel> blogPostingCommentModels =
+			_blogPostingCommentModelService.getPage(
+				modelNameModelIdIdentifier.getModelId(), 0, Integer.MAX_VALUE);
 
+		Stream<BlogPostingCommentModel> stream =
+			blogPostingCommentModels.stream();
+
+		List<Comment> blogPostingComments = stream.map(
+			CommentConverter::toComment
+		).collect(
+			Collectors.toList()
+		);
+
+		return new PageItems<>(blogPostingComments, blogPostingComments.size());
+	}
 
 	@Retrieve
 	public PageItems<Comment> retrievePage(

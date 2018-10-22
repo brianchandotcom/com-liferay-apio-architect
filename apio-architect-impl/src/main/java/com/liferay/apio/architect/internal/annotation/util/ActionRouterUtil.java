@@ -26,6 +26,7 @@ import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.ParentId;
 import com.liferay.apio.architect.annotation.Vocabulary;
 import com.liferay.apio.architect.internal.annotation.ActionKey;
+import com.liferay.apio.architect.internal.annotation.representor.StringUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -46,25 +47,29 @@ import java.util.stream.Stream;
 public class ActionRouterUtil {
 
 	public static ActionKey getActionKey(
-		Method method, String name, String httpMethodName) {
+		Method method, Action annotation, String name) {
+
+		String httpMethod = annotation.httpMethod();
 
 		Optional<String> nestedNameOptional = _getNestedNameOptional(method);
 
 		String customActionName = _getCustomActionName(method);
 
-		if (nestedNameOptional.isPresent()) {
+		if (annotation.reusable()) {
+			return new ActionKey(httpMethod, "r", name, ANY_ROUTE);
+		}
+		else if (nestedNameOptional.isPresent()) {
 			return new ActionKey(
-				httpMethodName, nestedNameOptional.get(), ANY_ROUTE, name,
+				httpMethod, nestedNameOptional.get(), ANY_ROUTE, name,
 				customActionName);
 		}
 		else if (getAnnotationFromParametersOptional(
 					method, Id.class).isPresent()) {
 
-			return new ActionKey(
-				httpMethodName, name, ANY_ROUTE, customActionName);
+			return new ActionKey(httpMethod, name, ANY_ROUTE, customActionName);
 		}
 
-		return new ActionKey(httpMethodName, name, customActionName);
+		return new ActionKey(httpMethod, name, customActionName);
 	}
 
 	public static Object[] getParameters(
@@ -112,7 +117,9 @@ public class ActionRouterUtil {
 		).map(
 			resource -> resource.getAnnotation(Vocabulary.Type.class)
 		).map(
-			type -> toLowercaseSlug(type.value())
+			Vocabulary.Type::value
+		).map(
+			StringUtil::toLowercaseSlug
 		);
 	}
 
