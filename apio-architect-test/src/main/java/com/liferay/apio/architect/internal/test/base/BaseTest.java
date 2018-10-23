@@ -24,6 +24,7 @@ import static java.util.function.Function.identity;
 
 import static org.osgi.service.jaxrs.runtime.JaxrsServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT;
 
+import io.vavr.Function1;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Traversable;
@@ -43,11 +44,15 @@ import javax.ws.rs.client.WebTarget;
 import org.junit.After;
 import org.junit.Before;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.runtime.ServiceComponentRuntime;
+import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
 import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
+import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -67,12 +72,20 @@ public class BaseTest {
 
 		_runtimeServiceReference = _bundleContext.getServiceReference(
 			JaxrsServiceRuntime.class);
+
+		ServiceReference<ServiceComponentRuntime> serviceReference =
+			_bundleContext.getServiceReference(ServiceComponentRuntime.class);
+
+		_serviceComponentRuntime = _bundleContext.getService(serviceReference);
 	}
 
 	@After
 	public void tearDown() {
 		_clientBuilderTracker.close();
 		_iterateAndExecute(_registrations, ServiceRegistration::unregister);
+		_iterateAndExecute(
+			_disabledImplementations,
+			_update(_serviceComponentRuntime::enableComponent));
 	}
 
 	/**
@@ -102,6 +115,29 @@ public class BaseTest {
 		_registrations.add(serviceRegistration);
 
 		return serviceRegistration;
+	}
+
+	/**
+	 * Unregister the default implementation for a given service class. The
+	 * implementation is expected to be present in the same bundle as the
+	 * service class.
+	 *
+	 * <p>
+	 * Warning! This method must be only used in a specific test lifecycle
+	 * (inside methods annotated with {@link Before}, {@link After} or {@link
+	 * org.junit.Test}.
+	 * </p>
+	 *
+	 * @param  serviceClass the service class
+	 * @review
+	 */
+	protected <T> void beforeTestUnregisterImplementationFor(
+		Class<T> serviceClass) {
+
+		ComponentDescriptionDTO componentDescriptionDTO =
+			_unregisterImplementationFor(serviceClass);
+
+		_disabledImplementations.add(componentDescriptionDTO);
 	}
 
 	/**
@@ -161,6 +197,45 @@ public class BaseTest {
 		}
 	}
 
+	private <T> ComponentDescriptionDTO _unregisterImplementationFor(
+		Class<T> serviceClass) {
+
+		ServiceReference<T> serviceReference =
+			_bundleContext.getServiceReference(serviceClass);
+
+		String implementationClassName = (String)serviceReference.getProperty(
+			"component.name");
+
+		Bundle bundle = FrameworkUtil.getBundle(serviceClass);
+
+		ComponentDescriptionDTO componentDescriptionDTO =
+			_serviceComponentRuntime.getComponentDescriptionDTO(
+				bundle, implementationClassName);
+
+		_update(
+			_serviceComponentRuntime::disableComponent
+		).accept(
+			componentDescriptionDTO
+		);
+
+		return componentDescriptionDTO;
+	}
+
+	private <C extends ComponentDescriptionDTO> Consumer<C> _update(
+		Function1<C, Promise<Void>> updateFunction) {
+
+		return c -> Try.of(
+			() -> updateFunction.apply(c)
+		).andThenTry(
+			Promise::getValue
+		).onFailure(
+			t -> {
+				throw new AssertionError(
+					"Unable to update component " + c.name, t);
+			}
+		);
+	}
+
 	@SuppressWarnings({"Convert2MethodRef", "unchecked"})
 	private static final Function<Object, List<String>> _TO_LIST = v -> Match(
 		v
@@ -175,8 +250,11 @@ public class BaseTest {
 		BaseTest.class).getBundleContext();
 
 	private ServiceTracker<ClientBuilder, ClientBuilder> _clientBuilderTracker;
+	private final Collection<ComponentDescriptionDTO> _disabledImplementations =
+		new ArrayList<>();
 	private final Collection<ServiceRegistration<?>> _registrations =
 		new ArrayList<>();
 	private ServiceReference<JaxrsServiceRuntime> _runtimeServiceReference;
+	private ServiceComponentRuntime _serviceComponentRuntime;
 
 }
