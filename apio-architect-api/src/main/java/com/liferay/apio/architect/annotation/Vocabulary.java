@@ -78,13 +78,32 @@ public @interface Vocabulary {
 		public String description() default "";
 
 		/**
+		 * Returns the mode of the field
+		 *
+		 * @return the mode of the field
+		 * @review
+		 */
+		public FieldMode mode() default FieldMode.READ_WRITE;
+
+		/**
 		 * Returns {@code true} if a field should only be used when representing
 		 * the type. If this attribute is {@code true}, it will be ignored when
 		 * instantiating the interface from the HTTP request body. This
 		 * attribute is the opposite of {@link #writeOnly()}.
 		 *
-		 * @see #writeOnly()
+		 * <p>
+		 * If this attribute is {@code true}, it will be ignored when
+		 * instantiating the interface out of the HTTP request body.
+		 * </p>
+		 *
+		 * <p>
+		 * Opposite attribute to {@link #writeOnly()} ()}.
+		 * </p>
+		 *
+		 * @see        #writeOnly()
+		 * @review
 		 */
+		@Deprecated
 		public boolean readOnly() default false;
 
 		/**
@@ -108,8 +127,19 @@ public @interface Vocabulary {
 		 * type in any format. This attribute is the opposite of {@link
 		 * #readOnly()}.
 		 *
-		 * @see #readOnly()
+		 * <p>
+		 * If this attribute is {@code true}, it will be ignored when
+		 * representing the type in any format.
+		 * </p>
+		 *
+		 * <p>
+		 * Opposite attribute to {@link #readOnly()}.
+		 * </p>
+		 *
+		 * @see        #readOnly()
+		 * @review
 		 */
+		@Deprecated
 		public boolean writeOnly() default false;
 
 	}
