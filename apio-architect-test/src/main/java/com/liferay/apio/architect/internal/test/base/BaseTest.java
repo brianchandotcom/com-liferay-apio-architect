@@ -23,8 +23,11 @@ import static io.vavr.Predicates.is;
 import static java.util.function.Function.identity;
 
 import static org.osgi.service.jaxrs.runtime.JaxrsServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_RESOURCE;
 
 import io.vavr.Function1;
+import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Traversable;
@@ -115,6 +118,29 @@ public class BaseTest {
 		_registrations.add(serviceRegistration);
 
 		return serviceRegistration;
+	}
+
+	/**
+	 * Registers a new service as a JAX-RS resource with the provided
+	 * properties. Returns the service registration.
+	 *
+	 * <p>
+	 * Warning! This method must be only used in a specific test lifecycle
+	 * (inside methods annotated with {@link Before}, {@link After} or {@link
+	 * org.junit.Test}.
+	 * </p>
+	 *
+	 * @param  service the JAX-RS resource
+	 * @param  properties the service properties
+	 * @return the service registration
+	 * @review
+	 */
+	protected ServiceRegistration<?> beforeTestRegisterResource(
+		Object service, Map<String, Object> properties) {
+
+		return beforeTestRegisterAs(
+			Object.class, service,
+			properties.merge(_defaultResourceProperties));
 	}
 
 	/**
@@ -248,6 +274,11 @@ public class BaseTest {
 
 	private static final BundleContext _bundleContext = FrameworkUtil.getBundle(
 		BaseTest.class).getBundleContext();
+	private static final Map<String, Object> _defaultResourceProperties =
+		HashMap.of(
+			JAX_RS_APPLICATION_SELECT,
+			"(liferay.apio.architect.application=true)", JAX_RS_RESOURCE,
+			"true");
 
 	private ServiceTracker<ClientBuilder, ClientBuilder> _clientBuilderTracker;
 	private final Collection<ComponentDescriptionDTO> _disabledImplementations =
