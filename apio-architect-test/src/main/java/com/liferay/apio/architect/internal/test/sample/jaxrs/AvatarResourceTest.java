@@ -23,7 +23,7 @@ import com.liferay.apio.architect.internal.test.base.BaseTest;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -71,12 +71,9 @@ public class AvatarResourceTest extends BaseTest {
 	}
 
 	private Response _requestAvatarForId(int id) {
-		ClientBuilder clientBuilder = getClientBuilder();
+		WebTarget webTarget = createDefaultTarget();
 
-		return clientBuilder.build(
-		).target(
-			WHITEBOARD_URI
-		).path(
+		return webTarget.path(
 			"images/{id}"
 		).resolveTemplate(
 			"id", id
