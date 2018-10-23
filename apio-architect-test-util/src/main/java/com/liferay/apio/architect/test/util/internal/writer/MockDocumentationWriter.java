@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.test.util.internal.writer;
 
+import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
@@ -32,9 +33,11 @@ import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Provides methods that test {@code DocumentationMessageMapper} objects.
@@ -95,13 +98,16 @@ public class MockDocumentationWriter {
 		CustomDocumentation customDocumentation =
 			customDocumentationBuilder.build();
 
-		_addActions(actionManager);
+		Set<ActionKey> actionKeys = new HashSet<>();
+
+		_addActions(actionManager, actionKeys);
 
 		Documentation documentation = new Documentation(
 			() -> Optional.of(() -> "Title"),
 			() -> Optional.of(() -> "Description"),
-			() -> Optional.of(() -> "Entrypoint"), () -> root,
-			() -> actionManager, () -> customDocumentation);
+			() -> Optional.of(() -> "Entrypoint"), () -> root, () -> actionKeys,
+			actionKey -> actionManager.getActions(actionKey, null),
+			() -> customDocumentation);
 
 		DocumentationWriter documentationWriter = DocumentationWriter.create(
 			builder -> builder.documentation(
@@ -117,21 +123,29 @@ public class MockDocumentationWriter {
 		return documentationWriter.write();
 	}
 
-	private static void _addActions(ActionManager actionManager) {
-		actionManager.add(
-			new ActionKey("GET", "root"), _getEmptyThrowableTriFunction());
+	private static void _addAction(
+		ActionKey actionKey, ActionManager actionManager,
+		Set<ActionKey> actionKeys) {
 
-		actionManager.add(
-			new ActionKey("DELETE", "root", ActionKey.ANY_ROUTE),
-			_getEmptyThrowableTriFunction());
+		actionKeys.add(actionKey);
+		actionManager.add(actionKey, _getEmptyThrowableTriFunction());
+	}
 
-		actionManager.add(
-			new ActionKey("GET", "root", ActionKey.ANY_ROUTE),
-			_getEmptyThrowableTriFunction());
+	private static void _addActions(
+		ActionManager actionManager, Set<ActionKey> actionKeys) {
 
-		actionManager.add(
-			new ActionKey("DELETE", "root", ActionKey.ANY_ROUTE),
-			_getEmptyThrowableTriFunction());
+		_addAction(new ActionKey("GET", "root"), actionManager, actionKeys);
+
+		_addAction(
+			new ActionKey("DELETE", "root", ANY_ROUTE), actionManager,
+			actionKeys);
+
+		_addAction(
+			new ActionKey("GET", "root", ANY_ROUTE), actionManager, actionKeys);
+
+		_addAction(
+			new ActionKey("DELETE", "root", ANY_ROUTE), actionManager,
+			actionKeys);
 	}
 
 	private static ThrowableTriFunction<Object, Object, List<Object>, Object>

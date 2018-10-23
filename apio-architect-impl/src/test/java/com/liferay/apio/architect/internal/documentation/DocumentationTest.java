@@ -46,7 +46,7 @@ public class DocumentationTest {
 	public void testDocumentationWithEmptyValuesReturnEmpty() {
 		Documentation documentation = new Documentation(
 			Optional::empty, Optional::empty, Optional::empty,
-			Collections::emptyMap, null, null);
+			Collections::emptyMap, null, null, null);
 
 		Optional<String> optionalTitle = documentation.getAPITitleOptional();
 
@@ -69,7 +69,7 @@ public class DocumentationTest {
 		Documentation documentation = new Documentation(
 			() -> Optional.of(() -> "A"), () -> Optional.of(() -> "B"),
 			() -> Optional.of(() -> "C"),
-			() -> Collections.singletonMap("r", null), () -> null,
+			() -> Collections.singletonMap("r", null), null, null,
 			dummyCustomDocumentationBuilder::build);
 
 		Optional<String> optionalTitle = documentation.getAPITitleOptional();
