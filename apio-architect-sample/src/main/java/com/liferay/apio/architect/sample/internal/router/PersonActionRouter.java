@@ -79,7 +79,7 @@ public class PersonActionRouter implements ActionRouter<Person> {
 	}
 
 	@Actions.Action(httpMethod = "GET", name = "recover_first_user")
-	public Person recoverFirstTenUsers() {
+	public Person recoverFirstUser() {
 		List<PersonModel> personModels = _personModelService.getPage(0, 1);
 
 		PersonModel personModel = personModels.get(0);
