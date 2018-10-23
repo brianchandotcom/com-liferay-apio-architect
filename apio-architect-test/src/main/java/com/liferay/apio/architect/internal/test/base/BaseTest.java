@@ -20,12 +20,20 @@ import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 import static io.vavr.Predicates.is;
 
+import static java.util.function.Function.identity;
+
 import static org.osgi.service.jaxrs.runtime.JaxrsServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT;
 
 import io.vavr.collection.List;
+import io.vavr.collection.Map;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Try;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.ws.rs.client.Client;
@@ -38,6 +46,7 @@ import org.junit.Before;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -63,6 +72,36 @@ public class BaseTest {
 	@After
 	public void tearDown() {
 		_clientBuilderTracker.close();
+		_iterateAndExecute(_registrations, ServiceRegistration::unregister);
+	}
+
+	/**
+	 * Registers a new service with the provided properties. Returns the service
+	 * registration.
+	 *
+	 * <p>
+	 * Warning! This method must be only used in a specific test lifecycle
+	 * (inside methods annotated with {@link Before}, {@link After} or {@link
+	 * org.junit.Test}.
+	 * </p>
+	 *
+	 * @param  serviceClass the service class
+	 * @param  service the service
+	 * @param  properties the service properties
+	 * @return the service registration
+	 * @review
+	 */
+	protected <T> ServiceRegistration<T> beforeTestRegisterAs(
+		Class<T> serviceClass, T service, Map<String, Object> properties) {
+
+		ServiceRegistration<T> serviceRegistration =
+			_bundleContext.registerService(
+				serviceClass, service,
+				properties.toJavaMap(Hashtable::new, identity()));
+
+		_registrations.add(serviceRegistration);
+
+		return serviceRegistration;
 	}
 
 	/**
@@ -106,6 +145,22 @@ public class BaseTest {
 		);
 	}
 
+	private static <T> void _iterateAndExecute(
+		Collection<T> collection, Consumer<T> consumer) {
+
+		Iterator<T> iterator = collection.iterator();
+
+		while (iterator.hasNext()) {
+			Try.of(
+				iterator::next
+			).andThen(
+				consumer
+			).andFinally(
+				iterator::remove
+			);
+		}
+	}
+
 	@SuppressWarnings({"Convert2MethodRef", "unchecked"})
 	private static final Function<Object, List<String>> _TO_LIST = v -> Match(
 		v
@@ -120,6 +175,8 @@ public class BaseTest {
 		BaseTest.class).getBundleContext();
 
 	private ServiceTracker<ClientBuilder, ClientBuilder> _clientBuilderTracker;
+	private final Collection<ServiceRegistration<?>> _registrations =
+		new ArrayList<>();
 	private ServiceReference<JaxrsServiceRuntime> _runtimeServiceReference;
 
 }
