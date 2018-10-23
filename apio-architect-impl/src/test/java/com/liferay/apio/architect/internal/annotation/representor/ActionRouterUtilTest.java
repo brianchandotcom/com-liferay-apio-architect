@@ -54,10 +54,10 @@ public class ActionRouterUtilTest {
 		Method method = DummyRouter.class.getMethod(
 			"retrievePage", Pagination.class);
 
-		Retrieve annotation = method.getAnnotation(Retrieve.class);
+		Retrieve retrieve = method.getAnnotation(Retrieve.class);
 
 		ActionKey actionKey = getActionKey(
-			method, annotation.annotationType().getAnnotation(Action.class),
+			method, retrieve.annotationType().getAnnotation(Action.class),
 			"blog");
 
 		assertThat(actionKey.getHttpMethodName(), is("GET"));
@@ -90,10 +90,10 @@ public class ActionRouterUtilTest {
 		Method method = DummyRouter.class.getMethod(
 			"retrieveChild", Long.class);
 
-		Retrieve annotation = method.getAnnotation(Retrieve.class);
+		Retrieve retrieve = method.getAnnotation(Retrieve.class);
 
 		ActionKey actionKey = getActionKey(
-			method, annotation.annotationType().getAnnotation(Action.class),
+			method, retrieve.annotationType().getAnnotation(Action.class),
 			"blog");
 
 		assertThat(actionKey.getHttpMethodName(), is("GET"));
@@ -108,10 +108,10 @@ public class ActionRouterUtilTest {
 
 		Method method = DummyRouter.class.getMethod("retrieve", Long.class);
 
-		Retrieve annotation = method.getAnnotation(Retrieve.class);
+		Retrieve retrieve = method.getAnnotation(Retrieve.class);
 
 		ActionKey actionKey = getActionKey(
-			method, annotation.annotationType().getAnnotation(Action.class),
+			method, retrieve.annotationType().getAnnotation(Action.class),
 			"blog");
 
 		assertThat(actionKey.getHttpMethodName(), is("GET"));

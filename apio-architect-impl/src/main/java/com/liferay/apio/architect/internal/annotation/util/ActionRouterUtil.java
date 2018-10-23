@@ -47,15 +47,15 @@ import java.util.stream.Stream;
 public class ActionRouterUtil {
 
 	public static ActionKey getActionKey(
-		Method method, Action annotation, String name) {
+		Method method, Action action, String name) {
 
-		String httpMethod = annotation.httpMethod();
+		String httpMethod = action.httpMethod();
 
 		Optional<String> nestedNameOptional = _getNestedNameOptional(method);
 
 		String customActionName = _getCustomActionName(method);
 
-		if (annotation.reusable()) {
+		if (action.reusable()) {
 			return new ActionKey(httpMethod, "r", name, ANY_ROUTE);
 		}
 		else if (nestedNameOptional.isPresent()) {
