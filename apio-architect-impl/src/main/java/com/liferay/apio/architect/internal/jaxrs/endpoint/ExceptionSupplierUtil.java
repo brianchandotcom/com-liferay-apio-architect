@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.endpoint;
+package com.liferay.apio.architect.internal.jaxrs.endpoint;
 
 import static javax.ws.rs.core.Response.Status.METHOD_NOT_ALLOWED;
 

@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.internal.entrypoint;
 
-import static com.liferay.apio.architect.internal.endpoint.ExceptionSupplierUtil.notAllowed;
-import static com.liferay.apio.architect.internal.endpoint.ExceptionSupplierUtil.notFound;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.ExceptionSupplierUtil.notAllowed;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.ExceptionSupplierUtil.notFound;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;

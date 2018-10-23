@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.endpoint;
+package com.liferay.apio.architect.internal.jaxrs.endpoint;
 
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.CustomOperationsEndpoint;

@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.endpoint;
+package com.liferay.apio.architect.internal.jaxrs.endpoint;
 
-import static com.liferay.apio.architect.internal.endpoint.EndpointsTestUtil.collectionRoutes;
-import static com.liferay.apio.architect.internal.endpoint.EndpointsTestUtil.emptyCollectionRoutes;
-import static com.liferay.apio.architect.internal.endpoint.EndpointsTestUtil.emptyItemRoutes;
-import static com.liferay.apio.architect.internal.endpoint.EndpointsTestUtil.emptyNestedCollectionRoutes;
-import static com.liferay.apio.architect.internal.endpoint.EndpointsTestUtil.itemRoutes;
-import static com.liferay.apio.architect.internal.endpoint.EndpointsTestUtil.nestedCollectionRoutes;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.EndpointsTestUtil.collectionRoutes;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.EndpointsTestUtil.emptyCollectionRoutes;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.EndpointsTestUtil.emptyItemRoutes;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.EndpointsTestUtil.emptyNestedCollectionRoutes;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.EndpointsTestUtil.itemRoutes;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.EndpointsTestUtil.nestedCollectionRoutes;
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aFailTry;
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aSuccessTry;
 

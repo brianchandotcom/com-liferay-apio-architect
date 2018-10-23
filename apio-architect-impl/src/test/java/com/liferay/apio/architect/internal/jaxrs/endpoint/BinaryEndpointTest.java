@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.endpoint;
+package com.liferay.apio.architect.internal.jaxrs.endpoint;
 
 import static com.liferay.apio.architect.test.util.result.TryMatchers.aFailTry;
 

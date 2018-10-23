@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.endpoint;
+package com.liferay.apio.architect.internal.jaxrs.endpoint;
 
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;

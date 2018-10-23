@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.application;
+package com.liferay.apio.architect.internal.jaxrs.application;
 
-import com.liferay.apio.architect.internal.endpoint.RootEndpoint;
+import com.liferay.apio.architect.internal.jaxrs.endpoint.RootEndpoint;
 
 import java.util.Collections;
 import java.util.Set;

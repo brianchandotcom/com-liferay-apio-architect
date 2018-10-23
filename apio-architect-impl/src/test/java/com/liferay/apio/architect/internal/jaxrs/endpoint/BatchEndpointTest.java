@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.endpoint;
+package com.liferay.apio.architect.internal.jaxrs.endpoint;
 
-import static com.liferay.apio.architect.internal.endpoint.EndpointsTestUtil.emptyNestedCollectionRoutes;
-import static com.liferay.apio.architect.internal.endpoint.EndpointsTestUtil.nestedCollectionRoutes;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.EndpointsTestUtil.emptyNestedCollectionRoutes;
+import static com.liferay.apio.architect.internal.jaxrs.endpoint.EndpointsTestUtil.nestedCollectionRoutes;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
