@@ -14,9 +14,15 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.exception.mapper;
 
+import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
+
 import com.liferay.apio.architect.error.APIError;
+import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 
 import java.util.Optional;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides methods to map exceptions to generic {@link APIError}
@@ -24,13 +30,18 @@ import java.util.Optional;
  *
  * @author Alejandro Hernández
  */
-public interface ExceptionMapperManager {
+@Component(service = ExceptionMapperManager.class)
+public class ExceptionMapperManager
+	extends ClassNameBaseManager<ExceptionMapper> {
+
+	public ExceptionMapperManager() {
+		super(ExceptionMapper.class, 0);
+	}
 
 	/**
 	 * Converts an exception to its generic {@link APIError} representation, if
-	 * a valid {@link
-	 * com.liferay.apio.architect.exception.mapper.ExceptionMapper} exists.
-	 * Returns {@code Optional#empty()} otherwise.
+	 * a valid {@link ExceptionMapper} exists. Returns {@code Optional#empty()}
+	 * otherwise.
 	 *
 	 * <p>
 	 * If no {@code ExceptionMapper} can be found for the exception class, this
@@ -42,6 +53,29 @@ public interface ExceptionMapperManager {
 	 *         {@code ExceptionMapper} is present; {@code Optional#empty()}
 	 *         otherwise
 	 */
-	public <T extends Exception> Optional<APIError> map(T exception);
+	public <T extends Exception> Optional<APIError> map(T exception) {
+		return _convert(exception, unsafeCast(exception.getClass()));
+	}
+
+	private <T extends Exception> Optional<APIError> _convert(
+		T exception, Class<T> exceptionClass) {
+
+		Optional<ExceptionMapper<T>> optional = unsafeCast(
+			getServiceOptional(exceptionClass));
+
+		return optional.map(
+			exceptionConverter -> exceptionConverter.map(exception)
+		).map(
+			Optional::of
+		).orElseGet(
+			() -> Optional.ofNullable(
+				exceptionClass.getSuperclass()
+			).filter(
+				Exception.class::isAssignableFrom
+			).flatMap(
+				clazz -> _convert(exception, unsafeCast(clazz))
+			)
+		);
+	}
 
 }

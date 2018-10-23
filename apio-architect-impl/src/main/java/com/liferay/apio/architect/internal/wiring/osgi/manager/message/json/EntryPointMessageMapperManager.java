@@ -14,11 +14,16 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.message.json;
 
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
 import com.liferay.apio.architect.internal.message.json.EntryPointMessageMapper;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.MessageMapperBaseManager;
 
 import java.util.Optional;
 
 import javax.ws.rs.core.Request;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides methods to get the {@link EntryPointMessageMapper} that corresponds
@@ -26,7 +31,15 @@ import javax.ws.rs.core.Request;
  *
  * @author Alejandro Hernández
  */
-public interface EntryPointMessageMapperManager {
+@Component(service = EntryPointMessageMapperManager.class)
+public class EntryPointMessageMapperManager
+	extends MessageMapperBaseManager<EntryPointMessageMapper> {
+
+	public EntryPointMessageMapperManager() {
+		super(
+			EntryPointMessageMapper.class,
+			INSTANCE::putEntryPointMessageMapper);
+	}
 
 	/**
 	 * Returns the {@code EntryPointMessageMapper}, if present, that corresponds
@@ -37,6 +50,10 @@ public interface EntryPointMessageMapperManager {
 	 *         Optional#empty()} otherwise
 	 */
 	public Optional<EntryPointMessageMapper> getEntryPointMessageMapperOptional(
-		Request request);
+		Request request) {
+
+		return INSTANCE.getEntryPointMessageMapperOptional(
+			request, this::computeMessageMappers);
+	}
 
 }

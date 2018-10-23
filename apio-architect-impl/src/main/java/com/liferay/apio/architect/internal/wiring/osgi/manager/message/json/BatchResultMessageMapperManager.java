@@ -14,11 +14,16 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.message.json;
 
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
 import com.liferay.apio.architect.internal.message.json.BatchResultMessageMapper;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.MessageMapperBaseManager;
 
 import java.util.Optional;
 
 import javax.ws.rs.core.Request;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides methods to get the {@link BatchResultMessageMapper} that corresponds
@@ -26,7 +31,15 @@ import javax.ws.rs.core.Request;
  *
  * @author Alejandro Hernández
  */
-public interface BatchResultMessageMapperManager {
+@Component(service = BatchResultMessageMapperManager.class)
+public class BatchResultMessageMapperManager
+	extends MessageMapperBaseManager<BatchResultMessageMapper> {
+
+	public BatchResultMessageMapperManager() {
+		super(
+			BatchResultMessageMapper.class,
+			INSTANCE::putBatchResultMessageMapper);
+	}
 
 	/**
 	 * Returns the {@code BatchResultMessageMapper}, if present, that
@@ -37,6 +50,10 @@ public interface BatchResultMessageMapperManager {
 	 *         Optional#empty()} otherwise
 	 */
 	public <T> Optional<BatchResultMessageMapper<T>>
-		getBatchResultMessageMapperOptional(Request request);
+		getBatchResultMessageMapperOptional(Request request) {
+
+		return INSTANCE.getBatchResultMessageMapperOptional(
+			request, this::computeMessageMappers);
+	}
 
 }

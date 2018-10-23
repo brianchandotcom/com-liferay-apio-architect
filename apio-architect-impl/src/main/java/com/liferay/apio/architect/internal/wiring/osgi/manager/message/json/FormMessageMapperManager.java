@@ -14,11 +14,16 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.message.json;
 
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
 import com.liferay.apio.architect.internal.message.json.FormMessageMapper;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.MessageMapperBaseManager;
 
 import java.util.Optional;
 
 import javax.ws.rs.core.Request;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides methods to get the {@link FormMessageMapper} that corresponds to the
@@ -26,7 +31,13 @@ import javax.ws.rs.core.Request;
  *
  * @author Alejandro Hernández
  */
-public interface FormMessageMapperManager {
+@Component(service = FormMessageMapperManager.class)
+public class FormMessageMapperManager
+	extends MessageMapperBaseManager<FormMessageMapper> {
+
+	public FormMessageMapperManager() {
+		super(FormMessageMapper.class, INSTANCE::putFormMessageMapper);
+	}
 
 	/**
 	 * Returns the {@code FormMessageMapper}, if present, that corresponds to
@@ -37,6 +48,10 @@ public interface FormMessageMapperManager {
 	 *         Optional#empty()} otherwise
 	 */
 	public Optional<FormMessageMapper> getFormMessageMapperOptional(
-		Request request);
+		Request request) {
+
+		return INSTANCE.getFormMessageMapperOptional(
+			request, this::computeMessageMappers);
+	}
 
 }

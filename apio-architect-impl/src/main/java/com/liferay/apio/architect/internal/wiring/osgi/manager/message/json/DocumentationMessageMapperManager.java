@@ -14,11 +14,16 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.message.json;
 
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.MessageMapperBaseManager;
 
 import java.util.Optional;
 
 import javax.ws.rs.core.Request;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides methods to get the {@link DocumentationMessageMapper} that
@@ -26,7 +31,15 @@ import javax.ws.rs.core.Request;
  *
  * @author Alejandro Hernández
  */
-public interface DocumentationMessageMapperManager {
+@Component(service = DocumentationMessageMapperManager.class)
+public class DocumentationMessageMapperManager
+	extends MessageMapperBaseManager<DocumentationMessageMapper> {
+
+	public DocumentationMessageMapperManager() {
+		super(
+			DocumentationMessageMapper.class,
+			INSTANCE::putDocumentationMessageMapper);
+	}
 
 	/**
 	 * Returns the {@code DocumentationMessageMapper}, if present, that
@@ -37,6 +50,10 @@ public interface DocumentationMessageMapperManager {
 	 *         Optional#empty()} otherwise
 	 */
 	public Optional<DocumentationMessageMapper>
-		getDocumentationMessageMapperOptional(Request request);
+		getDocumentationMessageMapperOptional(Request request) {
+
+		return INSTANCE.getDocumentationMessageMapperOptional(
+			request, this::computeMessageMappers);
+	}
 
 }

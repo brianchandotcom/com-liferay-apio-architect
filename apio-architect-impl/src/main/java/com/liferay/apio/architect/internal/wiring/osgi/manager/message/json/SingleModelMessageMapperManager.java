@@ -14,11 +14,16 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.message.json;
 
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
 import com.liferay.apio.architect.internal.message.json.SingleModelMessageMapper;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.MessageMapperBaseManager;
 
 import java.util.Optional;
 
 import javax.ws.rs.core.Request;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides methods to get the {@link SingleModelMessageMapper} that corresponds
@@ -26,7 +31,15 @@ import javax.ws.rs.core.Request;
  *
  * @author Alejandro Hernández
  */
-public interface SingleModelMessageMapperManager {
+@Component(service = SingleModelMessageMapperManager.class)
+public class SingleModelMessageMapperManager
+	extends MessageMapperBaseManager<SingleModelMessageMapper> {
+
+	public SingleModelMessageMapperManager() {
+		super(
+			SingleModelMessageMapper.class,
+			INSTANCE::putSingleModelMessageMapper);
+	}
 
 	/**
 	 * Returns the {@code SingleModelMessageMapper}, if present, that
@@ -37,6 +50,10 @@ public interface SingleModelMessageMapperManager {
 	 *         Optional#empty()} otherwise
 	 */
 	public <T> Optional<SingleModelMessageMapper<T>>
-		getSingleModelMessageMapperOptional(Request request);
+		getSingleModelMessageMapperOptional(Request request) {
+
+		return INSTANCE.getSingleModelMessageMapperOptional(
+			request, this::computeMessageMappers);
+	}
 
 }

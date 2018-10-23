@@ -14,21 +14,49 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.router;
 
-import com.liferay.apio.architect.routes.ItemRoutes;
+import static com.liferay.apio.architect.internal.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.routes.ItemRoutesImpl.BuilderImpl;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
+import com.liferay.apio.architect.router.ItemRouter;
+import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.ItemRoutes.Builder;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import org.slf4j.Logger;
 
 /**
  * Provides methods to retrieve the routes information provided by the different
- * {@link com.liferay.apio.architect.router.ItemRouter} instances.
+ * {@link ItemRouter} instances.
  *
  * @author Alejandro Hernández
- * @see    com.liferay.apio.architect.router.ItemRouter
+ * @see    ItemRouter
  */
-public interface ItemRouterManager {
+@Component(service = ItemRouterManager.class)
+public class ItemRouterManager extends ClassNameBaseManager<ItemRouter> {
 
-	public Map<String, ItemRoutes> getItemRoutes();
+	public ItemRouterManager() {
+		super(ItemRouter.class, 2);
+	}
+
+	public Map<String, ItemRoutes> getItemRoutes() {
+		return INSTANCE.getItemRoutesMap(this::_computeItemRoutes);
+	}
 
 	/**
 	 * Returns the item routes for the item resource's name.
@@ -36,6 +64,79 @@ public interface ItemRouterManager {
 	 * @param  name the item resource's name
 	 * @return the item routes
 	 */
-	public <T, S> Optional<ItemRoutes<T, S>> getItemRoutesOptional(String name);
+	public <T, S> Optional<ItemRoutes<T, S>> getItemRoutesOptional(
+		String name) {
+
+		return INSTANCE.getItemRoutesOptional(name, this::_computeItemRoutes);
+	}
+
+	private void _computeItemRoutes() {
+		forEachService(
+			(className, itemRouter) -> {
+				Optional<String> nameOptional = _nameManager.getNameOptional(
+					className);
+
+				if (!nameOptional.isPresent()) {
+					_logger.warn(
+						"Unable to find a Representable for class name {}",
+						className);
+
+					return;
+				}
+
+				String name = nameOptional.get();
+
+				boolean hasPathIdentifierMapper =
+					_pathIdentifierMapperManager.hasPathIdentifierMapper(name);
+
+				if (!hasPathIdentifierMapper) {
+					_logger.warn(
+						"Missing path identifier mapper for resource with " +
+							"name {}",
+						name);
+
+					return;
+				}
+
+				Set<String> neededProviders = new TreeSet<>();
+
+				Builder<Object, Object> builder = new BuilderImpl<>(
+					name, curry(_providerManager::provideMandatory),
+					neededProviders::add,
+					_pathIdentifierMapperManager::mapToIdentifierOrFail,
+					identifier -> _pathIdentifierMapperManager.mapToPath(
+						name, identifier),
+					_nameManager::getNameOptional, _actionManager);
+
+				@SuppressWarnings("unchecked")
+				ItemRoutes itemRoutes = itemRouter.itemRoutes(builder);
+
+				List<String> missingProviders =
+					_providerManager.getMissingProviders(neededProviders);
+
+				if (!missingProviders.isEmpty()) {
+					_logger.warn(
+						"Missing providers for classes: {}", missingProviders);
+
+					return;
+				}
+
+				INSTANCE.putItemRoutes(name, itemRoutes);
+			});
+	}
+
+	@Reference
+	private ActionManager _actionManager;
+
+	private Logger _logger = getLogger(getClass());
+
+	@Reference
+	private NameManager _nameManager;
+
+	@Reference
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
+
+	@Reference
+	private ProviderManager _providerManager;
 
 }

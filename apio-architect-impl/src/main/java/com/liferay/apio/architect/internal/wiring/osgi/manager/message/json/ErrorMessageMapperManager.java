@@ -14,11 +14,16 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.message.json;
 
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
 import com.liferay.apio.architect.internal.message.json.ErrorMessageMapper;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.MessageMapperBaseManager;
 
 import java.util.Optional;
 
 import javax.ws.rs.core.Request;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides methods to get the {@link ErrorMessageMapper} that corresponds to
@@ -26,7 +31,13 @@ import javax.ws.rs.core.Request;
  *
  * @author Alejandro Hernández
  */
-public interface ErrorMessageMapperManager {
+@Component(service = ErrorMessageMapperManager.class)
+public class ErrorMessageMapperManager
+	extends MessageMapperBaseManager<ErrorMessageMapper> {
+
+	public ErrorMessageMapperManager() {
+		super(ErrorMessageMapper.class, INSTANCE::putErrorMessageMapper);
+	}
 
 	/**
 	 * Returns the {@code ErrorMessageMapper}, if present, that corresponds to
@@ -37,6 +48,10 @@ public interface ErrorMessageMapperManager {
 	 *         Optional#empty()} otherwise
 	 */
 	public Optional<ErrorMessageMapper> getErrorMessageMapperOptional(
-		Request request);
+		Request request) {
+
+		return INSTANCE.getErrorMessageMapperOptional(
+			request, this::computeMessageMappers);
+	}
 
 }

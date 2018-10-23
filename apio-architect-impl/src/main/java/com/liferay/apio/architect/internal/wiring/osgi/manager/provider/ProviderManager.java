@@ -14,21 +14,41 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.provider;
 
+import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
+
+import static org.slf4j.LoggerFactory.getLogger;
+
+import com.liferay.apio.architect.credentials.Credentials;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
+import com.liferay.apio.architect.provider.Provider;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.ws.rs.NotFoundException;
+
+import org.osgi.service.component.annotations.Component;
+
+import org.slf4j.Logger;
+
 /**
- * Manages services that have a {@link
- * com.liferay.apio.architect.provider.Provider}.
+ * Manages services that have a {@link Provider}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public interface ProviderManager {
+@Component(service = ProviderManager.class)
+public class ProviderManager extends ClassNameBaseManager<Provider> {
+
+	public ProviderManager() {
+		super(Provider.class, 0);
+	}
 
 	/**
 	 * Returns the list of missing providers' class names.
@@ -36,7 +56,17 @@ public interface ProviderManager {
 	 * @param  neededProviders the list of needed providers
 	 * @return the list of missing providers
 	 */
-	public List<String> getMissingProviders(Collection<String> neededProviders);
+	public List<String> getMissingProviders(
+		Collection<String> neededProviders) {
+
+		Set<String> providedClassNames = serviceTrackerMap.keySet();
+
+		List<String> list = new ArrayList<>(neededProviders);
+
+		list.removeAll(providedClassNames);
+
+		return list;
+	}
 
 	/**
 	 * Returns an instance of type {@code T} if a valid {@code Provider} is
@@ -48,7 +78,30 @@ public interface ProviderManager {
 	 *         throws {@code NotFoundException} otherwise
 	 */
 	public <T> T provideMandatory(
-		HttpServletRequest httpServletRequest, Class<T> clazz);
+		HttpServletRequest httpServletRequest, Class<T> clazz) {
+
+		Optional<Provider> providerOptional = getServiceOptional(clazz);
+
+		if (!providerOptional.isPresent()) {
+			_logger.warn("Missing provider for mandatory class: {}", clazz);
+
+			throw new NotFoundException();
+		}
+
+		Optional<T> optional = provideOptional(httpServletRequest, clazz);
+
+		if (clazz.equals(Credentials.class) && !optional.isPresent()) {
+			return unsafeCast((Credentials)() -> "");
+		}
+
+		return optional.orElseThrow(
+			() -> {
+				_logger.warn(
+					"Mandatory provider for class {} returned null", clazz);
+
+				return new NotFoundException();
+			});
+	}
 
 	/**
 	 * Returns the instance of type {@code T} if a valid {@code Provider} can be
@@ -60,6 +113,14 @@ public interface ProviderManager {
 	 *         present; {@code Optional#empty()} otherwise
 	 */
 	public <T> Optional<T> provideOptional(
-		HttpServletRequest httpServletRequest, Class<T> clazz);
+		HttpServletRequest httpServletRequest, Class<T> clazz) {
+
+		Optional<Provider<T>> optional = unsafeCast(getServiceOptional(clazz));
+
+		return optional.map(
+			provider -> provider.createContext(httpServletRequest));
+	}
+
+	private Logger _logger = getLogger(getClass());
 
 }

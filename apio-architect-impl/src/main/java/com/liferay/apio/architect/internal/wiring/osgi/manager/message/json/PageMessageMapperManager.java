@@ -14,11 +14,16 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.message.json;
 
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+
 import com.liferay.apio.architect.internal.message.json.PageMessageMapper;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.MessageMapperBaseManager;
 
 import java.util.Optional;
 
 import javax.ws.rs.core.Request;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Provides methods to get the {@link PageMessageMapper} that corresponds to the
@@ -26,7 +31,13 @@ import javax.ws.rs.core.Request;
  *
  * @author Alejandro Hernández
  */
-public interface PageMessageMapperManager {
+@Component(service = PageMessageMapperManager.class)
+public class PageMessageMapperManager
+	extends MessageMapperBaseManager<PageMessageMapper> {
+
+	public PageMessageMapperManager() {
+		super(PageMessageMapper.class, INSTANCE::putPageMessageMapper);
+	}
 
 	/**
 	 * Returns the {@code PageMessageMapper}, if present, that corresponds to
@@ -37,6 +48,10 @@ public interface PageMessageMapperManager {
 	 *         Optional#empty()} otherwise
 	 */
 	public <T> Optional<PageMessageMapper<T>> getPageMessageMapperOptional(
-		Request request);
+		Request request) {
+
+		return INSTANCE.getPageMessageMapperOptional(
+			request, this::computeMessageMappers);
+	}
 
 }

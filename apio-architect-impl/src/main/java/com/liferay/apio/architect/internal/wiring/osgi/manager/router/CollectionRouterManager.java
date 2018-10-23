@@ -14,21 +14,58 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.router;
 
-import com.liferay.apio.architect.routes.CollectionRoutes;
+import static com.liferay.apio.architect.internal.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import com.liferay.apio.architect.credentials.Credentials;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl.BuilderImpl;
+import com.liferay.apio.architect.internal.url.ApplicationURL;
+import com.liferay.apio.architect.internal.url.ServerURL;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
+import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.router.CollectionRouter;
+import com.liferay.apio.architect.routes.CollectionRoutes;
+import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
+import com.liferay.apio.architect.routes.ItemRoutes;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import org.slf4j.Logger;
 
 /**
  * Provides methods to retrieve the routes information provided by the different
- * {@link com.liferay.apio.architect.router.CollectionRouter} instances.
+ * {@link CollectionRouter} instances.
  *
  * @author Alejandro Hernández
- * @see    com.liferay.apio.architect.router.CollectionRouter
+ * @see    CollectionRouter
  */
-public interface CollectionRouterManager {
+@Component(service = CollectionRouterManager.class)
+public class CollectionRouterManager
+	extends ClassNameBaseManager<CollectionRouter> {
 
-	public Map<String, CollectionRoutes> getCollectionRoutes();
+	public CollectionRouterManager() {
+		super(CollectionRouter.class, 2);
+	}
+
+	public Map<String, CollectionRoutes> getCollectionRoutes() {
+		return INSTANCE.getCollectionRoutes(this::_computeCollectionRoutes);
+	}
 
 	/**
 	 * Returns the collection routes for the collection resource's name.
@@ -37,6 +74,110 @@ public interface CollectionRouterManager {
 	 * @return the collection routes
 	 */
 	public <T, S> Optional<CollectionRoutes<T, S>> getCollectionRoutesOptional(
-		String name);
+		String name) {
+
+		return INSTANCE.getCollectionRoutesOptional(
+			name, this::_computeCollectionRoutes);
+	}
+
+	private void _computeCollectionRoutes() {
+		List<String> list = _providerManager.getMissingProviders(
+			_mandatoryClassNames);
+
+		if (!list.isEmpty()) {
+			_logger.warn("Missing providers for mandatory classes: {}", list);
+
+			return;
+		}
+
+		forEachService(
+			(className, collectionRouter) -> {
+				Optional<String> nameOptional = _nameManager.getNameOptional(
+					className);
+
+				if (!nameOptional.isPresent()) {
+					_logger.warn(
+						"Unable to find a Representable for class name {}",
+						className);
+
+					return;
+				}
+
+				String name = nameOptional.get();
+
+				Optional<Representor<Object>> representorOptional =
+					_representableManager.getRepresentorOptional(name);
+
+				if (!representorOptional.isPresent()) {
+					_logger.warn(
+						"Unable to find a Representable for class name {}",
+						className);
+
+					return;
+				}
+
+				Representor<Object> representor = representorOptional.get();
+
+				Set<String> neededProviders = new TreeSet<>();
+
+				Builder builder = new BuilderImpl<>(
+					name, curry(_providerManager::provideMandatory),
+					neededProviders::add,
+					_pathIdentifierMapperManager::mapToIdentifierOrFail,
+					representor::getIdentifier, _nameManager::getNameOptional,
+					_actionManager);
+
+				@SuppressWarnings("unchecked")
+				CollectionRoutes collectionRoutes =
+					collectionRouter.collectionRoutes(builder);
+
+				List<String> missingProviders =
+					_providerManager.getMissingProviders(neededProviders);
+
+				if (!missingProviders.isEmpty()) {
+					_logger.warn(
+						"Missing providers for classes: {}", missingProviders);
+
+					return;
+				}
+
+				Optional<ItemRoutes<Object, Object>> optional =
+					_itemRouterManager.getItemRoutesOptional(name);
+
+				if (!optional.isPresent()) {
+					_logger.warn(
+						"Missing item router for resource with name {}", name);
+
+					return;
+				}
+
+				INSTANCE.putRootResourceNameSdk(name);
+				INSTANCE.putCollectionRoutes(name, collectionRoutes);
+			});
+	}
+
+	private static final List<String> _mandatoryClassNames = Arrays.asList(
+		ApplicationURL.class.getName(), Credentials.class.getName(),
+		Pagination.class.getName(), ServerURL.class.getName());
+
+	@Reference
+	private ActionManager _actionManager;
+
+	@Reference
+	private ItemRouterManager _itemRouterManager;
+
+	private Logger _logger = getLogger(getClass());
+
+	@Reference
+	private NameManager _nameManager;
+
+	@Reference
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
+
+	@Reference
+	private ProviderManager _providerManager;
+
+	@Reference
+	private RepresentableManager _representableManager;
 
 }
