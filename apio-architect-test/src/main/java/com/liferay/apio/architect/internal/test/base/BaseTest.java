@@ -43,6 +43,9 @@ import java.util.function.Function;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import org.json.JSONObject;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -103,6 +106,22 @@ public class BaseTest {
 		_iterateAndExecute(
 			_disabledImplementations,
 			_update(_serviceComponentRuntime::enableComponent));
+	}
+
+	/**
+	 * Tries to read a response's entity as a {@link JSONObject}.
+	 *
+	 * @review
+	 */
+	protected static JSONObject asJSONObject(Response response) {
+		String entity = response.readEntity(String.class);
+
+		return Try.of(
+			() -> new JSONObject(entity)
+		).getOrElseThrow(
+			t -> new AssertionError(
+				"Unable to create JSON object out of entity: " + entity, t)
+		);
 	}
 
 	/**
@@ -176,6 +195,23 @@ public class BaseTest {
 			_unregisterImplementationFor(serviceClass);
 
 		_classedDisabledImplementations.add(componentDescriptionDTO);
+	}
+
+	/**
+	 * Creates a {@link JSONObject} by populating a map with data.
+	 *
+	 * @review
+	 */
+	protected static JSONObject createJSONObject(
+		Function1<Map<String, Object>, Map<String, Object>> function) {
+
+		return function.andThen(
+			Map::toJavaMap
+		).andThen(
+			JSONObject::new
+		).apply(
+			HashMap.empty()
+		);
 	}
 
 	/**
