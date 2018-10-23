@@ -294,6 +294,18 @@ public class BaseTest {
 		);
 	}
 
+	/**
+	 * This constant should be used when no properties are required on
+	 * register/unregister methods.
+	 *
+	 * @see    #beforeClassRegisterImplementationFor(Class, Object, Map)
+	 * @see    #beforeClassRegisterResource(Object, Map)
+	 * @see    #beforeTestRegisterAs(Class, Object, Map)
+	 * @see    #beforeTestRegisterResource(Object, Map)
+	 * @review
+	 */
+	protected static final Map<String, Object> noProperties = HashMap.empty();
+
 	private static <T> void _iterateAndExecute(
 		Collection<T> collection, Consumer<T> consumer) {
 
