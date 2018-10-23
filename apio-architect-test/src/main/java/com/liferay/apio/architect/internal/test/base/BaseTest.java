@@ -35,7 +35,6 @@ import javax.ws.rs.client.WebTarget;
 import org.junit.After;
 import org.junit.Before;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -50,11 +49,27 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class BaseTest {
 
+	@Before
+	public void setUp() {
+		_clientBuilderTracker = new ServiceTracker<>(
+			_bundleContext, ClientBuilder.class, null);
+
+		_clientBuilderTracker.open();
+
+		_runtimeServiceReference = _bundleContext.getServiceReference(
+			JaxrsServiceRuntime.class);
+	}
+
+	@After
+	public void tearDown() {
+		_clientBuilderTracker.close();
+	}
+
 	/**
 	 * Returns a new {@code ClientBuilder} instance by using the bundle context
 	 * to retrieve the registered client builder implementation.
 	 */
-	protected static Client createClient() {
+	protected Client createClient() {
 		return Try.of(
 			() -> _clientBuilderTracker.waitForService(5000)
 		).map(
@@ -70,7 +85,7 @@ public class BaseTest {
 	 *
 	 * @review
 	 */
-	protected static WebTarget createDefaultTarget() {
+	protected WebTarget createDefaultTarget() {
 		Client client = createClient();
 
 		return Try.of(
@@ -101,25 +116,10 @@ public class BaseTest {
 		Case($(), value -> List.of(value.toString()))
 	);
 
-	private static final BundleContext _bundleContext;
+	private static final BundleContext _bundleContext = FrameworkUtil.getBundle(
+		BaseTest.class).getBundleContext();
 
-	private static final ServiceTracker<ClientBuilder, ClientBuilder>
-		_clientBuilderTracker;
-	private static final ServiceReference<JaxrsServiceRuntime>
-		_runtimeServiceReference;
-
-	static {
-		Bundle bundle = FrameworkUtil.getBundle(BaseTest.class);
-
-		_bundleContext = bundle.getBundleContext();
-
-		_clientBuilderTracker = new ServiceTracker<>(
-			_bundleContext, ClientBuilder.class, null);
-
-		_clientBuilderTracker.open();
-
-		_runtimeServiceReference = _bundleContext.getServiceReference(
-			JaxrsServiceRuntime.class);
-	}
+	private ServiceTracker<ClientBuilder, ClientBuilder> _clientBuilderTracker;
+	private ServiceReference<JaxrsServiceRuntime> _runtimeServiceReference;
 
 }
