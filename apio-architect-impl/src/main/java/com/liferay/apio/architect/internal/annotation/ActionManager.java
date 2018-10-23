@@ -49,17 +49,18 @@ public interface ActionManager {
 
 	/**
 	 * Adds an action with the key specified by the actionKey parameter, that
-	 * calls a throwableTriFunction with ID, body and parameters based on a
-	 * varags of providers
+	 * calls a executeActionThrowableTriFunction with ID, body and parameters
+	 * based on a varags of providers
 	 *
 	 * @param  actionKey the path parameters to add an Action
-	 * @param  throwableTriFunction the method to call in that path
+	 * @param  executeActionThrowableTriFunction the method to call in that path
 	 * @param  providers the list of providers to supply to the action
 	 * @review
 	 */
 	public void add(
 		ActionKey actionKey,
-		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
+		ThrowableTriFunction<Object, ?, List<Object>, ?>
+			executeActionThrowableTriFunction,
 		Class... providers);
 
 	/**

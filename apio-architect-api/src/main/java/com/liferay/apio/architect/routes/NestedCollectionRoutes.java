@@ -91,8 +91,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 	 * through the {@link NestedCollectionRoutes.Builder} and the function
 	 * therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the function used to obtain the page, if the function exists;
-	 *         {@code Optional#empty()} otherwise
+	 * @return     the function used to obtain the page, if the function exists;
+	 *             {@code Optional#empty()} otherwise
 	 * @deprecated use annotation builder instead
 	 */
 	@Deprecated

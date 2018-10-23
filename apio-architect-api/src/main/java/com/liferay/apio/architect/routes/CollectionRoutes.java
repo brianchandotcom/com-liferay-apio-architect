@@ -74,8 +74,8 @@ public interface CollectionRoutes<T, S> {
 	 * endpoint was added through the {@link CollectionRoutes.Builder} and the
 	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the function used to create a collection item, if the function
-	 *         exists; {@code Optional#empty()} otherwise
+	 * @return     the function used to create a collection item, if the
+	 *             function exists; {@code Optional#empty()} otherwise
 	 * @deprecated use annotation builder instead
 	 */
 	@Deprecated
@@ -112,8 +112,8 @@ public interface CollectionRoutes<T, S> {
 	 * through the {@link CollectionRoutes.Builder} and the function therefore
 	 * exists. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the function used to obtain the page, if the function exists;
-	 *         {@code Optional#empty()} otherwise
+	 * @return     the function used to obtain the page, if the function exists;
+	 *             {@code Optional#empty()} otherwise
 	 * @deprecated use annotation builder instead
 	 */
 	@Deprecated

@@ -78,52 +78,57 @@ public class ActionManagerImpl implements ActionManager {
 	@Override
 	public void add(
 		ActionKey actionKey,
-		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
+		ThrowableTriFunction<Object, ?, List<Object>, ?>
+			executeActionThrowableTriFunction,
 		Class... providers) {
 
-		_actionsMap.put(actionKey, throwableTriFunction);
+		_actionsMap.put(actionKey, executeActionThrowableTriFunction);
 
 		_providers.put(actionKey, providers);
 	}
 
 	public void addCollectionGetter(
 		String name,
-		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
+		ThrowableTriFunction<Object, ?, List<Object>, ?>
+			executeActionThrowableTriFunction,
 		Class... providers) {
 
 		ActionKey actionKey = new ActionKey(GET.name(), name);
 
-		add(actionKey, throwableTriFunction, providers);
+		add(actionKey, executeActionThrowableTriFunction, providers);
 	}
 
 	public void addItemGetter(
 		String name,
-		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
+		ThrowableTriFunction<Object, ?, List<Object>, ?>
+			executeActionThrowableTriFunction,
 		Class... providers) {
 
 		ActionKey actionKey = new ActionKey(GET.name(), name, ANY_ROUTE);
 
-		add(actionKey, throwableTriFunction, providers);
+		add(actionKey, executeActionThrowableTriFunction, providers);
 	}
 
 	public void addItemRemover(
 		String name,
-		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
+		ThrowableTriFunction<Object, ?, List<Object>, ?>
+			executeActionThrowableTriFunction,
 		Class... providers) {
 
 		ActionKey actionKey = new ActionKey(DELETE.name(), name, ANY_ROUTE);
 
-		add(actionKey, throwableTriFunction, providers);
+		add(actionKey, executeActionThrowableTriFunction, providers);
 	}
 
 	public void addNestedGetter(
 		String name, String nestedName,
-		ThrowableTriFunction<Object, ?, List<Object>, ?> throwableTriFunction,
+		ThrowableTriFunction<Object, ?, List<Object>, ?>
+			executeActionThrowableTriFunction,
 		Class... providers) {
 
 		ActionKey actionKey = _getActionKeyForNested(name, nestedName);
 
-		add(actionKey, throwableTriFunction, providers);
+		add(actionKey, executeActionThrowableTriFunction, providers);
 	}
 
 	@Override
@@ -191,12 +196,6 @@ public class ActionManagerImpl implements ActionManager {
 		);
 	}
 
-	public Map<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
-		getActionsMap() {
-
-		return _actionsMap;
-	}
-
 	@Override
 	public Documentation getDocumentation(
 		Supplier<Optional<APITitle>> apiTitleOptionalSupplier,
@@ -235,7 +234,7 @@ public class ActionManagerImpl implements ActionManager {
 			@Override
 			public Object apply(HttpServletRequest httpServletRequest) {
 				return Try.fromFallible(
-					() -> _getActionThrowableTriFunction(actionKey)
+					() -> _getExecuteActionThrowableTriFunction(actionKey)
 				).map(
 					action -> action.apply(
 						id, null,
@@ -281,7 +280,7 @@ public class ActionManagerImpl implements ActionManager {
 	}
 
 	private ThrowableTriFunction
-		<Object, ?, List<Object>, ?> _getActionThrowableTriFunction(
+		<Object, ?, List<Object>, ?> _getExecuteActionThrowableTriFunction(
 			ActionKey actionKey) {
 
 		if (_actionsMap.containsKey(actionKey)) {
@@ -350,7 +349,7 @@ public class ActionManagerImpl implements ActionManager {
 
 		if (!actionKey.isNested() && actionKey.isItem() &&
 			childActionKey.isItem() &&
-			(_getActionThrowableTriFunction(
+			(_getExecuteActionThrowableTriFunction(
 				new ActionKey("GET", childActionKey.getNestedResource())) ==
 					null)) {
 
@@ -379,7 +378,7 @@ public class ActionManagerImpl implements ActionManager {
 			return _actionsMap.containsKey(actionKey);
 		}
 
-		if (_getActionThrowableTriFunction(actionKey) != null) {
+		if (_getExecuteActionThrowableTriFunction(actionKey) != null) {
 			return true;
 		}
 

@@ -50,8 +50,8 @@ public class Documentation {
 		_entryPointSupplier = entryPointSupplier;
 		_representorMapSupplier = representorMapSupplier;
 		_actionKeysSupplier = actionKeysSupplier;
-		_customDocumentationSupplier = customDocumentationSupplier;
 		_actionsFunction = actionsFunction;
+		_customDocumentationSupplier = customDocumentationSupplier;
 	}
 
 	public Supplier<Set<ActionKey>> getActionKeysSupplier() {
