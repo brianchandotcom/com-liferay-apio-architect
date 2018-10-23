@@ -72,10 +72,26 @@ public class ErrorUtil {
 		APIError apiError = apiErrorOptional.get();
 
 		if (_logger.isDebugEnabled()) {
-			_logger.debug(apiError.getMessage(), apiError.getException());
+			_logger.debug(apiError.getMessage(), exception);
 		}
 		else {
-			_logger.error(apiError.getMessage());
+			StringBuilder stringBuilder = new StringBuilder();
+
+			String message = stringBuilder.append(
+				apiError.getMessage()
+			).append(
+				"\n"
+			).append(
+				exception
+			).append(
+				"\nat "
+			).append(
+				exception.getStackTrace()[0]
+			).append(
+				"\n"
+			).toString();
+
+			_logger.error(message);
 		}
 
 		int statusCode = apiError.getStatusCode();
