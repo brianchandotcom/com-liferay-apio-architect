@@ -206,7 +206,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	}
 
 	private String _getNestedName(String id, String nestedName) {
-		if ("r".equals(_name)) {
+		if (_name.equals("r")) {
 			return id;
 		}
 
