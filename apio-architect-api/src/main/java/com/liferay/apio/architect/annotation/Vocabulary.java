@@ -101,6 +101,7 @@ public @interface Vocabulary {
 		 * </p>
 		 *
 		 * @see        #writeOnly()
+		 * @deprecated use {@link #mode()} instead
 		 * @review
 		 */
 		@Deprecated
@@ -137,6 +138,7 @@ public @interface Vocabulary {
 		 * </p>
 		 *
 		 * @see        #readOnly()
+		 * @deprecated use {@link #mode()} instead
 		 * @review
 		 */
 		@Deprecated
