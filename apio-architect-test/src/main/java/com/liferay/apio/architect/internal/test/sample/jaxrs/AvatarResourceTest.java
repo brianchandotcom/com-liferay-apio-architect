@@ -16,7 +16,6 @@ package com.liferay.apio.architect.internal.test.sample.jaxrs;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.internal.test.base.BaseTest;
@@ -27,6 +26,8 @@ import java.io.InputStream;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.json.JSONObject;
 
 import org.junit.Test;
 
@@ -39,17 +40,20 @@ import org.junit.Test;
 public class AvatarResourceTest extends BaseTest {
 
 	@Test
-	public void testAvatarResourceReturns404OnNonexistentAvatar()
-		throws IOException {
-
+	public void testAvatarResourceReturns404OnNonexistentAvatar() {
 		Response response = _requestAvatarForId(9999);
 
-		InputStream inputStream = (InputStream)response.getEntity();
-
 		assertThat(response.getStatus(), is(404));
-		assertThat(response.getMediaType(), is(nullValue()));
 
-		assertThat(inputStream.available(), is(0));
+		JSONObject jsonObject = new JSONObject(
+			response.readEntity(String.class));
+
+		String expected = "Unable to find the image of user with id 9999";
+
+		assertThat(jsonObject.getString("@type"), is("not-found"));
+		assertThat(jsonObject.getString("description"), is(expected));
+		assertThat(jsonObject.getNumber("statusCode"), is(404));
+		assertThat(jsonObject.getString("title"), is("Not Found"));
 	}
 
 	@Test
