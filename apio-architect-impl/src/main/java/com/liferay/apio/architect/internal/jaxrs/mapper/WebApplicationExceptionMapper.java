@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.jaxrs.mapper;
 
 import com.liferay.apio.architect.internal.jaxrs.util.ErrorUtil;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
@@ -25,7 +26,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Captures and converts any exception to its corresponding {@link Response}.
+ * Captures and converts any {@link WebApplicationException} to its
+ * corresponding {@link Response}.
  *
  * @author Alejandro Hernández
  * @review
@@ -37,10 +39,11 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = ExceptionMapper.class
 )
-public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
+public class WebApplicationExceptionMapper
+	implements ExceptionMapper<WebApplicationException> {
 
 	@Override
-	public Response toResponse(Exception exception) {
+	public Response toResponse(WebApplicationException exception) {
 		return _errorUtil.getErrorResponse(exception, _request);
 	}
 
