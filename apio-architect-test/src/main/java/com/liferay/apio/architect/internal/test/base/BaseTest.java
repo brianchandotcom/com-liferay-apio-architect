@@ -45,7 +45,9 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -66,6 +68,23 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class BaseTest {
 
+	@BeforeClass
+	public static void setUpClass() {
+		ServiceReference<ServiceComponentRuntime> serviceReference =
+			_bundleContext.getServiceReference(ServiceComponentRuntime.class);
+
+		_serviceComponentRuntime = _bundleContext.getService(serviceReference);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_iterateAndExecute(
+			_classRegistrations, ServiceRegistration::unregister);
+		_iterateAndExecute(
+			_classedDisabledImplementations,
+			_update(_serviceComponentRuntime::enableComponent));
+	}
+
 	@Before
 	public void setUp() {
 		_clientBuilderTracker = new ServiceTracker<>(
@@ -75,11 +94,6 @@ public class BaseTest {
 
 		_runtimeServiceReference = _bundleContext.getServiceReference(
 			JaxrsServiceRuntime.class);
-
-		ServiceReference<ServiceComponentRuntime> serviceReference =
-			_bundleContext.getServiceReference(ServiceComponentRuntime.class);
-
-		_serviceComponentRuntime = _bundleContext.getService(serviceReference);
 	}
 
 	@After
@@ -89,6 +103,79 @@ public class BaseTest {
 		_iterateAndExecute(
 			_disabledImplementations,
 			_update(_serviceComponentRuntime::enableComponent));
+	}
+
+	/**
+	 * Registers a new service with the provided properties. Returns the service
+	 * registration.
+	 *
+	 * <p>
+	 * Warning! This method must be only used in a specific class test lifecycle
+	 * (inside methods annotated with {@link BeforeClass} or {@link AfterClass}.
+	 * </p>
+	 *
+	 * @param  serviceClass the service class
+	 * @param  service the service
+	 * @param  properties the service properties
+	 * @return the service registration
+	 * @review
+	 */
+	protected static <T> ServiceRegistration<T>
+		beforeClassRegisterImplementationFor(
+			Class<T> serviceClass, T service, Map<String, Object> properties) {
+
+		ServiceRegistration<T> serviceRegistration =
+			_bundleContext.registerService(
+				serviceClass, service,
+				properties.toJavaMap(Hashtable::new, identity()));
+
+		_classRegistrations.add(serviceRegistration);
+
+		return serviceRegistration;
+	}
+
+	/**
+	 * Registers a new service as a JAX-RS resource with the provided
+	 * properties. Returns the service registration.
+	 *
+	 * <p>
+	 * Warning! This method must be only used in a specific class test lifecycle
+	 * (inside methods annotated with {@link BeforeClass} or {@link AfterClass}.
+	 * </p>
+	 *
+	 * @param  service the JAX-RS resource
+	 * @param  properties the service properties
+	 * @return the service registration
+	 * @review
+	 */
+	protected static ServiceRegistration<?> beforeClassRegisterResource(
+		Object service, Map<String, Object> properties) {
+
+		return beforeClassRegisterImplementationFor(
+			Object.class, service,
+			properties.merge(_defaultResourceProperties));
+	}
+
+	/**
+	 * Unregister the default implementation for a given service class. The
+	 * implementation is expected to be present in the same bundle as the
+	 * service class.
+	 *
+	 * <p>
+	 * Warning! This method must be only used in a specific class test lifecycle
+	 * (inside methods annotated with {@link BeforeClass} or {@link AfterClass}.
+	 * </p>
+	 *
+	 * @param  serviceClass the service class
+	 * @review
+	 */
+	protected static <T> void beforeClassUnregisterImplementationFor(
+		Class<T> serviceClass) {
+
+		ComponentDescriptionDTO componentDescriptionDTO =
+			_unregisterImplementationFor(serviceClass);
+
+		_classedDisabledImplementations.add(componentDescriptionDTO);
 	}
 
 	/**
@@ -223,7 +310,7 @@ public class BaseTest {
 		}
 	}
 
-	private <T> ComponentDescriptionDTO _unregisterImplementationFor(
+	private static <T> ComponentDescriptionDTO _unregisterImplementationFor(
 		Class<T> serviceClass) {
 
 		ServiceReference<T> serviceReference =
@@ -247,7 +334,7 @@ public class BaseTest {
 		return componentDescriptionDTO;
 	}
 
-	private <C extends ComponentDescriptionDTO> Consumer<C> _update(
+	private static <C extends ComponentDescriptionDTO> Consumer<C> _update(
 		Function1<C, Promise<Void>> updateFunction) {
 
 		return c -> Try.of(
@@ -274,11 +361,16 @@ public class BaseTest {
 
 	private static final BundleContext _bundleContext = FrameworkUtil.getBundle(
 		BaseTest.class).getBundleContext();
+	private static final Collection<ComponentDescriptionDTO>
+		_classedDisabledImplementations = new ArrayList<>();
+	private static final Collection<ServiceRegistration<?>>
+		_classRegistrations = new ArrayList<>();
 	private static final Map<String, Object> _defaultResourceProperties =
 		HashMap.of(
 			JAX_RS_APPLICATION_SELECT,
 			"(liferay.apio.architect.application=true)", JAX_RS_RESOURCE,
 			"true");
+	private static ServiceComponentRuntime _serviceComponentRuntime;
 
 	private ServiceTracker<ClientBuilder, ClientBuilder> _clientBuilderTracker;
 	private final Collection<ComponentDescriptionDTO> _disabledImplementations =
@@ -286,6 +378,5 @@ public class BaseTest {
 	private final Collection<ServiceRegistration<?>> _registrations =
 		new ArrayList<>();
 	private ServiceReference<JaxrsServiceRuntime> _runtimeServiceReference;
-	private ServiceComponentRuntime _serviceComponentRuntime;
 
 }
