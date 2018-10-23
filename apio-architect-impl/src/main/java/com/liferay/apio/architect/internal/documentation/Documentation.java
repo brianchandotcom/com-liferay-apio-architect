@@ -17,12 +17,16 @@ package com.liferay.apio.architect.internal.documentation;
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
-import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.annotation.Action;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.representor.Representor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -37,19 +41,25 @@ public class Documentation {
 		Supplier<Optional<APIDescription>> apiDescriptionSupplier,
 		Supplier<Optional<ApplicationURL>> entryPointSupplier,
 		Supplier<Map<String, Representor>> representorMapSupplier,
-		Supplier<ActionManager> actionManagerSupplier,
+		Supplier<Set<ActionKey>> actionKeysSupplier,
+		Function<ActionKey, List<Action>> actionsFunction,
 		Supplier<CustomDocumentation> customDocumentationSupplier) {
 
 		_apiTitleSupplier = apiTitleSupplier;
 		_apiDescriptionSupplier = apiDescriptionSupplier;
 		_entryPointSupplier = entryPointSupplier;
 		_representorMapSupplier = representorMapSupplier;
-		_actionManagerSupplier = actionManagerSupplier;
+		_actionKeysSupplier = actionKeysSupplier;
 		_customDocumentationSupplier = customDocumentationSupplier;
+		_actionsFunction = actionsFunction;
 	}
 
-	public Supplier<ActionManager> getActionManagerSupplier() {
-		return _actionManagerSupplier;
+	public Supplier<Set<ActionKey>> getActionKeysSupplier() {
+		return _actionKeysSupplier;
+	}
+
+	public Function<ActionKey, List<Action>> getActionsFunction() {
+		return _actionsFunction;
 	}
 
 	/**
@@ -97,7 +107,8 @@ public class Documentation {
 		return _representorMapSupplier.get();
 	}
 
-	private final Supplier<ActionManager> _actionManagerSupplier;
+	private final Supplier<Set<ActionKey>> _actionKeysSupplier;
+	private final Function<ActionKey, List<Action>> _actionsFunction;
 	private final Supplier<Optional<APIDescription>> _apiDescriptionSupplier;
 	private final Supplier<Optional<APITitle>> _apiTitleSupplier;
 	private final Supplier<CustomDocumentation> _customDocumentationSupplier;

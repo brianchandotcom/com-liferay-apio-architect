@@ -31,11 +31,8 @@ import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
-import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.internal.annotation.ActionKey;
-import com.liferay.apio.architect.internal.annotation.ActionManager;
-import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
@@ -100,18 +97,15 @@ public class DocumentationWriter {
 		Map<String, Representor> representors =
 			_documentation.getRepresentors();
 
-		Supplier<ActionManager> actionManagerSupplier =
-			_documentation.getActionManagerSupplier();
+		Supplier<Set<ActionKey>> actionKeysSupplier =
+			_documentation.getActionKeysSupplier();
 
-		ActionManagerImpl actionManager =
-			(ActionManagerImpl)actionManagerSupplier.get();
-
-		Map<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
-			actions = actionManager.getActionsMap();
-
-		Set<ActionKey> actionKeys = actions.keySet();
+		Set<ActionKey> actionKeys = actionKeysSupplier.get();
 
 		Stream<ActionKey> stream = actionKeys.stream();
+
+		Function<ActionKey, List<Action>> actionsFunction =
+			_documentation.getActionsFunction();
 
 		stream.filter(
 			actionKey -> representors.containsKey(actionKey.getResource())
@@ -129,7 +123,7 @@ public class DocumentationWriter {
 					_getResourceMapperTriConsumer(actionKey),
 					(resource, type, resourceJsonObjectBuilder) ->
 						_writeOperations(
-							actionManager, resource, type, actionKey,
+							actionsFunction, resource, type, actionKey,
 							resourceJsonObjectBuilder),
 					_getWriteFieldsRepresentorConsumer(actionKey, representor));
 			}
@@ -467,10 +461,11 @@ public class DocumentationWriter {
 	}
 
 	private void _writeOperations(
-		ActionManager actionManager, String resource, String type,
-		ActionKey actionKey, JSONObjectBuilder resourceJsonObjectBuilder) {
+		Function<ActionKey, List<Action>> actionManager, String resource,
+		String type, ActionKey actionKey,
+		JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		List<Action> actions = actionManager.getActions(actionKey, null);
+		List<Action> actions = actionManager.apply(actionKey);
 
 		actions.forEach(
 			action -> _writeAction(

@@ -206,7 +206,8 @@ public class ActionManagerImpl implements ActionManager {
 		return new Documentation(
 			apiTitleOptionalSupplier, apiDescriptionOptionalSupplier,
 			applicationUrlOptionalSupplier,
-			() -> _representableManager.getRepresentors(), () -> this,
+			() -> _representableManager.getRepresentors(), _actionsMap::keySet,
+			actionKey -> getActions(actionKey, null),
 			() -> _customDocumentationManager.getCustomDocumentation());
 	}
 
