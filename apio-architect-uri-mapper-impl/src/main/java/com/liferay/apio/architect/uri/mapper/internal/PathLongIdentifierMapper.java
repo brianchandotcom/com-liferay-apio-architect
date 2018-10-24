@@ -14,9 +14,10 @@
 
 package com.liferay.apio.architect.uri.mapper.internal;
 
-import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.uri.Path;
 import com.liferay.apio.architect.uri.mapper.PathIdentifierMapper;
+
+import io.vavr.control.Try;
 
 import javax.ws.rs.BadRequestException;
 
@@ -36,10 +37,11 @@ public class PathLongIdentifierMapper implements PathIdentifierMapper<Long> {
 
 	@Override
 	public Long map(Path path) {
-		return Try.fromFallible(
+		return Try.of(
 			() -> Long.parseLong(path.getId())
-		).orElseThrow(
-			BadRequestException::new
+		).getOrElseThrow(
+			() -> new BadRequestException(
+				path.getId() + " is not a valid long value")
 		);
 	}
 

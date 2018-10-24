@@ -18,7 +18,7 @@ import static com.liferay.apio.architect.exception.mapper.internal.WebApplicatio
 
 import com.liferay.apio.architect.error.APIError;
 
-import java.util.Optional;
+import io.vavr.control.Option;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.StatusType;
@@ -39,12 +39,12 @@ public abstract class WebApplicationExceptionMapper {
 	 * @return the exception's {@code APIError} representation
 	 */
 	protected APIError convert(WebApplicationException exception) {
-		String description = Optional.ofNullable(
+		String description = Option.of(
 			exception.getMessage()
 		).filter(
 			isNotDefaultMessage(getStatusType())
-		).orElse(
-			null
+		).getOrElse(
+			() -> null
 		);
 
 		StatusType statusType = getStatusType();

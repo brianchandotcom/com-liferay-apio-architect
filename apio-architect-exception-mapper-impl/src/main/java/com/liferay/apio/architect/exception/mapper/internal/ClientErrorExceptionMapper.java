@@ -19,7 +19,7 @@ import static com.liferay.apio.architect.exception.mapper.internal.WebApplicatio
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.exception.mapper.ExceptionMapper;
 
-import java.util.Optional;
+import io.vavr.control.Option;
 
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
@@ -43,12 +43,12 @@ public class ClientErrorExceptionMapper
 
 		StatusType statusType = response.getStatusInfo();
 
-		String description = Optional.ofNullable(
+		String description = Option.of(
 			exception.getMessage()
 		).filter(
 			isNotDefaultMessage(statusType)
-		).orElse(
-			null
+		).getOrElse(
+			() -> null
 		);
 
 		return new APIError(
