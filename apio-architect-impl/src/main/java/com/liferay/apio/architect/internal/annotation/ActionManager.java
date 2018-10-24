@@ -15,19 +15,16 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import com.liferay.apio.architect.credentials.Credentials;
-import com.liferay.apio.architect.documentation.APIDescription;
-import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.internal.annotation.Action.Error;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
-import com.liferay.apio.architect.internal.url.ApplicationURL;
 
 import io.vavr.control.Either;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Supplier;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Provides methods to get the different actions provided by the different
@@ -141,9 +138,7 @@ public interface ActionManager {
 	 * @review
 	 */
 	public Documentation getDocumentation(
-		Supplier<Optional<APITitle>> apiTitleOptionalSupplier,
-		Supplier<Optional<APIDescription>> apiDescriptionOptionalSupplier,
-		Supplier<Optional<ApplicationURL>> applicationUrlOptionalSupplier);
+		HttpServletRequest httpServletRequest);
 
 	/**
 	 * The API entry point with the root resources.

@@ -198,13 +198,22 @@ public class ActionManagerImpl implements ActionManager {
 
 	@Override
 	public Documentation getDocumentation(
-		Supplier<Optional<APITitle>> apiTitleOptionalSupplier,
-		Supplier<Optional<APIDescription>> apiDescriptionOptionalSupplier,
-		Supplier<Optional<ApplicationURL>> applicationUrlOptionalSupplier) {
+		HttpServletRequest httpServletRequest) {
+
+		Supplier<Optional<APITitle>> apiTitleSupplier =
+			() -> providerManager.provideOptional(
+				httpServletRequest, APITitle.class);
+
+		Supplier<Optional<APIDescription>> apiDescriptionSupplier =
+			() -> providerManager.provideOptional(
+				httpServletRequest, APIDescription.class);
+
+		Supplier<Optional<ApplicationURL>> applicationUrlSupplier =
+			() -> providerManager.provideOptional(
+				httpServletRequest, ApplicationURL.class);
 
 		return new Documentation(
-			apiTitleOptionalSupplier, apiDescriptionOptionalSupplier,
-			applicationUrlOptionalSupplier,
+			apiTitleSupplier, apiDescriptionSupplier, applicationUrlSupplier,
 			() -> _representableManager.getRepresentors(), _actionsMap::keySet,
 			actionKey -> getActions(actionKey, null),
 			() -> _customDocumentationManager.getCustomDocumentation());
