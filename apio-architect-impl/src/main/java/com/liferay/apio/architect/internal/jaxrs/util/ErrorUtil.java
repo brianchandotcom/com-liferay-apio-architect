@@ -16,6 +16,8 @@ package com.liferay.apio.architect.internal.jaxrs.util;
 
 import static com.liferay.apio.architect.internal.writer.ErrorWriter.writeError;
 
+import static java.lang.String.join;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.error.APIError;
@@ -71,25 +73,17 @@ public class ErrorUtil {
 
 		APIError apiError = apiErrorOptional.get();
 
+		String errorMessage = apiError.getMessage();
+
 		if (_logger.isDebugEnabled()) {
-			_logger.debug(apiError.getMessage(), exception);
+			_logger.debug(errorMessage, exception);
 		}
 		else {
-			StringBuilder stringBuilder = new StringBuilder();
+			StackTraceElement stackTraceElement = exception.getStackTrace()[0];
 
-			String message = stringBuilder.append(
-				apiError.getMessage()
-			).append(
-				"\n"
-			).append(
-				exception
-			).append(
-				"\nat "
-			).append(
-				exception.getStackTrace()[0]
-			).append(
-				"\n"
-			).toString();
+			String message = join(
+				"\n", errorMessage, exception.toString(),
+				"at " + stackTraceElement);
 
 			_logger.error(message);
 		}
