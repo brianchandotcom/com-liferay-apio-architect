@@ -18,6 +18,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 
+import static uk.co.datumedge.hamcrest.json.SameJSONAs.sameJSONObjectAs;
+
 import com.liferay.apio.architect.internal.test.base.BaseTest;
 
 import java.io.IOException;
@@ -45,15 +47,18 @@ public class AvatarResourceTest extends BaseTest {
 
 		assertThat(response.getStatus(), is(404));
 
-		JSONObject jsonObject = new JSONObject(
-			response.readEntity(String.class));
+		JSONObject expected = createJSONObject(
+			builder -> builder.put(
+				"@type", "not-found"
+			).put(
+				"description", "Unable to find the image of user with id 9999"
+			).put(
+				"statusCode", 404
+			).put(
+				"title", "Not Found"
+			));
 
-		String expected = "Unable to find the image of user with id 9999";
-
-		assertThat(jsonObject.getString("@type"), is("not-found"));
-		assertThat(jsonObject.getString("description"), is(expected));
-		assertThat(jsonObject.getNumber("statusCode"), is(404));
-		assertThat(jsonObject.getString("title"), is("Not Found"));
+		assertThat(asJSONObject(response), is(sameJSONObjectAs(expected)));
 	}
 
 	@Test
