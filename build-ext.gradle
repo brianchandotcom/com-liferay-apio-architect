@@ -45,14 +45,16 @@ task codeCoverageReport(type: JacocoReport)
 codeCoverageReport {
 	executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
-	subprojects.findAll { !it.childProjects }.each {
-		sourceSets it.sourceSets.main
+	subprojects.findAll { !it.childProjects }.each { sourceSets it.sourceSets.main }
+
+	afterEvaluate {
+		classDirectories = files(classDirectories.files.collect { fileTree(dir: it, exclude: ['**/com/liferay/apio/architect/internal/test/**']) })
 	}
 
 	reports {
-		csv.enabled false
-		html.enabled false
+		csv.enabled = false
+		html.enabled = false
 		xml.destination "${buildDir}/reports/jacoco/report.xml"
-		xml.enabled true
+		xml.enabled = true
 	}
 }
