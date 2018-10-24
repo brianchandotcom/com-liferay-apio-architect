@@ -18,7 +18,6 @@ import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
-import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
@@ -31,6 +30,8 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
 import com.liferay.apio.architect.uri.Path;
+
+import io.vavr.CheckedFunction3;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -128,7 +129,7 @@ public class MockDocumentationWriter {
 		Set<ActionKey> actionKeys) {
 
 		actionKeys.add(actionKey);
-		actionManager.add(actionKey, _getEmptyThrowableTriFunction());
+		actionManager.add(actionKey, _emptyActionFunction);
 	}
 
 	private static void _addActions(
@@ -148,14 +149,11 @@ public class MockDocumentationWriter {
 			actionKeys);
 	}
 
-	private static ThrowableTriFunction<Object, Object, List<Object>, Object>
-		_getEmptyThrowableTriFunction() {
-
-		return (id, body, providers) -> null;
-	}
-
 	private MockDocumentationWriter() {
 		throw new UnsupportedOperationException();
 	}
+
+	private static final CheckedFunction3<Object, Object, List<Object>, Object>
+		_emptyActionFunction = (id, body, providers) -> null;
 
 }

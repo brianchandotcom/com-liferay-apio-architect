@@ -22,8 +22,6 @@ import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
-import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
-import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
@@ -33,9 +31,12 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.Rep
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.uri.Path;
 
+import io.vavr.CheckedFunction3;
 import io.vavr.control.Either;
+import io.vavr.control.Try;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,57 +79,52 @@ public class ActionManagerImpl implements ActionManager {
 	@Override
 	public void add(
 		ActionKey actionKey,
-		ThrowableTriFunction<Object, ?, List<Object>, ?>
-			executeActionThrowableTriFunction,
+		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
 		Class... providers) {
 
-		_actionsMap.put(actionKey, executeActionThrowableTriFunction);
+		_actionsMap.put(actionKey, actionFunction);
 
 		_providers.put(actionKey, providers);
 	}
 
 	public void addCollectionGetter(
 		String name,
-		ThrowableTriFunction<Object, ?, List<Object>, ?>
-			executeActionThrowableTriFunction,
+		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
 		Class... providers) {
 
 		ActionKey actionKey = new ActionKey(GET.name(), name);
 
-		add(actionKey, executeActionThrowableTriFunction, providers);
+		add(actionKey, actionFunction, providers);
 	}
 
 	public void addItemGetter(
 		String name,
-		ThrowableTriFunction<Object, ?, List<Object>, ?>
-			executeActionThrowableTriFunction,
+		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
 		Class... providers) {
 
 		ActionKey actionKey = new ActionKey(GET.name(), name, ANY_ROUTE);
 
-		add(actionKey, executeActionThrowableTriFunction, providers);
+		add(actionKey, actionFunction, providers);
 	}
 
 	public void addItemRemover(
 		String name,
-		ThrowableTriFunction<Object, ?, List<Object>, ?>
-			executeActionThrowableTriFunction,
+		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
 		Class... providers) {
 
 		ActionKey actionKey = new ActionKey(DELETE.name(), name, ANY_ROUTE);
 
-		add(actionKey, executeActionThrowableTriFunction, providers);
+		add(actionKey, actionFunction, providers);
 	}
 
 	public void addNestedGetter(
 		String name, String nestedName,
-		ThrowableTriFunction<Object, ?, List<Object>, ?>
-			executeActionThrowableTriFunction,
+		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
 		Class... providers) {
 
 		ActionKey actionKey = _getActionKeyForNested(name, nestedName);
 
-		add(actionKey, executeActionThrowableTriFunction, providers);
+		add(actionKey, actionFunction, providers);
 	}
 
 	@Override
@@ -242,15 +238,15 @@ public class ActionManagerImpl implements ActionManager {
 
 			@Override
 			public Object apply(HttpServletRequest httpServletRequest) {
-				return Try.fromFallible(
-					() -> _getExecuteActionThrowableTriFunction(actionKey)
-				).map(
+				return Try.of(
+					() -> _getActionFunction(actionKey)
+				).mapTry(
 					action -> action.apply(
 						id, null,
 						(List<Object>)_getProviders(
 							httpServletRequest, actionKey))
-				).orElseThrow(
-					NotFoundException::new
+				).getOrElseThrow(
+					() -> new NotFoundException("Not Found")
 				);
 			}
 
@@ -272,6 +268,16 @@ public class ActionManagerImpl implements ActionManager {
 		};
 	}
 
+	private CheckedFunction3<Object, ?, List<Object>, ?> _getActionFunction(
+		ActionKey actionKey) {
+
+		if (_actionsMap.containsKey(actionKey)) {
+			return _actionsMap.get(actionKey);
+		}
+
+		return _actionsMap.get(actionKey.getGenericActionKey());
+	}
+
 	private ActionKey _getActionKeyForNested(String name, String nestedName) {
 		if (name.equals("r")) {
 			return new ActionKey(GET.name(), name, nestedName, ANY_ROUTE);
@@ -286,17 +292,6 @@ public class ActionManagerImpl implements ActionManager {
 		Object id = _getId(actionKey.getPath());
 
 		return Either.right(_getAction(actionKey, id));
-	}
-
-	private ThrowableTriFunction
-		<Object, ?, List<Object>, ?> _getExecuteActionThrowableTriFunction(
-			ActionKey actionKey) {
-
-		if (_actionsMap.containsKey(actionKey)) {
-			return _actionsMap.get(actionKey);
-		}
-
-		return _actionsMap.get(actionKey.getGenericActionKey());
 	}
 
 	private Object _getId(Path path) {
@@ -324,12 +319,12 @@ public class ActionManagerImpl implements ActionManager {
 	private List<Object> _getProviders(
 		HttpServletRequest httpServletRequest, ActionKey actionKey) {
 
-		return Try.fromFallible(
+		return Try.of(
 			() -> _getProvidersByParam(actionKey)
 		).map(
 			value -> _getProvidedObjects(value, httpServletRequest)
-		).orElseGet(
-			ArrayList::new
+		).getOrElse(
+			Collections::emptyList
 		);
 	}
 
@@ -358,7 +353,7 @@ public class ActionManagerImpl implements ActionManager {
 
 		if (!actionKey.isNested() && actionKey.isItem() &&
 			childActionKey.isItem() &&
-			(_getExecuteActionThrowableTriFunction(
+			(_getActionFunction(
 				new ActionKey("GET", childActionKey.getNestedResource())) ==
 					null)) {
 
@@ -387,7 +382,7 @@ public class ActionManagerImpl implements ActionManager {
 			return _actionsMap.containsKey(actionKey);
 		}
 
-		if (_getExecuteActionThrowableTriFunction(actionKey) != null) {
+		if (_getActionFunction(actionKey) != null) {
 			return true;
 		}
 
@@ -402,9 +397,8 @@ public class ActionManagerImpl implements ActionManager {
 		return resource.equals(actionKey.getResource());
 	}
 
-	private final Map
-		<ActionKey, ThrowableTriFunction<Object, ?, List<Object>, ?>>
-			_actionsMap = new HashMap<>();
+	private final Map<ActionKey, CheckedFunction3<Object, ?, List<Object>, ?>>
+		_actionsMap = new HashMap<>();
 
 	@Reference
 	private CustomDocumentationManager _customDocumentationManager;
