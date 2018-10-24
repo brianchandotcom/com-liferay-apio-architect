@@ -27,7 +27,6 @@ import com.liferay.apio.architect.internal.message.json.BatchResultMessageMapper
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.EntryPointMessageMapper;
 import com.liferay.apio.architect.internal.message.json.ErrorMessageMapper;
-import com.liferay.apio.architect.internal.message.json.FormMessageMapper;
 import com.liferay.apio.architect.internal.message.json.MessageMapper;
 import com.liferay.apio.architect.internal.message.json.PageMessageMapper;
 import com.liferay.apio.architect.internal.message.json.SingleModelMessageMapper;
@@ -35,7 +34,6 @@ import com.liferay.apio.architect.internal.writer.ErrorWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockBatchResultWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockDocumentationWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockEntryPointWriter;
-import com.liferay.apio.architect.test.util.internal.writer.MockFormWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockPageWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockSingleModelWriter;
 import com.liferay.apio.architect.test.util.model.RootModel;
@@ -166,23 +164,6 @@ public class MessageMapperTesterBuilder {
 				errorMessageMapper, _MOCK_API_ERROR);
 
 			_validateMessageMapper(errorMessageMapper, actual, "error");
-
-			return this;
-		}
-
-		/**
-		 * Validates that the output of the provided {@code FormMessageMapper}
-		 * matches the content of {@code /src/test/resources/form.json}.
-		 *
-		 * @param  formMessageMapper the {@code FormMessageMapper}
-		 * @return the builder's next step
-		 */
-		public MessageMapperStep validateFormMessageMapper(
-			FormMessageMapper formMessageMapper) {
-
-			String result = MockFormWriter.write(formMessageMapper);
-
-			_validateMessageMapper(formMessageMapper, result, "form");
 
 			return this;
 		}

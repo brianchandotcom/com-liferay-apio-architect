@@ -22,7 +22,6 @@ import com.liferay.apio.architect.internal.message.json.BatchResultMessageMapper
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.EntryPointMessageMapper;
 import com.liferay.apio.architect.internal.message.json.ErrorMessageMapper;
-import com.liferay.apio.architect.internal.message.json.FormMessageMapper;
 import com.liferay.apio.architect.internal.message.json.PageMessageMapper;
 import com.liferay.apio.architect.internal.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.internal.unsafe.Unsafe;
@@ -71,7 +70,6 @@ public class ManagerCache {
 		_documentationMessageMappers = null;
 		_entryPointMessageMappers = null;
 		_errorMessageMappers = null;
-		_formMessageMappers = null;
 		_identifierClasses = null;
 		_reusableIdentifierClasses = null;
 		_itemRoutes = null;
@@ -220,29 +218,6 @@ public class ManagerCache {
 
 		Optional<ErrorMessageMapper> optional = _getMessageMapperOptional(
 			request, _errorMessageMappers);
-
-		return optional.map(Unsafe::unsafeCast);
-	}
-
-	/**
-	 * Returns the form message mapper, if present, for the current request;
-	 * {@code Optional#empty()} otherwise.
-	 *
-	 * @param  request the current request
-	 * @param  computeEmptyFunction the function that can be called to compute
-	 *         the data
-	 * @return the form message mapper, if present; {@code Optional#empty()}
-	 *         otherwise
-	 */
-	public Optional<FormMessageMapper> getFormMessageMapperOptional(
-		Request request, EmptyFunction computeEmptyFunction) {
-
-		if (_formMessageMappers == null) {
-			computeEmptyFunction.invoke();
-		}
-
-		Optional<FormMessageMapper> optional = _getMessageMapperOptional(
-			request, _formMessageMappers);
 
 		return optional.map(Unsafe::unsafeCast);
 	}
@@ -622,22 +597,6 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Adds a form message mapper.
-	 *
-	 * @param mediaType the media type
-	 * @param formMessageMapper the form message mapper
-	 */
-	public void putFormMessageMapper(
-		MediaType mediaType, FormMessageMapper formMessageMapper) {
-
-		if (_formMessageMappers == null) {
-			_formMessageMappers = new HashMap<>();
-		}
-
-		_formMessageMappers.put(mediaType, formMessageMapper);
-	}
-
-	/**
 	 * Adds an identifier class.
 	 *
 	 * @param key the key
@@ -858,7 +817,6 @@ public class ManagerCache {
 		_documentationMessageMappers;
 	private Map<MediaType, EntryPointMessageMapper> _entryPointMessageMappers;
 	private Map<MediaType, ErrorMessageMapper> _errorMessageMappers;
-	private Map<MediaType, FormMessageMapper> _formMessageMappers;
 	private Map<String, Class<Identifier>> _identifierClasses;
 	private Map<String, ItemRoutes> _itemRoutes;
 	private Map<String, String> _names;

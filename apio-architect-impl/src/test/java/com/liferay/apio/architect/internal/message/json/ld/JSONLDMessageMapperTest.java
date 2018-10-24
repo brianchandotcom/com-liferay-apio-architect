@@ -40,8 +40,6 @@ public class JSONLDMessageMapperTest {
 			new JSONLDEntryPointMessageMapper()
 		).validateErrorMessageMapper(
 			new JSONLDErrorMessageMapper()
-		).validateFormMessageMapper(
-			new JSONLDFormMessageMapper()
 		).validatePageMessageMapper(
 			new JSONLDPageMessageMapper<>()
 		).validateSingleModelMessageMapper(
