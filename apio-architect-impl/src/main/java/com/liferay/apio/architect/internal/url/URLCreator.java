@@ -31,6 +31,8 @@ import com.liferay.apio.architect.uri.Path;
 import java.net.URI;
 
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.ws.rs.core.UriBuilder;
 
@@ -236,24 +238,33 @@ public final class URLCreator {
 	}
 
 	/**
-	 * Returns the {@link Path} from the HTTP servlet request's original URL.
+	 * Returns a {@link Path} from the URL if it's a valid URL for a resource
+	 * with the provided name. Returns {@link Optional#empty()} otherwise.
 	 *
-	 * @return a Path objectSingleModelWriter.java
+	 * @param  url the resource URL to parse
+	 * @param  name the resource's name
+	 * @return a {@link Path} if the URL is valid; {@link Optional#empty()}
+	 *         otherwise
+	 * @review
 	 */
-	public static Path getPath(String url) {
-		String[] serverAndPath = url.split("/[bfp]/");
-
-		if (serverAndPath.length == 2) {
-			String fullPath = serverAndPath[1];
-
-			String[] pathComponents = fullPath.split("/");
-
-			String id = pathComponents.length == 1 ? null : pathComponents[1];
-
-			return new Path(pathComponents[0], id);
-		}
-
-		return null;
+	public static Optional<Path> getPath(String url, String name) {
+		return Optional.of(
+			url.lastIndexOf(name)
+		).filter(
+			index -> index != -1
+		).map(
+			url::substring
+		).map(
+			uri -> uri.split("/")
+		).filter(
+			components -> components.length == 2
+		).map(
+			components -> new Path(components[0], components[1])
+		).filter(
+			_isNotEmpty(Path::getName)
+		).filter(
+			_isNotEmpty(Path::getId)
+		);
 	}
 
 	private static String _buildURL(String baseUrl, String relativeURL) {
@@ -270,6 +281,16 @@ public final class URLCreator {
 		}
 
 		return join("/", baseUrl, relativeURL);
+	}
+
+	private static Predicate<Path> _isNotEmpty(
+		Function<Path, String> function) {
+
+		return path -> function.andThen(
+			s -> s != null && !s.isEmpty()
+		).apply(
+			path
+		);
 	}
 
 	private URLCreator() {

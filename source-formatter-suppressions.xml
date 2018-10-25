@@ -14,6 +14,7 @@
 		<suppress checks="JavaIllegalImportsCheck" files="apio-architect-impl/src/main/java/com/liferay/apio/architect/internal/.*" />
 		<suppress checks="JavaModuleInternalImportsCheck" files="apio-architect-impl/src/main/java/com/liferay/apio/architect/internal/wiring/osgi/manager/base/BaseManager\.java" />
 		<suppress checks="JavaModuleInternalImportsCheck" files="apio-architect-impl/src/main/java/com/liferay/apio/architect/internal/wiring/osgi/manager/documentation/contributor/CustomDocumentationManager\.java" />
+		<suppress checks="JavaMultiPlusConcatCheck" files="apio-architect-impl/src/main/java/com/liferay/apio/architect/internal/form/FormUtil\.java" />
 		<suppress checks="JavaStaticImportsCheck" files=".*" />
 		<suppress checks="StringMethodsCheck" files=".*" />
 	</source-check>

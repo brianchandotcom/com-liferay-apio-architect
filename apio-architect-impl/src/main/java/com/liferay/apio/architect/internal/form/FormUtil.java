@@ -25,7 +25,6 @@ import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.alias.form.FieldFormBiConsumer;
 import com.liferay.apio.architect.internal.date.DateTransformer;
-import com.liferay.apio.architect.internal.url.URLCreator;
 import com.liferay.apio.architect.uri.Path;
 
 import java.text.NumberFormat;
@@ -39,6 +38,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.ws.rs.BadRequestException;
@@ -666,12 +666,20 @@ public class FormUtil {
 		if (optional.isPresent()) {
 			List<String> urls = optional.get();
 
-			Stream<String> urlStream = urls.stream();
+			List<?> list = IntStream.range(
+				0, urls.size()
+			).mapToObj(
+				index -> {
+					Optional<Path> optionalPath = getPath(
+						urls.get(index), "invalid-name");
 
-			List<?> list = urlStream.map(
-				URLCreator::getPath
+					return optionalPath.orElseThrow(
+						() -> new BadRequestException(
+							"Field \"" + key + "\" has an invalid value in " +
+								"position " + index));
+				}
 			).map(
-				identifierFunction::apply
+				identifierFunction
 			).collect(
 				Collectors.toList()
 			);
@@ -692,7 +700,11 @@ public class FormUtil {
 		if (optional.isPresent()) {
 			String url = optional.get();
 
-			Path path = getPath(url);
+			Optional<Path> optionalPath = getPath(url, "invalid-name");
+
+			Path path = optionalPath.orElseThrow(
+				() -> new BadRequestException(
+					"Field \"" + key + "\" has an invalid value"));
 
 			Object object = pathToIdentifierFunction.apply(path);
 
