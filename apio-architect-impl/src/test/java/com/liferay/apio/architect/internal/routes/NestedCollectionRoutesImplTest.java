@@ -81,7 +81,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 			"name", "nested", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.build();
@@ -109,7 +110,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -135,7 +137,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -162,7 +165,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -188,7 +192,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -215,7 +220,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -236,7 +242,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -257,7 +264,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -281,7 +289,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -306,7 +315,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -327,7 +337,8 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION, actionManager);
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(

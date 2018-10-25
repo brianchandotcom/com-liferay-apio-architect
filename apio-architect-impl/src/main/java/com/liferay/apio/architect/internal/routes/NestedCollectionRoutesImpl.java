@@ -96,7 +96,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
 			Function<T, S> modelToIdentifierFunction,
-			ActionManager actionManager) {
+			ActionManager actionManager,
+			Function<String, Optional<String>> nameFunction) {
 
 			_name = name;
 			_nestedName = nestedName;
@@ -107,6 +108,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 			_modelToIdentifierFunction = modelToIdentifierFunction;
 			_actionManager = (ActionManagerImpl)actionManager;
+			_nameFunction = nameFunction;
 		}
 
 		@Override
@@ -141,7 +143,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_pathToIdentifierFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			_form = form;
 
@@ -209,7 +211,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_pathToIdentifierFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			_form = form;
 
@@ -280,7 +282,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_pathToIdentifierFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			_form = form;
 
@@ -347,7 +349,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_pathToIdentifierFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			_form = form;
 
@@ -410,7 +412,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_pathToIdentifierFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			_form = form;
 
@@ -559,6 +561,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_hasNestedAddingPermissionFunction;
 		private final Function<T, S> _modelToIdentifierFunction;
 		private final String _name;
+		private final Function<String, Optional<String>> _nameFunction;
 		private final Consumer<String> _neededProviderConsumer;
 		private NestedBatchCreateItemFunction<S, U>
 			_nestedBatchCreateItemFunction;

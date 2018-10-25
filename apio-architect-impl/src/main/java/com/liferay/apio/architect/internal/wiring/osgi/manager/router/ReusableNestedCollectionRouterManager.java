@@ -108,7 +108,8 @@ public class ReusableNestedCollectionRouterManager
 					neededProviders::add,
 					identifier -> _pathIdentifierMapperManager.mapToPath(
 						name, identifier),
-					representor::getIdentifier, _actionManager);
+					representor::getIdentifier, _actionManager,
+					_nameManager::getNameOptional);
 
 				NestedCollectionRoutes nestedCollectionRoutes =
 					reusableNestedCollectionRouter.collectionRoutes(builder);

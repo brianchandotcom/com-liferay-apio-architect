@@ -209,14 +209,21 @@ public class FormUtil {
 	 *
 	 * @param  body the HTTP request body
 	 * @param  t the form values store
+	 * @param  pathToIdentifierFunction the function that transforms a path into
+	 *         an identifier
+	 * @param  keyToNameFunction the function that gets the resource's name for
+	 *         a form key
 	 * @return the field form consumer
+	 * @review
 	 */
-	public static <T> BiConsumer<String, Function<T, Consumer<?>>>
+	public static <T> BiConsumer<String, Function<T, Consumer<Object>>>
 		getOptionalLinkedModel(
-			Body body, T t, IdentifierFunction<?> pathToIdentifierFunction) {
+			Body body, T t, IdentifierFunction<?> pathToIdentifierFunction,
+			Function<String, Optional<String>> keyToNameFunction) {
 
 		return (key, function) -> _getLinkedModelValueField(
-			body, key, false, function.apply(t), pathToIdentifierFunction);
+			body, key, false, function.apply(t), pathToIdentifierFunction,
+			keyToNameFunction);
 	}
 
 	/**
@@ -227,14 +234,21 @@ public class FormUtil {
 	 *
 	 * @param  body the HTTP request body
 	 * @param  t the form values store
+	 * @param  pathToIdentifierFunction the function that transforms a path into
+	 *         an identifier
+	 * @param  keyToNameFunction the function that gets the resource's name for
+	 *         a form key
 	 * @return the field form consumer
+	 * @review
 	 */
 	public static <T> BiConsumer<String, Function<T, Consumer<List<?>>>>
 		getOptionalLinkedModelList(
-			Body body, T t, IdentifierFunction identifierFunction) {
+			Body body, T t, IdentifierFunction<?> pathToIdentifierFunction,
+			Function<String, Optional<String>> keyToNameFunction) {
 
 		return (key, function) -> _getLinkedModelListValueField(
-			body, key, false, function.apply(t), identifierFunction);
+			body, key, false, function.apply(t), pathToIdentifierFunction,
+			keyToNameFunction);
 	}
 
 	/**
@@ -458,14 +472,21 @@ public class FormUtil {
 	 *
 	 * @param  body the HTTP request body
 	 * @param  t the form values store
+	 * @param  pathToIdentifierFunction the function that transforms a path into
+	 *         an identifier
+	 * @param  keyToNameFunction the function that transforms an identifier into
+	 *         a name
 	 * @return the {@code FormField} consumer
+	 * @review
 	 */
-	public static <T> BiConsumer<String, Function<T, Consumer<?>>>
+	public static <T> BiConsumer<String, Function<T, Consumer<Object>>>
 		getRequiredLinkedModel(
-			Body body, T t, IdentifierFunction<?> pathToIdentifierFunction) {
+			Body body, T t, IdentifierFunction<?> pathToIdentifierFunction,
+			Function<String, Optional<String>> keyToNameFunction) {
 
 		return (key, function) -> _getLinkedModelValueField(
-			body, key, true, function.apply(t), pathToIdentifierFunction);
+			body, key, true, function.apply(t), pathToIdentifierFunction,
+			keyToNameFunction);
 	}
 
 	/**
@@ -476,14 +497,21 @@ public class FormUtil {
 	 *
 	 * @param  body the HTTP request body
 	 * @param  t the form values store
+	 * @param  pathToIdentifierFunction the function that transforms a path into
+	 *         an identifier
+	 * @param  keyToNameFunction the function that gets the resource's name for
+	 *         a form key
 	 * @return the {@code FormField} consumer
+	 * @review
 	 */
 	public static <T> BiConsumer<String, Function<T, Consumer<List<?>>>>
 		getRequiredLinkedModelList(
-			Body body, T t, IdentifierFunction identifierFunction) {
+			Body body, T t, IdentifierFunction<?> pathToIdentifierFunction,
+			Function<String, Optional<String>> keyToNameFunction) {
 
 		return (key, function) -> _getLinkedModelListValueField(
-			body, key, true, function.apply(t), identifierFunction);
+			body, key, true, function.apply(t), pathToIdentifierFunction,
+			keyToNameFunction);
 	}
 
 	/**
@@ -659,25 +687,26 @@ public class FormUtil {
 
 	private static void _getLinkedModelListValueField(
 		Body body, String key, boolean required, Consumer<List<?>> consumer,
-		IdentifierFunction<?> identifierFunction) {
+		IdentifierFunction<?> identifierFunction,
+		Function<String, Optional<String>> keyToNameFunction) {
 
 		Optional<List<String>> optional = body.getValueListOptional(key);
 
 		if (optional.isPresent()) {
+			Optional<String> nameOptional = keyToNameFunction.apply(key);
+
 			List<String> urls = optional.get();
 
 			List<?> list = IntStream.range(
 				0, urls.size()
 			).mapToObj(
-				index -> {
-					Optional<Path> optionalPath = getPath(
-						urls.get(index), "invalid-name");
-
-					return optionalPath.orElseThrow(
-						() -> new BadRequestException(
-							"Field \"" + key + "\" has an invalid value in " +
-								"position " + index));
-				}
+				index -> nameOptional.flatMap(
+					name -> getPath(urls.get(index), name)
+				).orElseThrow(
+					() -> new BadRequestException(
+						"Field \"" + key + "\" has an invalid value in " +
+							"position " + index)
+				)
 			).map(
 				identifierFunction
 			).collect(
@@ -692,19 +721,23 @@ public class FormUtil {
 	}
 
 	private static void _getLinkedModelValueField(
-		Body body, String key, boolean required, Consumer consumer,
-		IdentifierFunction<?> pathToIdentifierFunction) {
+		Body body, String key, boolean required, Consumer<Object> consumer,
+		IdentifierFunction<?> pathToIdentifierFunction,
+		Function<String, Optional<String>> keyToNameFunction) {
 
 		Optional<String> optional = body.getValueOptional(key);
 
 		if (optional.isPresent()) {
 			String url = optional.get();
 
-			Optional<Path> optionalPath = getPath(url, "invalid-name");
-
-			Path path = optionalPath.orElseThrow(
+			Path path = keyToNameFunction.apply(
+				key
+			).flatMap(
+				name -> getPath(url, name)
+			).orElseThrow(
 				() -> new BadRequestException(
-					"Field \"" + key + "\" has an invalid value"));
+					"Field \"" + key + "\" has an invalid value")
+			);
 
 			Object object = pathToIdentifierFunction.apply(path);
 

@@ -528,7 +528,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					_nameFunction));
 
 			_form = form;
 
@@ -561,7 +562,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					_nameFunction));
 
 			_form = form;
 
@@ -595,7 +597,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					_nameFunction));
 
 			_form = form;
 
@@ -626,7 +629,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					_nameFunction));
 
 			_form = form;
 
@@ -656,7 +660,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					_nameFunction));
 
 			_form = form;
 
@@ -686,7 +691,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Form<?> form = formBuilderFunction.apply(
 					new FormImpl.BuilderImpl<>(
 						Arrays.asList("p", _name, name),
-						_pathToIdentifierFunction));
+						_pathToIdentifierFunction, _nameFunction));
 
 				customRoute.setForm(form);
 			}
