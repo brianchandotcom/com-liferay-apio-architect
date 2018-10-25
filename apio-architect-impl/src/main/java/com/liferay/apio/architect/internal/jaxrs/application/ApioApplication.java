@@ -14,9 +14,16 @@
 
 package com.liferay.apio.architect.internal.jaxrs.application;
 
+import static java.util.Collections.singleton;
+
+import com.liferay.apio.architect.internal.jaxrs.resource.RootResource;
+
+import java.util.Set;
+
 import javax.ws.rs.core.Application;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * Registers the application's root endpoint, writers, and mappers in JAX-RS.
@@ -33,4 +40,13 @@ import org.osgi.service.component.annotations.Component;
 	service = Application.class
 )
 public class ApioApplication extends Application {
+
+	@Override
+	public Set<Object> getSingletons() {
+		return singleton(_rootResource);
+	}
+
+	@Reference
+	private RootResource _rootResource;
+
 }
