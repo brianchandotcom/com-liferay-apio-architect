@@ -28,6 +28,8 @@ import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
+import static java.util.Arrays.asList;
+
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,7 +44,6 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.internal.routes.ItemRoutesImpl.BuilderImpl;
-import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes.Builder;
@@ -79,7 +80,7 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 		assertThat(itemRoutes, is(notNullValue()));
 
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			GET.name(), "name", ANY_ROUTE);
+			GET.name(), asList("name", ANY_ROUTE));
 
 		assertThat(actionEither.isRight(), is(true));
 
@@ -104,7 +105,7 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 		assertThat(itemRoutes, is(notNullValue()));
 
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			DELETE.name(), "name", ANY_ROUTE);
+			DELETE.name(), asList("name", ANY_ROUTE));
 
 		assertThat(actionEither.isRight(), is(true));
 
@@ -354,7 +355,7 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 
 	private void _testItemRoutesDeleter() {
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			HTTPMethod.DELETE.name(), "name", "42");
+			DELETE.name(), asList("name", "42"));
 
 		if (actionEither.isLeft()) {
 			throw new AssertionError("Action not present");
@@ -369,7 +370,7 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 
 	private void _testItemRoutesGetter() {
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			HTTPMethod.GET.name(), "name", "42");
+			GET.name(), asList("name", "42"));
 
 		if (actionEither.isLeft()) {
 			throw new AssertionError("Action not present");

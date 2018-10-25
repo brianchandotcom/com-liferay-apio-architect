@@ -46,8 +46,8 @@ public interface ActionManager {
 
 	/**
 	 * Adds an action with the key specified by the actionKey parameter, that
-	 * calls a actionFunction with ID, body and parameters based on a
-	 * varags of providers
+	 * calls a actionFunction with ID, body and parameters based on a varags of
+	 * providers
 	 *
 	 * @param  actionKey the path parameters to add an Action
 	 * @param  actionFunction the method to call in that path
@@ -60,66 +60,17 @@ public interface ActionManager {
 		Class... providers);
 
 	/**
-	 * Returns the action that requires one parameter for the provided HTTP
-	 * method, if found. Returns {@link Error.NotAllowed} if an action exist,
-	 * but not with the provided method. Returns {@link Error.NotFound} if no
-	 * action is found.
+	 * Returns the action for the provided combination of parameters and method,
+	 * if found. Returns an {@link Action.Error} if an action couldn't be
+	 * provided.
 	 *
 	 * @param  method the HTTP method of the action
-	 * @param  param the parameter
-	 * @return the action, if found; an {@link Error} otherwise
+	 * @param  params the parameters
+	 * @return the action, if found; an {@link Action.Error} otherwise
 	 * @review
 	 */
-	public Either<Error, Action> getAction(String method, String param);
-
-	/**
-	 * Returns the action that requires two parameters for the provided HTTP
-	 * method, if found. Returns {@link Error.NotAllowed} if an action exist,
-	 * but not with the provided method. Returns {@link Error.NotFound} if no
-	 * action is found.
-	 *
-	 * @param  method the HTTP method of the action
-	 * @param  param1 the first parameter
-	 * @param  param2 the second parameter
-	 * @return the action, if found; an {@link Error} otherwise
-	 * @review
-	 */
-	public Either<Error, Action> getAction(
-		String method, String param1, String param2);
-
-	/**
-	 * Returns the action that requires three parameters for the provided HTTP
-	 * method, if found. Returns {@link Error.NotAllowed} if an action exist,
-	 * but not with the provided method. Returns {@link Error.NotFound} if no
-	 * action is found.
-	 *
-	 * @param  method the HTTP method of the action
-	 * @param  param1 the first parameter
-	 * @param  param2 the second parameter
-	 * @param  param3 the third parameter
-	 * @return the action, if found; an {@link Error} otherwise
-	 * @review
-	 */
-	public Either<Error, Action> getAction(
-		String method, String param1, String param2, String param3);
-
-	/**
-	 * Returns the action that requires four parameters for the provided HTTP
-	 * method, if found. Returns {@link Error.NotAllowed} if an action exist,
-	 * but not with the provided method. Returns {@link Error.NotFound} if no
-	 * action is found.
-	 *
-	 * @param  method the HTTP method of the action
-	 * @param  param1 the first parameter
-	 * @param  param2 the second parameter
-	 * @param  param3 the third parameter
-	 * @param  param4 the fourth parameter
-	 * @return the action, if found; an {@link Error} otherwise
-	 * @review
-	 */
-	public Either<Error, Action> getAction(
-		String method, String param1, String param2, String param3,
-		String param4);
+	public Either<Action.Error, Action> getAction(
+		String method, List<String> params);
 
 	/**
 	 * Return the list of actions that are valid in that path

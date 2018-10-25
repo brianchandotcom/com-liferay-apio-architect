@@ -19,6 +19,9 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.Mana
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
+import static io.vavr.control.Either.left;
+import static io.vavr.control.Either.right;
+
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
@@ -129,40 +132,37 @@ public class ActionManagerImpl implements ActionManager {
 
 	@Override
 	public Either<Action.Error, Action> getAction(
-		String method, String param1) {
+		String method, List<String> params) {
 
-		ActionKey actionKey = new ActionKey(method, param1);
+		if (params.size() == 1) {
+			ActionKey actionKey = new ActionKey(method, params.get(0));
 
-		return Either.right(_getAction(actionKey, null));
-	}
+			return right(_getAction(actionKey, null));
+		}
 
-	@Override
-	public Either<Action.Error, Action> getAction(
-		String method, String param1, String param2) {
+		if (params.size() == 2) {
+			ActionKey actionKey = new ActionKey(
+				method, params.get(0), params.get(1));
 
-		ActionKey actionKey = new ActionKey(method, param1, param2);
+			return _getActionsWithId(actionKey);
+		}
 
-		return _getActionsWithId(actionKey);
-	}
+		if (params.size() == 3) {
+			ActionKey actionKey = new ActionKey(
+				method, params.get(0), params.get(1), params.get(2));
 
-	@Override
-	public Either<Action.Error, Action> getAction(
-		String method, String param1, String param2, String param3) {
+			return _getActionsWithId(actionKey);
+		}
 
-		ActionKey actionKey = new ActionKey(method, param1, param2, param3);
+		if (params.size() == 4) {
+			ActionKey actionKey = new ActionKey(
+				method, params.get(0), params.get(1), params.get(2),
+				params.get(3));
 
-		return _getActionsWithId(actionKey);
-	}
+			return _getActionsWithId(actionKey);
+		}
 
-	@Override
-	public Either<Action.Error, Action> getAction(
-		String method, String param1, String param2, String param3,
-		String param4) {
-
-		ActionKey actionKey = new ActionKey(
-			method, param1, param2, param3, param4);
-
-		return _getActionsWithId(actionKey);
+		return left(new Action.Error.NotFound() {});
 	}
 
 	@Override
@@ -291,7 +291,7 @@ public class ActionManagerImpl implements ActionManager {
 
 		Object id = _getId(actionKey.getPath());
 
-		return Either.right(_getAction(actionKey, id));
+		return right(_getAction(actionKey, id));
 	}
 
 	private Object _getId(Path path) {

@@ -26,6 +26,8 @@ import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 
+import static java.util.Collections.singletonList;
+
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -44,7 +46,6 @@ import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.operation.RetrieveOperation;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl.BuilderImpl;
-import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -55,7 +56,6 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import io.vavr.control.Either;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -87,7 +87,7 @@ public class CollectionRoutesImplTest extends BaseRoutesTest {
 		assertThat(createItemFunctionOptional, is(emptyOptional()));
 
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			GET.name(), "name");
+			GET.name(), singletonList("name"));
 
 		assertThat(actionEither.isRight(), is(true));
 
@@ -379,7 +379,7 @@ public class CollectionRoutesImplTest extends BaseRoutesTest {
 
 		assertThat(pagination, is(PAGINATION));
 
-		return new PageItems<>(Collections.singletonList("Apio"), 1);
+		return new PageItems<>(singletonList("Apio"), 1);
 	}
 
 	private List<Long> _testAndReturnOneParameterBatchCreatorRoute(
@@ -555,7 +555,7 @@ public class CollectionRoutesImplTest extends BaseRoutesTest {
 
 	private void _testCollectionRoutesGetter() {
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			HTTPMethod.GET.name(), "name");
+			GET.name(), singletonList("name"));
 
 		if (actionEither.isLeft()) {
 			throw new AssertionError("Action not present");

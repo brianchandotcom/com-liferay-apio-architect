@@ -28,6 +28,8 @@ import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
+import static java.util.Arrays.asList;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -57,7 +59,6 @@ import com.liferay.apio.architect.single.model.SingleModel;
 
 import io.vavr.control.Either;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 		assertThat(optional1, is(emptyOptional()));
 
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			GET.name(), "name", ANY_ROUTE, "nested");
+			GET.name(), asList("name", ANY_ROUTE, "nested"));
 
 		assertThat(actionEither.isRight(), is(true));
 
@@ -379,7 +380,7 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 		assertThat(bodies.get(0).get("key"), is(keyValueFrom(_singleBody)));
 		assertThat(bodies.get(1).get("key"), is(keyValueFrom(_singleBody)));
 
-		return Arrays.asList(42L, 42L);
+		return asList(42L, 42L);
 	}
 
 	private String _testAndReturnNoParameterCreatorRoute(
@@ -587,7 +588,7 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 
 	private void _testNestedCollectionRoutesGetter() {
 		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			HTTPMethod.GET.name(), "name", ANY_ROUTE, "nested");
+			HTTPMethod.GET.name(), asList("name", ANY_ROUTE, "nested"));
 
 		if (actionEither.isLeft()) {
 			throw new AssertionError("Action not present");
@@ -623,7 +624,7 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 	static {
 		_singleBody = __ -> Optional.of("Apio");
 
-		_batchBody = Body.create(Arrays.asList(_singleBody, _singleBody));
+		_batchBody = Body.create(asList(_singleBody, _singleBody));
 	}
 
 }
