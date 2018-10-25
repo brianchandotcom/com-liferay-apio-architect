@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
@@ -29,6 +31,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 /**
@@ -38,6 +41,27 @@ import javax.ws.rs.core.Response;
  * @review
  */
 public class NestedResource {
+
+	/**
+	 * Returns the result generated from executing an action over a non-default
+	 * method (other than the ones included in {@link javax.ws.rs.HttpMethod})
+	 * with the provided parameters.
+	 *
+	 * <p>
+	 * Since JAX-RS resources cannot be created dynamically, this endpoint
+	 * ensures that any custom HTTP method can be used in Apio Architect
+	 * actions. The {@link
+	 * com.liferay.apio.architect.internal.jaxrs.filter.HTTPMethodOverrideFilter}
+	 * converts any non-default method into {@code CUSTOM} but the original
+	 * method is used when making the call to the Apio Architect core.
+	 * </p>
+	 *
+	 * @review
+	 */
+	@CUSTOM
+	public Response custom(@Context HttpServletRequest httpServletRequest) {
+		return _getResponseForMethod(httpServletRequest.getMethod());
+	}
 
 	/**
 	 * Returns the result generated from executing a {@code DELETE} action with

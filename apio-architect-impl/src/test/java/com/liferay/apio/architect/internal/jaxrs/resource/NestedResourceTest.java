@@ -22,6 +22,11 @@ import static java.util.Collections.singleton;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import javax.servlet.http.HttpServletRequest;
+
 import javax.ws.rs.core.Response;
 
 import org.junit.Before;
@@ -43,6 +48,18 @@ public class NestedResourceTest {
 		).allowedMethodsFunction(
 			__ -> singleton("PUT")
 		).build();
+	}
+
+	@Test
+	public void testCustomCallsResultFunctionWithCustomMethod() {
+		HttpServletRequest request = mock(HttpServletRequest.class);
+
+		when(request.getMethod()).thenReturn("CUSTOM");
+
+		Response response = _nestedResource.custom(request);
+
+		assertThat(response.getStatus(), is(200));
+		assertThat(response.getEntity(), is("Endpoint = 1/2, Method = CUSTOM"));
 	}
 
 	@Test
