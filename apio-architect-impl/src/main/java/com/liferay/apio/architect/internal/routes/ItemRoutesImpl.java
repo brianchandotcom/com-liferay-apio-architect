@@ -14,7 +14,10 @@
 
 package com.liferay.apio.architect.internal.routes;
 
+import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
 import static com.liferay.apio.architect.internal.routes.RoutesBuilderUtil.provide;
+import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
+import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -42,8 +45,8 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.annotation.ActionManager;
-import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.operation.CreateOperation;
 import com.liferay.apio.architect.internal.operation.DeleteOperation;
@@ -54,6 +57,8 @@ import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.uri.Path;
+
+import io.vavr.CheckedRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -138,7 +143,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 			_identifierToPathFunction = identifierToPathFunction;
 			_nameFunction = nameFunction;
-			_actionManager = (ActionManagerImpl)actionManager;
+			_actionManager = actionManager;
 		}
 
 		@Override
@@ -323,8 +328,10 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			ThrowableBiFunction<S, A, T> getterThrowableBiFunction,
 			Class<A> aClass) {
 
-			_actionManager.addItemGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableBiFunction.apply(
 					(S)id, (A)list.get(0)),
 				aClass);
@@ -338,8 +345,10 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		public Builder<T, S> addGetter(
 			ThrowableFunction<S, T> getterThrowableFunction) {
 
-			_actionManager.addItemGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableFunction.apply((S)id));
 
 			return this;
@@ -352,8 +361,10 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
-			_actionManager.addItemGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowablePentaFunction.apply(
 					(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2),
 					(D)list.get(3)),
@@ -372,8 +383,10 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			ThrowableTetraFunction<S, A, B, C, T> getterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-			_actionManager.addItemGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableTetraFunction.apply(
 					(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2)),
 				aClass, bClass, cClass);
@@ -393,8 +406,10 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 
-			_actionManager.addItemGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableTriFunction.apply(
 					(S)id, (A)list.get(0), (B)list.get(1)),
 				aClass, bClass);
@@ -412,13 +427,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_actionManager.addItemRemover(
-				_name,
-				(id, body, list) -> {
-					removerThrowableBiConsumer.accept((S)id, (A)list.get(0));
+			ActionKey actionKey = new ActionKey(
+				DELETE.name(), _name, ANY_ROUTE);
 
-					return null;
-				},
+			_actionManager.add(
+				actionKey,
+				(id, body, list) -> _run(
+					() -> removerThrowableBiConsumer.accept(
+						(S)id, (A)list.get(0))),
 				aClass);
 
 			return this;
@@ -431,13 +447,13 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_actionManager.addItemRemover(
-				_name,
-				(id, body, list) -> {
-					removerThrowableConsumer.accept((S)id);
+			ActionKey actionKey = new ActionKey(
+				DELETE.name(), _name, ANY_ROUTE);
 
-					return null;
-				});
+			_actionManager.add(
+				actionKey,
+				(id, body, list) -> _run(
+					() -> removerThrowableConsumer.accept((S)id)));
 
 			return this;
 		}
@@ -455,15 +471,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_actionManager.addItemRemover(
-				_name,
-				(id, body, list) -> {
-					removerThrowablePentaConsumer.accept(
-						(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2),
-						(D)list.get(3));
+			ActionKey actionKey = new ActionKey(
+				DELETE.name(), _name, ANY_ROUTE);
 
-					return null;
-				},
+			_actionManager.add(
+				actionKey,
+				(id, body, list) -> _run(
+					() -> removerThrowablePentaConsumer.accept(
+						(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2),
+						(D)list.get(3))),
 				aClass, bClass, cClass, dClass);
 
 			return this;
@@ -481,14 +497,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_actionManager.addItemRemover(
-				_name,
-				(id, body, list) -> {
-					removerThrowableTetraConsumer.accept(
-						(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2));
+			ActionKey actionKey = new ActionKey(
+				DELETE.name(), _name, ANY_ROUTE);
 
-					return null;
-				},
+			_actionManager.add(
+				actionKey,
+				(id, body, list) -> _run(
+					() -> removerThrowableTetraConsumer.accept(
+						(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2))),
 				aClass, bClass, cClass);
 
 			return this;
@@ -505,14 +521,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			_hasRemovePermissionFunction = hasRemovePermissionFunction;
 
-			_actionManager.addItemRemover(
-				_name,
-				(id, body, list) -> {
-					removerThrowableTriConsumer.accept(
-						(S)id, (A)list.get(0), (B)list.get(1));
+			ActionKey actionKey = new ActionKey(
+				DELETE.name(), _name, ANY_ROUTE);
 
-					return null;
-				},
+			_actionManager.add(
+				actionKey,
+				(id, body, list) -> _run(
+					() -> removerThrowableTriConsumer.accept(
+						(S)id, (A)list.get(0), (B)list.get(1))),
 				aClass, bClass);
 
 			return this;
@@ -823,7 +839,13 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			);
 		}
 
-		private final ActionManagerImpl _actionManager;
+		private Void _run(CheckedRunnable checkedRunnable) throws Throwable {
+			checkedRunnable.run();
+
+			return null;
+		}
+
+		private final ActionManager _actionManager;
 		private Map<String, CustomItemFunction<?, S>> _customItemFunctions =
 			new HashMap<>();
 		private Map<String, BiFunction<Credentials, S, Boolean>>

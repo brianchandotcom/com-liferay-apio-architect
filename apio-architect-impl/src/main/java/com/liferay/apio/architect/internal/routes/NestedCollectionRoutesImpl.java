@@ -14,7 +14,9 @@
 
 package com.liferay.apio.architect.internal.routes;
 
+import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
 import static com.liferay.apio.architect.internal.routes.RoutesBuilderUtil.provide;
+import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -33,8 +35,8 @@ import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.annotation.ActionManager;
-import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -107,7 +109,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 
 			_modelToIdentifierFunction = modelToIdentifierFunction;
-			_actionManager = (ActionManagerImpl)actionManager;
+			_actionManager = actionManager;
 			_nameFunction = nameFunction;
 		}
 
@@ -443,8 +445,10 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			ThrowableBiFunction<Pagination, U, PageItems<T>>
 				getterThrowableBiFunction) {
 
-			_actionManager.addNestedGetter(
-				_name, _nestedName,
+			ActionKey actionKey = _getActionKeyForNested(_name, _nestedName);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableBiFunction.apply(
 					(Pagination)list.get(0), (U)id),
 				Pagination.class);
@@ -464,8 +468,10 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_neededProviderConsumer.accept(cClass.getName());
 			_neededProviderConsumer.accept(dClass.getName());
 
-			_actionManager.addNestedGetter(
-				_name, _nestedName,
+			ActionKey actionKey = _getActionKeyForNested(_name, _nestedName);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableHexaFunction.apply(
 					(Pagination)list.get(0), (U)id, (A)list.get(1),
 					(B)list.get(2), (C)list.get(3), (D)list.get(4)),
@@ -484,8 +490,10 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_neededProviderConsumer.accept(bClass.getName());
 			_neededProviderConsumer.accept(cClass.getName());
 
-			_actionManager.addNestedGetter(
-				_name, _nestedName,
+			ActionKey actionKey = _getActionKeyForNested(_name, _nestedName);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowablePentaFunction.apply(
 					(Pagination)list.get(0), (U)id, (A)list.get(1),
 					(B)list.get(2), (C)list.get(3)),
@@ -503,8 +511,10 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 
-			_actionManager.addNestedGetter(
-				_name, _nestedName,
+			ActionKey actionKey = _getActionKeyForNested(_name, _nestedName);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableTetraFunction.apply(
 					(Pagination)list.get(0), (U)id, (A)list.get(1),
 					(B)list.get(2)),
@@ -521,8 +531,10 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 			_neededProviderConsumer.accept(aClass.getName());
 
-			_actionManager.addNestedGetter(
-				_name, _nestedName,
+			ActionKey actionKey = _getActionKeyForNested(_name, _nestedName);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableTriFunction.apply(
 					(Pagination)list.get(0), (U)id, (A)list.get(1)),
 				Pagination.class, aClass);
@@ -533,6 +545,16 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		@Override
 		public NestedCollectionRoutes<T, S, U> build() {
 			return new NestedCollectionRoutesImpl<>(this);
+		}
+
+		private ActionKey _getActionKeyForNested(
+			String name, String nestedName) {
+
+			if (name.equals("r")) {
+				return new ActionKey(GET.name(), name, nestedName, ANY_ROUTE);
+			}
+
+			return new ActionKey(GET.name(), name, ANY_ROUTE, nestedName);
 		}
 
 		private <V> List<S> _transformList(
@@ -555,7 +577,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			return newList;
 		}
 
-		private final ActionManagerImpl _actionManager;
+		private final ActionManager _actionManager;
 		private Form _form;
 		private ThrowableBiFunction<Credentials, U, Boolean>
 			_hasNestedAddingPermissionFunction;

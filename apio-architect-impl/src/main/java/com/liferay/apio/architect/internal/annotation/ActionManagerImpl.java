@@ -14,10 +14,7 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
-import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
-import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
@@ -88,46 +85,6 @@ public class ActionManagerImpl implements ActionManager {
 		_actionsMap.put(actionKey, actionFunction);
 
 		_providers.put(actionKey, providers);
-	}
-
-	public void addCollectionGetter(
-		String name,
-		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
-		Class... providers) {
-
-		ActionKey actionKey = new ActionKey(GET.name(), name);
-
-		add(actionKey, actionFunction, providers);
-	}
-
-	public void addItemGetter(
-		String name,
-		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
-		Class... providers) {
-
-		ActionKey actionKey = new ActionKey(GET.name(), name, ANY_ROUTE);
-
-		add(actionKey, actionFunction, providers);
-	}
-
-	public void addItemRemover(
-		String name,
-		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
-		Class... providers) {
-
-		ActionKey actionKey = new ActionKey(DELETE.name(), name, ANY_ROUTE);
-
-		add(actionKey, actionFunction, providers);
-	}
-
-	public void addNestedGetter(
-		String name, String nestedName,
-		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
-		Class... providers) {
-
-		ActionKey actionKey = _getActionKeyForNested(name, nestedName);
-
-		add(actionKey, actionFunction, providers);
 	}
 
 	@Override
@@ -276,14 +233,6 @@ public class ActionManagerImpl implements ActionManager {
 		}
 
 		return _actionsMap.get(actionKey.getGenericActionKey());
-	}
-
-	private ActionKey _getActionKeyForNested(String name, String nestedName) {
-		if (name.equals("r")) {
-			return new ActionKey(GET.name(), name, nestedName, ANY_ROUTE);
-		}
-
-		return new ActionKey(GET.name(), name, ANY_ROUTE, nestedName);
 	}
 
 	private Either<Action.Error, Action> _getActionsWithId(

@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.internal.routes;
 
 import static com.liferay.apio.architect.internal.routes.RoutesBuilderUtil.provide;
+import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -37,8 +38,8 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
+import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.annotation.ActionManager;
-import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -121,8 +122,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 			_modelToIdentifierFunction = modelToIdentifierFunction;
 			_nameFunction = nameFunction;
-
-			_actionManager = (ActionManagerImpl)actionManager;
+			_actionManager = actionManager;
 		}
 
 		@Override
@@ -609,8 +609,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_neededProviderConsumer.accept(aClass.getName());
 
-			_actionManager.addCollectionGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableBiFunction.apply(
 					(Pagination)list.get(0), (A)list.get(1)),
 				Pagination.class, aClass);
@@ -623,8 +625,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			ThrowableFunction<Pagination, PageItems<T>>
 				getterThrowableFunction) {
 
-			_actionManager.addCollectionGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableFunction.apply(
 					(Pagination)list.get(0)),
 				Pagination.class);
@@ -644,8 +648,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(cClass.getName());
 			_neededProviderConsumer.accept(dClass.getName());
 
-			_actionManager.addCollectionGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowablePentaFunction.apply(
 					(Pagination)list.get(0), (A)list.get(1), (B)list.get(2),
 					(C)list.get(3), (D)list.get(4)),
@@ -664,8 +670,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(bClass.getName());
 			_neededProviderConsumer.accept(cClass.getName());
 
-			_actionManager.addCollectionGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableTetraFunction.apply(
 					(Pagination)list.get(0), (A)list.get(1), (B)list.get(2),
 					(C)list.get(3)),
@@ -683,8 +691,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_neededProviderConsumer.accept(aClass.getName());
 			_neededProviderConsumer.accept(bClass.getName());
 
-			_actionManager.addCollectionGetter(
-				_name,
+			ActionKey actionKey = new ActionKey(GET.name(), _name);
+
+			_actionManager.add(
+				actionKey,
 				(id, body, list) -> getterThrowableTriFunction.apply(
 					(Pagination)list.get(0), (A)list.get(1), (B)list.get(2)),
 				Pagination.class, aClass, bClass);
@@ -751,7 +761,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return newList;
 		}
 
-		private final ActionManagerImpl _actionManager;
+		private final ActionManager _actionManager;
 		private BatchCreateItemFunction<S> _batchCreateItemFunction;
 		private CreateItemFunction<T> _createItemFunction;
 		private final Map<String, Function<Credentials, Boolean>>
