@@ -17,19 +17,18 @@ package com.liferay.apio.architect.documentation.contributor;
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation.Builder;
 
 /**
- * Represents the mapping between properties or operation names and its
- * documentation
+ * Represents the mapping between properties or operation names and their
+ * documentation.
  *
  * @author Víctor Galán
- * @review
  */
 public interface CustomDocumentationContributor {
 
 	/**
-	 * Creates a {@link CustomDocumentation} with the provided {@link Builder}.
+	 * Creates a {@link CustomDocumentation} instance by using the provided
+	 * {@link CustomDocumentation.Builder}.
 	 *
-	 * @param  builder the builder used to construct the CustomDocumentation.
-	 * @review
+	 * @param builder the builder
 	 */
 	public CustomDocumentation customDocumentation(Builder builder);
 

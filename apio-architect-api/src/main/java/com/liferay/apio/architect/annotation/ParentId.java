@@ -23,32 +23,29 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Provides information about a parent type ID.
+ * Defines an annotation that provides information about a parent type ID.
  *
  * <p>
  * This annotation should always be used on an {@link
  * com.liferay.apio.architect.router.ActionRouter} method parameter representing
- * an parent resource ID.
+ * a parent resource ID.
  * </p>
  *
  * <p>
  * A {@link com.liferay.apio.architect.uri.mapper.PathIdentifierMapper} for the
- * ID type must exist in order for Apio to be able to auto convert it from the
- * request.
+ * ID type must exist for Apio to automatically convert it from the request.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 @Retention(RUNTIME)
 @Target(PARAMETER)
 public @interface ParentId {
 
 	/**
-	 * Returns the class of the parent resource.
+	 * Returns the parent resource's class.
 	 *
-	 * @return the class of the parent resource
-	 * @review
+	 * @return the parent resource's class
 	 */
 	public Class<? extends Identifier<?>> value();
 

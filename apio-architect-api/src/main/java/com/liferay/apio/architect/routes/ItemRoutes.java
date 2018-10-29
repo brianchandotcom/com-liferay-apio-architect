@@ -63,30 +63,29 @@ import java.util.function.BiFunction;
 public interface ItemRoutes<T, S> {
 
 	/**
-	 * Returns the functions that are used to create custom operations, if the
-	 * endpoint was added through the {@link CollectionRoutes.Builder} and the
-	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
+	 * Returns the function that creates custom operations, if the endpoint was
+	 * added through {@link CollectionRoutes.Builder} and the function therefore
+	 * exists. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function used to create custom operations, if the function
 	 *         exists; {@code Optional#empty()} otherwise
-	 * @review
 	 */
 	public Optional<Map<String, CustomItemFunction<?, S>>>
 		getCustomItemFunctionsOptional();
 
 	/**
-	 * Returns the custom routes configured based on their paths
+	 * Returns the custom routes configured based on their paths.
 	 *
-	 * @review
+	 * @return the custom routes
 	 */
 	public Map<String, CustomRoute> getCustomRoutes();
 
 	/**
-	 * Returns the function used to delete the item, if the endpoint was added
-	 * through the {@link ItemRoutes.Builder} and the function therefore exists.
+	 * Returns the function that deletes the item, if the endpoint was added
+	 * through {@link ItemRoutes.Builder} and the function therefore exists.
 	 * Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the function used to delete the item, if the function exists;
+	 * @return the function that deletes the item, if the function exists;
 	 *         {@code Optional#empty()} otherwise
 	 */
 	public Optional<DeleteItemConsumer<S>> getDeleteConsumerOptional();
@@ -133,18 +132,17 @@ public interface ItemRoutes<T, S> {
 	public interface Builder<T, S> {
 
 		/**
-		 * Adds a custom route with the http method specified in customRoute and
-		 * with a function that receives the ID of the element and returns
-		 * another model of type R
+		 * Adds a custom route with the HTTP method specified in {@code
+		 * customRoute}, and with a function that receives the element's ID and
+		 * returns another model of type {@code R}.
 		 *
-		 * @param  customRoute the name and method of the custom route
-		 * @param  throwableBiFunction the custom route function
-		 * @param  supplier the class of the identifier of the type R
+		 * @param  customRoute the custom route's name and method
+		 * @param  throwableBiFunction the custom route's function
+		 * @param  supplier the identifier class of type {@code R}
 		 * @param  permissionBiFunction the permission function for this route
 		 * @param  formBuilderFunction the function that creates the form for
 		 *         this operation
 		 * @return the updated builder
-		 * @review
 		 */
 		public <R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
 			CustomRoute customRoute,

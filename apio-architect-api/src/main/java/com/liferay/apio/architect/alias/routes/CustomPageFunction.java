@@ -27,7 +27,6 @@ import java.util.function.Function;
  *
  * @author Javier Gamarra
  * @param  <U> the model's type
- * @review
  */
 @FunctionalInterface
 public interface CustomPageFunction<U>

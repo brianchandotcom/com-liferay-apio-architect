@@ -24,8 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * This annotation provides namespace for vocabulary annotations. Use one of the
- * nested annotation.
+ * Defines an annotation that namespaces vocabulary annotations. Use one of this
+ * interface's nested annotations.
  *
  * @author Alejandro Hernández
  */
@@ -34,127 +34,90 @@ public @interface Vocabulary {
 	/**
 	 * Indicates that a type has a bidirectional link to another resource's
 	 * page.
-	 *
-	 * <p>
-	 * Annotation has an attribute to indicate the type of the resource being
-	 * linked to, and the property field that holds information about the
-	 * property that will be added to the linked type.
-	 * </p>
-	 *
-	 * @review
 	 */
 	@Retention(RUNTIME)
 	@Target(METHOD)
 	public @interface BidirectionalModel {
 
 		/**
-		 * Returns the field information.
+		 * Returns the property field that holds information about the property
+		 * added to the linked type.
 		 *
-		 * @return the field information
-		 * @review
+		 * @return the property field
 		 */
 		public Field field();
 
 		/**
 		 * Returns the class of the resource being linked to.
 		 *
-		 * @return the class of the resource being linked to
-		 * @review
+		 * @return the resource's class
 		 */
 		public Class<? extends Identifier<?>> modelClass();
 
 	}
 
 	/**
-	 * Provides information about a field. This annotation should always be used
-	 * on an interface method.
+	 * Defines an annotation that provides information about a field. This
+	 * annotation should always be used on an interface method.
 	 *
 	 * <p>
-	 * Annotation has attributes to customize the schema URL (<a
-	 * href="https://schema.org">schema.org</a> by default) and the description
-	 * of the field (in the case the field is a custom one).
+	 * This annotation has attributes to customize the schema URL (<a
+	 * href="https://schema.org">schema.org </a> by default) and the field
+	 * description (in the case of a custom field).
 	 * </p>
-	 *
-	 * @review
 	 */
 	@Retention(RUNTIME)
 	@Target(METHOD)
 	public @interface Field {
 		/**
-		 * Returns the field description, if it is a custom one. Returns empty
-		 * string otherwise.
+		 * Returns the field description, if the field is a custom field;
+		 * otherwise returns an empty string.
 		 *
-		 * @return the field description, if it is a custom one; empty string
-		 *         otherwise
-		 * @review
+		 * @return the custom field's description; an empty string otherwise
 		 */
 		public String description() default "";
 
 		/**
 		 * Returns {@code true} if a field should only be used when representing
-		 * the type.
+		 * the type. If this attribute is {@code true}, it will be ignored when
+		 * instantiating the interface from the HTTP request body. This
+		 * attribute is the opposite of {@link #writeOnly()}.
 		 *
-		 * <p>
-		 * If this attribute is {@code true}, it will be ignored when
-		 * instantiating the interface out of the HTTP request body.
-		 * </p>
-		 *
-		 * <p>
-		 * Opposite attribute to {@link #writeOnly()} ()}.
-		 * </p>
-		 *
-		 * @see    #writeOnly()
-		 * @review
+		 * @see #writeOnly()
 		 */
 		public boolean readOnly() default false;
 
 		/**
-		 * Returns the field's schema URL
+		 * Returns the field's schema URL.
 		 *
 		 * @return the field's schema URL
-		 * @review
 		 */
 		public String schemaURL() default "https://www.schema.org/";
 
 		/**
-		 * Returns the field's name
+		 * Returns the field's name.
 		 *
 		 * @return the field's name
-		 * @review
 		 */
 		public String value();
 
 		/**
 		 * Returns {@code true} if a field should only be used when
-		 * instantiating the interface out of the HTTP request body.
+		 * instantiating the interface from the HTTP request body. If this
+		 * attribute is {@code true}, it will be ignored when representing the
+		 * type in any format. This attribute is the opposite of {@link
+		 * #readOnly()}.
 		 *
-		 * <p>
-		 * If this attribute is {@code true}, it will be ignored when
-		 * representing the type in any format.
-		 * </p>
-		 *
-		 * <p>
-		 * Opposite attribute to {@link #readOnly()}.
-		 * </p>
-		 *
-		 * @see    #readOnly()
-		 * @review
+		 * @see #readOnly()
 		 */
 		public boolean writeOnly() default false;
 
 	}
 
 	/**
-	 * Indicates that a field should be expressed as a link to another resource.
-	 * For this to be possible, the method must provide information about
-	 * another resource's ID.
-	 *
-	 * <p>
-	 * Annotation has an attribute to indicate the type of the resource being
-	 * linked to.
-	 * </p>
-	 *
-	 * @review
+	 * Defines an annotation that indicates a field should be expressed as a
+	 * link to another resource. For this to be possible, the method must
+	 * provide information about another resource's ID.
 	 */
 	@Retention(RUNTIME)
 	@Target(METHOD)
@@ -163,22 +126,15 @@ public @interface Vocabulary {
 		/**
 		 * Returns the class of the resource being linked to.
 		 *
-		 * @return the class of the resource being linked to
-		 * @review
+		 * @return the resource's class
 		 */
 		public Class<? extends Identifier<?>> value();
 
 	}
 
 	/**
-	 * Indicates that a type has a link to another resource's page.
-	 *
-	 * <p>
-	 * Annotation has an attribute to indicate the type of the resource being
-	 * linked to.
-	 * </p>
-	 *
-	 * @review
+	 * Defines an annotation that indicates a type has a link to another
+	 * resource's page.
 	 */
 	@Retention(RUNTIME)
 	@Target(METHOD)
@@ -187,25 +143,16 @@ public @interface Vocabulary {
 		/**
 		 * Returns the class of the resource being linked to.
 		 *
-		 * @return the class of the resource being linked to
-		 * @review
+		 * @return the resource's class
 		 */
 		public Class<? extends Identifier<?>> value();
 
 	}
 
 	/**
-	 * Indicates that a field contains a relative URL that should be expressed
-	 * as an absolute one.
-	 *
-	 * <p>
-	 * The annotated method must return the relative URL in the form of a {@code
-	 * String}. <p> <p> Annotation has an attribute to indicate if the URL is
-	 * relative to the JAX-RS application. By default, the URL is supposedly
-	 * relative to the server.
-	 * </p>
-	 *
-	 * @review
+	 * Defines an annotation that indicates a field contains a relative URL that
+	 * should be expressed as an absolute one. The annotated method must return
+	 * the relative URL as a string.
 	 */
 	@Retention(RUNTIME)
 	@Target(METHOD)
@@ -217,51 +164,39 @@ public @interface Vocabulary {
 		 *
 		 * @return {@code true} if the provided URL is relative to the JAX-RS
 		 *         application; {@code false} otherwise
-		 * @review
 		 */
 		public boolean fromApplication() default false;
 
 	}
 
 	/**
-	 * Provides information about a type. This annotation should always be used
-	 * on an interface.
-	 *
-	 * <p>
-	 * Annotation has attributes to customize the schema URL (<a
-	 * href="https://schema.org">schema.org</a> by default) and the description
-	 * of the type (in the case the type is a custom one).
-	 * </p>
-	 *
-	 * @review
+	 * Defines an annotation that provides information about a type. This
+	 * annotation should always be used on an interface.
 	 */
 	@Retention(RUNTIME)
 	@Target(TYPE)
 	public @interface Type {
 
 		/**
-		 * Returns the type description, if it is a custom one. Returns empty
-		 * string otherwise.
+		 * Returns the type description, if the type is a custom type; returns
+		 * an empty string otherwise.
 		 *
-		 * @return the type description, if it is a custom one; empty string
-		 *         otherwise
-		 * @review
+		 * @return the type description if the type is a custom type; an empty
+		 *         string otherwise
 		 */
 		public String description() default "";
 
 		/**
-		 * Returns the type's schema URL
+		 * Returns the type's schema URL.
 		 *
 		 * @return the type's schema URL
-		 * @review
 		 */
 		public String schemaURL() default "https://www.schema.org/";
 
 		/**
-		 * Returns the type's name
+		 * Returns the type's name.
 		 *
 		 * @return the type's name
-		 * @review
 		 */
 		public String value();
 

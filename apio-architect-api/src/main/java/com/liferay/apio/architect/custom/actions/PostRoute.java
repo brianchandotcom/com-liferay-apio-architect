@@ -17,10 +17,9 @@ package com.liferay.apio.architect.custom.actions;
 import com.liferay.apio.architect.operation.HTTPMethod;
 
 /**
- * Models a resource route with POST semantics
+ * Models a resource route with POST semantics.
  *
  * @author Javier Gamarra
- * @review
  */
 public abstract class PostRoute extends CustomRoute {
 

@@ -29,10 +29,9 @@ import java.util.Optional;
 public interface Operation {
 
 	/**
-	 * Returns the custom route of the operation
+	 * Returns the operation's custom route.
 	 *
-	 * @return the custom route of the operation
-	 * @review
+	 * @return the custom route
 	 */
 	public String getCustomRoute();
 
@@ -75,10 +74,10 @@ public interface Operation {
 	public boolean isCollection();
 
 	/**
-	 * Return {@code true} if this is a custom operation
+	 * Returns {@code true} if this is a custom operation.
 	 *
-	 * @return {@code true} if this is a custom operation
-	 * @review
+	 * @return {@code true} if this is a custom operation; {@code false}
+	 *         otherwise
 	 */
 	public boolean isCustom();
 

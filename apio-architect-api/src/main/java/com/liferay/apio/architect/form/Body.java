@@ -148,7 +148,6 @@ public interface Body {
 	 * @param  key the key for extracting the nested body list
 	 * @return the nested body list, if present; {@code Optional#empty()}
 	 *         otherwise
-	 * @review
 	 */
 	public default Optional<List<Body>> getNestedBodyListOptional(String key) {
 		return Optional.empty();
@@ -160,7 +159,6 @@ public interface Body {
 	 *
 	 * @param  key the key for extracting the nested body
 	 * @return the nested body, if present; {@code Optional#empty()} otherwise
-	 * @review
 	 */
 	public default Optional<Body> getNestedBodyOptional(String key) {
 		return Optional.empty();

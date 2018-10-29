@@ -20,10 +20,9 @@ import com.liferay.apio.architect.operation.HTTPMethod;
 import java.util.Optional;
 
 /**
- * Models a custom resource route
+ * Models a custom resource route.
  *
  * @author Javier Gamarra
- * @review
  */
 public abstract class CustomRoute {
 

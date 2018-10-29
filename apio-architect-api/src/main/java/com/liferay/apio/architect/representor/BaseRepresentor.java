@@ -356,7 +356,6 @@ public interface BaseRepresentor<T> {
 		 * @param  itemIdentifierClass the class of the collection items'
 		 *         identifier
 		 * @return the builder's step
-		 * @review
 		 */
 		public <V, S extends Identifier<?>> U addRelatedCollection(
 			String key, Class<S> itemIdentifierClass,

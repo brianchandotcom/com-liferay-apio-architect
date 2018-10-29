@@ -20,28 +20,23 @@ import java.util.Locale;
 import java.util.function.Function;
 
 /**
- * Holds information about the documentation of the properties and operations of
- * the Resources.
+ * Holds information about the documentation of the resources' properties and
+ * operations.
  *
  * @author Víctor Galán
- * @review
  */
 public interface CustomDocumentation {
 
 	/**
-	 * Returns a function that will return the description of a property or
-	 * operation passing the desired locale.
+	 * Returns a function that returns the description of a property or
+	 * operation for the locale.
 	 *
-	 * @param  name the name of the property or operation to get its
-	 *         description.
-	 * @review
+	 * @param name the name of the property or operation
 	 */
 	public Function<Locale, String> getDescriptionFunction(String name);
 
 	/**
-	 * Creates a custom documentation
-	 *
-	 * @review
+	 * Creates a {@code CustomDocumentation} object.
 	 */
 	@ProviderType
 	public interface Builder {
@@ -49,28 +44,24 @@ public interface CustomDocumentation {
 		/**
 		 * Adds a description for the name.
 		 *
-		 * @param  name the name to add the description to.
-		 * @param  description the description to be added to the name.
-		 * @review
+		 * @param name the name
+		 * @param description the description
 		 */
 		public Builder addDescription(String name, String description);
 
 		/**
-		 * Adds a localizable description of the name.
+		 * Adds the name's localized description via the function that takes the
+		 * locale and returns the description.
 		 *
-		 * @param  name the name to add the description to.
-		 * @param  stringFunction the fucntion that takes a locale a return a
-		 *         description
-		 * @review
+		 * @param name the name
+		 * @param stringFunction the function
 		 */
 		public Builder addLocalizedDescription(
 			String name, Function<Locale, String> stringFunction);
 
 		/**
-		 * Constructs and returns a {@link CustomDocumentation} instance with
+		 * Constructs and returns a {@code CustomDocumentation} instance with
 		 * the information provided to the builder.
-		 *
-		 * @review
 		 */
 		public CustomDocumentation build();
 

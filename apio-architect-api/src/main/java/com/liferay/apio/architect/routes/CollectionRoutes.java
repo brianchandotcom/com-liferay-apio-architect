@@ -80,21 +80,18 @@ public interface CollectionRoutes<T, S> {
 	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional();
 
 	/**
-	 * Returns the functions that are used to create custom operations, if the
-	 * endpoint was added through the {@link CollectionRoutes.Builder} and the
-	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
+	 * Returns the function used to create custom operations, if the endpoint
+	 * was added through {@link CollectionRoutes.Builder} and the function
+	 * therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function used to create custom operations, if the function
 	 *         exists; {@code Optional#empty()} otherwise
-	 * @review
 	 */
 	public Optional<Map<String, CustomPageFunction<?>>>
 		getCustomPageFunctionsOptional();
 
 	/**
-	 * Returns the custom routes configured based on their paths
-	 *
-	 * @review
+	 * Returns the custom routes configured based on their paths.
 	 */
 	public Map<String, CustomRoute> getCustomRoutes();
 

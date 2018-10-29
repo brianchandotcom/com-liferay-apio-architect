@@ -21,8 +21,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotating an action parameter with {@link Body} indicates that the parameter
- * must be obtained from the request body.
+ * Defines an action parameter annotation that indicates the parameter must be
+ * obtained from the request body.
  *
  * <p>
  * This annotation should always be used on an {@link
@@ -31,7 +31,6 @@ import java.lang.annotation.Target;
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 @Retention(RUNTIME)
 @Target(PARAMETER)

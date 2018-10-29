@@ -17,10 +17,9 @@ package com.liferay.apio.architect.custom.actions;
 import com.liferay.apio.architect.operation.HTTPMethod;
 
 /**
- * Models a resource route with DELETE semantics
+ * Models a resource route with DELETE semantics.
  *
  * @author Javier Gamarra
- * @review
  */
 public abstract class DeleteRoute extends CustomRoute {
 
