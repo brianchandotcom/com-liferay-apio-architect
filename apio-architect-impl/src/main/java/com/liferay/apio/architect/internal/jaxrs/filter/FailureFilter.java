@@ -16,11 +16,9 @@ package com.liferay.apio.architect.internal.jaxrs.filter;
 
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
-import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.functional.Try.Failure;
 import com.liferay.apio.architect.internal.jaxrs.util.ErrorUtil;
 
-import java.io.IOException;
+import io.vavr.control.Try;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -35,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Filters and converts a {@link Failure} entity to its corresponding {@code
+ * Filters and converts a {@link Try.Failure} entity to its corresponding {@code
  * Response};
  *
  * @author Alejandro Hernández
@@ -51,21 +49,22 @@ public class FailureFilter implements ContainerResponseFilter {
 
 	@Override
 	public void filter(
-			ContainerRequestContext containerRequestContext,
-			ContainerResponseContext containerResponseContext)
-		throws IOException {
+		ContainerRequestContext containerRequestContext,
+		ContainerResponseContext containerResponseContext) {
 
-		Try.fromFallible(
-			containerResponseContext::getEntity
-		).map(
-			Failure.class::cast
-		).map(
-			Failure::getException
-		).map(
-			exception -> _errorUtil.getErrorResponse(exception, _request)
-		).ifSuccess(
-			response -> _updateContext(containerResponseContext, response)
-		);
+		Object entity = containerResponseContext.getEntity();
+
+		if (entity instanceof Try) {
+			Try<?> entityTry = (Try<?>)entity;
+
+			entityTry.onFailure(
+				throwable -> {
+					Response response = _errorUtil.getErrorResponse(
+						throwable, _request);
+
+					_updateContext(containerResponseContext, response);
+				});
+		}
 	}
 
 	private static void _updateContext(

@@ -47,46 +47,40 @@ public class ErrorUtil {
 	/**
 	 * Transforms an exception into a {@code Response}.
 	 *
-	 * @param  exception the exception
+	 * @param  e the exception
 	 * @param  request the current request
 	 * @return the response
 	 */
-	public Response getErrorResponse(Exception exception, Request request) {
+	public <E extends Throwable> Response getErrorResponse(
+		E e, Request request) {
+
+		if (!Exception.class.isAssignableFrom(e.getClass())) {
+			_logException(e, e.getMessage());
+
+			return _serverError;
+		}
+
 		Optional<APIError> apiErrorOptional = _exceptionMapperManager.map(
-			exception);
+			(Exception)e);
 
 		if (!apiErrorOptional.isPresent()) {
-			_logger.warn(
-				"No exception mapper found for {}", exception.getClass());
+			_logger.warn("No exception mapper found for {}", e.getClass());
 
-			if (exception instanceof WebApplicationException) {
+			_logException(e, e.getMessage());
+
+			if (e instanceof WebApplicationException) {
 				WebApplicationException webApplicationException =
-					(WebApplicationException)exception;
+					(WebApplicationException)e;
 
 				return webApplicationException.getResponse();
 			}
 
-			Response.ResponseBuilder responseBuilder = Response.serverError();
-
-			return responseBuilder.build();
+			return _serverError;
 		}
 
 		APIError apiError = apiErrorOptional.get();
 
-		String errorMessage = apiError.getMessage();
-
-		if (_logger.isDebugEnabled()) {
-			_logger.debug(errorMessage, exception);
-		}
-		else {
-			StackTraceElement stackTraceElement = exception.getStackTrace()[0];
-
-			String message = join(
-				"\n", errorMessage, exception.toString(),
-				"at " + stackTraceElement);
-
-			_logger.error(message);
-		}
+		_logException(e, apiError.getMessage());
 
 		int statusCode = apiError.getStatusCode();
 
@@ -107,6 +101,20 @@ public class ErrorUtil {
 			).build()
 		);
 	}
+
+	private <E extends Throwable> void _logException(E e, String message) {
+		if (_logger.isDebugEnabled()) {
+			_logger.debug(message, e);
+		}
+		else {
+			StackTraceElement stackTraceElement = e.getStackTrace()[0];
+
+			_logger.error(
+				join("\n", message, e.toString(), "at " + stackTraceElement));
+		}
+	}
+
+	private static final Response _serverError = Response.serverError().build();
 
 	@Reference
 	private ErrorMessageMapperManager _errorMessageMapperManager;
