@@ -15,9 +15,6 @@ task export(type: Export)
 task resolve(type: Resolve)
 task run(type: JavaExec)
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
-
 dependencies {
 	compileInclude group: "com.github.javafaker", name: "javafaker", version: "0.13"
 	compileInclude group: "com.github.mifmif", name: "generex", version: "1.0.2"

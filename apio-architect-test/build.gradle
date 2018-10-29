@@ -15,9 +15,6 @@ task copyJacocoAgent(type: Copy)
 task resolve(type: Resolve)
 task testOSGi(type: TestOSGi)
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
-
 copyJacocoAgent {
 	from {
 		zipTree(configurations.jacocoAgent.singleFile)
