@@ -29,22 +29,20 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * Provides utility function to transform a class annotated with {@link Type}
- * into a nested representor
+ * Provides a utility function to transform a class annotated with {@code Type}
+ * into a nested representor.
  *
  * @author Víctor Galán
- * @review
  */
 public class NestedRepresentorTransformer {
 
 	/**
-	 * Transform a class annotated with {@link Type} into a nested representor,
-	 * using the builder provided
+	 * Uses the nested representor builder to transform a class annotated with
+	 * {@code Type} into a nested representor.
 	 *
-	 * @param  typeClass the class annotated with {@link Type}
+	 * @param  typeClass the class annotated with {@code Type}
 	 * @param  builder the nested representor builder
-	 * @return the instance of representor created
-	 * @review
+	 * @return the nested representor
 	 */
 	public static NestedRepresentor<?> toRepresentor(
 		Class<?> typeClass, NestedRepresentor.Builder<?> builder) {

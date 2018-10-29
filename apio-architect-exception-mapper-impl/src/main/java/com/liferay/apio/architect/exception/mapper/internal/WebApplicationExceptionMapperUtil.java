@@ -26,19 +26,16 @@ import javax.ws.rs.core.Response.StatusType;
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public class WebApplicationExceptionMapperUtil {
 
 	/**
-	 * Returns {@code true} if a {@code message} is equals to the default
-	 * message for the {@code statusType}. Returns {@<code>false</code>}
-	 * otherwise.
+	 * Returns {@code true} if the message is the default message for the {@code
+	 * StatusType}.
 	 *
 	 * @param  statusType the status type
-	 * @return {@code true} if the message is equals to the status type default
-	 *         message; {@code false} otherwise
-	 * @review
+	 * @return {@code true} if the message is the status type's default message;
+	 *         {@code false} otherwise
 	 */
 	public static Predicate<String> isNotDefaultMessage(StatusType statusType) {
 		return anObject -> !_getDefaultMessage(statusType).equals(anObject);

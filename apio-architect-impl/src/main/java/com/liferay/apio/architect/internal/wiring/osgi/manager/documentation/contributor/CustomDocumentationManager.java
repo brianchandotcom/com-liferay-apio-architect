@@ -17,11 +17,10 @@ package com.liferay.apio.architect.internal.wiring.osgi.manager.documentation.co
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 
 /**
- * Provides methods to retrieve information provided by the different {@link
+ * Provides methods to retrieve information provided by the different {@code
  * CustomDocumentation} instances.
  *
  * @author Víctor Galán
- * @review
  */
 public interface CustomDocumentationManager {
 

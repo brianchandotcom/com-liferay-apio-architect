@@ -37,19 +37,16 @@ import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 
 /**
- * Base class for integration tests. Provides utility methods for basic
- * whiteboard/Apio operations/checks.
+ * Provides utility methods for basic whiteboard and Apio operations and checks.
+ * This class is the base class for integration tests.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class BaseTest {
 
 	/**
-	 * Returns a new {@code ClientBuilder} instance using the bundle context to
-	 * retrieve the registered client builder implementation.
-	 *
-	 * @review
+	 * Returns a new {@code ClientBuilder} instance by using the bundle context
+	 * to retrieve the registered client builder implementation.
 	 */
 	protected static ClientBuilder getClientBuilder() {
 		return _clientBuilders.getService();

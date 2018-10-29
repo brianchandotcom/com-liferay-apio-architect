@@ -22,20 +22,18 @@ import com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil;
 import com.liferay.apio.architect.router.ActionRouter;
 
 /**
- * Provides functions to extract the type class from an {@link ActionRouter}
+ * Provides functions to extract the type class from an {@code ActionRouter}.
  *
  * @author Alejandro Hernandez
  * @author Víctor Galán
- * @review
  */
 public class ActionRouterTypeExtractor {
 
 	/**
-	 * Extract the type class from an {@link ActionRouter}
+	 * Extract the type class from an action router.
 	 *
 	 * @param  actionRouter the action router
 	 * @return the type class
-	 * @review
 	 */
 	public static Try<Class<? extends Identifier>> extractTypeClass(
 		ActionRouter<?> actionRouter) {

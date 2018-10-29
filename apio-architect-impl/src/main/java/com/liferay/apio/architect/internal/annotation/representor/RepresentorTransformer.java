@@ -42,25 +42,23 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Provides utility function to transform a class annotated with {@link Type}
- * into a representor
+ * Provides a utility function that transforms a class annotated with {@code
+ * Vocabulary.Type} into a representor
  *
  * @author Alejandro Hernandez
  * @author Víctor Galán
- * @review
  */
 public class RepresentorTransformer {
 
 	/**
-	 * Transform a class annotated with {@link Type} into a representor
+	 * Transforms a class annotated with {@code Type} into a representor.
 	 *
-	 * @param  typeClass the class annotated with {@link Type}
+	 * @param  typeClass the class annotated with {@code Type}
 	 * @param  nameFunction the function that gets a class's {@link
 	 *         com.liferay.apio.architect.resource.CollectionResource} name
-	 * @param  relatedCollections list of the related collections of all
+	 * @param  relatedCollections the list of the related collections of all
 	 *         representors
-	 * @return the instance of representor created
-	 * @review
+	 * @return the representor
 	 */
 	public static <T extends Identifier<S>, S> Representor<T> toRepresentor(
 		Class<T> typeClass,

@@ -43,11 +43,10 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 
 /**
- * Keep track of all {@link ActionRouter} registered and provides a method to
- * compute the representors from each action router.
+ * Tracks all the registered {@code ActionRouter} instances and provides a
+ * method to compute the representors from each action router.
  *
  * @author Víctor Galán
- * @review
  */
 @Component(service = ActionRouterRepresentorManager.class)
 public class ActionRouterRepresentorManager {
@@ -58,14 +57,13 @@ public class ActionRouterRepresentorManager {
 	}
 
 	/**
-	 * Create a representors for each {@link ActionRouter} registered, for this
-	 * it uses its type.
+	 * Creates representors for each registered action router, using the action
+	 * router's type.
 	 *
-	 * @param  nameFunction the function that gets a class's {@link
-	 *         com.liferay.apio.architect.resource.CollectionResource} name
-	 * @param  relatedCollections list of the related collections of all
-	 *         representors
-	 * @review
+	 * @param nameFunction the function that gets a class's {@code
+	 *        com.liferay.apio.architect.resource.CollectionResource} name
+	 * @param relatedCollections the list of the related collections of all
+	 *        representors
 	 */
 	public void computeRepresentors(
 		Function<Class<? extends Identifier<?>>, String> nameFunction,

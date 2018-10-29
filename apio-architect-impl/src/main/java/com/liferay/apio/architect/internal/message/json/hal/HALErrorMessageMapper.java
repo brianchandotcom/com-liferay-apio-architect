@@ -24,11 +24,10 @@ import org.osgi.service.component.annotations.Component;
  *
  * <p>
  * For more information, see <a
- * href="http://stateless.co/hal_specification.html">HAL </a>.
+ * href="http://stateless.co/hal_specification.html">the HAL specification </a>.
  * </p>
  *
  * @author Julio Camarero
- * @review
  */
 @Component(service = ErrorMessageMapper.class)
 public class HALErrorMessageMapper implements ErrorMessageMapper {

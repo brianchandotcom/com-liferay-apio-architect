@@ -20,7 +20,7 @@ import com.liferay.apio.architect.uri.Path;
 import java.util.Optional;
 
 /**
- * Provides methods to map a {@link Path} to an identifier, and vice versa.
+ * Provides methods to map a {@code Path} to an identifier, and vice versa.
  *
  * @author Alejandro Hernández
  */
@@ -55,10 +55,9 @@ public interface PathIdentifierMapperManager {
 	 * throws a {@code MustHavePathIdentifierMapper} exception otherwise.
 	 *
 	 * @param  path the {@code Path}
-	 * @param  classNameBaseManager the classNameBaseManager to look for
-	 *         reusable routes
+	 * @param  classNameBaseManager the class name base manager to use to look
+	 *         for reusable routes
 	 * @return the identifier
-	 * @review
 	 */
 	public default <T, R> T mapToIdentifierOrFail(
 		Path path, ClassNameBaseManager<R> classNameBaseManager) {
@@ -85,11 +84,10 @@ public interface PathIdentifierMapperManager {
 	 *
 	 * @param  name the resource's name
 	 * @param  identifier the identifier
-	 * @param  classNameBaseManager the classNameBaseManager to look for
-	 *         reusable routes
+	 * @param  classNameBaseManager the class name base manager to use to look
+	 *         for reusable routes
 	 * @return the {@code Path}, if a valid {@code PathIdentifierMapper} is
 	 *         present; {@code Optional#empty()} otherwise
-	 * @review
 	 */
 	public default <R, T> Optional<Path> mapToPath(
 		String name, T identifier,

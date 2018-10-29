@@ -20,13 +20,12 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Provides methods to retrieve the routes information provided by the different
- * {@link com.liferay.apio.architect.router.ReusableNestedCollectionRouter}
+ * Provides methods to retrieve the route information provided by the different
+ * {@code com.liferay.apio.architect.router.ReusableNestedCollectionRouter}
  * instances.
  *
  * @author Alejandro Hernández
  * @see    com.liferay.apio.architect.router.ReusableNestedCollectionRouter
- * @review
  */
 public interface ReusableNestedCollectionRouterManager {
 
@@ -36,9 +35,8 @@ public interface ReusableNestedCollectionRouterManager {
 	 * Returns the nested collection routes for the reusable nested collection
 	 * resource's name.
 	 *
-	 * @param  name the reusable nested collection resource's name
-	 * @return the nested collection routes
-	 * @review
+	 * @param  name the resource's name
+	 * @return the routes
 	 */
 	public Optional<NestedCollectionRoutes> getReusableCollectionRoutesOptional(
 		String name);

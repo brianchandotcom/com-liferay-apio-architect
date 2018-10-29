@@ -18,15 +18,15 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
 
 /**
- * Maps {@link Form} data to its representation in a JSON object. Instances of
- * this interface work like events. The {@code
- * javax.ws.rs.ext.MessageBodyWriter} of the {@code Form} calls the {@code
- * FormMessageMapper} methods. In each method, developers should only map the
- * provided part of the resource to its representation in a JSON object. To
- * enable this, each method receives a {@link JSONObjectBuilder}.
+ * Maps {@code Form} data to its JSON object representation. Instances of this
+ * interface work like events. The form's {@code
+ * javax.ws.rs.ext.MessageBodyWriter} calls the form message mapper's methods.
+ * In each method, developers should only map the provided part of the resource
+ * to its JSON object representation. To enable this, each method receives a
+ * {@link JSONObjectBuilder}.
  *
  * <p>
- * The method {@link #onFinish} is called when the writer finishes writing the
+ * The {@link #onFinish} method is called when the writer finishes writing the
  * form. Otherwise, the form message mapper's methods aren't called in a
  * particular order.
  * </p>
@@ -36,32 +36,31 @@ import com.liferay.apio.architect.form.FormField;
 public interface FormMessageMapper extends MessageMapper<Form> {
 
 	/**
-	 * Maps the {@code Form} description to its JSON object representation.
+	 * Maps the form's description to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the form
-	 * @param description the {@code Form} description
+	 * @param description the form description
 	 */
 	public default void mapFormDescription(
 		JSONObjectBuilder jsonObjectBuilder, String description) {
 	}
 
 	/**
-	 * Maps a form field to its JSON object representation.
+	 * Maps the form field to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the form
-	 * @param formField a form's field
+	 * @param formField the form field
 	 */
 	public default void mapFormField(
 		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
 	}
 
 	/**
-	 * Maps a form field to its JSON object representation.
+	 * Maps the form field to its JSON object representation.
 	 *
-	 * @param  jsonObjectBuilder the JSON object builder for the form
-	 * @param  formField a form's field
-	 * @param  nestedJsonObjectBuilder a nested form
-	 * @review
+	 * @param jsonObjectBuilder the JSON object builder for the form
+	 * @param formField the form field
+	 * @param nestedJsonObjectBuilder the nested form
 	 */
 	public default void mapFormField(
 		JSONObjectBuilder jsonObjectBuilder, FormField formField,
@@ -69,17 +68,17 @@ public interface FormMessageMapper extends MessageMapper<Form> {
 	}
 
 	/**
-	 * Maps the {@code Form} title to its JSON object representation.
+	 * Maps the form's title to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the form
-	 * @param title the {@code Form} title
+	 * @param title the form's title
 	 */
 	public default void mapFormTitle(
 		JSONObjectBuilder jsonObjectBuilder, String title) {
 	}
 
 	/**
-	 * Maps a form URL to its JSON object representation.
+	 * Maps the form URL to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the form
 	 * @param url the form's URL
