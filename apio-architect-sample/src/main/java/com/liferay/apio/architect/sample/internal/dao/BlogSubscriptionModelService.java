@@ -28,7 +28,6 @@ import org.osgi.service.component.annotations.Component;
  * Contains methods for creating blog subscriptions in an in-memory database.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component(immediate = true, service = BlogSubscriptionModelService.class)
 public class BlogSubscriptionModelService {

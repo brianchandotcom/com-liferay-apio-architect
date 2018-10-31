@@ -38,19 +38,16 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Contains methods for retrieving contact points in an in-memory database with
- * fake data.
+ * Contains methods for retrieving contact points from an in-memory database
+ * with fake data.
  *
  * @author Victor Galán
- * @review
  */
 @Component(immediate = true, service = ContactPointModelService.class)
 public class ContactPointModelService {
 
 	/**
 	 * Computes the fake data for this model class.
-	 *
-	 * @review
 	 */
 	@Activate
 	public void activate() {
@@ -86,7 +83,6 @@ public class ContactPointModelService {
 	 *
 	 * @param  id the contact point's ID
 	 * @return the contact point, if present; {@code Optional#empty()} otherwise
-	 * @review
 	 */
 	public Optional<ContactPointModel> get(long id) {
 		Collection<Map<Long, ContactPointModel>> contactPointModels =
@@ -111,7 +107,6 @@ public class ContactPointModelService {
 	 *
 	 * @param  personId the person's ID
 	 * @return the total number of comments
-	 * @review
 	 */
 	public int getCount(long personId) {
 		return Optional.of(
@@ -133,7 +128,6 @@ public class ContactPointModelService {
 	 * @param  start the page's start position
 	 * @param  end the page's end position
 	 * @return the page of contact points
-	 * @review
 	 */
 	public List<ContactPointModel> getPage(long personId, int start, int end) {
 		return Optional.of(

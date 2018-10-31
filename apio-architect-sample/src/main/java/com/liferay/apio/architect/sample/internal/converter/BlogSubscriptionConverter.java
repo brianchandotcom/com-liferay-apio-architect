@@ -24,16 +24,14 @@ import com.liferay.apio.architect.sample.internal.type.BlogSubscription;
  * DTOs.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class BlogSubscriptionConverter {
 
 	/**
-	 * Converts a {@link BlogSubscriptionModel} to a {@link BlogSubscription}.
+	 * Converts a {@link BlogSubscriptionModel} to a {@code BlogSubscription}.
 	 *
 	 * @param  blogSubscriptionModel the internal blog subscription model
-	 * @return a {@link BlogSubscription}
-	 * @review
+	 * @return the {@code BlogSubscription}
 	 */
 	public static BlogSubscription toBlogSubscription(
 		BlogSubscriptionModel blogSubscriptionModel) {

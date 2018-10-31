@@ -25,16 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a method performs the action of subscribing a person to
- * something.
- *
- * <p>
- * This annotation must be used on a method that lives inside a class
- * implementing {@link com.liferay.apio.architect.router.ActionRouter}.
- * </p>
+ * Defines an annotation that indicates a method subscribes a person to
+ * something. That method must live inside a class that implements {@link
+ * com.liferay.apio.architect.router.ActionRouter}.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Actions.Action(httpMethod = PUT, name = "subscribe")
 @Retention(RUNTIME)

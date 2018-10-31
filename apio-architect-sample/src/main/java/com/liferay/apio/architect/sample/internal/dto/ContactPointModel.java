@@ -18,7 +18,6 @@ package com.liferay.apio.architect.sample.internal.dto;
  * Represents a contact point. This is a mock class for sample purposes only.
  *
  * @author Víctor Galán
- * @review
  */
 public class ContactPointModel {
 

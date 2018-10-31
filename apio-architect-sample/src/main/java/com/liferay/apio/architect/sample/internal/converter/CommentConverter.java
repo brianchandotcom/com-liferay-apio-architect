@@ -20,19 +20,17 @@ import com.liferay.apio.architect.sample.internal.type.Comment;
 import java.util.Date;
 
 /**
- * Provides methods for creating {@link Comment} instances out of other DTOs.
+ * Provides methods for creating {@link Comment} instances from other DTOs.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class CommentConverter {
 
 	/**
-	 * Converts a {@link BlogPostingCommentModel} to a {@link Comment}.
+	 * Converts a {@link BlogPostingCommentModel} to a {@code Comment}.
 	 *
 	 * @param  blogPostingCommentModel the internal blog posting comment model
-	 * @return a {@link Comment}
-	 * @review
+	 * @return the {@code Comment}
 	 */
 	public static Comment toComment(
 		BlogPostingCommentModel blogPostingCommentModel) {

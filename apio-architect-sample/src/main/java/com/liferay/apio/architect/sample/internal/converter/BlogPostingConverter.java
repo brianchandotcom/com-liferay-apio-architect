@@ -27,20 +27,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Provides methods for creating {@link BlogPosting} instances out of other
- * DTOs.
+ * Provides methods for creating {@link BlogPosting} instances from other DTOs.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class BlogPostingConverter {
 
 	/**
-	 * Converts a {@link BlogPostingModel} to a {@link BlogPosting}.
+	 * Converts a {@link BlogPostingModel} to a {@code BlogPosting}.
 	 *
 	 * @param  blogPostingModel the internal blog posting model
-	 * @return a {@link BlogPosting}
-	 * @review
+	 * @return the {@code BlogPosting}
 	 */
 	public static BlogPosting toBlogPosting(BlogPostingModel blogPostingModel) {
 		return new BlogPosting() {
@@ -106,8 +103,7 @@ public class BlogPostingConverter {
 	 * Converts a {@link RatingModel} to a {@link Rating}.
 	 *
 	 * @param  ratingModel the internal rating model
-	 * @return a {@link Rating}
-	 * @review
+	 * @return the {@link Rating}
 	 */
 	private static Rating _toRating(RatingModel ratingModel) {
 		return new Rating() {
@@ -129,8 +125,7 @@ public class BlogPostingConverter {
 	 * Converts a {@link ReviewModel} to a {@link Review}.
 	 *
 	 * @param  reviewModel the internal review model
-	 * @return a {@link Review}
-	 * @review
+	 * @return the {@code Review}
 	 */
 	private static Review _toReview(ReviewModel reviewModel) {
 		return new Review() {

@@ -44,7 +44,6 @@ import org.osgi.service.component.annotations.Reference;
  * comments in an in-memory database with fake data.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component(immediate = true, service = BlogPostingCommentModelService.class)
 public class BlogPostingCommentModelService {

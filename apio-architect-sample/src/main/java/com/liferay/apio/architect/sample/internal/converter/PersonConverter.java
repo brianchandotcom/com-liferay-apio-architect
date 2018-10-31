@@ -29,16 +29,14 @@ import javax.ws.rs.core.UriBuilder;
  * Provides methods for creating {@link Person} instances out of other DTOs.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class PersonConverter {
 
 	/**
-	 * Converts a {@link PersonModel} to a {@link Person}.
+	 * Converts a {@link PersonModel} to a {@code Person}.
 	 *
 	 * @param  personModel the internal person model
-	 * @return a {@link Person}
-	 * @review
+	 * @return the {@code Person}
 	 */
 	public static Person toPerson(PersonModel personModel) {
 		return new Person() {
@@ -104,8 +102,7 @@ public class PersonConverter {
 	 * Converts a {@link PostalAddressModel} to a {@link PostalAddress}.
 	 *
 	 * @param  postalAddressModel the internal postal address model
-	 * @return a {@link PostalAddress}
-	 * @review
+	 * @return the {@code PostalAddress}
 	 */
 	private static PostalAddress _toPostalAddress(
 		PostalAddressModel postalAddressModel) {

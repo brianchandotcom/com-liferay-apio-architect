@@ -18,62 +18,61 @@ import com.liferay.apio.architect.annotation.Vocabulary.Field;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 
 /**
- * Instances of this interface represent a postal address exposed through the
- * API.
+ * Represents a postal address exposed through the API. See <a
+ * href="https://schema.org/PostalAddress">PostalAddress </a> for more
+ * information.
  *
  * @author Alejandro Hernández
- * @see    <a href="https://schema.org/PostalAddress">PostalAddress</a>
- * @review
  */
 @Type("PostalAddressAnnotated")
 public interface PostalAddress {
 
 	/**
-	 * Returns the address's country.
+	 * Returns the postal address's country. See <a
+	 * href="https://schema.org/addressCountry">addressCountry </a> for more
+	 * information.
 	 *
-	 * @return the address's country
-	 * @see    <a href="https://schema.org/addressCountry">addressCountry</a>
-	 * @review
+	 * @return the postal address's country
 	 */
 	@Field("addressCountry")
 	public String getAddressCountry();
 
 	/**
-	 * Returns the address's locality.
+	 * Returns the postal address's locality. See <a
+	 * href="https://schema.org/addressLocality">addressLocality </a> for more
+	 * information.
 	 *
-	 * @return the address's locality
-	 * @see    <a href="https://schema.org/addressLocality">addressLocality</a>
-	 * @review
+	 * @return the postal address's locality
 	 */
 	@Field("addressLocality")
 	public String getAddressLocality();
 
 	/**
-	 * Returns the address's region.
+	 * Returns the postal address's region. See <a
+	 * href="https://schema.org/addressRegion">addressRegion </a> for more
+	 * information.
 	 *
-	 * @return the address's region
-	 * @see    <a href="https://schema.org/addressRegion">addressRegion</a>
-	 * @review
+	 * @return the postal address's region
 	 */
 	@Field("addressRegion")
 	public String getAddressRegion();
 
 	/**
-	 * Returns the address's postal code.
+	 * Returns the address's postal code. See <a
+	 * href="https://schema.org/postalCode">postalCode </a> for more
+	 * information.
 	 *
 	 * @return the address's postal code
-	 * @see    <a href="https://schema.org/postalCode">postalCode</a>
-	 * @review
 	 */
 	@Field("postalCode")
 	public String getPostalCode();
 
 	/**
-	 * Returns the address's street.
+	 * Returns the street address. See <a
+	 * href="https://schema.org/streetAddress">streetAddress </a> for more
+	 * information.
 	 *
-	 * @return the address's street
-	 * @see    <a href="https://schema.org/streetAddress">streetAddress</a>
-	 * @review
+	 * @return the street address
 	 */
 	@Field("streetAddress")
 	public String getStreetAddress();

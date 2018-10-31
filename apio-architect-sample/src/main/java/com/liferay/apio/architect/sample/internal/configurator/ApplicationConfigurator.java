@@ -27,11 +27,12 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * This configurator updates the {@code ApioApplication} properties so its
- * served on the base path, instead of the default {@code "api"}.
+ * Updates the {@code
+ * com.liferay.apio.architect.internal.application.ApioApplication} properties
+ * so the application is served on the base path instead of the default {@code
+ * "api"}.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component(immediate = true, service = {})
 public class ApplicationConfigurator {

@@ -21,7 +21,6 @@ import java.util.Date;
  * sample purposes only.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class BlogPostingCommentModel {
 

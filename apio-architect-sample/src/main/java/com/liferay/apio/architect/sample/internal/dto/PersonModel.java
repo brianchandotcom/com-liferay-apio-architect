@@ -21,7 +21,6 @@ import java.util.List;
  * Represents a person. This is a mock class for sample purposes only.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class PersonModel {
 

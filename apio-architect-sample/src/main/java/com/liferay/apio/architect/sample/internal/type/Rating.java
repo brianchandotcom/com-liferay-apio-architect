@@ -19,21 +19,20 @@ import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 
 /**
- * Instances of this interface represent a rating exposed through the API.
+ * Represents a rating exposed through the API. See <a
+ * href="https://schema.org/Rating">Rating </a> for more information.
  *
  * @author Alejandro Hernández
- * @see    <a href="https://schema.org/Rating">Rating</a>
- * @review
  */
 @Type("RatingAnnotated")
 public interface Rating {
 
 	/**
-	 * Returns the rating's best possible rating.
+	 * Returns the best rating value that this rating allows. See <a
+	 * href="https://schema.org/bestRating">bestRating </a> for more
+	 * information.
 	 *
-	 * @return the rating's best possible rating
-	 * @see    <a href="https://schema.org/bestRating">bestRating</a>
-	 * @review
+	 * @return the best possible rating value
 	 */
 	@Field(readOnly = true, value = "bestRating")
 	public default Number getBestRating() {
@@ -41,32 +40,31 @@ public interface Rating {
 	}
 
 	/**
-	 * Returns the rating's creator.
+	 * Returns the rating's creator. See <a
+	 * href="https://schema.org/creator">creator </a> for more information.
 	 *
 	 * @return the rating's creator
-	 * @see    <a href="https://schema.org/creator">creator</a>
-	 * @review
 	 */
 	@Field("creator")
 	@LinkedModel(Person.class)
 	public Long getCreatorId();
 
 	/**
-	 * Returns the actual rating's value.
+	 * Returns the rating's value. See <a
+	 * href="https://schema.org/ratingValue">ratingValue </a> for more
+	 * information.
 	 *
-	 * @return the actual rating's value
-	 * @see    <a href="https://schema.org/ratingValue">ratingValue</a>
-	 * @review
+	 * @return the rating's value
 	 */
 	@Field("ratingValue")
 	public Long getRatingValue();
 
 	/**
-	 * Returns the rating's worst possible value.
+	 * Returns the worst rating value that this rating allows. See <a
+	 * href="https://schema.org/worstRating">worstRating </a> for more
+	 * information.
 	 *
-	 * @return the rating's worst possible value
-	 * @see    <a href="https://schema.org/worstRating">worstRating</a>
-	 * @review
+	 * @return the worst possible rating value
 	 */
 	@Field(readOnly = true, value = "worstRating")
 	public default Number getWorstRating() {

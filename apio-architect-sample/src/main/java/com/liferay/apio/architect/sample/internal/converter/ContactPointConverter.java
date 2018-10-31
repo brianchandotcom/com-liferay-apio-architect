@@ -18,20 +18,17 @@ import com.liferay.apio.architect.sample.internal.dto.ContactPointModel;
 import com.liferay.apio.architect.sample.internal.type.ContactPoint;
 
 /**
- * Provides methods for creating {@link ContactPoint} instances out of other
- * DTOs.
+ * Provides methods for creating {@link ContactPoint} instances from other DTOs.
  *
  * @author Víctor Galán
- * @review
  */
 public class ContactPointConverter {
 
 	/**
-	 * Converts a {@link ContactPointModel} to a {@link ContactPoint}.
+	 * Converts a {@link ContactPointModel} to a {@code ContactPoint}.
 	 *
 	 * @param  contactPointModel the internal contact point model
-	 * @return a {@link ContactPoint}
-	 * @review
+	 * @return the {@code ContactPoint}
 	 */
 	public static ContactPoint toContactPoint(
 		ContactPointModel contactPointModel) {

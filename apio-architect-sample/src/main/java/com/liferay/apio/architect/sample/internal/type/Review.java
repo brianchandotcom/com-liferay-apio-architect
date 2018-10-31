@@ -18,21 +18,19 @@ import com.liferay.apio.architect.annotation.Vocabulary.Field;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 
 /**
- * Instances of this interface represent a review exposed through the API.
+ * Represents a review exposed through the API. See <a
+ * href="https://schema.org/Review">Review </a> for more information.
  *
  * @author Alejandro Hernández
- * @see    <a href="https://schema.org/Review">Review</a>
- * @review
  */
 @Type("ReviewAnnotated")
 public interface Review {
 
 	/**
-	 * Returns the review's rating.
+	 * Returns the review's rating. See <a
+	 * href="https://schema.org/Rating">Rating </a> for more information.
 	 *
 	 * @return the review's rating
-	 * @see    <a href="https://schema.org/rating">rating</a>
-	 * @review
 	 */
 	@Field("rating")
 	public Rating getRating();
@@ -41,8 +39,6 @@ public interface Review {
 	 * Returns the review's body.
 	 *
 	 * @return the review's body
-	 * @see    <a href="https://schema.org/body">body</a>
-	 * @review
 	 */
 	@Field("reviewBody")
 	public String getReviewBody();

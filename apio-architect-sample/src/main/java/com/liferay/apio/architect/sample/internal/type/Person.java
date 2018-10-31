@@ -24,51 +24,47 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Instances of this interface represent a person exposed through the API.
+ * Represents a person resource exposed through the API. See <a
+ * href="https://schema.org/Person">Person </a> for more information.
  *
  * @author Alejandro Hernández
- * @see    <a href="https://schema.org/Person">Person</a>
- * @review
  */
 @Type("PersonAnnotated")
 public interface Person extends Identifier<Long> {
 
 	/**
-	 * Returns the person's birth date.
+	 * Returns the person's birth date. See <a
+	 * href="https://schema.org/birthDate">birthDate </a> for more information.
 	 *
 	 * @return the person's birth date
-	 * @see    <a href="https://schema.org/birthDate">birthDate</a>
-	 * @review
 	 */
 	@Field("birthDate")
 	public Date getBirthDate();
 
 	/**
-	 * Returns the person's email.
+	 * Returns the person's email. See <a href="https://schema.org/email">email
+	 * </a> for more information.
 	 *
 	 * @return the person's email
-	 * @see    <a href="https://schema.org/email">email</a>
-	 * @review
 	 */
 	@Field("email")
 	public String getEmail();
 
 	/**
-	 * Returns the person's family name.
+	 * Returns the person's family name. See <a
+	 * href="https://schema.org/familyName">familyName </a> for more
+	 * information.
 	 *
 	 * @return the person's family name
-	 * @see    <a href="https://schema.org/familyName">familyName</a>
-	 * @review
 	 */
 	@Field("familyName")
 	public String getFamilyName();
 
 	/**
-	 * Returns the person's given name.
+	 * Returns the person's given name. See <a
+	 * href="https://schema.org/givenName">givenName </a> for more information.
 	 *
 	 * @return the person's given name
-	 * @see    <a href="https://schema.org/givenName">givenName</a>
-	 * @review
 	 */
 	@Field("givenName")
 	public String getGivenName();
@@ -77,17 +73,15 @@ public interface Person extends Identifier<Long> {
 	 * Returns the person's ID.
 	 *
 	 * @return the person's ID
-	 * @review
 	 */
 	@Id
 	public Long getId();
 
 	/**
-	 * Returns the person's image URL.
+	 * Returns the person's image URL. See <a
+	 * href="https://schema.org/image">image </a> for more information.
 	 *
 	 * @return the person's image URL
-	 * @see    <a href="https://schema.org/image">image</a>
-	 * @review
 	 */
 	@Field("image")
 	@RelativeURL(fromApplication = true)
@@ -96,29 +90,26 @@ public interface Person extends Identifier<Long> {
 	/**
 	 * Returns the list of the person's job titles.
 	 *
-	 * @return the list of the person's job titles.
-	 * @see    <a href="https://schema.org/jobTitle">jobTitle</a>
-	 * @review
+	 * @return the list of job titles
 	 */
 	@Field("jobTitle")
 	public List<String> getJobTitles();
 
 	/**
-	 * Returns the person's full name.
+	 * Returns the person's full name. See <a
+	 * href="https://schema.org/name">name </a> for more information.
 	 *
 	 * @return the person's full name
-	 * @see    <a href="https://schema.org/name">name</a>
-	 * @review
 	 */
 	@Field("name")
 	public String getName();
 
 	/**
-	 * Returns the person's postal address.
+	 * Returns the person's postal address. See <a
+	 * href="https://schema.org/PostalAddress">PostalAddress </a> for more
+	 * information.
 	 *
-	 * @return the person's postal address
-	 * @see    <a href="https://schema.org/postalAddress">postalAddress</a>
-	 * @review
+	 * @return the postal address
 	 */
 	@Field("postalAddress")
 	public PostalAddress getPostalAddress();

@@ -25,42 +25,39 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Instances of this interface represent a blog posting exposed through the API.
+ * Represents a blog posting exposed through the API. See <a
+ * href="https://schema.org/BlogPosting">BlogPosting </a> for more information.
  *
  * @author Alejandro Hernández
- * @see    <a href="https://schema.org/BlogPosting">BlogPosting</a>
- * @review
  */
 @Type("BlogPostingAnnotated")
 public interface BlogPosting extends Identifier<Long> {
 
 	/**
-	 * Returns the blog posting's alternative headline.
+	 * Returns the blog posting's alternate headline. See <a
+	 * href="https://schema.org/alternativeHeadline">alternativeHeadline </a>
+	 * for more information.
 	 *
-	 * @return the blog posting's alternative headline
-	 * @see    <a
-	 *         href="https://schema.org/alternativeHeadline">alternativeHeadline</a>
-	 * @review
+	 * @return the alternate headline
 	 */
 	@Field("alternativeHeadline")
 	public String getAlternativeHeadline();
 
 	/**
-	 * Returns the blog posting's body.
+	 * Returns the blog posting's body. See <a
+	 * href="https://schema.org/articleBody">articleBody </a> for more
+	 * information.
 	 *
 	 * @return the blog posting's body
-	 * @see    <a href="https://schema.org/articleBody">articleBody</a>
-	 * @review
 	 */
 	@Field("articleBody")
 	public String getArticleBody();
 
 	/**
-	 * Returns the blog posting comments parent ID.
+	 * Returns the parent ID of the blog posting's comments. See <a
+	 * href="https://schema.org/comment">comment </a> for more information.
 	 *
-	 * @return the blog posting comments parent ID
-	 * @see    <a href="https://schema.org/comment">comment</a>
-	 * @review
+	 * @return the parent ID of the comments
 	 */
 	@Field("comment")
 	@RelatedCollection(Comment.class)
@@ -69,52 +66,50 @@ public interface BlogPosting extends Identifier<Long> {
 	}
 
 	/**
-	 * Returns the blog posting's creator ID.
+	 * Returns the ID of the blog posting's creator. See <a
+	 * href="https://schema.org/creator">creator </a> for more information.
 	 *
-	 * @return the blog posting's creator ID
-	 * @see    <a href="https://schema.org/creator">creator</a>
-	 * @review
+	 * @return the creator's ID
 	 */
 	@Field("creator")
 	@LinkedModel(Person.class)
 	public Long getCreatorId();
 
 	/**
-	 * Returns the blog posting's creation date.
+	 * Returns the blog posting's creation date. See <a
+	 * href="https://schema.org/dateCreated">dateCreated </a> for more
+	 * information.
 	 *
-	 * @return the blog posting's creation date
-	 * @see    <a href="https://schema.org/dateCreated">dateCreated</a>
-	 * @review
+	 * @return the creation date
 	 */
 	@Field("dateCreated")
 	public Date getDateCreated();
 
 	/**
-	 * Returns the blog posting's modification date.
+	 * Returns the blog posting's modification date. See <a
+	 * href="https://schema.org/dateModified">dateModified </a> for more
+	 * information.
 	 *
-	 * @return the blog posting's modification date
-	 * @see    <a href="https://schema.org/dateModified">dateModified</a>
-	 * @review
+	 * @return the modification date
 	 */
 	@Field("dateModified")
 	public Date getDateModified();
 
 	/**
-	 * Returns the blog posting's format.
+	 * Returns the blog posting's format. See <a
+	 * href="https://schema.org/fileFormat">fileFormat </a> for more
+	 * information.
 	 *
-	 * @return the blog posting's format
-	 * @see    <a href="https://schema.org/fileFormat">fileFormat</a>
-	 * @review
+	 * @return the format
 	 */
 	@Field("fileFormat")
 	public String getFileFormat();
 
 	/**
-	 * Returns the blog posting's headline.
+	 * Returns the blog posting's headline. See <a
+	 * href="https://schema.org/headline">headline </a> for more information.
 	 *
-	 * @return the blog posting's headline
-	 * @see    <a href="https://schema.org/headline">headline</a>
-	 * @review
+	 * @return the headline
 	 */
 	@Field("headline")
 	public String getHeadline();
@@ -123,17 +118,15 @@ public interface BlogPosting extends Identifier<Long> {
 	 * Returns the blog posting's ID.
 	 *
 	 * @return the blog posting's ID
-	 * @review
 	 */
 	@Id
 	public Long getId();
 
 	/**
-	 * Returns the list of blog posting's reviews.
+	 * Returns the list of the blog posting's reviews. See <a
+	 * href="https://schema.org/review">review </a> for more information.
 	 *
-	 * @return the list of blog posting's reviews
-	 * @see    <a href="https://schema.org/review">review</a>
-	 * @review
+	 * @return the list of reviews
 	 */
 	@Field("review")
 	public List<Review> getReviews();

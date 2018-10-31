@@ -32,63 +32,46 @@ import java.util.List;
  * Provides demo data for testing purposes.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class DemoDataUtil {
 
 	/**
-	 * Demo {@link BlogPostingCommentModel}.
-	 *
-	 * @review
+	 * Defines a demo {@link BlogPostingCommentModel}.
 	 */
 	public static final BlogPostingCommentModel BLOG_POSTING_COMMENT_MODEL;
 
 	/**
-	 * Demo {@link BlogPostingModel}.
-	 *
-	 * @review
+	 * Defines a demo {@link BlogPostingModel}.
 	 */
 	public static final BlogPostingModel BLOG_POSTING_MODEL;
 
 	/**
-	 * Demo {@link ContactPointModel}.
-	 *
-	 * @review
+	 * Defines a demo {@link ContactPointModel}.
 	 */
 	public static final ContactPointModel CONTACT_POINT_MODEL;
 
 	/**
-	 * Demo {@link PersonModel}.
-	 *
-	 * @review
+	 * Defines a demo {@link PersonModel}.
 	 */
 	public static final PersonModel PERSON_MODEL;
 
 	/**
-	 * Demo {@link PostalAddressModel}.
-	 *
-	 * @review
+	 * Defines a demo {@link PostalAddressModel}.
 	 */
 	public static final PostalAddressModel POSTAL_ADDRESS_MODEL;
 
 	/**
-	 * Demo {@link RatingModel}.
-	 *
-	 * @review
+	 * Defines a demo {@link RatingModel}.
 	 */
 	public static final RatingModel RATING_MODEL;
 
 	/**
-	 * Demo {@link ReviewModel}.
-	 *
-	 * @review
+	 * Defines a demo {@link ReviewModel}.
 	 */
 	public static final ReviewModel REVIEW_MODEL;
 
 	/**
-	 * Demo {@link ReviewModel} list.
-	 *
-	 * @review
+	 * Defines a demo {@link ReviewModel} list.
 	 */
 	public static final List<ReviewModel> REVIEW_MODELS;
 

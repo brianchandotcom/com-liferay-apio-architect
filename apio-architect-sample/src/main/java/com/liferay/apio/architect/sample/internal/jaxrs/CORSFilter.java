@@ -23,12 +23,11 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Enables Cross-Origin Resource Sharing (CORS) in the Apio Architect Sample.
+ * For more information, see <a
+ * href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">Cross-Origin
+ * Resource Sharing </a>
  *
  * @author Alejandro Hernández
- * @see    <a
- *         href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">Cross-Origin
- *         Resource Sharing (CORS)</a>
- * @review
  */
 @Component(
 	property = {

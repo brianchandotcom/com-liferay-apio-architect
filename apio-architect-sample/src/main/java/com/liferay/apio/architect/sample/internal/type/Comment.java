@@ -23,42 +23,40 @@ import com.liferay.apio.architect.identifier.Identifier;
 import java.util.Date;
 
 /**
- * Instances of this interface represent a comment exposed through the API.
+ * Represents a comment exposed through the API. See <a
+ * href="https://schema.org/Comment">Comment </a> for more information.
  *
  * @author Alejandro Hernández
- * @see    <a href="https://schema.org/Comment">Comment</a>
- * @review
  */
 @Type("CommentAnnotated")
 public interface Comment extends Identifier<Long> {
 
 	/**
-	 * Returns the comment's creator.
+	 * Returns the comment's creator. See <a
+	 * href="https://schema.org/creator">creator </a> for more information.
 	 *
 	 * @return the comment's creator
-	 * @see    <a href="https://schema.org/creator">creator</a>
-	 * @review
 	 */
 	@Field("creator")
 	@LinkedModel(Person.class)
 	public Long getCreatorId();
 
 	/**
-	 * Returns the comment's creation date.
+	 * Returns the comment's creation date. See <a
+	 * href="https://schema.org/dateCreated">dateCreated </a> for more
+	 * information.
 	 *
 	 * @return the comment's creation date
-	 * @see    <a href="https://schema.org/dateCreated">dateCreated</a>
-	 * @review
 	 */
 	@Field("dateCreated")
 	public Date getDateCreated();
 
 	/**
-	 * Returns the comment's modification date.
+	 * Returns the comment's modification date. See <a
+	 * href="https://schema.org/dateModified">dateModified </a> for more
+	 * information.
 	 *
 	 * @return the comment's modification date
-	 * @see    <a href="https://schema.org/dateModified">dateModified</a>
-	 * @review
 	 */
 	@Field("dateModified")
 	public Date getDateModified();
@@ -67,17 +65,15 @@ public interface Comment extends Identifier<Long> {
 	 * Returns the comment's ID.
 	 *
 	 * @return the comment's ID
-	 * @review
 	 */
 	@Id
 	public Long getId();
 
 	/**
-	 * Returns the comment's text.
+	 * Returns the comment's text. See <a href="https://schema.org/text">text
+	 * </a> for more information.
 	 *
 	 * @return the comment's text
-	 * @see    <a href="https://schema.org/text">text</a>
-	 * @review
 	 */
 	@Field("text")
 	public String getText();

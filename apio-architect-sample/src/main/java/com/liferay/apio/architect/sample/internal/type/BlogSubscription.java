@@ -21,11 +21,9 @@ import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 
 /**
- * Instances of this interface represent a person's blog post subscription
- * exposed through the API.
+ * Represents a person's blog post subscription exposed through the API.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Type(
 	description = "A blog-person subscription",
@@ -37,7 +35,6 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * Returns the blog's ID.
 	 *
 	 * @return the blog's ID
-	 * @review
 	 */
 	@Field(
 		description = "The blog being subscribed", readOnly = true,
@@ -50,7 +47,6 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * Returns the subscription's ID.
 	 *
 	 * @return the subscription's ID
-	 * @review
 	 */
 	@Id
 	public Long getId();
@@ -59,7 +55,6 @@ public interface BlogSubscription extends Identifier<Long> {
 	 * Returns the person's ID.
 	 *
 	 * @return the person's ID
-	 * @review
 	 */
 	@Field(
 		description = "The person being subscribed to the blog",

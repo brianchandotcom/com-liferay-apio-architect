@@ -18,7 +18,6 @@ package com.liferay.apio.architect.sample.internal.dto;
  * Represents a subscription. This is a mock class for sample purposes only.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class BlogSubscriptionModel {
 

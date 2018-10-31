@@ -21,42 +21,39 @@ import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 
 /**
- * Instances of this interface represent a contact point exposed through the
- * API.
+ * Represents a contact point exposed through the API. See <a
+ * href="https://schema.org/ContactPoint">ContactPoint </a> for more
+ * information.
  *
  * @author Alejandro Hernández
- * @see    <a href="https://schema.org/ContactPoint">ContactPoint</a>
- * @review
  */
 @Type("ContactPointAnnotated")
 public interface ContactPoint extends Identifier<Long> {
 
 	/**
-	 * Returns the contact point's contact option.
+	 * Returns the contact point's contact option. See <a
+	 * href="https://schema.org/contactOption">contactOption </a> for more
+	 * information.
 	 *
-	 * @return the contact point's contact option
-	 * @see    <a href="https://schema.org/contactOption">creator</a>
-	 * @review
+	 * @return the contact option
 	 */
 	@Field("contactOption")
 	public String getContactOption();
 
 	/**
-	 * Returns the contact point's email.
+	 * Returns the contact point's email. See <a
+	 * href="https://schema.org/email">email </a> for more information.
 	 *
 	 * @return the contact point's email
-	 * @see    <a href="https://schema.org/email">creator</a>
-	 * @review
 	 */
 	@Field("email")
 	public String getEmail();
 
 	/**
-	 * Returns the contact point's fax number.
+	 * Returns the contact point's fax number. See <a
+	 * href="https://schema.org/faxNumber">faxNumber </a> for more information.
 	 *
 	 * @return the contact point's fax number
-	 * @see    <a href="https://schema.org/faxNumber">creator</a>
-	 * @review
 	 */
 	@Field("getFaxNumber")
 	public String getFaxNumber();
@@ -65,16 +62,14 @@ public interface ContactPoint extends Identifier<Long> {
 	 * Returns the contact point's ID.
 	 *
 	 * @return the contact point's ID
-	 * @review
 	 */
 	@Id
 	public Long getId();
 
 	/**
-	 * Returns the contact point's person ID.
+	 * Returns the ID of the contact point's person.
 	 *
-	 * @return the contact point's person ID
-	 * @review
+	 * @return the ID of the contact point's person
 	 */
 	@BidirectionalModel(
 		field = @Field("contactPoint"), modelClass = Person.class
@@ -83,11 +78,10 @@ public interface ContactPoint extends Identifier<Long> {
 	public Long getPersonId();
 
 	/**
-	 * Returns the contact point's telephone.
+	 * Returns the contact point's telephone number. See <a
+	 * https://schema.org/telephone">telephone </a> for more information.
 	 *
-	 * @return the contact point's telephone
-	 * @see    <a href="https://schema.org/telephone">creator</a>
-	 * @review
+	 * @return the telephone number
 	 */
 	@Field("telephone")
 	public String getTelephone();

@@ -24,19 +24,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Provides methods for transforming {@link Review} instances out of other DTOs.
+ * Provides methods for transforming {@link Review} instances from other DTOs.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class ReviewConverter {
 
 	/**
-	 * Converts a list of {@link Review} to a list of {@link ReviewModel}.
+	 * Converts a {@code Review} list to a {@link ReviewModel} list.
 	 *
-	 * @param  reviews the reviews
-	 * @return a list of {@link ReviewModel}
-	 * @review
+	 * @param  reviews the {@code Review} list
+	 * @return the {@code ReviewModel} list
 	 */
 	public static List<ReviewModel> toReviewModels(List<Review> reviews) {
 		Stream<Review> stream = reviews.stream();
