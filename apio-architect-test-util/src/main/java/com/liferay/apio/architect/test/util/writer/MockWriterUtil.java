@@ -53,11 +53,10 @@ import java.util.function.Function;
 public class MockWriterUtil {
 
 	/**
-	 * Returns a mock name from an identifier class.
+	 * Returns a mock identifier name from the identifier class.
 	 *
 	 * @param  identifierClass the identifier class
-	 * @return the mock identifier name from the identifier class
-	 * @review
+	 * @return the mock identifier name
 	 */
 	public static String getIdentifierName(
 		Class<? extends Identifier<?>> identifierClass) {
