@@ -81,7 +81,7 @@ public class ParsedTypeManager {
 				__ -> _logger.warn(
 					"Unable to extract class from action router"),
 				typeClass -> {
-					ParsedType parsedType = TypeProcessor.proccesType(
+					ParsedType parsedType = TypeProcessor.processType(
 						typeClass);
 
 					INSTANCE.putParsedType(typeClass.getName(), parsedType);

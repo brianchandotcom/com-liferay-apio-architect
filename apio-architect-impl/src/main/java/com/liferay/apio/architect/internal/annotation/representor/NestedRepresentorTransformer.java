@@ -52,12 +52,12 @@ public class NestedRepresentorTransformer {
 			type.value()
 		);
 
-		_proccessFields(parsedType, firstStep);
+		_processFields(parsedType, firstStep);
 
 		return firstStep.build();
 	}
 
-	private static void _proccessFields(
+	private static void _processFields(
 		ParsedType parsedType, NestedRepresentor.FirstStep<?> firstStep) {
 
 		List<RelatedCollectionFieldData> relatedCollectionFieldDataList =

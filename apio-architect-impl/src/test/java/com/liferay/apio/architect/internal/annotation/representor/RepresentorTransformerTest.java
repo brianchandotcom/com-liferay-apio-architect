@@ -55,7 +55,7 @@ public class RepresentorTransformerTest {
 	public void setUp() {
 		_relatedCollections = new HashMap<>();
 
-		ParsedType parsedType = TypeProcessor.proccesType(Dummy.class);
+		ParsedType parsedType = TypeProcessor.processType(Dummy.class);
 
 		_representor = RepresentorTransformer.toRepresentor(
 			parsedType, null, _relatedCollections);

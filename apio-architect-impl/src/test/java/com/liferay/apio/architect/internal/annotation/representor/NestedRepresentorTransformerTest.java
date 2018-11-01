@@ -56,7 +56,7 @@ public class NestedRepresentorTransformerTest {
 
 	@Before
 	public void setUp() {
-		ParsedType parsedType = TypeProcessor.proccesType(
+		ParsedType parsedType = TypeProcessor.processType(
 			DummyWithNested.class);
 
 		_representor = RepresentorTransformer.toRepresentor(

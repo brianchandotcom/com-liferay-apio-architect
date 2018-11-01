@@ -65,7 +65,7 @@ public class FormTransformerNestedTest {
 
 		Body body = new JSONBodyImpl(jsonNode);
 
-		ParsedType parsedType = TypeProcessor.proccesType(
+		ParsedType parsedType = TypeProcessor.processType(
 			DummyWithNested.class);
 
 		Form<DummyWithNested> objectForm = FormTransformer.toForm(

@@ -40,6 +40,7 @@ import org.osgi.service.component.annotations.Reference;
  * with {@link Type}
  *
  * @author Víctor Galán
+ * @review
  */
 @Component(service = ActionRouterRepresentorManager.class)
 public class ActionRouterRepresentorManager {

@@ -95,7 +95,7 @@ public class RepresentorTransformer {
 			)
 		);
 
-		_proccessFields(parsedType, firstStep);
+		_processFields(parsedType, firstStep);
 
 		return firstStep.build();
 	}
@@ -127,7 +127,7 @@ public class RepresentorTransformer {
 	}
 
 	private static <T extends Identifier<?>> void
-		_proccessFields(ParsedType parsedType, FirstStep<T> firstStep) {
+		_processFields(ParsedType parsedType, FirstStep<T> firstStep) {
 
 		List<BidirectionalFieldData> bidirectionalFieldDataList =
 			filterWritableFields(parsedType::getBidirectionalFieldDataList);

@@ -48,7 +48,7 @@ public class TypeProcessor {
 	 * @return the parsed type
 	 * @review
 	 */
-	public static ParsedType proccesType(
+	public static ParsedType processType(
 		Class<? extends Identifier> typeClass) {
 
 		return _processType(typeClass, false);

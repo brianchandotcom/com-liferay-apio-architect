@@ -76,7 +76,7 @@ public class FormTransformerTest {
 			key -> Optional.ofNullable(bodyStringMap.get(key)),
 			key -> Optional.ofNullable(bodyStringListMap.get(key)));
 
-		ParsedType parsedType = TypeProcessor.proccesType(Dummy.class);
+		ParsedType parsedType = TypeProcessor.processType(Dummy.class);
 
 		Form<Dummy> objectForm = FormTransformer.toForm(
 			parsedType, __ -> "", __ -> Optional.of("something"));

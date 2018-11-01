@@ -40,7 +40,7 @@ public class TypeProcessorNestedTest {
 
 	@BeforeClass
 	public static void setUpClass() {
-		ParsedType parsedType = TypeProcessor.proccesType(
+		ParsedType parsedType = TypeProcessor.processType(
 			DummyWithNested.class);
 
 		List<NestedParsedType> parsedTypes = parsedType.getParsedTypes();

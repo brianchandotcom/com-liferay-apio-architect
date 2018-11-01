@@ -47,7 +47,7 @@ public class TypeProcessorTest {
 
 	@BeforeClass
 	public static void setUpClass() {
-		_parsedType = TypeProcessor.proccesType(Dummy.class);
+		_parsedType = TypeProcessor.processType(Dummy.class);
 	}
 
 	@Test

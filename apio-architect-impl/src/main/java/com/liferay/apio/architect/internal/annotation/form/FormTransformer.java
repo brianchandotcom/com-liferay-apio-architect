@@ -85,7 +85,7 @@ public class FormTransformer {
 
 		Map<String, Object> resultsMap = new HashMap<>();
 
-		InvocationHandler invocationHandler = (o, method, args) -> {
+		InvocationHandler invocationHandler = (object, method, args) -> {
 			if (!resultsMap.containsKey(method.getName())) {
 				throw new IllegalAccessException("method not found:" + method);
 			}
@@ -94,7 +94,7 @@ public class FormTransformer {
 		};
 
 		Function<String, BiConsumer<T, ?>> formFunction =
-			methodName -> (o, value) -> resultsMap.put(methodName, value);
+			methodName -> (object, value) -> resultsMap.put(methodName, value);
 
 		Builder.FieldStep<T> fieldStep = formBuilder.title(
 			__ -> ""
