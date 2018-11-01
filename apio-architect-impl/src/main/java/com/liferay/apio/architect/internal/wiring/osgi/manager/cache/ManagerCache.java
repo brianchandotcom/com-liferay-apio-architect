@@ -77,6 +77,7 @@ public class ManagerCache {
 		_names = null;
 		_nestedCollectionRoutes = null;
 		_pageMessageMappers = null;
+		_parsedTypes = null;
 		_batchResultMessageMappers = null;
 		_representors = null;
 		_reusableNestedCollectionRoutes = null;
@@ -391,6 +392,7 @@ public class ManagerCache {
 		String key, EmptyFunction computeEmptyFunction) {
 
 		if (_parsedTypes == null) {
+			_parsedTypes = new HashMap<>();
 			computeEmptyFunction.invoke();
 		}
 
