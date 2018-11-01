@@ -150,8 +150,8 @@ public class RepresentorTransformerUtil {
 
 				FieldMode fieldMode = field.mode();
 
-				if (fieldMode.equals(FieldMode.WRITE_ONLY) ||
-					fieldMode.equals(FieldMode.READ_WRITE)) {
+				if (FieldMode.WRITE_ONLY.equals(fieldMode) ||
+					FieldMode.READ_WRITE.equals(fieldMode)) {
 
 					return true;
 				}

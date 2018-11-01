@@ -250,8 +250,8 @@ public class FormTransformer {
 
 				FieldMode fieldMode = field.mode();
 
-				if (fieldMode.equals(FieldMode.READ_ONLY) ||
-					fieldMode.equals(FieldMode.READ_WRITE)) {
+				if (FieldMode.READ_ONLY.equals(fieldMode) ||
+					FieldMode.READ_WRITE.equals(fieldMode)) {
 
 					return true;
 				}
