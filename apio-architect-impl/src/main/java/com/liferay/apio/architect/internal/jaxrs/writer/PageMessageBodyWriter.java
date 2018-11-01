@@ -16,19 +16,14 @@ package com.liferay.apio.architect.internal.jaxrs.writer;
 
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
-import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.functional.Try.Success;
 import com.liferay.apio.architect.internal.jaxrs.writer.base.BaseMessageBodyWriter;
 import com.liferay.apio.architect.internal.message.json.PageMessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.PageMessageMapperManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
-import com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil;
 import com.liferay.apio.architect.internal.writer.PageWriter;
 import com.liferay.apio.architect.pagination.Page;
-
-import java.lang.reflect.Type;
 
 import java.util.Optional;
 
@@ -56,17 +51,11 @@ import org.osgi.service.component.annotations.Reference;
 )
 @Provider
 public class PageMessageBodyWriter<T>
-	extends BaseMessageBodyWriter<Success<Page<T>>, PageMessageMapper<T>> {
+	extends BaseMessageBodyWriter<Page<T>, PageMessageMapper<T>> {
 
 	@Override
-	public boolean canWrite(Class<?> clazz, Type genericType) {
-		Try<Class<Object>> classTry =
-			GenericUtil.getFirstGenericTypeArgumentFromTypeTry(
-				genericType, Try.class);
-
-		return classTry.filter(
-			Page.class::equals
-		).isSuccess();
+	public boolean canWrite(Class<?> clazz) {
+		return Page.class.isAssignableFrom(clazz);
 	}
 
 	@Override
@@ -78,12 +67,12 @@ public class PageMessageBodyWriter<T>
 
 	@Override
 	protected String write(
-		Success<Page<T>> success, PageMessageMapper<T> pageMessageMapper,
+		Page<T> page, PageMessageMapper<T> pageMessageMapper,
 		RequestInfo requestInfo) {
 
 		PageWriter<T> pageWriter = PageWriter.create(
 			builder -> builder.page(
-				success.getValue()
+				page
 			).pageMessageMapper(
 				pageMessageMapper
 			).pathFunction(

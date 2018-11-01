@@ -16,19 +16,14 @@ package com.liferay.apio.architect.internal.jaxrs.writer;
 
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
-import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.functional.Try.Success;
 import com.liferay.apio.architect.internal.jaxrs.writer.base.BaseMessageBodyWriter;
 import com.liferay.apio.architect.internal.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.SingleModelMessageMapperManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
-import com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil;
 import com.liferay.apio.architect.internal.writer.SingleModelWriter;
 import com.liferay.apio.architect.single.model.SingleModel;
-
-import java.lang.reflect.Type;
 
 import java.util.Optional;
 
@@ -57,18 +52,11 @@ import org.osgi.service.component.annotations.Reference;
 )
 @Provider
 public class SingleModelMessageBodyWriter<T>
-	extends BaseMessageBodyWriter
-		<Success<SingleModel<T>>, SingleModelMessageMapper<T>> {
+	extends BaseMessageBodyWriter<SingleModel<T>, SingleModelMessageMapper<T>> {
 
 	@Override
-	public boolean canWrite(Class<?> clazz, Type genericType) {
-		Try<Class<Object>> classTry =
-			GenericUtil.getFirstGenericTypeArgumentFromTypeTry(
-				genericType, Try.class);
-
-		return classTry.filter(
-			SingleModel.class::equals
-		).isSuccess();
+	public boolean canWrite(Class<?> clazz) {
+		return SingleModel.class.isAssignableFrom(clazz);
 	}
 
 	@Override
@@ -81,13 +69,13 @@ public class SingleModelMessageBodyWriter<T>
 
 	@Override
 	protected String write(
-		Success<SingleModel<T>> success,
+		SingleModel<T> singleModel,
 		SingleModelMessageMapper<T> singleModelMessageMapper,
 		RequestInfo requestInfo) {
 
 		SingleModelWriter<T> singleModelWriter = SingleModelWriter.create(
 			builder -> builder.singleModel(
-				success.getValue()
+				singleModel
 			).modelMessageMapper(
 				singleModelMessageMapper
 			).pathFunction(

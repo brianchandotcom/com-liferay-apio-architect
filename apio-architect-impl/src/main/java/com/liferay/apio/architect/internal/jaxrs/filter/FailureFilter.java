@@ -64,6 +64,8 @@ public class FailureFilter implements ContainerResponseFilter {
 
 					_updateContext(containerResponseContext, response);
 				});
+
+			entityTry.onSuccess(containerResponseContext::setEntity);
 		}
 	}
 

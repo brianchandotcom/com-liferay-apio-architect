@@ -34,7 +34,6 @@ import com.liferay.apio.architect.language.AcceptLanguage;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -72,10 +71,9 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 	 * Whether the current {@code MessageBodyWriter} can write the actual class.
 	 *
 	 * @param  clazz the class of the element being written
-	 * @param  genericType the generic type of the element being written
 	 * @return {@code true} if the type is supported; {@code false} otherwise
 	 */
-	public abstract boolean canWrite(Class<?> clazz, Type genericType);
+	public abstract boolean canWrite(Class<?> clazz);
 
 	/**
 	 * Returns the message mapper used to write the actual element, if present;
@@ -89,7 +87,7 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 
 	@Override
 	public long getSize(
-		T documentation, Class<?> aClass, Type type, Annotation[] annotations,
+		T documentation, Class<?> clazz, Type type, Annotation[] annotations,
 		MediaType mediaType) {
 
 		return -1;
@@ -97,10 +95,10 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 
 	@Override
 	public boolean isWriteable(
-		Class<?> aClass, Type genericType, Annotation[] annotations,
+		Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
-		return canWrite(aClass, genericType);
+		return canWrite(clazz);
 	}
 
 	@Override
@@ -108,7 +106,7 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 			T t, Class<?> aClass, Type type, Annotation[] annotations,
 			MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
 			OutputStream outputStream)
-		throws IOException, WebApplicationException {
+		throws WebApplicationException {
 
 		OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
 			outputStream, StandardCharsets.UTF_8);

@@ -24,8 +24,6 @@ import com.liferay.apio.architect.internal.writer.EntryPointWriter;
 import com.liferay.apio.architect.internal.writer.EntryPointWriter.Builder;
 import com.liferay.apio.architect.representor.Representor;
 
-import java.lang.reflect.Type;
-
 import java.util.Optional;
 
 import javax.ws.rs.core.Request;
@@ -54,12 +52,8 @@ public class EntryPointMessageBodyWriter
 	extends BaseMessageBodyWriter<EntryPoint, EntryPointMessageMapper> {
 
 	@Override
-	public boolean canWrite(Class<?> clazz, Type genericType) {
-		if (genericType == EntryPoint.class) {
-			return true;
-		}
-
-		return false;
+	public boolean canWrite(Class<?> clazz) {
+		return EntryPoint.class.isAssignableFrom(clazz);
 	}
 
 	@Override

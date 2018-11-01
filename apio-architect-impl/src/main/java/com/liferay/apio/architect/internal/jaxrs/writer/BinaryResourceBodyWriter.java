@@ -18,8 +18,6 @@ import static javax.ws.rs.core.HttpHeaders.CONTENT_LENGTH;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
 import com.liferay.apio.architect.file.BinaryFile;
-import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,38 +49,29 @@ import org.osgi.service.component.annotations.Component;
 	service = MessageBodyWriter.class
 )
 @Provider
-public class BinaryResourceBodyWriter
-	implements MessageBodyWriter<Try.Success<BinaryFile>> {
+public class BinaryResourceBodyWriter implements MessageBodyWriter<BinaryFile> {
 
 	public long getSize(
-		Try.Success<BinaryFile> singleModelSuccess, Class<?> aClass, Type type,
+		BinaryFile binaryFile, Class<?> aClass, Type type,
 		Annotation[] annotations, MediaType mediaType) {
 
 		return -1;
 	}
 
 	public boolean isWriteable(
-		Class<?> aClass, Type genericType, Annotation[] annotations,
+		Class<?> clazz, Type genericType, Annotation[] annotations,
 		MediaType mediaType) {
 
-		Try<Class<Object>> classTry =
-			GenericUtil.getFirstGenericTypeArgumentFromTypeTry(
-				genericType, Try.class);
-
-		return classTry.filter(
-			BinaryFile.class::equals
-		).isSuccess();
+		return BinaryFile.class.isAssignableFrom(clazz);
 	}
 
 	@Override
 	public void writeTo(
-			Try.Success<BinaryFile> success, Class<?> aClass, Type type,
+			BinaryFile binaryFile, Class<?> aClass, Type type,
 			Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> multivaluedMap,
 			OutputStream outputStream)
 		throws IOException, WebApplicationException {
-
-		BinaryFile binaryFile = success.getValue();
 
 		multivaluedMap.put(
 			CONTENT_TYPE, Collections.singletonList(binaryFile.getMimeType()));

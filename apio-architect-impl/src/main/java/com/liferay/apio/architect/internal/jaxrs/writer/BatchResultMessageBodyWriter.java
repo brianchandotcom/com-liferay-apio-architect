@@ -14,11 +14,7 @@
 
 package com.liferay.apio.architect.internal.jaxrs.writer;
 
-import static com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil.getFirstGenericTypeArgumentFromTypeTry;
-
 import com.liferay.apio.architect.batch.BatchResult;
-import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.functional.Try.Success;
 import com.liferay.apio.architect.internal.jaxrs.writer.base.BaseMessageBodyWriter;
 import com.liferay.apio.architect.internal.message.json.BatchResultMessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
@@ -27,8 +23,6 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.Rep
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.internal.writer.BatchResultWriter;
 import com.liferay.apio.architect.internal.writer.BatchResultWriter.Builder;
-
-import java.lang.reflect.Type;
 
 import java.util.Optional;
 
@@ -55,17 +49,11 @@ import org.osgi.service.component.annotations.Reference;
 )
 @Provider
 public class BatchResultMessageBodyWriter<T>
-	extends BaseMessageBodyWriter
-		<Success<BatchResult<T>>, BatchResultMessageMapper<T>> {
+	extends BaseMessageBodyWriter<BatchResult<T>, BatchResultMessageMapper<T>> {
 
 	@Override
-	public boolean canWrite(Class<?> clazz, Type genericType) {
-		Try<Class<Object>> classTry = getFirstGenericTypeArgumentFromTypeTry(
-			genericType, Try.class);
-
-		return classTry.filter(
-			BatchResult.class::equals
-		).isSuccess();
+	public boolean canWrite(Class<?> clazz) {
+		return BatchResult.class.isAssignableFrom(clazz);
 	}
 
 	@Override
@@ -78,12 +66,12 @@ public class BatchResultMessageBodyWriter<T>
 
 	@Override
 	protected String write(
-		Success<BatchResult<T>> success,
+		BatchResult<T> batchResult,
 		BatchResultMessageMapper<T> batchResultMessageMapper,
 		RequestInfo requestInfo) {
 
 		BatchResultWriter<T> batchResultWriter = Builder.batchResult(
-			success.getValue()
+			batchResult
 		).batchResultMessageMapper(
 			batchResultMessageMapper
 		).pathFunction(
