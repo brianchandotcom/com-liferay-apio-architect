@@ -52,7 +52,8 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testBasicFields() {
-		List<FieldData> fieldMetadata = _parsedType.getFieldDataList();
+		List<FieldData> fieldMetadata = getOrderedList(
+			_parsedType::getFieldDataList);
 
 		testFieldData(fieldMetadata.get(0), "booleanField1", Boolean.class);
 		testFieldData(fieldMetadata.get(1), "booleanField2", Boolean.class);
