@@ -14,13 +14,15 @@
 
 package com.liferay.apio.architect.internal.annotation.form;
 
+import static com.liferay.apio.architect.annotation.FieldMode.READ_ONLY;
+import static com.liferay.apio.architect.annotation.FieldMode.READ_WRITE;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
 import static java.util.Collections.emptyList;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.annotation.FieldMode;
-import com.liferay.apio.architect.annotation.Vocabulary;
+import com.liferay.apio.architect.annotation.Vocabulary.Field;
 import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Form;
@@ -44,6 +46,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -245,22 +248,22 @@ public class FormTransformer {
 		Stream<T> stream = list.stream();
 
 		return stream.filter(
-			fieldData -> {
-				Vocabulary.Field field = fieldData.getField();
-
-				FieldMode fieldMode = field.mode();
-
-				if (FieldMode.READ_ONLY.equals(fieldMode) ||
-					FieldMode.READ_WRITE.equals(fieldMode)) {
-
-					return true;
-				}
-
-				return false;
-			}
+			_isReadableField
 		).collect(
 			Collectors.toList()
 		);
 	}
+
+	private static final Predicate<FieldData> _isReadableField = fieldData -> {
+		Field field = fieldData.getField();
+
+		FieldMode fieldMode = field.mode();
+
+		if (READ_ONLY.equals(fieldMode) || READ_WRITE.equals(fieldMode)) {
+			return true;
+		}
+
+		return false;
+	};
 
 }

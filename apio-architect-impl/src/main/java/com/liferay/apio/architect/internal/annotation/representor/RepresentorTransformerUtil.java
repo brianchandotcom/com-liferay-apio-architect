@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.internal.annotation.representor;
 
+import static com.liferay.apio.architect.annotation.FieldMode.READ_WRITE;
+import static com.liferay.apio.architect.annotation.FieldMode.WRITE_ONLY;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.alias.BinaryFunction;
@@ -39,6 +41,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,19 +147,7 @@ public class RepresentorTransformerUtil {
 		Stream<T> stream = list.stream();
 
 		return stream.filter(
-			fieldData -> {
-				Field field = fieldData.getField();
-
-				FieldMode fieldMode = field.mode();
-
-				if (FieldMode.WRITE_ONLY.equals(fieldMode) ||
-					FieldMode.READ_WRITE.equals(fieldMode)) {
-
-					return true;
-				}
-
-				return false;
-			}
+			_isWritableField
 		).collect(
 			Collectors.toList()
 		);
@@ -249,5 +240,17 @@ public class RepresentorTransformerUtil {
 			firstStep.addString(key, getMethodFunction(method));
 		}
 	}
+
+	private static final Predicate<FieldData> _isWritableField = fieldData -> {
+		Field field = fieldData.getField();
+
+		FieldMode fieldMode = field.mode();
+
+		if (WRITE_ONLY.equals(fieldMode) || READ_WRITE.equals(fieldMode)) {
+			return true;
+		}
+
+		return false;
+	};
 
 }
