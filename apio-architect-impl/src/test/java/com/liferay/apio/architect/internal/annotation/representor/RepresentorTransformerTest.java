@@ -24,8 +24,10 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import com.liferay.apio.architect.alias.representor.FieldFunction;
+import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
+import com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessor;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy;
-import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.DummpyImpl;
+import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.DummyImpl;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.IntegerIdentifier;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.StringIdentifier;
 import com.liferay.apio.architect.internal.representor.RepresentorTestUtil;
@@ -53,8 +55,10 @@ public class RepresentorTransformerTest {
 	public void setUp() {
 		_relatedCollections = new HashMap<>();
 
+		ParsedType parsedType = TypeProcessor.proccesType(Dummy.class);
+
 		_representor = RepresentorTransformer.toRepresentor(
-			Dummy.class, null, _relatedCollections);
+			parsedType, null, _relatedCollections);
 	}
 
 	@Test
@@ -113,7 +117,7 @@ public class RepresentorTransformerTest {
 		_testFields(
 			_representor.getNumberListFunctions(),
 			asList("numberListField1", "numberListField2"),
-			asList(asList(1, 2, 3), asList(4, 5, 6)));
+			asList(asList(1L, 2L, 3L), asList(4L, 5L, 6L)));
 
 		_testFields(
 			_representor.getBooleanListFunctions(),
@@ -153,9 +157,8 @@ public class RepresentorTransformerTest {
 	@Test
 	public void testRelativeUrlFields() {
 		_testFields(
-			_representor.getRelativeURLFunctions(),
-			asList("relativeUrl1", "relativeUrl2"),
-			asList("/first", "/second"));
+			_representor.getRelativeURLFunctions(), asList("relativeUrl2"),
+			asList("/second"));
 	}
 
 	@Test
@@ -181,7 +184,7 @@ public class RepresentorTransformerTest {
 		RepresentorTestUtil.testFields(_dummy, list, keys, values);
 	}
 
-	private final Dummy _dummy = new DummpyImpl();
+	private final Dummy _dummy = new DummyImpl();
 	private HashMap<String, List<RelatedCollection<?, ?>>> _relatedCollections;
 	private Representor<Dummy> _representor;
 

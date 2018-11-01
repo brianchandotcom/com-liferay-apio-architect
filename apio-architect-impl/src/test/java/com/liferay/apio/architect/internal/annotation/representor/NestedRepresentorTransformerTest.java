@@ -26,6 +26,8 @@ import static org.junit.Assert.assertThat;
 
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
+import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
+import com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessor;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.IntegerIdentifier;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyWithNested;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyWithNested.NestedDummy;
@@ -54,8 +56,11 @@ public class NestedRepresentorTransformerTest {
 
 	@Before
 	public void setUp() {
+		ParsedType parsedType = TypeProcessor.proccesType(
+			DummyWithNested.class);
+
 		_representor = RepresentorTransformer.toRepresentor(
-			DummyWithNested.class, null, new HashMap<>());
+			parsedType, null, new HashMap<>());
 	}
 
 	@Test
