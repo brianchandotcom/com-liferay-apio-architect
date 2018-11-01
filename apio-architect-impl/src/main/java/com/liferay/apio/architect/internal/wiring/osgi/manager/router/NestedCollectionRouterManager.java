@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.router;
 
-import static com.liferay.apio.architect.internal.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.TypeArgumentProperties.KEY_PARENT_IDENTIFIER_CLASS;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.TypeArgumentProperties.KEY_PRINCIPAL_TYPE_ARGUMENT;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
@@ -24,25 +23,25 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.util.Manag
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
+import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.router.NestedCollectionRouter;
-import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper.Emitter;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
@@ -65,24 +64,29 @@ public class NestedCollectionRouterManager
 		super(NestedCollectionRouter.class, 2);
 	}
 
-	public Map<String, NestedCollectionRoutes> getNestedCollectionRoutes() {
-		return INSTANCE.getNestedCollectionRoutesMap(
-			this::_computeNestedCollectionRoutes);
-	}
-
 	/**
-	 * Returns the nested collection routes for the nested collection resource's
-	 * name.
+	 * Returns the list of {@link ActionSemantics} created by the managed
+	 * routers.
 	 *
-	 * @param  name the parent resource's name
-	 * @param  nestedName the nested collection resource's name
-	 * @return the nested collection routes
+	 * @review
 	 */
-	public <T, S, U> Optional<NestedCollectionRoutes<T, S, U>>
-		getNestedCollectionRoutesOptional(String name, String nestedName) {
-
-		return INSTANCE.getNestedCollectionRoutesOptional(
-			name, nestedName, this::_computeNestedCollectionRoutes);
+	public Stream<ActionSemantics> getActionSemantics() {
+		return Optional.ofNullable(
+			INSTANCE.getNestedCollectionRoutesMap(
+				this::_computeNestedCollectionRoutes)
+		).map(
+			Map::values
+		).map(
+			Collection::stream
+		).orElseGet(
+			Stream::empty
+		).map(
+			NestedCollectionRoutesImpl.class::cast
+		).map(
+			NestedCollectionRoutesImpl::getActionSemantics
+		).flatMap(
+			Collection::stream
+		);
 	}
 
 	protected void emit(
@@ -148,7 +152,7 @@ public class NestedCollectionRouterManager
 					return;
 				}
 
-				String name = nameOptional.get();
+				String parentName = nameOptional.get();
 
 				Optional<String> nestedNameOptional =
 					_nameManager.getNameOptional(nestedClassName);
@@ -177,61 +181,20 @@ public class NestedCollectionRouterManager
 
 				Representor<Object> representor = representorOptional.get();
 
-				Optional<ItemRoutes<Object, Object>> nestedItemRoutes =
-					_itemRouterManager.getItemRoutesOptional(nestedName);
-
-				if (!nestedItemRoutes.isPresent()) {
-					_logger.warn(
-						"Missing item router for resource with name {}",
-						nestedName);
-
-					return;
-				}
-
-				Optional<ItemRoutes<Object, Object>> parentItemRoutes =
-					_itemRouterManager.getItemRoutesOptional(name);
-
-				if (!parentItemRoutes.isPresent()) {
-					_logger.warn(
-						"Missing item router for resource with name {}", name);
-
-					return;
-				}
-
-				Set<String> neededProviders = new TreeSet<>();
-
 				Builder builder = new BuilderImpl<>(
-					name, nestedName, curry(_providerManager::provideMandatory),
-					neededProviders::add,
+					Nested.of(Item.of(parentName), nestedName),
 					identifier -> _pathIdentifierMapperManager.mapToPath(
-						name, identifier),
-					representor::getIdentifier, _actionManager,
-					_nameManager::getNameOptional);
+						parentName, identifier),
+					representor::getIdentifier, _nameManager::getNameOptional);
 
 				@SuppressWarnings("unchecked")
 				NestedCollectionRoutes nestedCollectionRoutes =
 					nestedCollectionRouter.collectionRoutes(builder);
 
-				List<String> missingProviders =
-					_providerManager.getMissingProviders(neededProviders);
-
-				if (!missingProviders.isEmpty()) {
-					_logger.warn(
-						"Missing providers for classes: {}", missingProviders);
-
-					return;
-				}
-
 				INSTANCE.putNestedCollectionRoutes(
-					name + "-" + nestedName, nestedCollectionRoutes);
+					parentName + "-" + nestedName, nestedCollectionRoutes);
 			});
 	}
-
-	@Reference
-	private ActionManager _actionManager;
-
-	@Reference
-	private ItemRouterManager _itemRouterManager;
 
 	private Logger _logger = getLogger(getClass());
 
@@ -240,9 +203,6 @@ public class NestedCollectionRouterManager
 
 	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;
-
-	@Reference
-	private ProviderManager _providerManager;
 
 	@Reference
 	private RepresentableManager _representableManager;

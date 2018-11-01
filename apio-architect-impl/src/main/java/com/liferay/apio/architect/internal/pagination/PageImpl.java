@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.internal.pagination;
 
+import static java.util.Collections.emptyList;
+
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
@@ -34,6 +36,12 @@ import java.util.Optional;
  * @param  <T> the model's type
  */
 public class PageImpl<T> implements Page<T> {
+
+	public PageImpl(
+		String resourceName, PageItems<T> pageItems, Pagination pagination) {
+
+		this(resourceName, pageItems, pagination, null, emptyList());
+	}
 
 	public PageImpl(
 		String resourceName, PageItems<T> pageItems, Pagination pagination,

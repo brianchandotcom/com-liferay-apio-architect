@@ -120,30 +120,6 @@ public class ManagerCache {
 		return _collectionRoutes;
 	}
 
-	/**
-	 * Returns the collection routes for the collection resource's name.
-	 *
-	 * @param  name the collection resource's name
-	 * @param  computeEmptyFunction the function that can be called to compute
-	 *         the data
-	 * @return the collection routes
-	 */
-	public <T, S> Optional<CollectionRoutes<T, S>> getCollectionRoutesOptional(
-		String name, EmptyFunction computeEmptyFunction) {
-
-		if (_collectionRoutes == null) {
-			computeEmptyFunction.invoke();
-		}
-
-		return Optional.ofNullable(
-			_collectionRoutes
-		).map(
-			map -> map.get(name)
-		).map(
-			Unsafe::unsafeCast
-		);
-	}
-
 	public CustomDocumentation getDocumentationContribution(
 		EmptyFunction computeEmptyFunction) {
 
@@ -327,34 +303,6 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the nested collection routes for the nested collection resource's
-	 * name.
-	 *
-	 * @param  name the parent resource's name
-	 * @param  nestedName the nested collection resource's name
-	 * @param  computeEmptyFunction the function that can be called to compute
-	 *         the data
-	 * @return the nested collection routes
-	 */
-	public <T, S, U> Optional<NestedCollectionRoutes<T, S, U>>
-		getNestedCollectionRoutesOptional(
-			String name, String nestedName,
-			EmptyFunction computeEmptyFunction) {
-
-		if (_nestedCollectionRoutes == null) {
-			computeEmptyFunction.invoke();
-		}
-
-		return Optional.ofNullable(
-			_nestedCollectionRoutes
-		).map(
-			map -> map.get(name + "-" + nestedName)
-		).map(
-			Unsafe::unsafeCast
-		);
-	}
-
-	/**
 	 * Returns the page message mapper, if present, for the current request;
 	 * {@code Optional#empty()} otherwise.
 	 *
@@ -465,32 +413,6 @@ public class ManagerCache {
 	public Optional<Class<?>> getReusableIdentifierClassOptional(String name) {
 		return Optional.ofNullable(
 			_reusableIdentifierClasses
-		).map(
-			map -> map.get(name)
-		).map(
-			Unsafe::unsafeCast
-		);
-	}
-
-	/**
-	 * Returns the nested collection routes for the reusable nested collection
-	 * resource's name.
-	 *
-	 * @param  name the reusable nested collection resource's name
-	 * @param  computeEmptyFunction the function that can be called to compute
-	 *         the data
-	 * @return the nested collection routes
-	 */
-	public Optional<NestedCollectionRoutes>
-		getReusableNestedCollectionRoutesOptional(
-			String name, EmptyFunction computeEmptyFunction) {
-
-		if (_reusableNestedCollectionRoutes == null) {
-			computeEmptyFunction.invoke();
-		}
-
-		return Optional.ofNullable(
-			_reusableNestedCollectionRoutes
 		).map(
 			map -> map.get(name)
 		).map(

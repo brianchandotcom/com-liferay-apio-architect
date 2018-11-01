@@ -14,120 +14,89 @@
 
 package com.liferay.apio.architect.internal.routes;
 
-import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
+import static com.liferay.apio.architect.internal.action.Predicates.isRemoveAction;
+import static com.liferay.apio.architect.internal.action.Predicates.isReplaceAction;
+import static com.liferay.apio.architect.internal.action.Predicates.isRetrieveAction;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.GET_CUSTOM_ROUTE;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_REMOVE_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_UPDATE_PERMISSION_FUNCTION;
-import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_TO_PATH_FUNCTION;
-import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
-import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.keyValueFrom;
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
-import static com.liferay.apio.architect.operation.HTTPMethod.GET;
-import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IS_READ_ACTION;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IS_WRITE_ACTION;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.POST_CUSTOM_ROUTE;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.filterActionSemantics;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.getParams;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.prependWith;
 import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
 
-import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
-import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
+import static io.vavr.Predicates.isNull;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
-import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
+import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.form.Body;
-import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.internal.annotation.Action;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.routes.ItemRoutesImpl.BuilderImpl;
-import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.internal.routes.RoutesTestUtil.CustomIdentifier;
 import com.liferay.apio.architect.routes.ItemRoutes;
-import com.liferay.apio.architect.routes.ItemRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import io.vavr.control.Either;
+import io.vavr.CheckedFunction1;
+import io.vavr.control.Try;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 
-import javax.ws.rs.NotFoundException;
-
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Alejandro Hernández
  */
-public class ItemRoutesImplTest extends BaseRoutesTest {
+public class ItemRoutesImplTest {
 
-	@Test(expected = NotFoundException.class)
-	public void testEmptyBuilderBuildsEmptyRoutes() {
-		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION,
-			__ -> {
-			},
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION,
-			__ -> Optional.empty(), actionManager);
-
-		ItemRoutes<String, Long> itemRoutes = builder.build();
-
-		assertThat(itemRoutes, is(notNullValue()));
-
-		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			GET.name(), asList("name", ANY_ROUTE));
-
-		assertThat(actionEither.isRight(), is(true));
-
-		Action action = actionEither.get();
-
-		Object result = action.apply(null);
-
-		assertThat(result, is(nullValue()));
-	}
-
-	@Test(expected = NotFoundException.class)
-	public void testEmptyBuilderBuildsEmptyRoutes1() {
-		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION,
-			__ -> {
-			},
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION,
-			__ -> Optional.empty(), actionManager);
-
-		ItemRoutes<String, Long> itemRoutes = builder.build();
-
-		assertThat(itemRoutes, is(notNullValue()));
-
-		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			DELETE.name(), asList("name", ANY_ROUTE));
-
-		assertThat(actionEither.isRight(), is(true));
-
-		Action action = actionEither.get();
-
-		Object result = action.apply(null);
-
-		assertThat(result, is(nullValue()));
+	@Before
+	public void setUp() {
+		_builder = new ItemRoutesImpl.BuilderImpl<>(
+			Resource.Item.of("name"), __ -> null, __ -> Optional.of("custom"));
 	}
 
 	@Test
-	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
-		Set<String> neededProviders = new TreeSet<>();
+	public void testEmptyBuilderDoesNotGenerateActionSemantics() {
+		ItemRoutes<String, Long> itemRoutes = _builder.build();
 
-		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
+		assertThat(itemRoutes, instanceOf(ItemRoutesImpl.class));
 
-		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
+		ItemRoutesImpl<String, Long> itemRoutesImpl =
+			(ItemRoutesImpl<String, Long>)itemRoutes;
+
+		assertThat(itemRoutesImpl.getActionSemantics(), is(empty()));
+	}
+
+	@Test
+	public void testFiveParameterBuilderMethodsCreatesActionSemantics() {
+		ItemRoutes<String, Long> itemRoutes = _builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
 			Long.class, Boolean.class, Integer.class
+		).addCustomRoute(
+			GET_CUSTOM_ROUTE, this::_testAndReturnFourParameterCustomRoute,
+			String.class, Long.class, Boolean.class, Integer.class,
+			CustomIdentifier.class, (credentials, aLong) -> true, __ -> null
+		).addCustomRoute(
+			POST_CUSTOM_ROUTE, this::_testAndReturnFourParameterCustomRoute,
+			String.class, Long.class, Boolean.class, Integer.class,
+			CustomIdentifier.class, (credentials, aLong) -> true,
+			FORM_BUILDER_FUNCTION
 		).addRemover(
 			this::_testFourParameterRemoverRoute, String.class, Long.class,
 			Boolean.class, Integer.class, HAS_REMOVE_PERMISSION_FUNCTION
@@ -137,26 +106,26 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 			HAS_UPDATE_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 
-		assertThat(
-			neededProviders,
-			contains(
-				Boolean.class.getName(), Integer.class.getName(),
-				Long.class.getName(), String.class.getName()));
+		assertThat(itemRoutes, instanceOf(ItemRoutesImpl.class));
 
-		_testItemRoutes(itemRoutes);
+		_testActionSemantics(
+			(ItemRoutesImpl<String, Long>)itemRoutes,
+			asList(String.class, Long.class, Boolean.class, Integer.class));
 	}
 
 	@Test
-	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
-		Set<String> neededProviders = new TreeSet<>();
-
-		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
-
-		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
+	public void testFourParameterBuilderMethodsCreatesActionSemantics() {
+		ItemRoutes<String, Long> itemRoutes = _builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
 			Long.class, Boolean.class
+		).addCustomRoute(
+			GET_CUSTOM_ROUTE, this::_testAndReturnThreeParameterCustomRoute,
+			String.class, Long.class, Boolean.class, CustomIdentifier.class,
+			(credentials, aLong) -> true, __ -> null
+		).addCustomRoute(
+			POST_CUSTOM_ROUTE, this::_testAndReturnThreeParameterCustomRoute,
+			String.class, Long.class, Boolean.class, CustomIdentifier.class,
+			(credentials, aLong) -> true, FORM_BUILDER_FUNCTION
 		).addRemover(
 			this::_testThreeParameterRemoverRoute, String.class, Long.class,
 			Boolean.class, HAS_REMOVE_PERMISSION_FUNCTION
@@ -166,25 +135,16 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 			FORM_BUILDER_FUNCTION
 		).build();
 
-		assertThat(
-			neededProviders,
-			contains(
-				Boolean.class.getName(), Long.class.getName(),
-				String.class.getName()));
+		assertThat(itemRoutes, instanceOf(ItemRoutesImpl.class));
 
-		_testItemRoutes(itemRoutes);
+		_testActionSemantics(
+			(ItemRoutesImpl<String, Long>)itemRoutes,
+			asList(String.class, Long.class, Boolean.class));
 	}
 
 	@Test
-	public void testItemRoutesDeprecatedMethodsThrowException() {
-		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION,
-			__ -> {
-			},
-			__ -> null, IDENTIFIER_TO_PATH_FUNCTION,
-			__ -> Optional.empty(), actionManager);
-
-		ItemRoutes<String, Long> itemRoutes = builder.build();
+	public void testItemRoutesDeprecatedMethodsThrowsException() {
+		ItemRoutes<String, Long> itemRoutes = _builder.build();
 
 		assertThat(
 			itemRoutes::getItemFunctionOptional,
@@ -212,15 +172,16 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 	}
 
 	@Test
-	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
-		Set<String> neededProviders = new TreeSet<>();
-
-		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
-
-		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
+	public void testOneParameterBuilderMethodsCreatesActionSemantics() {
+		ItemRoutes<String, Long> itemRoutes = _builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
+		).addCustomRoute(
+			GET_CUSTOM_ROUTE, this::_testAndReturnNoParameterCustomRoute,
+			CustomIdentifier.class, (credentials, aLong) -> true, __ -> null
+		).addCustomRoute(
+			POST_CUSTOM_ROUTE, this::_testAndReturnNoParameterCustomRoute,
+			CustomIdentifier.class, (credentials, aLong) -> true,
+			FORM_BUILDER_FUNCTION
 		).addRemover(
 			this::_testAndReturnNoParameterRemoverRoute,
 			HAS_REMOVE_PERMISSION_FUNCTION
@@ -229,22 +190,25 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 			HAS_UPDATE_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 
-		assertThat(neededProviders.size(), is(0));
+		assertThat(itemRoutes, instanceOf(ItemRoutesImpl.class));
 
-		_testItemRoutes(itemRoutes);
+		_testActionSemantics(
+			(ItemRoutesImpl<String, Long>)itemRoutes, emptyList());
 	}
 
 	@Test
-	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
-		Set<String> neededProviders = new TreeSet<>();
-
-		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
-
-		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
+	public void testThreeParameterBuilderMethodsCreatesActionSemantics() {
+		ItemRoutes<String, Long> itemRoutes = _builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
 			Long.class
+		).addCustomRoute(
+			GET_CUSTOM_ROUTE, this::_testAndReturnTwoParameterCustomRoute,
+			String.class, Long.class, CustomIdentifier.class,
+			(credentials, aLong) -> true, __ -> null
+		).addCustomRoute(
+			POST_CUSTOM_ROUTE, this::_testAndReturnTwoParameterCustomRoute,
+			String.class, Long.class, CustomIdentifier.class,
+			(credentials, aLong) -> true, FORM_BUILDER_FUNCTION
 		).addRemover(
 			this::_testTwoParameterRemoverRoute, String.class, Long.class,
 			HAS_REMOVE_PERMISSION_FUNCTION
@@ -253,23 +217,25 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 			Long.class, HAS_UPDATE_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 
-		assertThat(
-			neededProviders,
-			contains(Long.class.getName(), String.class.getName()));
+		assertThat(itemRoutes, instanceOf(ItemRoutesImpl.class));
 
-		_testItemRoutes(itemRoutes);
+		_testActionSemantics(
+			(ItemRoutesImpl<String, Long>)itemRoutes,
+			asList(String.class, Long.class));
 	}
 
 	@Test
-	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
-		Set<String> neededProviders = new TreeSet<>();
-
-		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			IDENTIFIER_TO_PATH_FUNCTION, __ -> Optional.empty(), actionManager);
-
-		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
+	public void testTwoParameterBuilderMethodsCreatesActionSemantics() {
+		ItemRoutes<String, Long> itemRoutes = _builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class
+		).addCustomRoute(
+			GET_CUSTOM_ROUTE, this::_testAndReturnOneParameterCustomRoute,
+			String.class, CustomIdentifier.class, (credentials, aLong) -> true,
+			__ -> null
+		).addCustomRoute(
+			POST_CUSTOM_ROUTE, this::_testAndReturnOneParameterCustomRoute,
+			String.class, CustomIdentifier.class, (credentials, aLong) -> true,
+			FORM_BUILDER_FUNCTION
 		).addRemover(
 			this::_testOneParameterRemoverRoute, String.class,
 			HAS_REMOVE_PERMISSION_FUNCTION
@@ -278,9 +244,55 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 			HAS_UPDATE_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).build();
 
-		assertThat(neededProviders, contains(String.class.getName()));
+		assertThat(itemRoutes, instanceOf(ItemRoutesImpl.class));
 
-		_testItemRoutes(itemRoutes);
+		_testActionSemantics(
+			(ItemRoutesImpl<String, Long>)itemRoutes,
+			singletonList(String.class));
+	}
+
+	private void _testActionSemantics(
+		ItemRoutesImpl<String, Long> itemRoutesImpl,
+		List<Class<?>> paramClasses) {
+
+		List<ActionSemantics> actionSemantics =
+			itemRoutesImpl.getActionSemantics();
+
+		assertThat(actionSemantics.size(), is(5));
+
+		_testRouteActionSemantics(
+			prependWith(paramClasses, Id.class),
+			filterActionSemantics(actionSemantics, isRetrieveAction), "GET",
+			"retrieve", "name", "Apio");
+
+		_testRouteActionSemantics(
+			prependWith(paramClasses, Id.class, Body.class),
+			filterActionSemantics(actionSemantics, isReplaceAction), "PUT",
+			"replace", "name", "Updated");
+
+		_testRemoveActionSemantics(
+			prependWith(paramClasses, Id.class),
+			filterActionSemantics(actionSemantics, isRemoveAction));
+
+		_testRouteActionSemantics(
+			prependWith(paramClasses, Id.class, Void.class),
+			filterActionSemantics(actionSemantics, IS_READ_ACTION), "GET",
+			"read", "custom", "Custom Apio");
+
+		_testRouteActionSemantics(
+			prependWith(paramClasses, Id.class, Body.class),
+			filterActionSemantics(actionSemantics, IS_WRITE_ACTION), "POST",
+			"write", "custom", "Custom Apio");
+	}
+
+	private String _testAndReturnFourParameterCustomRoute(
+		Long identifier, Map<String, Object> body, String string, Long aLong,
+		Boolean aBoolean, Integer integer) {
+
+		assertThat(integer, is(2017));
+
+		return _testAndReturnThreeParameterCustomRoute(
+			identifier, body, string, aLong, aBoolean);
 	}
 
 	private String _testAndReturnFourParameterGetterRoute(
@@ -303,6 +315,18 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 			identifier, body, string, aLong, aBoolean);
 	}
 
+	private String _testAndReturnNoParameterCustomRoute(
+		Long identifier, Map<String, Object> body) {
+
+		assertThat(identifier, is(42L));
+
+		if (body != null) {
+			assertThat(body.get("key"), is("Apio"));
+		}
+
+		return "Custom Apio";
+	}
+
 	private String _testAndReturnNoParameterGetterRoute(Long identifier) {
 		assertThat(identifier, is(42L));
 
@@ -318,9 +342,17 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 
 		assertThat(identifier, is(42L));
 
-		assertThat(body.get("key"), is(keyValueFrom(_body)));
+		assertThat(body.get("key"), is("Apio"));
 
 		return "Updated";
+	}
+
+	private String _testAndReturnOneParameterCustomRoute(
+		Long identifier, Map<String, Object> body, String string) {
+
+		assertThat(string, is("Apio"));
+
+		return _testAndReturnNoParameterCustomRoute(identifier, body);
 	}
 
 	private String _testAndReturnOneParameterGetterRoute(
@@ -339,6 +371,16 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 		return _testAndReturnNoParameterUpdaterRoute(identifier, body);
 	}
 
+	private String _testAndReturnThreeParameterCustomRoute(
+		Long identifier, Map<String, Object> body, String string, Long aLong,
+		Boolean aBoolean) {
+
+		assertThat(aBoolean, is(true));
+
+		return _testAndReturnTwoParameterCustomRoute(
+			identifier, body, string, aLong);
+	}
+
 	private String _testAndReturnThreeParameterGetterRoute(
 		Long identifier, String string, Long aLong, Boolean aBoolean) {
 
@@ -355,6 +397,14 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 
 		return _testAndReturnTwoParameterUpdaterRoute(
 			identifier, body, string, aLong);
+	}
+
+	private String _testAndReturnTwoParameterCustomRoute(
+		Long identifier, Map<String, Object> body, String string, Long aLong) {
+
+		assertThat(aLong, is(42L));
+
+		return _testAndReturnOneParameterCustomRoute(identifier, body, string);
 	}
 
 	private String _testAndReturnTwoParameterGetterRoute(
@@ -382,109 +432,54 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 		_testThreeParameterRemoverRoute(identifier, string, aLong, aBoolean);
 	}
 
-	private void _testItemRoutes(ItemRoutes<String, Long> itemRoutes) {
-		_testItemRoutesGetter();
-
-		_testItemRoutesUpdater(itemRoutes);
-
-		_testItemRoutesDeleter();
-	}
-
-	private void _testItemRoutesDeleter() {
-		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			DELETE.name(), asList("name", "42"));
-
-		if (actionEither.isLeft()) {
-			throw new AssertionError("Action not present");
-		}
-
-		Action action = actionEither.get();
-
-		Object pageItems = action.apply(null);
-
-		System.out.println(pageItems);
-	}
-
-	private void _testItemRoutesGetter() {
-		Either<Action.Error, Action> actionEither = actionManager.getAction(
-			GET.name(), asList("name", "42"));
-
-		if (actionEither.isLeft()) {
-			throw new AssertionError("Action not present");
-		}
-
-		Action action = actionEither.get();
-
-		Object model = action.apply(null);
-
-		assertThat(model, is("Apio"));
-	}
-
-	private void _testItemRoutesUpdater(ItemRoutes<String, Long> itemRoutes) {
-		Optional<Form> formOptional = itemRoutes.getFormOptional();
-
-		if (!formOptional.isPresent()) {
-			throw new AssertionError("Update Form not present");
-		}
-
-		Form form = formOptional.get();
-
-		assertThat(form.getId(), is("u/name"));
-
-		Map map = (Map)form.get(_body);
-
-		assertThat(map.get("key"), is(keyValueFrom(_body)));
-
-		Optional<UpdateItemFunction<String, Long>> updateItemFunctionOptional =
-			itemRoutes.getUpdateItemFunctionOptional();
-
-		if (!updateItemFunctionOptional.isPresent()) {
-			throw new AssertionError("UpdateItemFunction not present");
-		}
-
-		UpdateItemFunction<String, Long> updateItemFunction =
-			updateItemFunctionOptional.get();
-
-		SingleModel<String> singleModel = updateItemFunction.apply(
-			null
-		).apply(
-			42L
-		).andThen(
-			Try::getUnchecked
-		).apply(
-			_body
-		);
-
-		assertThat(singleModel.getResourceName(), is("name"));
-		assertThat(singleModel.getModel(), is("Updated"));
-
-		List<Operation> operations = singleModel.getOperations();
-
-		assertThat(operations, hasSize(2));
-
-		Operation firstOperation = operations.get(0);
-
-		assertThat(firstOperation.getFormOptional(), is(emptyOptional()));
-		assertThat(firstOperation.getHttpMethod(), is(DELETE));
-		assertThat(firstOperation.getName(), is("name/delete"));
-		assertThat(
-			firstOperation.getURIOptional(),
-			is(optionalWithValue(equalTo("name/id"))));
-
-		Operation secondOperation = operations.get(1);
-
-		assertThat(secondOperation.getFormOptional(), is(optionalWithValue()));
-		assertThat(secondOperation.getHttpMethod(), is(PUT));
-		assertThat(secondOperation.getName(), is("name/update"));
-		assertThat(
-			secondOperation.getURIOptional(),
-			is(optionalWithValue(equalTo("name/id"))));
-	}
-
 	private void _testOneParameterRemoverRoute(Long identifier, String string) {
 		assertThat(string, is("Apio"));
 
 		_testAndReturnNoParameterRemoverRoute(identifier);
+	}
+
+	private void _testRemoveActionSemantics(
+		List<Class<?>> paramClasses, ActionSemantics actionSemantics) {
+
+		assertThat(actionSemantics.method(), is("DELETE"));
+		assertThat(actionSemantics.name(), is("remove"));
+		assertThat(actionSemantics.paramClasses(), is(paramClasses));
+		assertThat(actionSemantics.resource(), is(Resource.Item.of("name")));
+		assertThat(actionSemantics.returnClass(), is(equalTo(Void.class)));
+
+		CheckedFunction1<List<?>, ?> executeFunction =
+			actionSemantics.executeFunction();
+
+		Try.of(
+			() -> executeFunction.apply(getParams(paramClasses))
+		).filter(
+			isNull()
+		).get();
+	}
+
+	private void _testRouteActionSemantics(
+		List<Class<?>> paramClasses, ActionSemantics actionSemantics,
+		String method, String actionName, String resourceName, String result) {
+
+		assertThat(actionSemantics.method(), is(method));
+		assertThat(actionSemantics.name(), is(actionName));
+		assertThat(actionSemantics.paramClasses(), is(paramClasses));
+		assertThat(actionSemantics.resource(), is(Resource.Item.of("name")));
+		assertThat(
+			actionSemantics.returnClass(), is(equalTo(SingleModel.class)));
+
+		CheckedFunction1<List<?>, ?> executeFunction =
+			actionSemantics.executeFunction();
+
+		SingleModel<?> singleModel = Try.of(
+			() -> executeFunction.apply(getParams(paramClasses))
+		).map(
+			SingleModel.class::cast
+		).get();
+
+		assertThat(singleModel.getModel(), is(result));
+		assertThat(singleModel.getOperations(), is(empty()));
+		assertThat(singleModel.getResourceName(), is(resourceName));
 	}
 
 	private void _testThreeParameterRemoverRoute(
@@ -503,6 +498,6 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 		_testOneParameterRemoverRoute(identifier, string);
 	}
 
-	private final Body _body = __ -> Optional.of("Apio");
+	private BuilderImpl<String, Long> _builder;
 
 }

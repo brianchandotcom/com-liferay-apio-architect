@@ -14,10 +14,9 @@
 
 package com.liferay.apio.architect.internal.routes;
 
-import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
-import static com.liferay.apio.architect.internal.routes.RoutesBuilderUtil.provide;
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
-import static com.liferay.apio.architect.operation.HTTPMethod.GET;
+import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
+
+import static java.util.Arrays.asList;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -27,6 +26,7 @@ import com.liferay.apio.architect.alias.routes.GetItemFunction;
 import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasRemovePermissionFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasUpdatePermissionFunction;
+import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.consumer.throwable.ThrowableBiConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowablePentaConsumer;
@@ -42,36 +42,25 @@ import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
-import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.internal.alias.ProvideFunction;
-import com.liferay.apio.architect.internal.annotation.ActionKey;
-import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.form.FormImpl;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
-import com.liferay.apio.architect.internal.operation.DeleteOperation;
-import com.liferay.apio.architect.internal.operation.RetrieveOperation;
-import com.liferay.apio.architect.internal.operation.UpdateOperation;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
-import com.liferay.apio.architect.operation.HTTPMethod;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
 import io.vavr.CheckedRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.function.Supplier;
 
 /**
  * @author Alejandro Hernández
@@ -79,10 +68,16 @@ import java.util.stream.Stream;
 public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 	public ItemRoutesImpl(BuilderImpl<T, S> builderImpl) {
-		_form = builderImpl._form;
-		_updateItemFunction = builderImpl._updateItemFunction;
-		_customItemFunctions = builderImpl._customItemFunctions;
-		_customRoutes = builderImpl._customRoutes;
+		_actionSemantics = builderImpl._actionSemantics;
+	}
+
+	/**
+	 * Returns the list of {@link ActionSemantics} created by a {@link Builder}.
+	 *
+	 * @review
+	 */
+	public List<ActionSemantics> getActionSemantics() {
+		return _actionSemantics;
 	}
 
 	@Override
@@ -125,25 +120,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 	 * @param <S> the type of the model's identifier (e.g., {@code Long}, {@code
 	 *        String}, etc.)
 	 */
-	@SuppressWarnings("unused")
 	public static class BuilderImpl<T, S> implements Builder<T, S> {
 
 		public BuilderImpl(
-			String name, ProvideFunction provideFunction,
-			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> pathToIdentifierFunction,
-			Function<S, Optional<Path>> identifierToPathFunction,
-			Function<String, Optional<String>> nameFunction,
-			ActionManager actionManager) {
+			Item item, Function<Path, ?> pathToIdentifierFunction,
+			Function<String, Optional<String>> nameFunction) {
 
-			_name = name;
-			_provideFunction = provideFunction;
-			_neededProviderConsumer = neededProviderConsumer;
-
+			_item = item;
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
-			_identifierToPathFunction = identifierToPathFunction;
 			_nameFunction = nameFunction;
-			_actionManager = actionManager;
 		}
 
 		@Override
@@ -153,24 +138,32 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			String name = customRoute.getName();
+			Form<R> form = _getForm(
+				formBuilderFunction,
+				asList("p", _item.name(), customRoute.getName()));
 
-			_calculateForm(customRoute, formBuilderFunction, name);
+			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
-			_customRoutes.put(name, customRoute);
+			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				customRoute.getName()
+			).method(
+				customRoute.getMethod()
+			).receivesParams(
+				Id.class, bodyClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> throwableBiFunction.andThen(
+					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
+				).apply(
+					unsafeCast(params.get(0)),
+					_getModel(form, () -> (Body)params.get(1))
+				)
+			).build();
 
-			_customPermissionFunctions.put(name, permissionBiFunction);
-
-			CustomItemFunction<U, S> customFunction =
-				httpServletRequest -> s -> body -> Try.fromFallible(
-					() -> throwableBiFunction.andThen(
-						t -> new SingleModelImpl<>(
-							t, _getResourceName(supplier))
-					).apply(
-						s, _getModel(customRoute.getFormOptional(), body)
-					));
-
-			_customItemFunctions.put(name, customFunction);
+			_actionSemantics.add(createActionSemantics);
 
 			return this;
 		}
@@ -186,32 +179,34 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-			_neededProviderConsumer.accept(cClass.getName());
-			_neededProviderConsumer.accept(dClass.getName());
+			Form<R> form = _getForm(
+				formBuilderFunction,
+				asList("p", _item.name(), customRoute.getName()));
 
-			String name = customRoute.getName();
+			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
-			_calculateForm(customRoute, formBuilderFunction, name);
+			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				customRoute.getName()
+			).method(
+				customRoute.getMethod()
+			).receivesParams(
+				Id.class, bodyClass, aClass, bClass, cClass, dClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> throwableHexaFunction.andThen(
+					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
+				).apply(
+					unsafeCast(params.get(0)),
+					_getModel(form, () -> (Body)params.get(1)),
+					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
+					unsafeCast(params.get(4)), unsafeCast(params.get(5))
+				)
+			).build();
 
-			_customRoutes.put(name, customRoute);
-
-			_customPermissionFunctions.put(name, permissionBiFunction);
-
-			CustomItemFunction<U, S> customFunction =
-				httpServletRequest -> s -> body -> provide(
-					_provideFunction.apply(httpServletRequest), aClass, bClass,
-					cClass, dClass,
-					(a, b, c, d) -> throwableHexaFunction.andThen(
-						t -> new SingleModelImpl<>(
-							t, _getResourceName(supplier))
-					).apply(
-						s, _getModel(customRoute.getFormOptional(), body), a, b,
-						c, d
-					));
-
-			_customItemFunctions.put(name, customFunction);
+			_actionSemantics.add(createActionSemantics);
 
 			return this;
 		}
@@ -226,31 +221,34 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-			_neededProviderConsumer.accept(cClass.getName());
+			Form<R> form = _getForm(
+				formBuilderFunction,
+				asList("p", _item.name(), customRoute.getName()));
 
-			String name = customRoute.getName();
+			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
-			_calculateForm(customRoute, formBuilderFunction, name);
+			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				customRoute.getName()
+			).method(
+				customRoute.getMethod()
+			).receivesParams(
+				Id.class, bodyClass, aClass, bClass, cClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> throwablePentaFunction.andThen(
+					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
+				).apply(
+					unsafeCast(params.get(0)),
+					_getModel(form, () -> (Body)params.get(1)),
+					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
+					unsafeCast(params.get(4))
+				)
+			).build();
 
-			_customRoutes.put(name, customRoute);
-
-			_customPermissionFunctions.put(name, permissionBiFunction);
-
-			CustomItemFunction<U, S> customFunction =
-				httpServletRequest -> s -> body -> provide(
-					_provideFunction.apply(httpServletRequest), aClass, bClass,
-					cClass,
-					(a, b, c) -> throwablePentaFunction.andThen(
-						t -> new SingleModelImpl<>(
-							t, _getResourceName(supplier))
-					).apply(
-						s, _getModel(customRoute.getFormOptional(), body), a, b,
-						c
-					));
-
-			_customItemFunctions.put(name, customFunction);
+			_actionSemantics.add(createActionSemantics);
 
 			return this;
 		}
@@ -264,28 +262,33 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
+			Form<R> form = _getForm(
+				formBuilderFunction,
+				asList("p", _item.name(), customRoute.getName()));
 
-			String name = customRoute.getName();
+			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
-			_calculateForm(customRoute, formBuilderFunction, name);
+			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				customRoute.getName()
+			).method(
+				customRoute.getMethod()
+			).receivesParams(
+				Id.class, bodyClass, aClass, bClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> throwableTetraFunction.andThen(
+					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
+				).apply(
+					unsafeCast(params.get(0)),
+					_getModel(form, () -> (Body)params.get(1)),
+					unsafeCast(params.get(2)), unsafeCast(params.get(3))
+				)
+			).build();
 
-			_customRoutes.put(name, customRoute);
-
-			_customPermissionFunctions.put(name, permissionBiFunction);
-
-			CustomItemFunction<U, S> customFunction =
-				httpServletRequest -> s -> body -> provide(
-					_provideFunction.apply(httpServletRequest), aClass, bClass,
-					(a, b) -> throwableTetraFunction.andThen(
-						t -> new SingleModelImpl<>(
-							t, _getResourceName(supplier))
-					).apply(
-						s, _getModel(customRoute.getFormOptional(), body), a, b
-					));
-
-			_customItemFunctions.put(name, customFunction);
+			_actionSemantics.add(createActionSemantics);
 
 			return this;
 		}
@@ -298,27 +301,33 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			BiFunction<Credentials, S, Boolean> permissionBiFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
+			Form<R> form = _getForm(
+				formBuilderFunction,
+				asList("p", _item.name(), customRoute.getName()));
 
-			String name = customRoute.getName();
+			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
-			_calculateForm(customRoute, formBuilderFunction, name);
+			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				customRoute.getName()
+			).method(
+				customRoute.getMethod()
+			).receivesParams(
+				Id.class, bodyClass, aClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> throwableTriFunction.andThen(
+					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
+				).apply(
+					unsafeCast(params.get(0)),
+					_getModel(form, () -> (Body)params.get(1)),
+					unsafeCast(params.get(2))
+				)
+			).build();
 
-			_customRoutes.put(name, customRoute);
-
-			_customPermissionFunctions.put(name, permissionBiFunction);
-
-			CustomItemFunction<U, S> customFunction =
-				httpServletRequest -> s -> body -> provide(
-					_provideFunction.apply(httpServletRequest), aClass,
-					a -> throwableTriFunction.andThen(
-						t -> new SingleModelImpl<>(
-							t, _getResourceName(supplier))
-					).apply(
-						s, _getModel(customRoute.getFormOptional(), body), a
-					));
-
-			_customItemFunctions.put(name, customFunction);
+			_actionSemantics.add(createActionSemantics);
 
 			return this;
 		}
@@ -328,15 +337,25 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			ThrowableBiFunction<S, A, T> getterThrowableBiFunction,
 			Class<A> aClass) {
 
-			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"retrieve"
+			).method(
+				"GET"
+			).receivesParams(
+				Id.class, aClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> getterThrowableBiFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
+				).apply(
+					unsafeCast(params.get(0)), unsafeCast(params.get(1))
+				)
+			).build();
 
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> getterThrowableBiFunction.apply(
-					(S)id, (A)list.get(0)),
-				aClass);
-
-			_neededProviderConsumer.accept(aClass.getName());
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -345,11 +364,25 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		public Builder<T, S> addGetter(
 			ThrowableFunction<S, T> getterThrowableFunction) {
 
-			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"retrieve"
+			).method(
+				"GET"
+			).receivesParams(
+				Id.class
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> getterThrowableFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
+				).apply(
+					unsafeCast(params.get(0))
+				)
+			).build();
 
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> getterThrowableFunction.apply((S)id));
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -361,19 +394,27 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			Class<D> dClass) {
 
-			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"retrieve"
+			).method(
+				"GET"
+			).receivesParams(
+				Id.class, aClass, bClass, cClass, dClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> getterThrowablePentaFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
+				).apply(
+					unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
+					unsafeCast(params.get(4))
+				)
+			).build();
 
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> getterThrowablePentaFunction.apply(
-					(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2),
-					(D)list.get(3)),
-				aClass, bClass, cClass, dClass);
-
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-			_neededProviderConsumer.accept(cClass.getName());
-			_neededProviderConsumer.accept(dClass.getName());
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -383,17 +424,26 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			ThrowableTetraFunction<S, A, B, C, T> getterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
 
-			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"retrieve"
+			).method(
+				"GET"
+			).receivesParams(
+				Id.class, aClass, bClass, cClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> getterThrowableTetraFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
+				).apply(
+					unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+					unsafeCast(params.get(2)), unsafeCast(params.get(3))
+				)
+			).build();
 
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> getterThrowableTetraFunction.apply(
-					(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2)),
-				aClass, bClass, cClass);
-
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-			_neededProviderConsumer.accept(cClass.getName());
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -403,16 +453,26 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			ThrowableTriFunction<S, A, B, T> getterThrowableTriFunction,
 			Class<A> aClass, Class<B> bClass) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"retrieve"
+			).method(
+				"GET"
+			).receivesParams(
+				Id.class, aClass, bClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> getterThrowableTriFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
+				).apply(
+					unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+					unsafeCast(params.get(2))
+				)
+			).build();
 
-			ActionKey actionKey = new ActionKey(GET.name(), _name, ANY_ROUTE);
-
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> getterThrowableTriFunction.apply(
-					(S)id, (A)list.get(0), (B)list.get(1)),
-				aClass, bClass);
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -423,19 +483,22 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			Class<A> aClass,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-
-			_hasRemovePermissionFunction = hasRemovePermissionFunction;
-
-			ActionKey actionKey = new ActionKey(
-				DELETE.name(), _name, ANY_ROUTE);
-
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> _run(
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"remove"
+			).method(
+				"DELETE"
+			).receivesParams(
+				Id.class, aClass
+			).returnsNothing(
+			).executeFunction(
+				params -> _run(
 					() -> removerThrowableBiConsumer.accept(
-						(S)id, (A)list.get(0))),
-				aClass);
+						unsafeCast(params.get(0)), unsafeCast(params.get(1))))
+			).build();
+
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -445,15 +508,22 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			ThrowableConsumer<S> removerThrowableConsumer,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
-			_hasRemovePermissionFunction = hasRemovePermissionFunction;
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"remove"
+			).method(
+				"DELETE"
+			).receivesParams(
+				Id.class
+			).returnsNothing(
+			).executeFunction(
+				params -> _run(
+					() -> removerThrowableConsumer.accept(
+						unsafeCast(params.get(0))))
+			).build();
 
-			ActionKey actionKey = new ActionKey(
-				DELETE.name(), _name, ANY_ROUTE);
-
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> _run(
-					() -> removerThrowableConsumer.accept((S)id)));
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -464,23 +534,24 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-			_neededProviderConsumer.accept(cClass.getName());
-			_neededProviderConsumer.accept(dClass.getName());
-
-			_hasRemovePermissionFunction = hasRemovePermissionFunction;
-
-			ActionKey actionKey = new ActionKey(
-				DELETE.name(), _name, ANY_ROUTE);
-
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> _run(
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"remove"
+			).method(
+				"DELETE"
+			).receivesParams(
+				Id.class, aClass, bClass, cClass, dClass
+			).returnsNothing(
+			).executeFunction(
+				params -> _run(
 					() -> removerThrowablePentaConsumer.accept(
-						(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2),
-						(D)list.get(3))),
-				aClass, bClass, cClass, dClass);
+						unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
+						unsafeCast(params.get(4))))
+			).build();
+
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -491,21 +562,23 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-			_neededProviderConsumer.accept(cClass.getName());
-
-			_hasRemovePermissionFunction = hasRemovePermissionFunction;
-
-			ActionKey actionKey = new ActionKey(
-				DELETE.name(), _name, ANY_ROUTE);
-
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> _run(
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"remove"
+			).method(
+				"DELETE"
+			).receivesParams(
+				Id.class, aClass, bClass, cClass
+			).returnsNothing(
+			).executeFunction(
+				params -> _run(
 					() -> removerThrowableTetraConsumer.accept(
-						(S)id, (A)list.get(0), (B)list.get(1), (C)list.get(2))),
-				aClass, bClass, cClass);
+						unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+						unsafeCast(params.get(2)), unsafeCast(params.get(3))))
+			).build();
+
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -516,20 +589,23 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			Class<A> aClass, Class<B> bClass,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-
-			_hasRemovePermissionFunction = hasRemovePermissionFunction;
-
-			ActionKey actionKey = new ActionKey(
-				DELETE.name(), _name, ANY_ROUTE);
-
-			_actionManager.add(
-				actionKey,
-				(id, body, list) -> _run(
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"remove"
+			).method(
+				"DELETE"
+			).receivesParams(
+				Id.class, aClass, bClass
+			).returnsNothing(
+			).executeFunction(
+				params -> _run(
 					() -> removerThrowableTriConsumer.accept(
-						(S)id, (A)list.get(0), (B)list.get(1))),
-				aClass, bClass);
+						unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+						unsafeCast(params.get(2))))
+			).build();
+
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -540,23 +616,30 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					Arrays.asList("u", _item.name()), _pathToIdentifierFunction,
 					_nameFunction));
 
-			_form = form;
-
-			_updateItemFunction = httpServletRequest -> s -> body -> provide(
-				_provideFunction.apply(httpServletRequest), Credentials.class,
-				credentials -> updaterThrowableBiFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"replace"
+			).method(
+				"PUT"
+			).receivesParams(
+				Id.class, Body.class
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> updaterThrowableBiFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					s, form.get(body)
-				));
+					unsafeCast(params.get(0)), form.get((Body)params.get(1))
+				)
+			).build();
+
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -569,30 +652,32 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-			_neededProviderConsumer.accept(cClass.getName());
-			_neededProviderConsumer.accept(dClass.getName());
-
-			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					Arrays.asList("u", _item.name()), _pathToIdentifierFunction,
 					_nameFunction));
 
-			_form = form;
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"replace"
+			).method(
+				"PUT"
+			).receivesParams(
+				Id.class, Body.class, aClass, bClass, cClass, dClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> updaterThrowableHexaFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
+				).apply(
+					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
+					unsafeCast(params.get(4)), unsafeCast(params.get(5))
+				)
+			).build();
 
-			_updateItemFunction = httpServletRequest -> s -> body -> provide(
-				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				cClass, dClass, Credentials.class,
-				(a, b, c, d, credentials) ->
-					updaterThrowableHexaFunction.andThen(
-						t -> new SingleModelImpl<>(
-							t, _name, _getOperations(credentials, s))
-					).apply(
-						s, form.get(body), a, b, c, d
-					));
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -605,28 +690,32 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-			_neededProviderConsumer.accept(cClass.getName());
-
-			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					Arrays.asList("u", _item.name()), _pathToIdentifierFunction,
 					_nameFunction));
 
-			_form = form;
-
-			_updateItemFunction = httpServletRequest -> s -> body -> provide(
-				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				cClass, Credentials.class,
-				(a, b, c, credentials) -> updaterThrowablePentaFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"replace"
+			).method(
+				"PUT"
+			).receivesParams(
+				Id.class, Body.class, aClass, bClass, cClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> updaterThrowablePentaFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					s, form.get(body), a, b, c
-				));
+					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
+					unsafeCast(params.get(4))
+				)
+			).build();
+
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -638,27 +727,31 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-			_neededProviderConsumer.accept(bClass.getName());
-
-			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					Arrays.asList("u", _item.name()), _pathToIdentifierFunction,
 					_nameFunction));
 
-			_form = form;
-
-			_updateItemFunction = httpServletRequest -> s -> body -> provide(
-				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				Credentials.class,
-				(a, b, credentials) -> updaterThrowableTetraFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"replace"
+			).method(
+				"PUT"
+			).receivesParams(
+				Id.class, Body.class, aClass, bClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> updaterThrowableTetraFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					s, form.get(body), a, b
-				));
+					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					unsafeCast(params.get(2)), unsafeCast(params.get(3))
+				)
+			).build();
+
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -670,26 +763,31 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			_neededProviderConsumer.accept(aClass.getName());
-
-			_hasUpdatePermissionFunction = hasUpdatePermissionFunction;
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _pathToIdentifierFunction,
+					Arrays.asList("u", _item.name()), _pathToIdentifierFunction,
 					_nameFunction));
 
-			_form = form;
-
-			_updateItemFunction = httpServletRequest -> s -> body -> provide(
-				_provideFunction.apply(httpServletRequest), aClass,
-				Credentials.class,
-				(a, credentials) -> updaterThrowableTriFunction.andThen(
-					t -> new SingleModelImpl<>(
-						t, _name, _getOperations(credentials, s))
+			ActionSemantics actionSemantics = ActionSemantics.ofResource(
+				_item
+			).name(
+				"replace"
+			).method(
+				"PUT"
+			).receivesParams(
+				Id.class, Body.class, aClass
+			).returns(
+				SingleModel.class
+			).executeFunction(
+				params -> updaterThrowableTriFunction.andThen(
+					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					s, form.get(body), a
-				));
+					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					unsafeCast(params.get(2))
+				)
+			).build();
+
+			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -699,134 +797,24 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return new ItemRoutesImpl<>(this);
 		}
 
-		private void _calculateForm(
-			CustomRoute customRoute, FormBuilderFunction<?> formBuilderFunction,
-			String name) {
+		private <R> Form<R> _getForm(
+			FormBuilderFunction<R> formBuilderFunction, List<String> paths) {
 
 			if (formBuilderFunction != null) {
-				Form<?> form = formBuilderFunction.apply(
+				return formBuilderFunction.apply(
 					new FormImpl.BuilderImpl<>(
-						Arrays.asList("p", _name, name),
-						_pathToIdentifierFunction, _nameFunction));
-
-				customRoute.setForm(form);
-			}
-		}
-
-		private Operation _createOperation(
-			Form form, HTTPMethod method, String name, String path,
-			String custom) {
-
-			if (method == HTTPMethod.GET) {
-				return new RetrieveOperation(name, false, path, custom);
-			}
-			else if (method == HTTPMethod.POST) {
-				return new CreateOperation(form, name, path, custom);
-			}
-			else if (method == HTTPMethod.DELETE) {
-				return new DeleteOperation(name, path, custom);
-			}
-			else if (method == HTTPMethod.PUT) {
-				return new UpdateOperation(form, name, path, custom);
+						paths, _pathToIdentifierFunction, _nameFunction));
 			}
 
 			return null;
 		}
 
-		private <R> R _getModel(Optional<Form<?>> formOptional, Body body) {
-			return (R)formOptional.map(
-				form -> form.get(body)
-			).orElse(
-				null
-			);
-		}
-
-		private List<Operation> _getOperations(
-			Credentials credentials, S identifier) {
-
-			Optional<Path> optional = _identifierToPathFunction.apply(
-				identifier);
-
-			if (!optional.isPresent()) {
-				return Collections.emptyList();
+		private <R> R _getModel(Form<R> form, Supplier<Body> body) {
+			if (form != null) {
+				return form.get(body.get());
 			}
 
-			Path path = optional.get();
-
-			List<Operation> operations = new ArrayList<>();
-
-			if (_hasRemovePermissionFunction != null) {
-				Boolean canRemove = Try.fromFallible(
-					() -> _hasRemovePermissionFunction.apply(
-						credentials, identifier)
-				).orElse(
-					false
-				);
-
-				if (canRemove) {
-					DeleteOperation deleteOperation = new DeleteOperation(
-						_name, path.asURI());
-
-					operations.add(deleteOperation);
-				}
-			}
-
-			if (_hasUpdatePermissionFunction != null) {
-				Boolean canUpdate = Try.fromFallible(
-					() -> _hasUpdatePermissionFunction.apply(
-						credentials, identifier)
-				).orElse(
-					false
-				);
-
-				if (canUpdate) {
-					UpdateOperation updateOperation = new UpdateOperation(
-						_form, _name, path.asURI());
-
-					operations.add(updateOperation);
-				}
-			}
-
-			Set<String> customPermissionKeys =
-				_customPermissionFunctions.keySet();
-
-			Stream<String> customPermissionKeysStream =
-				customPermissionKeys.stream();
-
-			customPermissionKeysStream.filter(
-				key -> _getPermissionFunction(credentials, identifier, key)
-			).forEach(
-				routeEntry -> {
-					CustomRoute customRoute = _customRoutes.get(routeEntry);
-
-					Optional<Form<?>> formOptional =
-						customRoute.getFormOptional();
-
-					Form form = formOptional.orElse(
-						null
-					);
-
-					Operation operation = _createOperation(
-						form, customRoute.getMethod(), _name, path.asURI(),
-						routeEntry);
-
-					operations.add(operation);
-				}
-			);
-
-			return operations;
-		}
-
-		private Boolean _getPermissionFunction(
-			Credentials credentials, S identifier, String key) {
-
-			return Try.fromFallible(
-				() -> _customPermissionFunctions.get(key)
-			).map(
-				function -> function.apply(credentials, identifier)
-			).orElse(
-				false
-			);
+			return null;
 		}
 
 		private <I extends Identifier<?>> String _getResourceName(
@@ -845,28 +833,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return null;
 		}
 
-		private final ActionManager _actionManager;
-		private Map<String, CustomItemFunction<?, S>> _customItemFunctions =
-			new HashMap<>();
-		private Map<String, BiFunction<Credentials, S, Boolean>>
-			_customPermissionFunctions = new HashMap<>();
-		private final Map<String, CustomRoute> _customRoutes = new HashMap<>();
-		private Form _form;
-		private HasRemovePermissionFunction<S> _hasRemovePermissionFunction;
-		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
-		private final Function<S, Optional<Path>> _identifierToPathFunction;
-		private final String _name;
+		private final List<ActionSemantics> _actionSemantics =
+			new ArrayList<>();
+		private final Item _item;
 		private final Function<String, Optional<String>> _nameFunction;
-		private final Consumer<String> _neededProviderConsumer;
 		private final IdentifierFunction<?> _pathToIdentifierFunction;
-		private final ProvideFunction _provideFunction;
-		private UpdateItemFunction<T, S> _updateItemFunction;
 
 	}
 
-	private final Map<String, CustomItemFunction<?, S>> _customItemFunctions;
-	private final Map<String, CustomRoute> _customRoutes;
-	private final Form _form;
-	private final UpdateItemFunction<T, S> _updateItemFunction;
+	private final List<ActionSemantics> _actionSemantics;
 
 }

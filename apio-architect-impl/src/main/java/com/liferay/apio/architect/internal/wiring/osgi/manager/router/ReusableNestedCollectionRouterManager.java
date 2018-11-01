@@ -14,30 +14,28 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.router;
 
-import static com.liferay.apio.architect.internal.alias.ProvideFunction.curry;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import com.liferay.apio.architect.internal.annotation.ActionManager;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
-import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -59,23 +57,29 @@ public class ReusableNestedCollectionRouterManager
 		super(ReusableNestedCollectionRouter.class, 2);
 	}
 
-	public Map<String, NestedCollectionRoutes> getReusableCollectionRoutes() {
-		return INSTANCE.getReusableCollectionRoutesMap(
-			this::_computeNestedCollectionRoutes);
-	}
-
 	/**
-	 * Returns the nested collection routes for the reusable nested collection
-	 * resource's name.
+	 * Returns the list of {@link ActionSemantics} created by the managed
+	 * routers.
 	 *
-	 * @param  name the resource's name
-	 * @return the routes
+	 * @review
 	 */
-	public Optional<NestedCollectionRoutes> getReusableCollectionRoutesOptional(
-		String name) {
-
-		return INSTANCE.getReusableNestedCollectionRoutesOptional(
-			name, this::_computeNestedCollectionRoutes);
+	public Stream<ActionSemantics> getActionSemantics() {
+		return Optional.ofNullable(
+			INSTANCE.getReusableCollectionRoutesMap(
+				this::_computeNestedCollectionRoutes)
+		).map(
+			Map::values
+		).map(
+			Collection::stream
+		).orElseGet(
+			Stream::empty
+		).map(
+			NestedCollectionRoutesImpl.class::cast
+		).map(
+			NestedCollectionRoutesImpl::getActionSemantics
+		).flatMap(
+			Collection::stream
+		);
 	}
 
 	private void _computeNestedCollectionRoutes() {
@@ -96,49 +100,28 @@ public class ReusableNestedCollectionRouterManager
 
 				String name = nameOptional.get();
 
-				Set<String> neededProviders = new TreeSet<>();
-
 				Optional<Representor<Object>> representorOptional =
 					_representableManager.getRepresentorOptional(name);
+
+				if (!representorOptional.isPresent()) {
+					_logger.warn(
+						"Unable to find a Representable for nested class " +
+							"name " + className);
+
+					return;
+				}
 
 				Representor<Object> representor = representorOptional.get();
 
 				Builder builder = new NestedCollectionRoutesImpl.BuilderImpl<>(
-					"r", name, curry(_providerManager::provideMandatory),
-					neededProviders::add,
+					Nested.of(Item.of("r"), name),
 					identifier -> _pathIdentifierMapperManager.mapToPath(
 						name, identifier),
-					representor::getIdentifier, _actionManager,
-					_nameManager::getNameOptional);
+					representor::getIdentifier, _nameManager::getNameOptional);
 
+				@SuppressWarnings("unchecked")
 				NestedCollectionRoutes nestedCollectionRoutes =
 					reusableNestedCollectionRouter.collectionRoutes(builder);
-
-				List<String> missingProviders =
-					_providerManager.getMissingProviders(neededProviders);
-
-				if (!missingProviders.isEmpty()) {
-					if (_logger.isWarnEnabled()) {
-						_logger.warn(
-							"Missing providers for classes: " +
-								missingProviders);
-					}
-
-					return;
-				}
-
-				Optional<ItemRoutes<Object, Object>> optional =
-					_itemRouterManager.getItemRoutesOptional(name);
-
-				if (!optional.isPresent()) {
-					if (_logger.isWarnEnabled()) {
-						_logger.warn(
-							"Missing item router for resource with name " +
-								name);
-					}
-
-					return;
-				}
 
 				INSTANCE.putReusableNestedCollectionRoutes(
 					name, nestedCollectionRoutes);
@@ -153,12 +136,6 @@ public class ReusableNestedCollectionRouterManager
 			});
 	}
 
-	@Reference
-	private ActionManager _actionManager;
-
-	@Reference
-	private ItemRouterManager _itemRouterManager;
-
 	private Logger _logger = getLogger(getClass());
 
 	@Reference
@@ -166,9 +143,6 @@ public class ReusableNestedCollectionRouterManager
 
 	@Reference
 	private PathIdentifierMapperManager _pathIdentifierMapperManager;
-
-	@Reference
-	private ProviderManager _providerManager;
 
 	@Reference
 	private RepresentableManager _representableManager;

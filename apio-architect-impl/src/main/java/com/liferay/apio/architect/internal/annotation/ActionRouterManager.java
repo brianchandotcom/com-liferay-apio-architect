@@ -37,10 +37,6 @@ import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.url.ServerURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.router.CollectionRouterManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ItemRouterManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.router.NestedCollectionRouterManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.router.ActionRouter;
 
@@ -76,10 +72,6 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 
 	public void initializeRouterManagers() {
 		_computeActionRouters();
-		_itemRouterManager.getItemRoutes();
-		_reusableNestedCollectionRouterManager.getReusableCollectionRoutes();
-		_nestedCollectionRouterManager.getNestedCollectionRoutes();
-		_collectionRouterManager.getCollectionRoutes();
 	}
 
 	private void _computeActionRouters() {
@@ -157,22 +149,9 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 	@Reference
 	private ActionManager _actionManager;
 
-	@Reference
-	private CollectionRouterManager _collectionRouterManager;
-
-	@Reference
-	private ItemRouterManager _itemRouterManager;
-
 	private Logger _logger = getLogger(getClass());
 
 	@Reference
-	private NestedCollectionRouterManager _nestedCollectionRouterManager;
-
-	@Reference
 	private ProviderManager _providerManager;
-
-	@Reference
-	private ReusableNestedCollectionRouterManager
-		_reusableNestedCollectionRouterManager;
 
 }
