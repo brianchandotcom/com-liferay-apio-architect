@@ -137,11 +137,10 @@ public class RepresentorTransformer {
 				BidirectionalModel bidirectionalModel =
 					bidirectionalFieldData.getBidirectionalModel();
 
-				Field bidirectionalModelField = bidirectionalModel.field();
+				Field field = bidirectionalModel.field();
 
 				firstStep.addBidirectionalModel(
-					bidirectionalFieldData.getFieldName(),
-					bidirectionalModelField.value(),
+					bidirectionalFieldData.getFieldName(), field.value(),
 					unsafeCast(bidirectionalModel.modelClass()),
 					getMethodFunction(bidirectionalFieldData.getMethod()));
 			});

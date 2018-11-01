@@ -18,8 +18,8 @@ import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.alias.BinaryFunction;
 import com.liferay.apio.architect.annotation.FieldMode;
-import com.liferay.apio.architect.annotation.Vocabulary;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
 import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.functional.Try;
@@ -67,8 +67,7 @@ public class RepresentorTransformerUtil {
 
 		linkedModelFieldDataList.forEach(
 			linkedModelFieldData -> {
-				Vocabulary.LinkedModel linkedModel =
-					linkedModelFieldData.getLinkedModel();
+				LinkedModel linkedModel = linkedModelFieldData.getLinkedModel();
 
 				firstStep.addLinkedModel(
 					linkedModelFieldData.getFieldName(),
@@ -184,9 +183,9 @@ public class RepresentorTransformerUtil {
 	private static void _addBasicFields(
 		BaseRepresentor.BaseFirstStep<?, ?, ?> firstStep, FieldData fieldData) {
 
-		Field field = fieldData.getField();
-
 		Method method = fieldData.getMethod();
+
+		Field field = fieldData.getField();
 
 		Class<?> returnType = method.getReturnType();
 
