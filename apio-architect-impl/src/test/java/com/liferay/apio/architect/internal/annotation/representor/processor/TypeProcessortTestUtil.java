@@ -25,7 +25,9 @@ import com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil;
 
 import java.lang.reflect.Method;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
@@ -41,6 +43,16 @@ public class TypeProcessortTestUtil {
 		).orElse(
 			null
 		);
+	}
+
+	public static <T extends FieldData> List<T> getOrderedList(
+		Supplier<List<T>> supplier) {
+
+		List<T> list = supplier.get();
+
+		list.sort(Comparator.comparing(FieldData::getFieldName));
+
+		return list;
 	}
 
 	public static void testBidirectionalData(

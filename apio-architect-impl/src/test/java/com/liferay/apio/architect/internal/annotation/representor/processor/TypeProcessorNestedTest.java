@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.internal.annotation.representor.processor;
 
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.getOrderedList;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testFieldData;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testLinkedModelData;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testListFieldData;
@@ -42,22 +43,25 @@ public class TypeProcessorNestedTest {
 		ParsedType parsedType = TypeProcessor.proccesType(
 			DummyWithNested.class);
 
-		_nestedParsedType = parsedType.getParsedTypes().get(0);
+		List<NestedParsedType> parsedTypes = parsedType.getParsedTypes();
+
+		_nestedParsedType = parsedTypes.get(0);
 
 		_parsedType = _nestedParsedType.getParsedType();
 	}
 
 	@Test
 	public void testBasicFields() {
-		List<FieldData> fieldMetadata = _parsedType.getFieldDataList();
+		List<FieldData> fieldMetadata = getOrderedList(
+			_parsedType::getFieldDataList);
 
 		testFieldData(fieldMetadata.get(0), "stringField", String.class);
 	}
 
 	@Test
 	public void testLinkedModels() {
-		List<LinkedModelFieldData> linkedModelFieldData =
-			_parsedType.getLinkedModelFieldDataList();
+		List<LinkedModelFieldData> linkedModelFieldData = getOrderedList(
+			_parsedType::getLinkedModelFieldDataList);
 
 		testLinkedModelData(
 			linkedModelFieldData.get(0), "linkedModel",
@@ -66,7 +70,8 @@ public class TypeProcessorNestedTest {
 
 	@Test
 	public void testListFields() {
-		List<ListFieldData> listFieldData = _parsedType.getListFieldDataList();
+		List<ListFieldData> listFieldData = getOrderedList(
+			_parsedType::getListFieldDataList);
 
 		testListFieldData(
 			listFieldData.get(0), "stringListField", String.class);
@@ -83,7 +88,7 @@ public class TypeProcessorNestedTest {
 	@Test
 	public void testRelatedCollections() {
 		List<RelatedCollectionFieldData> relatedCollectionFieldData =
-			_parsedType.getRelatedCollectionFieldDataList();
+			getOrderedList(_parsedType::getRelatedCollectionFieldDataList);
 
 		testRelatedCollectionData(
 			relatedCollectionFieldData.get(0), "relatedCollection",

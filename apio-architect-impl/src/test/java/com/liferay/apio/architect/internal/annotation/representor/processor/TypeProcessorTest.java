@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.internal.annotation.representor.processor;
 
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.getOrderedList;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testBidirectionalData;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testFieldData;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testLinkedModelData;
@@ -63,8 +64,8 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testBidirectionalModels() {
-		List<BidirectionalFieldData> bidirectionalFieldData =
-			_parsedType.getBidirectionalFieldDataList();
+		List<BidirectionalFieldData> bidirectionalFieldData = getOrderedList(
+			_parsedType::getBidirectionalFieldDataList);
 
 		testBidirectionalData(
 			bidirectionalFieldData.get(0), "bidirectional1", "linked1",
@@ -88,8 +89,8 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testLinkedModels() {
-		List<LinkedModelFieldData> linkedModelFieldData =
-			_parsedType.getLinkedModelFieldDataList();
+		List<LinkedModelFieldData> linkedModelFieldData = getOrderedList(
+			_parsedType::getLinkedModelFieldDataList);
 
 		testLinkedModelData(
 			linkedModelFieldData.get(0), "linkedModel1",
@@ -102,7 +103,8 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testListFields() {
-		List<ListFieldData> listFieldData = _parsedType.getListFieldDataList();
+		List<ListFieldData> listFieldData = getOrderedList(
+			_parsedType::getListFieldDataList);
 
 		testListFieldData(
 			listFieldData.get(0), "booleanListField1", Boolean.class);
@@ -119,7 +121,7 @@ public class TypeProcessorTest {
 	@Test
 	public void testRelatedCollections() {
 		List<RelatedCollectionFieldData> relatedCollectionFieldData =
-			_parsedType.getRelatedCollectionFieldDataList();
+			getOrderedList(_parsedType::getRelatedCollectionFieldDataList);
 
 		testRelatedCollectionData(
 			relatedCollectionFieldData.get(0), "relatedCollection1",
@@ -132,8 +134,8 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testRelativeUrls() {
-		List<RelativeURLFieldData> relativeURLFieldData =
-			_parsedType.getRelativeURLFieldDataList();
+		List<RelativeURLFieldData> relativeURLFieldData = getOrderedList(
+			_parsedType::getRelativeURLFieldDataList);
 
 		testRelativeURLData(
 			relativeURLFieldData.get(0), "applicationRelativeUrl", true);
