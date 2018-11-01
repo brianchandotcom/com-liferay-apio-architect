@@ -17,14 +17,11 @@ package com.liferay.apio.architect.internal.annotation.representor;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.addCommonFields;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.getMethodFunction;
 
-import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnnotation;
-
-import com.liferay.apio.architect.annotation.Vocabulary.Field;
 import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
+import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
+import com.liferay.apio.architect.internal.annotation.representor.processor.RelatedCollectionFieldData;
 import com.liferay.apio.architect.representor.NestedRepresentor;
-
-import java.lang.reflect.Method;
 
 import java.util.List;
 
@@ -33,52 +30,51 @@ import java.util.List;
  * into a nested representor.
  *
  * @author Víctor Galán
+ * @review
  */
 public class NestedRepresentorTransformer {
 
 	/**
-	 * Uses the nested representor builder to transform a class annotated with
-	 * {@code Type} into a nested representor.
+	 * Uses the nested representor builder to transform a parsed type into a
+	 * nested representor.
 	 *
-	 * @param  typeClass the class annotated with {@code Type}
+	 * @param  parsedType the parsed type
 	 * @param  builder the nested representor builder
 	 * @return the nested representor
+	 * @review
 	 */
 	public static NestedRepresentor<?> toRepresentor(
-		Class<?> typeClass, NestedRepresentor.Builder<?> builder) {
+		ParsedType parsedType, NestedRepresentor.Builder<?> builder) {
 
-		Type type = typeClass.getAnnotation(Type.class);
+		Type type = parsedType.getType();
 
 		NestedRepresentor.FirstStep<?> firstStep = builder.types(
 			type.value()
 		);
 
-		List<Method> methods = getMethodsListWithAnnotation(
-			typeClass, Field.class);
-
-		methods.forEach(method -> _processMethod(firstStep, method));
+		_proccessFields(parsedType, firstStep);
 
 		return firstStep.build();
 	}
 
-	private static void _processMethod(
-		NestedRepresentor.FirstStep<?> firstStep, Method method) {
+	private static void _proccessFields(
+		ParsedType parsedType, NestedRepresentor.FirstStep<?> firstStep) {
 
-		Class<?> returnType = method.getReturnType();
+		List<RelatedCollectionFieldData> relatedCollectionFieldDataList =
+			parsedType.getRelatedCollectionFieldDataList();
 
-		Field field = method.getAnnotation(Field.class);
+		relatedCollectionFieldDataList.forEach(
+			relatedCollectionFieldData -> {
+				RelatedCollection relatedCollection =
+					relatedCollectionFieldData.getRelatedCollection();
 
-		String key = field.value();
+				firstStep.addRelatedCollection(
+					relatedCollectionFieldData.getFieldName(),
+					relatedCollection.value(),
+					getMethodFunction(relatedCollectionFieldData.getMethod()));
+			});
 
-		RelatedCollection relatedCollection = method.getAnnotation(
-			RelatedCollection.class);
-
-		if (relatedCollection != null) {
-			firstStep.addRelatedCollection(
-				key, relatedCollection.value(), getMethodFunction(method));
-		}
-
-		addCommonFields(firstStep, method, returnType, key);
+		addCommonFields(firstStep, parsedType);
 	}
 
 }

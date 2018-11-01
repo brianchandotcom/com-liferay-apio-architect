@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.internal.annotation.representor;
 
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.addCommonFields;
+import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.filterWritableFields;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.getMethodFunction;
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
@@ -29,6 +30,9 @@ import com.liferay.apio.architect.annotation.Vocabulary.Field;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.internal.annotation.representor.processor.BidirectionalFieldData;
+import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
+import com.liferay.apio.architect.internal.annotation.representor.processor.RelatedCollectionFieldData;
 import com.liferay.apio.architect.internal.representor.RepresentorImpl;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representor;
@@ -44,30 +48,33 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Provides a utility function that transforms a class annotated with {@code
- * Vocabulary.Type} into a representor
+ * Provides a utility function that transforms a parsed type into a representor
  *
  * @author Alejandro Hernandez
  * @author Víctor Galán
+ * @review
  */
 public class RepresentorTransformer {
 
 	/**
-	 * Transforms a class annotated with {@code Type} into a representor.
+	 * Transforms a parsed type into a representor.
 	 *
-	 * @param  typeClass the class annotated with {@code Type}
+	 * @param  parsedType the parsed type {@link ParsedType}
 	 * @param  nameFunction the function that gets a class's {@link
 	 *         com.liferay.apio.architect.resource.CollectionResource} name
 	 * @param  relatedCollections the list of the related collections of all
 	 *         representors
-	 * @return the representor
+	 * @return the instance of representor created
+	 * @review
 	 */
 	public static <T extends Identifier<S>, S> Representor<T> toRepresentor(
-		Class<T> typeClass,
+		ParsedType parsedType,
 		Function<Class<? extends Identifier<?>>, String> nameFunction,
 		Map<String, List<RelatedCollection<?, ?>>> relatedCollections) {
 
-		Type type = typeClass.getAnnotation(Type.class);
+		Type type = parsedType.getType();
+
+		Class<T> typeClass = unsafeCast(parsedType.getTypeClass());
 
 		Representor.Builder<T, S> builder = _createBuilder(
 			typeClass, nameFunction, unsafeCast(relatedCollections));
@@ -88,10 +95,7 @@ public class RepresentorTransformer {
 			)
 		);
 
-		List<Method> methods = getMethodsListWithAnnotation(
-			typeClass, Field.class);
-
-		methods.forEach(method -> _processMethod(firstStep, method));
+		_proccessFields(parsedType, firstStep);
 
 		return firstStep.build();
 	}
@@ -122,55 +126,62 @@ public class RepresentorTransformer {
 			typeClass, nameFunction, biConsumer, relatedCollectionsSupplier);
 	}
 
-	private static <T extends Identifier<S>, S> void _processMethod(
-		FirstStep<T> firstStep, Method method) {
+	private static <T extends Identifier<?>> void
+		_proccessFields(ParsedType parsedType, FirstStep<T> firstStep) {
 
-		Class<?> returnType = method.getReturnType();
+		List<BidirectionalFieldData> bidirectionalFieldDataList =
+			filterWritableFields(parsedType::getBidirectionalFieldDataList);
 
-		Field field = method.getAnnotation(Field.class);
+		bidirectionalFieldDataList.forEach(
+			bidirectionalFieldData -> {
+				BidirectionalModel bidirectionalModel =
+					bidirectionalFieldData.getBidirectionalModel();
 
-		String key = field.value();
+				Field bidirectionalModelField = bidirectionalModel.field();
 
-		Vocabulary.RelatedCollection relatedCollection = method.getAnnotation(
-			Vocabulary.RelatedCollection.class);
+				firstStep.addBidirectionalModel(
+					bidirectionalFieldData.getFieldName(),
+					bidirectionalModelField.value(),
+					unsafeCast(bidirectionalModel.modelClass()),
+					getMethodFunction(bidirectionalFieldData.getMethod()));
+			});
 
-		BidirectionalModel bidirectionalModel = method.getAnnotation(
-			BidirectionalModel.class);
+		List<RelatedCollectionFieldData> relatedCollectionFieldDataList =
+			filterWritableFields(parsedType::getRelatedCollectionFieldDataList);
 
-		if (relatedCollection != null) {
-			if (relatedCollection.reusable()) {
-				firstStep.addRelatedCollection(
-					key, relatedCollection.value(),
-					model -> Try.fromFallible(
-						() -> method.invoke(model)
-					).orElse(
-						null
-					));
+		relatedCollectionFieldDataList.forEach(
+			relatedCollectionFieldData -> {
+				Vocabulary.RelatedCollection relatedCollection =
+					relatedCollectionFieldData.getRelatedCollection();
 
-				Class<? extends Identifier<?>> typeClass =
-					relatedCollection.value();
+				String key = relatedCollectionFieldData.getFieldName();
+				Method method = relatedCollectionFieldData.getMethod();
 
-				Type type = typeClass.getAnnotation(Type.class);
+				if (relatedCollection.reusable()) {
+					firstStep.addRelatedCollection(
+						key, relatedCollection.value(),
+						model -> Try.fromFallible(
+							() -> method.invoke(model)
+						).orElse(
+							null
+						));
 
-				String name = toLowercaseSlug(type.value());
+					Class<? extends Identifier<?>> typeClass =
+						relatedCollection.value();
 
-				_addReusableClass(name, method.getReturnType());
-			}
-			else {
-				firstStep.addRelatedCollection(key, relatedCollection.value());
-			}
-		}
-		else if (bidirectionalModel != null) {
-			Field bidirectionalField = bidirectionalModel.field();
+					Type type = typeClass.getAnnotation(Type.class);
 
-			firstStep.addBidirectionalModel(
-				key, bidirectionalField.value(),
-				unsafeCast(bidirectionalModel.modelClass()),
-				getMethodFunction(method));
-		}
-		else {
-			addCommonFields(firstStep, method, returnType, key);
-		}
+					String name = toLowercaseSlug(type.value());
+
+					_addReusableClass(name, method.getReturnType());
+				}
+				else {
+					firstStep.addRelatedCollection(
+						key, relatedCollection.value());
+				}
+			});
+
+		addCommonFields(firstStep, parsedType);
 	}
 
 }
