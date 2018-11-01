@@ -18,6 +18,7 @@ import static javax.ws.rs.core.Variant.VariantListBuilder.newInstance;
 
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
 import com.liferay.apio.architect.internal.message.json.BatchResultMessageMapper;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.EntryPointMessageMapper;
@@ -375,6 +376,45 @@ public class ManagerCache {
 		return optional.map(Unsafe::unsafeCast);
 	}
 
+	/**
+	 * Returns the parsed type, if present, for the current key; {@code
+	 * Optional#empty()} otherwise.
+	 *
+	 * @param  key the key
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the parsed type, if present, for the current key; {@code
+	 *         Optional#empty()} otherwise.
+	 * @review
+	 */
+	public Optional<ParsedType> getParsedTypeOptional(
+		String key, EmptyFunction computeEmptyFunction) {
+
+		if (_parsedTypes == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		return Optional.ofNullable(_parsedTypes.get(key));
+	}
+
+	/**
+	 * Returns the parsed types.
+	 *
+	 * @param  computeEmptyFunction the function that can be called to compute
+	 *         the data
+	 * @return the parsed type
+	 * @review
+	 */
+	public Map<String, ParsedType> getParsedTypesMap(
+		EmptyFunction computeEmptyFunction) {
+
+		if (_parsedTypes == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		return _parsedTypes;
+	}
+
 	public Map<String, Representor> getRepresentorMap(
 		EmptyFunction computeEmptyFunction) {
 
@@ -673,6 +713,21 @@ public class ManagerCache {
 	}
 
 	/**
+	 * Adds a parsed type.
+	 *
+	 * @param  key the key
+	 * @param  parsedType the parsed type
+	 * @review
+	 */
+	public void putParsedType(String key, ParsedType parsedType) {
+		if (_parsedTypes == null) {
+			_parsedTypes = new HashMap<>();
+		}
+
+		_parsedTypes.put(key, parsedType);
+	}
+
+	/**
 	 * Adds a representor.
 	 *
 	 * @param key the key
@@ -822,6 +877,7 @@ public class ManagerCache {
 	private Map<String, String> _names;
 	private Map<String, NestedCollectionRoutes> _nestedCollectionRoutes;
 	private Map<MediaType, PageMessageMapper> _pageMessageMappers;
+	private Map<String, ParsedType> _parsedTypes;
 	private Map<String, Representor> _representors;
 	private Map<String, Class<?>> _reusableIdentifierClasses;
 	private Map<String, NestedCollectionRoutes> _reusableNestedCollectionRoutes;
