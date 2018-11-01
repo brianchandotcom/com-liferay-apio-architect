@@ -14,6 +14,9 @@
 
 package com.liferay.apio.architect.internal.annotation.representor.processor;
 
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+
 import static org.junit.Assert.assertThat;
 
 import com.liferay.apio.architect.annotation.Vocabulary;
@@ -29,13 +32,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsEqual;
-
 /**
  * @author Víctor Galán Grande
  */
-public class TypeProcessortTestUtil {
+public class TypeProcessorTestUtil {
 
 	public static <T> T getIdentifierType(Class<?> identifierClass) {
 		return (T)GenericUtil.getGenericTypeArgumentTry(
@@ -64,11 +64,9 @@ public class TypeProcessortTestUtil {
 
 		Class<?> identifierType = getIdentifierType(identifierClass);
 
-		assertThat(
-			bidirectionalModel.modelClass(), IsEqual.equalTo(identifierClass));
+		assertThat(bidirectionalModel.modelClass(), equalTo(identifierClass));
 
-		assertThat(
-			bidirectionalModel.field().value(), Is.is(bidirectionalName));
+		assertThat(bidirectionalModel.field().value(), is(bidirectionalName));
 
 		testFieldData(bidirectionalFieldData, fieldName, identifierType);
 	}
@@ -79,8 +77,8 @@ public class TypeProcessortTestUtil {
 		Field field = fieldData.getField();
 		Method method = fieldData.getMethod();
 
-		assertThat(field.value(), Is.is(fieldName));
-		assertThat(method.getReturnType(), IsEqual.equalTo(returnType));
+		assertThat(field.value(), is(fieldName));
+		assertThat(method.getReturnType(), equalTo(returnType));
 	}
 
 	public static void testLinkedModelData(
@@ -91,7 +89,7 @@ public class TypeProcessortTestUtil {
 			linkedModelFieldData.getLinkedModel();
 		Class<?> identifierType = getIdentifierType(identifierClass);
 
-		assertThat(linkedModel.value(), IsEqual.equalTo(identifierClass));
+		assertThat(linkedModel.value(), equalTo(identifierClass));
 
 		testFieldData(linkedModelFieldData, fieldName, identifierType);
 	}
@@ -99,7 +97,7 @@ public class TypeProcessortTestUtil {
 	public static void testListFieldData(
 		ListFieldData listFieldData, String fieldName, Class<?> listType) {
 
-		assertThat(listFieldData.getListType(), IsEqual.equalTo(listType));
+		assertThat(listFieldData.getListType(), equalTo(listType));
 
 		testFieldData(listFieldData, fieldName, List.class);
 	}
@@ -112,8 +110,7 @@ public class TypeProcessortTestUtil {
 			relatedCollectionFieldData.getRelatedCollection();
 		Class<?> identifierType = getIdentifierType(identifierClass);
 
-		assertThat(
-			relatedCollection.value(), Is.is(IsEqual.equalTo(identifierClass)));
+		assertThat(relatedCollection.value(), is(equalTo(identifierClass)));
 
 		testFieldData(relatedCollectionFieldData, fieldName, identifierType);
 	}
@@ -124,7 +121,7 @@ public class TypeProcessortTestUtil {
 
 		RelativeURL relativeURL = relativeURLFieldData.getRelativeURL();
 
-		assertThat(relativeURL.fromApplication(), Is.is(fromApplication));
+		assertThat(relativeURL.fromApplication(), is(fromApplication));
 
 		testFieldData(relativeURLFieldData, fieldName, String.class);
 	}

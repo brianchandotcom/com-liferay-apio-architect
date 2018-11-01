@@ -14,13 +14,13 @@
 
 package com.liferay.apio.architect.internal.annotation.representor.processor;
 
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.getOrderedList;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testBidirectionalData;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testFieldData;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testLinkedModelData;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testListFieldData;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testRelatedCollectionData;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessortTestUtil.testRelativeURLData;
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.getOrderedList;
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testBidirectionalData;
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testFieldData;
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testLinkedModelData;
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testListFieldData;
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testRelatedCollectionData;
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testRelativeURLData;
 
 import static org.hamcrest.core.Is.is;
 
