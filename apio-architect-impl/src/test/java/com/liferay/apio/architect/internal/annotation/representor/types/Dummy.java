@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.internal.annotation.representor.types;
 
+import static com.liferay.apio.architect.annotation.FieldMode.READ_ONLY;
+
 import static java.util.Arrays.asList;
 
 import com.liferay.apio.architect.annotation.Id;
@@ -113,14 +115,14 @@ public interface Dummy extends Identifier<Long> {
 		return 20L;
 	}
 
-	@Field("stringListField1")
-	public default List<String> getNumberListField() {
-		return asList("one", "two", "three");
+	@Field("numberListField1")
+	public default List<Long> getNumberListField1() {
+		return asList(1L, 2L, 3L);
 	}
 
-	@Field("stringListField2")
-	public default List<String> getNumberListField2() {
-		return asList("four", "five", "six");
+	@Field("numberListField2")
+	public default List<Long> getNumberListField2() {
+		return asList(4L, 5L, 6L);
 	}
 
 	@Field("relatedCollection1")
@@ -135,7 +137,7 @@ public interface Dummy extends Identifier<Long> {
 		return "2d1d";
 	}
 
-	@Field("relativeUrl1")
+	@Field(mode = READ_ONLY, value = "relativeUrl1")
 	@RelativeURL
 	public default String getRelativeUrl1() {
 		return "/first";
@@ -157,17 +159,17 @@ public interface Dummy extends Identifier<Long> {
 		return "string2";
 	}
 
-	@Field("numberListField1")
-	public default List<Integer> getStringListField1() {
-		return asList(1, 2, 3);
+	@Field("stringListField1")
+	public default List<String> getStringListField1() {
+		return asList("one", "two", "three");
 	}
 
-	@Field("numberListField2")
-	public default List<Integer> getStringListField2() {
-		return asList(4, 5, 6);
+	@Field("stringListField2")
+	public default List<String> getStringListField2() {
+		return asList("four", "five", "six");
 	}
 
-	public class DummpyImpl implements Dummy {
+	public class DummyImpl implements Dummy {
 	}
 
 	public interface IntegerIdentifier extends Identifier<Integer> {
