@@ -27,15 +27,15 @@ public enum FieldMode {
 	 * interface out of the HTTP request body.
 	 *
 	 * <p>
-	 * A field with this mode will be ignored when representing the type in any
-	 * format.
+	 * A field with this mode will be ignored instantiating the interface out of
+	 * the HTTP request body.
 	 * </p>
 	 *
 	 * <p>
-	 * Opposite attribute to {@link #READ_ONLY}.
+	 * Opposite attribute to {@link #WRITE_ONLY}.
 	 * </p>
 	 *
-	 * @see    #READ_ONLY
+	 * @see    #WRITE_ONLY
 	 * @review
 	 */
 	READ_ONLY,
