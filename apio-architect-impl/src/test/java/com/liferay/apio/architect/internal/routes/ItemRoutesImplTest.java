@@ -40,6 +40,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.annotation.Id;
@@ -448,6 +449,7 @@ public class ItemRoutesImplTest {
 		assertThat(actionSemantics.paramClasses(), is(paramClasses));
 		assertThat(actionSemantics.resource(), is(Item.of("name")));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Void.class)));
+		assertThat(actionSemantics.annotations(), hasSize(0));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();
@@ -469,6 +471,7 @@ public class ItemRoutesImplTest {
 		assertThat(actionSemantics.resource(), is(Item.of("name")));
 		assertThat(
 			actionSemantics.returnClass(), is(equalTo(SingleModel.class)));
+		assertThat(actionSemantics.annotations(), hasSize(0));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();

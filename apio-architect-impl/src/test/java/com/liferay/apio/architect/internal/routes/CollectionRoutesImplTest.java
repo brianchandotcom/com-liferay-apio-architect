@@ -36,13 +36,17 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
+import static org.hamcrest.CoreMatchers.both;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
+import com.liferay.apio.architect.annotation.Actions.EntryPoint;
 import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
@@ -58,9 +62,13 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;
 
+import java.lang.annotation.Annotation;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import org.hamcrest.Matcher;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -413,6 +421,7 @@ public class CollectionRoutesImplTest {
 		assertThat(actionSemantics.resource(), is(Paged.of("name")));
 		assertThat(
 			actionSemantics.returnClass(), is(equalTo(BatchResult.class)));
+		assertThat(actionSemantics.annotations(), hasSize(0));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();
@@ -434,6 +443,7 @@ public class CollectionRoutesImplTest {
 		assertThat(actionSemantics.paramClasses(), is(paramClasses));
 		assertThat(actionSemantics.resource(), is(Paged.of("name")));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Page.class)));
+		assertThat(actionSemantics.annotations(), _hasEntryPoint);
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();
@@ -464,6 +474,7 @@ public class CollectionRoutesImplTest {
 		assertThat(actionSemantics.resource(), is(Paged.of("name")));
 		assertThat(
 			actionSemantics.returnClass(), is(equalTo(SingleModel.class)));
+		assertThat(actionSemantics.annotations(), hasSize(0));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();
@@ -478,6 +489,9 @@ public class CollectionRoutesImplTest {
 		assertThat(singleModel.getOperations(), is(empty()));
 		assertThat(singleModel.getResourceName(), is(resourceName));
 	}
+
+	private static final Matcher<List<? extends Annotation>> _hasEntryPoint =
+		both(hasSize(1)).and((Matcher)hasItem(instanceOf(EntryPoint.class)));
 
 	private BuilderImpl<String, Long> _builder;
 

@@ -23,6 +23,8 @@ import com.liferay.apio.architect.operation.HTTPMethod;
 
 import io.vavr.CheckedFunction1;
 
+import java.lang.annotation.Annotation;
+
 import java.util.List;
 
 import org.immutables.value.Value.Immutable;
@@ -46,18 +48,26 @@ public abstract class ActionSemantics {
 	 * @review
 	 */
 	public static NameStep ofResource(Resource resource) {
-		return name -> method -> paramClasses -> returnClass ->
+		return name -> method -> paramClasses -> returnClass -> annotations ->
 			executeFunction -> () -> actionSemantics(
 				resource, name, method, asList(paramClasses), returnClass,
-				executeFunction);
+				asList(annotations), executeFunction);
 	}
+
+	/**
+	 * The list of annotations.
+	 *
+	 * @review
+	 */
+	@Parameter(order = 5)
+	public abstract List<Annotation> annotations();
 
 	/**
 	 * The function that executes the action.
 	 *
 	 * @review
 	 */
-	@Parameter(order = 5)
+	@Parameter(order = 6)
 	public abstract CheckedFunction1<List<?>, ?> executeFunction();
 
 	/**
@@ -99,6 +109,37 @@ public abstract class ActionSemantics {
 	 */
 	@Parameter(order = 4)
 	public abstract Class<?> returnClass();
+
+	@FunctionalInterface
+	public interface AnnotationsStep {
+
+		/**
+		 * Provides information about the params needed by the action.
+		 *
+		 * <p>
+		 * The param instances will be provided in the {@link
+		 * #executeFunction()} in the same order as their classes in this
+		 * method. {@link Void} classes will be ignored (will be provided as
+		 * {@code null}. For the {@link
+		 * com.liferay.apio.architect.annotation.Id} or {@link
+		 * com.liferay.apio.architect.annotation.ParentId} params, the
+		 * annotation class should be provided to the list.
+		 * </p>
+		 *
+		 * @review
+		 */
+		public ExecuteStep annotatedWith(Annotation... annotations);
+
+		/**
+		 * Specifies that the action does not receive any params.
+		 *
+		 * @review
+		 */
+		public default ExecuteStep notAnnotated() {
+			return annotatedWith();
+		}
+
+	}
 
 	@FunctionalInterface
 	public interface BuildStep {
@@ -202,14 +243,14 @@ public abstract class ActionSemantics {
 		 *
 		 * @review
 		 */
-		public ExecuteStep returns(Class<?> returnClass);
+		public AnnotationsStep returns(Class<?> returnClass);
 
 		/**
 		 * Specifies that the action does not return anything.
 		 *
 		 * @review
 		 */
-		public default ExecuteStep returnsNothing() {
+		public default AnnotationsStep returnsNothing() {
 			return returns(Void.class);
 		}
 

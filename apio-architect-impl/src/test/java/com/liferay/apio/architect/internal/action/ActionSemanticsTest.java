@@ -31,6 +31,8 @@ import io.vavr.CheckedFunction1;
 import java.util.Arrays;
 import java.util.List;
 
+import org.immutables.value.Value.Immutable;
+
 import org.junit.Test;
 
 /**
@@ -50,6 +52,8 @@ public class ActionSemanticsTest {
 			String.class, Long.class
 		).returns(
 			Long.class
+		).annotatedWith(
+			_myAnnotation
 		).executeFunction(
 			_join
 		).build();
@@ -60,6 +64,39 @@ public class ActionSemanticsTest {
 		assertThat(
 			actionSemantics.paramClasses(), contains(String.class, Long.class));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Long.class)));
+		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
+
+		CheckedFunction1<List<?>, ?> executeFunction =
+			actionSemantics.executeFunction();
+
+		String result = (String)executeFunction.apply(Arrays.asList("1", "2"));
+
+		assertThat(result, is("1-2"));
+	}
+
+	@Test
+	public void testBuilderWithoutAnnotationsCreatesActionSemantics()
+		throws Throwable {
+
+		ActionSemantics actionSemantics = ActionSemantics.ofResource(
+			Paged.of("name")
+		).name(
+			"action"
+		).method(
+			GET
+		).receivesNoParams(
+		).returnsNothing(
+		).notAnnotated(
+		).executeFunction(
+			_join
+		).build();
+
+		assertThat(actionSemantics.resource(), is(Paged.of("name")));
+		assertThat(actionSemantics.name(), is("action"));
+		assertThat(actionSemantics.method(), is("GET"));
+		assertThat(actionSemantics.paramClasses(), is(empty()));
+		assertThat(actionSemantics.returnClass(), is(equalTo(Void.class)));
+		assertThat(actionSemantics.annotations(), is(empty()));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();
@@ -82,6 +119,8 @@ public class ActionSemanticsTest {
 		).receivesNoParams(
 		).returns(
 			Long.class
+		).annotatedWith(
+			_myAnnotation
 		).executeFunction(
 			_join
 		).build();
@@ -91,6 +130,7 @@ public class ActionSemanticsTest {
 		assertThat(actionSemantics.method(), is("GET"));
 		assertThat(actionSemantics.paramClasses(), is(empty()));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Long.class)));
+		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();
@@ -112,6 +152,8 @@ public class ActionSemanticsTest {
 			GET
 		).receivesNoParams(
 		).returnsNothing(
+		).annotatedWith(
+			_myAnnotation
 		).executeFunction(
 			_join
 		).build();
@@ -121,6 +163,7 @@ public class ActionSemanticsTest {
 		assertThat(actionSemantics.method(), is("GET"));
 		assertThat(actionSemantics.paramClasses(), is(empty()));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Void.class)));
+		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();
@@ -142,6 +185,8 @@ public class ActionSemanticsTest {
 			"POST"
 		).receivesNoParams(
 		).returnsNothing(
+		).annotatedWith(
+			_myAnnotation
 		).executeFunction(
 			_join
 		).build();
@@ -151,6 +196,7 @@ public class ActionSemanticsTest {
 		assertThat(actionSemantics.method(), is("POST"));
 		assertThat(actionSemantics.paramClasses(), is(empty()));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Void.class)));
+		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();
@@ -160,8 +206,15 @@ public class ActionSemanticsTest {
 		assertThat(result, is("1-2"));
 	}
 
+	@Immutable(singleton = true)
+	public static @interface MyAnnotation {
+	}
+
 	@SuppressWarnings("unchecked")
 	private static final CheckedFunction1<List<?>, Object> _join = list -> join(
 		"-", (List<String>)list);
+
+	private static final MyAnnotation _myAnnotation =
+		ImmutableMyAnnotation.of();
 
 }

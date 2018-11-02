@@ -167,6 +167,7 @@ public class PredicatesTest {
 			String.class, Integer.class
 		).returns(
 			Long.class
+		).notAnnotated(
 		).executeFunction(
 			__ -> null
 		).build();

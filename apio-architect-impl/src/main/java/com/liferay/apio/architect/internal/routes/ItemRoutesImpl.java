@@ -146,6 +146,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, bodyClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> throwableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -185,6 +186,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, bodyClass, aClass, bClass, cClass, dClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> throwableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -225,6 +227,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, bodyClass, aClass, bClass, cClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> throwablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -264,6 +267,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, bodyClass, aClass, bClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> throwableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -301,6 +305,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, bodyClass, aClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> throwableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -331,6 +336,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, aClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -358,6 +364,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -388,6 +395,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, aClass, bClass, cClass, dClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -418,6 +426,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, aClass, bClass, cClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -447,6 +456,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, aClass, bClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -476,6 +486,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).receivesParams(
 				Id.class, aClass
 			).returnsNothing(
+			).notAnnotated(
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableBiConsumer.accept(
@@ -501,6 +512,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).receivesParams(
 				Id.class
 			).returnsNothing(
+			).notAnnotated(
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableConsumer.accept(
@@ -527,6 +539,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).receivesParams(
 				Id.class, aClass, bClass, cClass, dClass
 			).returnsNothing(
+			).notAnnotated(
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowablePentaConsumer.accept(
@@ -555,6 +568,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).receivesParams(
 				Id.class, aClass, bClass, cClass
 			).returnsNothing(
+			).notAnnotated(
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableTetraConsumer.accept(
@@ -582,6 +596,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).receivesParams(
 				Id.class, aClass, bClass
 			).returnsNothing(
+			).notAnnotated(
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableTriConsumer.accept(
@@ -612,6 +627,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, Body.class
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -645,6 +661,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, Body.class, aClass, bClass, cClass, dClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -680,6 +697,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, Body.class, aClass, bClass, cClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -714,6 +732,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, Body.class, aClass, bClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -747,6 +766,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				Id.class, Body.class, aClass
 			).returns(
 				SingleModel.class
+			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())

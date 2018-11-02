@@ -16,6 +16,7 @@ task deployConfigs(type: Copy)
 
 dependencies {
 	annotationProcessor group: "org.immutables", name: "value", version: "2.7.1"
+	testAnnotationProcessor group: "org.immutables", name: "value", version: "2.7.1"
 
 	compileInclude group: "com.fasterxml.jackson.core", name: "jackson-annotations", version: "2.9.6"
 	compileInclude group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.6"
