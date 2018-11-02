@@ -15,11 +15,12 @@
 package com.liferay.apio.architect.internal.action;
 
 import static com.liferay.apio.architect.internal.action.Predicates.areEquals;
+import static com.liferay.apio.architect.internal.action.Predicates.hasAnnotation;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByDELETE;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByGET;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByPOST;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByPUT;
-import static com.liferay.apio.architect.internal.action.Predicates.isActionForResource;
+import static com.liferay.apio.architect.internal.action.Predicates.isActionFor;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionNamed;
 import static com.liferay.apio.architect.internal.action.Predicates.isCreateAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRemoveAction;
@@ -32,16 +33,22 @@ import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.apio.architect.annotation.Actions;
+import com.liferay.apio.architect.annotation.Actions.EntryPoint;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 
 import java.util.List;
 import java.util.function.Predicate;
+
+import org.immutables.value.Value;
 
 import org.junit.Test;
 
 /**
  * @author Alejandro Hernández
  */
+@Value.Include(EntryPoint.class)
 public class PredicatesTest {
 
 	@Test
@@ -53,6 +60,17 @@ public class PredicatesTest {
 
 		assertTrue(truePredicate.test(list));
 		assertFalse(falsePredicate.test(list));
+	}
+
+	@Test
+	public void testHasAnnotation() {
+		Predicate<ActionSemantics> truePredicate = hasAnnotation(
+			EntryPoint.class);
+		Predicate<ActionSemantics> falsePredicate = hasAnnotation(
+			Actions.Retrieve.class);
+
+		assertTrue(truePredicate.test(_actionSemantics));
+		assertFalse(falsePredicate.test(_actionSemantics));
 	}
 
 	@Test
@@ -81,11 +99,20 @@ public class PredicatesTest {
 
 	@Test
 	public void testIsActionForResource() {
-		Predicate<ActionSemantics> truePredicate = isActionForResource(
+		Predicate<ActionSemantics> truePredicate = isActionFor(
 			Paged.of("Name"));
 
-		Predicate<ActionSemantics> falsePredicate = isActionForResource(
+		Predicate<ActionSemantics> falsePredicate = isActionFor(
 			Paged.of("NotName"));
+
+		assertTrue(truePredicate.test(_actionSemantics));
+		assertFalse(falsePredicate.test(_actionSemantics));
+	}
+
+	@Test
+	public void testIsActionForResourceClass() {
+		Predicate<ActionSemantics> truePredicate = isActionFor(Paged.class);
+		Predicate<ActionSemantics> falsePredicate = isActionFor(Item.class);
 
 		assertTrue(truePredicate.test(_actionSemantics));
 		assertFalse(falsePredicate.test(_actionSemantics));
@@ -94,7 +121,6 @@ public class PredicatesTest {
 	@Test
 	public void testIsActionNamed() {
 		Predicate<ActionSemantics> truePredicate = isActionNamed("name");
-
 		Predicate<ActionSemantics> falsePredicate = isActionNamed("notName");
 
 		assertTrue(truePredicate.test(_actionSemantics));
@@ -167,7 +193,8 @@ public class PredicatesTest {
 			String.class, Integer.class
 		).returns(
 			Long.class
-		).notAnnotated(
+		).annotatedWith(
+			ImmutableEntryPoint.builder().build()
 		).executeFunction(
 			__ -> null
 		).build();

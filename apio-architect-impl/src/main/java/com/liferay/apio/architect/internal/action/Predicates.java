@@ -18,9 +18,12 @@ import static java.util.Arrays.asList;
 
 import com.liferay.apio.architect.internal.action.resource.Resource;
 
+import java.lang.annotation.Annotation;
+
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * This class contains several {@link ActionSemantics}-related predicates that
@@ -124,14 +127,43 @@ public class Predicates {
 	}
 
 	/**
+	 * Checks if an action is annotated with a certain {@link Annotation}.
+	 *
+	 * @review
+	 */
+	public static <A extends Annotation> Predicate<ActionSemantics>
+		hasAnnotation(Class<A> annotation) {
+
+		return actionSemantics -> Stream.of(
+			actionSemantics.annotations()
+		).flatMap(
+			List::stream
+		).map(
+			Annotation::getClass
+		).anyMatch(
+			annotation::isAssignableFrom
+		);
+	}
+
+	/**
+	 * Returns a predicate that checks if the action's resource is an instance
+	 * of the provided resource class.
+	 *
+	 * @review
+	 */
+	public static <R extends Resource> Predicate<ActionSemantics> isActionFor(
+		Class<R> clazz) {
+
+		return actionSemantics -> clazz.isInstance(actionSemantics.resource());
+	}
+
+	/**
 	 * Returns a predicate that checks if the action's resource is equals to the
 	 * one provided.
 	 *
 	 * @review
 	 */
-	public static Predicate<ActionSemantics> isActionForResource(
-		Resource resource) {
-
+	public static Predicate<ActionSemantics> isActionFor(Resource resource) {
 		return areEquals(ActionSemantics::resource, resource);
 	}
 

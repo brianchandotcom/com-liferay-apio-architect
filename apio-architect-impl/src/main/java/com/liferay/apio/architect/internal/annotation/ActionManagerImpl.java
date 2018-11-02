@@ -14,20 +14,28 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
-import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
+import static com.liferay.apio.architect.internal.action.converter.EntryPointConverter.getEntryPointFrom;
 
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
+
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.documentation.contributor.CustomDocumentationManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.router.CollectionRouterManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ItemRouterManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.router.NestedCollectionRouterManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.uri.Path;
 
@@ -35,7 +43,6 @@ import io.vavr.CheckedFunction3;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +50,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -74,6 +80,22 @@ public class ActionManagerImpl implements ActionManager {
 		actionManagerImpl.providerManager = providerManager;
 
 		return actionManagerImpl;
+	}
+
+	/**
+	 * Returns all of the action semantics collected by the different routers.
+	 *
+	 * @review
+	 */
+	public Stream<ActionSemantics> actionSemantics() {
+		return Stream.of(
+			_itemRouterManager.getActionSemantics(),
+			_collectionRouterManager.getActionSemantics(),
+			_reusableNestedCollectionRouterManager.getActionSemantics(),
+			_nestedCollectionRouterManager.getActionSemantics()
+		).flatMap(
+			identity()
+		);
 	}
 
 	@Override
@@ -145,7 +167,7 @@ public class ActionManagerImpl implements ActionManager {
 				return _getAction(childActionKey, id);
 			}
 		).collect(
-			Collectors.toList()
+			toList()
 		);
 	}
 
@@ -174,14 +196,7 @@ public class ActionManagerImpl implements ActionManager {
 
 	@Override
 	public EntryPoint getEntryPoint() {
-		return () -> {
-			List<String> list = new ArrayList<>();
-
-			list.addAll(INSTANCE.getRootResourceNamesSdk());
-			list.addAll(INSTANCE.getRootResourceNames());
-
-			return list;
-		};
+		return getEntryPointFrom(actionSemantics());
 	}
 
 	@Reference
@@ -261,7 +276,7 @@ public class ActionManagerImpl implements ActionManager {
 			provider -> providerManager.provideMandatory(
 				httpServletRequest, provider)
 		).collect(
-			Collectors.toList()
+			toList()
 		);
 	}
 
@@ -350,11 +365,24 @@ public class ActionManagerImpl implements ActionManager {
 		_actionsMap = new HashMap<>();
 
 	@Reference
+	private CollectionRouterManager _collectionRouterManager;
+
+	@Reference
 	private CustomDocumentationManager _customDocumentationManager;
+
+	@Reference
+	private ItemRouterManager _itemRouterManager;
+
+	@Reference
+	private NestedCollectionRouterManager _nestedCollectionRouterManager;
 
 	private final Map<ActionKey, Class[]> _providers = new HashMap<>();
 
 	@Reference
 	private RepresentableManager _representableManager;
+
+	@Reference
+	private ReusableNestedCollectionRouterManager
+		_reusableNestedCollectionRouterManager;
 
 }
