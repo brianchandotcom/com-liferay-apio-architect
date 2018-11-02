@@ -15,8 +15,8 @@
 package com.liferay.apio.architect.internal.annotation.representor.types;
 
 import com.liferay.apio.architect.annotation.Actions;
+import com.liferay.apio.architect.annotation.Actions.EntryPoint;
 import com.liferay.apio.architect.annotation.Body;
-import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.ParentId;
 import com.liferay.apio.architect.annotation.Vocabulary;

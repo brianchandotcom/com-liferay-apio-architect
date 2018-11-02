@@ -25,9 +25,9 @@ import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnn
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.annotation.Actions.Action;
+import com.liferay.apio.architect.annotation.Actions.EntryPoint;
 import com.liferay.apio.architect.annotation.Actions.Remove;
 import com.liferay.apio.architect.annotation.Actions.Retrieve;
-import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.functional.Try;

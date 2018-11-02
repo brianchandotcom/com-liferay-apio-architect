@@ -109,9 +109,24 @@ public @interface Actions {
 	}
 
 	/**
-	 * Defines an annotation that indicates a method removes elements. That
-	 * method must live inside a class that implements {@link
-	 * com.liferay.apio.architect.router.ActionRouter}.
+	 * Indicates that an action must be listed in the application's entry point.
+	 *
+	 * @review
+	 */
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface EntryPoint {
+	}
+
+	/**
+	 * Indicates that a method performs the action of removing elements.
+	 *
+	 * <p>
+	 * This annotation must be used on a method that lives inside a class
+	 * implementing {@link com.liferay.apio.architect.router.ActionRouter}.
+	 * </p>
+	 *
+	 * @review
 	 */
 	@Action(httpMethod = "DELETE", name = "remove")
 	@Retention(RUNTIME)
