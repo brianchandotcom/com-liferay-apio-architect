@@ -15,8 +15,8 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.action.ActionSemantics.toAction;
+import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
 import static com.liferay.apio.architect.internal.action.converter.EntryPointConverter.getEntryPointFrom;
-import static com.liferay.apio.architect.internal.action.converter.PagedResourceConverter.filterRetrieveActionFor;
 import static com.liferay.apio.architect.internal.alias.ProvideFunction.curry;
 
 import static io.vavr.control.Either.right;
@@ -119,10 +119,13 @@ public class ActionManagerImpl implements ActionManager {
 
 		if (params.size() == 1) {
 			if (method.equals("GET")) {
-				Optional<ActionSemantics> optional = filterRetrieveActionFor(
-					Paged.of(params.get(0)), actionSemantics());
-
-				return optional.map(
+				return ActionSemantics.filter(
+					actionSemantics()
+				).forResource(
+					Paged.of(params.get(0))
+				).withPredicate(
+					isRootCollectionAction
+				).map(
 					toAction(curry(providerManager::provideMandatory))
 				).<Either<Action.Error, Action>>map(
 					Either::right
