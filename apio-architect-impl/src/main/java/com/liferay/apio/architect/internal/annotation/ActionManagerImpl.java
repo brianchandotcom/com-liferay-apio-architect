@@ -34,6 +34,7 @@ import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotFound;
@@ -60,6 +61,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -128,36 +130,14 @@ public class ActionManagerImpl implements ActionManager {
 		String method, List<String> params) {
 
 		if (params.size() == 1) {
+			Paged paged = Paged.of(params.get(0));
+
 			if (method.equals("GET")) {
-				return ActionSemantics.filter(
-					actionSemantics()
-				).forResource(
-					Paged.of(params.get(0))
-				).withPredicate(
-					isRootCollectionAction
-				).map(
-					toAction(_getProvideFunction())
-				).<Either<Action.Error, Action>>map(
-					Either::right
-				).orElseGet(
-					() -> Either.left(_notFound)
-				);
+				return _getAction(paged, isRootCollectionAction);
 			}
 
 			if (method.equals("POST")) {
-				return ActionSemantics.filter(
-					actionSemantics()
-				).forResource(
-					Paged.of(params.get(0))
-				).withPredicate(
-					isRootCreateAction
-				).map(
-					toAction(_getProvideFunction())
-				).<Either<Action.Error, Action>>map(
-					Either::right
-				).orElseGet(
-					() -> Either.left(_notFound)
-				);
+				return _getAction(paged, isRootCreateAction);
 			}
 		}
 
@@ -280,6 +260,24 @@ public class ActionManagerImpl implements ActionManager {
 			}
 
 		};
+	}
+
+	private Either<Action.Error, Action> _getAction(
+		Resource resource, Predicate<ActionSemantics> predicate) {
+
+		return ActionSemantics.filter(
+			actionSemantics()
+		).forResource(
+			resource
+		).withPredicate(
+			predicate
+		).map(
+			toAction(_getProvideFunction())
+		).<Either<Action.Error, Action>>map(
+			Either::right
+		).orElseGet(
+			() -> Either.left(_notFound)
+		);
 	}
 
 	private CheckedFunction3<Object, ?, List<Object>, ?> _getActionFunction(
