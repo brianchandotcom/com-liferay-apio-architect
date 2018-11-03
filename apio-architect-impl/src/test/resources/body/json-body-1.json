@@ -1,0 +1,27 @@
+{
+	"cultivation": [
+		{
+			"region": "North America",
+			"type": { "name": "Pascal"}
+		},
+		{
+			"region": "Europe",
+			"type": { "name": "Celeriac"}
+		},
+		{
+			"region": "Asia",
+			"type": { "name": "Leaf"}
+		}
+	],
+	"genus": "Apium",
+	"kingdom": "Plantae",
+	"name": {
+		"english": "Celery",
+		"spanish": "Apio"
+	},
+	"variants": [
+		"Apium graveolens var. graveolens",
+		"Apium graveolens var. rapaceum",
+		"Apium graveolens var. secalinum"
+	]
+}

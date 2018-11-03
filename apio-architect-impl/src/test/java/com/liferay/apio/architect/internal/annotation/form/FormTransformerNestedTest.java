@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.internal.annotation.form;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 import static org.hamcrest.core.Is.is;
 
@@ -29,7 +29,7 @@ import com.liferay.apio.architect.internal.annotation.representor.processor.Pars
 import com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessor;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyWithNested;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyWithNested.NestedDummy;
-import com.liferay.apio.architect.internal.form.JSONBodyImpl;
+import com.liferay.apio.architect.internal.body.JSONToBodyConverter.JSONBodyImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,14 +48,14 @@ public class FormTransformerNestedTest {
 		HashMap<String, Object> nestedMap = new HashMap<String, Object>() {
 			{
 				put("stringField", "stringFieldValue");
-				put("stringListField", asList("stringListFieldValue"));
+				put("stringListField", singletonList("stringListFieldValue"));
 			}
 		};
 
 		HashMap<String, Object> bodyMap = new HashMap<String, Object>() {
 			{
 				put("nestedDummy", nestedMap);
-				put("nestedDummyList", asList(nestedMap));
+				put("nestedDummyList", singletonList(nestedMap));
 			}
 		};
 
@@ -81,7 +81,7 @@ public class FormTransformerNestedTest {
 		assertThat(nestedDummy.getStringField(), is("stringFieldValue"));
 		assertThat(
 			nestedDummy.getStringListField(),
-			is(asList("stringListFieldValue")));
+			is(singletonList("stringListFieldValue")));
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class FormTransformerNestedTest {
 		assertThat(nestedDummy.getStringField(), is("stringFieldValue"));
 		assertThat(
 			nestedDummy.getStringListField(),
-			is(asList("stringListFieldValue")));
+			is(singletonList("stringListFieldValue")));
 	}
 
 	private static DummyWithNested _dummyWithNested;

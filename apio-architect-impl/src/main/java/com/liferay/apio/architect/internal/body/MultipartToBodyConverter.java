@@ -12,11 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.reader;
-
-import static java.util.Map.Entry.comparingByKey;
-
-import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
+package com.liferay.apio.architect.internal.body;
 
 import static org.apache.commons.fileupload.servlet.ServletFileUpload.isMultipartContent;
 
@@ -25,9 +21,6 @@ import com.liferay.apio.architect.form.Body;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,12 +39,6 @@ import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.MessageBodyReader;
-import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -60,40 +47,23 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * Reads {@code "multipart/form-data"} as a {@link Body}.
  *
  * @author Alejandro Hernández
+ * @review
  */
-@Component(
-	property = {
-		"osgi.jaxrs.application.select=(liferay.apio.architect.application=true)",
-		"osgi.jaxrs.extension=true"
-	},
-	service = MessageBodyReader.class
-)
-@Consumes(MULTIPART_FORM_DATA)
-@Provider
-public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
+public class MultipartToBodyConverter {
 
-	@Override
-	public boolean isReadable(
-		Class<?> clazz, Type genericType, Annotation[] annotations,
-		MediaType mediaType) {
-
-		return true;
-	}
-
-	@Override
-	public Body readFrom(
-			Class<Body> clazz, Type genericType, Annotation[] annotations,
-			MediaType mediaType, MultivaluedMap<String, String> httpHeaders,
-			InputStream entityStream)
-		throws IOException {
-
-		if (!isMultipartContent(_httpServletRequest)) {
+	/**
+	 * Reads a {@code "multipart/form"} HTTP request body into a {@link Body}
+	 * instance or fails with a {@link BadRequestException} if the input is not
+	 * a valid multipart form.
+	 *
+	 * @review
+	 */
+	public static Body multipartToBody(HttpServletRequest request) {
+		if (!isMultipartContent(request)) {
 			throw new BadRequestException(
 				"Request body is not a valid multipart form");
 		}
@@ -104,8 +74,7 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 			fileItemFactory);
 
 		try {
-			List<FileItem> fileItems = servletFileUpload.parseRequest(
-				_httpServletRequest);
+			List<FileItem> fileItems = servletFileUpload.parseRequest(request);
 
 			Iterator<FileItem> iterator = fileItems.iterator();
 
@@ -172,7 +141,7 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 		}
 	}
 
-	private <T> Map<String, List<T>> _flattenMap(
+	private static <T> Map<String, List<T>> _flattenMap(
 		Map<String, Map<Integer, T>> indexedValueLists) {
 
 		Set<Entry<String, Map<Integer, T>>> entries =
@@ -180,42 +149,40 @@ public class MultipartBodyMessageBodyReader implements MessageBodyReader<Body> {
 
 		Stream<Entry<String, Map<Integer, T>>> stream = entries.stream();
 
-		return stream.sorted(
-			comparingByKey()
-		).collect(
+		return stream.collect(
 			Collectors.toMap(
 				Entry::getKey,
 				v -> {
 					Map<Integer, T> map = v.getValue();
 
 					return new ArrayList<>(map.values());
-				})
-		);
+				}));
 	}
 
-	private void _storeFileItem(
-			FileItem fileItem, Consumer<String> valueConsumer,
-			Consumer<BinaryFile> fileConsumer)
-		throws IOException {
+	private static void _storeFileItem(
+		FileItem fileItem, Consumer<String> valueConsumer,
+		Consumer<BinaryFile> fileConsumer) {
 
-		if (fileItem.isFormField()) {
-			InputStream stream = fileItem.getInputStream();
+		try {
+			if (fileItem.isFormField()) {
+				InputStream stream = fileItem.getInputStream();
 
-			valueConsumer.accept(Streams.asString(stream));
+				valueConsumer.accept(Streams.asString(stream));
+			}
+			else {
+				BinaryFile binaryFile = new BinaryFile(
+					fileItem.getInputStream(), fileItem.getSize(),
+					fileItem.getContentType(), fileItem.getName());
+
+				fileConsumer.accept(binaryFile);
+			}
 		}
-		else {
-			BinaryFile binaryFile = new BinaryFile(
-				fileItem.getInputStream(), fileItem.getSize(),
-				fileItem.getContentType(), fileItem.getName());
-
-			fileConsumer.accept(binaryFile);
+		catch (IOException ioe) {
+			throw new BadRequestException("Invalid body", ioe);
 		}
 	}
 
 	private static final Pattern _arrayPattern = Pattern.compile(
 		"([A-Z|a-z]+)\\[([0-9]+)]");
-
-	@Context
-	private HttpServletRequest _httpServletRequest;
 
 }
