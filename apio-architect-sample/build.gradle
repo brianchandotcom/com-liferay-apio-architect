@@ -1,9 +1,9 @@
-import aQute.bnd.gradle.Export
+import aQute.bnd.gradle.Bndrun
 import aQute.bnd.gradle.Resolve
 
 buildscript {
 	dependencies {
-		classpath group: "biz.aQute.bnd", name: "biz.aQute.bnd.gradle", version: "4.0.0"
+		classpath group: "biz.aQute.bnd", name: "biz.aQute.bnd.gradle", version: "4.1.0"
 	}
 
 	repositories {
@@ -11,9 +11,8 @@ buildscript {
 	}
 }
 
-task export(type: Export)
 task resolve(type: Resolve)
-task run(type: JavaExec)
+task run(type: Bndrun)
 
 dependencies {
 	compileInclude group: "com.github.javafaker", name: "javafaker", version: "0.13"
@@ -58,16 +57,6 @@ deploy {
 	enabled = false
 }
 
-export {
-	description 'Exports the sample.bndrun into a runnable jar.'
-
-	group 'sample'
-
-	bndrun 'sample.bndrun'
-
-	bundles configurations.compileOnly
-}
-
 resolve {
 	description 'Updates the sample.bndrun "runBundles" section.'
 
@@ -79,9 +68,13 @@ resolve {
 }
 
 run {
-	dependsOn export
+	description 'Runs the sample.bndrun.'
 
-	main = "-jar"
+	dependsOn resolve
 
-	args 'build/distributions/executable/sample.jar'
+	group 'sample'
+
+	bndrun 'sample.bndrun'
+
+	bundles configurations.compileOnly
 }

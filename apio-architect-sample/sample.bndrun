@@ -34,7 +34,7 @@
 -runfw: org.eclipse.osgi;version=3.13.0
 
 -runproperties: \
-	logback.configurationFile=file:logback.xml,\
+	logback.configurationFile=file:${.}/logback.xml,\
 	osgi.console.enable.builtin=false,\
 	org.osgi.service.http.port=9000
 
