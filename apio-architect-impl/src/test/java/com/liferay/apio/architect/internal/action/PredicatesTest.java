@@ -27,6 +27,7 @@ import static com.liferay.apio.architect.internal.action.Predicates.isRemoveActi
 import static com.liferay.apio.architect.internal.action.Predicates.isReplaceAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRetrieveAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
+import static com.liferay.apio.architect.internal.action.Predicates.isRootCreateAction;
 import static com.liferay.apio.architect.internal.action.Predicates.returnsAnyOf;
 
 import static java.util.Collections.singletonList;
@@ -39,18 +40,19 @@ import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.immutables.value.Value;
+import org.immutables.value.Value.Include;
 
 import org.junit.Test;
 
 /**
  * @author Alejandro Hernández
  */
-@Value.Include(EntryPoint.class)
+@Include(EntryPoint.class)
 public class PredicatesTest {
 
 	@Test
@@ -160,6 +162,16 @@ public class PredicatesTest {
 	}
 
 	@Test
+	public void testIsRootCreateAction() {
+		ActionSemantics actionSemantics = _withActionReturning(
+			"POST", "create", SingleModel.class);
+
+		assertTrue(isRootCreateAction.test(actionSemantics));
+
+		assertFalse(isRootCreateAction.test(_actionSemantics));
+	}
+
+	@Test
 	public void testReturnsAnyOf() {
 		Predicate<ActionSemantics> truePredicate = returnsAnyOf(
 			String.class, Page.class);
@@ -178,6 +190,15 @@ public class PredicatesTest {
 		ImmutableActionSemantics immutableActionSemantics = _withMethod(method);
 
 		return immutableActionSemantics.withName(action);
+	}
+
+	private static ActionSemantics _withActionReturning(
+		String method, String action, Class<?> returnClass) {
+
+		ImmutableActionSemantics immutableActionSemantics = _withAction(
+			method, action);
+
+		return immutableActionSemantics.withReturnClass(returnClass);
 	}
 
 	private static ImmutableActionSemantics _withMethod(String method) {

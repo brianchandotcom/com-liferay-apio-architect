@@ -20,6 +20,7 @@ import com.liferay.apio.architect.annotation.Actions.EntryPoint;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.lang.annotation.Annotation;
 
@@ -119,6 +120,18 @@ public class Predicates {
 			returnsAnyOf(Page.class)
 		).and(
 			hasAnnotation(EntryPoint.class)
+		).and(
+			isActionFor(Paged.class)
+		);
+
+	/**
+	 * Checks if an action is a root create action.
+	 *
+	 * @review
+	 */
+	public static final Predicate<ActionSemantics> isRootCreateAction =
+		isCreateAction.and(
+			returnsAnyOf(SingleModel.class)
 		).and(
 			isActionFor(Paged.class)
 		);

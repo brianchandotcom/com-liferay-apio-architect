@@ -16,19 +16,26 @@ package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.action.ActionSemantics.toAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
+import static com.liferay.apio.architect.internal.action.Predicates.isRootCreateAction;
 import static com.liferay.apio.architect.internal.action.converter.EntryPointConverter.getEntryPointFrom;
-import static com.liferay.apio.architect.internal.alias.ProvideFunction.curry;
+import static com.liferay.apio.architect.internal.body.JSONToBodyConverter.jsonToBody;
+import static com.liferay.apio.architect.internal.body.MultipartToBodyConverter.multipartToBody;
 
 import static io.vavr.control.Either.right;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
+import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA_TYPE;
+
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
+import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
+import com.liferay.apio.architect.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotFound;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
@@ -58,7 +65,10 @@ import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.NotSupportedException;
+import javax.ws.rs.core.MediaType;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -126,7 +136,23 @@ public class ActionManagerImpl implements ActionManager {
 				).withPredicate(
 					isRootCollectionAction
 				).map(
-					toAction(curry(providerManager::provideMandatory))
+					toAction(_getProvideFunction())
+				).<Either<Action.Error, Action>>map(
+					Either::right
+				).orElseGet(
+					() -> Either.left(_notFound)
+				);
+			}
+
+			if (method.equals("POST")) {
+				return ActionSemantics.filter(
+					actionSemantics()
+				).forResource(
+					Paged.of(params.get(0))
+				).withPredicate(
+					isRootCreateAction
+				).map(
+					toAction(_getProvideFunction())
 				).<Either<Action.Error, Action>>map(
 					Either::right
 				).orElseGet(
@@ -274,6 +300,24 @@ public class ActionManagerImpl implements ActionManager {
 		return right(_getAction(actionKey, id));
 	}
 
+	private Object _getBody(HttpServletRequest request) {
+		MediaType mediaType = Try.of(
+			() -> MediaType.valueOf(request.getContentType())
+		).getOrElseThrow(
+			t -> new BadRequestException("Invalid Content-Type header", t)
+		);
+
+		if (mediaType.isCompatible(APPLICATION_JSON_TYPE)) {
+			return jsonToBody(request);
+		}
+
+		if (mediaType.isCompatible(MULTIPART_FORM_DATA_TYPE)) {
+			return multipartToBody(request);
+		}
+
+		throw new NotSupportedException();
+	}
+
 	private Object _getId(Path path) {
 		try {
 			return pathIdentifierMapperManager.mapToIdentifierOrFail(path);
@@ -294,6 +338,20 @@ public class ActionManagerImpl implements ActionManager {
 		).collect(
 			toList()
 		);
+	}
+
+	private ProvideFunction _getProvideFunction() {
+		return request -> clazz -> {
+			if (clazz.equals(Void.class)) {
+				return null;
+			}
+
+			if (clazz.equals(Body.class)) {
+				return _getBody(request);
+			}
+
+			return providerManager.provideMandatory(request, clazz);
+		};
 	}
 
 	private List<Object> _getProviders(
