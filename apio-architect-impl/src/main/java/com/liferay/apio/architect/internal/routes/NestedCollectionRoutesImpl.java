@@ -32,6 +32,7 @@ import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
 import com.liferay.apio.architect.internal.pagination.PageImpl;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
@@ -147,8 +148,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					params -> batchCreatorThrowableBiFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
 					).apply(
-						unsafeCast(params.get(0)),
-						form.getList((Body)params.get(1))
+						_getId(params.get(0)), form.getList((Body)params.get(1))
 					)
 				).build();
 
@@ -169,7 +169,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				params -> creatorThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1))
+					_getId(params.get(0)), form.get((Body)params.get(1))
 				)
 			).build();
 
@@ -229,7 +229,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					params -> batchCreatorThrowableHexaFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
 					).apply(
-						unsafeCast(params.get(0)),
+						_getId(params.get(0)),
 						form.getList((Body)params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 						unsafeCast(params.get(4)), unsafeCast(params.get(5))
@@ -253,7 +253,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				params -> creatorThrowableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
@@ -315,7 +315,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					params -> batchCreatorThrowablePentaFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
 					).apply(
-						unsafeCast(params.get(0)),
+						_getId(params.get(0)),
 						form.getList((Body)params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 						unsafeCast(params.get(4))
@@ -339,7 +339,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				params -> creatorThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
@@ -398,7 +398,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					params -> batchCreatorThrowableTetraFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
 					).apply(
-						unsafeCast(params.get(0)),
+						_getId(params.get(0)),
 						form.getList((Body)params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3))
 					)
@@ -421,7 +421,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				params -> creatorThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
 			).build();
@@ -478,7 +478,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					params -> batchCreatorThrowableTriFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
 					).apply(
-						unsafeCast(params.get(0)),
+						_getId(params.get(0)),
 						form.getList((Body)params.get(1)),
 						unsafeCast(params.get(2))
 					)
@@ -501,7 +501,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				params -> creatorThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2))
 				)
 			).build();
@@ -532,7 +532,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					pageItems -> new PageImpl<>(
 						_nested.name(), pageItems, (Pagination)params.get(0))
 				).apply(
-					(Pagination)params.get(0), unsafeCast(params.get(1))
+					(Pagination)params.get(0), _getId(params.get(1))
 				)
 			).build();
 
@@ -564,7 +564,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					pageItems -> new PageImpl<>(
 						_nested.name(), pageItems, (Pagination)params.get(0))
 				).apply(
-					(Pagination)params.get(0), unsafeCast(params.get(1)),
+					(Pagination)params.get(0), _getId(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
@@ -597,7 +597,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					pageItems -> new PageImpl<>(
 						_nested.name(), pageItems, (Pagination)params.get(0))
 				).apply(
-					(Pagination)params.get(0), unsafeCast(params.get(1)),
+					(Pagination)params.get(0), _getId(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
@@ -630,7 +630,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					pageItems -> new PageImpl<>(
 						_nested.name(), pageItems, (Pagination)params.get(0))
 				).apply(
-					(Pagination)params.get(0), unsafeCast(params.get(1)),
+					(Pagination)params.get(0), _getId(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
 			).build();
@@ -662,7 +662,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					pageItems -> new PageImpl<>(
 						_nested.name(), pageItems, (Pagination)params.get(0))
 				).apply(
-					(Pagination)params.get(0), unsafeCast(params.get(1)),
+					(Pagination)params.get(0), _getId(params.get(1)),
 					unsafeCast(params.get(2))
 				)
 			).build();
@@ -682,6 +682,12 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			FormBuilderFunction<R> formBuilderFunction) {
 
 			return formBuilderFunction.apply(_formBuilderSupplier.get());
+		}
+
+		private U _getId(Object object) {
+			Resource.Id id = (Resource.Id)object;
+
+			return unsafeCast(id.asObject());
 		}
 
 		private <V> List<S> _transformList(

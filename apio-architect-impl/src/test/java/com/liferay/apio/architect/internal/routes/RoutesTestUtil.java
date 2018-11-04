@@ -213,7 +213,7 @@ public class RoutesTestUtil {
 			return Resource.Id.of(42L, "42L");
 		}
 		else if (aClass.equals(ParentId.class)) {
-			return 21L;
+			return Resource.Id.of(21L, "21");
 		}
 		else {
 			throw new AssertionError("Class " + aClass + " is not supported");
