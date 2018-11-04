@@ -14,8 +14,7 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
-import static com.liferay.apio.architect.internal.action.Predicates.isActionBy;
-import static com.liferay.apio.architect.internal.action.Predicates.isActionNamed;
+import static com.liferay.apio.architect.internal.action.Predicates.isAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isCreateAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRemoveAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isReplaceAction;
@@ -152,7 +151,7 @@ public class ActionManagerImpl implements ActionManager {
 			String actionName = params.get(1);
 
 			Either<Action.Error, Action> pagedCustomActionEither = _getAction(
-				paged, isActionNamed(actionName).and(isActionBy(method)));
+				paged, isAction(actionName, method));
 
 			if (pagedCustomActionEither.isRight()) {
 				return pagedCustomActionEither;
@@ -175,10 +174,16 @@ public class ActionManagerImpl implements ActionManager {
 		}
 
 		if (params.size() == 3) {
-			ActionKey actionKey = new ActionKey(
-				method, params.get(0), params.get(1), params.get(2));
+			Item item = Item.of(
+				params.get(0), _getId(params.get(0), params.get(1)));
+			String actionName = params.get(2);
 
-			return _getActionsWithId(actionKey);
+			Either<Action.Error, Action> itemCustomActionEither = _getAction(
+				item, isAction(actionName, method));
+
+			if (itemCustomActionEither.isRight()) {
+				return itemCustomActionEither;
+			}
 		}
 
 		if (params.size() == 4) {

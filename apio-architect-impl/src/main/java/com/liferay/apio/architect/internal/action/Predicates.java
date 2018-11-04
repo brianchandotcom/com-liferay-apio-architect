@@ -163,6 +163,18 @@ public class Predicates {
 	}
 
 	/**
+	 * Returns a predicate that checks if the action's name and method are
+	 * equals to the ones provided.
+	 *
+	 * @review
+	 */
+	public static Predicate<ActionSemantics> isAction(
+		String name, String method) {
+
+		return isActionNamed(name).and(isActionBy(method));
+	}
+
+	/**
 	 * Checks if an action's method is the one provided.
 	 *
 	 * @review

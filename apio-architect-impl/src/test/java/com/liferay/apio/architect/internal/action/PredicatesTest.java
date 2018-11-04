@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.action;
 
 import static com.liferay.apio.architect.internal.action.Predicates.areEquals;
 import static com.liferay.apio.architect.internal.action.Predicates.hasAnnotation;
+import static com.liferay.apio.architect.internal.action.Predicates.isAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionBy;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByDELETE;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByGET;
@@ -74,6 +75,18 @@ public class PredicatesTest {
 
 		assertTrue(truePredicate.test(_actionSemantics));
 		assertFalse(falsePredicate.test(_actionSemantics));
+	}
+
+	@Test
+	public void testIsAction() {
+		Predicate<ActionSemantics> truePredicate = isAction("name", "GET");
+		Predicate<ActionSemantics> falsePredicate = isAction("name", "DELETE");
+		Predicate<ActionSemantics> anotherFalsePredicate = isAction(
+			"retrieve", "GET");
+
+		assertTrue(truePredicate.test(_actionSemantics));
+		assertFalse(falsePredicate.test(_actionSemantics));
+		assertFalse(anotherFalsePredicate.test(_actionSemantics));
 	}
 
 	@Test
