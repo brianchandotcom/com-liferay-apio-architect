@@ -14,34 +14,19 @@
 
 package com.liferay.apio.architect.internal.alias;
 
-import com.liferay.apio.architect.alias.RequestFunction;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import io.vavr.Function3;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Defines a type alias for a function that receives the HTTP request, and
- * returns a function that receives a class and returns an instance of that
- * class.
+ * Defines a type alias for a function that receives the {@link
+ * ActionSemantics}, the HTTP request, and the class being provided and returns
+ * an instance of that class.
  *
  * @author Alejandro Hernández
  */
 public interface ProvideFunction
-	extends RequestFunction<Function<Class<?>, ?>> {
-
-	/**
-	 * Currifies a non-currified version of a {@code ProvideFunction}.
-	 *
-	 * @param  biFunction the non-currified version of the {@code
-	 *         ProvideFunction}
-	 * @return the currified {@code ProvideFunction}
-	 */
-	public static ProvideFunction curry(
-		BiFunction<HttpServletRequest, Class<?>, ?> biFunction) {
-
-		return a -> b -> biFunction.apply(a, b);
-	}
-
+	extends Function3<ActionSemantics, HttpServletRequest, Class<?>, Object> {
 }

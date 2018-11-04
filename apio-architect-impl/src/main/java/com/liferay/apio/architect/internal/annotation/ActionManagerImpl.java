@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
-import static com.liferay.apio.architect.internal.action.ActionSemantics.toAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRootCreateAction;
 import static com.liferay.apio.architect.internal.action.converter.EntryPointConverter.getEntryPointFrom;
@@ -36,7 +35,6 @@ import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
-import com.liferay.apio.architect.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotFound;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
@@ -272,7 +270,7 @@ public class ActionManagerImpl implements ActionManager {
 		).withPredicate(
 			predicate
 		).map(
-			toAction(_getProvideFunction())
+			actionSemantics -> actionSemantics.toAction(this::_provide)
 		).<Either<Action.Error, Action>>map(
 			Either::right
 		).orElseGet(
@@ -336,20 +334,6 @@ public class ActionManagerImpl implements ActionManager {
 		).collect(
 			toList()
 		);
-	}
-
-	private ProvideFunction _getProvideFunction() {
-		return request -> clazz -> {
-			if (clazz.equals(Void.class)) {
-				return null;
-			}
-
-			if (clazz.equals(Body.class)) {
-				return _getBody(request);
-			}
-
-			return providerManager.provideMandatory(request, clazz);
-		};
 	}
 
 	private List<Object> _getProviders(
@@ -423,6 +407,21 @@ public class ActionManagerImpl implements ActionManager {
 		}
 
 		return false;
+	}
+
+	private Object _provide(
+		ActionSemantics actionSemantics, HttpServletRequest request,
+		Class<?> clazz) {
+
+		if (clazz.equals(Void.class)) {
+			return null;
+		}
+
+		if (clazz.equals(Body.class)) {
+			return _getBody(request);
+		}
+
+		return providerManager.provideMandatory(request, clazz);
 	}
 
 	private boolean _sameResource(

@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.internal.action;
 
-import static com.liferay.apio.architect.internal.action.ActionSemantics.toAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
@@ -49,7 +48,6 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.hamcrest.Matcher;
@@ -311,10 +309,8 @@ public class ActionSemanticsTest {
 			_join
 		).build();
 
-		Function<ActionSemantics, Action> toActionFunction = toAction(
-			__ -> Class::getSimpleName);
-
-		Action action = toActionFunction.apply(actionSemantics);
+		Action action = actionSemantics.toAction(
+			(semantics, request, clazz) -> clazz.getSimpleName());
 
 		Object object = action.apply(null);
 

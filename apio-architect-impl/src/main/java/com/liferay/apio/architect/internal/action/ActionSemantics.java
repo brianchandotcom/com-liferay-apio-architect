@@ -32,7 +32,6 @@ import java.lang.annotation.Annotation;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -72,31 +71,6 @@ public abstract class ActionSemantics {
 			executeFunction -> () -> actionSemantics(
 				resource, name, method, asList(paramClasses), returnClass,
 				asList(annotations), executeFunction);
-	}
-
-	/**
-	 * Returns a function that transforms an {@link ActionSemantics} instance
-	 * into its {@link Action}.
-	 *
-	 * @param  provideFunction the function used to provide instances of action
-	 *         params
-	 * @return the function that transforms an {@link ActionSemantics} into an
-	 *         {@link Action}
-	 */
-	public static Function<ActionSemantics, Action> toAction(
-		ProvideFunction provideFunction) {
-
-		return actionSemantics -> request -> Try.of(
-			actionSemantics.paramClasses()::stream
-		).map(
-			stream -> stream.map(
-				provideFunction.apply(request)
-			).collect(
-				toList()
-			)
-		).mapTry(
-			actionSemantics.executeFunction()
-		);
 	}
 
 	/**
@@ -154,6 +128,27 @@ public abstract class ActionSemantics {
 	 */
 	@Parameter(order = 4)
 	public abstract Class<?> returnClass();
+
+	/**
+	 * Transforms this {@link ActionSemantics} instance into its {@link Action}.
+	 *
+	 * @param  provideFunction the function used to provide instances of action
+	 *         params
+	 * @review
+	 */
+	public Action toAction(ProvideFunction provideFunction) {
+		return request -> Try.of(
+			paramClasses()::stream
+		).map(
+			stream -> stream.map(
+				provideFunction.apply(this, request)
+			).collect(
+				toList()
+			)
+		).mapTry(
+			executeFunction()
+		);
+	}
 
 	@FunctionalInterface
 	public interface AnnotationsStep {
