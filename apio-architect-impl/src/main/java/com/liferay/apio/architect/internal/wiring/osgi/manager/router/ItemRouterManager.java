@@ -78,18 +78,6 @@ public class ItemRouterManager extends ClassNameBaseManager<ItemRouter> {
 		);
 	}
 
-	/**
-	 * Returns the item routes for the item resource's name.
-	 *
-	 * @param  name the item resource's name
-	 * @return the item routes
-	 */
-	public <T, S> Optional<ItemRoutes<T, S>> getItemRoutesOptional(
-		String name) {
-
-		return INSTANCE.getItemRoutesOptional(name, this::_computeItemRoutes);
-	}
-
 	private void _computeItemRoutes() {
 		forEachService(
 			(className, itemRouter) -> {

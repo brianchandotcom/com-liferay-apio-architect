@@ -33,6 +33,7 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.credentials.Credentials;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotAllowed;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotFound;
@@ -41,6 +42,7 @@ import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.internal.test.base.BaseTest;
+import com.liferay.apio.architect.single.model.SingleModel;
 
 import io.vavr.CheckedFunction3;
 import io.vavr.control.Either;
@@ -254,6 +256,13 @@ public class RootResourceTest extends BaseTest {
 		@Override
 		public EntryPoint getEntryPoint() {
 			return Collections::emptyList;
+		}
+
+		@Override
+		public Optional<SingleModel> getItemSingleModel(
+			Item item, HttpServletRequest request) {
+
+			return Optional.empty();
 		}
 
 		private static final NotFound _notFound = new NotFound() {

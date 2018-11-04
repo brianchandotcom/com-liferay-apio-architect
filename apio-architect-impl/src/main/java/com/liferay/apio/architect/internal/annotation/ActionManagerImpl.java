@@ -54,6 +54,7 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ItemRouter
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
+import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
 import io.vavr.CheckedFunction3;
@@ -250,6 +251,24 @@ public class ActionManagerImpl implements ActionManager {
 	@Override
 	public EntryPoint getEntryPoint() {
 		return getEntryPointFrom(actionSemantics());
+	}
+
+	@Override
+	public Optional<SingleModel> getItemSingleModel(
+		Item item, HttpServletRequest request) {
+
+		return Either.narrow(
+			_getAction(item, isRetrieveAction)
+		).map(
+			action -> action.apply(request)
+		).map(
+			object -> object instanceof Try ? ((Try)object).get() : object
+		).toJavaOptional(
+		).filter(
+			instanceOf(SingleModel.class)
+		).map(
+			SingleModel.class::cast
+		);
 	}
 
 	@Reference

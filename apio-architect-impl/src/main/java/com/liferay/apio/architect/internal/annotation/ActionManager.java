@@ -15,14 +15,16 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import com.liferay.apio.architect.credentials.Credentials;
-import com.liferay.apio.architect.internal.annotation.Action.Error;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
+import com.liferay.apio.architect.single.model.SingleModel;
 
 import io.vavr.CheckedFunction3;
 import io.vavr.control.Either;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -96,5 +98,19 @@ public interface ActionManager {
 	 * @review
 	 */
 	public EntryPoint getEntryPoint();
+
+	/**
+	 * Returns a {@link SingleModel} instance for the supplied {@link Item};
+	 * returns {@code Optional#empty()} otherwise.
+	 *
+	 * @param  item the item for which to look for the {@link SingleModel single
+	 *         model}
+	 * @param  request the current HTTP request
+	 * @return the {@link SingleModel} instance for the supplied {@link Item};
+	 *         {@code Optional#empty()} otherwise.
+	 * @review
+	 */
+	public Optional<SingleModel> getItemSingleModel(
+		Item item, HttpServletRequest request);
 
 }

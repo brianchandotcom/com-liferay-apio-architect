@@ -18,21 +18,22 @@ import static java.util.Collections.singletonList;
 
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
-import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.internal.action.resource.Resource.Id;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.message.json.MessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.response.control.Embedded;
 import com.liferay.apio.architect.internal.response.control.Fields;
-import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.url.ServerURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ItemRouterManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.language.AcceptLanguage;
-import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
+import com.liferay.apio.architect.uri.Path;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -167,24 +168,13 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 	protected Optional<SingleModel> getSingleModelOptional(
 		Object identifier, Class<? extends Identifier> identifierClass) {
 
-		return Try.success(
-			identifierClass.getName()
-		).mapOptional(
-			nameManager::getNameOptional
-		).mapOptional(
-			itemRouterManager::getItemRoutesOptional
-		).mapOptional(
-			ItemRoutes::getItemFunctionOptional
-		).map(
-			function -> function.apply(_httpServletRequest)
+		Optional<String> nameOptional = nameManager.getNameOptional(
+			identifierClass.getName());
+
+		return nameOptional.flatMap(
+			name -> _getItem(name, identifier)
 		).flatMap(
-			function -> function.apply(identifier)
-		).<SingleModel>map(
-			Unsafe::unsafeCast
-		).map(
-			Optional::of
-		).orElseGet(
-			Optional::empty
+			item -> actionManager.getItemSingleModel(item, _httpServletRequest)
 		);
 	}
 
@@ -200,13 +190,27 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 	protected abstract String write(T t, S s, RequestInfo requestInfo);
 
 	@Reference
-	protected ItemRouterManager itemRouterManager;
+	protected ActionManager actionManager;
 
 	@Reference
 	protected NameManager nameManager;
 
 	@Reference
+	protected PathIdentifierMapperManager pathIdentifierMapperManager;
+
+	@Reference
 	protected ProviderManager providerManager;
+
+	private Optional<Item> _getItem(String name, Object identifier) {
+		Optional<Path> optionalPath = pathIdentifierMapperManager.mapToPath(
+			name, identifier);
+
+		return optionalPath.map(
+			path -> Id.of(identifier, path.getId())
+		).map(
+			id -> Item.of(name, id)
+		);
+	}
 
 	@Context
 	private HttpServletRequest _httpServletRequest;
