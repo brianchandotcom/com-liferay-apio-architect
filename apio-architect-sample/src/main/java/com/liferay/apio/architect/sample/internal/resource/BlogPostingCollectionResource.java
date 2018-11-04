@@ -16,9 +16,12 @@ package com.liferay.apio.architect.sample.internal.resource;
 
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.custom.actions.PostRoute;
+import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.representor.Representor;
@@ -34,6 +37,9 @@ import com.liferay.apio.architect.sample.internal.router.BlogPostingActionRouter
 import com.liferay.apio.architect.sample.internal.type.BlogPosting;
 import com.liferay.apio.architect.sample.internal.type.Rating;
 import com.liferay.apio.architect.sample.internal.type.Review;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import java.util.Date;
 import java.util.List;
@@ -99,6 +105,8 @@ public class BlogPostingCollectionResource
 			"BlogPosting"
 		).identifier(
 			BlogPosting::getId
+		).addBinary(
+			"contentUrl", this::_getRawContent
 		).addDate(
 			"dateCreated", BlogPosting::getDateCreated
 		).addDate(
@@ -203,6 +211,16 @@ public class BlogPostingCollectionResource
 			"rating", BlogPostingCollectionResource::_buildRatingForm,
 			ReviewForm::_setRating
 		).build();
+	}
+
+	private BinaryFile _getRawContent(BlogPosting blogPosting) {
+		String articleBody = blogPosting.getArticleBody();
+
+		byte[] bytes = articleBody.getBytes(UTF_8);
+
+		InputStream inputStream = new ByteArrayInputStream(bytes);
+
+		return new BinaryFile(inputStream, (long)bytes.length, "text/plain");
 	}
 
 	private static final CustomRoute _SUBSCRIBE_CUSTOM_ROUTE = new PostRoute() {
