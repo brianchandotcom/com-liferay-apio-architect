@@ -24,6 +24,7 @@ import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.keyValue
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
+import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
@@ -172,6 +173,42 @@ public class ItemRoutesImplTest extends BaseRoutesTest {
 				String.class.getName()));
 
 		_testItemRoutes(itemRoutes);
+	}
+
+	@Test
+	public void testItemRoutesDeprecatedMethodsThrowException() {
+		Builder<String, Long> builder = new BuilderImpl<>(
+			"name", REQUEST_PROVIDE_FUNCTION,
+			__ -> {
+			},
+			__ -> null, IDENTIFIER_TO_PATH_FUNCTION,
+			__ -> Optional.empty(), actionManager);
+
+		ItemRoutes<String, Long> itemRoutes = builder.build();
+
+		assertThat(
+			itemRoutes::getItemFunctionOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			itemRoutes::getCustomItemFunctionsOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			itemRoutes::getCustomRoutes,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			itemRoutes::getUpdateItemFunctionOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			itemRoutes::getDeleteConsumerOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			itemRoutes::getFormOptional,
+			failsWith(UnsupportedOperationException.class));
 	}
 
 	@Test

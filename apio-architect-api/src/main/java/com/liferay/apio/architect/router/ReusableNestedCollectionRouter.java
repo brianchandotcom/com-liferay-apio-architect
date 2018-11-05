@@ -45,16 +45,19 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
  * resource that behaves as its own API.
  * </p>
  *
- * @author Alejandro Hernández
- * @param  <T> the model's type
- * @param  <S> the type of the collection item's identifier (e.g., {@code Long},
- *         {@code String}, etc.)
- * @param  <U> the type of the collection's identifier. It must be a subclass of
- *         {@code Identifier<S>}.
- * @see    NestedCollectionRoutes.Builder
+ * @author     Alejandro Hernández
+ * @param      <T> the model's type
+ * @param      <S> the type of the collection item's identifier (e.g., {@code
+ *             Long}, {@code String}, etc.)
+ * @param      <U> the type of the collection's identifier. It must be a
+ *             subclass of {@code Identifier<S>}.
+ * @see        NestedCollectionRoutes.Builder
+ * @deprecated As of 1.9.0, use {@link ActionRouter} instead
+ * @review
  */
 @ConsumerType
-@SuppressWarnings("unused")
+@Deprecated
+@SuppressWarnings({"DeprecatedIsStillUsed", "unused"})
 public interface ReusableNestedCollectionRouter
 	<T, S, U extends Identifier<S>, W> {
 
@@ -63,10 +66,13 @@ public interface ReusableNestedCollectionRouter
 	 * collection resource. Use the provided routes builder to create the {@code
 	 * NestedCollectionRoutes} instance.
 	 *
-	 * @param builder the routes builder to use to create the {@code
-	 *        NestedCollectionRoutes} instance
-	 * @see   NestedCollectionRoutes.Builder
+	 * @param      builder the routes builder to use to create the {@code
+	 *             NestedCollectionRoutes} instance
+	 * @see        NestedCollectionRoutes.Builder
+	 * @deprecated As of 1.9.0, use {@link ActionRouter} instead
+	 * @review
 	 */
+	@Deprecated
 	public NestedCollectionRoutes<T, S, W> collectionRoutes(
 		Builder<T, S, W> builder);
 

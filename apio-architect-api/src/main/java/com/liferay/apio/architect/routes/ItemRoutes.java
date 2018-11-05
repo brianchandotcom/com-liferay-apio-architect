@@ -53,13 +53,19 @@ import java.util.function.BiFunction;
  * instances of this interface.
  * </p>
  *
- * @author Alejandro Hernández
- * @param  <T> the model's type
- * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code
- *         String}, etc.)
- * @see    Builder
+ * @author     Alejandro Hernández
+ * @param      <T> the model's type
+ * @param      <S> the type of the model's identifier (e.g., {@code Long},
+ *             {@code String}, etc.)
+ * @see        Builder
+ * @deprecated As of 1.9.0, use {@link
+ *             com.liferay.apio.architect.annotation.Actions} annotations
+ *             instead
+ * @review
  */
+@Deprecated
 @ProviderType
+@SuppressWarnings("DeprecatedIsStillUsed")
 public interface ItemRoutes<T, S> {
 
 	/**
@@ -67,17 +73,26 @@ public interface ItemRoutes<T, S> {
 	 * added through {@link CollectionRoutes.Builder} and the function therefore
 	 * exists. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the function used to create custom operations, if the function
-	 *         exists; {@code Optional#empty()} otherwise
+	 * @return     the function used to create custom operations, if the
+	 *             function exists; {@code Optional#empty()} otherwise
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
+	 * @review
 	 */
+	@Deprecated
 	public Optional<Map<String, CustomItemFunction<?, S>>>
 		getCustomItemFunctionsOptional();
 
 	/**
 	 * Returns the custom routes configured based on their paths.
 	 *
-	 * @return the custom routes
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
+	 * @review
 	 */
+	@Deprecated
 	public Map<String, CustomRoute> getCustomRoutes();
 
 	/**
@@ -88,6 +103,7 @@ public interface ItemRoutes<T, S> {
 	 * @return     the function that deletes the item, if the function exists;
 	 *             {@code Optional#empty()} otherwise
 	 * @deprecated use annotation builder instead
+	 * @review
 	 */
 	@Deprecated
 	public Optional<DeleteItemConsumer<S>> getDeleteConsumerOptional();
@@ -97,9 +113,14 @@ public interface ItemRoutes<T, S> {
 	 * added through the {@link ItemRoutes.Builder}. Returns {@code
 	 * Optional#empty()} otherwise.
 	 *
-	 * @return the form used to update a collection item; {@code
-	 *         Optional#empty()} otherwise
+	 * @return     the form used to update a collection item; {@code
+	 *             Optional#empty()} otherwise
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
+	 * @review
 	 */
+	@Deprecated
 	public Optional<Form> getFormOptional();
 
 	/**
@@ -107,9 +128,14 @@ public interface ItemRoutes<T, S> {
 	 * through the {@link ItemRoutes.Builder} and the function therefore exists.
 	 * Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the function used to obtain the item, if the function exists;
-	 *         {@code Optional#empty()} otherwise
+	 * @return     the function used to obtain the item, if the function exists;
+	 *             {@code Optional#empty()} otherwise
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
+	 * @review
 	 */
+	@Deprecated
 	public Optional<GetItemFunction<T, S>> getItemFunctionOptional();
 
 	/**
@@ -117,19 +143,29 @@ public interface ItemRoutes<T, S> {
 	 * through the {@link ItemRoutes.Builder} and the function therefore exists.
 	 * Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the function used to update the item, if the function exists;
-	 *         {@code Optional#empty()} otherwise
+	 * @return     the function used to update the item, if the function exists;
+	 *             {@code Optional#empty()} otherwise
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
+	 * @review
 	 */
+	@Deprecated
 	public Optional<UpdateItemFunction<T, S>> getUpdateItemFunctionOptional();
 
 	/**
 	 * Creates the {@code ItemRoutes} of an {@link
 	 * com.liferay.apio.architect.router.ItemRouter}.
 	 *
-	 * @param <T> the model's type
-	 * @param <S> the type of the model's identifier (e.g., {@code Long}, {@code
-	 *        String}, etc.)
+	 * @param      <T> the model's type
+	 * @param      <S> the type of the model's identifier (e.g., {@code Long},
+	 *             {@code String}, etc.)
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
+	 * @review
 	 */
+	@Deprecated
 	@ProviderType
 	public interface Builder<T, S> {
 
@@ -138,19 +174,20 @@ public interface ItemRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwableBiFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the element's ID and the value
-		 * extracted from the form. It returns another model of type {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwableBiFunction the custom route function
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionBiFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwableBiFunction the custom route function
+		 * @param      supplier the class of the identifier of the type R
+		 * @param      permissionBiFunction the permission function for this
+		 *             route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
 			CustomRoute customRoute,
 			ThrowableBiFunction<S, R, U> throwableBiFunction, Class<I> supplier,
@@ -162,24 +199,24 @@ public interface ItemRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwableHexaFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the element's ID, the value
-		 * extracted from the form, and four provider parameters ({@code aClass}
-		 * through {@code dClass}). It returns another model of type {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwableHexaFunction the custom route function
-		 * @param  aClass the class of the item function's second parameter
-		 * @param  bClass the class of the item function's third parameter
-		 * @param  cClass the class of the item function's fourth parameter
-		 * @param  dClass the class of the item function's fifth parameter
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionBiFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwableHexaFunction the custom route function
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      bClass the class of the item function's third parameter
+		 * @param      cClass the class of the item function's fourth parameter
+		 * @param      dClass the class of the item function's fifth parameter
+		 * @param      supplier the class of the identifier of the type R
+		 * @param      permissionBiFunction the permission function for this
+		 *             route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C, D, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
@@ -195,24 +232,23 @@ public interface ItemRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwablePentaFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the element's ID, the value
-		 * extracted from the form, and three provider parameters ({@code
-		 * aClass} through {@code cClass}). It returns another model of type
-		 * {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwablePentaFunction the custom route function
-		 * @param  aClass the class of the item function's second parameter
-		 * @param  bClass the class of the item function's third parameter
-		 * @param  cClass the class of the item function's fourth parameter
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionBiFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwablePentaFunction the custom route function
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      bClass the class of the item function's third parameter
+		 * @param      cClass the class of the item function's fourth parameter
+		 * @param      supplier the class of the identifier of the type R
+		 * @param      permissionBiFunction the permission function for this
+		 *             route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
@@ -227,22 +263,22 @@ public interface ItemRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwableTetraFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the element's ID, the value
-		 * extracted from the form, and two provider parameters ({@code aClass}
-		 * and {@code bClass}). It returns another model of type {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwableTetraFunction the custom route function
-		 * @param  aClass the class of the item function's second parameter
-		 * @param  bClass the class of the item function's third parameter
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionBiFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwableTetraFunction the custom route function
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      bClass the class of the item function's third parameter
+		 * @param      supplier the class of the identifier of the type R
+		 * @param      permissionBiFunction the permission function for this
+		 *             route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
@@ -256,21 +292,21 @@ public interface ItemRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwableTriFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the element's ID, the value
-		 * extracted from the form, and one provider parameter ({@code aClass}).
-		 * It returns another model of type {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwableTriFunction the custom route function
-		 * @param  aClass the class of the item function's second parameter
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionBiFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwableTriFunction the custom route function
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      supplier the class of the identifier of the type R
+		 * @param      permissionBiFunction the permission function for this
+		 *             route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
 			CustomRoute customRoute,
 			ThrowableTriFunction<S, R, A, U> throwableTriFunction,
@@ -281,11 +317,16 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with one extra parameter.
 		 *
-		 * @param  getterThrowableBiFunction the function that calculates the
-		 *         item
-		 * @param  aClass the class of the item function's second parameter
-		 * @return the updated builder
+		 * @param      getterThrowableBiFunction the function that calculates
+		 *             the item
+		 * @param      aClass the class of the item function's second parameter
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A> Builder<T, S> addGetter(
 			ThrowableBiFunction<S, A, T> getterThrowableBiFunction,
 			Class<A> aClass);
@@ -293,23 +334,34 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with no extra parameters.
 		 *
-		 * @param  getterThrowableFunction the function that calculates the item
-		 * @return the updated builder
+		 * @param      getterThrowableFunction the function that calculates the
+		 *             item
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public Builder<T, S> addGetter(
 			ThrowableFunction<S, T> getterThrowableFunction);
 
 		/**
 		 * Adds a route to an item function with four extra parameters.
 		 *
-		 * @param  getterThrowablePentaFunction the function that calculates the
-		 *         item
-		 * @param  aClass the class of the item function's second parameter
-		 * @param  bClass the class of the item function's third parameter
-		 * @param  cClass the class of the item function's fourth parameter
-		 * @param  dClass the class of the item function's fifth parameter
-		 * @return the updated builder
+		 * @param      getterThrowablePentaFunction the function that calculates
+		 *             the item
+		 * @param      aClass the class of the item function's second parameter
+		 * @param      bClass the class of the item function's third parameter
+		 * @param      cClass the class of the item function's fourth parameter
+		 * @param      dClass the class of the item function's fifth parameter
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C, D> Builder<T, S> addGetter(
 			ThrowablePentaFunction<S, A, B, C, D, T>
 				getterThrowablePentaFunction,
@@ -318,13 +370,18 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with three extra parameters.
 		 *
-		 * @param  getterThrowableTetraFunction the function that calculates the
-		 *         item
-		 * @param  aClass the class of the item function's second parameter
-		 * @param  bClass the class of the item function's third parameter
-		 * @param  cClass the class of the item function's fourth parameter
-		 * @return the updated builder
+		 * @param      getterThrowableTetraFunction the function that calculates
+		 *             the item
+		 * @param      aClass the class of the item function's second parameter
+		 * @param      bClass the class of the item function's third parameter
+		 * @param      cClass the class of the item function's fourth parameter
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C> Builder<T, S> addGetter(
 			ThrowableTetraFunction<S, A, B, C, T> getterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass);
@@ -332,12 +389,17 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with two extra parameters.
 		 *
-		 * @param  getterThrowableTriFunction the function that calculates the
-		 *         item
-		 * @param  aClass the class of the item function's second parameter
-		 * @param  bClass the class of the item function's third parameter
-		 * @return the updated builder
+		 * @param      getterThrowableTriFunction the function that calculates
+		 *             the item
+		 * @param      aClass the class of the item function's second parameter
+		 * @param      bClass the class of the item function's third parameter
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B> Builder<T, S> addGetter(
 			ThrowableTriFunction<S, A, B, T> getterThrowableTriFunction,
 			Class<A> aClass, Class<B> bClass);
@@ -345,13 +407,18 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to a remover function with one extra parameter.
 		 *
-		 * @param  removerThrowableBiConsumer the remover function
-		 * @param  aClass the class of the item remover function's second
-		 *         parameter
-		 * @param  hasRemovePermissionFunction the permission function for this
-		 *         route
-		 * @return the updated builder
+		 * @param      removerThrowableBiConsumer the remover function
+		 * @param      aClass the class of the item remover function's second
+		 *             parameter
+		 * @param      hasRemovePermissionFunction the permission function for
+		 *             this route
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Remove}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A> Builder<T, S> addRemover(
 			ThrowableBiConsumer<S, A> removerThrowableBiConsumer,
 			Class<A> aClass,
@@ -360,11 +427,16 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to a remover function with no extra parameters.
 		 *
-		 * @param  removerThrowableConsumer the remover function
-		 * @param  hasRemovePermissionFunction the permission function for this
-		 *         route
-		 * @return the updated builder
+		 * @param      removerThrowableConsumer the remover function
+		 * @param      hasRemovePermissionFunction the permission function for
+		 *             this route
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Remove}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public Builder<T, S> addRemover(
 			ThrowableConsumer<S> removerThrowableConsumer,
 			HasRemovePermissionFunction<S> hasRemovePermissionFunction);
@@ -372,19 +444,24 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to a remover function with four extra parameters.
 		 *
-		 * @param  removerThrowablePentaConsumer the remover function
-		 * @param  aClass the class of the item remover function's second
-		 *         parameter
-		 * @param  bClass the class of the item remover function's third
-		 *         parameter
-		 * @param  cClass the class of the item remover function's fourth
-		 *         parameter
-		 * @param  dClass the class of the item remover function's fifth
-		 *         parameter
-		 * @param  hasRemovePermissionFunction the permission function for this
-		 *         route
-		 * @return the updated builder
+		 * @param      removerThrowablePentaConsumer the remover function
+		 * @param      aClass the class of the item remover function's second
+		 *             parameter
+		 * @param      bClass the class of the item remover function's third
+		 *             parameter
+		 * @param      cClass the class of the item remover function's fourth
+		 *             parameter
+		 * @param      dClass the class of the item remover function's fifth
+		 *             parameter
+		 * @param      hasRemovePermissionFunction the permission function for
+		 *             this route
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Remove}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C, D> Builder<T, S> addRemover(
 			ThrowablePentaConsumer<S, A, B, C, D> removerThrowablePentaConsumer,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
@@ -393,17 +470,22 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to a remover function with three extra parameters.
 		 *
-		 * @param  removerThrowableTetraConsumer the remover function
-		 * @param  aClass the class of the item remover function's second
-		 *         parameter
-		 * @param  bClass the class of the item remover function's third
-		 *         parameter
-		 * @param  cClass the class of the item remover function's fourth
-		 *         parameter
-		 * @param  hasRemovePermissionFunction the permission function for this
-		 *         route
-		 * @return the updated builder
+		 * @param      removerThrowableTetraConsumer the remover function
+		 * @param      aClass the class of the item remover function's second
+		 *             parameter
+		 * @param      bClass the class of the item remover function's third
+		 *             parameter
+		 * @param      cClass the class of the item remover function's fourth
+		 *             parameter
+		 * @param      hasRemovePermissionFunction the permission function for
+		 *             this route
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Remove}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C> Builder<T, S> addRemover(
 			ThrowableTetraConsumer<S, A, B, C> removerThrowableTetraConsumer,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
@@ -412,15 +494,20 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to a remover function with two extra parameters.
 		 *
-		 * @param  removerThrowableTriConsumer the remover function
-		 * @param  aClass the class of the item remover function's second
-		 *         parameter
-		 * @param  bClass the class of the item remover function's third
-		 *         parameter
-		 * @param  hasRemovePermissionFunction the permission function for this
-		 *         route
-		 * @return the updated builder
+		 * @param      removerThrowableTriConsumer the remover function
+		 * @param      aClass the class of the item remover function's second
+		 *             parameter
+		 * @param      bClass the class of the item remover function's third
+		 *             parameter
+		 * @param      hasRemovePermissionFunction the permission function for
+		 *             this route
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Remove}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B> Builder<T, S> addRemover(
 			ThrowableTriConsumer<S, A, B> removerThrowableTriConsumer,
 			Class<A> aClass, Class<B> bClass,
@@ -429,13 +516,18 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an updater function with no extra parameters.
 		 *
-		 * @param  updaterThrowableBiFunction the updater function
-		 * @param  hasUpdatePermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      updaterThrowableBiFunction the updater function
+		 * @param      hasUpdatePermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Replace}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <R> Builder<T, S> addUpdater(
 			ThrowableBiFunction<S, R, T> updaterThrowableBiFunction,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
@@ -444,17 +536,26 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an updater function with four extra parameters.
 		 *
-		 * @param  updaterThrowableHexaFunction the updater function
-		 * @param  aClass the class of the updater function's third parameter
-		 * @param  bClass the class of the updater function's fourth parameter
-		 * @param  cClass the class of the updater function's fifth parameter
-		 * @param  dClass the class of the updater function's sixth parameter
-		 * @param  hasUpdatePermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      updaterThrowableHexaFunction the updater function
+		 * @param      aClass the class of the updater function's third
+		 *             parameter
+		 * @param      bClass the class of the updater function's fourth
+		 *             parameter
+		 * @param      cClass the class of the updater function's fifth
+		 *             parameter
+		 * @param      dClass the class of the updater function's sixth
+		 *             parameter
+		 * @param      hasUpdatePermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Replace}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C, D, R> Builder<T, S> addUpdater(
 			ThrowableHexaFunction<S, R, A, B, C, D, T>
 				updaterThrowableHexaFunction,
@@ -465,17 +566,25 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an updater function with three extra parameters.
 		 *
-		 * @param  updaterThrowablePentaFunction the updater function that
-		 *         removes the item
-		 * @param  aClass the class of the updater function's third parameter
-		 * @param  bClass the class of the updater function's fourth parameter
-		 * @param  cClass the class of the updater function's fifth parameter
-		 * @param  hasUpdatePermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      updaterThrowablePentaFunction the updater function that
+		 *             removes the item
+		 * @param      aClass the class of the updater function's third
+		 *             parameter
+		 * @param      bClass the class of the updater function's fourth
+		 *             parameter
+		 * @param      cClass the class of the updater function's fifth
+		 *             parameter
+		 * @param      hasUpdatePermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Replace}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C, R> Builder<T, S> addUpdater(
 			ThrowablePentaFunction<S, R, A, B, C, T>
 				updaterThrowablePentaFunction,
@@ -486,15 +595,22 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an updater function with two extra parameters.
 		 *
-		 * @param  updaterThrowableTetraFunction the updater function
-		 * @param  aClass the class of the updater function's third parameter
-		 * @param  bClass the class of the updater function's fourth parameter
-		 * @param  hasUpdatePermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      updaterThrowableTetraFunction the updater function
+		 * @param      aClass the class of the updater function's third
+		 *             parameter
+		 * @param      bClass the class of the updater function's fourth
+		 *             parameter
+		 * @param      hasUpdatePermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Replace}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, R> Builder<T, S> addUpdater(
 			ThrowableTetraFunction<S, R, A, B, T> updaterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass,
@@ -504,15 +620,21 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an updater function with one extra parameter.
 		 *
-		 * @param  updaterThrowableTriFunction the updater function that removes
-		 *         the item
-		 * @param  aClass the class of the updater function's third parameter
-		 * @param  hasUpdatePermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      updaterThrowableTriFunction the updater function that
+		 *             removes the item
+		 * @param      aClass the class of the updater function's third
+		 *             parameter
+		 * @param      hasUpdatePermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Replace}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, R> Builder<T, S> addUpdater(
 			ThrowableTriFunction<S, R, A, T> updaterThrowableTriFunction,
 			Class<A> aClass,
@@ -523,8 +645,13 @@ public interface ItemRoutes<T, S> {
 		 * Constructs the {@link ItemRoutes} instance with the information
 		 * provided to the builder.
 		 *
-		 * @return the {@code Routes} instance
+		 * @return     the {@code Routes} instance
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions}
+		 *             annotations instead
+		 * @review
 		 */
+		@Deprecated
 		public ItemRoutes<T, S> build();
 
 	}

@@ -75,29 +75,29 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 	public Optional<BatchCreateItemFunction<S>>
 		getBatchCreateItemFunctionOptional() {
 
-		return Optional.ofNullable(_batchCreateItemFunction);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional() {
-		return Optional.ofNullable(_createItemFunction);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Optional<Map<String, CustomPageFunction<?>>>
 		getCustomPageFunctionsOptional() {
 
-		return Optional.of(_customPageFunctions);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Map<String, CustomRoute> getCustomRoutes() {
-		return _customRoutes;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Optional<Form> getFormOptional() {
-		return Optional.ofNullable(_form);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

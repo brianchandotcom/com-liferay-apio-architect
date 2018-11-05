@@ -24,6 +24,7 @@ import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.hasNeste
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.keyValueFrom;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
+import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
@@ -212,6 +213,35 @@ public class NestedCollectionRoutesImplTest extends BaseRoutesTest {
 				String.class.getName()));
 
 		_testNestedCollectionRoutes(nestedCollectionRoutes);
+	}
+
+	@Test
+	public void testNestedCollectionRoutesDeprecatedMethodsThrowException() {
+		Builder<String, Long, Long> builder = new BuilderImpl<>(
+			"name", "nested", REQUEST_PROVIDE_FUNCTION,
+			__ -> {
+			},
+			__ -> null, IDENTIFIER_FUNCTION, actionManager,
+			__ -> Optional.of("name"));
+
+		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
+			builder.build();
+
+		assertThat(
+			nestedCollectionRoutes::getFormOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			nestedCollectionRoutes::getNestedCreateItemFunctionOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			nestedCollectionRoutes::getNestedGetPageFunctionOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			nestedCollectionRoutes::getNestedBatchCreateItemFunctionOptional,
+			failsWith(UnsupportedOperationException.class));
 	}
 
 	@Test

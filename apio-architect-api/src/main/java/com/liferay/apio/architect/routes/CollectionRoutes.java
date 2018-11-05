@@ -50,13 +50,18 @@ import java.util.function.Function;
  * instances of this interface.
  * </p>
  *
- * @author Alejandro Hernández
- * @param  <T> the model's type
- * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code
- *         String}, etc.)
- * @see    Builder
+ * @author     Alejandro Hernández
+ * @param      <T> the model's type
+ * @param      <S> the type of the model's identifier (e.g., {@code Long},
+ *             {@code String}, etc.)
+ * @see        Builder
+ * @deprecated As of 1.9.0, use {@link
+ *             com.liferay.apio.architect.annotation.Actions} annotations
+ *             instead
  */
+@Deprecated
 @ProviderType
+@SuppressWarnings("DeprecatedIsStillUsed")
 public interface CollectionRoutes<T, S> {
 
 	/**
@@ -64,8 +69,13 @@ public interface CollectionRoutes<T, S> {
 	 * the endpoint was added through the builder and the function therefore
 	 * exists; returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the function, if it exists; {@code Optional#empty()} otherwise
+	 * @return     the function, if it exists; {@code Optional#empty()}
+	 *             otherwise
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
 	 */
+	@Deprecated
 	public Optional<BatchCreateItemFunction<S>>
 		getBatchCreateItemFunctionOptional();
 
@@ -76,7 +86,9 @@ public interface CollectionRoutes<T, S> {
 	 *
 	 * @return     the function used to create a collection item, if the
 	 *             function exists; {@code Optional#empty()} otherwise
-	 * @deprecated use annotation builder instead
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
 	 */
 	@Deprecated
 	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional();
@@ -86,15 +98,26 @@ public interface CollectionRoutes<T, S> {
 	 * was added through {@link CollectionRoutes.Builder} and the function
 	 * therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @return the function used to create custom operations, if the function
-	 *         exists; {@code Optional#empty()} otherwise
+	 * @return     the function used to create custom operations, if the
+	 *             function exists; {@code Optional#empty()} otherwise
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
+	 * @review
 	 */
+	@Deprecated
 	public Optional<Map<String, CustomPageFunction<?>>>
 		getCustomPageFunctionsOptional();
 
 	/**
-	 * Returns the custom routes configured based on their paths.
+	 * Returns the custom routes configured based on their paths
+	 *
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
+	 * @review
 	 */
+	@Deprecated
 	public Map<String, CustomRoute> getCustomRoutes();
 
 	/**
@@ -102,9 +125,13 @@ public interface CollectionRoutes<T, S> {
 	 * added through the {@link CollectionRoutes.Builder}. Returns {@code
 	 * Optional#empty()} otherwise.
 	 *
-	 * @return the form used to create a collection item; {@code
-	 *         Optional#empty()} otherwise
+	 * @return     the form used to create a collection item; {@code
+	 *             Optional#empty()} otherwise
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
 	 */
+	@Deprecated
 	public Optional<Form> getFormOptional();
 
 	/**
@@ -114,7 +141,9 @@ public interface CollectionRoutes<T, S> {
 	 *
 	 * @return     the function used to obtain the page, if the function exists;
 	 *             {@code Optional#empty()} otherwise
-	 * @deprecated use annotation builder instead
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
 	 */
 	@Deprecated
 	public Optional<GetPageFunction<T>> getGetPageFunctionOptional();
@@ -122,21 +151,31 @@ public interface CollectionRoutes<T, S> {
 	/**
 	 * Creates the {@link CollectionRoutes} of a {@link
 	 * com.liferay.apio.architect.router.CollectionRouter}.
+	 *
+	 * @deprecated As of 1.9.0, use {@link
+	 *             com.liferay.apio.architect.annotation.Actions} annotations
+	 *             instead
 	 */
+	@Deprecated
 	@ProviderType
 	public interface Builder<T, S> {
 
 		/**
 		 * Adds a route to a creator function that has one extra parameter.
 		 *
-		 * @param  creatorThrowableBiFunction the creator function
-		 * @param  aClass the class of the creator function's second parameter
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowableBiFunction the creator function
+		 * @param      aClass the class of the creator function's second
+		 *             parameter
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, R> Builder<T, S> addCreator(
 			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
 			Class<A> aClass,
@@ -146,15 +185,21 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a creator function that has one extra parameter.
 		 *
-		 * @param  creatorThrowableBiFunction the creator function
-		 * @param  batchCreatorThrowableBiFunction the batch creator function
-		 * @param  aClass the class of the creator function's second parameter
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowableBiFunction the creator function
+		 * @param      batchCreatorThrowableBiFunction the batch creator
+		 *             function
+		 * @param      aClass the class of the creator function's second
+		 *             parameter
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, R> Builder<T, S> addCreator(
 			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
 			ThrowableBiFunction<List<R>, A, List<S>>
@@ -166,13 +211,17 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a creator function that has no extra parameters.
 		 *
-		 * @param  creatorThrowableFunction the creator function
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowableFunction the creator function
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <R> Builder<T, S> addCreator(
 			ThrowableFunction<R, T> creatorThrowableFunction,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
@@ -181,14 +230,18 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a creator function that has no extra parameters.
 		 *
-		 * @param  creatorThrowableFunction the creator function
-		 * @param  batchCreatorThrowableFunction the batch creator function
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowableFunction the creator function
+		 * @param      batchCreatorThrowableFunction the batch creator function
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <R> Builder<T, S> addCreator(
 			ThrowableFunction<R, T> creatorThrowableFunction,
 			ThrowableFunction<List<R>, List<S>> batchCreatorThrowableFunction,
@@ -198,17 +251,25 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a creator function that has four extra parameters.
 		 *
-		 * @param  creatorThrowablePentaFunction the creator function
-		 * @param  aClass the class of the creator function's second parameter
-		 * @param  bClass the class of the creator function's third parameter
-		 * @param  cClass the class of the creator function's fourth parameter
-		 * @param  dClass the class of the creator function's fifth parameter
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowablePentaFunction the creator function
+		 * @param      aClass the class of the creator function's second
+		 *             parameter
+		 * @param      bClass the class of the creator function's third
+		 *             parameter
+		 * @param      cClass the class of the creator function's fourth
+		 *             parameter
+		 * @param      dClass the class of the creator function's fifth
+		 *             parameter
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, B, C, D, R> Builder<T, S> addCreator(
 			ThrowablePentaFunction<R, A, B, C, D, T>
 				creatorThrowablePentaFunction,
@@ -219,18 +280,27 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a creator function that has four extra parameters.
 		 *
-		 * @param  creatorThrowablePentaFunction the creator function
-		 * @param  batchCreatorThrowablePentaFunction the batch creator function
-		 * @param  aClass the class of the creator function's second parameter
-		 * @param  bClass the class of the creator function's third parameter
-		 * @param  cClass the class of the creator function's fourth parameter
-		 * @param  dClass the class of the creator function's fifth parameter
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowablePentaFunction the creator function
+		 * @param      batchCreatorThrowablePentaFunction the batch creator
+		 *             function
+		 * @param      aClass the class of the creator function's second
+		 *             parameter
+		 * @param      bClass the class of the creator function's third
+		 *             parameter
+		 * @param      cClass the class of the creator function's fourth
+		 *             parameter
+		 * @param      dClass the class of the creator function's fifth
+		 *             parameter
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, B, C, D, R> Builder<T, S> addCreator(
 			ThrowablePentaFunction<R, A, B, C, D, T>
 				creatorThrowablePentaFunction,
@@ -243,16 +313,23 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a creator function that has three extra parameters.
 		 *
-		 * @param  creatorThrowableTetraFunction the creator function
-		 * @param  aClass the class of the creator function's second parameter
-		 * @param  bClass the class of the creator function's third parameter
-		 * @param  cClass the class of the creator function's fourth parameter
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowableTetraFunction the creator function
+		 * @param      aClass the class of the creator function's second
+		 *             parameter
+		 * @param      bClass the class of the creator function's third
+		 *             parameter
+		 * @param      cClass the class of the creator function's fourth
+		 *             parameter
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, B, C, R> Builder<T, S> addCreator(
 			ThrowableTetraFunction<R, A, B, C, T> creatorThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
@@ -262,17 +339,25 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a creator function that has three extra parameters.
 		 *
-		 * @param  creatorThrowableTetraFunction the creator function
-		 * @param  batchCreatorThrowableTetraFunction the batch creator function
-		 * @param  aClass the class of the creator function's second parameter
-		 * @param  bClass the class of the creator function's third parameter
-		 * @param  cClass the class of the creator function's fourth parameter
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowableTetraFunction the creator function
+		 * @param      batchCreatorThrowableTetraFunction the batch creator
+		 *             function
+		 * @param      aClass the class of the creator function's second
+		 *             parameter
+		 * @param      bClass the class of the creator function's third
+		 *             parameter
+		 * @param      cClass the class of the creator function's fourth
+		 *             parameter
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, B, C, R> Builder<T, S> addCreator(
 			ThrowableTetraFunction<R, A, B, C, T> creatorThrowableTetraFunction,
 			ThrowableTetraFunction<List<R>, A, B, C, List<S>>
@@ -284,15 +369,21 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a creator function that has two extra parameters.
 		 *
-		 * @param  creatorThrowableTriFunction the creator function
-		 * @param  aClass the class of the creator function's second parameter
-		 * @param  bClass the class of the creator function's third parameter
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowableTriFunction the creator function
+		 * @param      aClass the class of the creator function's second
+		 *             parameter
+		 * @param      bClass the class of the creator function's third
+		 *             parameter
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, B, R> Builder<T, S> addCreator(
 			ThrowableTriFunction<R, A, B, T> creatorThrowableTriFunction,
 			Class<A> aClass, Class<B> bClass,
@@ -302,16 +393,23 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a creator function that has two extra parameters.
 		 *
-		 * @param  creatorThrowableTriFunction the creator function
-		 * @param  batchCreatorThrowableTriFunction the batch creator function
-		 * @param  aClass the class of the creator function's second parameter
-		 * @param  bClass the class of the creator function's third parameter
-		 * @param  hasAddingPermissionFunction the permission function for this
-		 *         route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
+		 * @param      creatorThrowableTriFunction the creator function
+		 * @param      batchCreatorThrowableTriFunction the batch creator
+		 *             function
+		 * @param      aClass the class of the creator function's second
+		 *             parameter
+		 * @param      bClass the class of the creator function's third
+		 *             parameter
+		 * @param      hasAddingPermissionFunction the permission function for
+		 *             this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Create}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, B, R> Builder<T, S> addCreator(
 			ThrowableTriFunction<R, A, B, T> creatorThrowableTriFunction,
 			ThrowableTriFunction<List<R>, A, B, List<S>>
@@ -325,24 +423,24 @@ public interface CollectionRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwableBiFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the pagination and the value
-		 * extracted from the form. It returns another model of type {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwableBiFunction the custom route function
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwableBiFunction the custom route function
+		 * @param      identifierClass the class of the identifier of the type R
+		 * @param      permissionFunction the permission function for this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableBiFunction<Pagination, R, U> throwableBiFunction,
-				Class<I> supplier,
+				Class<I> identifierClass,
 				Function<Credentials, Boolean> permissionFunction,
 				FormBuilderFunction<R> formBuilderFunction);
 
@@ -351,31 +449,30 @@ public interface CollectionRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwableHexaFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the pagination, the value
-		 * extracted from the form, and four provider parameters ({@code aClass}
-		 * through {@code dClass}). It returns another model of type {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwableHexaFunction the custom route function
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  bClass the class of the page function's third parameter
-		 * @param  cClass the class of the page function's fourth parameter
-		 * @param  dClass the class of the page function's fifth parameter
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwableHexaFunction the custom route function
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      bClass the class of the page function's third parameter
+		 * @param      cClass the class of the page function's fourth parameter
+		 * @param      dClass the class of the page function's fifth parameter
+		 * @param      identifierClass the class of the identifier of the type R
+		 * @param      permissionFunction the permission function for this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C, D, R, U, I extends Identifier>
 			CollectionRoutes.Builder<T, S> addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableHexaFunction<Pagination, R, A, B, C, D, U>
 					throwableHexaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
-				Class<D> dClass, Class<I> supplier,
+				Class<D> dClass, Class<I> identifierClass,
 				Function<Credentials, Boolean> permissionFunction,
 				FormBuilderFunction<R> formBuilderFunction);
 
@@ -384,31 +481,29 @@ public interface CollectionRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwablePentaFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the pagination, the value
-		 * extracted from the form, and three provider parameters ({@code
-		 * aClass} through {@code cClass}). It returns another model of type
-		 * {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwablePentaFunction the custom route function
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  bClass the class of the page function's third parameter
-		 * @param  cClass the class of the page function's fourth parameter
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwablePentaFunction the custom route function
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      bClass the class of the page function's third parameter
+		 * @param      cClass the class of the page function's fourth parameter
+		 * @param      identifierClass the class of the identifier of the type R
+		 * @param      permissionFunction the permission function for this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, C, R, U, I extends Identifier>
 			CollectionRoutes.Builder<T, S> addCustomRoute(
 				CustomRoute customRoute,
 				ThrowablePentaFunction<Pagination, R, A, B, C, U>
 					throwablePentaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
-				Class<I> supplier,
+				Class<I> identifierClass,
 				Function<Credentials, Boolean> permissionFunction,
 				FormBuilderFunction<R> formBuilderFunction);
 
@@ -417,28 +512,27 @@ public interface CollectionRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwableTetraFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the pagination, the value
-		 * extracted from the form, and two provider parameters ({@code aClass}
-		 * and {@code bClass}). It returns another model of type {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwableTetraFunction the custom route function
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  bClass the class of the page function's third parameter
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwableTetraFunction the custom route function
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      bClass the class of the page function's third parameter
+		 * @param      identifierClass the class of the identifier of the type R
+		 * @param      permissionFunction the permission function for this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, B, R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableTetraFunction<Pagination, R, A, B, U>
 					throwableTetraFunction,
-				Class<A> aClass, Class<B> bClass, Class<I> supplier,
+				Class<A> aClass, Class<B> bClass, Class<I> identifierClass,
 				Function<Credentials, Boolean> permissionFunction,
 				FormBuilderFunction<R> formBuilderFunction);
 
@@ -447,37 +541,40 @@ public interface CollectionRoutes<T, S> {
 		 * sets the HTTP method to use) and the custom route function {@code
 		 * throwableTriFunction}.
 		 *
-		 * <p>
-		 * The custom route function receives the pagination, the value
-		 * extracted from the form, and one provider parameter ({@code aClass}).
-		 * It returns another model of type {@code U}.
-		 * </p>
-		 *
-		 * @param  customRoute the custom route that sets the HTTP method to use
-		 * @param  throwableTriFunction the custom route function
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  supplier the identifier class of type {@code R}
-		 * @param  permissionFunction the route's permission function
-		 * @param  formBuilderFunction the function that creates this
-		 *         operation's form
-		 * @return the updated builder
+		 * @param      customRoute the name and method of the custom route
+		 * @param      throwableTriFunction the custom route function
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      identifierClass the class of the identifier of the type R
+		 * @param      permissionFunction the permission function for this route
+		 * @param      formBuilderFunction the function that creates the form
+		 *             for this operation
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Action}
+		 *             annotation instead
+		 * @review
 		 */
+		@Deprecated
 		public <A, R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableTriFunction<Pagination, R, A, U> throwableTriFunction,
-				Class<A> aClass, Class<I> supplier,
+				Class<A> aClass, Class<I> identifierClass,
 				Function<Credentials, Boolean> permissionFunction,
 				FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a route to a collection page function with one extra parameter.
 		 *
-		 * @param  getterThrowableBiFunction the function that calculates the
-		 *         page
-		 * @param  aClass the class of the page function's third parameter
-		 * @return the updated builder
+		 * @param      getterThrowableBiFunction the function that calculates
+		 *             the page
+		 * @param      aClass the class of the page function's third parameter
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A> Builder<T, S> addGetter(
 			ThrowableBiFunction<Pagination, A, PageItems<T>>
 				getterThrowableBiFunction,
@@ -487,9 +584,14 @@ public interface CollectionRoutes<T, S> {
 		 * Adds a route to a collection page function with none extra
 		 * parameters.
 		 *
-		 * @param  getterThrowableFunction the function that calculates the page
-		 * @return the updated builder
+		 * @param      getterThrowableFunction the function that calculates the
+		 *             page
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public Builder<T, S> addGetter(
 			ThrowableFunction<Pagination, PageItems<T>>
 				getterThrowableFunction);
@@ -498,14 +600,18 @@ public interface CollectionRoutes<T, S> {
 		 * Adds a route to a collection page function with four extra
 		 * parameters.
 		 *
-		 * @param  getterThrowablePentaFunction the function that calculates the
-		 *         page
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  bClass the class of the page function's third parameter
-		 * @param  cClass the class of the page function's fourth parameter
-		 * @param  dClass the class of the page function's fifth parameter
-		 * @return the updated builder
+		 * @param      getterThrowablePentaFunction the function that calculates
+		 *             the page
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      bClass the class of the page function's third parameter
+		 * @param      cClass the class of the page function's fourth parameter
+		 * @param      dClass the class of the page function's fifth parameter
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, B, C, D> Builder<T, S> addGetter(
 			ThrowablePentaFunction<Pagination, A, B, C, D, PageItems<T>>
 				getterThrowablePentaFunction,
@@ -515,13 +621,17 @@ public interface CollectionRoutes<T, S> {
 		 * Adds a route to a collection page function with three extra
 		 * parameters.
 		 *
-		 * @param  getterThrowableTetraFunction the function that calculates the
-		 *         page
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  bClass the class of the page function's third parameter
-		 * @param  cClass the class of the page function's fourth parameter
-		 * @return the updated builder
+		 * @param      getterThrowableTetraFunction the function that calculates
+		 *             the page
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      bClass the class of the page function's third parameter
+		 * @param      cClass the class of the page function's fourth parameter
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, B, C> Builder<T, S> addGetter(
 			ThrowableTetraFunction<Pagination, A, B, C, PageItems<T>>
 				getterThrowableTetraFunction,
@@ -530,12 +640,16 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a collection page function with two extra parameters.
 		 *
-		 * @param  getterThrowableTriFunction the function that calculates the
-		 *         page
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  bClass the class of the page function's third parameter
-		 * @return the updated builder
+		 * @param      getterThrowableTriFunction the function that calculates
+		 *             the page
+		 * @param      aClass the class of the page function's second parameter
+		 * @param      bClass the class of the page function's third parameter
+		 * @return     the updated builder
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions.Retrieve}
+		 *             annotation instead
 		 */
+		@Deprecated
 		public <A, B> Builder<T, S> addGetter(
 			ThrowableTriFunction<Pagination, A, B, PageItems<T>>
 				getterThrowableTriFunction,
@@ -545,8 +659,12 @@ public interface CollectionRoutes<T, S> {
 		 * Constructs the {@link CollectionRoutes} instance with the information
 		 * provided to the builder.
 		 *
-		 * @return the {@code Routes} instance
+		 * @return     the {@code Routes} instance
+		 * @deprecated As of 1.9.0, use {@link
+		 *             com.liferay.apio.architect.annotation.Actions}
+		 *             annotations instead
 		 */
+		@Deprecated
 		public CollectionRoutes<T, S> build();
 
 	}

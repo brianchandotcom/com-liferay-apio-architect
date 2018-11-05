@@ -67,21 +67,21 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 	@Override
 	public Optional<Form> getFormOptional() {
-		return Optional.ofNullable(_form);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Optional<NestedBatchCreateItemFunction<S, U>>
 		getNestedBatchCreateItemFunctionOptional() {
 
-		return Optional.ofNullable(_nestedBatchCreateItemFunction);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Optional<NestedCreateItemFunction<T, U>>
 		getNestedCreateItemFunctionOptional() {
 
-		return Optional.ofNullable(_nestedCreateItemFunction);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

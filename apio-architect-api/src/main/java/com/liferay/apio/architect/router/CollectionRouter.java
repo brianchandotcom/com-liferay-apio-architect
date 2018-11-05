@@ -35,15 +35,19 @@ import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
  * resource that behaves as its own API.
  * </p>
  *
- * @author Alejandro Hernández
- * @param  <T> the model's type
- * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code
- *         String}, etc.)
- * @param  <U> the type of the resource's identifier. It must be a subclass of
- *         {@code Identifier}.
- * @see    CollectionRoutes.Builder
+ * @author     Alejandro Hernández
+ * @param      <T> the model's type
+ * @param      <S> the type of the model's identifier (e.g., {@code Long},
+ *             {@code String}, etc.)
+ * @param      <U> the type of the resource's identifier. It must be a subclass
+ *             of {@code Identifier}.
+ * @see        CollectionRoutes.Builder
+ * @deprecated As of 1.9.0, use {@link ActionRouter} instead
+ * @review
  */
 @ConsumerType
+@Deprecated
+@SuppressWarnings({"DeprecatedIsStillUsed", "unused"})
 public interface CollectionRouter<T, S, U extends Identifier<S>> {
 
 	/**
@@ -51,10 +55,13 @@ public interface CollectionRouter<T, S, U extends Identifier<S>> {
 	 * resource. Use the provided routes builder to create the {@code
 	 * CollectionRoutes} instance.
 	 *
-	 * @param builder the routes builder to use to create the {@code
-	 *        CollectionRoutes} instance
-	 * @see   CollectionRoutes.Builder
+	 * @param      builder the routes builder to use to create the {@code
+	 *             CollectionRoutes} instance
+	 * @see        CollectionRoutes.Builder
+	 * @deprecated As of 1.9.0, use {@link ActionRouter} instead
+	 * @review
 	 */
+	@Deprecated
 	public CollectionRoutes<T, S> collectionRoutes(Builder<T, S> builder);
 
 }

@@ -23,6 +23,7 @@ import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.REQUEST_
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.keyValueFrom;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
+import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 
@@ -70,6 +71,41 @@ import org.junit.Test;
  * @author Alejandro Hernández
  */
 public class CollectionRoutesImplTest extends BaseRoutesTest {
+
+	@Test
+	public void testCollectionRoutesDeprecatedMethodsThrowsException() {
+		Set<String> neededProviders = new TreeSet<>();
+
+		Builder<String, Long> builder = new BuilderImpl<>(
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			__ -> null, IDENTIFIER_FUNCTION, __ -> null, actionManager);
+
+		CollectionRoutes<String, Long> collectionRoutes = builder.build();
+
+		assertThat(
+			collectionRoutes::getBatchCreateItemFunctionOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			collectionRoutes::getCreateItemFunctionOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			collectionRoutes::getCustomPageFunctionsOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			collectionRoutes::getCustomRoutes,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			collectionRoutes::getGetPageFunctionOptional,
+			failsWith(UnsupportedOperationException.class));
+
+		assertThat(
+			collectionRoutes::getFormOptional,
+			failsWith(UnsupportedOperationException.class));
+	}
 
 	@Test(expected = NotFoundException.class)
 	public void testEmptyBuilderBuildsEmptyRoutes() {

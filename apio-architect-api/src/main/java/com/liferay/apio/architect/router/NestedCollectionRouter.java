@@ -40,19 +40,23 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
  * resource that behaves as its own API.
  * </p>
  *
- * @author Alejandro Hernández
- * @param  <T> the model's type
- * @param  <S> the type of the model's identifier (e.g., {@code Long}, {@code
- *         String}, etc.)
- * @param  <U> the type of the resource's identifier. It must be a subclass of
- *         {@code Identifier}.
- * @param  <V> the type of the parent model's identifier (e.g., {@code Long},
- *         {@code String}, etc.)
- * @param  <W> the type of the parent resource's identifier. It must be a
- *         subclass of {@code Identifier<W>}.
- * @see    NestedCollectionRoutes.Builder
+ * @author     Alejandro Hernández
+ * @param      <T> the model's type
+ * @param      <S> the type of the model's identifier (e.g., {@code Long},
+ *             {@code String}, etc.)
+ * @param      <U> the type of the resource's identifier. It must be a subclass
+ *             of {@code Identifier}.
+ * @param      <V> the type of the parent model's identifier (e.g., {@code
+ *             Long}, {@code String}, etc.)
+ * @param      <W> the type of the parent resource's identifier. It must be a
+ *             subclass of {@code Identifier<W>}.
+ * @see        NestedCollectionRoutes.Builder
+ * @deprecated As of 1.9.0, use {@link ActionRouter} instead
+ * @review
  */
 @ConsumerType
+@Deprecated
+@SuppressWarnings({"DeprecatedIsStillUsed", "unused"})
 public interface NestedCollectionRouter
 	<T, S, U extends Identifier<S>, V, W extends Identifier<V>> {
 
@@ -61,10 +65,13 @@ public interface NestedCollectionRouter
 	 * collection resource. Use the provided routes builder to create the {@code
 	 * NestedCollectionRoutes} instance.
 	 *
-	 * @param builder the routes builder to use to create the {@code
-	 *        NestedCollectionRoutes} instance
-	 * @see   NestedCollectionRoutes.Builder
+	 * @param      builder the routes builder to use to create the {@code
+	 *             NestedCollectionRoutes} instance
+	 * @see        NestedCollectionRoutes.Builder
+	 * @deprecated As of 1.9.0, use {@link ActionRouter} instead
+	 * @review
 	 */
+	@Deprecated
 	public NestedCollectionRoutes<T, S, V> collectionRoutes(
 		Builder<T, S, V> builder);
 

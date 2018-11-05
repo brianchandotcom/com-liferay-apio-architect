@@ -26,5 +26,6 @@ import com.liferay.apio.architect.identifier.Identifier;
  * @param  <T> the type to apply to the actions this router defines
  */
 @ConsumerType
+@SuppressWarnings("unused")
 public interface ActionRouter<T extends Identifier<?>> {
 }

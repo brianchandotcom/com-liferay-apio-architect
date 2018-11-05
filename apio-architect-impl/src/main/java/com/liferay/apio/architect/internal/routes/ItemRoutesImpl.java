@@ -89,12 +89,12 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 	public Optional<Map<String, CustomItemFunction<?, S>>>
 		getCustomItemFunctionsOptional() {
 
-		return Optional.of(_customItemFunctions);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Map<String, CustomRoute> getCustomRoutes() {
-		return _customRoutes;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 	@Override
 	public Optional<Form> getFormOptional() {
-		return Optional.ofNullable(_form);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 	@Override
 	public Optional<UpdateItemFunction<T, S>> getUpdateItemFunctionOptional() {
-		return Optional.ofNullable(_updateItemFunction);
+		throw new UnsupportedOperationException();
 	}
 
 	/**
