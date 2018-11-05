@@ -21,7 +21,6 @@ import static java.lang.String.format;
 import static java.lang.String.join;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 import static javax.ws.rs.core.HttpHeaders.ALLOW;
@@ -33,6 +32,8 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.credentials.Credentials;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotAllowed;
@@ -52,6 +53,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -237,10 +239,10 @@ public class RootResourceTest extends BaseTest {
 		}
 
 		@Override
-		public List<Action> getActions(
-			ActionKey actionKey, Credentials credentials) {
+		public Stream<ActionSemantics> getActionSemantics(
+			Resource resource, Credentials credentials) {
 
-			return emptyList();
+			return Stream.empty();
 		}
 
 		@Override

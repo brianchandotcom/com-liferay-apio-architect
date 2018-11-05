@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.action.Predicates.isAction;
+import static com.liferay.apio.architect.internal.action.Predicates.isActionFor;
 import static com.liferay.apio.architect.internal.action.Predicates.isCreateAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRemoveAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isReplaceAction;
@@ -31,7 +32,6 @@ import static io.vavr.Predicates.instanceOf;
 import static io.vavr.control.Either.left;
 
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA_TYPE;
@@ -72,7 +72,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -153,29 +152,15 @@ public class ActionManagerImpl implements ActionManager {
 	}
 
 	@Override
-	public List<Action> getActions(
-		ActionKey actionKey, Credentials credentials) {
+	public Stream<ActionSemantics> getActionSemantics(
+		Resource resource, Credentials credentials) {
 
-		Set<ActionKey> actionKeys = _actionsMap.keySet();
-
-		Stream<ActionKey> stream = actionKeys.stream();
+		Stream<ActionSemantics> stream = actionSemantics();
 
 		return stream.filter(
-			childActionKey ->
-				_sameResource(actionKey, childActionKey) &&
-				(_isCustomActionOfCollection(actionKey, childActionKey) ||
-				 _isCustomActionOfItem(actionKey, childActionKey) ||
-				 _isCustomOfActionNested(actionKey, childActionKey))
-		).filter(
-			this::_isValidAction
+			isActionFor(resource)
 		).map(
-			childActionKey -> {
-				Object id = _getId(actionKey.getPath());
-
-				return _getAction(childActionKey, id);
-			}
-		).collect(
-			toList()
+			actionSemantics -> actionSemantics.withResource(resource)
 		);
 	}
 
@@ -198,7 +183,7 @@ public class ActionManagerImpl implements ActionManager {
 		return new Documentation(
 			apiTitleSupplier, apiDescriptionSupplier, applicationUrlSupplier,
 			() -> _representableManager.getRepresentors(), _actionsMap::keySet,
-			actionKey -> getActions(actionKey, null),
+			actionKey -> Collections.emptyList(),
 			() -> _customDocumentationManager.getCustomDocumentation());
 	}
 
@@ -231,41 +216,6 @@ public class ActionManagerImpl implements ActionManager {
 	@Reference
 	protected ProviderManager providerManager;
 
-	private Action _getAction(ActionKey actionKey, Object id) {
-		return new Action() {
-
-			@Override
-			public Object apply(HttpServletRequest httpServletRequest) {
-				return Try.of(
-					() -> _getActionFunction(actionKey)
-				).mapTry(
-					action -> action.apply(
-						id, null,
-						(List<Object>)_getProviders(
-							httpServletRequest, actionKey))
-				).getOrElseThrow(
-					() -> new NotFoundException("Not Found")
-				);
-			}
-
-			@Override
-			public ActionKey getActionKey() {
-				return actionKey;
-			}
-
-			@Override
-			public Optional<String> getURIOptional() {
-				Optional<Path> optionalPath =
-					pathIdentifierMapperManager.mapToPath(
-						actionKey.getResource(), actionKey.getIdOrAction());
-
-				return optionalPath.map(
-					path -> path.asURI() + "/" + actionKey.getNestedResource());
-			}
-
-		};
-	}
-
 	private Either<Action.Error, Action> _getAction(
 		Resource resource, Predicate<ActionSemantics> predicate) {
 
@@ -284,16 +234,6 @@ public class ActionManagerImpl implements ActionManager {
 		).orElseGet(
 			() -> Either.left(_notFound)
 		);
-	}
-
-	private CheckedFunction3<Object, ?, List<Object>, ?> _getActionFunction(
-		ActionKey actionKey) {
-
-		if (_actionsMap.containsKey(actionKey)) {
-			return _actionsMap.get(actionKey);
-		}
-
-		return _actionsMap.get(actionKey.getGenericActionKey());
 	}
 
 	private Either<Action.Error, Action> _getBinaryFileAction(
@@ -337,15 +277,6 @@ public class ActionManagerImpl implements ActionManager {
 		throw new NotSupportedException();
 	}
 
-	private Object _getId(Path path) {
-		try {
-			return pathIdentifierMapperManager.mapToIdentifierOrFail(path);
-		}
-		catch (Error e) {
-			return null;
-		}
-	}
-
 	@SuppressWarnings("Convert2MethodRef")
 	private Resource.Id _getId(String name, String id) {
 		return Try.success(
@@ -357,39 +288,6 @@ public class ActionManagerImpl implements ActionManager {
 		).getOrElseThrow(
 			t -> new NotFoundException(t)
 		);
-	}
-
-	private List<Object> _getProvidedObjects(
-		Class<Object>[] value, HttpServletRequest httpServletRequest) {
-
-		return Stream.of(
-			value
-		).map(
-			provider -> providerManager.provideMandatory(
-				httpServletRequest, provider)
-		).collect(
-			toList()
-		);
-	}
-
-	private List<Object> _getProviders(
-		HttpServletRequest httpServletRequest, ActionKey actionKey) {
-
-		return Try.of(
-			() -> _getProvidersByParam(actionKey)
-		).map(
-			value -> _getProvidedObjects(value, httpServletRequest)
-		).getOrElse(
-			Collections::emptyList
-		);
-	}
-
-	private Class<Object>[] _getProvidersByParam(ActionKey actionKey) {
-		if (_providers.containsKey(actionKey)) {
-			return _providers.get(actionKey);
-		}
-
-		return _providers.get(actionKey.getGenericActionKey());
 	}
 
 	private Either<Action.Error, Action> _handleFourParams(
@@ -467,59 +365,6 @@ public class ActionManagerImpl implements ActionManager {
 		);
 	}
 
-	private boolean _isCustomActionOfCollection(
-		ActionKey actionKey, ActionKey childActionKey) {
-
-		if (actionKey.isCollection() &&
-			(childActionKey.isCollection() || childActionKey.isCustom())) {
-
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean _isCustomActionOfItem(
-		ActionKey actionKey, ActionKey childActionKey) {
-
-		if (!actionKey.isNested() && actionKey.isItem() &&
-			childActionKey.isItem() &&
-			(_getActionFunction(
-				new ActionKey("GET", childActionKey.getNestedResource())) ==
-					null)) {
-
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean _isCustomOfActionNested(
-		ActionKey actionKey, ActionKey childActionKey) {
-
-		String nestedResource = actionKey.getNestedResource();
-
-		if (actionKey.isNested() &&
-			nestedResource.equals(childActionKey.getNestedResource())) {
-
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean _isValidAction(ActionKey actionKey) {
-		if (actionKey.isCollection()) {
-			return _actionsMap.containsKey(actionKey);
-		}
-
-		if (_getActionFunction(actionKey) != null) {
-			return true;
-		}
-
-		return false;
-	}
-
 	private Object _provide(
 		ActionSemantics actionSemantics, HttpServletRequest request,
 		Class<?> clazz) {
@@ -565,14 +410,6 @@ public class ActionManagerImpl implements ActionManager {
 		}
 
 		return providerManager.provideMandatory(request, clazz);
-	}
-
-	private boolean _sameResource(
-		ActionKey actionKey, ActionKey childActionKey) {
-
-		String resource = childActionKey.getResource();
-
-		return resource.equals(actionKey.getResource());
 	}
 
 	private static final NotFound _notFound = new NotFound() {

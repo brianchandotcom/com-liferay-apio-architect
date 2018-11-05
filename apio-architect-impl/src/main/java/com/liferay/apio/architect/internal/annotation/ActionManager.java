@@ -15,6 +15,8 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import com.liferay.apio.architect.credentials.Credentials;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
@@ -25,6 +27,7 @@ import io.vavr.control.Either;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -75,14 +78,21 @@ public interface ActionManager {
 		String method, List<String> params);
 
 	/**
-	 * Return the list of actions that are valid in that path
+	 * Returns the list of action semantics available for a resource.
 	 *
-	 * @param  actionKey the path parameters to add an Action
-	 * @param  credentials the user logged in to calculate the right operations
+	 * <p>
+	 * A {@link Credentials} instance can be provided to filter only those for
+	 * which the user has permission.
+	 * </p>
+	 *
+	 * @param  resource the resource for which to obtain the actions
+	 * @param  credentials the user credentials (can be {@code null}). Providing
+	 *         this value will filter the actions to those allowed to the user.
+	 * @return the list of action semantics for the resource
 	 * @review
 	 */
-	public List<Action> getActions(
-		ActionKey actionKey, Credentials credentials);
+	public Stream<ActionSemantics> getActionSemantics(
+		Resource resource, Credentials credentials);
 
 	/**
 	 * The API documentation with the list of actions and resources.
