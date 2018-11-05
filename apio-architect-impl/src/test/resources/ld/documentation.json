@@ -23,6 +23,40 @@
 	"entrypoint": "Entrypoint",
 	"supportedClass": [
 		{
+			"@id": "vocab:Type 1Collection",
+			"@type": "Class",
+			"description": "A collection of Type 1",
+			"subClassOf": "Collection",
+			"supportedOperation": [
+				{
+					"@id": "_:root/retrieve",
+					"@type": [
+						"Operation"
+					],
+					"comment": "retrieve description",
+					"method": "GET",
+					"returns": "Collection"
+				}
+			],
+			"supportedProperty": [
+				{
+					"@type": "SupportedProperty",
+					"property": "totalItems",
+					"rdf:type": "number"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "member"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "numberOfItems",
+					"rdf:type": "number"
+				}
+			],
+			"title": "Type 1Collection"
+		},
+		{
 			"@id": "Type 1",
 			"@type": "Class",
 			"supportedOperation": [
@@ -36,13 +70,22 @@
 					"returns": "Type 1"
 				},
 				{
-					"@id": "_:root/delete",
+					"@id": "_:root/remove",
 					"@type": [
 						"DeleteAction",
 						"Operation"
 					],
 					"method": "DELETE",
 					"returns": "http://www.w3.org/2002/07/owl#Nothing"
+				},
+				{
+					"@id": "_:root/replace",
+					"@type": [
+						"ReplaceAction",
+						"Operation"
+					],
+					"method": "PUT",
+					"returns": "Type 1"
 				}
 			],
 			"supportedProperty": [
@@ -300,353 +343,6 @@
 				}
 			],
 			"title": "Type 1"
-		},
-		{
-			"@id": "Type 2",
-			"@type": "Class",
-			"supportedOperation": [
-				{
-					"@id": "_:root/retrieve",
-					"@type": [
-						"Operation"
-					],
-					"comment": "retrieve description",
-					"method": "GET",
-					"returns": "Type 2"
-				},
-				{
-					"@id": "_:root/delete",
-					"@type": [
-						"DeleteAction",
-						"Operation"
-					],
-					"method": "DELETE",
-					"returns": "http://www.w3.org/2002/07/owl#Nothing"
-				}
-			],
-			"supportedProperty": [
-				{
-					"@type": "SupportedProperty",
-					"property": "applicationRelativeURL1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"comment": "binary description",
-					"property": "binary1",
-					"rdf:type": "file"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "binary2",
-					"rdf:type": "file"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "boolean1",
-					"rdf:type": "boolean"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "boolean2",
-					"rdf:type": "boolean"
-				},
-				{
-					"@type": "SupportedProperty",
-					"manages": {
-						"object": "boolean",
-						"property": "rdf:type"
-					},
-					"property": "booleanList1",
-					"rdf:type": "collection"
-				},
-				{
-					"@type": "SupportedProperty",
-					"manages": {
-						"object": "boolean",
-						"property": "rdf:type"
-					},
-					"property": "booleanList2",
-					"rdf:type": "collection"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "link1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "link2",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "localizedString1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "localizedString2",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "nested1"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "nested2"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "nested1"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "nested2"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "number1",
-					"rdf:type": "number"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "number2",
-					"rdf:type": "number"
-				},
-				{
-					"@type": "SupportedProperty",
-					"manages": {
-						"object": "number",
-						"property": "rdf:type"
-					},
-					"property": "numberList1",
-					"rdf:type": "collection"
-				},
-				{
-					"@type": "SupportedProperty",
-					"manages": {
-						"object": "number",
-						"property": "rdf:type"
-					},
-					"property": "numberList2",
-					"rdf:type": "collection"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "relativeURL1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "relativeURL2",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "relativeURL3",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "date1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "date2",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "string1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "string2",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"manages": {
-						"object": "string",
-						"property": "rdf:type"
-					},
-					"property": "stringList1",
-					"rdf:type": "collection"
-				},
-				{
-					"@type": "SupportedProperty",
-					"manages": {
-						"object": "string",
-						"property": "rdf:type"
-					},
-					"property": "stringList2",
-					"rdf:type": "collection"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "embedded1",
-					"rdf:type": "FirstEmbeddedId"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "embedded2",
-					"rdf:type": "FirstEmbeddedId"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "linked1",
-					"rdf:type": "FirstEmbeddedId"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "linked2",
-					"rdf:type": "FirstEmbeddedId"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "number1",
-					"rdf:type": "number"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "string1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "string2",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "nested3"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "nested3"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "number1",
-					"rdf:type": "number"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "number1",
-					"rdf:type": "number"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "string1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "string1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "linked3",
-					"rdf:type": "ThirdEmbeddedId"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "string1",
-					"rdf:type": "string"
-				},
-				{
-					"@type": "SupportedProperty",
-					"manages": {
-						"object": "FirstEmbeddedId",
-						"property": "rdf:type"
-					},
-					"property": "relatedCollection1",
-					"rdf:type": "collection"
-				},
-				{
-					"@type": "SupportedProperty",
-					"manages": {
-						"object": "FirstEmbeddedId",
-						"property": "rdf:type"
-					},
-					"property": "relatedCollection2",
-					"rdf:type": "collection"
-				}
-			],
-			"title": "Type 2"
-		},
-		{
-			"@id": "vocab:Type 1Collection",
-			"@type": "Class",
-			"description": "A collection of Type 1",
-			"subClassOf": "Collection",
-			"supportedOperation": [
-				{
-					"@id": "_:root/retrieve",
-					"@type": [
-						"Operation"
-					],
-					"comment": "retrieve description",
-					"method": "GET",
-					"returns": "Collection"
-				}
-			],
-			"supportedProperty": [
-				{
-					"@type": "SupportedProperty",
-					"property": "totalItems",
-					"rdf:type": "number"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "member"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "numberOfItems",
-					"rdf:type": "number"
-				}
-			],
-			"title": "Type 1Collection"
-		},
-		{
-			"@id": "vocab:Type 2Collection",
-			"@type": "Class",
-			"description": "A collection of Type 2",
-			"subClassOf": "Collection",
-			"supportedOperation": [
-				{
-					"@id": "_:root/retrieve",
-					"@type": [
-						"Operation"
-					],
-					"comment": "retrieve description",
-					"method": "GET",
-					"returns": "Collection"
-				}
-			],
-			"supportedProperty": [
-				{
-					"@type": "SupportedProperty",
-					"property": "totalItems",
-					"rdf:type": "number"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "member"
-				},
-				{
-					"@type": "SupportedProperty",
-					"property": "numberOfItems",
-					"rdf:type": "number"
-				}
-			],
-			"title": "Type 2Collection"
 		}
 	],
 	"title": "Title"

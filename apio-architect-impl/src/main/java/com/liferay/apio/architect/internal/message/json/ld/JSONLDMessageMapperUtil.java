@@ -14,11 +14,13 @@
 
 package com.liferay.apio.architect.internal.message.json.ld;
 
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
-import com.liferay.apio.architect.internal.annotation.Action;
-import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
 import com.liferay.apio.architect.internal.operation.CreateOperation;
 import com.liferay.apio.architect.internal.operation.DeleteOperation;
@@ -37,26 +39,6 @@ import java.util.List;
  * @author Alejandro Hernández
  */
 public class JSONLDMessageMapperUtil {
-
-	public static List<String> getOperationTypes(Action action) {
-		ActionKey actionKey = action.getActionKey();
-
-		String httpMethodName = actionKey.getHttpMethodName();
-
-		if (httpMethodName.equals("POST")) {
-			return asList("CreateAction", "Operation");
-		}
-
-		if (httpMethodName.equals("DELETE")) {
-			return asList("DeleteAction", "Operation");
-		}
-
-		if (httpMethodName.equals("PUT")) {
-			return asList("ReplaceAction", "Operation");
-		}
-
-		return singletonList("Operation");
-	}
 
 	/**
 	 * Return the list of {@link Operation} types.
@@ -82,6 +64,18 @@ public class JSONLDMessageMapperUtil {
 		}
 
 		return singletonList("Operation");
+	}
+
+	public static List<String> getOperationTypes(String actionName) {
+		return Match(
+			actionName
+		).of(
+			Case($("create"), asList("CreateAction", "Operation")),
+			Case($("batch-create"), asList("CreateAction", "Operation")),
+			Case($("remove"), asList("DeleteAction", "Operation")),
+			Case($("replace"), asList("ReplaceAction", "Operation")),
+			Case($(), singletonList("Operation"))
+		);
 	}
 
 	private JSONLDMessageMapperUtil() {

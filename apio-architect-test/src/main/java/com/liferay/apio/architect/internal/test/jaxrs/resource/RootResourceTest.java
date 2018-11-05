@@ -251,8 +251,8 @@ public class RootResourceTest extends BaseTest {
 
 			return new Documentation(
 				Optional::empty, Optional::empty, Optional::empty,
-				Collections::emptyMap, Collections::emptySet,
-				__ -> emptyList(), () -> __ -> Locale::toString);
+				Collections::emptyMap, Stream.empty(),
+				__ -> Stream.empty(), () -> __ -> Locale::toString);
 		}
 
 		@Override

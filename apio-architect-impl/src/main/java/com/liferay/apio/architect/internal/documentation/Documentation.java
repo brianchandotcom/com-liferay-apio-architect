@@ -17,17 +17,16 @@ package com.liferay.apio.architect.internal.documentation;
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
-import com.liferay.apio.architect.internal.annotation.Action;
-import com.liferay.apio.architect.internal.annotation.ActionKey;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.representor.Representor;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Represents the API's auto-documentation.
@@ -41,25 +40,23 @@ public class Documentation {
 		Supplier<Optional<APIDescription>> apiDescriptionSupplier,
 		Supplier<Optional<ApplicationURL>> entryPointSupplier,
 		Supplier<Map<String, Representor>> representorMapSupplier,
-		Supplier<Set<ActionKey>> actionKeysSupplier,
-		Function<ActionKey, List<Action>> actionsFunction,
+		Stream<Resource> resourceStream,
+		Function<Resource, Stream<ActionSemantics>> actionSemanticsFunction,
 		Supplier<CustomDocumentation> customDocumentationSupplier) {
 
 		_apiTitleSupplier = apiTitleSupplier;
 		_apiDescriptionSupplier = apiDescriptionSupplier;
 		_entryPointSupplier = entryPointSupplier;
 		_representorMapSupplier = representorMapSupplier;
-		_actionKeysSupplier = actionKeysSupplier;
-		_actionsFunction = actionsFunction;
+		_resourceStream = resourceStream;
+		_actionSemanticsFunction = actionSemanticsFunction;
 		_customDocumentationSupplier = customDocumentationSupplier;
 	}
 
-	public Supplier<Set<ActionKey>> getActionKeysSupplier() {
-		return _actionKeysSupplier;
-	}
+	public Function<Resource, Stream<ActionSemantics>>
+		getActionSemanticsFunction() {
 
-	public Function<ActionKey, List<Action>> getActionsFunction() {
-		return _actionsFunction;
+		return _actionSemanticsFunction;
 	}
 
 	/**
@@ -107,12 +104,17 @@ public class Documentation {
 		return _representorMapSupplier.get();
 	}
 
-	private final Supplier<Set<ActionKey>> _actionKeysSupplier;
-	private final Function<ActionKey, List<Action>> _actionsFunction;
+	public Stream<Resource> getResourceStream() {
+		return _resourceStream;
+	}
+
+	private final Function<Resource, Stream<ActionSemantics>>
+		_actionSemanticsFunction;
 	private final Supplier<Optional<APIDescription>> _apiDescriptionSupplier;
 	private final Supplier<Optional<APITitle>> _apiTitleSupplier;
 	private final Supplier<CustomDocumentation> _customDocumentationSupplier;
 	private final Supplier<Optional<ApplicationURL>> _entryPointSupplier;
 	private final Supplier<Map<String, Representor>> _representorMapSupplier;
+	private final Stream<Resource> _resourceStream;
 
 }

@@ -14,31 +14,35 @@
 
 package com.liferay.apio.architect.test.util.internal.writer;
 
-import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
-import com.liferay.apio.architect.internal.annotation.ActionKey;
-import com.liferay.apio.architect.internal.annotation.ActionManager;
-import com.liferay.apio.architect.internal.annotation.ActionManagerImpl;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.documentation.contributor.CustomDocumentationImpl;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.internal.writer.DocumentationWriter;
+import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;
-import com.liferay.apio.architect.uri.Path;
-
-import io.vavr.CheckedFunction3;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Provides methods that test {@code DocumentationMessageMapper} objects.
@@ -75,39 +79,16 @@ public class MockDocumentationWriter {
 		Map<String, Representor> root = Collections.singletonMap(
 			"root", rootModelRepresentor);
 
-		ActionManager actionManager = ActionManagerImpl.newTestInstance(
-			new PathIdentifierMapperManager() {
-
-				@Override
-				public boolean hasPathIdentifierMapper(String name) {
-					return false;
-				}
-
-				@Override
-				public <T> T mapToIdentifierOrFail(Path path) {
-					return null;
-				}
-
-				@Override
-				public <T> Optional<Path> mapToPath(String name, T identifier) {
-					return Optional.empty();
-				}
-
-			},
-			null);
-
 		CustomDocumentation customDocumentation =
 			customDocumentationBuilder.build();
 
-		Set<ActionKey> actionKeys = new HashSet<>();
-
-		_addActions(actionManager, actionKeys);
+		Stream<Resource> stream = Stream.of(Paged.of("root"), Item.of("root"));
 
 		Documentation documentation = new Documentation(
 			() -> Optional.of(() -> "Title"),
 			() -> Optional.of(() -> "Description"),
-			() -> Optional.of(() -> "Entrypoint"), () -> root, () -> actionKeys,
-			actionKey -> actionManager.getActions(actionKey, null),
+			() -> Optional.of(() -> "Entrypoint"), () -> root, stream,
+			MockDocumentationWriter::_getActionSemantics,
 			() -> customDocumentation);
 
 		DocumentationWriter documentationWriter = DocumentationWriter.create(
@@ -124,36 +105,85 @@ public class MockDocumentationWriter {
 		return documentationWriter.write();
 	}
 
-	private static void _addAction(
-		ActionKey actionKey, ActionManager actionManager,
-		Set<ActionKey> actionKeys) {
+	private static Stream<ActionSemantics> _getActionSemantics(
+		Resource resource) {
 
-		actionKeys.add(actionKey);
-		actionManager.add(actionKey, _emptyActionFunction);
-	}
-
-	private static void _addActions(
-		ActionManager actionManager, Set<ActionKey> actionKeys) {
-
-		_addAction(new ActionKey("GET", "root"), actionManager, actionKeys);
-
-		_addAction(
-			new ActionKey("DELETE", "root", ANY_ROUTE), actionManager,
-			actionKeys);
-
-		_addAction(
-			new ActionKey("GET", "root", ANY_ROUTE), actionManager, actionKeys);
-
-		_addAction(
-			new ActionKey("DELETE", "root", ANY_ROUTE), actionManager,
-			actionKeys);
+		return Match(
+			resource
+		).of(
+			Case($(Paged.of("root")), __ -> _rootActionSemantics.stream()),
+			Case($(Item.of("root")), __ -> _itemActionSemantics.stream()),
+			Case($(), Stream::empty)
+		);
 	}
 
 	private MockDocumentationWriter() {
 		throw new UnsupportedOperationException();
 	}
 
-	private static final CheckedFunction3<Object, Object, List<Object>, Object>
-		_emptyActionFunction = (id, body, providers) -> null;
+	private static final List<ActionSemantics> _itemActionSemantics;
+	private static final List<ActionSemantics> _rootActionSemantics;
+
+	static {
+		ActionSemantics retrievePage = ActionSemantics.ofResource(
+			Paged.of("root")
+		).name(
+			"retrieve"
+		).method(
+			"GET"
+		).receivesNoParams(
+		).returns(
+			Page.class
+		).notAnnotated(
+		).executeFunction(
+			__ -> null
+		).build();
+
+		_rootActionSemantics = singletonList(retrievePage);
+
+		ActionSemantics retrieve = ActionSemantics.ofResource(
+			Item.of("root")
+		).name(
+			"retrieve"
+		).method(
+			"GET"
+		).receivesNoParams(
+		).returns(
+			SingleModel.class
+		).notAnnotated(
+		).executeFunction(
+			__ -> null
+		).build();
+
+		ActionSemantics remove = ActionSemantics.ofResource(
+			Item.of("root")
+		).name(
+			"remove"
+		).method(
+			"DELETE"
+		).receivesNoParams(
+		).returns(
+			Void.class
+		).notAnnotated(
+		).executeFunction(
+			__ -> null
+		).build();
+
+		ActionSemantics replace = ActionSemantics.ofResource(
+			Item.of("root")
+		).name(
+			"replace"
+		).method(
+			"PUT"
+		).receivesNoParams(
+		).returns(
+			SingleModel.class
+		).notAnnotated(
+		).executeFunction(
+			__ -> null
+		).build();
+
+		_itemActionSemantics = asList(retrieve, remove, replace);
+	}
 
 }

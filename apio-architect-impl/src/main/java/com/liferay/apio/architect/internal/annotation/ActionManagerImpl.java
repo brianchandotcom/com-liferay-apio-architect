@@ -67,7 +67,6 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,19 +95,6 @@ import org.osgi.service.component.annotations.Reference;
 @Component(service = ActionManager.class)
 public class ActionManagerImpl implements ActionManager {
 
-	public static ActionManager newTestInstance(
-		PathIdentifierMapperManager pathIdentifierMapperManager,
-		ProviderManager providerManager) {
-
-		ActionManagerImpl actionManagerImpl = new ActionManagerImpl();
-
-		actionManagerImpl.pathIdentifierMapperManager =
-			pathIdentifierMapperManager;
-		actionManagerImpl.providerManager = providerManager;
-
-		return actionManagerImpl;
-	}
-
 	/**
 	 * Returns all of the action semantics collected by the different routers.
 	 *
@@ -132,8 +118,6 @@ public class ActionManagerImpl implements ActionManager {
 		Class... providers) {
 
 		_actionsMap.put(actionKey, actionFunction);
-
-		_providers.put(actionKey, providers);
 	}
 
 	@Override
@@ -180,10 +164,16 @@ public class ActionManagerImpl implements ActionManager {
 			() -> providerManager.provideOptional(
 				httpServletRequest, ApplicationURL.class);
 
+		Stream<ActionSemantics> stream = actionSemantics();
+
+		Stream<Resource> resourceStream = stream.map(
+			ActionSemantics::resource
+		).distinct();
+
 		return new Documentation(
 			apiTitleSupplier, apiDescriptionSupplier, applicationUrlSupplier,
-			() -> _representableManager.getRepresentors(), _actionsMap::keySet,
-			actionKey -> Collections.emptyList(),
+			() -> _representableManager.getRepresentors(), resourceStream,
+			resource -> getActionSemantics(resource, null),
 			() -> _customDocumentationManager.getCustomDocumentation());
 	}
 
@@ -429,8 +419,6 @@ public class ActionManagerImpl implements ActionManager {
 
 	@Reference
 	private NestedCollectionRouterManager _nestedCollectionRouterManager;
-
-	private final Map<ActionKey, Class[]> _providers = new HashMap<>();
 
 	@Reference
 	private RepresentableManager _representableManager;

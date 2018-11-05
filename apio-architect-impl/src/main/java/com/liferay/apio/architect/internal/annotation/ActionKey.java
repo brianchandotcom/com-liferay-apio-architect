@@ -14,8 +14,6 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
-import static com.liferay.apio.architect.operation.HTTPMethod.GET;
-
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Objects;
@@ -80,22 +78,8 @@ public class ActionKey {
 		return false;
 	}
 
-	public ActionKey getGenericActionKey() {
-		if (isReusable()) {
-			return new ActionKey(
-				_httpMethodName, _param1, _param2, ANY_ROUTE, _param4);
-		}
-
-		return new ActionKey(
-			_httpMethodName, _param1, ANY_ROUTE, _param3, _param4);
-	}
-
 	public String getHttpMethodName() {
 		return _httpMethodName;
-	}
-
-	public String getIdName() {
-		return _param1 + "/" + (isCustom() ? _param2 : _getOperationVerb());
 	}
 
 	public String getIdOrAction() {
@@ -148,10 +132,6 @@ public class ActionKey {
 		return false;
 	}
 
-	public boolean isGetRequest() {
-		return _httpMethodName.equals(GET.name());
-	}
-
 	public boolean isItem() {
 		if ((_param2 != null) && _param2.equals(ActionKey.ANY_ROUTE)) {
 			return true;
@@ -168,34 +148,12 @@ public class ActionKey {
 		return false;
 	}
 
-	public boolean isReusable() {
-		if ((_param1 != null) && _param1.equals("r")) {
-			return true;
-		}
-
-		return false;
-	}
-
 	@Override
 	public String toString() {
 		return String.join(
 			"\'", "_httpMethodName='", _httpMethodName, ", _param1='", _param1,
 			", _param2='", _param2, ", _param3='", _param3, ", _param4='",
 			_param4);
-	}
-
-	private String _getOperationVerb() {
-		if ("DELETE".equals(_httpMethodName)) {
-			return "delete";
-		}
-		else if ("PUT".equals(_httpMethodName)) {
-			return "update";
-		}
-		else if ("POST".equals(_httpMethodName)) {
-			return "create";
-		}
-
-		return "retrieve";
 	}
 
 	private final String _httpMethodName;

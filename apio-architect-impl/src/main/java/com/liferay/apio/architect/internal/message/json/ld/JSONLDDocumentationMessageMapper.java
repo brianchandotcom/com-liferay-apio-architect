@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.internal.message.json.ld;
 
+import static com.liferay.apio.architect.internal.action.Predicates.returnsAnyOf;
 import static com.liferay.apio.architect.internal.message.json.ld.JSONLDMessageMapperUtil.getOperationTypes;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN_LIST;
@@ -27,16 +28,20 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.js
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.RELATED_COLLECTION;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING_LIST;
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
-import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
-import com.liferay.apio.architect.internal.annotation.Action;
-import com.liferay.apio.architect.internal.annotation.ActionKey;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+
+import static java.lang.String.join;
+
+import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType;
+import com.liferay.apio.architect.pagination.Page;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -67,33 +72,31 @@ public class JSONLDDocumentationMessageMapper
 	@Override
 	public void mapAction(
 		JSONObjectBuilder jsonObjectBuilder, String resourceName, String type,
-		Action action, String description) {
-
-		ActionKey actionKey = action.getActionKey();
+		ActionSemantics actionSemantics, String description) {
 
 		jsonObjectBuilder.field(
 			"@id"
 		).stringValue(
-			"_:" + actionKey.getIdName()
+			"_:" + join("/", resourceName, actionSemantics.name())
 		);
 
 		jsonObjectBuilder.field(
 			"@type"
 		).arrayValue(
 		).addAllStrings(
-			getOperationTypes(action)
+			getOperationTypes(actionSemantics.name())
 		);
 
 		jsonObjectBuilder.field(
 			"method"
 		).stringValue(
-			actionKey.getHttpMethodName()
+			actionSemantics.method()
 		);
 
 		jsonObjectBuilder.field(
 			"returns"
 		).stringValue(
-			_getReturnValue(type, action)
+			_getReturnValue(type, actionSemantics)
 		);
 
 		_addDescription(jsonObjectBuilder, description);
@@ -305,7 +308,8 @@ public class JSONLDDocumentationMessageMapper
 	@Override
 	public void onFinishAction(
 		JSONObjectBuilder documentationJsonObjectBuilder,
-		JSONObjectBuilder operationJsonObjectBuilder, Action action) {
+		JSONObjectBuilder operationJsonObjectBuilder,
+		ActionSemantics actionSemantics) {
 
 		documentationJsonObjectBuilder.field(
 			"supportedOperation"
@@ -432,26 +436,18 @@ public class JSONLDDocumentationMessageMapper
 		}
 	}
 
-	private String _getReturnValue(String type, Action action) {
-		String value = null;
+	private String _getReturnValue(
+		String type, ActionSemantics actionSemantics) {
 
-		ActionKey actionKey = action.getActionKey();
-
-		String httpMethodName = actionKey.getHttpMethodName();
-
-		if (httpMethodName.equals(DELETE.name())) {
-			value = "http://www.w3.org/2002/07/owl#Nothing";
-		}
-		else if (actionKey.isCollection() &&
-				 httpMethodName.equals(GET.name())) {
-
-			value = "Collection";
-		}
-		else {
-			value = type;
-		}
-
-		return value;
+		return Match(
+			actionSemantics
+		).of(
+			Case($(returnsAnyOf(Void.class)), _NOTHING),
+			Case($(returnsAnyOf(Page.class)), "Collection"), Case($(), type)
+		);
 	}
+
+	private static final String _NOTHING =
+		"http://www.w3.org/2002/07/owl#Nothing";
 
 }
