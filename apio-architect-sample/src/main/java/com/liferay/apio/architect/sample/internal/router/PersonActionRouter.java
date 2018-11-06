@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.sample.internal.converter.PersonConvert
 
 import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.annotation.Actions.Create;
+import com.liferay.apio.architect.annotation.Actions.EntryPoint;
 import com.liferay.apio.architect.annotation.Actions.Remove;
 import com.liferay.apio.architect.annotation.Actions.Replace;
 import com.liferay.apio.architect.annotation.Actions.Retrieve;
@@ -134,6 +135,7 @@ public class PersonActionRouter implements ActionRouter<Person> {
 		);
 	}
 
+	@EntryPoint
 	@Retrieve
 	public PageItems<Person> retrieveCollection(Pagination pagination) {
 		List<PersonModel> personModels = _personModelService.getPage(
