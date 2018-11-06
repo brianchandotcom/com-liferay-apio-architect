@@ -14,14 +14,14 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
-import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.internal.annotation.form.FormTransformer;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedTypeManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -39,27 +39,27 @@ public class FormManager {
 	 * Computes the form for a className.
 	 *
 	 * @param  className the className of the type
-	 * @param  pathToIdentifierFunction function that extract the identifier
-	 *         from a path given
-	 * @param  nameFunction function that returns the name of the resource given
-	 *         the className of the identifier
 	 * @return the resulting optional form
 	 * @review
 	 */
-	public <T> Optional<Form<T>> getFormOptional(
-		String className, IdentifierFunction<?> pathToIdentifierFunction,
-		Function<String, Optional<String>> nameFunction) {
-
+	public <T> Optional<Form<T>> getFormOptional(String className) {
 		Optional<ParsedType> parsedTypeOptional =
 			_parsedTypeManager.getParsedType(className);
 
 		return parsedTypeOptional.map(
 			parsedType -> FormTransformer.toForm(
-				parsedType, pathToIdentifierFunction, nameFunction)
+				parsedType, _pathIdentifierMapperManager::mapToIdentifierOrFail,
+				_nameManager::getNameOptional)
 		);
 	}
 
 	@Reference
+	private NameManager _nameManager;
+
+	@Reference
 	private ParsedTypeManager _parsedTypeManager;
+
+	@Reference
+	private PathIdentifierMapperManager _pathIdentifierMapperManager;
 
 }
