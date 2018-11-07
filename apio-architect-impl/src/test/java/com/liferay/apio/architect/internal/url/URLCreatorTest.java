@@ -17,19 +17,27 @@ package com.liferay.apio.architect.internal.url;
 import static com.liferay.apio.architect.internal.url.URLCreator.createAbsoluteURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createCollectionPageURL;
-import static com.liferay.apio.architect.internal.url.URLCreator.createCollectionURL;
-import static com.liferay.apio.architect.internal.url.URLCreator.createNestedCollectionURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createItemResourceURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createNestedResourceURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createOperationURL;
-import static com.liferay.apio.architect.internal.url.URLCreator.createSingleURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createPagedResourceURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.getPath;
+
+import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
+import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
 import static java.util.Collections.emptyList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.nullValue;
 
 import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.internal.action.resource.Resource.Id;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.operation.CreateOperation;
 import com.liferay.apio.architect.internal.operation.DeleteOperation;
 import com.liferay.apio.architect.internal.operation.RetrieveOperation;
@@ -124,17 +132,35 @@ public class URLCreatorTest {
 
 	@Test
 	public void testCreateCollectionURL() {
-		String url = createCollectionURL(_applicationURL, "resource");
+		Paged paged = Paged.of("resource");
+
+		String url = createPagedResourceURL(_applicationURL, paged);
 
 		assertThat(url, is("www.liferay.com/resource"));
 	}
 
 	@Test
-	public void testCreateNestedCollectionURL() {
-		String url = createNestedCollectionURL(
-			_applicationURL, _path, "related");
+	public void testCreateNestedResourceURLReturnsEmptyIfMissingId() {
+		Nested nested = Nested.of(Item.of("parent"), "related");
 
-		assertThat(url, is("www.liferay.com/name/id/related"));
+		Optional<String> optional = createNestedResourceURL(
+			_applicationURL, nested);
+
+		assertThat(optional, is(emptyOptional()));
+	}
+
+	@Test
+	public void testCreateNestedResourceURLReturnsURLIfPresentId() {
+		Id id = Id.of(_path.getId(), _path.getId());
+
+		Nested nested = Nested.of(Item.of("parent", id), "related");
+
+		Optional<String> optional = createNestedResourceURL(
+			_applicationURL, nested);
+
+		String expected = "www.liferay.com/name/id/related";
+
+		assertThat(optional, is(optionalWithValue(equalTo(expected))));
 	}
 
 	@Test(expected = NoSuchElementException.class)
@@ -152,10 +178,27 @@ public class URLCreatorTest {
 	}
 
 	@Test
-	public void testCreateSingleURL() {
-		String url = createSingleURL(_applicationURL, _path);
+	public void testCreateSingleURLReturnsEmptyIfMissingId() {
+		Item item = Item.of(_path.getName());
 
-		assertThat(url, is("www.liferay.com/name/id"));
+		Optional<String> optional = createItemResourceURL(
+			_applicationURL, item);
+
+		assertThat(optional, is(emptyOptional()));
+	}
+
+	@Test
+	public void testCreateSingleURLReturnsURLIfPresentId() {
+		Id id = Id.of(_path.getId(), _path.getId());
+
+		Item item = Item.of(_path.getName(), id);
+
+		Optional<String> optional = createItemResourceURL(
+			_applicationURL, item);
+
+		String expected = "www.liferay.com/name/id";
+
+		assertThat(optional, is(optionalWithValue(equalTo(expected))));
 	}
 
 	@Test(expected = NoSuchElementException.class)

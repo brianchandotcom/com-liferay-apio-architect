@@ -15,12 +15,16 @@
 package com.liferay.apio.architect.internal.writer;
 
 import static com.liferay.apio.architect.internal.url.URLCreator.createCollectionPageURL;
-import static com.liferay.apio.architect.internal.url.URLCreator.createCollectionURL;
-import static com.liferay.apio.architect.internal.url.URLCreator.createNestedCollectionURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createNestedResourceURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createPagedResourceURL;
 import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getPathOptional;
 
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
+import com.liferay.apio.architect.internal.action.resource.Resource.Id;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.alias.RepresentorFunction;
@@ -32,6 +36,7 @@ import com.liferay.apio.architect.internal.message.json.PageMessageMapper;
 import com.liferay.apio.architect.internal.pagination.PageType;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
+import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.representor.BaseRepresentor;
@@ -295,12 +300,17 @@ public class PageWriter<T> {
 	private String _getCollectionURL() {
 		Optional<Path> optional = _page.getPathOptional();
 
+		ApplicationURL applicationURL = _requestInfo.getApplicationURL();
+
 		return optional.map(
-			path -> createNestedCollectionURL(
-				_requestInfo.getApplicationURL(), path, _page.getResourceName())
+			path -> Item.of(path.getName(), Id.of(null, path.getId()))
+		).map(
+			parent -> Nested.of(parent, _page.getResourceName())
+		).flatMap(
+			nested -> createNestedResourceURL(applicationURL, nested)
 		).orElseGet(
-			() -> createCollectionURL(
-				_requestInfo.getApplicationURL(), _page.getResourceName())
+			() -> createPagedResourceURL(
+				applicationURL, Paged.of(_page.getResourceName()))
 		);
 	}
 

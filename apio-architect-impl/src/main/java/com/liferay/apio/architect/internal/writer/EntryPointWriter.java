@@ -14,8 +14,9 @@
 
 package com.liferay.apio.architect.internal.writer;
 
-import static com.liferay.apio.architect.internal.url.URLCreator.createCollectionURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createPagedResourceURL;
 
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.internal.message.json.EntryPointMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
@@ -50,7 +51,9 @@ public class EntryPointWriter {
 		for (String resourceName : resourceNames) {
 			JSONObjectBuilder itemJsonObjectBuilder = new JSONObjectBuilder();
 
-			String url = createCollectionURL(applicationURL, resourceName);
+			Paged paged = Paged.of(resourceName);
+
+			String url = createPagedResourceURL(applicationURL, paged);
 
 			_entryPointMessageMapper.mapItemSelfURL(
 				_jsonObjectBuilder, itemJsonObjectBuilder, resourceName, url);

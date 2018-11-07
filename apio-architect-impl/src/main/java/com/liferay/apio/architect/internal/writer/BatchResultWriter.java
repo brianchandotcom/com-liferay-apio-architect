@@ -14,9 +14,11 @@
 
 package com.liferay.apio.architect.internal.writer;
 
-import static com.liferay.apio.architect.internal.url.URLCreator.createSingleURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createItemResourceURL;
 
 import com.liferay.apio.architect.batch.BatchResult;
+import com.liferay.apio.architect.internal.action.resource.Resource.Id;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.message.json.BatchResultMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
@@ -70,15 +72,19 @@ public class BatchResultWriter<T> {
 
 			_pathFunction.apply(
 				_batchResult.resourceName, identifier
+			).map(
+				path -> Item.of(path.getName(), Id.of(null, path.getId()))
 			).ifPresent(
-				path -> {
+				item -> {
 					_batchResultMessageMapper.onStartItem(
 						_jsonObjectBuilder, itemJsonObjectBuilder);
 
-					String url = createSingleURL(applicationURL, path);
+					Optional<String> optionalURL = createItemResourceURL(
+						applicationURL, item);
 
-					_batchResultMessageMapper.mapItemSelfURL(
-						_jsonObjectBuilder, itemJsonObjectBuilder, url);
+					optionalURL.ifPresent(
+						url -> _batchResultMessageMapper.mapItemSelfURL(
+							_jsonObjectBuilder, itemJsonObjectBuilder, url));
 
 					_batchResultMessageMapper.mapItemTypes(
 						_jsonObjectBuilder, itemJsonObjectBuilder, types);
