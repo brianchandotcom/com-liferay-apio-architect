@@ -15,27 +15,44 @@
 package com.liferay.apio.architect.internal.action;
 
 import static com.liferay.apio.architect.internal.action.ActionSemantics.toAction;
+import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
+
+import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
+import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
 import static java.lang.String.join;
 
+import static java.util.Collections.emptyList;
+
+import static org.hamcrest.CoreMatchers.both;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
 
+import com.liferay.apio.architect.annotation.Actions.EntryPoint;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.annotation.Action;
+import com.liferay.apio.architect.pagination.Page;
 
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;
 
+import java.lang.annotation.Annotation;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import org.hamcrest.Matcher;
 
 import org.immutables.value.Value.Immutable;
 
@@ -213,6 +230,70 @@ public class ActionSemanticsTest {
 	}
 
 	@Test
+	public void testFilterFromEmptyStreamReturnsNone() {
+		Optional<ActionSemantics> optional = ActionSemantics.filter(
+			Stream.empty()
+		).forResource(
+			Resource.Paged.of("name")
+		).withPredicate(
+			__ -> true
+		);
+
+		assertThat(optional, is(emptyOptional()));
+	}
+
+	@Test
+	public void testFilterReturnsCorrectActionSemantics() {
+		ImmutableActionSemantics immutableActionSemantics =
+			(ImmutableActionSemantics)ActionSemantics.ofResource(
+				Resource.Paged.of("name")
+			).name(
+				"retrieve"
+			).method(
+				"GET"
+			).receivesNoParams(
+			).returns(
+				Page.class
+			).annotatedWith(
+				ImmutableEntryPoint.builder().build()
+			).executeFunction(
+				__ -> null
+			).build();
+
+		Stream<ActionSemantics> stream = Stream.of(
+			immutableActionSemantics,
+			immutableActionSemantics.withName("create"),
+			immutableActionSemantics.withAnnotations(emptyList()),
+			immutableActionSemantics.withResource(Resource.Paged.of("name2")),
+			immutableActionSemantics.withReturnClass(String.class),
+			immutableActionSemantics.withResource(Resource.Item.of("item")),
+			immutableActionSemantics.withMethod("PUT"),
+			immutableActionSemantics.withResource(Resource.Paged.of("name3")));
+
+		Optional<ActionSemantics> optional = ActionSemantics.filter(
+			stream
+		).forResource(
+			Resource.Paged.of("name")
+		).withPredicate(
+			isRootCollectionAction
+		);
+
+		assertThat(optional, is(optionalWithValue()));
+
+		optional.ifPresent(
+			actionSemantics -> {
+				assertThat(actionSemantics.method(), is("GET"));
+				assertThat(actionSemantics.name(), is("retrieve"));
+				assertThat(actionSemantics.annotations(), hasSize(1));
+				assertThat(actionSemantics.annotations(), _hasEntryPoint);
+				assertThat(
+					actionSemantics.returnClass(), is(equalTo(Page.class)));
+				assertThat(
+					actionSemantics.resource(), is(Resource.Paged.of("name")));
+			});
+	}
+
+	@Test
 	public void testToActionTransformsAnActionSemanticsIntoAnAction() {
 		ActionSemantics actionSemantics = ActionSemantics.ofResource(
 			Resource.Paged.of("name")
@@ -248,6 +329,10 @@ public class ActionSemanticsTest {
 	@Immutable(singleton = true)
 	public static @interface MyAnnotation {
 	}
+
+	@SuppressWarnings("unchecked")
+	private static final Matcher<List<? extends Annotation>> _hasEntryPoint =
+		both(hasSize(1)).and((Matcher)hasItem(instanceOf(EntryPoint.class)));
 
 	@SuppressWarnings("unchecked")
 	private static final CheckedFunction1<List<?>, Object> _join = list -> join(
