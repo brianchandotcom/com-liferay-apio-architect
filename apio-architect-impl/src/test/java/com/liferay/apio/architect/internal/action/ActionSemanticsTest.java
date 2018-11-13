@@ -31,11 +31,13 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.annotation.Actions.EntryPoint;
 import com.liferay.apio.architect.internal.action.resource.Resource;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.pagination.Page;
@@ -320,6 +322,33 @@ public class ActionSemanticsTest {
 		Try<String> stringTry = (Try<String>)object;
 
 		assertThat(stringTry.get(), is("String-Long"));
+	}
+
+	@Test
+	public void testWithResourceReturnsActionSemanticsWithDifferentResource() {
+		ActionSemantics actionSemantics = ActionSemantics.ofResource(
+			Paged.of("name")
+		).name(
+			"retrieve"
+		).method(
+			"GET"
+		).receivesNoParams(
+		).returns(
+			Page.class
+		).notAnnotated(
+		).executeFunction(
+			__ -> null
+		).build();
+
+		ActionSemantics newActionSemantics = actionSemantics.withResource(
+			Item.of("name"));
+
+		assertThat(actionSemantics.resource(), is(Paged.of("name")));
+
+		assertThat(newActionSemantics.resource(), is(Item.of("name")));
+		assertThat(
+			newActionSemantics.resource(),
+			is(not(equalTo(actionSemantics.resource()))));
 	}
 
 	@Immutable(singleton = true)

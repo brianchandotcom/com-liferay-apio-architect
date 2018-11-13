@@ -150,6 +150,23 @@ public abstract class ActionSemantics {
 		);
 	}
 
+	/**
+	 * Copies the current {@link ActionSemantics} by setting a value for the
+	 * {@link ActionSemantics#resource() resource} attribute. A shallow
+	 * reference equality check is used to prevent copying of the same value by
+	 * returning {@code this}.
+	 *
+	 * @param  resource the new resource
+	 * @return A modified copy of {@code this} object
+	 * @review
+	 */
+	public ActionSemantics withResource(Resource resource) {
+		ImmutableActionSemantics immutableActionSemantics =
+			(ImmutableActionSemantics)this;
+
+		return immutableActionSemantics.withResource(resource);
+	}
+
 	@FunctionalInterface
 	public interface AnnotationsStep {
 
