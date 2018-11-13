@@ -18,6 +18,7 @@ import static javax.ws.rs.core.Variant.VariantListBuilder.newInstance;
 
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 import com.liferay.apio.architect.identifier.Identifier;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
 import com.liferay.apio.architect.internal.message.json.BatchResultMessageMapper;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
@@ -64,9 +65,23 @@ public class ManagerCache {
 	public static final ManagerCache INSTANCE = new ManagerCache();
 
 	/**
+	 * Adds action semantics.
+	 *
+	 * @param actionSemantics the action semantics
+	 */
+	public void addActionSemantics(ActionSemantics actionSemantics) {
+		if (_actionSemantics == null) {
+			_actionSemantics = new ArrayList<>();
+		}
+
+		_actionSemantics.add(actionSemantics);
+	}
+
+	/**
 	 * Clears the cache.
 	 */
 	public void clear() {
+		_actionSemantics = null;
 		_collectionRoutes = null;
 		_documentationMessageMappers = null;
 		_entryPointMessageMappers = null;
@@ -84,6 +99,16 @@ public class ManagerCache {
 		_rootResourceNames = null;
 		_rootResourceNamesSdk = null;
 		_singleModelMessageMappers = null;
+	}
+
+	public List<ActionSemantics> getActionSemantics(
+		EmptyFunction computeEmptyFunction) {
+
+		if (_actionSemantics == null) {
+			computeEmptyFunction.invoke();
+		}
+
+		return _actionSemantics;
 	}
 
 	/**
@@ -789,6 +814,7 @@ public class ManagerCache {
 	private static final MediaType _MEDIA_TYPE = MediaType.valueOf(
 		"application/ld+json");
 
+	private List<ActionSemantics> _actionSemantics;
 	private Map<MediaType, BatchResultMessageMapper> _batchResultMessageMappers;
 	private Map<String, CollectionRoutes> _collectionRoutes;
 	private CustomDocumentation _customDocumentation;

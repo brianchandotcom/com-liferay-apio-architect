@@ -14,12 +14,14 @@
 
 package com.liferay.apio.architect.internal.annotation.util;
 
+import static java.util.Objects.nonNull;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -27,40 +29,50 @@ import java.util.stream.Stream;
  */
 public class AnnotationUtil {
 
-	public static Object findObjectOfClass(
-		List<Object> objects, Class<?> clazz) {
+	public static <A extends Annotation> Optional<A> findAnnotation(
+		Class<A> annotationClass, Method method) {
 
-		Stream<Object> stream = objects.stream();
-
-		return stream.filter(
-			object -> clazz.isAssignableFrom(object.getClass())
-		).findFirst(
-		).orElse(
-			null
+		return Optional.ofNullable(
+			method.getAnnotation(annotationClass)
+		).map(
+			Optional::of
+		).orElseGet(
+			() -> Stream.of(
+				method.getAnnotations()
+			).map(
+				Annotation::annotationType
+			).map(
+				Class::getAnnotations
+			).flatMap(
+				Stream::of
+			).filter(
+				annotationClass::isInstance
+			).map(
+				annotationClass::cast
+			).findFirst()
 		);
 	}
 
-	public static Optional<Annotation> getAnnotationFromParametersOptional(
-		Method method, Class<? extends Annotation> annotation) {
+	public static <A extends Annotation> Optional<A>
+		getAnnotationFromParametersOptional(
+			Method method, Class<A> annotationClass) {
 
 		return Stream.of(
 			method.getParameterAnnotations()
 		).flatMap(
 			Stream::of
 		).filter(
-			annotationType -> annotation.isAssignableFrom(
+			annotationType -> annotationClass.isAssignableFrom(
 				annotationType.getClass())
+		).map(
+			annotationClass::cast
 		).findFirst();
 	}
 
-	public static boolean hasAnnotation(
-		Parameter parameter, Class<? extends Annotation> annotation) {
+	public static <A extends Annotation> Predicate<Parameter> hasAnnotation(
+		Class<A> annotationClass) {
 
-		if (parameter.getAnnotation(annotation) != null) {
-			return true;
-		}
-
-		return false;
+		return parameter -> nonNull(parameter.getAnnotation(annotationClass));
 	}
 
 	private AnnotationUtil() {

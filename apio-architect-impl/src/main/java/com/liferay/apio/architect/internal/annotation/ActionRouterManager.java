@@ -15,39 +15,54 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
-import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getActionKey;
-import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParameters;
-import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getProviders;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getFormOptional;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParamClasses;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getResource;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getReturnClass;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.updateParams;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.updateReturn;
+import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findAnnotation;
+import static com.liferay.apio.architect.internal.annotation.util.BodyUtil.isListBody;
+import static com.liferay.apio.architect.internal.annotation.util.BodyUtil.needsBody;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
-import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnnotation;
+import static io.leangen.geantyref.GenericTypeReflector.annotate;
+import static io.leangen.geantyref.GenericTypeReflector.getTypeParameter;
+
+import static io.vavr.control.Option.none;
+import static io.vavr.control.Option.some;
+
+import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
+import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.annotation.Actions.Action;
-import com.liferay.apio.architect.annotation.Actions.EntryPoint;
-import com.liferay.apio.architect.annotation.Actions.Remove;
-import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
-import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.internal.annotation.representor.ActionRouterTypeExtractor;
+import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.url.ServerURL;
-import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.router.ActionRouter;
 
-import java.lang.annotation.Annotation;
+import io.vavr.Tuple;
+import io.vavr.control.Option;
+
 import java.lang.reflect.Method;
+import java.lang.reflect.TypeVariable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 import org.slf4j.Logger;
@@ -60,21 +75,25 @@ import org.slf4j.Logger;
  * @review
  */
 @Component(service = ActionRouterManager.class)
-public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
+public class ActionRouterManager {
 
-	public ActionRouterManager() {
-		super(ActionRouter.class, 0);
+	@Deactivate
+	public void deactivate() {
+		INSTANCE.clear();
 	}
 
-	public List<String> getResourceNames() {
-		return INSTANCE.getRootResourceNames();
+	public Stream<ActionSemantics> getActionSemantics() {
+		return Optional.ofNullable(
+			INSTANCE.getActionSemantics(this::_computeActionSemantics)
+		).map(
+			List::stream
+		).orElseGet(
+			Stream::empty
+		);
 	}
 
-	public void initializeRouterManagers() {
-		_computeActionRouters();
-	}
-
-	private void _computeActionRouters() {
+	@SuppressWarnings("Convert2MethodRef")
+	private void _computeActionSemantics() {
 		List<String> list = _providerManager.getMissingProviders(
 			_mandatoryClassNames);
 
@@ -84,72 +103,117 @@ public class ActionRouterManager extends ClassNameBaseManager<ActionRouter> {
 			return;
 		}
 
-		forEachService(
-			(className, actionRouter) -> {
-				Try<Class<? extends Identifier>> classTry =
-					ActionRouterTypeExtractor.extractTypeClass(actionRouter);
+		for (ActionRouter<?> actionRouter : _actionRouters) {
+			Class<? extends ActionRouter> clazz = actionRouter.getClass();
 
-				classTry.ifSuccess(
-					typeClass -> {
-						Type type = typeClass.getAnnotation(Type.class);
+			Option<String> optionName = Option.of(
+				getTypeParameter(clazz, _actionRouterTypeParameter)
+			).map(
+				type -> annotate(type)
+			).flatMap(
+				type -> Option.of(type.getAnnotation(Type.class))
+			).map(
+				Type::value
+			).map(
+				string -> toLowercaseSlug(string)
+			);
 
-						String name = toLowercaseSlug(type.value());
+			if (optionName.isEmpty()) {
+				_logger.warn("Unable to get name for ActionRouter {}", clazz);
 
-						_registerActionRouter(actionRouter, name);
+				continue;
+			}
 
-						_registerEntryPoint(actionRouter, name);
-					});
-			});
-	}
+			String name = optionName.get();
 
-	private void _registerActionRouter(ActionRouter actionRouter, String name) {
-		_annotationsToSearch.forEach(
-			annotationClass -> getMethodsListWithAnnotation(
-				actionRouter.getClass(), annotationClass
+			Stream.of(
+				clazz.getMethods()
+			).map(
+				method -> Tuple.of(
+					method, findAnnotation(Action.class, method), name)
+			).filter(
+				tuple -> tuple._2.isPresent()
+			).map(
+				tuple -> tuple.map2(Optional::get)
+			).map(
+				tuple -> _getActionSemanticsOption(
+					actionRouter, tuple._3, tuple._1, tuple._2)
+			).filter(
+				Option::isDefined
+			).map(
+				Option::get
 			).forEach(
-				method -> {
-					Action annotation = method.getAnnotation(Action.class);
-
-					if (annotation == null) {
-						annotation = annotationClass.getAnnotation(
-							Action.class);
-					}
-
-					ActionKey actionKey = getActionKey(
-						method, annotation, name);
-
-					_actionManager.add(
-						actionKey,
-						(id, body, providers) -> method.invoke(
-							actionRouter,
-							getParameters(method, id, body, providers)),
-						getProviders(method));
-				}
-			)
-		);
+				INSTANCE::addActionSemantics
+			);
+		}
 	}
 
-	private void _registerEntryPoint(ActionRouter actionRouter, String name) {
-		Stream<Method> stream = getMethodsListWithAnnotation(
-			actionRouter.getClass(), EntryPoint.class).stream();
+	private Option<ActionSemantics> _getActionSemanticsOption(
+		ActionRouter actionRouter, String name, Method method, Action action) {
 
-		stream.distinct(
-		).forEach(
-			method -> INSTANCE.putRootResourceName(name)
+		Optional<Form<Object>> formOptional = getFormOptional(
+			method, _formManager::getFormOptional);
+
+		if (needsBody(method) && !formOptional.isPresent()) {
+			_logger.warn(
+				"Unable to find form for method with name: {}",
+				method.getName());
+
+			return none();
+		}
+
+		Function<Body, Object> bodyFunction = body -> formOptional.map(
+			form -> isListBody(method) ? form.getList(body) : form.get(body)
+		).orElse(
+			null
 		);
+
+		Class<?>[] paramClasses = getParamClasses(method);
+
+		Class<?> returnClass = getReturnClass(method);
+
+		ActionSemantics actionSemantics = ActionSemantics.ofResource(
+			getResource(method, name)
+		).name(
+			action.name()
+		).method(
+			action.httpMethod()
+		).receivesParams(
+			paramClasses
+		).returns(
+			returnClass
+		).annotatedWith(
+			method.getDeclaredAnnotations()
+		).executeFunction(
+			paramInstances -> {
+				Object[] updatedParams = updateParams(
+					paramInstances, bodyFunction);
+
+				Object result = method.invoke(actionRouter, updatedParams);
+
+				return updateReturn(result, paramInstances, name);
+			}
+		).build();
+
+		return some(actionSemantics);
 	}
 
-	private static final List<Class<? extends Annotation>>
-		_annotationsToSearch = Arrays.asList(
-			Action.class, Retrieve.class, Remove.class);
+	private static final TypeVariable<Class<ActionRouter>>
+		_actionRouterTypeParameter = ActionRouter.class.getTypeParameters()[0];
 	private static final List<String> _mandatoryClassNames = Arrays.asList(
 		ApplicationURL.class.getName(), Credentials.class.getName(),
 		Pagination.class.getName(), ServerURL.class.getName());
 
-	@Reference
-	private ActionManager _actionManager;
+	@Reference(
+		cardinality = MULTIPLE, policyOption = GREEDY,
+		service = ActionRouter.class
+	)
+	private List<ActionRouter<?>> _actionRouters;
 
-	private Logger _logger = getLogger(getClass());
+	@Reference
+	private FormManager _formManager;
+
+	private final Logger _logger = getLogger(getClass());
 
 	@Reference
 	private ProviderManager _providerManager;

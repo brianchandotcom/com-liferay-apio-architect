@@ -102,6 +102,7 @@ public class ActionManagerImpl implements ActionManager {
 	 */
 	public Stream<ActionSemantics> actionSemantics() {
 		return Stream.of(
+			_actionRouterManager.getActionSemantics(),
 			_itemRouterManager.getActionSemantics(),
 			_collectionRouterManager.getActionSemantics(),
 			_reusableNestedCollectionRouterManager.getActionSemantics(),
@@ -404,6 +405,9 @@ public class ActionManagerImpl implements ActionManager {
 
 	private static final NotFound _notFound = new NotFound() {
 	};
+
+	@Reference
+	private ActionRouterManager _actionRouterManager;
 
 	private final Map<ActionKey, CheckedFunction3<Object, ?, List<Object>, ?>>
 		_actionsMap = new HashMap<>();
