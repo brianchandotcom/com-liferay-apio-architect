@@ -155,7 +155,7 @@
 		],
 		"operation": [
 			{
-				"@id": "_:resource/delete",
+				"@id": "_:first/remove",
 				"@type": [
 					"DeleteAction",
 					"Operation"
@@ -312,20 +312,22 @@
 	],
 	"operation": [
 		{
-			"@id": "_:resource/delete",
-			"@type": [
-				"DeleteAction",
-				"Operation"
-			],
-			"method": "DELETE"
-		},
-		{
-			"@id": "_:resource/update",
+			"@id": "_:root/replace",
 			"@type": [
 				"ReplaceAction",
 				"Operation"
 			],
-			"method": "PUT"
+			"method": "PUT",
+			"target": "localhost/o/api/root/first"
+		},
+		{
+			"@id": "_:root/remove",
+			"@type": [
+				"DeleteAction",
+				"Operation"
+			],
+			"method": "DELETE",
+			"target": "localhost/o/api/root/first"
 		}
 	],
 	"relatedCollection1": "localhost/o/api/model/first/models",

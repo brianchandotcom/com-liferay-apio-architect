@@ -292,7 +292,7 @@ public class PageWriter<T> {
 		ApplicationURL applicationURL = _requestInfo.getApplicationURL();
 
 		return optional.map(
-			path -> Item.of(path.getName(), Id.of(null, path.getId()))
+			path -> Item.of(path.getName(), Id.of("", path.getId()))
 		).map(
 			parent -> Nested.of(parent, _page.getResourceName())
 		).flatMap(

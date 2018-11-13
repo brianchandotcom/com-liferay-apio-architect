@@ -588,7 +588,7 @@ public class FieldsWriter<T> {
 		pathFunction.apply(
 			relatedModel.getIdentifierName(), relatedIdentifier
 		).map(
-			path -> Item.of(path.getName(), Id.of(null, path.getId()))
+			path -> Item.of(path.getName(), Id.of("", path.getId()))
 		).flatMap(
 			item -> createItemResourceURL(
 				_requestInfo.getApplicationURL(), item)
@@ -652,7 +652,7 @@ public class FieldsWriter<T> {
 	 * @param urlConsumer the consumer that writes the URL
 	 */
 	public void writeSingleURL(Consumer<String> urlConsumer) {
-		Item item = Item.of(_path.getName(), Id.of(null, _path.getId()));
+		Item item = Item.of(_path.getName(), Id.of("", _path.getId()));
 
 		Optional<String> optional = createItemResourceURL(
 			_requestInfo.getApplicationURL(), item);
@@ -712,7 +712,7 @@ public class FieldsWriter<T> {
 		BiConsumer<String, FunctionalList<String>> biConsumer, String key,
 		Path path) {
 
-		Item parent = Item.of(path.getName(), Id.of(null, path.getId()));
+		Item parent = Item.of(path.getName(), Id.of("", path.getId()));
 
 		Nested nested = Nested.of(parent, resourceName);
 

@@ -30,6 +30,9 @@ import static org.hamcrest.collection.IsMapWithSize.aMapWithSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import static org.junit.Assert.assertEquals;
+
+import com.liferay.apio.architect.internal.action.resource.Resource.Id;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.list.FunctionalList;
@@ -139,7 +142,12 @@ public class FieldsWriterTest {
 		Item item = items.get(0);
 
 		assertThat(item.name(), is("root"));
-		assertThat(item.id(), is(optionalWithValue(equalTo("first"))));
+
+		Optional<Id> optional = item.id();
+
+		assertThat(optional, is(optionalWithValue()));
+
+		optional.ifPresent(id -> assertEquals(id, Id.of("first", "id")));
 	}
 
 	@Test

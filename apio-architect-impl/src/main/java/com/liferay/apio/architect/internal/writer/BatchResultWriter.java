@@ -73,7 +73,7 @@ public class BatchResultWriter<T> {
 			_pathFunction.apply(
 				_batchResult.resourceName, identifier
 			).map(
-				path -> Item.of(path.getName(), Id.of(null, path.getId()))
+				path -> Item.of(path.getName(), Id.of("", path.getId()))
 			).ifPresent(
 				item -> {
 					_batchResultMessageMapper.onStartItem(
