@@ -37,6 +37,7 @@ import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.test.util.pagination.PaginationRequest;
@@ -209,7 +210,7 @@ public class RoutesTestUtil {
 			return null;
 		}
 		else if (aClass.equals(Id.class)) {
-			return 42L;
+			return Resource.Id.of(42L, "42L");
 		}
 		else if (aClass.equals(ParentId.class)) {
 			return 21L;

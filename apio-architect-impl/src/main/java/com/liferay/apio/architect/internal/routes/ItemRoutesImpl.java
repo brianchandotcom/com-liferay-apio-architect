@@ -41,6 +41,7 @@ import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -151,7 +152,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> throwableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
 				).apply(
-					unsafeCast(params.get(0)),
+					_getId(params.get(0)),
 					_getModel(form, () -> (Body)params.get(1))
 				)
 			).build();
@@ -191,7 +192,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> throwableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
 				).apply(
-					unsafeCast(params.get(0)),
+					_getId(params.get(0)),
 					_getModel(form, () -> (Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
@@ -232,7 +233,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> throwablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
 				).apply(
-					unsafeCast(params.get(0)),
+					_getId(params.get(0)),
 					_getModel(form, () -> (Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
@@ -272,7 +273,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> throwableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
 				).apply(
-					unsafeCast(params.get(0)),
+					_getId(params.get(0)),
 					_getModel(form, () -> (Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
@@ -310,7 +311,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> throwableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
 				).apply(
-					unsafeCast(params.get(0)),
+					_getId(params.get(0)),
 					_getModel(form, () -> (Body)params.get(1)),
 					unsafeCast(params.get(2))
 				)
@@ -341,7 +342,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> getterThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0)), unsafeCast(params.get(1))
+					_getId(params.get(0)), unsafeCast(params.get(1))
 				)
 			).build();
 
@@ -369,7 +370,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> getterThrowableFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0))
+					_getId(params.get(0))
 				)
 			).build();
 
@@ -400,7 +401,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> getterThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
@@ -431,7 +432,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> getterThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
 			).build();
@@ -461,7 +462,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> getterThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2))
 				)
 			).build();
@@ -490,7 +491,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableBiConsumer.accept(
-						unsafeCast(params.get(0)), unsafeCast(params.get(1))))
+						_getId(params.get(0)), unsafeCast(params.get(1))))
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -516,7 +517,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableConsumer.accept(
-						unsafeCast(params.get(0))))
+						_getId(params.get(0))))
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -543,7 +544,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowablePentaConsumer.accept(
-						unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+						_getId(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 						unsafeCast(params.get(4))))
 			).build();
@@ -572,7 +573,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableTetraConsumer.accept(
-						unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+						_getId(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3))))
 			).build();
 
@@ -600,7 +601,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableTriConsumer.accept(
-						unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+						_getId(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2))))
 			).build();
 
@@ -632,7 +633,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> updaterThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1))
+					_getId(params.get(0)), form.get((Body)params.get(1))
 				)
 			).build();
 
@@ -666,7 +667,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> updaterThrowableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
@@ -702,7 +703,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> updaterThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
@@ -737,7 +738,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> updaterThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
 			).build();
@@ -771,7 +772,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> updaterThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					unsafeCast(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2))
 				)
 			).build();
@@ -795,6 +796,12 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			}
 
 			return null;
+		}
+
+		private S _getId(Object object) {
+			Resource.Id id = (Resource.Id)object;
+
+			return unsafeCast(id.asObject());
 		}
 
 		private <R> R _getModel(Form<R> form, Supplier<Body> body) {
