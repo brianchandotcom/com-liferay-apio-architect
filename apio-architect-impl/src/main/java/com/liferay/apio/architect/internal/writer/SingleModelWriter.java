@@ -29,7 +29,6 @@ import com.liferay.apio.architect.internal.message.json.SingleModelMessageMapper
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.internal.unsafe.Unsafe;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
@@ -109,13 +108,6 @@ public class SingleModelWriter<T> {
 		fieldsWriter.writeSingleURL(
 			url -> _singleModelMessageMapper.mapSelfURL(
 				_jsonObjectBuilder, url));
-
-		List<Operation> operations = _singleModel.getOperations();
-
-		OperationWriter operationWriter = new OperationWriter(
-			_singleModelMessageMapper, _requestInfo, _jsonObjectBuilder);
-
-		operations.forEach(operationWriter::write);
 
 		fieldsWriter.writeRelatedModels(
 			_pathFunction,
@@ -197,22 +189,6 @@ public class SingleModelWriter<T> {
 
 		_writeEmbeddedBasicFields(
 			fieldsWriter, jsonObjectBuilder, embeddedPathElements);
-
-		List<Operation> operations = singleModel.getOperations();
-
-		operations.forEach(
-			operation -> {
-				JSONObjectBuilder operationJSONObjectBuilder =
-					new JSONObjectBuilder();
-
-				_singleModelMessageMapper.mapEmbeddedOperationMethod(
-					jsonObjectBuilder, operationJSONObjectBuilder,
-					embeddedPathElements, operation.getHttpMethod());
-
-				_singleModelMessageMapper.onFinishEmbeddedOperation(
-					jsonObjectBuilder, operationJSONObjectBuilder,
-					embeddedPathElements, operation);
-			});
 
 		fieldsWriter.writeRelatedModels(
 			_pathFunction,

@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.internal.message.json.ld;
 
 import static com.liferay.apio.architect.internal.action.Predicates.returnsAnyOf;
-import static com.liferay.apio.architect.internal.message.json.ld.JSONLDMessageMapperUtil.getOperationTypes;
+import static com.liferay.apio.architect.internal.message.json.ld.JSONLDMessageMapperUtil.getActionTypes;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN_LIST;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.DATE;
@@ -84,7 +84,7 @@ public class JSONLDDocumentationMessageMapper
 			"@type"
 		).arrayValue(
 		).addAllStrings(
-			getOperationTypes(actionSemantics.name())
+			getActionTypes(actionSemantics.name())
 		);
 
 		jsonObjectBuilder.field(

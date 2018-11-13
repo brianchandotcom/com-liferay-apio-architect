@@ -22,15 +22,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
 
-import com.liferay.apio.architect.internal.operation.RetrieveOperation;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -49,11 +46,8 @@ public class PageTest {
 
 		_path = new Path("name", "id");
 
-		_operations = Collections.singletonList(
-			new RetrieveOperation("resource", false));
-
 		_page = new PageImpl<>(
-			"name", _pageItems, pagination, _path, _operations);
+			"name", _pageItems, pagination, _path, emptyList());
 	}
 
 	@Test
@@ -81,11 +75,6 @@ public class PageTest {
 	@Test
 	public void testGetLastPageNumberReturnsLastPageNumber() {
 		assertThat(_page.getLastPageNumber(), is(10));
-	}
-
-	@Test
-	public void testGetOperationsReturnsList() {
-		assertThat(_page.getOperations(), is(_operations));
 	}
 
 	@Test
@@ -147,7 +136,6 @@ public class PageTest {
 		assertThat(_page.hasPrevious(), is(true));
 	}
 
-	private List<Operation> _operations;
 	private Page<String> _page;
 	private PageItems<String> _pageItems;
 	private Path _path;

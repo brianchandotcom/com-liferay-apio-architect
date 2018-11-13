@@ -17,17 +17,20 @@ package com.liferay.apio.architect.internal.message.json.ld;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
+import static io.vavr.Predicates.instanceOf;
+
+import static java.lang.String.join;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
-import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
-import com.liferay.apio.architect.internal.operation.DeleteOperation;
-import com.liferay.apio.architect.internal.operation.UpdateOperation;
-import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.internal.action.resource.Resource;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Provides utility functions for JSON-LD message mappers.
@@ -41,32 +44,32 @@ import java.util.List;
 public class JSONLDMessageMapperUtil {
 
 	/**
-	 * Return the list of {@link Operation} types.
+	 * Returns an action's ID.
 	 *
-	 * @param  operation the operation
-	 * @return the list
+	 * @param  resource the action's resource
+	 * @param  actionName the action's name
+	 * @return the action's ID
+	 * @review
 	 */
-	public static List<String> getOperationTypes(Operation operation) {
-		if (operation instanceof BatchCreateOperation) {
-			return asList("BatchCreateAction", "Operation");
-		}
+	public static String getActionId(Resource resource, String actionName) {
+		String resourceName = Match(
+			resource
+		).of(
+			Case($(instanceOf(Paged.class)), Paged::name),
+			Case($(instanceOf(Item.class)), Item::name),
+			Case($(instanceOf(Nested.class)), _getNestedName),
+			Case($(), () -> null)
+		);
 
-		if (operation instanceof CreateOperation) {
-			return asList("CreateAction", "Operation");
-		}
-
-		if (operation instanceof DeleteOperation) {
-			return asList("DeleteAction", "Operation");
-		}
-
-		if (operation instanceof UpdateOperation) {
-			return asList("ReplaceAction", "Operation");
-		}
-
-		return singletonList("Operation");
+		return "_:" + join("/", resourceName, actionName);
 	}
 
-	public static List<String> getOperationTypes(String actionName) {
+	/**
+	 * Returns the list of types for a certain action based on its name.
+	 *
+	 * @review
+	 */
+	public static List<String> getActionTypes(String actionName) {
 		return Match(
 			actionName
 		).of(
@@ -81,5 +84,11 @@ public class JSONLDMessageMapperUtil {
 	private JSONLDMessageMapperUtil() {
 		throw new UnsupportedOperationException();
 	}
+
+	private static Function<Nested, String> _getNestedName = nested -> {
+		Item parent = nested.parent();
+
+		return join("/", parent.name(), nested.name());
+	};
 
 }

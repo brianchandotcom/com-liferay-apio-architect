@@ -14,24 +14,27 @@
 
 package com.liferay.apio.architect.internal.url;
 
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static io.vavr.Predicates.instanceOf;
+
 import static java.lang.String.join;
 
+import static java.util.Arrays.asList;
+
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Id;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
-import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
-import com.liferay.apio.architect.internal.operation.DeleteOperation;
-import com.liferay.apio.architect.internal.operation.RetrieveOperation;
-import com.liferay.apio.architect.internal.operation.UpdateOperation;
 import com.liferay.apio.architect.internal.pagination.PageType;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.uri.Path;
 
 import java.net.URI;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -73,6 +76,31 @@ public final class URLCreator {
 		ServerURL serverURL, String relativeURL) {
 
 		return _buildURL(serverURL.get(), relativeURL);
+	}
+
+	/**
+	 * Returns the URL for a resource's action.
+	 *
+	 * @param  applicationURL the application URL
+	 * @param  resource the action's resource
+	 * @param  actionName the action's name
+	 * @return the URL for the action
+	 * @review
+	 */
+	public static Optional<String> createActionURL(
+		ApplicationURL applicationURL, Resource resource, String actionName) {
+
+		Optional<String> optional = _createResourceURL(
+			applicationURL, resource);
+
+		return optional.map(
+			url -> {
+				if (_resourceActions.contains(actionName)) {
+					return url;
+				}
+
+				return url + "/" + actionName;
+			});
 	}
 
 	/**
@@ -180,51 +208,6 @@ public final class URLCreator {
 	}
 
 	/**
-	 * Returns an operation's URL.
-	 *
-	 * @param  applicationURL the application URL
-	 * @param  operation the operation
-	 * @return the operation's URL
-	 */
-	public static Optional<String> createOperationURL(
-		ApplicationURL applicationURL, Operation operation) {
-
-		Optional<String> optional = operation.getURIOptional();
-
-		return optional.map(
-			uri -> {
-				if (operation instanceof BatchCreateOperation) {
-					return uri;
-				}
-
-				if (operation.isCustom()) {
-					return uri + "/" + operation.getCustomRoute();
-				}
-
-				if (operation instanceof CreateOperation) {
-					return uri;
-				}
-
-				if (operation instanceof DeleteOperation) {
-					return uri;
-				}
-
-				if (operation instanceof RetrieveOperation) {
-					return uri;
-				}
-
-				if (operation instanceof UpdateOperation) {
-					return uri;
-				}
-
-				return null;
-			}
-		).map(
-			uri -> createAbsoluteURL(applicationURL, uri)
-		);
-	}
-
-	/**
 	 * Returns the URL for a paged resource.
 	 *
 	 * @param  applicationURL the application URL
@@ -290,6 +273,26 @@ public final class URLCreator {
 		return join("/", baseUrl, relativeURL);
 	}
 
+	private static Optional<String> _createResourceURL(
+		ApplicationURL applicationURL, Resource resource) {
+
+		return Match(
+			resource
+		).of(
+			Case(
+				$(instanceOf(Paged.class)),
+				paged -> Optional.of(
+					createPagedResourceURL(applicationURL, paged))),
+			Case(
+				$(instanceOf(Nested.class)),
+				nested -> createNestedResourceURL(applicationURL, nested)),
+			Case(
+				$(instanceOf(Item.class)),
+				item -> createItemResourceURL(applicationURL, item)),
+			Case($(), Optional::empty)
+		);
+	}
+
 	private static Predicate<Path> _isNotEmpty(
 		Function<Path, String> function) {
 
@@ -303,5 +306,8 @@ public final class URLCreator {
 	private URLCreator() {
 		throw new UnsupportedOperationException();
 	}
+
+	private static final List<String> _resourceActions = asList(
+		"create", "remove", "replace", "retrieve");
 
 }

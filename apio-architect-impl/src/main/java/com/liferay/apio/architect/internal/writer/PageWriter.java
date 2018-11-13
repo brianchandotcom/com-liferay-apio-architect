@@ -37,7 +37,6 @@ import com.liferay.apio.architect.internal.pagination.PageType;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.single.model.SingleModel;
@@ -115,18 +114,11 @@ public class PageWriter<T> {
 				new SingleModelImpl<>(
 					model, resourceName, Collections.emptyList())));
 
-		List<Operation> operations = _page.getOperations();
-
 		_representorFunction.apply(
 			resourceName
 		).ifPresent(
 			_mapPageSemantics(_jsonObjectBuilder)
 		);
-
-		OperationWriter operationWriter = new OperationWriter(
-			_pageMessageMapper, _requestInfo, _jsonObjectBuilder);
-
-		operations.forEach(operationWriter::write);
 
 		_pageMessageMapper.onFinish(_jsonObjectBuilder, _page);
 

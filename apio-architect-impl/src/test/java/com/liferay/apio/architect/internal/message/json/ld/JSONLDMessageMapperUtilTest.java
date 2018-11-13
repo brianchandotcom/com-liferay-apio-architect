@@ -14,17 +14,16 @@
 
 package com.liferay.apio.architect.internal.message.json.ld;
 
-import static com.liferay.apio.architect.internal.message.json.ld.JSONLDMessageMapperUtil.getOperationTypes;
+import static com.liferay.apio.architect.internal.message.json.ld.JSONLDMessageMapperUtil.getActionId;
+import static com.liferay.apio.architect.internal.message.json.ld.JSONLDMessageMapperUtil.getActionTypes;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 
-import com.liferay.apio.architect.internal.operation.BatchCreateOperation;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
-import com.liferay.apio.architect.internal.operation.DeleteOperation;
-import com.liferay.apio.architect.internal.operation.RetrieveOperation;
-import com.liferay.apio.architect.internal.operation.UpdateOperation;
-import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.test.util.internal.util.DescriptionUtil;
 
 import java.lang.reflect.Constructor;
@@ -55,48 +54,35 @@ public class JSONLDMessageMapperUtilTest {
 	}
 
 	@Test
-	public void testGetOperationTypesOnBatchCreateOperationReturnValidTypes() {
-		Operation operation = new BatchCreateOperation(null, "", "");
+	public void testGetActionId() {
+		Paged paged = Paged.of("paged");
 
-		List<String> operationTypes = getOperationTypes(operation);
+		Item item = Item.of("item");
 
-		assertThat(operationTypes, contains("BatchCreateAction", "Operation"));
+		Nested nested = Nested.of(item, "nested");
+
+		String pagedId = getActionId(paged, "retrieve");
+		String itemId = getActionId(item, "remove");
+		String nestedId = getActionId(nested, "create");
+
+		assertThat(pagedId, is("_:paged/retrieve"));
+		assertThat(itemId, is("_:item/remove"));
+		assertThat(nestedId, is("_:item/nested/create"));
 	}
 
 	@Test
-	public void testGetOperationTypesOnCreateOperationReturnValidTypes() {
-		Operation operation = new CreateOperation(null, "", "");
+	public void testGetActionType() {
+		List<String> retrieveTypes = getActionTypes("retrieve");
+		List<String> createTypes = getActionTypes("create");
+		List<String> removeTypes = getActionTypes("remove");
+		List<String> replaceTypes = getActionTypes("replace");
+		List<String> customActionTypes = getActionTypes("subscribe");
 
-		List<String> operationTypes = getOperationTypes(operation);
-
-		assertThat(operationTypes, contains("CreateAction", "Operation"));
-	}
-
-	@Test
-	public void testGetOperationTypesOnDeleteOperationReturnValidTypes() {
-		Operation operation = new DeleteOperation("", "");
-
-		List<String> operationTypes = getOperationTypes(operation);
-
-		assertThat(operationTypes, contains("DeleteAction", "Operation"));
-	}
-
-	@Test
-	public void testGetOperationTypesOnRetrieveOperationReturnValidTypes() {
-		Operation operation = new RetrieveOperation("", true);
-
-		List<String> operationTypes = getOperationTypes(operation);
-
-		assertThat(operationTypes, contains("Operation"));
-	}
-
-	@Test
-	public void testGetOperationTypesOnUpdateOperationReturnValidTypes() {
-		Operation operation = new UpdateOperation(null, "", "");
-
-		List<String> operationTypes = getOperationTypes(operation);
-
-		assertThat(operationTypes, contains("ReplaceAction", "Operation"));
+		assertThat(retrieveTypes, contains("Operation"));
+		assertThat(createTypes, contains("CreateAction", "Operation"));
+		assertThat(removeTypes, contains("DeleteAction", "Operation"));
+		assertThat(replaceTypes, contains("ReplaceAction", "Operation"));
+		assertThat(customActionTypes, contains("Operation"));
 	}
 
 }

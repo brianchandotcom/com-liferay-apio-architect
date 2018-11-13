@@ -14,9 +14,8 @@
 
 package com.liferay.apio.architect.internal.message.json;
 
+import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.list.FunctionalList;
-import com.liferay.apio.architect.operation.HTTPMethod;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.single.model.SingleModel;
 
@@ -48,8 +47,9 @@ import java.util.Optional;
  * @author Jorge Ferrer
  * @param  <T> the model's type
  */
+@SuppressWarnings("unused")
 public interface PageMessageMapper<T>
-	extends MessageMapper<Page<T>>, OperationMapper {
+	extends MessageMapper<Page<T>>, ActionMapper {
 
 	/**
 	 * Returns the {@link SingleModelMessageMapper} used by the item methods.
@@ -60,6 +60,19 @@ public interface PageMessageMapper<T>
 		getSingleModelMessageMapperOptional() {
 
 		return Optional.empty();
+	}
+
+	@Override
+	public default void mapActionSemanticsURL(
+		JSONObjectBuilder jsonObjectBuilder, String url) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper ->
+				singleModelMessageMapper.mapActionSemanticsURL(
+					jsonObjectBuilder, url));
 	}
 
 	/**
@@ -93,14 +106,15 @@ public interface PageMessageMapper<T>
 	}
 
 	/**
-	 * Maps a resource operation's method to its JSON object representation.
+	 * Maps a resource action's method to its JSON object representation.
 	 *
-	 * @param jsonObjectBuilder the JSON object builder for the operation
-	 * @param httpMethod the operation's method
+	 * @param  jsonObjectBuilder the JSON object builder for the action
+	 * @param  httpMethod the action's method
+	 * @review
 	 */
 	@Override
 	public default void mapHTTPMethod(
-		JSONObjectBuilder jsonObjectBuilder, HTTPMethod httpMethod) {
+		JSONObjectBuilder jsonObjectBuilder, String httpMethod) {
 
 		Optional<SingleModelMessageMapper<T>> optional =
 			getSingleModelMessageMapperOptional();
@@ -574,19 +588,6 @@ public interface PageMessageMapper<T>
 		JSONObjectBuilder jsonObjectBuilder, String url) {
 	}
 
-	@Override
-	public default void mapOperationURL(
-		JSONObjectBuilder jsonObjectBuilder, String url) {
-
-		Optional<SingleModelMessageMapper<T>> optional =
-			getSingleModelMessageMapperOptional();
-
-		optional.ifPresent(
-			singleModelMessageMapper ->
-				singleModelMessageMapper.mapOperationURL(
-					jsonObjectBuilder, url));
-	}
-
 	/**
 	 * Maps the page count to its JSON object representation.
 	 *
@@ -618,26 +619,27 @@ public interface PageMessageMapper<T>
 	}
 
 	/**
-	 * Finishes the operation. This is the final operation-mapper method the
-	 * writer calls.
+	 * Finishes the action. This is the final action-mapper method the writer
+	 * calls.
 	 *
-	 * @param resourceJSONObjectBuilder the JSON object builder for the page
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param operation the operation
+	 * @param  resourceJSONObjectBuilder the JSON object builder for the page
+	 * @param  actionJSONObjectBuilder the JSON object builder for the action
+	 * @param  actionSemantics the action's semantics
+	 * @review
 	 */
 	@Override
 	public default void onFinish(
 		JSONObjectBuilder resourceJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder, Operation operation) {
+		JSONObjectBuilder actionJSONObjectBuilder,
+		ActionSemantics actionSemantics) {
 
 		Optional<SingleModelMessageMapper<T>> optional =
 			getSingleModelMessageMapperOptional();
 
 		optional.ifPresent(
 			singleModelMessageMapper -> singleModelMessageMapper.onFinish(
-				resourceJSONObjectBuilder, operationJSONObjectBuilder,
-				operation));
+				resourceJSONObjectBuilder, actionJSONObjectBuilder,
+				actionSemantics));
 	}
 
 	/**

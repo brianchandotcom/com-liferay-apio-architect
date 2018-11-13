@@ -14,51 +14,53 @@
 
 package com.liferay.apio.architect.internal.writer;
 
-import static com.liferay.apio.architect.internal.url.URLCreator.createOperationURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createActionURL;
 
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.message.json.ActionMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
-import com.liferay.apio.architect.internal.message.json.OperationMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
-import com.liferay.apio.architect.operation.Operation;
 
 import java.util.Optional;
 
 /**
- * Writes the operations identified by the methods of an {@link
- * OperationMapper}.
+ * Writes the actions of a resource using the methods of an {@link
+ * ActionMapper}.
  *
  * @author Javier Gamarra
+ * @review
  */
-public class OperationWriter {
+public class ActionWriter {
 
-	public OperationWriter(
-		OperationMapper operationMapper, RequestInfo requestInfo,
+	public ActionWriter(
+		ActionMapper actionMapper, RequestInfo requestInfo,
 		JSONObjectBuilder jsonObjectBuilder) {
 
-		_operationMapper = operationMapper;
+		_actionMapper = actionMapper;
 		_requestInfo = requestInfo;
 		_jsonObjectBuilder = jsonObjectBuilder;
 	}
 
-	public void write(Operation operation) {
+	public void write(ActionSemantics actionSemantics) {
 		JSONObjectBuilder operationJSONObjectBuilder = new JSONObjectBuilder();
 
-		Optional<String> urlOptional = createOperationURL(
-			_requestInfo.getApplicationURL(), operation);
+		Optional<String> optional = createActionURL(
+			_requestInfo.getApplicationURL(), actionSemantics.resource(),
+			actionSemantics.name());
 
-		urlOptional.ifPresent(
-			url -> _operationMapper.mapOperationURL(
+		optional.ifPresent(
+			url -> _actionMapper.mapActionSemanticsURL(
 				operationJSONObjectBuilder, url));
 
-		_operationMapper.mapHTTPMethod(
-			operationJSONObjectBuilder, operation.getHttpMethod());
+		_actionMapper.mapHTTPMethod(
+			operationJSONObjectBuilder, actionSemantics.method());
 
-		_operationMapper.onFinish(
-			_jsonObjectBuilder, operationJSONObjectBuilder, operation);
+		_actionMapper.onFinish(
+			_jsonObjectBuilder, operationJSONObjectBuilder, actionSemantics);
 	}
 
+	private final ActionMapper _actionMapper;
 	private final JSONObjectBuilder _jsonObjectBuilder;
-	private final OperationMapper _operationMapper;
 	private final RequestInfo _requestInfo;
 
 }

@@ -14,9 +14,8 @@
 
 package com.liferay.apio.architect.internal.message.json;
 
+import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.list.FunctionalList;
-import com.liferay.apio.architect.operation.HTTPMethod;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.List;
@@ -41,7 +40,7 @@ import java.util.List;
  * @param  <T> the model's type
  */
 public interface SingleModelMessageMapper<T>
-	extends MessageMapper<SingleModel<T>>, OperationMapper {
+	extends MessageMapper<SingleModel<T>>, ActionMapper {
 
 	/**
 	 * Maps a resource's boolean field to its JSON object representation.
@@ -67,19 +66,21 @@ public interface SingleModelMessageMapper<T>
 	}
 
 	/**
-	 * Maps an embedded resource operation's method to its JSON object
+	 * Maps an embedded resource action's method to its JSON object
 	 * representation.
 	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param embeddedPathElements the current resource's embedded path elements
-	 * @param httpMethod the operation's method
+	 * @param  singleModelJSONObjectBuilder the JSON object builder for the
+	 *         model
+	 * @param  actionJSONObjectBuilder the JSON object builder for the action
+	 * @param  embeddedPathElements the current resource's embedded path
+	 *         elements
+	 * @param  httpMethod the action's method
+	 * @review
 	 */
-	public default void mapEmbeddedOperationMethod(
+	public default void mapEmbeddedActionMethod(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder,
-		FunctionalList<String> embeddedPathElements, HTTPMethod httpMethod) {
+		JSONObjectBuilder actionJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String httpMethod) {
 	}
 
 	/**
@@ -322,19 +323,22 @@ public interface SingleModelMessageMapper<T>
 	}
 
 	/**
-	 * Finishes an embedded model's operation. This is the final
-	 * embedded-operation-mapper method the writer calls.
+	 * Finishes an embedded model's action. This is the final
+	 * embedded-action-mapper method the writer calls.
 	 *
-	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
-	 * @param operationJSONObjectBuilder the JSON object builder for the
-	 *        operation
-	 * @param embeddedPathElements the current resource's embedded path elements
-	 * @param operation the operation
+	 * @param  singleModelJSONObjectBuilder the JSON object builder for the
+	 *         model
+	 * @param  actionJSONObjectBuilder the JSON object builder for the action
+	 * @param  embeddedPathElements the current resource's embedded path
+	 *         elements
+	 * @param  actionSemantics the action's semantics
+	 * @review
 	 */
-	public default void onFinishEmbeddedOperation(
+	public default void onFinishEmbeddedAction(
 		JSONObjectBuilder singleModelJSONObjectBuilder,
-		JSONObjectBuilder operationJSONObjectBuilder,
-		FunctionalList<String> embeddedPathElements, Operation operation) {
+		JSONObjectBuilder actionJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements,
+		ActionSemantics actionSemantics) {
 	}
 
 	/**
