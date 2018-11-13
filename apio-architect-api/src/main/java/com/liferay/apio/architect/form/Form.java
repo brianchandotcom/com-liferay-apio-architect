@@ -70,7 +70,11 @@ public interface Form<T> {
 
 	/**
 	 * The form's ID.
+	 *
+	 * @deprecated As of 1.9.0, with no direct replacement
+	 * @review
 	 */
+	@Deprecated
 	public String getId();
 
 	/**

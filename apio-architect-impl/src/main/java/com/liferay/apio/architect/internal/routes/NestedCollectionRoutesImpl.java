@@ -16,8 +16,6 @@ package com.liferay.apio.architect.internal.routes;
 
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
-import static java.util.Arrays.asList;
-
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.NestedBatchCreateItemFunction;
@@ -35,7 +33,6 @@ import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.pagination.PageImpl;
@@ -138,11 +135,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Item parent = _nested.parent();
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", parent.name(), _nested.name()),
 					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =
@@ -223,11 +217,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Item parent = _nested.parent();
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", parent.name(), _nested.name()),
 					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =
@@ -312,11 +303,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Item parent = _nested.parent();
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", parent.name(), _nested.name()),
 					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =
@@ -398,11 +386,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Item parent = _nested.parent();
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", parent.name(), _nested.name()),
 					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =
@@ -481,11 +466,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Item parent = _nested.parent();
-
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", parent.name(), _nested.name()),
 					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =

@@ -16,7 +16,6 @@ package com.liferay.apio.architect.internal.routes;
 
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
@@ -150,8 +149,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", _paged.name()), _pathToIdentifierFunction,
-					_nameFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =
 				ActionSemantics.ofResource(
@@ -221,8 +219,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", _paged.name()), _pathToIdentifierFunction,
-					_nameFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =
 				ActionSemantics.ofResource(
@@ -301,8 +298,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", _paged.name()), _pathToIdentifierFunction,
-					_nameFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =
 				ActionSemantics.ofResource(
@@ -382,8 +378,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", _paged.name()), _pathToIdentifierFunction,
-					_nameFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =
 				ActionSemantics.ofResource(
@@ -462,8 +457,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					asList("c", _paged.name()), _pathToIdentifierFunction,
-					_nameFunction));
+					_pathToIdentifierFunction, _nameFunction));
 
 			ActionSemantics batchCreateActionSemantics =
 				ActionSemantics.ofResource(
@@ -519,9 +513,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			Function<Credentials, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(
-				formBuilderFunction,
-				asList("p", _paged.name(), customRoute.getName()));
+			Form<R> form = _getForm(formBuilderFunction);
 
 			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
@@ -560,9 +552,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				Function<Credentials, Boolean> permissionFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(
-				formBuilderFunction,
-				asList("p", _paged.name(), customRoute.getName()));
+			Form<R> form = _getForm(formBuilderFunction);
 
 			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
@@ -603,9 +593,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				Function<Credentials, Boolean> permissionFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(
-				formBuilderFunction,
-				asList("p", _paged.name(), customRoute.getName()));
+			Form<R> form = _getForm(formBuilderFunction);
 
 			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
@@ -644,9 +632,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			Function<Credentials, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(
-				formBuilderFunction,
-				asList("p", _paged.name(), customRoute.getName()));
+			Form<R> form = _getForm(formBuilderFunction);
 
 			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
@@ -683,9 +669,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			Function<Credentials, Boolean> permissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(
-				formBuilderFunction,
-				asList("p", _paged.name(), customRoute.getName()));
+			Form<R> form = _getForm(formBuilderFunction);
 
 			Class<?> bodyClass = form == null ? Void.class : Body.class;
 
@@ -874,12 +858,12 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		private <R> Form<R> _getForm(
-			FormBuilderFunction<R> formBuilderFunction, List<String> paths) {
+			FormBuilderFunction<R> formBuilderFunction) {
 
 			if (formBuilderFunction != null) {
 				return formBuilderFunction.apply(
 					new FormImpl.BuilderImpl<>(
-						paths, _pathToIdentifierFunction, _nameFunction));
+						_pathToIdentifierFunction, _nameFunction));
 			}
 
 			return null;

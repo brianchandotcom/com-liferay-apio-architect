@@ -71,7 +71,6 @@ import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.language.AcceptLanguage;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -113,7 +112,7 @@ public class FormImpl<T> implements Form<T> {
 
 	@Override
 	public String getId() {
-		return _id;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -148,16 +147,14 @@ public class FormImpl<T> implements Form<T> {
 		 * @return the new builder
 		 */
 		public static <T> BuilderImpl<T> empty() {
-			return new BuilderImpl<>(
-				Collections.emptyList(), __ -> null, __ -> Optional.empty());
+			return new BuilderImpl<>(__ -> null, __ -> Optional.empty());
 		}
 
 		public BuilderImpl(
-			List<String> paths, IdentifierFunction<?> pathToIdentifierFunction,
+			IdentifierFunction<?> pathToIdentifierFunction,
 			Function<String, Optional<String>> nameFunction) {
 
-			_form = new FormImpl<>(
-				paths, pathToIdentifierFunction, nameFunction);
+			_form = new FormImpl<>(pathToIdentifierFunction, nameFunction);
 		}
 
 		@Override
@@ -539,10 +536,9 @@ public class FormImpl<T> implements Form<T> {
 	}
 
 	private FormImpl(
-		List<String> paths, IdentifierFunction<?> pathToIdentifierFunction,
+		IdentifierFunction<?> pathToIdentifierFunction,
 		Function<String, Optional<String>> nameFunction) {
 
-		_id = String.join("/", paths);
 		_pathToIdentifierFunction = pathToIdentifierFunction;
 		_nameFunction = nameFunction;
 		_keyToNameFunction = key -> Optional.ofNullable(
@@ -649,10 +645,8 @@ public class FormImpl<T> implements Form<T> {
 	}
 
 	private <V> FormImpl<V> _getNestedForm(String key) {
-		List<String> paths = Collections.singletonList(_id);
-
 		Builder<V> builder = new BuilderImpl<>(
-			paths, _pathToIdentifierFunction, _nameFunction);
+			_pathToIdentifierFunction, _nameFunction);
 
 		FormBuilderFunction<V> formBuilderFunction =
 			(FormBuilderFunction<V>)_formBuilderFunctionsMap.get(key);
@@ -766,7 +760,6 @@ public class FormImpl<T> implements Form<T> {
 	private Function<AcceptLanguage, String> _descriptionFunction;
 	private final Map<String, FormBuilderFunction<?>> _formBuilderFunctionsMap =
 		new HashMap<>();
-	private final String _id;
 	private final Map<String, String> _identifiers = new HashMap<>();
 	private final Function<String, Optional<String>> _keyToNameFunction;
 	private final Function<String, Optional<String>> _nameFunction;

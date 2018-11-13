@@ -18,8 +18,6 @@ import static com.liferay.apio.architect.annotation.FieldMode.READ_ONLY;
 import static com.liferay.apio.architect.annotation.FieldMode.READ_WRITE;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
-import static java.util.Collections.emptyList;
-
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.annotation.FieldMode;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
@@ -76,7 +74,7 @@ public class FormTransformer {
 		Function<String, Optional<String>> nameFunction) {
 
 		FormImpl.BuilderImpl<T> formBuilder = new FormImpl.BuilderImpl<>(
-			emptyList(), pathToIdentifierFunction, nameFunction);
+			pathToIdentifierFunction, nameFunction);
 
 		return _fillForm(parsedType, formBuilder);
 	}
