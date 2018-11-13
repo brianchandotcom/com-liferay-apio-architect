@@ -199,6 +199,9 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 	@Reference
 	protected ProviderManager providerManager;
 
+	@Context
+	protected HttpServletRequest request;
+
 	private Optional<Item> _getItem(String name, Object identifier) {
 		Optional<Path> optionalPath = pathIdentifierMapperManager.mapToPath(
 			name, identifier);
@@ -209,9 +212,6 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 			id -> Item.of(name, id)
 		);
 	}
-
-	@Context
-	protected HttpServletRequest request;
 
 	@Context
 	private Request _request;

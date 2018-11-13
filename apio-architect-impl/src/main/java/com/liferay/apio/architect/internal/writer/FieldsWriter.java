@@ -41,10 +41,10 @@ import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -114,6 +114,28 @@ public class FieldsWriter<T> {
 		Fields fields = _requestInfo.getFields();
 
 		return fields.apply(_baseRepresentor.getTypes());
+	}
+
+	/**
+	 * Calculate the {@link Item} managed by this writer and call the provided
+	 * consumer with the calculated instance.
+	 *
+	 * @review
+	 */
+	public void withItem(Consumer<Item> itemConsumer) {
+		if (!(_baseRepresentor instanceof Representor)) {
+			return;
+		}
+
+		Representor<T> representor = (Representor<T>)_baseRepresentor;
+
+		Object identifier = representor.getIdentifier(_singleModel.getModel());
+
+		Id id = Id.of(identifier, _path.getId());
+
+		Item item = Item.of(_singleModel.getResourceName(), id);
+
+		itemConsumer.accept(item);
 	}
 
 	/**
@@ -364,7 +386,7 @@ public class FieldsWriter<T> {
 						embeddedPathElements, nestedFieldFunction.getKey());
 
 				SingleModelImpl nestedSingleModel = new SingleModelImpl<>(
-					mappedModel, "", Collections.emptyList());
+					mappedModel, "");
 
 				BaseRepresentorFunction nestedRepresentorFunction =
 					__ -> Optional.of(

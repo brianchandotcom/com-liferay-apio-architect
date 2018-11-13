@@ -39,8 +39,10 @@ public interface SingleModel<T> {
 	/**
 	 * Returns the list of operations for the model.
 	 *
-	 * @return the list of operations
+	 * @return     the list of operations
+	 * @deprecated As of 1.9.0, with no direct replacement
 	 */
+	@Deprecated
 	public List<Operation> getOperations();
 
 	/**

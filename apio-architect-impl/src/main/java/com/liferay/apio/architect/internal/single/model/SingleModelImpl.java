@@ -14,10 +14,11 @@
 
 package com.liferay.apio.architect.internal.single.model;
 
+import static java.util.Collections.emptyList;
+
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,15 +30,8 @@ import java.util.List;
 public class SingleModelImpl<T> implements SingleModel<T> {
 
 	public SingleModelImpl(T model, String resourceName) {
-		this(model, resourceName, Collections.emptyList());
-	}
-
-	public SingleModelImpl(
-		T model, String resourceName, List<Operation> operations) {
-
 		_model = model;
 		_resourceName = resourceName;
-		_operations = operations;
 	}
 
 	@Override
@@ -47,7 +41,7 @@ public class SingleModelImpl<T> implements SingleModel<T> {
 
 	@Override
 	public List<Operation> getOperations() {
-		return _operations;
+		return emptyList();
 	}
 
 	@Override
@@ -56,7 +50,6 @@ public class SingleModelImpl<T> implements SingleModel<T> {
 	}
 
 	private final T _model;
-	private final List<Operation> _operations;
 	private final String _resourceName;
 
 }

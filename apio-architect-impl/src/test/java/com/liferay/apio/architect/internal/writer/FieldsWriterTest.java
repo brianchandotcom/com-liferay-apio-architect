@@ -30,6 +30,7 @@ import static org.hamcrest.collection.IsMapWithSize.aMapWithSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.list.FunctionalList;
 import com.liferay.apio.architect.internal.related.RelatedModelImpl;
@@ -44,7 +45,6 @@ import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -98,17 +98,15 @@ public class FieldsWriterTest {
 		);
 
 		_fieldsWriter = new FieldsWriter<>(
-			new SingleModelImpl<>(
-				() -> "first", "root", Collections.emptyList()),
-			_requestInfo, createRootModelRepresentor(true),
-			new Path("name", "id"), new FunctionalList<>(null, "first"),
-			MockWriterUtil::getSingleModel, null);
+			new SingleModelImpl<>(() -> "first", "root"), _requestInfo,
+			createRootModelRepresentor(true), new Path("name", "id"),
+			new FunctionalList<>(null, "first"), MockWriterUtil::getSingleModel,
+			null);
 	}
 
 	@Test
 	public void testGetSingleModel() {
-		SingleModel<Integer> parentSingleModel = new SingleModelImpl<>(
-			3, "", Collections.emptyList());
+		SingleModel<Integer> parentSingleModel = new SingleModelImpl<>(3, "");
 
 		RelatedModel<Integer, String> relatedModel = new RelatedModelImpl<>(
 			"key", FirstEmbeddedId.class, String::valueOf, () -> null);
@@ -128,6 +126,20 @@ public class FieldsWriterTest {
 
 				assertThat(firstEmbeddedModel.getId(), is("3"));
 			});
+	}
+
+	@Test
+	public void testWithItem() {
+		List<Item> items = new ArrayList<>();
+
+		_fieldsWriter.withItem(items::add);
+
+		assertThat(items, hasSize(1));
+
+		Item item = items.get(0);
+
+		assertThat(item.name(), is("root"));
+		assertThat(item.id(), is(optionalWithValue(equalTo("first"))));
 	}
 
 	@Test

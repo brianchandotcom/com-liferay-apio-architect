@@ -43,7 +43,6 @@ import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -110,9 +109,7 @@ public class PageWriter<T> {
 		String resourceName = _page.getResourceName();
 
 		items.forEach(
-			model -> _writeItem(
-				new SingleModelImpl<>(
-					model, resourceName, Collections.emptyList())));
+			model -> _writeItem(new SingleModelImpl<>(model, resourceName)));
 
 		_representorFunction.apply(
 			resourceName
@@ -675,8 +672,7 @@ public class PageWriter<T> {
 
 		nestedList.forEach(
 			model -> _writeItem(
-				nestedPageJSONObjectBuilder,
-				new SingleModelImpl<>(model, "", Collections.emptyList()),
+				nestedPageJSONObjectBuilder, new SingleModelImpl<>(model, ""),
 				embeddedPathElements, baseRepresentorFunction, singleModel));
 
 		_pageMessageMapper.onFinishNestedCollection(

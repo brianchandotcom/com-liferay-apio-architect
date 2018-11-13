@@ -34,7 +34,6 @@ import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -110,6 +109,16 @@ public class SingleModelWriter<T> {
 		fieldsWriter.writeSingleURL(
 			url -> _singleModelMessageMapper.mapSelfURL(
 				_jsonObjectBuilder, url));
+
+		ActionWriter actionWriter = new ActionWriter(
+			_singleModelMessageMapper, _requestInfo, _jsonObjectBuilder);
+
+		fieldsWriter.withItem(
+			item -> _actionSemanticsFunction.apply(
+				item
+			).forEach(
+				actionWriter::write
+			));
 
 		fieldsWriter.writeRelatedModels(
 			_pathFunction,
@@ -191,6 +200,24 @@ public class SingleModelWriter<T> {
 
 		_writeEmbeddedBasicFields(
 			fieldsWriter, jsonObjectBuilder, embeddedPathElements);
+
+		fieldsWriter.withItem(
+			item -> _actionSemanticsFunction.apply(
+				item
+			).forEach(
+				actionSemantics -> {
+					JSONObjectBuilder actionJSONObjectBuilder =
+						new JSONObjectBuilder();
+
+					_singleModelMessageMapper.mapEmbeddedActionMethod(
+						jsonObjectBuilder, actionJSONObjectBuilder,
+						embeddedPathElements, actionSemantics.method());
+
+					_singleModelMessageMapper.onFinishEmbeddedAction(
+						jsonObjectBuilder, actionJSONObjectBuilder,
+						embeddedPathElements, actionSemantics);
+				}
+			));
 
 		fieldsWriter.writeRelatedModels(
 			_pathFunction,
@@ -695,8 +722,7 @@ public class SingleModelWriter<T> {
 
 		list.forEach(
 			model -> _writeItem(
-				pageJSONObjectBuilder,
-				new SingleModelImpl<>(model, "", Collections.emptyList()),
+				pageJSONObjectBuilder, new SingleModelImpl<>(model, ""),
 				embeddedPathElements, baseRepresentorFunction));
 
 		_singleModelMessageMapper.onFinishNestedCollection(
@@ -731,8 +757,7 @@ public class SingleModelWriter<T> {
 					new FunctionalList<>(null, nestedFieldFunction.getKey());
 
 				_writeItemEmbeddedModelFields(
-					new SingleModelImpl<>(
-						mappedModel, "", Collections.emptyList()),
+					new SingleModelImpl<>(mappedModel, ""),
 					embeddedNestedPathElements, itemJsonObjectBuilder,
 					__ -> Optional.of(
 						nestedFieldFunction.getNestedRepresentor()));
