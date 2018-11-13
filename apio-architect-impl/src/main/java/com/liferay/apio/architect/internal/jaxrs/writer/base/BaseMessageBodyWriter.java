@@ -120,28 +120,26 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 
 		RequestInfo requestInfo = RequestInfo.create(
 			builder -> builder.httpServletRequest(
-				_httpServletRequest
+				request
 			).serverURL(
-				providerManager.provideMandatory(
-					_httpServletRequest, ServerURL.class)
+				providerManager.provideMandatory(request, ServerURL.class)
 			).applicationURL(
-				providerManager.provideMandatory(
-					_httpServletRequest, ApplicationURL.class)
+				providerManager.provideMandatory(request, ApplicationURL.class)
 			).embedded(
 				providerManager.provideOptional(
-					_httpServletRequest, Embedded.class
+					request, Embedded.class
 				).orElse(
 					__ -> false
 				)
 			).fields(
 				providerManager.provideOptional(
-					_httpServletRequest, Fields.class
+					request, Fields.class
 				).orElse(
 					__ -> string -> true
 				)
 			).language(
 				providerManager.provideOptional(
-					_httpServletRequest, AcceptLanguage.class
+					request, AcceptLanguage.class
 				).orElse(
 					Locale::getDefault
 				)
@@ -174,7 +172,7 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 		return nameOptional.flatMap(
 			name -> _getItem(name, identifier)
 		).flatMap(
-			item -> actionManager.getItemSingleModel(item, _httpServletRequest)
+			item -> actionManager.getItemSingleModel(item, request)
 		);
 	}
 
@@ -213,7 +211,7 @@ public abstract class BaseMessageBodyWriter<T, S extends MessageMapper>
 	}
 
 	@Context
-	private HttpServletRequest _httpServletRequest;
+	protected HttpServletRequest request;
 
 	@Context
 	private Request _request;

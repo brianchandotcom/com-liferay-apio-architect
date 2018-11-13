@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getFiel
 import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getPathOptional;
 
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
+import com.liferay.apio.architect.internal.alias.ActionSemanticsFunction;
 import com.liferay.apio.architect.internal.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.alias.RepresentorFunction;
@@ -63,6 +64,7 @@ public class SingleModelWriter<T> {
 	}
 
 	public SingleModelWriter(Builder<T> builder) {
+		_actionSemanticsFunction = builder._actionSemanticsFunction;
 		_pathFunction = builder._pathFunction;
 		_representorFunction = builder._representorFunction;
 		_requestInfo = builder._requestInfo;
@@ -244,6 +246,26 @@ public class SingleModelWriter<T> {
 			return new SingleModelMessageMapperStep();
 		}
 
+		public class ActionSemanticsFunctionStep {
+
+			/**
+			 * Adds information to the builder about the function that gets the
+			 * {@code ActionSemantics} of a resource.
+			 *
+			 * @param  actionSemanticsFunction the function that gets the {@code
+			 *         ActionSemantics} of a resource
+			 * @return the updated builder
+			 */
+			public BuildStep actionSemanticsFunction(
+				ActionSemanticsFunction actionSemanticsFunction) {
+
+				_actionSemanticsFunction = actionSemanticsFunction;
+
+				return new BuildStep();
+			}
+
+		}
+
 		public class BuildStep {
 
 			/**
@@ -349,12 +371,12 @@ public class SingleModelWriter<T> {
 			 *         SingleModel} of a class
 			 * @return the updated builder
 			 */
-			public BuildStep singleModelFunction(
+			public ActionSemanticsFunctionStep singleModelFunction(
 				SingleModelFunction singleModelFunction) {
 
 				_singleModelFunction = singleModelFunction;
 
-				return new BuildStep();
+				return new ActionSemanticsFunctionStep();
 			}
 
 		}
@@ -379,6 +401,7 @@ public class SingleModelWriter<T> {
 
 		}
 
+		private ActionSemanticsFunction _actionSemanticsFunction;
 		private PathFunction _pathFunction;
 		private RepresentorFunction _representorFunction;
 		private RequestInfo _requestInfo;
@@ -717,6 +740,7 @@ public class SingleModelWriter<T> {
 		);
 	}
 
+	private final ActionSemanticsFunction _actionSemanticsFunction;
 	private final JSONObjectBuilder _jsonObjectBuilder;
 	private final PathFunction _pathFunction;
 	private final RepresentorFunction _representorFunction;

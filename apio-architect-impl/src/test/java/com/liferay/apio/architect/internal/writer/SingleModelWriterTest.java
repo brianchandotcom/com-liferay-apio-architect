@@ -21,8 +21,8 @@ import static org.hamcrest.Matchers.is;
 
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 
-import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ public class SingleModelWriterTest {
 	public void testWriterReturnsEmptyIfNoRepresentorOrPathIsFound() {
 		SingleModelWriter<String> singleModelWriter = SingleModelWriter.create(
 			builder -> builder.singleModel(
-				new SingleModelImpl<>("Apio", "", Collections.emptyList())
+				new SingleModelImpl<>("Apio", "")
 			).modelMessageMapper(
 				() -> "mediaType"
 			).pathFunction(
@@ -48,6 +48,8 @@ public class SingleModelWriterTest {
 				null
 			).singleModelFunction(
 				(o, aClass) -> Optional.empty()
+			).actionSemanticsFunction(
+				__ -> Stream.empty()
 			).build());
 
 		Optional<String> optional = singleModelWriter.write();

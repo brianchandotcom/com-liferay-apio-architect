@@ -14,14 +14,9 @@
 
 package com.liferay.apio.architect.test.util.internal.writer;
 
-import static com.liferay.apio.architect.test.util.form.MockFormCreator.createForm;
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
-import static java.util.Arrays.asList;
-
 import com.liferay.apio.architect.internal.message.json.SingleModelMessageMapper;
-import com.liferay.apio.architect.internal.operation.DeleteOperation;
-import com.liferay.apio.architect.internal.operation.UpdateOperation;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.internal.writer.SingleModelWriter;
 import com.liferay.apio.architect.single.model.SingleModel;
@@ -52,12 +47,8 @@ public class MockSingleModelWriter {
 	public static String write(
 		SingleModelMessageMapper<RootModel> singleModelMessageMapper) {
 
-		DeleteOperation deleteOperation = new DeleteOperation("resource");
-		UpdateOperation updateOperation = new UpdateOperation(
-			createForm("u", "r"), "resource");
-
 		SingleModel<RootModel> singleModel = new SingleModelImpl<>(
-			() -> "first", "root", asList(deleteOperation, updateOperation));
+			() -> "first", "root");
 
 		SingleModelWriter<RootModel> singleModelWriter =
 			SingleModelWriter.create(
@@ -75,6 +66,8 @@ public class MockSingleModelWriter {
 					getRequestInfo()
 				).singleModelFunction(
 					MockWriterUtil::getSingleModel
+				).actionSemanticsFunction(
+					MockWriterUtil::getActionSemantics
 				).build());
 
 		Optional<String> optional = singleModelWriter.write();

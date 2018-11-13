@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.jaxrs.writer;
 
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
+import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.internal.jaxrs.writer.base.BaseMessageBodyWriter;
 import com.liferay.apio.architect.internal.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
@@ -73,6 +74,9 @@ public class SingleModelMessageBodyWriter<T>
 		SingleModelMessageMapper<T> singleModelMessageMapper,
 		RequestInfo requestInfo) {
 
+		Credentials credentials = providerManager.provideMandatory(
+			request, Credentials.class);
+
 		SingleModelWriter<T> singleModelWriter = SingleModelWriter.create(
 			builder -> builder.singleModel(
 				singleModel
@@ -89,6 +93,9 @@ public class SingleModelMessageBodyWriter<T>
 				requestInfo
 			).singleModelFunction(
 				this::getSingleModelOptional
+			).actionSemanticsFunction(
+				resource -> actionManager.getActionSemantics(
+					resource, credentials)
 			).build());
 
 		Optional<String> optional = singleModelWriter.write();

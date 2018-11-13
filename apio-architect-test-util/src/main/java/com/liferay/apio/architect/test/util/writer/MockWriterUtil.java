@@ -14,16 +14,20 @@
 
 package com.liferay.apio.architect.test.util.writer;
 
+import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
+import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createFirstEmbeddedModelRepresentor;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createRootModelRepresentor;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createSecondEmbeddedModelRepresentor;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createThirdEmbeddedModelRepresentor;
 
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.internal.operation.DeleteOperation;
+import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
-import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.identifier.FirstEmbeddedId;
@@ -35,11 +39,10 @@ import com.liferay.apio.architect.test.util.model.ThirdEmbeddedModel;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Provides utility functions for mock writers.
@@ -51,6 +54,29 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  */
 public class MockWriterUtil {
+
+	/**
+	 * Returns a stream of mock {@link ActionSemantics} for the provided
+	 * resource.
+	 *
+	 * @review
+	 */
+	public static Stream<ActionSemantics> getActionSemantics(
+		Resource resource) {
+
+		if (resource.equals(Item.of("root"))) {
+			return Stream.of(
+				_createActionSemantics(resource, "replace", PUT),
+				_createActionSemantics(resource, "remove", DELETE));
+		}
+
+		if (resource.equals(Item.of("first"))) {
+			return Stream.of(
+				_createActionSemantics(resource, "remove", DELETE));
+		}
+
+		return Stream.empty();
+	}
 
 	/**
 	 * Returns a mock identifier name from the identifier class.
@@ -140,27 +166,21 @@ public class MockWriterUtil {
 		}
 
 		if (identifierClass.equals(FirstEmbeddedId.class)) {
-			List<Operation> operations = Collections.singletonList(
-				new DeleteOperation("resource"));
-
 			return Optional.of(
 				new SingleModelImpl<>(
-					(FirstEmbeddedModel)() -> (String)identifier, "first",
-					operations));
+					(FirstEmbeddedModel)() -> (String)identifier, "first"));
 		}
 
 		if (identifierClass.equals(SecondEmbeddedId.class)) {
 			return Optional.of(
 				new SingleModelImpl<>(
-					(SecondEmbeddedModel)() -> (String)identifier, "second",
-					Collections.emptyList()));
+					(SecondEmbeddedModel)() -> (String)identifier, "second"));
 		}
 
 		if (identifierClass.equals(ThirdEmbeddedId.class)) {
 			return Optional.of(
 				new SingleModelImpl<>(
-					(ThirdEmbeddedModel)() -> (String)identifier, "third",
-					Collections.emptyList()));
+					(ThirdEmbeddedModel)() -> (String)identifier, "third"));
 		}
 
 		return Optional.empty();
@@ -199,6 +219,23 @@ public class MockWriterUtil {
 		}
 
 		return function.apply("third-inner-model");
+	}
+
+	private static ActionSemantics _createActionSemantics(
+		Resource resource, String name, HTTPMethod httpMethod) {
+
+		return ActionSemantics.ofResource(
+			resource
+		).name(
+			name
+		).method(
+			httpMethod
+		).receivesNoParams(
+		).returnsNothing(
+		).notAnnotated(
+		).executeFunction(
+			__ -> null
+		).build();
 	}
 
 	private MockWriterUtil() {
