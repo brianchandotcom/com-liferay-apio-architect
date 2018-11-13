@@ -24,7 +24,11 @@ import static com.liferay.apio.architect.internal.action.converter.EntryPointCon
 import static com.liferay.apio.architect.internal.body.JSONToBodyConverter.jsonToBody;
 import static com.liferay.apio.architect.internal.body.MultipartToBodyConverter.multipartToBody;
 
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
+import static io.vavr.control.Either.left;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
@@ -137,80 +141,15 @@ public class ActionManagerImpl implements ActionManager {
 	public Either<Action.Error, Action> getAction(
 		String method, List<String> params) {
 
-		if (params.size() == 1) {
-			Paged paged = Paged.of(params.get(0));
-
-			if (method.equals("GET")) {
-				return _getAction(paged, isRootCollectionAction);
-			}
-
-			if (method.equals("POST")) {
-				return _getAction(paged, isCreateAction);
-			}
-		}
-
-		if (params.size() == 2) {
-			Paged paged = Paged.of(params.get(0));
-			String actionName = params.get(1);
-
-			Either<Action.Error, Action> pagedCustomActionEither = _getAction(
-				paged, isAction(actionName, method));
-
-			if (pagedCustomActionEither.isRight()) {
-				return pagedCustomActionEither;
-			}
-
-			Item item = Item.of(
-				params.get(0), _getId(params.get(0), params.get(1)));
-
-			if (method.equals("DELETE")) {
-				return _getAction(item, isRemoveAction);
-			}
-
-			if (method.equals("PUT")) {
-				return _getAction(item, isReplaceAction);
-			}
-
-			if (method.equals("GET")) {
-				return _getAction(item, isRetrieveAction);
-			}
-		}
-
-		if (params.size() == 3) {
-			Item item = Item.of(
-				params.get(0), _getId(params.get(0), params.get(1)));
-
-			Either<Action.Error, Action> either = Either.narrow(
-				_getBinaryFileAction(item, params.get(2))
-			).orElse(
-				() -> _getAction(item, isAction(params.get(2), method))
-			);
-
-			if (either.isRight()) {
-				return either;
-			}
-
-			Nested nested = Nested.of(item, params.get(2));
-
-			if (method.equals("GET")) {
-				return _getAction(nested, isRetrieveAction);
-			}
-
-			if (method.equals("POST")) {
-				return _getAction(nested, isCreateAction);
-			}
-		}
-
-		if (params.size() == 4) {
-			Item item = Item.of(
-				params.get(0), _getId(params.get(0), params.get(1)));
-
-			Nested nested = Nested.of(item, params.get(2));
-
-			return _getAction(nested, isAction(params.get(3), method));
-		}
-
-		return Either.left(_notFound);
+		return Match(
+			params.size()
+		).of(
+			Case($(1), __ -> _handleOneParam(method, params.get(0))),
+			Case($(2), __ -> _handleTwoParams(method, params)),
+			Case($(3), __ -> _handleThreeParams(method, params)),
+			Case($(4), __ -> _handleFourParams(method, params)),
+			Case($(), __ -> left(_notFound))
+		);
 	}
 
 	@Override
@@ -451,6 +390,81 @@ public class ActionManagerImpl implements ActionManager {
 		}
 
 		return _providers.get(actionKey.getGenericActionKey());
+	}
+
+	private Either<Action.Error, Action> _handleFourParams(
+		String method, List<String> params) {
+
+		Item item = Item.of(
+			params.get(0), _getId(params.get(0), params.get(1)));
+
+		Nested nested = Nested.of(item, params.get(2));
+
+		return _getAction(nested, isAction(params.get(3), method));
+	}
+
+	private Either<Action.Error, Action> _handleOneParam(
+		String method, String param1) {
+
+		Paged paged = Paged.of(param1);
+
+		return Match(
+			method
+		).of(
+			Case($("GET"), __ -> _getAction(paged, isRootCollectionAction)),
+			Case($("POST"), __ -> _getAction(paged, isCreateAction)),
+			Case($(), __ -> left(_notFound))
+		);
+	}
+
+	private Either<Action.Error, Action> _handleThreeParams(
+		String method, List<String> params) {
+
+		Item item = Item.of(
+			params.get(0), _getId(params.get(0), params.get(1)));
+
+		return Either.narrow(
+			_getBinaryFileAction(item, params.get(2))
+		).orElse(
+			() -> _getAction(item, isAction(params.get(2), method))
+		).orElse(
+			() -> {
+				Nested nested = Nested.of(item, params.get(2));
+
+				return Match(
+					method
+				).of(
+					Case($("GET"), __ -> _getAction(nested, isRetrieveAction)),
+					Case($("POST"), __ -> _getAction(nested, isCreateAction)),
+					Case($(), __ -> left(_notFound))
+				);
+			}
+		);
+	}
+
+	private Either<Action.Error, Action> _handleTwoParams(
+		String method, List<String> params) {
+
+		Paged paged = Paged.of(params.get(0));
+		String actionName = params.get(1);
+
+		return Either.narrow(
+			_getAction(paged, isAction(actionName, method))
+		).orElse(
+			() -> {
+				Item item = Item.of(
+					params.get(0), _getId(params.get(0), params.get(1)));
+
+				return Match(
+					method
+				).of(
+					Case($("DELETE"), __ -> _getAction(item, isRemoveAction)),
+					Case($("PUT"), __ -> _getAction(item, isReplaceAction)),
+					Case($("GET"), __ -> _getAction(item, isRetrieveAction)),
+					Case($(), __ -> left(_notFound))
+				);
+			}
+		);
 	}
 
 	private boolean _isCustomActionOfCollection(
