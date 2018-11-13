@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.action;
 
 import static com.liferay.apio.architect.internal.action.Predicates.areEquals;
 import static com.liferay.apio.architect.internal.action.Predicates.hasAnnotation;
+import static com.liferay.apio.architect.internal.action.Predicates.isActionBy;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByDELETE;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByGET;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByPOST;
@@ -27,7 +28,6 @@ import static com.liferay.apio.architect.internal.action.Predicates.isRemoveActi
 import static com.liferay.apio.architect.internal.action.Predicates.isReplaceAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRetrieveAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
-import static com.liferay.apio.architect.internal.action.Predicates.isRootCreateAction;
 import static com.liferay.apio.architect.internal.action.Predicates.returnsAnyOf;
 
 import static java.util.Collections.singletonList;
@@ -40,7 +40,6 @@ import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.pagination.Page;
-import com.liferay.apio.architect.single.model.SingleModel;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -75,6 +74,12 @@ public class PredicatesTest {
 
 		assertTrue(truePredicate.test(_actionSemantics));
 		assertFalse(falsePredicate.test(_actionSemantics));
+	}
+
+	@Test
+	public void testIsActionBy() {
+		assertTrue(isActionBy("GET").test(_actionSemantics));
+		assertFalse(isActionBy("DELETE").test(_actionSemantics));
 	}
 
 	@Test
@@ -162,16 +167,6 @@ public class PredicatesTest {
 	}
 
 	@Test
-	public void testIsRootCreateAction() {
-		ActionSemantics actionSemantics = _withActionReturning(
-			"POST", "create", SingleModel.class);
-
-		assertTrue(isRootCreateAction.test(actionSemantics));
-
-		assertFalse(isRootCreateAction.test(_actionSemantics));
-	}
-
-	@Test
 	public void testReturnsAnyOf() {
 		Predicate<ActionSemantics> truePredicate = returnsAnyOf(
 			String.class, Page.class);
@@ -190,15 +185,6 @@ public class PredicatesTest {
 		ImmutableActionSemantics immutableActionSemantics = _withMethod(method);
 
 		return immutableActionSemantics.withName(action);
-	}
-
-	private static ActionSemantics _withActionReturning(
-		String method, String action, Class<?> returnClass) {
-
-		ImmutableActionSemantics immutableActionSemantics = _withAction(
-			method, action);
-
-		return immutableActionSemantics.withReturnClass(returnClass);
 	}
 
 	private static ImmutableActionSemantics _withMethod(String method) {

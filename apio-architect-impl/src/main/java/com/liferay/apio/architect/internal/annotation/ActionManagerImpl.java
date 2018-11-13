@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
+import static com.liferay.apio.architect.internal.action.Predicates.isActionBy;
 import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
-import static com.liferay.apio.architect.internal.action.Predicates.isRootCreateAction;
 import static com.liferay.apio.architect.internal.action.converter.EntryPointConverter.getEntryPointFrom;
 import static com.liferay.apio.architect.internal.body.JSONToBodyConverter.jsonToBody;
 import static com.liferay.apio.architect.internal.body.MultipartToBodyConverter.multipartToBody;
@@ -135,13 +135,20 @@ public class ActionManagerImpl implements ActionManager {
 			}
 
 			if (method.equals("POST")) {
-				return _getAction(paged, isRootCreateAction);
+				return _getAction(paged, isCreateAction);
 			}
 		}
 
 		if (params.size() == 2) {
-			ActionKey actionKey = new ActionKey(
-				method, params.get(0), params.get(1));
+			Paged paged = Paged.of(params.get(0));
+			String actionName = params.get(1);
+
+			Either<Action.Error, Action> pagedCustomActionEither = _getAction(
+				paged, isActionNamed(actionName).and(isActionBy(method)));
+
+			if (pagedCustomActionEither.isRight()) {
+				return pagedCustomActionEither;
+			}
 
 			return _getActionsWithId(actionKey);
 		}
