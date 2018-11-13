@@ -20,6 +20,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.routes.ItemRoutesImpl;
 import com.liferay.apio.architect.internal.routes.ItemRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
@@ -119,7 +120,9 @@ public class ItemRouterManager extends ClassNameBaseManager<ItemRouter> {
 
 				Builder<Object, Object> builder = new BuilderImpl<>(
 					Item.of(name),
-					_pathIdentifierMapperManager::mapToIdentifierOrFail,
+					() -> new FormImpl.BuilderImpl<>(
+						_pathIdentifierMapperManager::mapToIdentifierOrFail,
+						_nameManager::getNameOptional),
 					_nameManager::getNameOptional);
 
 				@SuppressWarnings("unchecked")

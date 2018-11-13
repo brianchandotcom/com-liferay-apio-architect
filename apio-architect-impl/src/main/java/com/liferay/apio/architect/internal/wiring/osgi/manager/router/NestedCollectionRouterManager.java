@@ -26,6 +26,7 @@ import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
+import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
@@ -183,9 +184,10 @@ public class NestedCollectionRouterManager
 
 				Builder builder = new BuilderImpl<>(
 					Nested.of(Item.of(parentName), nestedName),
-					identifier -> _pathIdentifierMapperManager.mapToPath(
-						parentName, identifier),
-					representor::getIdentifier, _nameManager::getNameOptional);
+					() -> new FormImpl.BuilderImpl<>(
+						_pathIdentifierMapperManager::mapToIdentifierOrFail,
+						_nameManager::getNameOptional),
+					representor::getIdentifier);
 
 				@SuppressWarnings("unchecked")
 				NestedCollectionRoutes nestedCollectionRoutes =

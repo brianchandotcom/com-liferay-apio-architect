@@ -19,7 +19,8 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.Mana
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
+import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
@@ -110,8 +111,10 @@ public class CollectionRouterManager
 				Representor<Object> representor = representorOptional.get();
 
 				Builder builder = new BuilderImpl<>(
-					Resource.Paged.of(name),
-					_pathIdentifierMapperManager::mapToIdentifierOrFail,
+					Paged.of(name),
+					() -> new FormImpl.BuilderImpl<>(
+						_pathIdentifierMapperManager::mapToIdentifierOrFail,
+						_nameManager::getNameOptional),
 					representor::getIdentifier, _nameManager::getNameOptional);
 
 				@SuppressWarnings("unchecked")

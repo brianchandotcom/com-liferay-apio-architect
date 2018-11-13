@@ -17,6 +17,7 @@ package com.liferay.apio.architect.internal.routes;
 import static com.liferay.apio.architect.internal.action.Predicates.isCreateAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRetrieveAction;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_SUPPLIER;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.GET_CUSTOM_ROUTE;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IS_BATCH_CREATE_ACTION;
@@ -45,7 +46,7 @@ import static org.hamcrest.core.Is.is;
 import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.routes.RoutesTestUtil.CustomIdentifier;
 import com.liferay.apio.architect.pagination.Page;
@@ -72,8 +73,8 @@ public class CollectionRoutesImplTest {
 	@Before
 	public void setUp() {
 		_builder = new BuilderImpl<>(
-			Resource.Paged.of("name"),
-			__ -> null, IDENTIFIER_FUNCTION, __ -> Optional.of("custom"));
+			Paged.of("name"), FORM_BUILDER_SUPPLIER, IDENTIFIER_FUNCTION,
+			__ -> Optional.of("custom"));
 	}
 
 	@Test
@@ -409,7 +410,7 @@ public class CollectionRoutesImplTest {
 		assertThat(actionSemantics.method(), is("POST"));
 		assertThat(actionSemantics.name(), is("batch-create"));
 		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Resource.Paged.of("name")));
+		assertThat(actionSemantics.resource(), is(Paged.of("name")));
 		assertThat(
 			actionSemantics.returnClass(), is(equalTo(BatchResult.class)));
 
@@ -431,7 +432,7 @@ public class CollectionRoutesImplTest {
 		assertThat(actionSemantics.method(), is("GET"));
 		assertThat(actionSemantics.name(), is("retrieve"));
 		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Resource.Paged.of("name")));
+		assertThat(actionSemantics.resource(), is(Paged.of("name")));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Page.class)));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
@@ -460,7 +461,7 @@ public class CollectionRoutesImplTest {
 		assertThat(actionSemantics.method(), is(method));
 		assertThat(actionSemantics.name(), is(actionName));
 		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Resource.Paged.of("name")));
+		assertThat(actionSemantics.resource(), is(Paged.of("name")));
 		assertThat(
 			actionSemantics.returnClass(), is(equalTo(SingleModel.class)));
 

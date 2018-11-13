@@ -34,8 +34,10 @@ import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.custom.actions.GetRoute;
 import com.liferay.apio.architect.custom.actions.PostRoute;
 import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.test.util.pagination.PaginationRequest;
 
@@ -46,6 +48,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -84,6 +87,14 @@ public class RoutesTestUtil {
 		).addRequiredString(
 			"key", (map, value) -> map.put("key", value)
 		).build();
+
+	/**
+	 * A supplier of form builders.
+	 *
+	 * @review
+	 */
+	public static final Supplier<Form.Builder> FORM_BUILDER_SUPPLIER = () ->
+		new FormImpl.BuilderImpl<>(__ -> null, __ -> Optional.of("custom"));
 
 	/**
 	 * A mock {@link CustomRoute} with name {@code read} and method {@code GET}.

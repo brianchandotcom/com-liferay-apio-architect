@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.internal.action.Predicates.isRemoveActi
 import static com.liferay.apio.architect.internal.action.Predicates.isReplaceAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRetrieveAction;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_SUPPLIER;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.GET_CUSTOM_ROUTE;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_REMOVE_PERMISSION_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.HAS_UPDATE_PERMISSION_FUNCTION;
@@ -44,7 +45,7 @@ import static org.hamcrest.core.Is.is;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
+import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.routes.ItemRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.routes.RoutesTestUtil.CustomIdentifier;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -68,7 +69,8 @@ public class ItemRoutesImplTest {
 	@Before
 	public void setUp() {
 		_builder = new ItemRoutesImpl.BuilderImpl<>(
-			Resource.Item.of("name"), __ -> null, __ -> Optional.of("custom"));
+			Item.of("name"), FORM_BUILDER_SUPPLIER,
+			__ -> Optional.of("custom"));
 	}
 
 	@Test
@@ -444,7 +446,7 @@ public class ItemRoutesImplTest {
 		assertThat(actionSemantics.method(), is("DELETE"));
 		assertThat(actionSemantics.name(), is("remove"));
 		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Resource.Item.of("name")));
+		assertThat(actionSemantics.resource(), is(Item.of("name")));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Void.class)));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
@@ -464,7 +466,7 @@ public class ItemRoutesImplTest {
 		assertThat(actionSemantics.method(), is(method));
 		assertThat(actionSemantics.name(), is(actionName));
 		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Resource.Item.of("name")));
+		assertThat(actionSemantics.resource(), is(Item.of("name")));
 		assertThat(
 			actionSemantics.returnClass(), is(equalTo(SingleModel.class)));
 

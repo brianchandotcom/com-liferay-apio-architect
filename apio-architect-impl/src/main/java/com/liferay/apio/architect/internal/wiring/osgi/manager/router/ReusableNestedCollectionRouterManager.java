@@ -22,6 +22,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
+import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
@@ -115,9 +116,10 @@ public class ReusableNestedCollectionRouterManager
 
 				Builder builder = new NestedCollectionRoutesImpl.BuilderImpl<>(
 					Nested.of(Item.of("r"), name),
-					identifier -> _pathIdentifierMapperManager.mapToPath(
-						name, identifier),
-					representor::getIdentifier, _nameManager::getNameOptional);
+					() -> new FormImpl.BuilderImpl<>(
+						_pathIdentifierMapperManager::mapToIdentifierOrFail,
+						_nameManager::getNameOptional),
+					representor::getIdentifier);
 
 				@SuppressWarnings("unchecked")
 				NestedCollectionRoutes nestedCollectionRoutes =

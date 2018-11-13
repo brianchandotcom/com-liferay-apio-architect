@@ -17,6 +17,7 @@ package com.liferay.apio.architect.internal.routes;
 import static com.liferay.apio.architect.internal.action.Predicates.isCreateAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRetrieveAction;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
+import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.FORM_BUILDER_SUPPLIER;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.IS_BATCH_CREATE_ACTION;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.PAGINATION;
@@ -57,7 +58,6 @@ import io.vavr.control.Try;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -70,8 +70,8 @@ public class NestedCollectionRoutesImplTest {
 	@Before
 	public void setUp() {
 		_builder = new BuilderImpl<>(
-			Nested.of(Item.of("parent"), "name"),
-			__ -> null, IDENTIFIER_FUNCTION, __ -> Optional.of("custom"));
+			Nested.of(Item.of("parent"), "name"), FORM_BUILDER_SUPPLIER,
+			IDENTIFIER_FUNCTION);
 	}
 
 	@Test
