@@ -14,9 +14,11 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
+import static com.liferay.apio.architect.internal.action.ActionSemantics.toAction;
 import static com.liferay.apio.architect.internal.action.converter.EntryPointConverter.getEntryPointFrom;
+import static com.liferay.apio.architect.internal.action.converter.PagedResourceConverter.filterRetrieveActionFor;
+import static com.liferay.apio.architect.internal.alias.ProvideFunction.curry;
 
-import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import static java.util.function.Function.identity;
@@ -26,6 +28,8 @@ import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
+import com.liferay.apio.architect.internal.annotation.Action.Error.NotFound;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
@@ -114,9 +118,18 @@ public class ActionManagerImpl implements ActionManager {
 		String method, List<String> params) {
 
 		if (params.size() == 1) {
-			ActionKey actionKey = new ActionKey(method, params.get(0));
+			if (method.equals("GET")) {
+				Optional<ActionSemantics> optional = filterRetrieveActionFor(
+					Paged.of(params.get(0)), actionSemantics());
 
-			return right(_getAction(actionKey, null));
+				return optional.map(
+					toAction(curry(providerManager::provideMandatory))
+				).<Either<Action.Error, Action>>map(
+					Either::right
+				).orElseGet(
+					() -> Either.left(_notFound)
+				);
+			}
 		}
 
 		if (params.size() == 2) {
@@ -141,7 +154,7 @@ public class ActionManagerImpl implements ActionManager {
 			return _getActionsWithId(actionKey);
 		}
 
-		return left(new Action.Error.NotFound() {});
+		return Either.left(_notFound);
 	}
 
 	@Override
@@ -360,6 +373,9 @@ public class ActionManagerImpl implements ActionManager {
 
 		return resource.equals(actionKey.getResource());
 	}
+
+	private static final NotFound _notFound = new NotFound() {
+	};
 
 	private final Map<ActionKey, CheckedFunction3<Object, ?, List<Object>, ?>>
 		_actionsMap = new HashMap<>();

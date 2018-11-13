@@ -17,15 +17,20 @@ package com.liferay.apio.architect.internal.action;
 import static com.liferay.apio.architect.internal.action.ImmutableActionSemantics.actionSemantics;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 import com.liferay.apio.architect.internal.action.resource.Resource;
+import com.liferay.apio.architect.internal.alias.ProvideFunction;
+import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.operation.HTTPMethod;
 
 import io.vavr.CheckedFunction1;
+import io.vavr.control.Try;
 
 import java.lang.annotation.Annotation;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.immutables.value.Value.Immutable;
 import org.immutables.value.Value.Parameter;
@@ -52,6 +57,31 @@ public abstract class ActionSemantics {
 			executeFunction -> () -> actionSemantics(
 				resource, name, method, asList(paramClasses), returnClass,
 				asList(annotations), executeFunction);
+	}
+
+	/**
+	 * Returns a function that transforms an {@link ActionSemantics} instance
+	 * into its {@link Action}.
+	 *
+	 * @param  provideFunction the function used to provide instances of action
+	 *         params
+	 * @return the function that transforms an {@link ActionSemantics} into an
+	 *         {@link Action}
+	 */
+	public static Function<ActionSemantics, Action> toAction(
+		ProvideFunction provideFunction) {
+
+		return actionSemantics -> request -> Try.of(
+			actionSemantics.paramClasses()::stream
+		).map(
+			stream -> stream.map(
+				provideFunction.apply(request)
+			).collect(
+				toList()
+			)
+		).mapTry(
+			actionSemantics.executeFunction()
+		);
 	}
 
 	/**
