@@ -18,6 +18,7 @@ import static java.util.Arrays.asList;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.nullValue;
 
 import static org.junit.Assert.assertThat;
 
@@ -56,7 +57,6 @@ public class FormTransformerTest {
 				put("relativeUrl1", "/first");
 				put("relativeUrl2", "/second");
 				put("stringField1", "string1");
-				put("stringField2", "string2");
 			}
 		};
 
@@ -92,7 +92,6 @@ public class FormTransformerTest {
 		assertThat(_dummy.getDateField2(), is(new Date(1491244560000L)));
 		assertThat(_dummy.getNumberField2(), is(20L));
 		assertThat(_dummy.getStringField1(), is("string1"));
-		assertThat(_dummy.getStringField2(), is("string2"));
 	}
 
 	@Test
@@ -103,6 +102,11 @@ public class FormTransformerTest {
 		assertThat(_dummy.getStringListField2(), is(asList("three", "four")));
 		assertThat(_dummy.getNumberListField1(), is(asList(1L, 2L)));
 		assertThat(_dummy.getNumberListField2(), is(asList(3L, 4L)));
+	}
+
+	@Test
+	public void testNonKeyInBodyShouldReturnNull() {
+		assertThat(_dummy.getStringField2(), is(nullValue()));
 	}
 
 	@Test

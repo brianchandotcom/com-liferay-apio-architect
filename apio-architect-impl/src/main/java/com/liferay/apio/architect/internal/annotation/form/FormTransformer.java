@@ -86,13 +86,8 @@ public class FormTransformer {
 
 		Map<String, Object> resultsMap = new HashMap<>();
 
-		InvocationHandler invocationHandler = (object, method, args) -> {
-			if (!resultsMap.containsKey(method.getName())) {
-				throw new IllegalAccessException("method not found:" + method);
-			}
-
-			return resultsMap.get(method.getName());
-		};
+		InvocationHandler invocationHandler =
+			(object, method, args) -> resultsMap.get(method.getName());
 
 		Function<String, BiConsumer<T, ?>> formFunction =
 			methodName -> (object, value) -> resultsMap.put(methodName, value);
