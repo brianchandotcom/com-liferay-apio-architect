@@ -158,11 +158,17 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <R> Builder<T, S, U> addCreator(
+		public default <R> Builder<T, S, U> addCreator(
 			ThrowableBiFunction<U, R, T> creatorThrowableBiFunction,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(u, r, ignored) -> creatorThrowableBiFunction.apply(u, r),
+				Void.class, hasNestedAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has no extra parameters.
@@ -182,13 +188,20 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <R> Builder<T, S, U> addCreator(
+		public default <R> Builder<T, S, U> addCreator(
 			ThrowableBiFunction<U, R, T> creatorThrowableBiFunction,
 			ThrowableBiFunction<U, List<R>, List<S>>
 				batchCreatorThrowableBiFunction,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(u, r, ignored) -> creatorThrowableBiFunction.apply(u, r),
+				(u, l, ignored) -> batchCreatorThrowableBiFunction.apply(u, l),
+				Void.class, hasNestedAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has four extra parameters.
@@ -280,13 +293,20 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, C, R> Builder<T, S, U> addCreator(
+		public default <A, B, C, R> Builder<T, S, U> addCreator(
 			ThrowablePentaFunction<U, R, A, B, C, T>
 				creatorThrowablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(u, r, a, b, c, ignored) -> creatorThrowablePentaFunction.apply(
+					u, r, a, b, c),
+				aClass, bClass, cClass, Void.class,
+				hasNestedAddingPermissionFunction, formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has three extra parameters.
@@ -312,7 +332,7 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, C, R> Builder<T, S, U> addCreator(
+		public default <A, B, C, R> Builder<T, S, U> addCreator(
 			ThrowablePentaFunction<U, R, A, B, C, T>
 				creatorThrowablePentaFunction,
 			ThrowablePentaFunction<U, List<R>, A, B, C, List<S>>
@@ -320,7 +340,16 @@ public interface NestedCollectionRoutes<T, S, U> {
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(u, r, a, b, c, ignored) -> creatorThrowablePentaFunction.apply(
+					u, r, a, b, c),
+				(u, l, a, b, c, ignored) ->
+					batchCreatorThrowablePentaFunction.apply(u, l, a, b, c),
+				aClass, bClass, cClass, Void.class,
+				hasNestedAddingPermissionFunction, formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has two extra parameters.
@@ -342,12 +371,19 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, R> Builder<T, S, U> addCreator(
+		public default <A, B, R> Builder<T, S, U> addCreator(
 			ThrowableTetraFunction<U, R, A, B, T> creatorThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(u, r, a, b, ignored) -> creatorThrowableTetraFunction.apply(
+					u, r, a, b),
+				aClass, bClass, Void.class, hasNestedAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has two extra parameters.
@@ -371,14 +407,23 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, R> Builder<T, S, U> addCreator(
+		public default <A, B, R> Builder<T, S, U> addCreator(
 			ThrowableTetraFunction<U, R, A, B, T> creatorThrowableTetraFunction,
 			ThrowableTetraFunction<U, List<R>, A, B, List<S>>
 				batchCreatorThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(u, r, a, b, ignored) -> creatorThrowableTetraFunction.apply(
+					u, r, a, b),
+				(u, l, a, b, ignored) ->
+					batchCreatorThrowableTetraFunction.apply(u, l, a, b),
+				aClass, bClass, Void.class, hasNestedAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has one extra parameter.
@@ -398,12 +443,19 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, R> Builder<T, S, U> addCreator(
+		public default <A, R> Builder<T, S, U> addCreator(
 			ThrowableTriFunction<U, R, A, T> creatorThrowableTriFunction,
 			Class<A> aClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(u, r, a, ignored) -> creatorThrowableTriFunction.apply(
+					u, r, a),
+				aClass, Void.class, hasNestedAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has one extra parameter.
@@ -425,14 +477,23 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, R> Builder<T, S, U> addCreator(
+		public default <A, R> Builder<T, S, U> addCreator(
 			ThrowableTriFunction<U, R, A, T> creatorThrowableTriFunction,
 			ThrowableTriFunction<U, List<R>, A, List<S>>
 				batchCreatorThrowableTriFunction,
 			Class<A> aClass,
 			HasNestedAddingPermissionFunction<U>
 				hasNestedAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(u, r, a, ignored) -> creatorThrowableTriFunction.apply(
+					u, r, a),
+				(u, l, a, ignored) -> batchCreatorThrowableTriFunction.apply(
+					u, l, a),
+				aClass, Void.class, hasNestedAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a collection page function with none extra
@@ -447,9 +508,14 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public Builder<T, S, U> addGetter(
+		public default Builder<T, S, U> addGetter(
 			ThrowableBiFunction<Pagination, U, PageItems<T>>
-				getterThrowableBiFunction);
+				getterThrowableBiFunction) {
+
+			return addGetter(
+				(p, u, ignored) -> getterThrowableBiFunction.apply(p, u),
+				Void.class);
+		}
 
 		/**
 		 * Adds a route to a collection page function with four extra
@@ -489,10 +555,16 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, C> Builder<T, S, U> addGetter(
+		public default <A, B, C> Builder<T, S, U> addGetter(
 			ThrowablePentaFunction<Pagination, U, A, B, C, PageItems<T>>
 				getterThrowablePentaFunction,
-			Class<A> aClass, Class<B> bClass, Class<C> cClass);
+			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
+
+			return addGetter(
+				(p, u, a, b, c, ignored) -> getterThrowablePentaFunction.apply(
+					p, u, a, b, c),
+				aClass, bClass, cClass, Void.class);
+		}
 
 		/**
 		 * Adds a route to a collection page function with two extra parameters.
@@ -508,10 +580,16 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B> Builder<T, S, U> addGetter(
+		public default <A, B> Builder<T, S, U> addGetter(
 			ThrowableTetraFunction<Pagination, U, A, B, PageItems<T>>
 				getterThrowableTetraFunction,
-			Class<A> aClass, Class<B> bClass);
+			Class<A> aClass, Class<B> bClass) {
+
+			return addGetter(
+				(p, u, a, b, ignored) -> getterThrowableTetraFunction.apply(
+					p, u, a, b),
+				aClass, bClass, Void.class);
+		}
 
 		/**
 		 * Adds a route to a collection page function with one extra parameter.
@@ -526,10 +604,15 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * @review
 		 */
 		@Deprecated
-		public <A> Builder<T, S, U> addGetter(
+		public default <A> Builder<T, S, U> addGetter(
 			ThrowableTriFunction<Pagination, U, A, PageItems<T>>
 				getterThrowableTriFunction,
-			Class<A> aClass);
+			Class<A> aClass) {
+
+			return addGetter(
+				(p, u, a, ignored) -> getterThrowableTriFunction.apply(p, u, a),
+				aClass, Void.class);
+		}
 
 		/**
 		 * Constructs the {@link NestedCollectionRoutes} instance with the

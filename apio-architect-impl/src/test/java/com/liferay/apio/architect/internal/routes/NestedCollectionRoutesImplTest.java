@@ -30,7 +30,6 @@ import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -134,7 +133,7 @@ public class NestedCollectionRoutesImplTest {
 		_testActionSemantics(
 			(NestedCollectionRoutesImpl<String, Long, Long>)
 				nestedCollectionRoutes,
-			asList(String.class, Long.class, Boolean.class));
+			asList(String.class, Long.class, Boolean.class, Void.class));
 	}
 
 	@Test
@@ -176,7 +175,7 @@ public class NestedCollectionRoutesImplTest {
 		_testActionSemantics(
 			(NestedCollectionRoutesImpl<String, Long, Long>)
 				nestedCollectionRoutes,
-			emptyList());
+			asList(Void.class, Void.class, Void.class, Void.class));
 	}
 
 	@Test
@@ -198,7 +197,7 @@ public class NestedCollectionRoutesImplTest {
 		_testActionSemantics(
 			(NestedCollectionRoutesImpl<String, Long, Long>)
 				nestedCollectionRoutes,
-			asList(String.class, Long.class));
+			asList(String.class, Long.class, Void.class, Void.class));
 	}
 
 	@Test
@@ -218,7 +217,7 @@ public class NestedCollectionRoutesImplTest {
 		_testActionSemantics(
 			(NestedCollectionRoutesImpl<String, Long, Long>)
 				nestedCollectionRoutes,
-			singletonList(String.class));
+			asList(String.class, Void.class, Void.class, Void.class));
 	}
 
 	private void _testActionSemantics(

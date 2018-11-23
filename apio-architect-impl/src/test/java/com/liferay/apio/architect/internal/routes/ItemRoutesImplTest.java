@@ -33,8 +33,6 @@ import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
 import static io.vavr.Predicates.isNull;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -142,7 +140,7 @@ public class ItemRoutesImplTest {
 
 		_testActionSemantics(
 			(ItemRoutesImpl<String, Long>)itemRoutes,
-			asList(String.class, Long.class, Boolean.class));
+			asList(String.class, Long.class, Boolean.class, Void.class));
 	}
 
 	@Test
@@ -196,7 +194,8 @@ public class ItemRoutesImplTest {
 		assertThat(itemRoutes, instanceOf(ItemRoutesImpl.class));
 
 		_testActionSemantics(
-			(ItemRoutesImpl<String, Long>)itemRoutes, emptyList());
+			(ItemRoutesImpl<String, Long>)itemRoutes,
+			asList(Void.class, Void.class, Void.class, Void.class));
 	}
 
 	@Test
@@ -224,7 +223,7 @@ public class ItemRoutesImplTest {
 
 		_testActionSemantics(
 			(ItemRoutesImpl<String, Long>)itemRoutes,
-			asList(String.class, Long.class));
+			asList(String.class, Long.class, Void.class, Void.class));
 	}
 
 	@Test
@@ -251,7 +250,7 @@ public class ItemRoutesImplTest {
 
 		_testActionSemantics(
 			(ItemRoutesImpl<String, Long>)itemRoutes,
-			singletonList(String.class));
+			asList(String.class, Void.class, Void.class, Void.class));
 	}
 
 	private void _testActionSemantics(

@@ -24,21 +24,13 @@ import com.liferay.apio.architect.alias.routes.UpdateItemFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasRemovePermissionFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasUpdatePermissionFunction;
 import com.liferay.apio.architect.annotation.Id;
-import com.liferay.apio.architect.consumer.throwable.ThrowableBiConsumer;
-import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.consumer.throwable.ThrowablePentaConsumer;
-import com.liferay.apio.architect.consumer.throwable.ThrowableTetraConsumer;
-import com.liferay.apio.architect.consumer.throwable.ThrowableTriConsumer;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
-import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
-import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
-import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource;
@@ -127,48 +119,13 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		@Override
-		public <R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
-			CustomRoute customRoute,
-			ThrowableBiFunction<S, R, U> throwableBiFunction, Class<I> supplier,
-			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			Form<R> form = _getForm(formBuilderFunction);
-
-			Class<?> bodyClass = form == null ? Void.class : Body.class;
-
-			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				customRoute.getName()
-			).method(
-				customRoute.getMethod()
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> throwableBiFunction.andThen(
-					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
-				).apply(
-					_getId(params.get(0)),
-					_getModel(form, () -> (Body)params.get(1))
-				)
-			).receivesParams(
-				Id.class, bodyClass
-			).build();
-
-			_actionSemantics.add(createActionSemantics);
-
-			return this;
-		}
-
-		@Override
 		public <A, B, C, D, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableHexaFunction<S, R, A, B, C, D, U>
 					throwableHexaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
-				Class<D> dClass, Class<I> supplier,
+				Class<D> dClass, Class<I> identifierClass,
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
@@ -186,7 +143,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				SingleModel.class
 			).executeFunction(
 				params -> throwableHexaFunction.andThen(
-					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
+					t -> new SingleModelImpl<>(
+						t, _getResourceName(identifierClass))
 				).apply(
 					_getId(params.get(0)),
 					_getModel(form, () -> (Body)params.get(1)),
@@ -198,176 +156,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A, B, C, R, U, I extends Identifier<?>> Builder<T, S>
-			addCustomRoute(
-				CustomRoute customRoute,
-				ThrowablePentaFunction<S, R, A, B, C, U> throwablePentaFunction,
-				Class<A> aClass, Class<B> bClass, Class<C> cClass,
-				Class<I> supplier,
-				BiFunction<Credentials, S, Boolean> permissionBiFunction,
-				FormBuilderFunction<R> formBuilderFunction) {
-
-			Form<R> form = _getForm(formBuilderFunction);
-
-			Class<?> bodyClass = form == null ? Void.class : Body.class;
-
-			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				customRoute.getName()
-			).method(
-				customRoute.getMethod()
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> throwablePentaFunction.andThen(
-					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
-				).apply(
-					_getId(params.get(0)),
-					_getModel(form, () -> (Body)params.get(1)),
-					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
-					unsafeCast(params.get(4))
-				)
-			).receivesParams(
-				Id.class, bodyClass, aClass, bClass, cClass
-			).build();
-
-			_actionSemantics.add(createActionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A, B, R, U, I extends Identifier<?>> Builder<T, S>
-			addCustomRoute(
-				CustomRoute customRoute,
-				ThrowableTetraFunction<S, R, A, B, U> throwableTetraFunction,
-				Class<A> aClass, Class<B> bClass, Class<I> supplier,
-				BiFunction<Credentials, S, Boolean> permissionBiFunction,
-				FormBuilderFunction<R> formBuilderFunction) {
-
-			Form<R> form = _getForm(formBuilderFunction);
-
-			Class<?> bodyClass = form == null ? Void.class : Body.class;
-
-			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				customRoute.getName()
-			).method(
-				customRoute.getMethod()
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> throwableTetraFunction.andThen(
-					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
-				).apply(
-					_getId(params.get(0)),
-					_getModel(form, () -> (Body)params.get(1)),
-					unsafeCast(params.get(2)), unsafeCast(params.get(3))
-				)
-			).receivesParams(
-				Id.class, bodyClass, aClass, bClass
-			).build();
-
-			_actionSemantics.add(createActionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A, R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
-			CustomRoute customRoute,
-			ThrowableTriFunction<S, R, A, U> throwableTriFunction,
-			Class<A> aClass, Class<I> supplier,
-			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			Form<R> form = _getForm(formBuilderFunction);
-
-			Class<?> bodyClass = form == null ? Void.class : Body.class;
-
-			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				customRoute.getName()
-			).method(
-				customRoute.getMethod()
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> throwableTriFunction.andThen(
-					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
-				).apply(
-					_getId(params.get(0)),
-					_getModel(form, () -> (Body)params.get(1)),
-					unsafeCast(params.get(2))
-				)
-			).receivesParams(
-				Id.class, bodyClass, aClass
-			).build();
-
-			_actionSemantics.add(createActionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A> Builder<T, S> addGetter(
-			ThrowableBiFunction<S, A, T> getterThrowableBiFunction,
-			Class<A> aClass) {
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"retrieve"
-			).method(
-				"GET"
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> getterThrowableBiFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
-				).apply(
-					_getId(params.get(0)), unsafeCast(params.get(1))
-				)
-			).receivesParams(
-				Id.class, aClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public Builder<T, S> addGetter(
-			ThrowableFunction<S, T> getterThrowableFunction) {
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"retrieve"
-			).method(
-				"GET"
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> getterThrowableFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
-				).apply(
-					_getId(params.get(0))
-				)
-			).receivesParams(
-				Id.class
-			).build();
-
-			_actionSemantics.add(actionSemantics);
 
 			return this;
 		}
@@ -405,117 +193,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		}
 
 		@Override
-		public <A, B, C> Builder<T, S> addGetter(
-			ThrowableTetraFunction<S, A, B, C, T> getterThrowableTetraFunction,
-			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"retrieve"
-			).method(
-				"GET"
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> getterThrowableTetraFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
-				).apply(
-					_getId(params.get(0)), unsafeCast(params.get(1)),
-					unsafeCast(params.get(2)), unsafeCast(params.get(3))
-				)
-			).receivesParams(
-				Id.class, aClass, bClass, cClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A, B> Builder<T, S> addGetter(
-			ThrowableTriFunction<S, A, B, T> getterThrowableTriFunction,
-			Class<A> aClass, Class<B> bClass) {
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"retrieve"
-			).method(
-				"GET"
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> getterThrowableTriFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
-				).apply(
-					_getId(params.get(0)), unsafeCast(params.get(1)),
-					unsafeCast(params.get(2))
-				)
-			).receivesParams(
-				Id.class, aClass, bClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A> Builder<T, S> addRemover(
-			ThrowableBiConsumer<S, A> removerThrowableBiConsumer,
-			Class<A> aClass,
-			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"remove"
-			).method(
-				"DELETE"
-			).returns(
-				Void.class
-			).executeFunction(
-				params -> _run(
-					() -> removerThrowableBiConsumer.accept(
-						_getId(params.get(0)), unsafeCast(params.get(1))))
-			).receivesParams(
-				Id.class, aClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public Builder<T, S> addRemover(
-			ThrowableConsumer<S> removerThrowableConsumer,
-			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"remove"
-			).method(
-				"DELETE"
-			).returns(
-				Void.class
-			).executeFunction(
-				params -> _run(
-					() -> removerThrowableConsumer.accept(
-						_getId(params.get(0))))
-			).receivesParams(
-				Id.class
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
 		public <A, B, C, D> Builder<T, S> addRemover(
 			ThrowablePentaConsumer<S, A, B, C, D> removerThrowablePentaConsumer,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
@@ -537,93 +214,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						unsafeCast(params.get(4))))
 			).receivesParams(
 				Id.class, aClass, bClass, cClass, dClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A, B, C> Builder<T, S> addRemover(
-			ThrowableTetraConsumer<S, A, B, C> removerThrowableTetraConsumer,
-			Class<A> aClass, Class<B> bClass, Class<C> cClass,
-			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"remove"
-			).method(
-				"DELETE"
-			).returns(
-				Void.class
-			).executeFunction(
-				params -> _run(
-					() -> removerThrowableTetraConsumer.accept(
-						_getId(params.get(0)), unsafeCast(params.get(1)),
-						unsafeCast(params.get(2)), unsafeCast(params.get(3))))
-			).receivesParams(
-				Id.class, aClass, bClass, cClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A, B> Builder<T, S> addRemover(
-			ThrowableTriConsumer<S, A, B> removerThrowableTriConsumer,
-			Class<A> aClass, Class<B> bClass,
-			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"remove"
-			).method(
-				"DELETE"
-			).returns(
-				Void.class
-			).executeFunction(
-				params -> _run(
-					() -> removerThrowableTriConsumer.accept(
-						_getId(params.get(0)), unsafeCast(params.get(1)),
-						unsafeCast(params.get(2))))
-			).receivesParams(
-				Id.class, aClass, bClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <R> Builder<T, S> addUpdater(
-			ThrowableBiFunction<S, R, T> updaterThrowableBiFunction,
-			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			Form<R> form = _getForm(formBuilderFunction);
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"replace"
-			).method(
-				"PUT"
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> updaterThrowableBiFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
-				).apply(
-					_getId(params.get(0)), form.get((Body)params.get(1))
-				)
-			).receivesParams(
-				Id.class, Body.class
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -659,107 +249,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				)
 			).receivesParams(
 				Id.class, Body.class, aClass, bClass, cClass, dClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A, B, C, R> Builder<T, S> addUpdater(
-			ThrowablePentaFunction<S, R, A, B, C, T>
-				updaterThrowablePentaFunction,
-			Class<A> aClass, Class<B> bClass, Class<C> cClass,
-			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			Form<R> form = _getForm(formBuilderFunction);
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"replace"
-			).method(
-				"PUT"
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> updaterThrowablePentaFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
-				).apply(
-					_getId(params.get(0)), form.get((Body)params.get(1)),
-					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
-					unsafeCast(params.get(4))
-				)
-			).receivesParams(
-				Id.class, Body.class, aClass, bClass, cClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A, B, R> Builder<T, S> addUpdater(
-			ThrowableTetraFunction<S, R, A, B, T> updaterThrowableTetraFunction,
-			Class<A> aClass, Class<B> bClass,
-			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			Form<R> form = _getForm(formBuilderFunction);
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"replace"
-			).method(
-				"PUT"
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> updaterThrowableTetraFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
-				).apply(
-					_getId(params.get(0)), form.get((Body)params.get(1)),
-					unsafeCast(params.get(2)), unsafeCast(params.get(3))
-				)
-			).receivesParams(
-				Id.class, Body.class, aClass, bClass
-			).build();
-
-			_actionSemantics.add(actionSemantics);
-
-			return this;
-		}
-
-		@Override
-		public <A, R> Builder<T, S> addUpdater(
-			ThrowableTriFunction<S, R, A, T> updaterThrowableTriFunction,
-			Class<A> aClass,
-			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			Form<R> form = _getForm(formBuilderFunction);
-
-			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_item
-			).name(
-				"replace"
-			).method(
-				"PUT"
-			).returns(
-				SingleModel.class
-			).executeFunction(
-				params -> updaterThrowableTriFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
-				).apply(
-					_getId(params.get(0)), form.get((Body)params.get(1)),
-					unsafeCast(params.get(2))
-				)
-			).receivesParams(
-				Id.class, Body.class, aClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);

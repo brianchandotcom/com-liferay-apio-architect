@@ -33,7 +33,6 @@ import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 import static org.hamcrest.CoreMatchers.both;
@@ -174,7 +173,7 @@ public class CollectionRoutesImplTest {
 
 		_testActionSemantics(
 			(CollectionRoutesImpl<String, Long>)collectionRoutes,
-			asList(String.class, Long.class, Boolean.class));
+			asList(String.class, Long.class, Boolean.class, Void.class));
 	}
 
 	@Test
@@ -195,7 +194,8 @@ public class CollectionRoutesImplTest {
 		assertThat(collectionRoutes, instanceOf(CollectionRoutesImpl.class));
 
 		_testActionSemantics(
-			(CollectionRoutesImpl<String, Long>)collectionRoutes, emptyList());
+			(CollectionRoutesImpl<String, Long>)collectionRoutes,
+			asList(Void.class, Void.class, Void.class, Void.class));
 	}
 
 	@Test
@@ -220,7 +220,7 @@ public class CollectionRoutesImplTest {
 
 		_testActionSemantics(
 			(CollectionRoutesImpl<String, Long>)collectionRoutes,
-			asList(String.class, Long.class));
+			asList(String.class, Long.class, Void.class, Void.class));
 	}
 
 	@Test
@@ -243,7 +243,7 @@ public class CollectionRoutesImplTest {
 
 		_testActionSemantics(
 			(CollectionRoutesImpl<String, Long>)collectionRoutes,
-			singletonList(String.class));
+			asList(String.class, Void.class, Void.class, Void.class));
 	}
 
 	private void _testActionSemantics(
@@ -490,6 +490,7 @@ public class CollectionRoutesImplTest {
 		assertThat(singleModel.getResourceName(), is(resourceName));
 	}
 
+	@SuppressWarnings("unchecked")
 	private static final Matcher<List<? extends Annotation>> _hasEntryPoint =
 		both(hasSize(1)).and((Matcher)hasItem(instanceOf(EntryPoint.class)));
 

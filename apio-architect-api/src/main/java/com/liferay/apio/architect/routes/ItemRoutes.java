@@ -176,7 +176,7 @@ public interface ItemRoutes<T, S> {
 		 *
 		 * @param      customRoute the name and method of the custom route
 		 * @param      throwableBiFunction the custom route function
-		 * @param      supplier the class of the identifier of the type R
+		 * @param      identifierClass the class of the identifier of the type R
 		 * @param      permissionBiFunction the permission function for this
 		 *             route
 		 * @param      formBuilderFunction the function that creates the form
@@ -188,11 +188,19 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
-			CustomRoute customRoute,
-			ThrowableBiFunction<S, R, U> throwableBiFunction, Class<I> supplier,
-			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+		public default <R, U, I extends Identifier<?>> Builder<T, S>
+			addCustomRoute(
+				CustomRoute customRoute,
+				ThrowableBiFunction<S, R, U> throwableBiFunction,
+				Class<I> identifierClass,
+				BiFunction<Credentials, S, Boolean> permissionBiFunction,
+				FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCustomRoute(
+				customRoute, (s, r, ignore) -> throwableBiFunction.apply(s, r),
+				Void.class, identifierClass, permissionBiFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a {@link CustomRoute} via the {@code CustomRoute} object (that
@@ -205,7 +213,7 @@ public interface ItemRoutes<T, S> {
 		 * @param      bClass the class of the item function's third parameter
 		 * @param      cClass the class of the item function's fourth parameter
 		 * @param      dClass the class of the item function's fifth parameter
-		 * @param      supplier the class of the identifier of the type R
+		 * @param      identifierClass the class of the identifier of the type R
 		 * @param      permissionBiFunction the permission function for this
 		 *             route
 		 * @param      formBuilderFunction the function that creates the form
@@ -223,7 +231,7 @@ public interface ItemRoutes<T, S> {
 				ThrowableHexaFunction<S, R, A, B, C, D, U>
 					throwableHexaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
-				Class<D> dClass, Class<I> supplier,
+				Class<D> dClass, Class<I> identifierClass,
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
 				FormBuilderFunction<R> formBuilderFunction);
 
@@ -237,7 +245,7 @@ public interface ItemRoutes<T, S> {
 		 * @param      aClass the class of the page function's second parameter
 		 * @param      bClass the class of the item function's third parameter
 		 * @param      cClass the class of the item function's fourth parameter
-		 * @param      supplier the class of the identifier of the type R
+		 * @param      identifierClass the class of the identifier of the type R
 		 * @param      permissionBiFunction the permission function for this
 		 *             route
 		 * @param      formBuilderFunction the function that creates the form
@@ -249,14 +257,22 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, C, R, U, I extends Identifier<?>> Builder<T, S>
+		public default <A, B, C, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
 				ThrowablePentaFunction<S, R, A, B, C, U> throwablePentaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
-				Class<I> supplier,
+				Class<I> identifierClass,
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
-				FormBuilderFunction<R> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCustomRoute(
+				customRoute,
+				(s, r, a, b, c, ignore) -> throwablePentaFunction.apply(
+					s, r, a, b, c),
+				aClass, bClass, cClass, Void.class, identifierClass,
+				permissionBiFunction, formBuilderFunction);
+		}
 
 		/**
 		 * Adds a {@link CustomRoute} via the {@code CustomRoute} object (that
@@ -267,7 +283,7 @@ public interface ItemRoutes<T, S> {
 		 * @param      throwableTetraFunction the custom route function
 		 * @param      aClass the class of the page function's second parameter
 		 * @param      bClass the class of the item function's third parameter
-		 * @param      supplier the class of the identifier of the type R
+		 * @param      identifierClass the class of the identifier of the type R
 		 * @param      permissionBiFunction the permission function for this
 		 *             route
 		 * @param      formBuilderFunction the function that creates the form
@@ -279,13 +295,21 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, R, U, I extends Identifier<?>> Builder<T, S>
+		public default <A, B, R, U, I extends Identifier<?>> Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableTetraFunction<S, R, A, B, U> throwableTetraFunction,
-				Class<A> aClass, Class<B> bClass, Class<I> supplier,
+				Class<A> aClass, Class<B> bClass, Class<I> identifierClass,
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
-				FormBuilderFunction<R> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCustomRoute(
+				customRoute,
+				(s, r, a, b, ignore) -> throwableTetraFunction.apply(
+					s, r, a, b),
+				aClass, bClass, Void.class, identifierClass,
+				permissionBiFunction, formBuilderFunction);
+		}
 
 		/**
 		 * Adds a {@link CustomRoute} via the {@code CustomRoute} object (that
@@ -295,7 +319,7 @@ public interface ItemRoutes<T, S> {
 		 * @param      customRoute the name and method of the custom route
 		 * @param      throwableTriFunction the custom route function
 		 * @param      aClass the class of the page function's second parameter
-		 * @param      supplier the class of the identifier of the type R
+		 * @param      identifierClass the class of the identifier of the type R
 		 * @param      permissionBiFunction the permission function for this
 		 *             route
 		 * @param      formBuilderFunction the function that creates the form
@@ -307,12 +331,20 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, R, U, I extends Identifier<?>> Builder<T, S> addCustomRoute(
-			CustomRoute customRoute,
-			ThrowableTriFunction<S, R, A, U> throwableTriFunction,
-			Class<A> aClass, Class<I> supplier,
-			BiFunction<Credentials, S, Boolean> permissionBiFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+		public default <A, R, U, I extends Identifier<?>> Builder<T, S>
+			addCustomRoute(
+				CustomRoute customRoute,
+				ThrowableTriFunction<S, R, A, U> throwableTriFunction,
+				Class<A> aClass, Class<I> identifierClass,
+				BiFunction<Credentials, S, Boolean> permissionBiFunction,
+				FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCustomRoute(
+				customRoute,
+				(s, r, a, ignore) -> throwableTriFunction.apply(s, r, a),
+				aClass, Void.class, identifierClass, permissionBiFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to an item function with one extra parameter.
@@ -327,9 +359,14 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A> Builder<T, S> addGetter(
+		public default <A> Builder<T, S> addGetter(
 			ThrowableBiFunction<S, A, T> getterThrowableBiFunction,
-			Class<A> aClass);
+			Class<A> aClass) {
+
+			return addGetter(
+				(s, a, ignore) -> getterThrowableBiFunction.apply(s, a), aClass,
+				Void.class);
+		}
 
 		/**
 		 * Adds a route to an item function with no extra parameters.
@@ -343,8 +380,12 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public Builder<T, S> addGetter(
-			ThrowableFunction<S, T> getterThrowableFunction);
+		public default Builder<T, S> addGetter(
+			ThrowableFunction<S, T> getterThrowableFunction) {
+
+			return addGetter(
+				(s, ignore) -> getterThrowableFunction.apply(s), Void.class);
+		}
 
 		/**
 		 * Adds a route to an item function with four extra parameters.
@@ -382,9 +423,15 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, C> Builder<T, S> addGetter(
+		public default <A, B, C> Builder<T, S> addGetter(
 			ThrowableTetraFunction<S, A, B, C, T> getterThrowableTetraFunction,
-			Class<A> aClass, Class<B> bClass, Class<C> cClass);
+			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
+
+			return addGetter(
+				(s, a, b, c, ignore) -> getterThrowableTetraFunction.apply(
+					s, a, b, c),
+				aClass, bClass, cClass, Void.class);
+		}
 
 		/**
 		 * Adds a route to an item function with two extra parameters.
@@ -400,9 +447,14 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B> Builder<T, S> addGetter(
+		public default <A, B> Builder<T, S> addGetter(
 			ThrowableTriFunction<S, A, B, T> getterThrowableTriFunction,
-			Class<A> aClass, Class<B> bClass);
+			Class<A> aClass, Class<B> bClass) {
+
+			return addGetter(
+				(s, a, b, ignore) -> getterThrowableTriFunction.apply(s, a, b),
+				aClass, bClass, Void.class);
+		}
 
 		/**
 		 * Adds a route to a remover function with one extra parameter.
@@ -419,10 +471,15 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A> Builder<T, S> addRemover(
+		public default <A> Builder<T, S> addRemover(
 			ThrowableBiConsumer<S, A> removerThrowableBiConsumer,
 			Class<A> aClass,
-			HasRemovePermissionFunction<S> hasRemovePermissionFunction);
+			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
+
+			return addRemover(
+				(s, a, ignore) -> removerThrowableBiConsumer.accept(s, a),
+				aClass, Void.class, hasRemovePermissionFunction);
+		}
 
 		/**
 		 * Adds a route to a remover function with no extra parameters.
@@ -437,9 +494,14 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public Builder<T, S> addRemover(
+		public default Builder<T, S> addRemover(
 			ThrowableConsumer<S> removerThrowableConsumer,
-			HasRemovePermissionFunction<S> hasRemovePermissionFunction);
+			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
+
+			return addRemover(
+				(s, ignore) -> removerThrowableConsumer.accept(s), Void.class,
+				hasRemovePermissionFunction);
+		}
 
 		/**
 		 * Adds a route to a remover function with four extra parameters.
@@ -486,10 +548,17 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, C> Builder<T, S> addRemover(
+		public default <A, B, C> Builder<T, S> addRemover(
 			ThrowableTetraConsumer<S, A, B, C> removerThrowableTetraConsumer,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
-			HasRemovePermissionFunction<S> hasRemovePermissionFunction);
+			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
+
+			return addRemover(
+				(s, a, b, c, ignore) -> removerThrowableTetraConsumer.accept(
+					s, a, b, c),
+				aClass, bClass, cClass, Void.class,
+				hasRemovePermissionFunction);
+		}
 
 		/**
 		 * Adds a route to a remover function with two extra parameters.
@@ -508,10 +577,16 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B> Builder<T, S> addRemover(
+		public default <A, B> Builder<T, S> addRemover(
 			ThrowableTriConsumer<S, A, B> removerThrowableTriConsumer,
 			Class<A> aClass, Class<B> bClass,
-			HasRemovePermissionFunction<S> hasRemovePermissionFunction);
+			HasRemovePermissionFunction<S> hasRemovePermissionFunction) {
+
+			return addRemover(
+				(s, a, b, ignore) -> removerThrowableTriConsumer.accept(
+					s, a, b),
+				aClass, bClass, Void.class, hasRemovePermissionFunction);
+		}
 
 		/**
 		 * Adds a route to an updater function with no extra parameters.
@@ -528,10 +603,15 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <R> Builder<T, S> addUpdater(
+		public default <R> Builder<T, S> addUpdater(
 			ThrowableBiFunction<S, R, T> updaterThrowableBiFunction,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addUpdater(
+				(s, r, ignore) -> updaterThrowableBiFunction.apply(s, r),
+				Void.class, hasUpdatePermissionFunction, formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to an updater function with four extra parameters.
@@ -585,12 +665,19 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, C, R> Builder<T, S> addUpdater(
+		public default <A, B, C, R> Builder<T, S> addUpdater(
 			ThrowablePentaFunction<S, R, A, B, C, T>
 				updaterThrowablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addUpdater(
+				(s, r, a, b, c, ignore) -> updaterThrowablePentaFunction.apply(
+					s, r, a, b, c),
+				aClass, bClass, cClass, Void.class, hasUpdatePermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to an updater function with two extra parameters.
@@ -611,11 +698,18 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, R> Builder<T, S> addUpdater(
+		public default <A, B, R> Builder<T, S> addUpdater(
 			ThrowableTetraFunction<S, R, A, B, T> updaterThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addUpdater(
+				(s, r, a, b, ignore) -> updaterThrowableTetraFunction.apply(
+					s, r, a, b),
+				aClass, bClass, Void.class, hasUpdatePermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to an updater function with one extra parameter.
@@ -635,11 +729,17 @@ public interface ItemRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, R> Builder<T, S> addUpdater(
+		public default <A, R> Builder<T, S> addUpdater(
 			ThrowableTriFunction<S, R, A, T> updaterThrowableTriFunction,
 			Class<A> aClass,
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addUpdater(
+				(s, r, a, ignore) -> updaterThrowableTriFunction.apply(s, r, a),
+				aClass, Void.class, hasUpdatePermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Constructs the {@link ItemRoutes} instance with the information

@@ -176,11 +176,17 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <A, R> Builder<T, S> addCreator(
+		public default <A, R> Builder<T, S> addCreator(
 			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
 			Class<A> aClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(r, a, ignored) -> creatorThrowableBiFunction.apply(r, a),
+				aClass, Void.class, hasAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has one extra parameter.
@@ -200,13 +206,20 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <A, R> Builder<T, S> addCreator(
+		public default <A, R> Builder<T, S> addCreator(
 			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
 			ThrowableBiFunction<List<R>, A, List<S>>
 				batchCreatorThrowableBiFunction,
 			Class<A> aClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(r, a, ignored) -> creatorThrowableBiFunction.apply(r, a),
+				(l, a, ignored) -> batchCreatorThrowableBiFunction.apply(l, a),
+				aClass, Void.class, hasAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has no extra parameters.
@@ -222,10 +235,15 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <R> Builder<T, S> addCreator(
+		public default <R> Builder<T, S> addCreator(
 			ThrowableFunction<R, T> creatorThrowableFunction,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(r, ignored) -> creatorThrowableFunction.apply(r), Void.class,
+				hasAddingPermissionFunction, formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has no extra parameters.
@@ -242,11 +260,17 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <R> Builder<T, S> addCreator(
+		public default <R> Builder<T, S> addCreator(
 			ThrowableFunction<R, T> creatorThrowableFunction,
 			ThrowableFunction<List<R>, List<S>> batchCreatorThrowableFunction,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(r, ignored) -> creatorThrowableFunction.apply(r),
+				(l, ignored) -> batchCreatorThrowableFunction.apply(l),
+				Void.class, hasAddingPermissionFunction, formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has four extra parameters.
@@ -330,11 +354,18 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <A, B, C, R> Builder<T, S> addCreator(
+		public default <A, B, C, R> Builder<T, S> addCreator(
 			ThrowableTetraFunction<R, A, B, C, T> creatorThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(r, a, b, c, ignored) -> creatorThrowableTetraFunction.apply(
+					r, a, b, c),
+				aClass, bClass, cClass, Void.class, hasAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has three extra parameters.
@@ -358,13 +389,22 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <A, B, C, R> Builder<T, S> addCreator(
+		public default <A, B, C, R> Builder<T, S> addCreator(
 			ThrowableTetraFunction<R, A, B, C, T> creatorThrowableTetraFunction,
 			ThrowableTetraFunction<List<R>, A, B, C, List<S>>
 				batchCreatorThrowableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(r, a, b, c, ignored) -> creatorThrowableTetraFunction.apply(
+					r, a, b, c),
+				(l, a, b, c, ignored) ->
+					batchCreatorThrowableTetraFunction.apply(l, a, b, c),
+				aClass, bClass, cClass, Void.class, hasAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has two extra parameters.
@@ -384,11 +424,18 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <A, B, R> Builder<T, S> addCreator(
+		public default <A, B, R> Builder<T, S> addCreator(
 			ThrowableTriFunction<R, A, B, T> creatorThrowableTriFunction,
 			Class<A> aClass, Class<B> bClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(r, a, b, ignored) -> creatorThrowableTriFunction.apply(
+					r, a, b),
+				aClass, bClass, Void.class, hasAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a creator function that has two extra parameters.
@@ -410,13 +457,22 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <A, B, R> Builder<T, S> addCreator(
+		public default <A, B, R> Builder<T, S> addCreator(
 			ThrowableTriFunction<R, A, B, T> creatorThrowableTriFunction,
 			ThrowableTriFunction<List<R>, A, B, List<S>>
 				batchCreatorThrowableTriFunction,
 			Class<A> aClass, Class<B> bClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction);
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				(r, a, b, ignored) -> creatorThrowableTriFunction.apply(
+					r, a, b),
+				(l, a, b, ignored) -> batchCreatorThrowableTriFunction.apply(
+					l, a, b),
+				aClass, bClass, Void.class, hasAddingPermissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a {@link CustomRoute} via the {@code CustomRoute} object (that
@@ -436,13 +492,19 @@ public interface CollectionRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
+		public default <R, U, I extends Identifier> Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableBiFunction<Pagination, R, U> throwableBiFunction,
 				Class<I> identifierClass,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<R> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCustomRoute(
+				customRoute, (p, r, ignored) -> throwableBiFunction.apply(p, r),
+				Void.class, identifierClass, permissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a {@link CustomRoute} via the {@code CustomRoute} object (that
@@ -467,7 +529,7 @@ public interface CollectionRoutes<T, S> {
 		 */
 		@Deprecated
 		public <A, B, C, D, R, U, I extends Identifier>
-			CollectionRoutes.Builder<T, S> addCustomRoute(
+			Builder<T, S> addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableHexaFunction<Pagination, R, A, B, C, D, U>
 					throwableHexaFunction,
@@ -497,15 +559,23 @@ public interface CollectionRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, C, R, U, I extends Identifier>
-			CollectionRoutes.Builder<T, S> addCustomRoute(
+		public default <A, B, C, R, U, I extends Identifier>
+			Builder<T, S> addCustomRoute(
 				CustomRoute customRoute,
 				ThrowablePentaFunction<Pagination, R, A, B, C, U>
 					throwablePentaFunction,
 				Class<A> aClass, Class<B> bClass, Class<C> cClass,
 				Class<I> identifierClass,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<R> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCustomRoute(
+				customRoute,
+				(p, r, a, b, c, ignored) -> throwablePentaFunction.apply(
+					p, r, a, b, c),
+				aClass, bClass, cClass, Void.class, identifierClass,
+				permissionFunction, formBuilderFunction);
+		}
 
 		/**
 		 * Adds a {@link CustomRoute} via the {@code CustomRoute} object (that
@@ -527,14 +597,22 @@ public interface CollectionRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, B, R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
+		public default <A, B, R, U, I extends Identifier> Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableTetraFunction<Pagination, R, A, B, U>
 					throwableTetraFunction,
 				Class<A> aClass, Class<B> bClass, Class<I> identifierClass,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<R> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCustomRoute(
+				customRoute,
+				(p, r, a, b, ignored) -> throwableTetraFunction.apply(
+					p, r, a, b),
+				aClass, bClass, Void.class, identifierClass, permissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a {@link CustomRoute} via the {@code CustomRoute} object (that
@@ -555,13 +633,20 @@ public interface CollectionRoutes<T, S> {
 		 * @review
 		 */
 		@Deprecated
-		public <A, R, U, I extends Identifier> CollectionRoutes.Builder<T, S>
+		public default <A, R, U, I extends Identifier> Builder<T, S>
 			addCustomRoute(
 				CustomRoute customRoute,
 				ThrowableTriFunction<Pagination, R, A, U> throwableTriFunction,
 				Class<A> aClass, Class<I> identifierClass,
 				Function<Credentials, Boolean> permissionFunction,
-				FormBuilderFunction<R> formBuilderFunction);
+				FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCustomRoute(
+				customRoute,
+				(p, r, a, ignored) -> throwableTriFunction.apply(p, r, a),
+				aClass, Void.class, identifierClass, permissionFunction,
+				formBuilderFunction);
+		}
 
 		/**
 		 * Adds a route to a collection page function with one extra parameter.
@@ -575,10 +660,15 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <A> Builder<T, S> addGetter(
+		public default <A> Builder<T, S> addGetter(
 			ThrowableBiFunction<Pagination, A, PageItems<T>>
 				getterThrowableBiFunction,
-			Class<A> aClass);
+			Class<A> aClass) {
+
+			return addGetter(
+				(p, a, ignored) -> getterThrowableBiFunction.apply(p, a),
+				aClass, Void.class);
+		}
 
 		/**
 		 * Adds a route to a collection page function with none extra
@@ -592,9 +682,13 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public Builder<T, S> addGetter(
+		public default Builder<T, S> addGetter(
 			ThrowableFunction<Pagination, PageItems<T>>
-				getterThrowableFunction);
+				getterThrowableFunction) {
+
+			return addGetter(
+				(p, ignored) -> getterThrowableFunction.apply(p), Void.class);
+		}
 
 		/**
 		 * Adds a route to a collection page function with four extra
@@ -632,10 +726,16 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <A, B, C> Builder<T, S> addGetter(
+		public default <A, B, C> Builder<T, S> addGetter(
 			ThrowableTetraFunction<Pagination, A, B, C, PageItems<T>>
 				getterThrowableTetraFunction,
-			Class<A> aClass, Class<B> bClass, Class<C> cClass);
+			Class<A> aClass, Class<B> bClass, Class<C> cClass) {
+
+			return addGetter(
+				(p, a, b, c, ignored) -> getterThrowableTetraFunction.apply(
+					p, a, b, c),
+				aClass, bClass, cClass, Void.class);
+		}
 
 		/**
 		 * Adds a route to a collection page function with two extra parameters.
@@ -650,10 +750,15 @@ public interface CollectionRoutes<T, S> {
 		 *             annotation instead
 		 */
 		@Deprecated
-		public <A, B> Builder<T, S> addGetter(
+		public default <A, B> Builder<T, S> addGetter(
 			ThrowableTriFunction<Pagination, A, B, PageItems<T>>
 				getterThrowableTriFunction,
-			Class<A> aClass, Class<B> bClass);
+			Class<A> aClass, Class<B> bClass) {
+
+			return addGetter(
+				(p, a, b, ignored) -> getterThrowableTriFunction.apply(p, a, b),
+				aClass, bClass, Void.class);
+		}
 
 		/**
 		 * Constructs the {@link CollectionRoutes} instance with the information
