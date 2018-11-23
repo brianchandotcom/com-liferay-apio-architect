@@ -37,6 +37,33 @@ import java.util.Optional;
 public class Resource {
 
 	/**
+	 * Returns {@code true} if this {@link Resource} is a {@link Item}.
+	 *
+	 * @review
+	 */
+	public boolean isItem() {
+		return this instanceof Item;
+	}
+
+	/**
+	 * Returns {@code true} if this {@link Resource} is a {@link Nested}.
+	 *
+	 * @review
+	 */
+	public boolean isNested() {
+		return this instanceof Nested;
+	}
+
+	/**
+	 * Returns {@code true} if this {@link Resource} is a {@link Paged}.
+	 *
+	 * @review
+	 */
+	public boolean isPaged() {
+		return this instanceof Paged;
+	}
+
+	/**
 	 * The resource's name
 	 *
 	 * @review

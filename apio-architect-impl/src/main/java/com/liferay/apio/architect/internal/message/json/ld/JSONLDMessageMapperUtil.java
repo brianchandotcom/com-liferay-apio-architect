@@ -22,7 +22,6 @@ import static java.util.Collections.singletonList;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 
 import java.util.List;
 
@@ -48,14 +47,13 @@ public class JSONLDMessageMapperUtil {
 	public static String getActionId(Resource resource, String actionName) {
 		String resourceName = "";
 
-		if (resource instanceof Paged) {
-			resourceName = ((Paged)resource).name();
+		if (resource.isNested()) {
+			Item parent = ((Nested)resource).parent();
+
+			resourceName = join("/", parent.name(), resource.name());
 		}
-		else if (resource instanceof Item) {
-			resourceName = ((Item)resource).name();
-		}
-		else if (resource instanceof Nested) {
-			resourceName = _getNestedName((Nested)resource);
+		else {
+			resourceName = resource.name();
 		}
 
 		return "_:" + join("/", resourceName, actionName);
@@ -82,12 +80,6 @@ public class JSONLDMessageMapperUtil {
 		else {
 			return singletonList("Operation");
 		}
-	}
-
-	private static String _getNestedName(Nested nested) {
-		Item parent = nested.parent();
-
-		return join("/", parent.name(), nested.name());
 	}
 
 	private JSONLDMessageMapperUtil() {

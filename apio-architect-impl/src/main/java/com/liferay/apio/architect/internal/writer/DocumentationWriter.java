@@ -34,8 +34,6 @@ import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
@@ -92,14 +90,6 @@ public class DocumentationWriter {
 	 * @return the JSON representation of the {@code Documentation}
 	 */
 	public String write() {
-		Function<Resource, String> nameFunction = resource -> {
-			if (resource instanceof Paged) {
-				return ((Paged)resource).name();
-			}
-
-			return ((Item)resource).name();
-		};
-
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
 		_writeDocumentationMetadata(jsonObjectBuilder);
@@ -110,10 +100,10 @@ public class DocumentationWriter {
 		Stream<Resource> stream = _documentation.getResourceStream();
 
 		stream.filter(
-			resource -> resource instanceof Item || resource instanceof Paged
+			resource -> resource.isItem() || resource.isPaged()
 		).forEach(
 			resource -> {
-				String name = nameFunction.apply(resource);
+				String name = resource.name();
 
 				Representor representor = representors.get(name);
 
@@ -348,7 +338,7 @@ public class DocumentationWriter {
 	private TriConsumer<JSONObjectBuilder, String, String>
 		_getResourceMapperTriConsumer(Resource resource) {
 
-		if (resource instanceof Paged) {
+		if (resource.isPaged()) {
 			return _documentationMessageMapper::mapResourceCollection;
 		}
 
@@ -358,7 +348,7 @@ public class DocumentationWriter {
 	private Consumer<JSONObjectBuilder> _getWriteFieldsRepresentorConsumer(
 		Resource resource, Representor representor) {
 
-		if (resource instanceof Paged) {
+		if (resource.isPaged()) {
 			return __ -> {
 			};
 		}

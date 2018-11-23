@@ -271,19 +271,19 @@ public final class URLCreator {
 	private static Optional<String> _createResourceURL(
 		ApplicationURL applicationURL, Resource resource) {
 
-		if (resource instanceof Paged) {
+		if (resource.isPaged()) {
 			Paged paged = (Paged)resource;
 
 			return Optional.of(createPagedResourceURL(applicationURL, paged));
 		}
 
-		if (resource instanceof Nested) {
+		if (resource.isNested()) {
 			Nested nested = (Nested)resource;
 
 			return createNestedResourceURL(applicationURL, nested);
 		}
 
-		if (resource instanceof Item) {
+		if (resource.isItem()) {
 			Item item = (Item)resource;
 
 			return createItemResourceURL(applicationURL, item);
