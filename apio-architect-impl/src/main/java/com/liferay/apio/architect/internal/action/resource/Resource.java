@@ -14,14 +14,7 @@
 
 package com.liferay.apio.architect.internal.action.resource;
 
-import static org.immutables.value.Value.Style.ImplementationVisibility.PACKAGE;
-
 import java.util.Optional;
-
-import org.immutables.value.Value.Auxiliary;
-import org.immutables.value.Value.Immutable;
-import org.immutables.value.Value.Parameter;
-import org.immutables.value.Value.Style;
 
 /**
  * Instances of this class represent an API resource name.
@@ -41,8 +34,16 @@ import org.immutables.value.Value.Style;
  * @see    Nested
  * @review
  */
-@Style(allParameters = true, visibility = PACKAGE)
-public abstract class Resource {
+public class Resource {
+
+	/**
+	 * The resource's name
+	 *
+	 * @review
+	 */
+	public String name() {
+		return _name;
+	}
 
 	/**
 	 * Instances of this class represent an item's ID.
@@ -54,8 +55,7 @@ public abstract class Resource {
 	 *
 	 * @review
 	 */
-	@Immutable
-	public abstract static class Id {
+	public static class Id {
 
 		/**
 		 * Creates a new {@link ID} with the provided {@code object}-{@code
@@ -63,8 +63,8 @@ public abstract class Resource {
 		 *
 		 * @review
 		 */
-		public static Id of(Object asObject, String stringVersion) {
-			return ImmutableId.of(asObject, stringVersion);
+		public static Id of(Object objectVersion, String stringVersion) {
+			return new Id(objectVersion, stringVersion);
 		}
 
 		/**
@@ -73,16 +73,57 @@ public abstract class Resource {
 		 *
 		 * @review
 		 */
-		@Parameter(order = 0)
-		public abstract Object asObject();
+		public Object asObject() {
+			return _objectVersion;
+		}
 
 		/**
 		 * The ID as an string instance.
 		 *
 		 * @review
 		 */
-		@Parameter(order = 1)
-		public abstract String asString();
+		public String asString() {
+			return _stringVersion;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+
+			if (obj instanceof Id &&
+				_objectVersion.equals(((Id)obj)._objectVersion) &&
+				_stringVersion.equals(((Id)obj)._stringVersion)) {
+
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			int h = 5381;
+
+			h += (h << 5) + _objectVersion.hashCode();
+			h += (h << 5) + _stringVersion.hashCode();
+
+			return h;
+		}
+
+		@Override
+		public String toString() {
+			return "Id{" + _stringVersion + "}";
+		}
+
+		private Id(Object objectVersion, String stringVersion) {
+			_objectVersion = objectVersion;
+			_stringVersion = stringVersion;
+		}
+
+		private final Object _objectVersion;
+		private final String _stringVersion;
 
 	}
 
@@ -96,8 +137,7 @@ public abstract class Resource {
 	 *
 	 * @review
 	 */
-	@Immutable
-	public abstract static class Item extends Resource {
+	public static class Item extends Resource {
 
 		/**
 		 * Creates a new {@link Item} with the provided {@code name}.
@@ -105,7 +145,7 @@ public abstract class Resource {
 		 * @review
 		 */
 		public static Item of(String name) {
-			return ImmutableItem.of(name, Optional.empty());
+			return new Item(name, null);
 		}
 
 		/**
@@ -115,7 +155,29 @@ public abstract class Resource {
 		 * @review
 		 */
 		public static Item of(String name, Id id) {
-			return ImmutableItem.of(name, Optional.of(id));
+			return new Item(name, id);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+
+			if (obj instanceof Item && name().equals(((Item)obj).name())) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			int h = 5381;
+
+			h += (h << 5) + name().hashCode();
+
+			return h;
 		}
 
 		/**
@@ -124,17 +186,26 @@ public abstract class Resource {
 		 *
 		 * @review
 		 */
-		@Auxiliary
-		@Parameter(order = 1)
-		public abstract Optional<Id> id();
+		public Optional<Id> id() {
+			return Optional.ofNullable(_id);
+		}
 
-		/**
-		 * The resource's name
-		 *
-		 * @review
-		 */
-		@Parameter(order = 0)
-		public abstract String name();
+		@Override
+		public String toString() {
+			if (_id != null) {
+				return "Item{name=" + name() + ", id=" + _id + "}";
+			}
+
+			return "Item{name=" + name() + "}";
+		}
+
+		private Item(String name, Id id) {
+			super(name);
+
+			_id = id;
+		}
+
+		private final Id _id;
 
 	}
 
@@ -148,8 +219,7 @@ public abstract class Resource {
 	 *
 	 * @review
 	 */
-	@Immutable
-	public abstract static class Nested extends Resource {
+	public static class Nested extends Resource {
 
 		/**
 		 * Creates a new {@link Nested} with the provided {@link Item parent}
@@ -158,24 +228,56 @@ public abstract class Resource {
 		 * @review
 		 */
 		public static Nested of(Item parent, String name) {
-			return ImmutableNested.of(parent, name);
+			return new Nested(parent, name);
 		}
 
-		/**
-		 * The resource's name
-		 *
-		 * @review
-		 */
-		@Parameter(order = 1)
-		public abstract String name();
+		public Nested(Item parent, String name) {
+			super(name);
+
+			_parent = parent;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+
+			if ((obj instanceof Nested) &&
+				name().equals(((Nested)obj).name()) &&
+				_parent.equals(((Nested)obj)._parent)) {
+
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			int h = 5381;
+
+			h += (h << 5) + name().hashCode();
+			h += (h << 5) + _parent.hashCode();
+
+			return h;
+		}
 
 		/**
 		 * The resource's parent
 		 *
 		 * @review
 		 */
-		@Parameter(order = 0)
-		public abstract Item parent();
+		public Item parent() {
+			return _parent;
+		}
+
+		@Override
+		public String toString() {
+			return "Nested{name=" + name() + ", parent=" + _parent + "}";
+		}
+
+		private final Item _parent;
 
 	}
 
@@ -189,8 +291,7 @@ public abstract class Resource {
 	 *
 	 * @review
 	 */
-	@Immutable
-	public abstract static class Paged extends Resource {
+	public static class Paged extends Resource {
 
 		/**
 		 * Creates a new {@link Paged} with the provided {@code name}.
@@ -198,16 +299,46 @@ public abstract class Resource {
 		 * @review
 		 */
 		public static Paged of(String name) {
-			return ImmutablePaged.of(name);
+			return new Paged(name);
 		}
 
-		/**
-		 * The resource's name
-		 *
-		 * @review
-		 */
-		public abstract String name();
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+
+			if (obj instanceof Paged && name().equals(((Paged)obj).name())) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			int h = 5381;
+
+			h += (h << 5) + name().hashCode();
+
+			return h;
+		}
+
+		@Override
+		public String toString() {
+			return "Paged{name=" + name() + "}";
+		}
+
+		private Paged(String name) {
+			super(name);
+		}
 
 	}
+
+	private Resource(String name) {
+		_name = name;
+	}
+
+	private final String _name;
 
 }
