@@ -156,7 +156,7 @@ public class Predicates {
 		).flatMap(
 			List::stream
 		).map(
-			Annotation::getClass
+			Annotation::annotationType
 		).anyMatch(
 			annotation::isAssignableFrom
 		);

@@ -35,8 +35,6 @@ import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
-import static org.hamcrest.CoreMatchers.both;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -66,8 +64,6 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import org.hamcrest.Matcher;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -443,7 +439,13 @@ public class CollectionRoutesImplTest {
 		assertThat(actionSemantics.paramClasses(), is(paramClasses));
 		assertThat(actionSemantics.resource(), is(Paged.of("name")));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Page.class)));
-		assertThat(actionSemantics.annotations(), _hasEntryPoint);
+		assertThat(actionSemantics.annotations(), hasSize(1));
+
+		List<Annotation> annotations = actionSemantics.annotations();
+
+		Annotation annotation = annotations.get(0);
+
+		assertThat(annotation.annotationType(), is(equalTo(EntryPoint.class)));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();
@@ -489,10 +491,6 @@ public class CollectionRoutesImplTest {
 		assertThat(singleModel.getOperations(), is(empty()));
 		assertThat(singleModel.getResourceName(), is(resourceName));
 	}
-
-	@SuppressWarnings("unchecked")
-	private static final Matcher<List<? extends Annotation>> _hasEntryPoint =
-		both(hasSize(1)).and((Matcher)hasItem(instanceOf(EntryPoint.class)));
 
 	private BuilderImpl<String, Long> _builder;
 

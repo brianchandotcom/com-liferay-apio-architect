@@ -24,7 +24,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.ImmutableEntryPoint;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.pagination.Page;
@@ -79,7 +78,7 @@ public class EntryPointConverterTest {
 		).executeFunction(
 			__ -> null
 		).annotatedWith(
-			ImmutableEntryPoint.builder().build()
+			() -> com.liferay.apio.architect.annotation.EntryPoint.class
 		).build();
 
 		Stream<ActionSemantics> stream = Stream.of(

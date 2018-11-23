@@ -39,10 +39,10 @@ import com.liferay.apio.architect.pagination.Page;
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;
 
+import java.lang.annotation.Annotation;
+
 import java.util.Collections;
 import java.util.List;
-
-import org.immutables.value.Value.Immutable;
 
 import org.junit.Test;
 
@@ -336,7 +336,6 @@ public class ActionSemanticsTest {
 		assertThat(newActionSemantics.returnClass(), is(equalTo(Void.class)));
 	}
 
-	@Immutable(singleton = true)
 	public static @interface MyAnnotation {
 	}
 
@@ -344,7 +343,13 @@ public class ActionSemanticsTest {
 	private static final CheckedFunction1<List<?>, Object> _join = list -> join(
 		"-", (List<String>)list);
 
-	private static final MyAnnotation _myAnnotation =
-		ImmutableMyAnnotation.of();
+	private static final MyAnnotation _myAnnotation = new MyAnnotation() {
+
+		@Override
+		public Class<? extends Annotation> annotationType() {
+			return MyAnnotation.class;
+		}
+
+	};
 
 }

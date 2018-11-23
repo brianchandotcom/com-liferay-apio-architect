@@ -45,14 +45,11 @@ import com.liferay.apio.architect.pagination.Page;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.immutables.value.Value.Include;
-
 import org.junit.Test;
 
 /**
  * @author Alejandro Hernández
  */
-@Include(EntryPoint.class)
 public class PredicatesTest {
 
 	@Test
@@ -223,7 +220,7 @@ public class PredicatesTest {
 		).receivesParams(
 			String.class, Integer.class
 		).annotatedWith(
-			ImmutableEntryPoint.builder().build()
+			() -> EntryPoint.class
 		).build();
 
 }

@@ -51,14 +51,9 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.immutables.value.Value.Include;
-import org.immutables.value.Value.Style;
-
 /**
  * @author Alejandro Hernández
  */
-@Include(EntryPoint.class)
-@Style(allParameters = true)
 public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 	public CollectionRoutesImpl(BuilderImpl<T, S> builderImpl) {
@@ -269,7 +264,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					unsafeCast(params.get(4))
 				)
 			).annotatedWith(
-				_entryPoint
+				() -> EntryPoint.class
 			).receivesParams(
 				Pagination.class, aClass, bClass, cClass, dClass
 			).build();
@@ -330,9 +325,6 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			return newList;
 		}
-
-		private static final EntryPoint _entryPoint =
-			ImmutableEntryPoint.builder().build();
 
 		private final List<ActionSemantics> _actionSemantics =
 			new ArrayList<>();
