@@ -19,11 +19,11 @@ import static com.liferay.apio.architect.sample.internal.converter.PersonConvert
 
 import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.annotation.Actions.Create;
-import com.liferay.apio.architect.annotation.Actions.EntryPoint;
 import com.liferay.apio.architect.annotation.Actions.Remove;
 import com.liferay.apio.architect.annotation.Actions.Replace;
 import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.annotation.Body;
+import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.pagination.PageItems;

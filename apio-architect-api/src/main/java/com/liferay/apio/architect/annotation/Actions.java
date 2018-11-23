@@ -109,16 +109,6 @@ public @interface Actions {
 	}
 
 	/**
-	 * Indicates that an action must be listed in the application's entry point.
-	 *
-	 * @review
-	 */
-	@Retention(RUNTIME)
-	@Target(METHOD)
-	public @interface EntryPoint {
-	}
-
-	/**
 	 * Indicates that a method performs the action of removing elements.
 	 *
 	 * <p>

@@ -21,7 +21,6 @@ import static com.liferay.apio.architect.internal.action.Predicates.returnsAnyOf
 
 import static java.util.stream.Collectors.toList;
 
-import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
@@ -73,7 +72,7 @@ public final class EntryPointConverter {
 		isRetrieveAction.and(
 			returnsAnyOf(Page.class)
 		).and(
-			hasAnnotation(Actions.EntryPoint.class)
+			hasAnnotation(com.liferay.apio.architect.annotation.EntryPoint.class)
 		).and(
 			isActionFor(Paged.class)
 		);

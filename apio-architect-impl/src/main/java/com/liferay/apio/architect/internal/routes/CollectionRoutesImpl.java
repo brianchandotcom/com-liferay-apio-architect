@@ -24,7 +24,7 @@ import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CustomPageFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasAddingPermissionFunction;
-import com.liferay.apio.architect.annotation.Actions.EntryPoint;
+import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.custom.actions.CustomRoute;

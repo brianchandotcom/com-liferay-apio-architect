@@ -35,7 +35,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
 
-import com.liferay.apio.architect.annotation.Actions.EntryPoint;
+import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
