@@ -14,11 +14,6 @@
 
 package com.liferay.apio.architect.internal.url;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static io.vavr.Predicates.instanceOf;
-
 import static java.lang.String.join;
 
 import static java.util.Arrays.asList;
@@ -276,21 +271,25 @@ public final class URLCreator {
 	private static Optional<String> _createResourceURL(
 		ApplicationURL applicationURL, Resource resource) {
 
-		return Match(
-			resource
-		).of(
-			Case(
-				$(instanceOf(Paged.class)),
-				paged -> Optional.of(
-					createPagedResourceURL(applicationURL, paged))),
-			Case(
-				$(instanceOf(Nested.class)),
-				nested -> createNestedResourceURL(applicationURL, nested)),
-			Case(
-				$(instanceOf(Item.class)),
-				item -> createItemResourceURL(applicationURL, item)),
-			Case($(), Optional::empty)
-		);
+		if (resource instanceof Paged) {
+			Paged paged = (Paged)resource;
+
+			return Optional.of(createPagedResourceURL(applicationURL, paged));
+		}
+
+		if (resource instanceof Nested) {
+			Nested nested = (Nested)resource;
+
+			return createNestedResourceURL(applicationURL, nested);
+		}
+
+		if (resource instanceof Item) {
+			Item item = (Item)resource;
+
+			return createItemResourceURL(applicationURL, item);
+		}
+
+		return Optional.empty();
 	}
 
 	private static Predicate<Path> _isNotEmpty(

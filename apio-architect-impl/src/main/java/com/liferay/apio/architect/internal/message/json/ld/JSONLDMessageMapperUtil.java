@@ -14,11 +14,6 @@
 
 package com.liferay.apio.architect.internal.message.json.ld;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static io.vavr.Predicates.instanceOf;
-
 import static java.lang.String.join;
 
 import static java.util.Arrays.asList;
@@ -30,7 +25,6 @@ import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * Provides utility functions for JSON-LD message mappers.
@@ -52,14 +46,17 @@ public class JSONLDMessageMapperUtil {
 	 * @review
 	 */
 	public static String getActionId(Resource resource, String actionName) {
-		String resourceName = Match(
-			resource
-		).of(
-			Case($(instanceOf(Paged.class)), Paged::name),
-			Case($(instanceOf(Item.class)), Item::name),
-			Case($(instanceOf(Nested.class)), _getNestedName),
-			Case($(), () -> null)
-		);
+		String resourceName = "";
+
+		if (resource instanceof Paged) {
+			resourceName = ((Paged)resource).name();
+		}
+		else if (resource instanceof Item) {
+			resourceName = ((Item)resource).name();
+		}
+		else if (resource instanceof Nested) {
+			resourceName = _getNestedName((Nested)resource);
+		}
 
 		return "_:" + join("/", resourceName, actionName);
 	}
@@ -70,25 +67,31 @@ public class JSONLDMessageMapperUtil {
 	 * @review
 	 */
 	public static List<String> getActionTypes(String actionName) {
-		return Match(
-			actionName
-		).of(
-			Case($("create"), asList("CreateAction", "Operation")),
-			Case($("batch-create"), asList("CreateAction", "Operation")),
-			Case($("remove"), asList("DeleteAction", "Operation")),
-			Case($("replace"), asList("ReplaceAction", "Operation")),
-			Case($(), singletonList("Operation"))
-		);
+		if ("create".equals(actionName)) {
+			return asList("CreateAction", "Operation");
+		}
+		else if ("batch-create".equals(actionName)) {
+			return asList("CreateAction", "Operation");
+		}
+		else if ("remove".equals(actionName)) {
+			return asList("DeleteAction", "Operation");
+		}
+		else if ("replace".equals(actionName)) {
+			return asList("ReplaceAction", "Operation");
+		}
+		else {
+			return singletonList("Operation");
+		}
+	}
+
+	private static String _getNestedName(Nested nested) {
+		Item parent = nested.parent();
+
+		return join("/", parent.name(), nested.name());
 	}
 
 	private JSONLDMessageMapperUtil() {
 		throw new UnsupportedOperationException();
 	}
-
-	private static Function<Nested, String> _getNestedName = nested -> {
-		Item parent = nested.parent();
-
-		return join("/", parent.name(), nested.name());
-	};
 
 }

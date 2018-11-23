@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.internal.message.json.ld;
 
-import static com.liferay.apio.architect.internal.action.Predicates.returnsAnyOf;
 import static com.liferay.apio.architect.internal.message.json.ld.JSONLDMessageMapperUtil.getActionTypes;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN_LIST;
@@ -28,10 +27,6 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.js
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.RELATED_COLLECTION;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING_LIST;
-
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
 
 import static java.lang.String.join;
 
@@ -439,12 +434,17 @@ public class JSONLDDocumentationMessageMapper
 	private String _getReturnValue(
 		String type, ActionSemantics actionSemantics) {
 
-		return Match(
-			actionSemantics
-		).of(
-			Case($(returnsAnyOf(Void.class)), _NOTHING),
-			Case($(returnsAnyOf(Page.class)), "Collection"), Case($(), type)
-		);
+		Class<?> returnClass = actionSemantics.returnClass();
+
+		if (Void.class.equals(returnClass)) {
+			return _NOTHING;
+		}
+
+		if (Page.class.equals(returnClass)) {
+			return "Collection";
+		}
+
+		return type;
 	}
 
 	private static final String _NOTHING =

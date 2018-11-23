@@ -16,15 +16,8 @@ package com.liferay.apio.architect.internal.annotation.util;
 
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.getAnnotationFromParametersOptional;
-import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.hasAnnotation;
 
 import static io.leangen.geantyref.GenericTypeReflector.getTypeParameter;
-
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static io.vavr.Predicates.instanceOf;
-import static io.vavr.Predicates.isNull;
 
 import static java.util.Collections.emptyList;
 
@@ -50,7 +43,6 @@ import io.vavr.control.Option;
 
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.lang.reflect.TypeVariable;
 
 import java.util.List;
@@ -142,14 +134,19 @@ public class ActionRouterUtil {
 		return Stream.of(
 			method.getParameters()
 		).<Class<?>>map(
-			parameter -> Match(
-				parameter
-			).of(
-				Case($(hasAnnotation(Id.class)), Id.class),
-				Case($(hasAnnotation(ParentId.class)), ParentId.class),
-				Case($(hasAnnotation(BODY_ANNOTATION)), Body.class),
-				Case($(), Parameter::getType)
-			)
+			parameter -> {
+				if (parameter.getAnnotation(Id.class) != null) {
+					return Id.class;
+				}
+				else if (parameter.getAnnotation(ParentId.class) != null) {
+					return ParentId.class;
+				}
+				else if (parameter.getAnnotation(BODY_ANNOTATION) != null) {
+					return Body.class;
+				}
+
+				return parameter.getType();
+			}
 		).toArray(
 			Class[]::new
 		);
@@ -253,16 +250,19 @@ public class ActionRouterUtil {
 	public static Object updateReturn(
 		Object object, List<?> params, String name) {
 
-		return Match(
-			object
-		).of(
-			Case($(isNull()), () -> null),
-			Case($(instanceOf(List.class)), list -> getPage(list, name)),
-			Case(
-				$(instanceOf(PageItems.class)),
-				pageItems -> getPage(pageItems, params, name)),
-			Case($(), () -> new SingleModelImpl<>(object, name))
-		);
+		if (object == null) {
+			return null;
+		}
+
+		if (object instanceof List) {
+			return getPage((List<?>)object, name);
+		}
+
+		if (object instanceof PageItems) {
+			return getPage((PageItems<?>)object, params, name);
+		}
+
+		return new SingleModelImpl<>(object, name);
 	}
 
 	private static final TypeVariable<Class<List>> _LIST_TYPE_PARAMETER =

@@ -25,9 +25,6 @@ import static com.liferay.apio.architect.internal.action.converter.EntryPointCon
 import static com.liferay.apio.architect.internal.body.JSONToBodyConverter.jsonToBody;
 import static com.liferay.apio.architect.internal.body.MultipartToBodyConverter.multipartToBody;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 import static io.vavr.control.Either.left;
 
@@ -47,6 +44,7 @@ import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
+import com.liferay.apio.architect.internal.annotation.Action.Error;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotFound;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
@@ -125,15 +123,79 @@ public class ActionManagerImpl implements ActionManager {
 	public Either<Action.Error, Action> getAction(
 		String method, List<String> params) {
 
-		return Match(
-			params.size()
-		).of(
-			Case($(1), __ -> _handleOneParam(method, params.get(0))),
-			Case($(2), __ -> _handleTwoParams(method, params)),
-			Case($(3), __ -> _handleThreeParams(method, params)),
-			Case($(4), __ -> _handleFourParams(method, params)),
-			Case($(), __ -> left(_notFound))
-		);
+		int numberOfParams = params.size();
+
+		if (numberOfParams == 1) {
+			Paged paged = Paged.of(params.get(0));
+
+			if ("GET".equals(method)) {
+				return _getAction(paged, isRootCollectionAction);
+			}
+			else if ("POST".equals(method)) {
+				return _getAction(paged, isCreateAction);
+			}
+		}
+		else if (numberOfParams == 2) {
+			Paged paged = Paged.of(params.get(0));
+			String actionName = params.get(1);
+
+			Either<Error, Action> pagedActionEither = _getAction(
+				paged, isAction(actionName, method));
+
+			if (pagedActionEither.isRight()) {
+				return pagedActionEither;
+			}
+
+			Item item = Item.of(
+				params.get(0), _getId(params.get(0), params.get(1)));
+
+			if ("DELETE".equals(method)) {
+				return _getAction(item, isRemoveAction);
+			}
+			else if ("PUT".equals(method)) {
+				return _getAction(item, isReplaceAction);
+			}
+			else if ("GET".equals(method)) {
+				return _getAction(item, isRetrieveAction);
+			}
+		}
+		else if (numberOfParams == 3) {
+			Item item = Item.of(
+				params.get(0), _getId(params.get(0), params.get(1)));
+
+			Either<Error, Action> binaryFileActionEither = _getBinaryFileAction(
+				item, params.get(2));
+
+			if (binaryFileActionEither.isRight()) {
+				return binaryFileActionEither;
+			}
+
+			Either<Error, Action> itemEither = _getAction(
+				item, isAction(params.get(2), method));
+
+			if (itemEither.isRight()) {
+				return itemEither;
+			}
+
+			Nested nested = Nested.of(item, params.get(2));
+
+			if ("GET".equals(method)) {
+				return _getAction(nested, isRetrieveAction);
+			}
+			else if ("POST".equals(method)) {
+				return _getAction(nested, isCreateAction);
+			}
+		}
+		else if (numberOfParams == 4) {
+			Item item = Item.of(
+				params.get(0), _getId(params.get(0), params.get(1)));
+
+			Nested nested = Nested.of(item, params.get(2));
+
+			return _getAction(nested, isAction(params.get(3), method));
+		}
+
+		return left(_notFound);
 	}
 
 	@Override
@@ -278,81 +340,6 @@ public class ActionManagerImpl implements ActionManager {
 			object -> Resource.Id.of(object, id)
 		).getOrElseThrow(
 			t -> new NotFoundException(t)
-		);
-	}
-
-	private Either<Action.Error, Action> _handleFourParams(
-		String method, List<String> params) {
-
-		Item item = Item.of(
-			params.get(0), _getId(params.get(0), params.get(1)));
-
-		Nested nested = Nested.of(item, params.get(2));
-
-		return _getAction(nested, isAction(params.get(3), method));
-	}
-
-	private Either<Action.Error, Action> _handleOneParam(
-		String method, String param1) {
-
-		Paged paged = Paged.of(param1);
-
-		return Match(
-			method
-		).of(
-			Case($("GET"), __ -> _getAction(paged, isRootCollectionAction)),
-			Case($("POST"), __ -> _getAction(paged, isCreateAction)),
-			Case($(), __ -> left(_notFound))
-		);
-	}
-
-	private Either<Action.Error, Action> _handleThreeParams(
-		String method, List<String> params) {
-
-		Item item = Item.of(
-			params.get(0), _getId(params.get(0), params.get(1)));
-
-		return Either.narrow(
-			_getBinaryFileAction(item, params.get(2))
-		).orElse(
-			() -> _getAction(item, isAction(params.get(2), method))
-		).orElse(
-			() -> {
-				Nested nested = Nested.of(item, params.get(2));
-
-				return Match(
-					method
-				).of(
-					Case($("GET"), __ -> _getAction(nested, isRetrieveAction)),
-					Case($("POST"), __ -> _getAction(nested, isCreateAction)),
-					Case($(), __ -> left(_notFound))
-				);
-			}
-		);
-	}
-
-	private Either<Action.Error, Action> _handleTwoParams(
-		String method, List<String> params) {
-
-		Paged paged = Paged.of(params.get(0));
-		String actionName = params.get(1);
-
-		return Either.narrow(
-			_getAction(paged, isAction(actionName, method))
-		).orElse(
-			() -> {
-				Item item = Item.of(
-					params.get(0), _getId(params.get(0), params.get(1)));
-
-				return Match(
-					method
-				).of(
-					Case($("DELETE"), __ -> _getAction(item, isRemoveAction)),
-					Case($("PUT"), __ -> _getAction(item, isReplaceAction)),
-					Case($("GET"), __ -> _getAction(item, isRetrieveAction)),
-					Case($(), __ -> left(_notFound))
-				);
-			}
 		);
 	}
 

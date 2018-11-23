@@ -16,10 +16,6 @@ package com.liferay.apio.architect.test.util.internal.writer;
 
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
@@ -108,13 +104,15 @@ public class MockDocumentationWriter {
 	private static Stream<ActionSemantics> _getActionSemantics(
 		Resource resource) {
 
-		return Match(
-			resource
-		).of(
-			Case($(Paged.of("root")), __ -> _rootActionSemantics.stream()),
-			Case($(Item.of("root")), __ -> _itemActionSemantics.stream()),
-			Case($(), Stream::empty)
-		);
+		if (Paged.of("root").equals(resource)) {
+			return _rootActionSemantics.stream();
+		}
+
+		if (Item.of("root").equals(resource)) {
+			return _itemActionSemantics.stream();
+		}
+
+		return Stream.empty();
 	}
 
 	private MockDocumentationWriter() {

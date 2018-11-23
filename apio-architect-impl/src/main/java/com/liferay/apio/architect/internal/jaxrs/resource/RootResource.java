@@ -14,11 +14,6 @@
 
 package com.liferay.apio.architect.internal.jaxrs.resource;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static io.vavr.Predicates.instanceOf;
-
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singletonList;
 
@@ -35,7 +30,6 @@ import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import io.vavr.control.Either;
 
 import java.util.List;
-import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -96,27 +90,35 @@ public class RootResource {
 		).build();
 	}
 
-	private Response _getResponse(String method, List<String> params) {
-		Either<Error, Action> either = _actionManager.getAction(method, params);
-
-		return either.fold(
-			error -> Match(
-				error
-			).of(
-				Case($(instanceOf(NotAllowed.class)), _notAllowedToResponse),
-				Case($(), _notFoundResponse)
-			),
-			action -> Response.ok(
-				action.apply(_request)
-			).build());
-	}
-
-	private static final Function<NotAllowed, Response> _notAllowedToResponse =
-		notAllowed -> Response.status(
+	private static Response _toResponse(NotAllowed notAllowed) {
+		return Response.status(
 			METHOD_NOT_ALLOWED
 		).allow(
 			notAllowed.getAllowedMethods()
 		).build();
+	}
+
+	@SuppressWarnings("Convert2MethodRef")
+	private Response _getResponse(String method, List<String> params) {
+		Either<Error, Action> either = _actionManager.getAction(method, params);
+
+		return either.fold(
+			error -> {
+				if (error instanceof NotAllowed) {
+					return _toResponse((NotAllowed)error);
+				}
+
+				return _notFoundResponse;
+			},
+			action -> _toResponse(action));
+	}
+
+	private Response _toResponse(Action action) {
+		return Response.ok(
+			action.apply(_request)
+		).build();
+	}
+
 	private static final Response _notFoundResponse = Response.status(
 		NOT_FOUND
 	).build();
