@@ -129,10 +129,8 @@ public class MockDocumentationWriter {
 			"retrieve"
 		).method(
 			"GET"
-		).receivesNoParams(
 		).returns(
 			Page.class
-		).notAnnotated(
 		).executeFunction(
 			__ -> null
 		).build();
@@ -145,10 +143,8 @@ public class MockDocumentationWriter {
 			"retrieve"
 		).method(
 			"GET"
-		).receivesNoParams(
 		).returns(
 			SingleModel.class
-		).notAnnotated(
 		).executeFunction(
 			__ -> null
 		).build();
@@ -159,10 +155,8 @@ public class MockDocumentationWriter {
 			"remove"
 		).method(
 			"DELETE"
-		).receivesNoParams(
 		).returns(
 			Void.class
-		).notAnnotated(
 		).executeFunction(
 			__ -> null
 		).build();
@@ -173,10 +167,8 @@ public class MockDocumentationWriter {
 			"replace"
 		).method(
 			"PUT"
-		).receivesNoParams(
 		).returns(
 			SingleModel.class
-		).notAnnotated(
 		).executeFunction(
 			__ -> null
 		).build();

@@ -178,12 +178,8 @@ public class ActionRouterManager {
 			action.name()
 		).method(
 			action.httpMethod()
-		).receivesParams(
-			paramClasses
 		).returns(
 			returnClass
-		).annotatedWith(
-			method.getDeclaredAnnotations()
 		).executeFunction(
 			paramInstances -> {
 				Object[] updatedParams = updateParams(
@@ -193,6 +189,10 @@ public class ActionRouterManager {
 
 				return updateReturn(result, paramInstances, name);
 			}
+		).receivesParams(
+			paramClasses
+		).annotatedWith(
+			method.getDeclaredAnnotations()
 		).build();
 
 		return some(actionSemantics);

@@ -24,7 +24,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.ImmutableActionSemantics;
 import com.liferay.apio.architect.internal.action.ImmutableEntryPoint;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
@@ -69,31 +68,28 @@ public class EntryPointConverterTest {
 
 	@Test
 	public void testGetEntryPointFromStreamFiltersActionSemantics() {
-		ImmutableActionSemantics immutableActionSemantics =
-			(ImmutableActionSemantics)ActionSemantics.ofResource(
-				Resource.Paged.of("name1")
-			).name(
-				"retrieve"
-			).method(
-				"GET"
-			).receivesNoParams(
-			).returns(
-				Page.class
-			).annotatedWith(
-				ImmutableEntryPoint.builder().build()
-			).executeFunction(
-				__ -> null
-			).build();
+		ActionSemantics actionSemantics = ActionSemantics.ofResource(
+			Resource.Paged.of("name1")
+		).name(
+			"retrieve"
+		).method(
+			"GET"
+		).returns(
+			Page.class
+		).executeFunction(
+			__ -> null
+		).annotatedWith(
+			ImmutableEntryPoint.builder().build()
+		).build();
 
 		Stream<ActionSemantics> stream = Stream.of(
-			immutableActionSemantics,
-			immutableActionSemantics.withName("create"),
-			immutableActionSemantics.withAnnotations(emptyList()),
-			immutableActionSemantics.withResource(Resource.Paged.of("name2")),
-			immutableActionSemantics.withReturnClass(String.class),
-			immutableActionSemantics.withResource(Resource.Item.of("item")),
-			immutableActionSemantics.withMethod("PUT"),
-			immutableActionSemantics.withResource(Resource.Paged.of("name3")));
+			actionSemantics, actionSemantics.withName("create"),
+			actionSemantics.withAnnotations(emptyList()),
+			actionSemantics.withResource(Resource.Paged.of("name2")),
+			actionSemantics.withReturnClass(String.class),
+			actionSemantics.withResource(Resource.Item.of("item")),
+			actionSemantics.withMethod("PUT"),
+			actionSemantics.withResource(Resource.Paged.of("name3")));
 
 		EntryPoint entryPoint = getEntryPointFrom(stream);
 

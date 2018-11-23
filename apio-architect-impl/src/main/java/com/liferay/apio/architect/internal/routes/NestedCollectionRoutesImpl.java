@@ -139,17 +139,16 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					ParentId.class, Body.class
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowableBiFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
 					).apply(
 						_getId(params.get(0)), form.getList((Body)params.get(1))
 					)
+				).receivesParams(
+					ParentId.class, Body.class
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -160,17 +159,16 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				ParentId.class, Body.class
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
 				).apply(
 					_getId(params.get(0)), form.get((Body)params.get(1))
 				)
+			).receivesParams(
+				ParentId.class, Body.class
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -220,11 +218,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					ParentId.class, Body.class, aClass, bClass, cClass, dClass
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowableHexaFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
@@ -234,6 +229,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 						unsafeCast(params.get(4)), unsafeCast(params.get(5))
 					)
+				).receivesParams(
+					ParentId.class, Body.class, aClass, bClass, cClass, dClass
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -244,11 +241,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				ParentId.class, Body.class, aClass, bClass, cClass, dClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
@@ -257,6 +251,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
+			).receivesParams(
+				ParentId.class, Body.class, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -306,11 +302,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					ParentId.class, Body.class, aClass, bClass, cClass
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowablePentaFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
@@ -320,6 +313,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 						unsafeCast(params.get(4))
 					)
+				).receivesParams(
+					ParentId.class, Body.class, aClass, bClass, cClass
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -330,11 +325,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				ParentId.class, Body.class, aClass, bClass, cClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
@@ -343,6 +335,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
+			).receivesParams(
+				ParentId.class, Body.class, aClass, bClass, cClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -389,11 +383,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					ParentId.class, Body.class, aClass, bClass
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowableTetraFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
@@ -402,6 +393,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 						form.getList((Body)params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3))
 					)
+				).receivesParams(
+					ParentId.class, Body.class, aClass, bClass
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -412,11 +405,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				ParentId.class, Body.class, aClass, bClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
@@ -424,6 +414,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
+			).receivesParams(
+				ParentId.class, Body.class, aClass, bClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -469,11 +461,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					ParentId.class, Body.class, aClass
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowableTriFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
@@ -482,6 +471,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 						form.getList((Body)params.get(1)),
 						unsafeCast(params.get(2))
 					)
+				).receivesParams(
+					ParentId.class, Body.class, aClass
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -492,11 +483,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				ParentId.class, Body.class, aClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
@@ -504,6 +492,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2))
 				)
+			).receivesParams(
+				ParentId.class, Body.class, aClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -522,11 +512,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class, ParentId.class
 			).returns(
 				Page.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableBiFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -534,6 +521,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				).apply(
 					(Pagination)params.get(0), _getId(params.get(1))
 				)
+			).receivesParams(
+				Pagination.class, ParentId.class
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -554,11 +543,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class, ParentId.class, aClass, bClass, cClass, dClass
 			).returns(
 				Page.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableHexaFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -568,6 +554,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
+			).receivesParams(
+				Pagination.class, ParentId.class, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -587,11 +575,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class, ParentId.class, aClass, bClass, cClass
 			).returns(
 				Page.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -601,6 +586,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
+			).receivesParams(
+				Pagination.class, ParentId.class, aClass, bClass, cClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -620,11 +607,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class, ParentId.class, aClass, bClass
 			).returns(
 				Page.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableTetraFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -633,6 +617,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					(Pagination)params.get(0), _getId(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
+			).receivesParams(
+				Pagination.class, ParentId.class, aClass, bClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -652,11 +638,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class, ParentId.class, aClass
 			).returns(
 				Page.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableTriFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -665,6 +648,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					(Pagination)params.get(0), _getId(params.get(1)),
 					unsafeCast(params.get(2))
 				)
+			).receivesParams(
+				Pagination.class, ParentId.class, aClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);

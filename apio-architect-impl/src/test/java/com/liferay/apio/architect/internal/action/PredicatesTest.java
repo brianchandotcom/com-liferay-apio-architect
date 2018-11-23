@@ -97,25 +97,26 @@ public class PredicatesTest {
 
 	@Test
 	public void testIsActionByDELETE() {
-		assertTrue(isActionByDELETE.test(_withMethod("DELETE")));
+		assertTrue(
+			isActionByDELETE.test(_actionSemantics.withMethod("DELETE")));
 		assertFalse(isActionByDELETE.test(_actionSemantics));
 	}
 
 	@Test
 	public void testIsActionByGET() {
 		assertTrue(isActionByGET.test(_actionSemantics));
-		assertFalse(isActionByGET.test(_withMethod("DELETE")));
+		assertFalse(isActionByGET.test(_actionSemantics.withMethod("DELETE")));
 	}
 
 	@Test
 	public void testIsActionByPOST() {
-		assertTrue(isActionByPOST.test(_withMethod("POST")));
+		assertTrue(isActionByPOST.test(_actionSemantics.withMethod("POST")));
 		assertFalse(isActionByPOST.test(_actionSemantics));
 	}
 
 	@Test
 	public void testIsActionByPUT() {
-		assertTrue(isActionByPUT.test(_withMethod("PUT")));
+		assertTrue(isActionByPUT.test(_actionSemantics.withMethod("PUT")));
 		assertFalse(isActionByPUT.test(_actionSemantics));
 	}
 
@@ -151,31 +152,47 @@ public class PredicatesTest {
 
 	@Test
 	public void testIsCreateAction() {
-		assertTrue(isCreateAction.test(_withAction("POST", "create")));
+		ActionSemantics actionSemantics = _actionSemantics.withMethod("POST");
+
+		assertTrue(isCreateAction.test(actionSemantics.withName("create")));
+
 		assertFalse(isCreateAction.test(_actionSemantics));
 	}
 
 	@Test
 	public void testIsRemoveAction() {
-		assertTrue(isRemoveAction.test(_withAction("DELETE", "remove")));
+		ActionSemantics actionSemantics = _actionSemantics.withMethod("DELETE");
+
+		assertTrue(isRemoveAction.test(actionSemantics.withName("remove")));
+
 		assertFalse(isRemoveAction.test(_actionSemantics));
 	}
 
 	@Test
 	public void testIsReplaceAction() {
-		assertTrue(isReplaceAction.test(_withAction("PUT", "replace")));
+		ActionSemantics actionSemantics = _actionSemantics.withMethod("PUT");
+
+		assertTrue(isReplaceAction.test(actionSemantics.withName("replace")));
+
 		assertFalse(isReplaceAction.test(_actionSemantics));
 	}
 
 	@Test
 	public void testIsRetrieveAction() {
-		assertTrue(isRetrieveAction.test(_withAction("GET", "retrieve")));
+		ActionSemantics actionSemantics = _actionSemantics.withMethod("GET");
+
+		assertTrue(isRetrieveAction.test(actionSemantics.withName("retrieve")));
+
 		assertFalse(isRetrieveAction.test(_actionSemantics));
 	}
 
 	@Test
 	public void testIsRootCollectionAction() {
-		assertTrue(isRootCollectionAction.test(_withAction("GET", "retrieve")));
+		ActionSemantics actionSemantics = _actionSemantics.withMethod("GET");
+
+		assertTrue(
+			isRootCollectionAction.test(actionSemantics.withName("retrieve")));
+
 		assertFalse(isRootCollectionAction.test(_actionSemantics));
 	}
 
@@ -192,21 +209,6 @@ public class PredicatesTest {
 		assertFalse(falsePredicate.test(_actionSemantics));
 	}
 
-	private static ImmutableActionSemantics _withAction(
-		String method, String action) {
-
-		ImmutableActionSemantics immutableActionSemantics = _withMethod(method);
-
-		return immutableActionSemantics.withName(action);
-	}
-
-	private static ImmutableActionSemantics _withMethod(String method) {
-		ImmutableActionSemantics immutableActionSemantics =
-			(ImmutableActionSemantics)_actionSemantics;
-
-		return immutableActionSemantics.withMethod(method);
-	}
-
 	private static final ActionSemantics _actionSemantics =
 		ActionSemantics.ofResource(
 			Paged.of("Name")
@@ -214,14 +216,14 @@ public class PredicatesTest {
 			"name"
 		).method(
 			"GET"
-		).receivesParams(
-			String.class, Integer.class
 		).returns(
 			Page.class
-		).annotatedWith(
-			ImmutableEntryPoint.builder().build()
 		).executeFunction(
 			__ -> null
+		).receivesParams(
+			String.class, Integer.class
+		).annotatedWith(
+			ImmutableEntryPoint.builder().build()
 		).build();
 
 }

@@ -230,9 +230,8 @@ public class MockWriterUtil {
 			name
 		).method(
 			httpMethod
-		).receivesNoParams(
-		).returnsNothing(
-		).notAnnotated(
+		).returns(
+			Void.class
 		).executeFunction(
 			__ -> null
 		).build();

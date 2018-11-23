@@ -159,11 +159,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					Body.class, aClass
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowableBiFunction.andThen(
 						t -> new BatchResult<>(t, _paged.name())
@@ -171,6 +168,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						form.getList((Body)params.get(0)),
 						unsafeCast(params.get(1))
 					)
+				).receivesParams(
+					Body.class, aClass
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -181,17 +180,16 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				Body.class, aClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _paged.name())
 				).apply(
 					form.get((Body)params.get(0)), unsafeCast(params.get(1))
 				)
+			).receivesParams(
+				Body.class, aClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -229,17 +227,16 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					Body.class
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowableFunction.andThen(
 						t -> new BatchResult<>(t, _paged.name())
 					).apply(
 						form.getList((Body)params.get(0))
 					)
+				).receivesParams(
+					Body.class
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -250,17 +247,16 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				Body.class
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowableFunction.andThen(
 					t -> new SingleModelImpl<>(t, _paged.name())
 				).apply(
 					form.get((Body)params.get(0))
 				)
+			).receivesParams(
+				Body.class
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -308,11 +304,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					Body.class, aClass, bClass, cClass, dClass
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowablePentaFunction.andThen(
 						t -> new BatchResult<>(t, _paged.name())
@@ -321,6 +314,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						unsafeCast(params.get(1)), unsafeCast(params.get(2)),
 						unsafeCast(params.get(3)), unsafeCast(params.get(4))
 					)
+				).receivesParams(
+					Body.class, aClass, bClass, cClass, dClass
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -331,11 +326,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				Body.class, aClass, bClass, cClass, dClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _paged.name())
@@ -344,6 +336,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
+			).receivesParams(
+				Body.class, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -388,11 +382,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					Body.class, aClass, bClass, cClass
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowableTetraFunction.andThen(
 						t -> new BatchResult<>(t, _paged.name())
@@ -401,6 +392,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						unsafeCast(params.get(1)), unsafeCast(params.get(2)),
 						unsafeCast(params.get(3))
 					)
+				).receivesParams(
+					Body.class, aClass, bClass, cClass
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -411,11 +404,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				Body.class, aClass, bClass, cClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _paged.name())
@@ -423,6 +413,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					form.get((Body)params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
+			).receivesParams(
+				Body.class, aClass, bClass, cClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -467,11 +459,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					"batch-create"
 				).method(
 					"POST"
-				).receivesParams(
-					Body.class, aClass, bClass
 				).returns(
 					BatchResult.class
-				).notAnnotated(
 				).executeFunction(
 					params -> batchCreatorThrowableTriFunction.andThen(
 						t -> new BatchResult<>(t, _paged.name())
@@ -479,6 +468,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						form.getList((Body)params.get(0)),
 						unsafeCast(params.get(1)), unsafeCast(params.get(2))
 					)
+				).receivesParams(
+					Body.class, aClass, bClass
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -489,11 +480,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"create"
 			).method(
 				"POST"
-			).receivesParams(
-				Body.class, aClass, bClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> creatorThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _paged.name())
@@ -501,6 +489,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					form.get((Body)params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2))
 				)
+			).receivesParams(
+				Body.class, aClass, bClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -526,11 +516,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Pagination.class, bodyClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -538,6 +525,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					(Pagination)params.get(0),
 					_getModel(form, () -> (Body)params.get(1))
 				)
+			).receivesParams(
+				Pagination.class, bodyClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -566,11 +555,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Pagination.class, bodyClass, aClass, bClass, cClass, dClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -580,6 +566,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
+			).receivesParams(
+				Pagination.class, bodyClass, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -608,11 +596,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Pagination.class, bodyClass, aClass, bClass, cClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -622,6 +607,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
+			).receivesParams(
+				Pagination.class, bodyClass, aClass, bClass, cClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -648,11 +635,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Pagination.class, bodyClass, aClass, bClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -661,6 +645,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					_getModel(form, () -> (Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
+			).receivesParams(
+				Pagination.class, bodyClass, aClass, bClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -686,11 +672,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Pagination.class, bodyClass, aClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -699,6 +682,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					_getModel(form, () -> (Body)params.get(1)),
 					unsafeCast(params.get(2))
 				)
+			).receivesParams(
+				Pagination.class, bodyClass, aClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -718,12 +703,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class, aClass
 			).returns(
 				Page.class
-			).annotatedWith(
-				_entryPoint
 			).executeFunction(
 				params -> getterThrowableBiFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -731,6 +712,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				).apply(
 					(Pagination)params.get(0), unsafeCast(params.get(1))
 				)
+			).annotatedWith(
+				_entryPoint
+			).receivesParams(
+				Pagination.class, aClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -749,12 +734,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class
 			).returns(
 				Page.class
-			).annotatedWith(
-				_entryPoint
 			).executeFunction(
 				params -> getterThrowableFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -762,6 +743,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				).apply(
 					(Pagination)params.get(0)
 				)
+			).annotatedWith(
+				_entryPoint
+			).receivesParams(
+				Pagination.class
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -782,12 +767,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class, aClass, bClass, cClass, dClass
 			).returns(
 				Page.class
-			).annotatedWith(
-				_entryPoint
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -797,6 +778,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
+			).annotatedWith(
+				_entryPoint
+			).receivesParams(
+				Pagination.class, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -816,12 +801,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class, aClass, bClass, cClass
 			).returns(
 				Page.class
-			).annotatedWith(
-				_entryPoint
 			).executeFunction(
 				params -> getterThrowableTetraFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -830,6 +811,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					(Pagination)params.get(0), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
+			).annotatedWith(
+				_entryPoint
+			).receivesParams(
+				Pagination.class, aClass, bClass, cClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -849,12 +834,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Pagination.class, aClass, bClass
 			).returns(
 				Page.class
-			).annotatedWith(
-				_entryPoint
 			).executeFunction(
 				params -> getterThrowableTriFunction.andThen(
 					pageItems -> new PageImpl<>(
@@ -863,6 +844,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					(Pagination)params.get(0), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2))
 				)
+			).annotatedWith(
+				_entryPoint
+			).receivesParams(
+				Pagination.class, aClass, bClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);

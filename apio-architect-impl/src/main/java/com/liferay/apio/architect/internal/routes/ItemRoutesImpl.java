@@ -143,11 +143,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Id.class, bodyClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -155,6 +152,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					_getId(params.get(0)),
 					_getModel(form, () -> (Body)params.get(1))
 				)
+			).receivesParams(
+				Id.class, bodyClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -183,11 +182,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Id.class, bodyClass, aClass, bClass, cClass, dClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -197,6 +193,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
+			).receivesParams(
+				Id.class, bodyClass, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -224,11 +222,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Id.class, bodyClass, aClass, bClass, cClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -238,6 +233,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
+			).receivesParams(
+				Id.class, bodyClass, aClass, bClass, cClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -264,11 +261,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Id.class, bodyClass, aClass, bClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -277,6 +271,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					_getModel(form, () -> (Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
+			).receivesParams(
+				Id.class, bodyClass, aClass, bClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -302,11 +298,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				customRoute.getName()
 			).method(
 				customRoute.getMethod()
-			).receivesParams(
-				Id.class, bodyClass, aClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> throwableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _getResourceName(supplier))
@@ -315,6 +308,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					_getModel(form, () -> (Body)params.get(1)),
 					unsafeCast(params.get(2))
 				)
+			).receivesParams(
+				Id.class, bodyClass, aClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -333,17 +328,16 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Id.class, aClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
 					_getId(params.get(0)), unsafeCast(params.get(1))
 				)
+			).receivesParams(
+				Id.class, aClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -361,17 +355,16 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Id.class
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
 					_getId(params.get(0))
 				)
+			).receivesParams(
+				Id.class
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -392,11 +385,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Id.class, aClass, bClass, cClass, dClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -405,6 +395,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
+			).receivesParams(
+				Id.class, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -423,11 +415,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Id.class, aClass, bClass, cClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -435,6 +424,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
+			).receivesParams(
+				Id.class, aClass, bClass, cClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -453,11 +444,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"retrieve"
 			).method(
 				"GET"
-			).receivesParams(
-				Id.class, aClass, bClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> getterThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -465,6 +453,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2))
 				)
+			).receivesParams(
+				Id.class, aClass, bClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -484,14 +474,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"remove"
 			).method(
 				"DELETE"
-			).receivesParams(
-				Id.class, aClass
-			).returnsNothing(
-			).notAnnotated(
+			).returns(
+				Void.class
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableBiConsumer.accept(
 						_getId(params.get(0)), unsafeCast(params.get(1))))
+			).receivesParams(
+				Id.class, aClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -510,14 +500,14 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"remove"
 			).method(
 				"DELETE"
-			).receivesParams(
-				Id.class
-			).returnsNothing(
-			).notAnnotated(
+			).returns(
+				Void.class
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableConsumer.accept(
 						_getId(params.get(0))))
+			).receivesParams(
+				Id.class
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -537,16 +527,16 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"remove"
 			).method(
 				"DELETE"
-			).receivesParams(
-				Id.class, aClass, bClass, cClass, dClass
-			).returnsNothing(
-			).notAnnotated(
+			).returns(
+				Void.class
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowablePentaConsumer.accept(
 						_getId(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 						unsafeCast(params.get(4))))
+			).receivesParams(
+				Id.class, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -566,15 +556,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"remove"
 			).method(
 				"DELETE"
-			).receivesParams(
-				Id.class, aClass, bClass, cClass
-			).returnsNothing(
-			).notAnnotated(
+			).returns(
+				Void.class
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableTetraConsumer.accept(
 						_getId(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3))))
+			).receivesParams(
+				Id.class, aClass, bClass, cClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -594,15 +584,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"remove"
 			).method(
 				"DELETE"
-			).receivesParams(
-				Id.class, aClass, bClass
-			).returnsNothing(
-			).notAnnotated(
+			).returns(
+				Void.class
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowableTriConsumer.accept(
 						_getId(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2))))
+			).receivesParams(
+				Id.class, aClass, bClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -624,17 +614,16 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"replace"
 			).method(
 				"PUT"
-			).receivesParams(
-				Id.class, Body.class
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
 					_getId(params.get(0)), form.get((Body)params.get(1))
 				)
+			).receivesParams(
+				Id.class, Body.class
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -658,11 +647,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"replace"
 			).method(
 				"PUT"
-			).receivesParams(
-				Id.class, Body.class, aClass, bClass, cClass, dClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -671,6 +657,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
+			).receivesParams(
+				Id.class, Body.class, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -694,11 +682,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"replace"
 			).method(
 				"PUT"
-			).receivesParams(
-				Id.class, Body.class, aClass, bClass, cClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -707,6 +692,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
+			).receivesParams(
+				Id.class, Body.class, aClass, bClass, cClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -729,11 +716,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"replace"
 			).method(
 				"PUT"
-			).receivesParams(
-				Id.class, Body.class, aClass, bClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -741,6 +725,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3))
 				)
+			).receivesParams(
+				Id.class, Body.class, aClass, bClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -763,11 +749,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"replace"
 			).method(
 				"PUT"
-			).receivesParams(
-				Id.class, Body.class, aClass
 			).returns(
 				SingleModel.class
-			).notAnnotated(
 			).executeFunction(
 				params -> updaterThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
@@ -775,6 +758,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					_getId(params.get(0)), form.get((Body)params.get(1)),
 					unsafeCast(params.get(2))
 				)
+			).receivesParams(
+				Id.class, Body.class, aClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);

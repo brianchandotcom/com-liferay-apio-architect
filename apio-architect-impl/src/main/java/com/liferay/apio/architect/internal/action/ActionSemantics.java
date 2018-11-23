@@ -14,9 +14,6 @@
 
 package com.liferay.apio.architect.internal.action;
 
-import static com.liferay.apio.architect.internal.action.ImmutableActionSemantics.actionSemantics;
-
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 import com.liferay.apio.architect.internal.action.resource.Resource;
@@ -29,11 +26,9 @@ import io.vavr.control.Try;
 
 import java.lang.annotation.Annotation;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import org.immutables.value.Value.Immutable;
-import org.immutables.value.Value.Parameter;
-import org.immutables.value.Value.Style;
 
 /**
  * Instances of this class contains semantic information about an action like
@@ -41,9 +36,7 @@ import org.immutables.value.Value.Style;
  * @author Alejandro Hernández
  * @review
  */
-@Immutable(builder = false)
-@Style(allParameters = true, of = "actionSemantics")
-public abstract class ActionSemantics {
+public final class ActionSemantics {
 
 	/**
 	 * Starts creating a new {@link ActionSemantics} by providing information
@@ -52,10 +45,11 @@ public abstract class ActionSemantics {
 	 * @review
 	 */
 	public static NameStep ofResource(Resource resource) {
-		return name -> method -> paramClasses -> returnClass -> annotations ->
-			executeFunction -> () -> actionSemantics(
-				resource, name, method, asList(paramClasses), returnClass,
-				asList(annotations), executeFunction);
+		ActionSemantics actionSemantics = new ActionSemantics();
+
+		actionSemantics._resource = resource;
+
+		return new Builder(actionSemantics);
 	}
 
 	/**
@@ -63,56 +57,63 @@ public abstract class ActionSemantics {
 	 *
 	 * @review
 	 */
-	@Parameter(order = 5)
-	public abstract List<Annotation> annotations();
+	public List<Annotation> annotations() {
+		return _annotations;
+	}
 
 	/**
 	 * The function that executes the action.
 	 *
 	 * @review
 	 */
-	@Parameter(order = 6)
-	public abstract CheckedFunction1<List<?>, ?> executeFunction();
+	public CheckedFunction1<List<?>, ?> executeFunction() {
+		return _executeFunction;
+	}
 
 	/**
 	 * The method in which the action is executed.
 	 *
 	 * @review
 	 */
-	@Parameter(order = 2)
-	public abstract String method();
+	public String method() {
+		return _method;
+	}
 
 	/**
 	 * The action's name.
 	 *
 	 * @review
 	 */
-	@Parameter(order = 1)
-	public abstract String name();
+	public String name() {
+		return _name;
+	}
 
 	/**
 	 * The list of param classes.
 	 *
 	 * @review
 	 */
-	@Parameter(order = 3)
-	public abstract List<Class<?>> paramClasses();
+	public List<Class<?>> paramClasses() {
+		return _paramClasses;
+	}
 
 	/**
 	 * The action's resource.
 	 *
 	 * @review
 	 */
-	@Parameter(order = 0)
-	public abstract Resource resource();
+	public Resource resource() {
+		return _resource;
+	}
 
 	/**
 	 * The class returned by the action.
 	 *
 	 * @review
 	 */
-	@Parameter(order = 4)
-	public abstract Class<?> returnClass();
+	public Class<?> returnClass() {
+		return _returnClass;
+	}
 
 	/**
 	 * Transforms this {@link ActionSemantics} instance into its {@link Action}.
@@ -137,6 +138,90 @@ public abstract class ActionSemantics {
 
 	/**
 	 * Copies the current {@link ActionSemantics} by setting a value for the
+	 * {@link ActionSemantics#annotations()} annotations} attribute. A shallow
+	 * reference equality check is used to prevent copying of the same value by
+	 * returning {@code this}.
+	 *
+	 * @param  annotations the new annotations list
+	 * @return A modified copy of {@code this} object
+	 * @review
+	 */
+	public ActionSemantics withAnnotations(List<Annotation> annotations) {
+		if (_annotations.equals(annotations)) {
+			return this;
+		}
+
+		ActionSemantics actionSemantics = new ActionSemantics();
+
+		actionSemantics._annotations = annotations;
+		actionSemantics._executeFunction = _executeFunction;
+		actionSemantics._method = _method;
+		actionSemantics._name = _name;
+		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._resource = _resource;
+		actionSemantics._returnClass = _returnClass;
+
+		return actionSemantics;
+	}
+
+	/**
+	 * Copies the current {@link ActionSemantics} by setting a value for the
+	 * {@link ActionSemantics#method()} method} attribute. A shallow
+	 * reference equality check is used to prevent copying of the same value by
+	 * returning {@code this}.
+	 *
+	 * @param  method the new method
+	 * @return A modified copy of {@code this} object
+	 * @review
+	 */
+	public ActionSemantics withMethod(String method) {
+		if (_method.equals(method)) {
+			return this;
+		}
+
+		ActionSemantics actionSemantics = new ActionSemantics();
+
+		actionSemantics._annotations = _annotations;
+		actionSemantics._executeFunction = _executeFunction;
+		actionSemantics._method = method;
+		actionSemantics._name = _name;
+		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._resource = _resource;
+		actionSemantics._returnClass = _returnClass;
+
+		return actionSemantics;
+	}
+
+	/**
+	 * Copies the current {@link ActionSemantics} by setting a value for the
+	 * {@link ActionSemantics#name()} name} attribute. A shallow
+	 * reference equality check is used to prevent copying of the same value by
+	 * returning {@code this}.
+	 *
+	 * @param  name the new name
+	 * @return A modified copy of {@code this} object
+	 * @review
+	 */
+	public ActionSemantics withName(String name) {
+		if (_name.equals(name)) {
+			return this;
+		}
+
+		ActionSemantics actionSemantics = new ActionSemantics();
+
+		actionSemantics._annotations = _annotations;
+		actionSemantics._executeFunction = _executeFunction;
+		actionSemantics._method = _method;
+		actionSemantics._name = name;
+		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._resource = _resource;
+		actionSemantics._returnClass = _returnClass;
+
+		return actionSemantics;
+	}
+
+	/**
+	 * Copies the current {@link ActionSemantics} by setting a value for the
 	 * {@link ActionSemantics#resource() resource} attribute. A shallow
 	 * reference equality check is used to prevent copying of the same value by
 	 * returning {@code this}.
@@ -146,14 +231,133 @@ public abstract class ActionSemantics {
 	 * @review
 	 */
 	public ActionSemantics withResource(Resource resource) {
-		ImmutableActionSemantics immutableActionSemantics =
-			(ImmutableActionSemantics)this;
+		if (_resource.equals(resource)) {
+			return this;
+		}
 
-		return immutableActionSemantics.withResource(resource);
+		ActionSemantics actionSemantics = new ActionSemantics();
+
+		actionSemantics._annotations = _annotations;
+		actionSemantics._executeFunction = _executeFunction;
+		actionSemantics._method = _method;
+		actionSemantics._name = _name;
+		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._resource = resource;
+		actionSemantics._returnClass = _returnClass;
+
+		return actionSemantics;
 	}
 
-	@FunctionalInterface
-	public interface AnnotationsStep {
+	/**
+	 * Copies the current {@link ActionSemantics} by setting a value for the
+	 * {@link ActionSemantics#returnClass()} return class} attribute. A shallow
+	 * reference equality check is used to prevent copying of the same value by
+	 * returning {@code this}.
+	 *
+	 * @param  returnClass the new return class
+	 * @return A modified copy of {@code this} object
+	 * @review
+	 */
+	public ActionSemantics withReturnClass(Class<?> returnClass) {
+		if (_returnClass.equals(returnClass)) {
+			return this;
+		}
+
+		ActionSemantics actionSemantics = new ActionSemantics();
+
+		actionSemantics._annotations = _annotations;
+		actionSemantics._executeFunction = _executeFunction;
+		actionSemantics._method = _method;
+		actionSemantics._name = _name;
+		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._resource = _resource;
+		actionSemantics._returnClass = returnClass;
+
+		return actionSemantics;
+	}
+
+	public static class Builder
+		implements NameStep, MethodStep, ReturnStep, ExecuteStep, FinalStep {
+
+		public Builder(ActionSemantics actionSemantics) {
+			_actionSemantics = actionSemantics;
+		}
+
+		@Override
+		public FinalStep annotatedWith(Annotation annotation) {
+			_actionSemantics._annotations.add(annotation);
+
+			return this;
+		}
+
+		@Override
+		public FinalStep annotatedWith(Annotation... annotations) {
+			_actionSemantics._annotations = Arrays.asList(annotations);
+
+			return this;
+		}
+
+		@Override
+		public ActionSemantics build() {
+			return _actionSemantics;
+		}
+
+		@Override
+		public FinalStep executeFunction(
+			CheckedFunction1<List<?>, ?> executeFunction) {
+
+			_actionSemantics._executeFunction = executeFunction;
+
+			return this;
+		}
+
+		@Override
+		public ReturnStep method(String method) {
+			_actionSemantics._method = method;
+
+			return this;
+		}
+
+		@Override
+		public MethodStep name(String name) {
+			_actionSemantics._name = name;
+
+			return this;
+		}
+
+		@Override
+		public FinalStep receivesParams(Class<?>... classes) {
+			_actionSemantics._paramClasses = Arrays.asList(classes);
+
+			return this;
+		}
+
+		@Override
+		public ExecuteStep returns(Class<?> returnClass) {
+			_actionSemantics._returnClass = returnClass;
+
+			return this;
+		}
+
+		private final ActionSemantics _actionSemantics;
+
+	}
+
+	public interface ExecuteStep {
+
+		/**
+		 * Provides information about the function action's execute function.
+		 * This function receives the list of params in the order provided in
+		 * the {@link FinalStep#receivesParams(Class[])} method.
+		 *
+		 * @review
+		 */
+		public FinalStep executeFunction(
+			CheckedFunction1<List<?>, ?> executeFunction);
+
+	}
+
+	public interface FinalStep {
 
 		/**
 		 * Provides information about the params needed by the action.
@@ -170,21 +374,24 @@ public abstract class ActionSemantics {
 		 *
 		 * @review
 		 */
-		public ExecuteStep annotatedWith(Annotation... annotations);
+		public FinalStep annotatedWith(Annotation annotations);
 
 		/**
-		 * Specifies that the action does not receive any params.
+		 * Provides information about the params needed by the action.
+		 *
+		 * <p>
+		 * The param instances will be provided in the {@link
+		 * #executeFunction()} in the same order as their classes in this
+		 * method. {@link Void} classes will be ignored (will be provided as
+		 * {@code null}. For the {@link
+		 * com.liferay.apio.architect.annotation.Id} or {@link
+		 * com.liferay.apio.architect.annotation.ParentId} params, the
+		 * annotation class should be provided to the list.
+		 * </p>
 		 *
 		 * @review
 		 */
-		public default ExecuteStep notAnnotated() {
-			return annotatedWith();
-		}
-
-	}
-
-	@FunctionalInterface
-	public interface BuildStep {
+		public FinalStep annotatedWith(Annotation... annotations);
 
 		/**
 		 * Creates the {@link ActionSemantics} object with the information
@@ -194,24 +401,25 @@ public abstract class ActionSemantics {
 		 */
 		public ActionSemantics build();
 
-	}
-
-	@FunctionalInterface
-	public interface ExecuteStep {
-
 		/**
-		 * Provides information about the function action's execute function.
-		 * This function receives the list of params in the order provided in
-		 * the {@link ProvideMethodStep#receivesParams(Class[])} method.
+		 * Provides information about the params needed by the action.
+		 *
+		 * <p>
+		 * The param instances will be provided in the {@link
+		 * #executeFunction()} in the same order as their classes in this
+		 * method. {@link Void} classes will be ignored (will be provided as
+		 * {@code null}. For the {@link
+		 * com.liferay.apio.architect.annotation.Id} or {@link
+		 * com.liferay.apio.architect.annotation.ParentId} params, the
+		 * annotation class should be provided to the list.
+		 * </p>
 		 *
 		 * @review
 		 */
-		public BuildStep executeFunction(
-			CheckedFunction1<List<?>, ?> executeFunction);
+		public FinalStep receivesParams(Class<?>... classes);
 
 	}
 
-	@FunctionalInterface
 	public interface MethodStep {
 
 		/**
@@ -220,7 +428,7 @@ public abstract class ActionSemantics {
 		 *
 		 * @review
 		 */
-		public default ProvideMethodStep method(HTTPMethod httpMethod) {
+		public default ReturnStep method(HTTPMethod httpMethod) {
 			return method(httpMethod.name());
 		}
 
@@ -230,11 +438,10 @@ public abstract class ActionSemantics {
 		 *
 		 * @review
 		 */
-		public ProvideMethodStep method(String method);
+		public ReturnStep method(String method);
 
 	}
 
-	@FunctionalInterface
 	public interface NameStep {
 
 		/**
@@ -246,38 +453,6 @@ public abstract class ActionSemantics {
 
 	}
 
-	@FunctionalInterface
-	public interface ProvideMethodStep {
-
-		/**
-		 * Specifies that the action does not receive any params.
-		 *
-		 * @review
-		 */
-		public default ReturnStep receivesNoParams() {
-			return receivesParams();
-		}
-
-		/**
-		 * Provides information about the params needed by the action.
-		 *
-		 * <p>
-		 * The param instances will be provided in the {@link
-		 * #executeFunction()} in the same order as their classes in this
-		 * method. {@link Void} classes will be ignored (will be provided as
-		 * {@code null}. For the {@link
-		 * com.liferay.apio.architect.annotation.Id} or {@link
-		 * com.liferay.apio.architect.annotation.ParentId} params, the
-		 * annotation class should be provided to the list.
-		 * </p>
-		 *
-		 * @review
-		 */
-		public ReturnStep receivesParams(Class<?>... classes);
-
-	}
-
-	@FunctionalInterface
 	public interface ReturnStep {
 
 		/**
@@ -285,17 +460,16 @@ public abstract class ActionSemantics {
 		 *
 		 * @review
 		 */
-		public AnnotationsStep returns(Class<?> returnClass);
-
-		/**
-		 * Specifies that the action does not return anything.
-		 *
-		 * @review
-		 */
-		public default AnnotationsStep returnsNothing() {
-			return returns(Void.class);
-		}
+		public ExecuteStep returns(Class<?> returnClass);
 
 	}
+
+	private List<Annotation> _annotations = new ArrayList<>();
+	private CheckedFunction1<List<?>, ?> _executeFunction;
+	private String _method;
+	private String _name;
+	private List<Class<?>> _paramClasses = new ArrayList<>();
+	private Resource _resource;
+	private Class<?> _returnClass;
 
 }
