@@ -166,9 +166,9 @@ public final class ActionSemantics {
 
 	/**
 	 * Copies the current {@link ActionSemantics} by setting a value for the
-	 * {@link ActionSemantics#method()} method} attribute. A shallow
-	 * reference equality check is used to prevent copying of the same value by
-	 * returning {@code this}.
+	 * {@link ActionSemantics#method()} method} attribute. A shallow reference
+	 * equality check is used to prevent copying of the same value by returning
+	 * {@code this}.
 	 *
 	 * @param  method the new method
 	 * @return A modified copy of {@code this} object
@@ -194,9 +194,9 @@ public final class ActionSemantics {
 
 	/**
 	 * Copies the current {@link ActionSemantics} by setting a value for the
-	 * {@link ActionSemantics#name()} name} attribute. A shallow
-	 * reference equality check is used to prevent copying of the same value by
-	 * returning {@code this}.
+	 * {@link ActionSemantics#name()} name} attribute. A shallow reference
+	 * equality check is used to prevent copying of the same value by returning
+	 * {@code this}.
 	 *
 	 * @param  name the new name
 	 * @return A modified copy of {@code this} object
