@@ -49,7 +49,6 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.Provider
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.router.ActionRouter;
 
-import io.vavr.Tuple;
 import io.vavr.control.Option;
 
 import java.lang.reflect.Method;
@@ -129,15 +128,7 @@ public class ActionRouterManager {
 			Stream.of(
 				clazz.getMethods()
 			).map(
-				method -> Tuple.of(
-					method, findAnnotation(Action.class, method), name)
-			).filter(
-				tuple -> tuple._2.isPresent()
-			).map(
-				tuple -> tuple.map2(Optional::get)
-			).map(
-				tuple -> _getActionSemanticsOption(
-					actionRouter, tuple._3, tuple._1, tuple._2)
+				method -> _getActionSemanticsOption(actionRouter, method, name)
 			).filter(
 				Option::isDefined
 			).map(
@@ -149,7 +140,16 @@ public class ActionRouterManager {
 	}
 
 	private Option<ActionSemantics> _getActionSemanticsOption(
-		ActionRouter actionRouter, String name, Method method, Action action) {
+		ActionRouter actionRouter, Method method, String name) {
+
+		Optional<Action> annotationOptional = findAnnotation(
+			Action.class, method);
+
+		if (!annotationOptional.isPresent()) {
+			return Option.none();
+		}
+
+		Action action = annotationOptional.get();
 
 		Optional<Form<Object>> formOptional = getFormOptional(
 			method, _formManager::getFormOptional);
