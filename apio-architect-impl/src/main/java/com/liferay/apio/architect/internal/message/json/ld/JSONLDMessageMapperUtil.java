@@ -47,7 +47,7 @@ public class JSONLDMessageMapperUtil {
 	public static String getActionId(Resource resource, String actionName) {
 		String resourceName = "";
 
-		if (resource.isNested()) {
+		if (resource instanceof Nested) {
 			Item parent = ((Nested)resource).parent();
 
 			resourceName = join("/", parent.name(), resource.name());
