@@ -27,6 +27,7 @@ import static com.liferay.apio.architect.internal.body.MultipartToBodyConverter.
 
 import static io.vavr.Predicates.instanceOf;
 import static io.vavr.control.Either.left;
+import static io.vavr.control.Either.right;
 
 import static java.util.function.Function.identity;
 
@@ -272,21 +273,23 @@ public class ActionManagerImpl implements ActionManager {
 	private Either<Action.Error, Action> _getAction(
 		Resource resource, Predicate<ActionSemantics> predicate) {
 
-		return ActionSemantics.filter(
-			actionSemantics()
-		).forResource(
-			resource
-		).withPredicate(
-			predicate
-		).map(
-			actionSemantics -> actionSemantics.withResource(resource)
-		).map(
-			actionSemantics -> actionSemantics.toAction(this::_provide)
-		).<Either<Action.Error, Action>>map(
-			Either::right
-		).orElseGet(
-			() -> Either.left(_notFound)
-		);
+		Stream<ActionSemantics> actionSemanticsStream = actionSemantics();
+
+		Optional<ActionSemantics> optionalActionSemantics =
+			actionSemanticsStream.filter(
+				predicate.and(isActionFor(resource))
+			).findFirst();
+
+		if (!optionalActionSemantics.isPresent()) {
+			return left(_notFound);
+		}
+
+		ActionSemantics actionSemantics = optionalActionSemantics.get();
+
+		ActionSemantics updatedActionSemantics = actionSemantics.withResource(
+			resource);
+
+		return right(updatedActionSemantics.toAction(this::_provide));
 	}
 
 	private Either<Action.Error, Action> _getBinaryFileAction(

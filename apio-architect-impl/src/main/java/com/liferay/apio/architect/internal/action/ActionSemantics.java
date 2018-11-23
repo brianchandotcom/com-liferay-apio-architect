@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.internal.action;
 
 import static com.liferay.apio.architect.internal.action.ImmutableActionSemantics.actionSemantics;
-import static com.liferay.apio.architect.internal.action.Predicates.isActionFor;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -31,9 +30,6 @@ import io.vavr.control.Try;
 import java.lang.annotation.Annotation;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.immutables.value.Value.Immutable;
 import org.immutables.value.Value.Parameter;
@@ -48,17 +44,6 @@ import org.immutables.value.Value.Style;
 @Immutable(builder = false)
 @Style(allParameters = true, of = "actionSemantics")
 public abstract class ActionSemantics {
-
-	/**
-	 * Starts filtering an {@link ActionSemantics} from a {@link Stream}.
-	 *
-	 * @review
-	 */
-	public static ResourceStep filter(Stream<ActionSemantics> stream) {
-		return resource -> predicate -> stream.filter(
-			predicate.and(isActionFor(resource))
-		).findFirst();
-	}
 
 	/**
 	 * Starts creating a new {@link ActionSemantics} by providing information
@@ -227,20 +212,6 @@ public abstract class ActionSemantics {
 	}
 
 	@FunctionalInterface
-	public interface FilterStep {
-
-		/**
-		 * Provides information about the predicate to apply for filtering the
-		 * {@link ActionSemantics}.
-		 *
-		 * @review
-		 */
-		public Optional<ActionSemantics> withPredicate(
-			Predicate<ActionSemantics> predicate);
-
-	}
-
-	@FunctionalInterface
 	public interface MethodStep {
 
 		/**
@@ -303,19 +274,6 @@ public abstract class ActionSemantics {
 		 * @review
 		 */
 		public ReturnStep receivesParams(Class<?>... classes);
-
-	}
-
-	@FunctionalInterface
-	public interface ResourceStep {
-
-		/**
-		 * Provides information about the resource for which the action has to
-		 * be filtered.
-		 *
-		 * @review
-		 */
-		public FilterStep forResource(Resource resource);
 
 	}
 
