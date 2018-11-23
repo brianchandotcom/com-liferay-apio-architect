@@ -319,11 +319,11 @@ public class ActionManagerImpl implements ActionManager {
 			t -> new BadRequestException("Invalid Content-Type header", t)
 		);
 
-		if (mediaType.isCompatible(APPLICATION_JSON_TYPE)) {
+		if (APPLICATION_JSON_TYPE.isCompatible(mediaType)) {
 			return jsonToBody(request);
 		}
 
-		if (mediaType.isCompatible(MULTIPART_FORM_DATA_TYPE)) {
+		if (MULTIPART_FORM_DATA_TYPE.isCompatible(mediaType)) {
 			return multipartToBody(request);
 		}
 
@@ -347,15 +347,15 @@ public class ActionManagerImpl implements ActionManager {
 		ActionSemantics actionSemantics, HttpServletRequest request,
 		Class<?> clazz) {
 
-		if (clazz.equals(Void.class)) {
+		if (Void.class.equals(clazz)) {
 			return null;
 		}
 
-		if (clazz.equals(Body.class)) {
+		if (Body.class.equals(clazz)) {
 			return _getBody(request);
 		}
 
-		if (clazz.equals(Id.class)) {
+		if (Id.class.equals(clazz)) {
 			return Optional.of(
 				actionSemantics.resource()
 			).filter(
@@ -369,7 +369,7 @@ public class ActionManagerImpl implements ActionManager {
 			);
 		}
 
-		if (clazz.equals(ParentId.class)) {
+		if (ParentId.class.equals(clazz)) {
 			return Optional.of(
 				actionSemantics.resource()
 			).filter(

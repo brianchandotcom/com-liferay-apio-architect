@@ -81,13 +81,16 @@ public class ActionSemanticsTest {
 			_join
 		).build();
 
-		assertThat(actionSemantics.resource(), is(Paged.of("name")));
+		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
 		assertThat(actionSemantics.name(), is("action"));
 		assertThat(actionSemantics.method(), is("GET"));
-		assertThat(
-			actionSemantics.paramClasses(), contains(String.class, Long.class));
+
+		List<Class<?>> paramClasses = actionSemantics.paramClasses();
+
+		assertThat(paramClasses, contains(String.class, Long.class));
+
+		assertThat(actionSemantics.resource(), is(Paged.of("name")));
 		assertThat(actionSemantics.returnClass(), is(equalTo(Long.class)));
-		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
 
 		CheckedFunction1<List<?>, ?> executeFunction =
 			actionSemantics.executeFunction();

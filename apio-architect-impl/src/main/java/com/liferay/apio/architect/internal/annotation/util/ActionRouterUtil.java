@@ -181,11 +181,11 @@ public class ActionRouterUtil {
 	public static Class<?> getReturnClass(Method method) {
 		Class<?> returnType = method.getReturnType();
 
-		if (returnType.equals(PageItems.class)) {
+		if (PageItems.class.equals(returnType)) {
 			return Page.class;
 		}
 
-		if (returnType.equals(List.class)) {
+		if (List.class.equals(returnType)) {
 			return Page.class;
 		}
 
@@ -193,7 +193,7 @@ public class ActionRouterUtil {
 			return SingleModel.class;
 		}
 
-		if (returnType.equals(void.class)) {
+		if (void.class.equals(returnType)) {
 			return Void.class;
 		}
 

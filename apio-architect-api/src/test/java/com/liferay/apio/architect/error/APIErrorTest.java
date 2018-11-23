@@ -42,14 +42,14 @@ public class APIErrorTest {
 	public void testFirstConstructorCreatesValidInstance() {
 		Exception exception = new IllegalArgumentException("Illegal!");
 
-		APIError apiError1 = new APIError(exception, "Title", "Type", 500);
+		APIError apiError = new APIError(exception, "Title", "Type", 500);
 
-		assertThat(apiError1.getException(), is(exception));
-		assertThat(apiError1.getDescription(), is(emptyOptional()));
-		assertThat(apiError1.getMessage(), is("Illegal!"));
-		assertThat(apiError1.getStatusCode(), is(500));
-		assertThat(apiError1.getTitle(), is("Title"));
-		assertThat(apiError1.getType(), is("Type"));
+		assertThat(apiError.getDescription(), is(emptyOptional()));
+		assertThat(apiError.getException(), is(exception));
+		assertThat(apiError.getMessage(), is("Illegal!"));
+		assertThat(apiError.getStatusCode(), is(500));
+		assertThat(apiError.getTitle(), is("Title"));
+		assertThat(apiError.getType(), is("Type"));
 	}
 
 	@Test
@@ -59,10 +59,10 @@ public class APIErrorTest {
 		APIError apiError = new APIError(
 			exception, "Title", "Description", "Type", 500);
 
-		assertThat(apiError.getException(), is(exception));
 		assertThat(
 			apiError.getDescription(),
 			is(optionalWithValue(equalTo("Description"))));
+		assertThat(apiError.getException(), is(exception));
 		assertThat(apiError.getMessage(), is("Description"));
 		assertThat(apiError.getStatusCode(), is(500));
 		assertThat(apiError.getTitle(), is("Title"));

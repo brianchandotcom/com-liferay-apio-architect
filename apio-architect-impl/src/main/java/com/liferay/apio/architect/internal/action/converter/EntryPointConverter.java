@@ -14,19 +14,14 @@
 
 package com.liferay.apio.architect.internal.action.converter;
 
-import static com.liferay.apio.architect.internal.action.Predicates.hasAnnotation;
-import static com.liferay.apio.architect.internal.action.Predicates.isActionFor;
-import static com.liferay.apio.architect.internal.action.Predicates.isRetrieveAction;
-import static com.liferay.apio.architect.internal.action.Predicates.returnsAnyOf;
+import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
 
 import static java.util.stream.Collectors.toList;
 
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
-import com.liferay.apio.architect.pagination.Page;
 
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -52,7 +47,7 @@ public final class EntryPointConverter {
 		Stream<ActionSemantics> actionSemantics) {
 
 		return () -> actionSemantics.filter(
-			_isEntryPointAction
+			isRootCollectionAction
 		).map(
 			ActionSemantics::resource
 		).map(
@@ -67,14 +62,5 @@ public final class EntryPointConverter {
 	private EntryPointConverter() {
 		throw new UnsupportedOperationException();
 	}
-
-	private static final Predicate<ActionSemantics> _isEntryPointAction =
-		isRetrieveAction.and(
-			returnsAnyOf(Page.class)
-		).and(
-			hasAnnotation(com.liferay.apio.architect.annotation.EntryPoint.class)
-		).and(
-			isActionFor(Paged.class)
-		);
 
 }
