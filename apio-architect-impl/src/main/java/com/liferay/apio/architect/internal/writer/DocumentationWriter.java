@@ -196,8 +196,27 @@ public class DocumentationWriter {
 			 *         can be created by using a {@link RequestInfo.Builder}.
 			 * @return the updated builder
 			 */
-			public BuildStep requestInfo(RequestInfo requestInfo) {
+			public TypeFunctionStep requestInfo(RequestInfo requestInfo) {
 				_requestInfo = requestInfo;
+
+				return new TypeFunctionStep();
+			}
+
+		}
+
+		public class TypeFunctionStep {
+
+			/**
+			 * Adds information to the builder about how to get the type from an
+			 * identifier class.
+			 *
+			 * @param  typeFunction the information obtained from the request.
+			 * @return the updated builder
+			 */
+			public BuildStep typeFunction(
+				Function<Class<?>, Optional<String>> typeFunction) {
+
+				_typeFunction = typeFunction;
 
 				return new BuildStep();
 			}
@@ -207,6 +226,7 @@ public class DocumentationWriter {
 		private Documentation _documentation;
 		private DocumentationMessageMapper _documentationMessageMapper;
 		private RequestInfo _requestInfo;
+		private Function<Class<?>, Optional<String>> _typeFunction;
 
 	}
 
