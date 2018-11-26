@@ -20,6 +20,7 @@ import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil
 import static io.leangen.geantyref.GenericTypeReflector.getTypeParameter;
 
 import static java.util.Collections.emptyList;
+import static java.util.Objects.nonNull;
 
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.ParentId;
@@ -39,6 +40,7 @@ import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.single.model.SingleModel;
 
+import io.vavr.CheckedFunction1;
 import io.vavr.control.Option;
 
 import java.lang.reflect.AnnotatedType;
@@ -61,6 +63,73 @@ public class ActionRouterUtil {
 
 	public static final Class<com.liferay.apio.architect.annotation.Body>
 		BODY_ANNOTATION = com.liferay.apio.architect.annotation.Body.class;
+
+	/**
+	 * Executes the provided {@code actionExecuteFunction} and returns its
+	 * result. An updated version of the provided param list is used, with all
+	 * {@link Resource.Id} values transformed with {@link
+	 * Resource.Id#asObject()}. After executing the function an updated result
+	 * is returned:
+	 *
+	 * <p>
+	 * If the element is {@code null}, {@code null} will be returned.
+	 * </p>
+	 *
+	 * <p>
+	 * If the element is a {@code List} or a {@code PageItems}, it will be
+	 * transformed to a {@link Page}.
+	 * </p>
+	 *
+	 * <p>
+	 * Otherwise, it gets wrapped in a {@code SingleModel}.
+	 * </p>
+	 *
+	 * @param  resource the action's resource
+	 * @param  params the action's params
+	 * @param  actionExecuteFunction the function used to execute the action
+	 * @return the action's result updated to a type that Apio understands
+	 * @throws Throwable if the action throws any exception, its cause is thrown
+	 *         instead
+	 * @review
+	 */
+	public static Object execute(
+			Resource resource, List<?> params,
+			CheckedFunction1<Object[], Object> actionExecuteFunction)
+		throws Throwable {
+
+		Object[] updatedParams = params.toArray(new Object[0]);
+
+		for (int i = 0; i < params.size(); i++) {
+			if (updatedParams[i] instanceof Resource.Id) {
+				updatedParams[i] = ((Resource.Id)updatedParams[i]).asObject();
+			}
+		}
+
+		try {
+			Object result = actionExecuteFunction.apply(updatedParams);
+
+			if (result == null) {
+				return null;
+			}
+
+			if (result instanceof List) {
+				return getPage((List<?>)result, resource.name());
+			}
+
+			if (result instanceof PageItems) {
+				return getPage((PageItems<?>)result, params, resource.name());
+			}
+
+			return new SingleModelImpl<>(result, resource.name());
+		}
+		catch (Throwable throwable) {
+			if (nonNull(throwable.getCause())) {
+				throw throwable.getCause();
+			}
+
+			throw throwable;
+		}
+	}
 
 	public static Option<Class<?>> getBodyResourceClass(Method method) {
 		return Stream.of(
@@ -198,64 +267,6 @@ public class ActionRouterUtil {
 		}
 
 		return returnType;
-	}
-
-	/**
-	 * Updates the list
-	 *
-	 * @param paramInstances
-	 * @return
-	 */
-	public static Object[] updateParams(List<?> paramInstances) {
-		Object[] updatedParams = paramInstances.toArray(new Object[0]);
-
-		for (int i = 0; i < paramInstances.size(); i++) {
-			if (updatedParams[i] instanceof Resource.Id) {
-				updatedParams[i] = ((Resource.Id)updatedParams[i]).asObject();
-			}
-		}
-
-		return updatedParams;
-	}
-
-	/**
-	 * Updates the return of an action according to some conditions:
-	 *
-	 * <p>
-	 * If the element is {@code null}, {@code null} will be returned.
-	 * </p>
-	 *
-	 * <p>
-	 * If the element is a {@code List} or a {@code PageItems}, it will be
-	 * transformed to a {@link Page}.
-	 * </p>
-	 *
-	 * <p>
-	 * Otherwise, it gets wrapped in a {@code SingleModel}.
-	 * </p>
-	 *
-	 * @param  object the object being converter
-	 * @param  params the list of param
-	 * @param  name the resource's name
-	 * @return the updated result
-	 * @review
-	 */
-	public static Object updateReturn(
-		Object object, List<?> params, String name) {
-
-		if (object == null) {
-			return null;
-		}
-
-		if (object instanceof List) {
-			return getPage((List<?>)object, name);
-		}
-
-		if (object instanceof PageItems) {
-			return getPage((PageItems<?>)object, params, name);
-		}
-
-		return new SingleModelImpl<>(object, name);
 	}
 
 	private static final TypeVariable<Class<List>> _LIST_TYPE_PARAMETER =

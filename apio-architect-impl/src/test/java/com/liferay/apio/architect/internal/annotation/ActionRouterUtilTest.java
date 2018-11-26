@@ -14,9 +14,9 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.execute;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParamClasses;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getResource;
-import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.updateReturn;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 
@@ -24,6 +24,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
@@ -54,6 +55,13 @@ import org.junit.Test;
  * @author Javier Gamarra
  */
 public class ActionRouterUtilTest {
+
+	@Test
+	public void testExecuteReturnLeavesNullAsNull() throws Throwable {
+		Object result = execute(Paged.of("name"), emptyList(), __ -> null);
+
+		assertNull(result);
+	}
 
 	@Test
 	public void testGetParamClassesFromMethodWithIdAndBody()
@@ -129,16 +137,11 @@ public class ActionRouterUtilTest {
 	}
 
 	@Test
-	public void testUpdateReturnLeavesNullAsNull() {
-		Object object = updateReturn(null, emptyList(), "name");
+	public void testUpdateReturnTransformsListIntoPage() throws Throwable {
+		Object object = execute(
+			Paged.of("name"), emptyList(), __ -> singletonList("1"));
 
-		assertNull(object);
-	}
-
-	@Test
-	public void testUpdateReturnTransformsListIntoPage() {
-		Object object = updateReturn(singletonList("1"), emptyList(), "name");
-
+		assertThat(object, is(notNullValue()));
 		assertThat(object, is(instanceOf(Page.class)));
 
 		Page<?> page = (Page<?>)object;
@@ -156,14 +159,17 @@ public class ActionRouterUtilTest {
 	}
 
 	@Test
-	public void testUpdateReturnTransformsPageItemsIntoPageWithoutParam() {
+	public void testUpdateReturnTransformsPageItemsIntoPageWithoutParam()
+		throws Throwable {
+
 		PageItems<?> pageItems = new PageItems<>(singletonList("1"), 31);
 
-		Object object = updateReturn(pageItems, emptyList(), "name");
+		Object result = execute(Paged.of("name"), emptyList(), __ -> pageItems);
 
-		assertThat(object, is(instanceOf(Page.class)));
+		assertThat(result, is(notNullValue()));
+		assertThat(result, is(instanceOf(Page.class)));
 
-		Page<?> page = (Page<?>)object;
+		Page<?> page = (Page<?>)result;
 
 		assertThat(page.getItems(), contains("1"));
 		assertThat(page.getItemsPerPage(), is(31));
@@ -178,17 +184,20 @@ public class ActionRouterUtilTest {
 	}
 
 	@Test
-	public void testUpdateReturnTransformsPageItemsIntoPageWithParam() {
+	public void testUpdateReturnTransformsPageItemsIntoPageWithParam()
+		throws Throwable {
+
 		PageItems<?> pageItems = new PageItems<>(singletonList("1"), 31);
 
 		Pagination pagination = new PaginationImpl(30, 2);
 
-		Object object = updateReturn(
-			pageItems, singletonList(pagination), "name");
+		Object result = execute(
+			Paged.of("name"), singletonList(pagination), __ -> pageItems);
 
-		assertThat(object, is(instanceOf(Page.class)));
+		assertThat(result, is(notNullValue()));
+		assertThat(result, is(instanceOf(Page.class)));
 
-		Page<?> page = (Page<?>)object;
+		Page<?> page = (Page<?>)result;
 
 		assertThat(page.getItems(), contains("1"));
 		assertThat(page.getItemsPerPage(), is(30));

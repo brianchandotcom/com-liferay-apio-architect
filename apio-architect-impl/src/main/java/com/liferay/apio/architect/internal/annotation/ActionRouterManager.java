@@ -15,12 +15,11 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.execute;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getFormOptional;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParamClasses;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getResource;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getReturnClass;
-import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.updateParams;
-import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.updateReturn;
 import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findAnnotation;
 import static com.liferay.apio.architect.internal.annotation.util.BodyUtil.isListBody;
 import static com.liferay.apio.architect.internal.annotation.util.BodyUtil.needsBody;
@@ -42,6 +41,7 @@ import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.url.ServerURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
@@ -140,14 +140,14 @@ public class ActionRouterManager {
 	private Option<ActionSemantics> _getActionSemanticsOption(
 		ActionRouter actionRouter, Method method, String name) {
 
-		Optional<Action> annotationOptional = findAnnotation(
+		Optional<Action> actionAnnotationOptional = findAnnotation(
 			Action.class, method);
 
-		if (!annotationOptional.isPresent()) {
+		if (!actionAnnotationOptional.isPresent()) {
 			return Option.none();
 		}
 
-		Action action = annotationOptional.get();
+		Action action = actionAnnotationOptional.get();
 
 		Optional<Form<Object>> formOptional = getFormOptional(
 			method, _formManager::getFormOptional);
@@ -160,26 +160,19 @@ public class ActionRouterManager {
 			return none();
 		}
 
-		Class<?>[] paramClasses = getParamClasses(method);
-
-		Class<?> returnClass = getReturnClass(method);
+		Resource resource = getResource(method, name);
 
 		ActionSemantics actionSemantics = ActionSemantics.ofResource(
-			getResource(method, name)
+			resource
 		).name(
 			action.name()
 		).method(
 			action.httpMethod()
 		).returns(
-			returnClass
+			getReturnClass(method)
 		).executeFunction(
-			paramInstances -> {
-				Object[] updatedParams = updateParams(paramInstances);
-
-				Object result = method.invoke(actionRouter, updatedParams);
-
-				return updateReturn(result, paramInstances, name);
-			}
+			params -> execute(
+				resource, params, array -> method.invoke(actionRouter, array))
 		).bodyFunction(
 			body -> formOptional.map(
 				form -> isListBody(method) ? form.getList(body) : form.get(body)
@@ -187,7 +180,7 @@ public class ActionRouterManager {
 				null
 			)
 		).receivesParams(
-			paramClasses
+			getParamClasses(method)
 		).annotatedWith(
 			method.getDeclaredAnnotations()
 		).build();
