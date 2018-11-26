@@ -18,9 +18,11 @@ import static com.liferay.apio.architect.internal.message.json.ld.JSONLDMessageM
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
+import com.liferay.apio.architect.form.FieldType;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField;
 import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 
@@ -108,7 +110,8 @@ public class JSONLDDocumentationMessageMapper
 
 	@Override
 	public void mapProperty(
-		JSONObjectBuilder jsonObjectBuilder, String fieldName,
+		JSONObjectBuilder jsonObjectBuilder,
+		DocumentationField documentationField,
 		String description) {
 
 		jsonObjectBuilder.field(

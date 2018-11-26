@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.internal.message.json;
 
 import com.liferay.apio.architect.internal.documentation.Documentation;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField;
 import com.liferay.apio.architect.operation.Operation;
 
 /**
@@ -56,8 +57,8 @@ public interface DocumentationMessageMapper
 	}
 
 	public default void mapProperty(
-		JSONObjectBuilder jsonObjectBuilder, String fieldName,
-		String description) {
+		JSONObjectBuilder jsonObjectBuilder,
+		DocumentationField documentationField, String description) {
 	}
 
 	public default void mapResource(
