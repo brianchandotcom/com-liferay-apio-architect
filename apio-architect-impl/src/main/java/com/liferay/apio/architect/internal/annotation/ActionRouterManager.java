@@ -40,7 +40,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import com.liferay.apio.architect.annotation.Actions.Action;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
-import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
@@ -57,7 +56,6 @@ import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
@@ -162,12 +160,6 @@ public class ActionRouterManager {
 			return none();
 		}
 
-		Function<Body, Object> bodyFunction = body -> formOptional.map(
-			form -> isListBody(method) ? form.getList(body) : form.get(body)
-		).orElse(
-			null
-		);
-
 		Class<?>[] paramClasses = getParamClasses(method);
 
 		Class<?> returnClass = getReturnClass(method);
@@ -182,13 +174,18 @@ public class ActionRouterManager {
 			returnClass
 		).executeFunction(
 			paramInstances -> {
-				Object[] updatedParams = updateParams(
-					paramInstances, bodyFunction);
+				Object[] updatedParams = updateParams(paramInstances);
 
 				Object result = method.invoke(actionRouter, updatedParams);
 
 				return updateReturn(result, paramInstances, name);
 			}
+		).bodyFunction(
+			body -> formOptional.map(
+				form -> isListBody(method) ? form.getList(body) : form.get(body)
+			).orElse(
+				null
+			)
 		).receivesParams(
 			paramClasses
 		).annotatedWith(

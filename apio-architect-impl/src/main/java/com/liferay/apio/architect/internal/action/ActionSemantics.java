@@ -17,6 +17,7 @@ package com.liferay.apio.architect.internal.action;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 
+import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.internal.annotation.Action;
@@ -30,6 +31,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Instances of this class contains semantic information about an action like
@@ -78,6 +80,20 @@ public final class ActionSemantics {
 	 */
 	public List<Annotation> getAnnotations() {
 		return unmodifiableList(_annotations);
+	}
+
+	/**
+	 * Returns the transformed body value needed for the action, if needed.
+	 * Returns {@code null} otherwise.
+	 *
+	 * @review
+	 */
+	public Object getBodyValue(Body body) {
+		if (_bodyFunction == null) {
+			return null;
+		}
+
+		return _bodyFunction.apply(body);
 	}
 
 	/**
@@ -155,6 +171,7 @@ public final class ActionSemantics {
 		ActionSemantics actionSemantics = new ActionSemantics();
 
 		actionSemantics._annotations = annotations;
+		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeFunction = _executeFunction;
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
@@ -183,6 +200,7 @@ public final class ActionSemantics {
 		ActionSemantics actionSemantics = new ActionSemantics();
 
 		actionSemantics._annotations = _annotations;
+		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeFunction = _executeFunction;
 		actionSemantics._method = method;
 		actionSemantics._name = _name;
@@ -211,6 +229,7 @@ public final class ActionSemantics {
 		ActionSemantics actionSemantics = new ActionSemantics();
 
 		actionSemantics._annotations = _annotations;
+		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeFunction = _executeFunction;
 		actionSemantics._method = _method;
 		actionSemantics._name = name;
@@ -239,6 +258,7 @@ public final class ActionSemantics {
 		ActionSemantics actionSemantics = new ActionSemantics();
 
 		actionSemantics._annotations = _annotations;
+		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeFunction = _executeFunction;
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
@@ -267,6 +287,7 @@ public final class ActionSemantics {
 		ActionSemantics actionSemantics = new ActionSemantics();
 
 		actionSemantics._annotations = _annotations;
+		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeFunction = _executeFunction;
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
@@ -294,6 +315,13 @@ public final class ActionSemantics {
 		@Override
 		public FinalStep annotatedWith(Annotation... annotations) {
 			_actionSemantics._annotations = Arrays.asList(annotations);
+
+			return this;
+		}
+
+		@Override
+		public FinalStep bodyFunction(Function<Body, Object> bodyFunction) {
+			_actionSemantics._bodyFunction = bodyFunction;
 
 			return this;
 		}
@@ -393,6 +421,19 @@ public final class ActionSemantics {
 		public FinalStep annotatedWith(Annotation... annotations);
 
 		/**
+		 * Provides information about the function used to transform the body
+		 * value into the object needed by the action.
+		 *
+		 * <p>
+		 * If the action does not need information from the body, this method
+		 * shouldn't be called.
+		 * </p>
+		 *
+		 * @review
+		 */
+		public FinalStep bodyFunction(Function<Body, Object> bodyFunction);
+
+		/**
 		 * Creates the {@link ActionSemantics} object with the information
 		 * provided to the builder.
 		 *
@@ -463,6 +504,7 @@ public final class ActionSemantics {
 	}
 
 	private List<Annotation> _annotations = new ArrayList<>();
+	private Function<Body, Object> _bodyFunction;
 	private CheckedFunction1<List<?>, ?> _executeFunction;
 	private String _method;
 	private String _name;

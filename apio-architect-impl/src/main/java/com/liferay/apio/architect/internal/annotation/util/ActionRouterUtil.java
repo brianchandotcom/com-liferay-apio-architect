@@ -204,19 +204,12 @@ public class ActionRouterUtil {
 	 * Updates the list
 	 *
 	 * @param paramInstances
-	 * @param bodyFunction
 	 * @return
 	 */
-	public static Object[] updateParams(
-		List<?> paramInstances, Function<Body, Object> bodyFunction) {
-
+	public static Object[] updateParams(List<?> paramInstances) {
 		Object[] updatedParams = paramInstances.toArray(new Object[0]);
 
 		for (int i = 0; i < paramInstances.size(); i++) {
-			if (updatedParams[i] instanceof Body) {
-				updatedParams[i] = bodyFunction.apply((Body)updatedParams[i]);
-			}
-
 			if (updatedParams[i] instanceof Resource.Id) {
 				updatedParams[i] = ((Resource.Id)updatedParams[i]).asObject();
 			}

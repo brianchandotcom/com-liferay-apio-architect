@@ -315,7 +315,7 @@ public class ActionManagerImpl implements ActionManager {
 		);
 	}
 
-	private Object _getBody(HttpServletRequest request) {
+	private Body _getBody(HttpServletRequest request) {
 		MediaType mediaType = Try.of(
 			() -> MediaType.valueOf(request.getContentType())
 		).getOrElseThrow(
@@ -355,7 +355,7 @@ public class ActionManagerImpl implements ActionManager {
 		}
 
 		if (Body.class.equals(clazz)) {
-			return _getBody(request);
+			return actionSemantics.getBodyValue(_getBody(request));
 		}
 
 		if (Id.class.equals(clazz)) {

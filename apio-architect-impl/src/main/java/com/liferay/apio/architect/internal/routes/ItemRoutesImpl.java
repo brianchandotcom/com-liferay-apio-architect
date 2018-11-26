@@ -129,9 +129,18 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(formBuilderFunction);
+			Optional<Form> optionalForm = Optional.ofNullable(
+				formBuilderFunction
+			).map(
+				function -> function.apply(
+					unsafeCast(_formBuilderSupplier.get()))
+			);
 
-			Class<?> bodyClass = form == null ? Void.class : Body.class;
+			Class<?> bodyClass = optionalForm.<Class<?>>map(
+				__ -> Body.class
+			).orElse(
+				Void.class
+			);
 
 			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
 				_item
@@ -146,10 +155,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					t -> new SingleModelImpl<>(
 						t, _getResourceName(identifierClass))
 				).apply(
-					_getId(params.get(0)),
-					_getModel(form, () -> (Body)params.get(1)),
+					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
+				)
+			).bodyFunction(
+				body -> optionalForm.map(
+					form -> form.get(body)
+				).orElse(
+					null
 				)
 			).receivesParams(
 				Id.class, bodyClass, aClass, bClass, cClass, dClass
@@ -229,7 +243,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			HasUpdatePermissionFunction<S> hasUpdatePermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(formBuilderFunction);
+			Form form = formBuilderFunction.apply(
+				unsafeCast(_formBuilderSupplier.get()));
 
 			ActionSemantics actionSemantics = ActionSemantics.ofResource(
 				_item
@@ -243,10 +258,12 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				params -> updaterThrowableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.name())
 				).apply(
-					_getId(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
+			).bodyFunction(
+				form::get
 			).receivesParams(
 				Id.class, Body.class, aClass, bClass, cClass, dClass
 			).build();
@@ -261,29 +278,10 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return new ItemRoutesImpl<>(this);
 		}
 
-		@SuppressWarnings("unchecked")
-		private <R> Form<R> _getForm(
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			if (formBuilderFunction != null) {
-				return formBuilderFunction.apply(_formBuilderSupplier.get());
-			}
-
-			return null;
-		}
-
 		private S _getId(Object object) {
 			Resource.Id id = (Resource.Id)object;
 
 			return unsafeCast(id.asObject());
-		}
-
-		private <R> R _getModel(Form<R> form, Supplier<Body> body) {
-			if (form != null) {
-				return form.get(body.get());
-			}
-
-			return null;
 		}
 
 		private <I extends Identifier<?>> String _getResourceName(

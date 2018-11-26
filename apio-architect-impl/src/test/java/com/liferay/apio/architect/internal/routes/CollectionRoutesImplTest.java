@@ -419,7 +419,8 @@ public class CollectionRoutesImplTest {
 		assertThat(actionSemantics.getAnnotations(), hasSize(0));
 
 		BatchResult<?> batchResult = Try.of(
-			() -> actionSemantics.execute(getParams(paramClasses))
+			() -> actionSemantics.execute(
+				getParams(actionSemantics, paramClasses))
 		).map(
 			BatchResult.class::cast
 		).get();
@@ -444,7 +445,8 @@ public class CollectionRoutesImplTest {
 		assertThat(annotation.annotationType(), is(equalTo(EntryPoint.class)));
 
 		Page<?> page = Try.of(
-			() -> actionSemantics.execute(getParams(paramClasses))
+			() -> actionSemantics.execute(
+				getParams(actionSemantics, paramClasses))
 		).map(
 			Page.class::cast
 		).get();
@@ -472,7 +474,8 @@ public class CollectionRoutesImplTest {
 		assertThat(actionSemantics.getAnnotations(), hasSize(0));
 
 		SingleModel<?> singleModel = Try.of(
-			() -> actionSemantics.execute(getParams(paramClasses))
+			() -> actionSemantics.execute(
+				getParams(actionSemantics, paramClasses))
 		).map(
 			SingleModel.class::cast
 		).get();

@@ -133,7 +133,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				hasNestedAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(formBuilderFunction);
+			Form form = formBuilderFunction.apply(
+				unsafeCast(_formBuilderSupplier.get()));
 
 			ActionSemantics batchCreateActionSemantics =
 				ActionSemantics.ofResource(
@@ -148,11 +149,12 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					params -> batchCreatorThrowableHexaFunction.andThen(
 						t -> new BatchResult<>(t, _nested.name())
 					).apply(
-						_getId(params.get(0)),
-						form.getList((Body)params.get(1)),
+						_getId(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 						unsafeCast(params.get(4)), unsafeCast(params.get(5))
 					)
+				).bodyFunction(
+					form::getList
 				).receivesParams(
 					ParentId.class, Body.class, aClass, bClass, cClass, dClass
 				).build();
@@ -171,10 +173,12 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				params -> creatorThrowableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _nested.name())
 				).apply(
-					_getId(params.get(0)), form.get((Body)params.get(1)),
+					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
+			).bodyFunction(
+				form::get
 			).receivesParams(
 				ParentId.class, Body.class, aClass, bClass, cClass, dClass
 			).build();
@@ -220,13 +224,6 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		@Override
 		public NestedCollectionRoutes<T, S, U> build() {
 			return new NestedCollectionRoutesImpl<>(this);
-		}
-
-		@SuppressWarnings("unchecked")
-		private <R> Form<R> _getForm(
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			return formBuilderFunction.apply(_formBuilderSupplier.get());
 		}
 
 		private U _getId(Object object) {

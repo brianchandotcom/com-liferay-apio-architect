@@ -177,50 +177,6 @@ public class RoutesTestUtil {
 	};
 
 	/**
-	 * A function that provides instances of {@code String}, {@code Long},
-	 * {@code Integer}, {@code Boolean}, {@code Float}, {@code Pagination}, and
-	 * {@code Credentials}.
-	 */
-	public static final Function<Class<?>, ?> PROVIDE_FUNCTION = aClass -> {
-		if (aClass.equals(String.class)) {
-			return "Apio";
-		}
-		else if (aClass.equals(Long.class)) {
-			return 42L;
-		}
-		else if (aClass.equals(Integer.class)) {
-			return 2017;
-		}
-		else if (aClass.equals(Boolean.class)) {
-			return true;
-		}
-		else if (aClass.equals(Float.class)) {
-			return 0.1F;
-		}
-		else if (aClass.equals(Pagination.class)) {
-			return PAGINATION;
-		}
-		else if (aClass.equals(Credentials.class)) {
-			return CREDENTIALS;
-		}
-		else if (aClass.equals(Body.class)) {
-			return TestBody.INSTANCE;
-		}
-		else if (aClass.equals(Void.class)) {
-			return null;
-		}
-		else if (aClass.equals(Id.class)) {
-			return Resource.Id.of(42L, "42L");
-		}
-		else if (aClass.equals(ParentId.class)) {
-			return Resource.Id.of(21L, "21");
-		}
-		else {
-			throw new AssertionError("Class " + aClass + " is not supported");
-		}
-	};
-
-	/**
 	 * Filters a list of {@link ActionSemantics} using the provided builder and
 	 * returns the first occurrence. It also check that there is only one
 	 * occurrence that matches the predicate.
@@ -246,15 +202,17 @@ public class RoutesTestUtil {
 
 	/**
 	 * Converts a list of param classes into param instances using the {@link
-	 * #PROVIDE_FUNCTION}.
+	 * #provide(ActionSemantics, Class)} method.
 	 *
 	 * @review
 	 */
-	public static List<?> getParams(List<Class<?>> params) {
+	public static List<?> getParams(
+		ActionSemantics actionSemantics, List<Class<?>> params) {
+
 		Stream<Class<?>> stream = params.stream();
 
 		return stream.map(
-			PROVIDE_FUNCTION
+			aClass -> provide(actionSemantics, aClass)
 		).collect(
 			Collectors.toList()
 		);
@@ -283,6 +241,54 @@ public class RoutesTestUtil {
 				addAll(list);
 			}
 		};
+	}
+
+	/**
+	 * Provides instances of {@code String}, {@code Long}, {@code Integer},
+	 * {@code Boolean}, {@code Float}, {@code Pagination}, {@code Credentials},
+	 * {@code Body}, {@code Void}, {@code ID} and {@code ParentId}.
+	 *
+	 * @review
+	 */
+	public static Object provide(
+		ActionSemantics actionSemantics, Class<?> aClass) {
+
+		if (aClass.equals(String.class)) {
+			return "Apio";
+		}
+		else if (aClass.equals(Long.class)) {
+			return 42L;
+		}
+		else if (aClass.equals(Integer.class)) {
+			return 2017;
+		}
+		else if (aClass.equals(Boolean.class)) {
+			return true;
+		}
+		else if (aClass.equals(Float.class)) {
+			return 0.1F;
+		}
+		else if (aClass.equals(Pagination.class)) {
+			return PAGINATION;
+		}
+		else if (aClass.equals(Credentials.class)) {
+			return CREDENTIALS;
+		}
+		else if (aClass.equals(Body.class)) {
+			return actionSemantics.getBodyValue(TestBody.INSTANCE);
+		}
+		else if (aClass.equals(Void.class)) {
+			return null;
+		}
+		else if (aClass.equals(Id.class)) {
+			return Resource.Id.of(42L, "42L");
+		}
+		else if (aClass.equals(ParentId.class)) {
+			return Resource.Id.of(21L, "21");
+		}
+		else {
+			throw new AssertionError("Class " + aClass + " is not supported");
+		}
 	}
 
 	/**

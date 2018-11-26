@@ -147,7 +147,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(formBuilderFunction);
+			Form<?> form = formBuilderFunction.apply(
+				unsafeCast(_formBuilderSupplier.get()));
 
 			ActionSemantics batchCreateActionSemantics =
 				ActionSemantics.ofResource(
@@ -162,10 +163,12 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					params -> batchCreatorThrowablePentaFunction.andThen(
 						t -> new BatchResult<>(t, _paged.name())
 					).apply(
-						form.getList((Body)params.get(0)),
-						unsafeCast(params.get(1)), unsafeCast(params.get(2)),
-						unsafeCast(params.get(3)), unsafeCast(params.get(4))
+						unsafeCast(params.get(0)), unsafeCast(params.get(1)),
+						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
+						unsafeCast(params.get(4))
 					)
+				).bodyFunction(
+					form::getList
 				).receivesParams(
 					Body.class, aClass, bClass, cClass, dClass
 				).build();
@@ -184,10 +187,12 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				params -> creatorThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _paged.name())
 				).apply(
-					form.get((Body)params.get(0)), unsafeCast(params.get(1)),
+					unsafeCast(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
+			).bodyFunction(
+				form::get
 			).receivesParams(
 				Body.class, aClass, bClass, cClass, dClass
 			).build();
@@ -208,9 +213,18 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				Function<Credentials, Boolean> permissionFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
-			Form<R> form = _getForm(formBuilderFunction);
+			Optional<Form> optionalForm = Optional.ofNullable(
+				formBuilderFunction
+			).map(
+				function -> function.apply(
+					unsafeCast(_formBuilderSupplier.get()))
+			);
 
-			Class<?> bodyClass = form == null ? Void.class : Body.class;
+			Class<?> bodyClass = optionalForm.<Class<?>>map(
+				__ -> Body.class
+			).orElse(
+				Void.class
+			);
 
 			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
 				_paged
@@ -225,10 +239,15 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					t -> new SingleModelImpl<>(
 						t, _getResourceName(identifierClass))
 				).apply(
-					(Pagination)params.get(0),
-					_getModel(form, () -> (Body)params.get(1)),
+					(Pagination)params.get(0), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
+				)
+			).bodyFunction(
+				body -> optionalForm.map(
+					form -> form.get(body)
+				).orElse(
+					null
 				)
 			).receivesParams(
 				Pagination.class, bodyClass, aClass, bClass, cClass, dClass
@@ -277,25 +296,6 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		@Override
 		public CollectionRoutes<T, S> build() {
 			return new CollectionRoutesImpl<>(this);
-		}
-
-		@SuppressWarnings("unchecked")
-		private <R> Form<R> _getForm(
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			if (formBuilderFunction != null) {
-				return formBuilderFunction.apply(_formBuilderSupplier.get());
-			}
-
-			return null;
-		}
-
-		private <R> R _getModel(Form<R> form, Supplier<Body> body) {
-			if (form != null) {
-				return form.get(body.get());
-			}
-
-			return null;
 		}
 
 		private <I extends Identifier> String _getResourceName(Class<I> clazz) {
