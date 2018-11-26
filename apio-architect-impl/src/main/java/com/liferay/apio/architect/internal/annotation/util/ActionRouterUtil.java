@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.internal.annotation.util;
 
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
-import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.getAnnotationFromParametersOptional;
+import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findAnnotationInAnyParameter;
 
 import static io.leangen.geantyref.GenericTypeReflector.getTypeParameter;
 
@@ -26,7 +26,6 @@ import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.ParentId;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.form.Body;
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
@@ -41,15 +40,12 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import io.vavr.CheckedFunction1;
-import io.vavr.control.Option;
 
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.Parameter;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -59,10 +55,7 @@ import java.util.stream.Stream;
  * @author Javier Gamarra
  * @review
  */
-public class ActionRouterUtil {
-
-	public static final Class<com.liferay.apio.architect.annotation.Body>
-		BODY_ANNOTATION = com.liferay.apio.architect.annotation.Body.class;
+public final class ActionRouterUtil {
 
 	/**
 	 * Executes the provided {@code actionExecuteFunction} and returns its
@@ -113,11 +106,25 @@ public class ActionRouterUtil {
 			}
 
 			if (result instanceof List) {
-				return getPage((List<?>)result, resource.name());
+				List<?> list = (List<?>)result;
+
+				PageItems<?> pageItems = new PageItems<>(list, list.size());
+
+				Pagination pagination = new PaginationImpl(list.size(), 1);
+
+				return new PageImpl<>(
+					resource.name(), pageItems, pagination, emptyList());
 			}
 
 			if (result instanceof PageItems) {
-				return getPage((PageItems<?>)result, params, resource.name());
+				PageItems<?> pageItems = (PageItems<?>)result;
+
+				Pagination pagination = getInstanceOf(
+					params, Pagination.class,
+					new PaginationImpl(pageItems.getTotalCount(), 1));
+
+				return new PageImpl<>(
+					resource.name(), pageItems, pagination, emptyList());
 			}
 
 			return new SingleModelImpl<>(result, resource.name());
@@ -131,78 +138,44 @@ public class ActionRouterUtil {
 		}
 	}
 
-	public static Option<Class<?>> getBodyResourceClass(Method method) {
-		return Stream.of(
-			method.getParameters()
-		).filter(
-			annotatedType -> annotatedType.isAnnotationPresent(BODY_ANNOTATION)
-		).findFirst(
-		).map(
-			Option::of
-		).orElseGet(
-			Option::none
-		).flatMap(
-			parameter -> {
-				Class<?> parameterClass = parameter.getType();
+	public static String getBodyResourceClassName(Method method) {
+		for (Parameter parameter : method.getParameters()) {
+			if (parameter.isAnnotationPresent(_BODY_ANNOTATION)) {
+				Class<?> parameterType = parameter.getType();
 
-				if (parameterClass.equals(List.class)) {
-					AnnotatedType annotatedType = parameter.getAnnotatedType();
-
-					return Option.of(
-						getTypeParameter(annotatedType, _LIST_TYPE_PARAMETER)
-					).map(
-						AnnotatedType::getType
-					).map(
-						type -> type instanceof Class ? (Class<?>)type : null
-					);
+				if (!List.class.isAssignableFrom(parameterType)) {
+					return parameterType.getName();
 				}
 
-				return Option.of(parameterClass);
+				AnnotatedType typeParameter = getTypeParameter(
+					parameter.getAnnotatedType(),
+					List.class.getTypeParameters()[0]);
+
+				if (Class.class.isInstance(typeParameter.getType())) {
+					return ((Class)typeParameter.getType()).getName();
+				}
 			}
-		);
+		}
+
+		return null;
 	}
 
-	public static Optional<Form<Object>> getFormOptional(
-		Method method, Function<String, Optional<Form<Object>>> function) {
+	public static <T> T getInstanceOf(
+		List<?> list, Class<T> searchedClass, T defaultValue) {
 
-		return Option.narrow(
-			getBodyResourceClass(method)
-		).map(
-			Class::getName
-		).flatMap(
-			className -> Option.ofOptional(function.apply(className))
-		).toJavaOptional();
-	}
+		for (Object object : list) {
+			if (searchedClass.isInstance(object)) {
+				return searchedClass.cast(object);
+			}
+		}
 
-	public static Page getPage(List<?> list, String name) {
-		PageItems<?> pageItems = new PageItems<>(list, list.size());
-
-		Pagination pagination = new PaginationImpl(list.size(), 1);
-
-		return new PageImpl<>(name, pageItems, pagination, emptyList());
-	}
-
-	public static Object getPage(
-		PageItems<?> pageItems, List<?> paramInstances, String name) {
-
-		Stream<?> stream = paramInstances.stream();
-
-		Pagination pagination = stream.filter(
-			Pagination.class::isInstance
-		).map(
-			Pagination.class::cast
-		).findFirst(
-		).orElseGet(
-			() -> new PaginationImpl(pageItems.getTotalCount(), 1)
-		);
-
-		return new PageImpl<>(name, pageItems, pagination, emptyList());
+		return defaultValue;
 	}
 
 	public static Class<?>[] getParamClasses(Method method) {
 		return Stream.of(
 			method.getParameters()
-		).<Class<?>>map(
+		).map(
 			parameter -> {
 				if (parameter.getAnnotation(Id.class) != null) {
 					return Id.class;
@@ -210,7 +183,7 @@ public class ActionRouterUtil {
 				else if (parameter.getAnnotation(ParentId.class) != null) {
 					return ParentId.class;
 				}
-				else if (parameter.getAnnotation(BODY_ANNOTATION) != null) {
+				else if (parameter.getAnnotation(_BODY_ANNOTATION) != null) {
 					return Body.class;
 				}
 
@@ -222,12 +195,10 @@ public class ActionRouterUtil {
 	}
 
 	public static Resource getResource(Method method, String name) {
-		Optional<ParentId> optionalParentId =
-			getAnnotationFromParametersOptional(method, ParentId.class);
+		ParentId parentId = findAnnotationInAnyParameter(
+			method, ParentId.class);
 
-		if (optionalParentId.isPresent()) {
-			ParentId parentId = optionalParentId.get();
-
+		if (parentId != null) {
 			Class<? extends Identifier<?>> typeClass = parentId.value();
 
 			Type type = typeClass.getAnnotation(Type.class);
@@ -237,10 +208,9 @@ public class ActionRouterUtil {
 			return Nested.of(parent, name);
 		}
 
-		Optional<Id> optionalId = getAnnotationFromParametersOptional(
-			method, Id.class);
+		Id id = findAnnotationInAnyParameter(method, Id.class);
 
-		if (optionalId.isPresent()) {
+		if (id != null) {
 			return Item.of(name);
 		}
 
@@ -269,7 +239,24 @@ public class ActionRouterUtil {
 		return returnType;
 	}
 
-	private static final TypeVariable<Class<List>> _LIST_TYPE_PARAMETER =
-		List.class.getTypeParameters()[0];
+	public static boolean isListBody(Method method) {
+		for (Parameter parameter : method.getParameters()) {
+			if (parameter.isAnnotationPresent(_BODY_ANNOTATION)) {
+				return List.class.isAssignableFrom(parameter.getType());
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean needsParameterFromBody(Method method) {
+		return nonNull(findAnnotationInAnyParameter(method, _BODY_ANNOTATION));
+	}
+
+	private ActionRouterUtil() {
+	}
+
+	private static final Class<com.liferay.apio.architect.annotation.Body>
+		_BODY_ANNOTATION = com.liferay.apio.architect.annotation.Body.class;
 
 }

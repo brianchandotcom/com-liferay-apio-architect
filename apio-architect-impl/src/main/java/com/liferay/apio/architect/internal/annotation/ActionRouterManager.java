@@ -16,13 +16,13 @@ package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.execute;
-import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getFormOptional;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getBodyResourceClassName;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParamClasses;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getResource;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getReturnClass;
-import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findAnnotation;
-import static com.liferay.apio.architect.internal.annotation.util.BodyUtil.isListBody;
-import static com.liferay.apio.architect.internal.annotation.util.BodyUtil.needsBody;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.isListBody;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.needsParameterFromBody;
+import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findAnnotationInMethodOrInItsAnnotations;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
 import static io.leangen.geantyref.GenericTypeReflector.annotate;
@@ -140,19 +140,17 @@ public class ActionRouterManager {
 	private Option<ActionSemantics> _getActionSemanticsOption(
 		ActionRouter actionRouter, Method method, String name) {
 
-		Optional<Action> actionAnnotationOptional = findAnnotation(
-			Action.class, method);
+		Action action = findAnnotationInMethodOrInItsAnnotations(
+			method, Action.class);
 
-		if (!actionAnnotationOptional.isPresent()) {
+		if (action == null) {
 			return Option.none();
 		}
 
-		Action action = actionAnnotationOptional.get();
+		Optional<Form<Object>> formOptional = _formManager.getFormOptional(
+			getBodyResourceClassName(method));
 
-		Optional<Form<Object>> formOptional = getFormOptional(
-			method, _formManager::getFormOptional);
-
-		if (needsBody(method) && !formOptional.isPresent()) {
+		if (needsParameterFromBody(method) && !formOptional.isPresent()) {
 			_logger.warn(
 				"Unable to find form for method with name: {}",
 				method.getName());

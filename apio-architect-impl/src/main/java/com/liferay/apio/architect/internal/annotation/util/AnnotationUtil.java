@@ -14,65 +14,45 @@
 
 package com.liferay.apio.architect.internal.annotation.util;
 
-import static java.util.Objects.nonNull;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
 /**
  * @author Javier Gamarra
  */
-public class AnnotationUtil {
+public final class AnnotationUtil {
 
-	public static <A extends Annotation> Optional<A> findAnnotation(
-		Class<A> annotationClass, Method method) {
+	public static <A extends Annotation> A findAnnotationInAnyParameter(
+		Method method, Class<A> annotationClass) {
 
-		return Optional.ofNullable(
-			method.getAnnotation(annotationClass)
-		).map(
-			Optional::of
-		).orElseGet(
-			() -> Stream.of(
-				method.getAnnotations()
-			).map(
-				Annotation::annotationType
-			).map(
-				Class::getAnnotations
-			).flatMap(
-				Stream::of
-			).filter(
-				annotationClass::isInstance
-			).map(
-				annotationClass::cast
-			).findFirst()
-		);
+		for (Parameter parameter : method.getParameters()) {
+			if (parameter.isAnnotationPresent(annotationClass)) {
+				return parameter.getAnnotation(annotationClass);
+			}
+		}
+
+		return null;
 	}
 
-	public static <A extends Annotation> Optional<A>
-		getAnnotationFromParametersOptional(
+	public static <A extends Annotation> A
+		findAnnotationInMethodOrInItsAnnotations(
 			Method method, Class<A> annotationClass) {
 
-		return Stream.of(
-			method.getParameterAnnotations()
-		).flatMap(
-			Stream::of
-		).filter(
-			annotationType -> annotationClass.isAssignableFrom(
-				annotationType.getClass())
-		).map(
-			annotationClass::cast
-		).findFirst();
-	}
+		if (method.isAnnotationPresent(annotationClass)) {
+			return method.getAnnotation(annotationClass);
+		}
 
-	public static <A extends Annotation> Predicate<Parameter> hasAnnotation(
-		Class<A> annotationClass) {
+		for (Annotation annotation : method.getAnnotations()) {
+			Class<? extends Annotation> annotationType =
+				annotation.annotationType();
 
-		return parameter -> nonNull(parameter.getAnnotation(annotationClass));
+			if (annotationType.isAnnotationPresent(annotationClass)) {
+				return annotationType.getAnnotation(annotationClass);
+			}
+		}
+
+		return null;
 	}
 
 	private AnnotationUtil() {
