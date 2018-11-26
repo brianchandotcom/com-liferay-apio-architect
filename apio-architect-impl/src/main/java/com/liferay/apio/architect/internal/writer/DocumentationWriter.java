@@ -364,7 +364,7 @@ public class DocumentationWriter {
 		JSONObjectBuilder operationJsonObjectBuilder = new JSONObjectBuilder();
 
 		String customDocumentation = _getCustomDocumentation(
-			name + "/" + actionSemantics.name());
+			name + "/" + actionSemantics.getActionName());
 
 		_documentationMessageMapper.mapAction(
 			operationJsonObjectBuilder, name, type, actionSemantics,

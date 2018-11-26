@@ -56,7 +56,6 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;
 
 import java.lang.annotation.Annotation;
@@ -411,19 +410,16 @@ public class CollectionRoutesImplTest {
 	private void _testBatchCreateActionSemantics(
 		List<Class<?>> paramClasses, ActionSemantics actionSemantics) {
 
-		assertThat(actionSemantics.method(), is("POST"));
-		assertThat(actionSemantics.name(), is("batch-create"));
-		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Paged.of("name")));
+		assertThat(actionSemantics.getHTTPMethod(), is("POST"));
+		assertThat(actionSemantics.getActionName(), is("batch-create"));
+		assertThat(actionSemantics.getParamClasses(), is(paramClasses));
+		assertThat(actionSemantics.getResource(), is(Paged.of("name")));
 		assertThat(
-			actionSemantics.returnClass(), is(equalTo(BatchResult.class)));
-		assertThat(actionSemantics.annotations(), hasSize(0));
-
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
+			actionSemantics.getReturnClass(), is(equalTo(BatchResult.class)));
+		assertThat(actionSemantics.getAnnotations(), hasSize(0));
 
 		BatchResult<?> batchResult = Try.of(
-			() -> executeFunction.apply(getParams(paramClasses))
+			() -> actionSemantics.execute(getParams(paramClasses))
 		).map(
 			BatchResult.class::cast
 		).get();
@@ -434,24 +430,21 @@ public class CollectionRoutesImplTest {
 	private void _testRetrieveActionSemantics(
 		List<Class<?>> paramClasses, ActionSemantics actionSemantics) {
 
-		assertThat(actionSemantics.method(), is("GET"));
-		assertThat(actionSemantics.name(), is("retrieve"));
-		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Paged.of("name")));
-		assertThat(actionSemantics.returnClass(), is(equalTo(Page.class)));
-		assertThat(actionSemantics.annotations(), hasSize(1));
+		assertThat(actionSemantics.getHTTPMethod(), is("GET"));
+		assertThat(actionSemantics.getActionName(), is("retrieve"));
+		assertThat(actionSemantics.getParamClasses(), is(paramClasses));
+		assertThat(actionSemantics.getResource(), is(Paged.of("name")));
+		assertThat(actionSemantics.getReturnClass(), is(equalTo(Page.class)));
+		assertThat(actionSemantics.getAnnotations(), hasSize(1));
 
-		List<Annotation> annotations = actionSemantics.annotations();
+		List<Annotation> annotations = actionSemantics.getAnnotations();
 
 		Annotation annotation = annotations.get(0);
 
 		assertThat(annotation.annotationType(), is(equalTo(EntryPoint.class)));
 
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
-
 		Page<?> page = Try.of(
-			() -> executeFunction.apply(getParams(paramClasses))
+			() -> actionSemantics.execute(getParams(paramClasses))
 		).map(
 			Page.class::cast
 		).get();
@@ -470,19 +463,16 @@ public class CollectionRoutesImplTest {
 		List<Class<?>> paramClasses, ActionSemantics actionSemantics,
 		String method, String actionName, String resourceName) {
 
-		assertThat(actionSemantics.method(), is(method));
-		assertThat(actionSemantics.name(), is(actionName));
-		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Paged.of("name")));
+		assertThat(actionSemantics.getHTTPMethod(), is(method));
+		assertThat(actionSemantics.getActionName(), is(actionName));
+		assertThat(actionSemantics.getParamClasses(), is(paramClasses));
+		assertThat(actionSemantics.getResource(), is(Paged.of("name")));
 		assertThat(
-			actionSemantics.returnClass(), is(equalTo(SingleModel.class)));
-		assertThat(actionSemantics.annotations(), hasSize(0));
-
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
+			actionSemantics.getReturnClass(), is(equalTo(SingleModel.class)));
+		assertThat(actionSemantics.getAnnotations(), hasSize(0));
 
 		SingleModel<?> singleModel = Try.of(
-			() -> executeFunction.apply(getParams(paramClasses))
+			() -> actionSemantics.execute(getParams(paramClasses))
 		).map(
 			SingleModel.class::cast
 		).get();

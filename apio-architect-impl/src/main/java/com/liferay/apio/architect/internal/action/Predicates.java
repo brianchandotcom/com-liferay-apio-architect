@@ -152,7 +152,7 @@ public class Predicates {
 		hasAnnotation(Class<A> annotation) {
 
 		return actionSemantics -> Stream.of(
-			actionSemantics.annotations()
+			actionSemantics.getAnnotations()
 		).flatMap(
 			List::stream
 		).map(
@@ -180,7 +180,7 @@ public class Predicates {
 	 * @review
 	 */
 	public static Predicate<ActionSemantics> isActionBy(String method) {
-		return areEquals(ActionSemantics::method, method);
+		return areEquals(ActionSemantics::getHTTPMethod, method);
 	}
 
 	/**
@@ -192,7 +192,8 @@ public class Predicates {
 	public static <R extends Resource> Predicate<ActionSemantics> isActionFor(
 		Class<R> clazz) {
 
-		return actionSemantics -> clazz.isInstance(actionSemantics.resource());
+		return actionSemantics -> clazz.isInstance(
+			actionSemantics.getResource());
 	}
 
 	/**
@@ -202,7 +203,7 @@ public class Predicates {
 	 * @review
 	 */
 	public static Predicate<ActionSemantics> isActionFor(Resource resource) {
-		return areEquals(ActionSemantics::resource, resource);
+		return areEquals(ActionSemantics::getResource, resource);
 	}
 
 	/**
@@ -212,7 +213,7 @@ public class Predicates {
 	 * @review
 	 */
 	public static Predicate<ActionSemantics> isActionNamed(String name) {
-		return actionSemantics -> name.equals(actionSemantics.name());
+		return actionSemantics -> name.equals(actionSemantics.getActionName());
 	}
 
 	/**
@@ -225,7 +226,7 @@ public class Predicates {
 		return actionSemantics -> {
 			List<Class<?>> list = asList(classes);
 
-			return list.contains(actionSemantics.returnClass());
+			return list.contains(actionSemantics.getReturnClass());
 		};
 	}
 

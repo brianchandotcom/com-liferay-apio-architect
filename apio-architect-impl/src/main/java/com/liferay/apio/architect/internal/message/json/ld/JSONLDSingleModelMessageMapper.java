@@ -397,14 +397,15 @@ public class JSONLDSingleModelMessageMapper<T>
 		actionJSONObjectBuilder.field(
 			"@id"
 		).stringValue(
-			getActionId(actionSemantics.resource(), actionSemantics.name())
+			getActionId(
+				actionSemantics.getResource(), actionSemantics.getActionName())
 		);
 
 		actionJSONObjectBuilder.field(
 			"@type"
 		).arrayValue(
 		).addAllStrings(
-			getActionTypes(actionSemantics.name())
+			getActionTypes(actionSemantics.getActionName())
 		);
 
 		resourceJSONObjectBuilder.field(
@@ -446,14 +447,15 @@ public class JSONLDSingleModelMessageMapper<T>
 		actionJSONObjectBuilder.field(
 			"@id"
 		).stringValue(
-			getActionId(actionSemantics.resource(), actionSemantics.name())
+			getActionId(
+				actionSemantics.getResource(), actionSemantics.getActionName())
 		);
 
 		actionJSONObjectBuilder.field(
 			"@type"
 		).arrayValue(
 		).addAllStrings(
-			getActionTypes(actionSemantics.name())
+			getActionTypes(actionSemantics.getActionName())
 		);
 
 		singleModelJSONObjectBuilder.nestedField(

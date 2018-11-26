@@ -231,7 +231,7 @@ public class ActionManagerImpl implements ActionManager {
 		Stream<ActionSemantics> stream = actionSemantics();
 
 		Stream<Resource> resourceStream = stream.map(
-			ActionSemantics::resource
+			ActionSemantics::getResource
 		).distinct();
 
 		return new Documentation(
@@ -360,7 +360,7 @@ public class ActionManagerImpl implements ActionManager {
 
 		if (Id.class.equals(clazz)) {
 			return Optional.of(
-				actionSemantics.resource()
+				actionSemantics.getResource()
 			).filter(
 				instanceOf(Item.class)
 			).map(
@@ -374,7 +374,7 @@ public class ActionManagerImpl implements ActionManager {
 
 		if (ParentId.class.equals(clazz)) {
 			return Optional.of(
-				actionSemantics.resource()
+				actionSemantics.getResource()
 			).filter(
 				instanceOf(Nested.class)
 			).map(

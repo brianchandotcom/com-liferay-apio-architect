@@ -49,7 +49,7 @@ public final class EntryPointConverter {
 		return () -> actionSemantics.filter(
 			isRootCollectionAction
 		).map(
-			ActionSemantics::resource
+			ActionSemantics::getResource
 		).map(
 			Paged.class::cast
 		).map(

@@ -72,20 +72,20 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			"@id"
 		).stringValue(
-			"_:" + join("/", resourceName, actionSemantics.name())
+			"_:" + join("/", resourceName, actionSemantics.getActionName())
 		);
 
 		jsonObjectBuilder.field(
 			"@type"
 		).arrayValue(
 		).addAllStrings(
-			getActionTypes(actionSemantics.name())
+			getActionTypes(actionSemantics.getActionName())
 		);
 
 		jsonObjectBuilder.field(
 			"method"
 		).stringValue(
-			actionSemantics.method()
+			actionSemantics.getHTTPMethod()
 		);
 
 		jsonObjectBuilder.field(
@@ -434,7 +434,7 @@ public class JSONLDDocumentationMessageMapper
 	private String _getReturnValue(
 		String type, ActionSemantics actionSemantics) {
 
-		Class<?> returnClass = actionSemantics.returnClass();
+		Class<?> returnClass = actionSemantics.getReturnClass();
 
 		if (Void.class.equals(returnClass)) {
 			return _NOTHING;

@@ -53,7 +53,6 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;
 
 import java.util.List;
@@ -339,21 +338,18 @@ public class NestedCollectionRoutesImplTest {
 	private void _testBatchCreateActionSemantics(
 		List<Class<?>> paramClasses, ActionSemantics actionSemantics) {
 
-		assertThat(actionSemantics.method(), is("POST"));
-		assertThat(actionSemantics.name(), is("batch-create"));
-		assertThat(actionSemantics.paramClasses(), is(paramClasses));
+		assertThat(actionSemantics.getHTTPMethod(), is("POST"));
+		assertThat(actionSemantics.getActionName(), is("batch-create"));
+		assertThat(actionSemantics.getParamClasses(), is(paramClasses));
 		assertThat(
-			actionSemantics.resource(),
+			actionSemantics.getResource(),
 			is(Nested.of(Item.of("parent"), "name")));
 		assertThat(
-			actionSemantics.returnClass(), is(equalTo(BatchResult.class)));
-		assertThat(actionSemantics.annotations(), hasSize(0));
-
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
+			actionSemantics.getReturnClass(), is(equalTo(BatchResult.class)));
+		assertThat(actionSemantics.getAnnotations(), hasSize(0));
 
 		BatchResult<?> batchResult = Try.of(
-			() -> executeFunction.apply(getParams(paramClasses))
+			() -> actionSemantics.execute(getParams(paramClasses))
 		).map(
 			BatchResult.class::cast
 		).get();
@@ -364,21 +360,18 @@ public class NestedCollectionRoutesImplTest {
 	private void _testCreateActionSemantics(
 		List<Class<?>> paramClasses, ActionSemantics actionSemantics) {
 
-		assertThat(actionSemantics.method(), is("POST"));
-		assertThat(actionSemantics.name(), is("create"));
-		assertThat(actionSemantics.paramClasses(), is(paramClasses));
+		assertThat(actionSemantics.getHTTPMethod(), is("POST"));
+		assertThat(actionSemantics.getActionName(), is("create"));
+		assertThat(actionSemantics.getParamClasses(), is(paramClasses));
 		assertThat(
-			actionSemantics.resource(),
+			actionSemantics.getResource(),
 			is(Nested.of(Item.of("parent"), "name")));
 		assertThat(
-			actionSemantics.returnClass(), is(equalTo(SingleModel.class)));
-		assertThat(actionSemantics.annotations(), hasSize(0));
-
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
+			actionSemantics.getReturnClass(), is(equalTo(SingleModel.class)));
+		assertThat(actionSemantics.getAnnotations(), hasSize(0));
 
 		SingleModel<?> singleModel = Try.of(
-			() -> executeFunction.apply(getParams(paramClasses))
+			() -> actionSemantics.execute(getParams(paramClasses))
 		).map(
 			SingleModel.class::cast
 		).get();
@@ -391,20 +384,17 @@ public class NestedCollectionRoutesImplTest {
 	private void _testRetrieveActionSemantics(
 		List<Class<?>> paramClasses, ActionSemantics actionSemantics) {
 
-		assertThat(actionSemantics.method(), is("GET"));
-		assertThat(actionSemantics.name(), is("retrieve"));
-		assertThat(actionSemantics.paramClasses(), is(paramClasses));
+		assertThat(actionSemantics.getHTTPMethod(), is("GET"));
+		assertThat(actionSemantics.getActionName(), is("retrieve"));
+		assertThat(actionSemantics.getParamClasses(), is(paramClasses));
 		assertThat(
-			actionSemantics.resource(),
+			actionSemantics.getResource(),
 			is(Nested.of(Item.of("parent"), "name")));
-		assertThat(actionSemantics.returnClass(), is(equalTo(Page.class)));
-		assertThat(actionSemantics.annotations(), hasSize(0));
-
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
+		assertThat(actionSemantics.getReturnClass(), is(equalTo(Page.class)));
+		assertThat(actionSemantics.getAnnotations(), hasSize(0));
 
 		Page<?> page = Try.of(
-			() -> executeFunction.apply(getParams(paramClasses))
+			() -> actionSemantics.execute(getParams(paramClasses))
 		).map(
 			Page.class::cast
 		).get();

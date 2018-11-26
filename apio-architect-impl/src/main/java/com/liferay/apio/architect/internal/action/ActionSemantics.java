@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.internal.action;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 
 import com.liferay.apio.architect.internal.action.resource.Resource;
@@ -53,30 +54,12 @@ public final class ActionSemantics {
 	}
 
 	/**
-	 * The list of annotations.
+	 * Executes the action with the provided params.
 	 *
 	 * @review
 	 */
-	public List<Annotation> annotations() {
-		return _annotations;
-	}
-
-	/**
-	 * The function that executes the action.
-	 *
-	 * @review
-	 */
-	public CheckedFunction1<List<?>, ?> executeFunction() {
-		return _executeFunction;
-	}
-
-	/**
-	 * The method in which the action is executed.
-	 *
-	 * @review
-	 */
-	public String method() {
-		return _method;
+	public Object execute(List<?> params) throws Throwable {
+		return _executeFunction.apply(params);
 	}
 
 	/**
@@ -84,8 +67,26 @@ public final class ActionSemantics {
 	 *
 	 * @review
 	 */
-	public String name() {
+	public String getActionName() {
 		return _name;
+	}
+
+	/**
+	 * The list of annotations.
+	 *
+	 * @review
+	 */
+	public List<Annotation> getAnnotations() {
+		return unmodifiableList(_annotations);
+	}
+
+	/**
+	 * The method in which the action is executed.
+	 *
+	 * @review
+	 */
+	public String getHTTPMethod() {
+		return _method;
 	}
 
 	/**
@@ -93,8 +94,8 @@ public final class ActionSemantics {
 	 *
 	 * @review
 	 */
-	public List<Class<?>> paramClasses() {
-		return _paramClasses;
+	public List<Class<?>> getParamClasses() {
+		return unmodifiableList(_paramClasses);
 	}
 
 	/**
@@ -102,7 +103,7 @@ public final class ActionSemantics {
 	 *
 	 * @review
 	 */
-	public Resource resource() {
+	public Resource getResource() {
 		return _resource;
 	}
 
@@ -111,7 +112,7 @@ public final class ActionSemantics {
 	 *
 	 * @review
 	 */
-	public Class<?> returnClass() {
+	public Class<?> getReturnClass() {
 		return _returnClass;
 	}
 
@@ -124,7 +125,7 @@ public final class ActionSemantics {
 	 */
 	public Action toAction(ProvideFunction provideFunction) {
 		return request -> Try.of(
-			paramClasses()::stream
+			getParamClasses()::stream
 		).map(
 			stream -> stream.map(
 				provideFunction.apply(this, request)
@@ -132,15 +133,15 @@ public final class ActionSemantics {
 				toList()
 			)
 		).mapTry(
-			executeFunction()
+			this::execute
 		);
 	}
 
 	/**
 	 * Copies the current {@link ActionSemantics} by setting a value for the
-	 * {@link ActionSemantics#annotations()} annotations} attribute. A shallow
-	 * reference equality check is used to prevent copying of the same value by
-	 * returning {@code this}.
+	 * {@link ActionSemantics#getAnnotations()} annotations} attribute. A
+	 * shallow reference equality check is used to prevent copying of the same
+	 * value by returning {@code this}.
 	 *
 	 * @param  annotations the new annotations list
 	 * @return A modified copy of {@code this} object
@@ -166,9 +167,9 @@ public final class ActionSemantics {
 
 	/**
 	 * Copies the current {@link ActionSemantics} by setting a value for the
-	 * {@link ActionSemantics#method()} method} attribute. A shallow reference
-	 * equality check is used to prevent copying of the same value by returning
-	 * {@code this}.
+	 * {@link ActionSemantics#getHTTPMethod()} method} attribute. A shallow
+	 * reference equality check is used to prevent copying of the same value by
+	 * returning {@code this}.
 	 *
 	 * @param  method the new method
 	 * @return A modified copy of {@code this} object
@@ -194,9 +195,9 @@ public final class ActionSemantics {
 
 	/**
 	 * Copies the current {@link ActionSemantics} by setting a value for the
-	 * {@link ActionSemantics#name()} name} attribute. A shallow reference
-	 * equality check is used to prevent copying of the same value by returning
-	 * {@code this}.
+	 * {@link ActionSemantics#getActionName()} name} attribute. A shallow
+	 * reference equality check is used to prevent copying of the same value by
+	 * returning {@code this}.
 	 *
 	 * @param  name the new name
 	 * @return A modified copy of {@code this} object
@@ -222,7 +223,7 @@ public final class ActionSemantics {
 
 	/**
 	 * Copies the current {@link ActionSemantics} by setting a value for the
-	 * {@link ActionSemantics#resource() resource} attribute. A shallow
+	 * {@link ActionSemantics#getResource() resource} attribute. A shallow
 	 * reference equality check is used to prevent copying of the same value by
 	 * returning {@code this}.
 	 *
@@ -250,9 +251,9 @@ public final class ActionSemantics {
 
 	/**
 	 * Copies the current {@link ActionSemantics} by setting a value for the
-	 * {@link ActionSemantics#returnClass()} return class} attribute. A shallow
-	 * reference equality check is used to prevent copying of the same value by
-	 * returning {@code this}.
+	 * {@link ActionSemantics#getReturnClass()} return class} attribute. A
+	 * shallow reference equality check is used to prevent copying of the same
+	 * value by returning {@code this}.
 	 *
 	 * @param  returnClass the new return class
 	 * @return A modified copy of {@code this} object
@@ -363,10 +364,9 @@ public final class ActionSemantics {
 		 * Provides information about the params needed by the action.
 		 *
 		 * <p>
-		 * The param instances will be provided in the {@link
-		 * #executeFunction()} in the same order as their classes in this
-		 * method. {@link Void} classes will be ignored (will be provided as
-		 * {@code null}. For the {@link
+		 * The param instances will be provided in the {@link #execute(List)} in
+		 * the same order as their classes in this method. {@link Void} classes
+		 * will be ignored (will be provided as {@code null}. For the {@link
 		 * com.liferay.apio.architect.annotation.Id} or {@link
 		 * com.liferay.apio.architect.annotation.ParentId} params, the
 		 * annotation class should be provided to the list.
@@ -380,10 +380,9 @@ public final class ActionSemantics {
 		 * Provides information about the params needed by the action.
 		 *
 		 * <p>
-		 * The param instances will be provided in the {@link
-		 * #executeFunction()} in the same order as their classes in this
-		 * method. {@link Void} classes will be ignored (will be provided as
-		 * {@code null}. For the {@link
+		 * The param instances will be provided in the {@link #execute(List)} in
+		 * the same order as their classes in this method. {@link Void} classes
+		 * will be ignored (will be provided as {@code null}. For the {@link
 		 * com.liferay.apio.architect.annotation.Id} or {@link
 		 * com.liferay.apio.architect.annotation.ParentId} params, the
 		 * annotation class should be provided to the list.
@@ -405,10 +404,9 @@ public final class ActionSemantics {
 		 * Provides information about the params needed by the action.
 		 *
 		 * <p>
-		 * The param instances will be provided in the {@link
-		 * #executeFunction()} in the same order as their classes in this
-		 * method. {@link Void} classes will be ignored (will be provided as
-		 * {@code null}. For the {@link
+		 * The param instances will be provided in the {@link #execute(List)} in
+		 * the same order as their classes in this method. {@link Void} classes
+		 * will be ignored (will be provided as {@code null}. For the {@link
 		 * com.liferay.apio.architect.annotation.Id} or {@link
 		 * com.liferay.apio.architect.annotation.ParentId} params, the
 		 * annotation class should be provided to the list.

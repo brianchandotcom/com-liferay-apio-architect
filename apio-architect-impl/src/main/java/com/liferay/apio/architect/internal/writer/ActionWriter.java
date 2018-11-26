@@ -45,15 +45,15 @@ public class ActionWriter {
 		JSONObjectBuilder operationJSONObjectBuilder = new JSONObjectBuilder();
 
 		Optional<String> optional = createActionURL(
-			_requestInfo.getApplicationURL(), actionSemantics.resource(),
-			actionSemantics.name());
+			_requestInfo.getApplicationURL(), actionSemantics.getResource(),
+			actionSemantics.getActionName());
 
 		optional.ifPresent(
 			url -> _actionMapper.mapActionSemanticsURL(
 				operationJSONObjectBuilder, url));
 
 		_actionMapper.mapHTTPMethod(
-			operationJSONObjectBuilder, actionSemantics.method());
+			operationJSONObjectBuilder, actionSemantics.getHTTPMethod());
 
 		_actionMapper.onFinish(
 			_jsonObjectBuilder, operationJSONObjectBuilder, actionSemantics);

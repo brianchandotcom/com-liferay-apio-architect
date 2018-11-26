@@ -69,21 +69,18 @@ public class ActionSemanticsTest {
 			_myAnnotation
 		).build();
 
-		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
-		assertThat(actionSemantics.name(), is("action"));
-		assertThat(actionSemantics.method(), is("GET"));
+		assertThat(actionSemantics.getAnnotations(), contains(_myAnnotation));
+		assertThat(actionSemantics.getActionName(), is("action"));
+		assertThat(actionSemantics.getHTTPMethod(), is("GET"));
 
-		List<Class<?>> paramClasses = actionSemantics.paramClasses();
+		List<Class<?>> paramClasses = actionSemantics.getParamClasses();
 
 		assertThat(paramClasses, contains(String.class, Long.class));
 
-		assertThat(actionSemantics.resource(), is(Paged.of("name")));
-		assertThat(actionSemantics.returnClass(), is(equalTo(Long.class)));
+		assertThat(actionSemantics.getResource(), is(Paged.of("name")));
+		assertThat(actionSemantics.getReturnClass(), is(equalTo(Long.class)));
 
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
-
-		String result = (String)executeFunction.apply(asList("1", "2"));
+		String result = (String)actionSemantics.execute(asList("1", "2"));
 
 		assertThat(result, is("1-2"));
 	}
@@ -104,17 +101,14 @@ public class ActionSemanticsTest {
 			_join
 		).build();
 
-		assertThat(actionSemantics.resource(), is(Paged.of("name")));
-		assertThat(actionSemantics.name(), is("action"));
-		assertThat(actionSemantics.method(), is("GET"));
-		assertThat(actionSemantics.paramClasses(), is(empty()));
-		assertThat(actionSemantics.returnClass(), is(equalTo(Void.class)));
-		assertThat(actionSemantics.annotations(), is(empty()));
+		assertThat(actionSemantics.getResource(), is(Paged.of("name")));
+		assertThat(actionSemantics.getActionName(), is("action"));
+		assertThat(actionSemantics.getHTTPMethod(), is("GET"));
+		assertThat(actionSemantics.getParamClasses(), is(empty()));
+		assertThat(actionSemantics.getReturnClass(), is(equalTo(Void.class)));
+		assertThat(actionSemantics.getAnnotations(), is(empty()));
 
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
-
-		String result = (String)executeFunction.apply(asList("1", "2"));
+		String result = (String)actionSemantics.execute(asList("1", "2"));
 
 		assertThat(result, is("1-2"));
 	}
@@ -137,17 +131,14 @@ public class ActionSemanticsTest {
 			_myAnnotation
 		).build();
 
-		assertThat(actionSemantics.resource(), is(Paged.of("name")));
-		assertThat(actionSemantics.name(), is("action"));
-		assertThat(actionSemantics.method(), is("GET"));
-		assertThat(actionSemantics.paramClasses(), is(empty()));
-		assertThat(actionSemantics.returnClass(), is(equalTo(Long.class)));
-		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
+		assertThat(actionSemantics.getResource(), is(Paged.of("name")));
+		assertThat(actionSemantics.getActionName(), is("action"));
+		assertThat(actionSemantics.getHTTPMethod(), is("GET"));
+		assertThat(actionSemantics.getParamClasses(), is(empty()));
+		assertThat(actionSemantics.getReturnClass(), is(equalTo(Long.class)));
+		assertThat(actionSemantics.getAnnotations(), contains(_myAnnotation));
 
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
-
-		String result = (String)executeFunction.apply(asList("1", "2"));
+		String result = (String)actionSemantics.execute(asList("1", "2"));
 
 		assertThat(result, is("1-2"));
 	}
@@ -170,17 +161,14 @@ public class ActionSemanticsTest {
 			_myAnnotation
 		).build();
 
-		assertThat(actionSemantics.resource(), is(Paged.of("name")));
-		assertThat(actionSemantics.name(), is("action"));
-		assertThat(actionSemantics.method(), is("POST"));
-		assertThat(actionSemantics.paramClasses(), is(empty()));
-		assertThat(actionSemantics.returnClass(), is(equalTo(Void.class)));
-		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
+		assertThat(actionSemantics.getResource(), is(Paged.of("name")));
+		assertThat(actionSemantics.getActionName(), is("action"));
+		assertThat(actionSemantics.getHTTPMethod(), is("POST"));
+		assertThat(actionSemantics.getParamClasses(), is(empty()));
+		assertThat(actionSemantics.getReturnClass(), is(equalTo(Void.class)));
+		assertThat(actionSemantics.getAnnotations(), contains(_myAnnotation));
 
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
-
-		String result = (String)executeFunction.apply(asList("1", "2"));
+		String result = (String)actionSemantics.execute(asList("1", "2"));
 
 		assertThat(result, is("1-2"));
 	}
@@ -238,9 +226,9 @@ public class ActionSemanticsTest {
 		assertEquals(
 			actionSemantics,
 			actionSemantics.withAnnotations(singletonList(_myAnnotation)));
-		assertThat(actionSemantics.annotations(), contains(_myAnnotation));
+		assertThat(actionSemantics.getAnnotations(), contains(_myAnnotation));
 
-		assertThat(newActionSemantics.annotations(), is(empty()));
+		assertThat(newActionSemantics.getAnnotations(), is(empty()));
 	}
 
 	@Test
@@ -261,9 +249,9 @@ public class ActionSemanticsTest {
 			"DELETE");
 
 		assertEquals(actionSemantics, actionSemantics.withMethod("GET"));
-		assertThat(actionSemantics.method(), is("GET"));
+		assertThat(actionSemantics.getHTTPMethod(), is("GET"));
 
-		assertThat(newActionSemantics.method(), is("DELETE"));
+		assertThat(newActionSemantics.getHTTPMethod(), is("DELETE"));
 	}
 
 	@Test
@@ -283,9 +271,9 @@ public class ActionSemanticsTest {
 		ActionSemantics newActionSemantics = actionSemantics.withName("create");
 
 		assertEquals(actionSemantics, actionSemantics.withName("retrieve"));
-		assertThat(actionSemantics.name(), is("retrieve"));
+		assertThat(actionSemantics.getActionName(), is("retrieve"));
 
-		assertThat(newActionSemantics.name(), is("create"));
+		assertThat(newActionSemantics.getActionName(), is("create"));
 	}
 
 	@Test
@@ -307,9 +295,9 @@ public class ActionSemanticsTest {
 
 		assertEquals(
 			actionSemantics, actionSemantics.withResource(Paged.of("name")));
-		assertThat(actionSemantics.resource(), is(Paged.of("name")));
+		assertThat(actionSemantics.getResource(), is(Paged.of("name")));
 
-		assertThat(newActionSemantics.resource(), is(Item.of("name")));
+		assertThat(newActionSemantics.getResource(), is(Item.of("name")));
 	}
 
 	@Test
@@ -331,9 +319,10 @@ public class ActionSemanticsTest {
 
 		assertEquals(
 			actionSemantics, actionSemantics.withReturnClass(Page.class));
-		assertThat(actionSemantics.returnClass(), is(equalTo(Page.class)));
+		assertThat(actionSemantics.getReturnClass(), is(equalTo(Page.class)));
 
-		assertThat(newActionSemantics.returnClass(), is(equalTo(Void.class)));
+		assertThat(
+			newActionSemantics.getReturnClass(), is(equalTo(Void.class)));
 	}
 
 	public static @interface MyAnnotation {

@@ -211,7 +211,7 @@ public class SingleModelWriter<T> {
 
 					_singleModelMessageMapper.mapEmbeddedActionMethod(
 						jsonObjectBuilder, actionJSONObjectBuilder,
-						embeddedPathElements, actionSemantics.method());
+						embeddedPathElements, actionSemantics.getHTTPMethod());
 
 					_singleModelMessageMapper.onFinishEmbeddedAction(
 						jsonObjectBuilder, actionJSONObjectBuilder,

@@ -50,7 +50,6 @@ import com.liferay.apio.architect.internal.routes.RoutesTestUtil.CustomIdentifie
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;
 
 import java.util.List;
@@ -443,18 +442,15 @@ public class ItemRoutesImplTest {
 	private void _testRemoveActionSemantics(
 		List<Class<?>> paramClasses, ActionSemantics actionSemantics) {
 
-		assertThat(actionSemantics.method(), is("DELETE"));
-		assertThat(actionSemantics.name(), is("remove"));
-		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Item.of("name")));
-		assertThat(actionSemantics.returnClass(), is(equalTo(Void.class)));
-		assertThat(actionSemantics.annotations(), hasSize(0));
-
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
+		assertThat(actionSemantics.getHTTPMethod(), is("DELETE"));
+		assertThat(actionSemantics.getActionName(), is("remove"));
+		assertThat(actionSemantics.getParamClasses(), is(paramClasses));
+		assertThat(actionSemantics.getResource(), is(Item.of("name")));
+		assertThat(actionSemantics.getReturnClass(), is(equalTo(Void.class)));
+		assertThat(actionSemantics.getAnnotations(), hasSize(0));
 
 		Try.of(
-			() -> executeFunction.apply(getParams(paramClasses))
+			() -> actionSemantics.execute(getParams(paramClasses))
 		).filter(
 			isNull()
 		).get();
@@ -464,19 +460,16 @@ public class ItemRoutesImplTest {
 		List<Class<?>> paramClasses, ActionSemantics actionSemantics,
 		String method, String actionName, String resourceName, String result) {
 
-		assertThat(actionSemantics.method(), is(method));
-		assertThat(actionSemantics.name(), is(actionName));
-		assertThat(actionSemantics.paramClasses(), is(paramClasses));
-		assertThat(actionSemantics.resource(), is(Item.of("name")));
+		assertThat(actionSemantics.getHTTPMethod(), is(method));
+		assertThat(actionSemantics.getActionName(), is(actionName));
+		assertThat(actionSemantics.getParamClasses(), is(paramClasses));
+		assertThat(actionSemantics.getResource(), is(Item.of("name")));
 		assertThat(
-			actionSemantics.returnClass(), is(equalTo(SingleModel.class)));
-		assertThat(actionSemantics.annotations(), hasSize(0));
-
-		CheckedFunction1<List<?>, ?> executeFunction =
-			actionSemantics.executeFunction();
+			actionSemantics.getReturnClass(), is(equalTo(SingleModel.class)));
+		assertThat(actionSemantics.getAnnotations(), hasSize(0));
 
 		SingleModel<?> singleModel = Try.of(
-			() -> executeFunction.apply(getParams(paramClasses))
+			() -> actionSemantics.execute(getParams(paramClasses))
 		).map(
 			SingleModel.class::cast
 		).get();
