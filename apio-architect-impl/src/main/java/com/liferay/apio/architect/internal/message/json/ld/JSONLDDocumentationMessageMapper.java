@@ -123,7 +123,7 @@ public class JSONLDDocumentationMessageMapper
 		jsonObjectBuilder.field(
 			"property"
 		).stringValue(
-			fieldName
+			documentationField.getName()
 		);
 
 		_addDescription(jsonObjectBuilder, description);
@@ -197,7 +197,11 @@ public class JSONLDDocumentationMessageMapper
 				JSONObjectBuilder propertyJsonObjectBuilder =
 					new JSONObjectBuilder();
 
-				mapProperty(propertyJsonObjectBuilder, fieldName, description);
+				DocumentationField documentationField =
+					DocumentationField.of(fieldName, FieldType.LONG);
+
+				mapProperty(
+					propertyJsonObjectBuilder, documentationField, description);
 
 				onFinishProperty(
 					jsonObjectBuilder, propertyJsonObjectBuilder, fieldName);

@@ -19,7 +19,10 @@ import com.liferay.apio.architect.internal.jaxrs.json.writer.base.BaseMessageBod
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationMessageMapperManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.writer.DocumentationWriter;
+import com.liferay.apio.architect.representor.BaseRepresentor;
 
 import java.lang.reflect.Type;
 
@@ -79,6 +82,14 @@ public class DocumentationMessageBodyWriter
 				documentationMessageMapper
 			).requestInfo(
 				requestInfo
+			).typeFunction(
+				identifierClass -> _nameManager.getNameOptional(
+					identifierClass.getName()
+				).flatMap(
+					name -> _representableManager.getRepresentorOptional(name)
+				).map(
+					BaseRepresentor::getPrimaryType
+				)
 			).build());
 
 		return documentationWriter.write();
@@ -87,5 +98,11 @@ public class DocumentationMessageBodyWriter
 	@Reference
 	private DocumentationMessageMapperManager
 		_documentationMessageMapperManager;
+
+	@Reference
+	private NameManager _nameManager;
+
+	@Reference
+	private RepresentableManager _representableManager;
 
 }
