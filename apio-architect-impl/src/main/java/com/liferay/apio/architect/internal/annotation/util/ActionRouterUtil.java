@@ -49,9 +49,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Provides utility function to transform a class annotated with actions
- * (Retrieve, Delete...) into the ActionManager
+ * Provides utility functions for transforming classes annotated with actions
+ * (Retrieve, Delete...) into {@link
+ * com.liferay.apio.architect.internal.action.ActionSemantics}.
  *
+ * <p>This class should not be instantiated.
+ *
+ * @author Alejandro Hernández
  * @author Javier Gamarra
  * @review
  */
@@ -138,6 +142,37 @@ public final class ActionRouterUtil {
 		}
 	}
 
+	/**
+	 * Returns the name of the class that must be provided from the HTTP body.
+	 *
+	 * <p>
+	 * This class is requested by annotating with {@link
+	 * com.liferay.apio.architect.annotation.Body} a parameter that must be
+	 * either of a class annotated with {@link Type} or a list of elements of a
+	 * class annotated with {@link Type}.
+	 *
+	 * <p>
+	 * For example, having a class {@code MyType}, annotated with {@link Type},
+	 * executing this function for this two methods:
+	 * <pre>
+	 * {@code
+	 *    public MyType create(@Body MyType myType);
+	 *    public List<MyType> createList(@Body List<MyType> myType);
+	 * }
+	 * </pre><p> Will return the class name of {@code MyType}.
+	 *
+	 * <p>
+	 * Otherwise, if a parameter annotated with {@link
+	 * com.liferay.apio.architect.annotation.Body}
+	 * cannot be found or its class is not annotated with {@link Type}, {@code
+	 * <code>null</code>} will be returned.
+	 *
+	 * @param  method the method being analyzed. It must contain a parameter
+	 *         annotated with {@link com.liferay.apio.architect.annotation.Body}
+	 * @return the name of the class that must be provided from the HTTP body,
+	 *         if present; {@code null} otherwise
+	 * @review
+	 */
 	public static String getBodyResourceClassName(Method method) {
 		for (Parameter parameter : method.getParameters()) {
 			if (parameter.isAnnotationPresent(_BODY_ANNOTATION)) {
@@ -160,6 +195,17 @@ public final class ActionRouterUtil {
 		return null;
 	}
 
+	/**
+	 * Returns the first occurrence of an instance of the searched class in the
+	 * provided list. Returns the default value if none is found.
+	 *
+	 * @param  list the list in which to look for
+	 * @param  searchedClass the class whose instance is searched
+	 * @param  defaultValue the fallback value
+	 * @return the first occurrence of the searched class; the default value if
+	 *         none is found
+	 * @review
+	 */
 	public static <T> T getInstanceOf(
 		List<?> list, Class<T> searchedClass, T defaultValue) {
 
@@ -172,6 +218,25 @@ public final class ActionRouterUtil {
 		return defaultValue;
 	}
 
+	/**
+	 * Returns an array containing the classes that must be provided as an
+	 * action's method parameters. The parameter type is stored in the same
+	 * position and with the same class as the method declaration, with the
+	 * following exceptions:
+	 *
+	 * <p>If the parameter is annotated with {@link ID}, the {@link ID} class is
+	 * stored.
+	 * <p>If the parameter is annotated with {@link ParentId}, the {@link
+	 * ParentId} class is stored.
+	 * <p>If the parameter is annotated with {@link
+	 * com.liferay.apio.architect.annotation.Body}, the {@link Body} class is
+	 * stored.
+	 *
+	 * @param  method the method being analyzed
+	 * @return an array with the classes that must be provided as an action's
+	 *         method parameters
+	 * @review
+	 */
 	public static Class<?>[] getParamClasses(Method method) {
 		return Stream.of(
 			method.getParameters()
@@ -194,6 +259,16 @@ public final class ActionRouterUtil {
 		);
 	}
 
+	/**
+	 * Returns the {@link Resource} to which the action described by the
+	 * provided method belongs to.
+	 *
+	 * @param  method the action's method
+	 * @param  name the name of the resource, extracted from the {@link
+	 *         com.liferay.apio.architect.router.ActionRouter}
+	 * @return the action's {@link Resource}
+	 * @review
+	 */
 	public static Resource getResource(Method method, String name) {
 		ParentId parentId = findAnnotationInAnyParameter(
 			method, ParentId.class);
@@ -217,6 +292,20 @@ public final class ActionRouterUtil {
 		return Paged.of(name);
 	}
 
+	/**
+	 * Returns the class of the method's return, updated so JAX-RS writers can
+	 * understand it.
+	 *
+	 * <p>{@link PageItems} and {@link List} are translated to {@link Page}.
+	 * <p>{@code void} is translated to {@link Void}.
+	 * <p>A class annotated with {@link Type} is translated to {@link
+	 * SingleModel}.
+	 * <p>Otherwise, the return from {@link Method#getReturnType()} is returned.
+	 *
+	 * @param  method the method being analyzed
+	 * @return the class of the method's return
+	 * @review
+	 */
 	public static Class<?> getReturnClass(Method method) {
 		Class<?> returnType = method.getReturnType();
 
@@ -239,6 +328,15 @@ public final class ActionRouterUtil {
 		return returnType;
 	}
 
+	/**
+	 * Checks if a method needing information from body (previously checked with
+	 * {@link #needsParameterFromBody(Method)}) needs the body information as a
+	 * list of elements or as a single element.
+	 *
+	 * @param  method the method to check
+	 * @return {@code true} if the method needs the body as a list, {@code
+	 *         false} otherwise
+	 */
 	public static boolean isListBody(Method method) {
 		for (Parameter parameter : method.getParameters()) {
 			if (parameter.isAnnotationPresent(_BODY_ANNOTATION)) {
@@ -249,6 +347,16 @@ public final class ActionRouterUtil {
 		return false;
 	}
 
+	/**
+	 * Checks if a method needs a parameter provided from the information in the
+	 * HTTP body, by checking if any of its parameters is annotated with {@link
+	 * com.liferay.apio.architect.annotation.Body}.
+	 *
+	 * @param  method the method to check
+	 * @return {@code true} if the method needs a parameter provided from the
+	 *         HTTP body information; {@code false} otherwise
+	 * @review
+	 */
 	public static boolean needsParameterFromBody(Method method) {
 		return nonNull(findAnnotationInAnyParameter(method, _BODY_ANNOTATION));
 	}

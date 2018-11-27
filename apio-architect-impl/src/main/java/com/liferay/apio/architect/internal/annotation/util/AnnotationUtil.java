@@ -19,10 +19,25 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 /**
+ * Provides utility functions for dealing with annotations.
+ *
+ * <p>This class should not be instantiated.
+ *
+ * @author Alejandro Hernández
  * @author Javier Gamarra
  */
 public final class AnnotationUtil {
 
+	/**
+	 * Tries to extract the first occurrence an annotation of a certain class
+	 * inside a method's parameters. Returns {@code null} if the annotation
+	 * could not be found.
+	 *
+	 * @param  method the method whose parameter annotations will be searched
+	 * @param  annotationClass the annotation class to search
+	 * @return the annotation, if found; {@code null} otherwise
+	 * @review
+	 */
 	public static <A extends Annotation> A findAnnotationInAnyParameter(
 		Method method, Class<A> annotationClass) {
 
@@ -35,6 +50,15 @@ public final class AnnotationUtil {
 		return null;
 	}
 
+	/**
+	 * Tries to extract an annotation of a certain class directly annotated on
+	 * to the method or any of its annotations.
+	 *
+	 * @param  method the method in which to look for
+	 * @param  annotationClass the annotation class to search
+	 * @return the annotation, if found; {@code null} otherwise
+	 * @review
+	 */
 	public static <A extends Annotation> A
 		findAnnotationInMethodOrInItsAnnotations(
 			Method method, Class<A> annotationClass) {
