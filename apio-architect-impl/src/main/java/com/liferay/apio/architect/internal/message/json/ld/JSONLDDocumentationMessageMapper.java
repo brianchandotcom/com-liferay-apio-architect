@@ -15,17 +15,30 @@
 package com.liferay.apio.architect.internal.message.json.ld;
 
 import static com.liferay.apio.architect.internal.message.json.ld.JSONLDMessageMapperUtil.getOperationTypes;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN_LIST;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.DATE;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.DATE_LIST;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.FILE;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.LINKED_MODEL;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.NESTED_MODEL_LIST;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.NUMBER;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.NUMBER_LIST;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.RELATED_COLLECTION;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING_LIST;
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.GET;
 
-import com.liferay.apio.architect.form.FieldType;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType;
 import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
@@ -111,8 +124,7 @@ public class JSONLDDocumentationMessageMapper
 	@Override
 	public void mapProperty(
 		JSONObjectBuilder jsonObjectBuilder,
-		DocumentationField documentationField,
-		String description) {
+		DocumentationField documentationField, String description) {
 
 		jsonObjectBuilder.field(
 			"@type"
@@ -126,6 +138,7 @@ public class JSONLDDocumentationMessageMapper
 			documentationField.getName()
 		);
 
+		_addType(jsonObjectBuilder, documentationField);
 		_addDescription(jsonObjectBuilder, description);
 	}
 
@@ -197,8 +210,16 @@ public class JSONLDDocumentationMessageMapper
 				JSONObjectBuilder propertyJsonObjectBuilder =
 					new JSONObjectBuilder();
 
-				DocumentationField documentationField =
-					DocumentationField.of(fieldName, FieldType.LONG);
+				DocumentationField documentationField;
+
+				if (fieldName.equals("member")) {
+					documentationField = DocumentationField.of(
+						fieldName, NESTED_MODEL_LIST);
+				}
+				else {
+					documentationField = DocumentationField.of(
+						fieldName, NUMBER);
+				}
 
 				mapProperty(
 					propertyJsonObjectBuilder, documentationField, description);
@@ -328,6 +349,85 @@ public class JSONLDDocumentationMessageMapper
 				"comment"
 			).stringValue(
 				description
+			);
+		}
+	}
+
+	private void _addExtraType(
+		JSONObjectBuilder jsonObjectBuilder, String collectionType) {
+
+		jsonObjectBuilder.nestedField(
+			"manages", "property"
+		).stringValue(
+			"rdf:type"
+		);
+
+		jsonObjectBuilder.nestedField(
+			"manages", "object"
+		).stringValue(
+			collectionType
+		);
+	}
+
+	private void _addType(
+		JSONObjectBuilder jsonObjectBuilder,
+		DocumentationField documentationField) {
+
+		FieldType type = documentationField.getType();
+		String typeString = null;
+
+		if (BOOLEAN.equals(type)) {
+			typeString = "boolean";
+		}
+		else if (BOOLEAN_LIST.equals(type)) {
+			typeString = "collection";
+			_addExtraType(jsonObjectBuilder, "boolean");
+		}
+		else if (DATE.equals(type)) {
+			typeString = "date";
+		}
+		else if (DATE_LIST.equals(type)) {
+			typeString = "collection";
+			_addExtraType(jsonObjectBuilder, "date");
+		}
+		else if (FILE.equals(type)) {
+			typeString = "file";
+		}
+		else if (NUMBER.equals(type)) {
+			typeString = "number";
+		}
+		else if (NUMBER_LIST.equals(type)) {
+			typeString = "collection";
+			_addExtraType(jsonObjectBuilder, "number");
+		}
+		else if (LINKED_MODEL.equals(type)) {
+			Optional<String> extraType = documentationField.getExtraType();
+
+			typeString = extraType.orElse(null);
+		}
+		else if (RELATED_COLLECTION.equals(type)) {
+			typeString = "collection";
+
+			Optional<String> extraTypeOptional =
+				documentationField.getExtraType();
+
+			extraTypeOptional.ifPresent(
+				extraType -> _addExtraType(jsonObjectBuilder, extraType)
+			);
+		}
+		else if (STRING.equals(type)) {
+			typeString = "string";
+		}
+		else if (STRING_LIST.equals(type)) {
+			typeString = "collection";
+			_addExtraType(jsonObjectBuilder, "string");
+		}
+
+		if (typeString != null) {
+			jsonObjectBuilder.field(
+				"rdf:type"
+			).stringValue(
+				typeString
 			);
 		}
 	}
