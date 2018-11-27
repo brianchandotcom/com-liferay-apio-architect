@@ -17,6 +17,9 @@ package com.liferay.apio.architect.internal.wiring.osgi.manager.message.json;
 import java.util.Optional;
 
 /**
+ * Hols information about a field and its type. In the case of a linked
+ * collection or model, it also contains information about the related type
+ *
  * @author Víctor Galán
  */
 public class DocumentationField {
