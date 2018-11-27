@@ -31,6 +31,8 @@ import static io.leangen.geantyref.GenericTypeReflector.getTypeParameter;
 import static io.vavr.control.Option.none;
 import static io.vavr.control.Option.some;
 
+import static java.util.Objects.isNull;
+
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
@@ -147,10 +149,10 @@ public class ActionRouterManager {
 			return Option.none();
 		}
 
-		Optional<Form<Object>> formOptional = _formManager.getFormOptional(
+		Form<Object> form = _formManager.getForm(
 			getBodyResourceClassName(method));
 
-		if (needsParameterFromBody(method) && !formOptional.isPresent()) {
+		if (needsParameterFromBody(method) && isNull(form)) {
 			_logger.warn(
 				"Unable to find form for method with name: {}",
 				method.getName());
@@ -172,11 +174,7 @@ public class ActionRouterManager {
 			params -> execute(
 				resource, params, array -> method.invoke(actionRouter, array))
 		).bodyFunction(
-			body -> formOptional.map(
-				form -> isListBody(method) ? form.getList(body) : form.get(body)
-			).orElse(
-				null
-			)
+			body -> isListBody(method) ? form.getList(body) : form.get(body)
 		).receivesParams(
 			getParamClasses(method)
 		).annotatedWith(

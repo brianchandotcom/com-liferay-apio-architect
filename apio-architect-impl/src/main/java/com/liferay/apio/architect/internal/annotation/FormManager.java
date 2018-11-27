@@ -14,8 +14,9 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
+import static com.liferay.apio.architect.internal.annotation.form.FormTransformer.toForm;
+
 import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.internal.annotation.form.FormTransformer;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedTypeManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
@@ -36,20 +37,23 @@ import org.osgi.service.component.annotations.Reference;
 public class FormManager {
 
 	/**
-	 * Computes the form for a className.
+	 * Computes the form for a className. Returns {@code null} if no form could
+	 * be found.
 	 *
 	 * @param  className the className of the type
-	 * @return the resulting optional form
+	 * @return the resulting form, if found; {@code null} otherwise
 	 * @review
 	 */
-	public <T> Optional<Form<T>> getFormOptional(String className) {
+	public <T> Form<T> getForm(String className) {
 		Optional<ParsedType> parsedTypeOptional =
 			_parsedTypeManager.getParsedType(className);
 
-		return parsedTypeOptional.map(
-			parsedType -> FormTransformer.toForm(
+		return parsedTypeOptional.<Form<T>>map(
+			parsedType -> toForm(
 				parsedType, _pathIdentifierMapperManager::mapToIdentifierOrFail,
 				_nameManager::getNameOptional)
+		).orElse(
+			null
 		);
 	}
 
