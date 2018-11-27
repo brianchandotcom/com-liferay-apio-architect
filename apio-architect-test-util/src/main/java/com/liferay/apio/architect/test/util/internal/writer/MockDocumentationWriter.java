@@ -117,6 +117,8 @@ public class MockDocumentationWriter {
 				documentationMessageMapper
 			).requestInfo(
 				getRequestInfo()
+			).typeFunction(
+				identifierClass -> Optional.of(identifierClass.getSimpleName())
 			).build());
 
 		return documentationWriter.write();

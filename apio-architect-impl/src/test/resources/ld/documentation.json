@@ -57,48 +57,67 @@
 			"supportedProperty": [
 				{
 					"@type": "SupportedProperty",
-					"property": "applicationRelativeURL1"
+					"property": "applicationRelativeURL1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
 					"comment": "binary description",
-					"property": "binary1"
+					"property": "binary1",
+					"rdf:type": "file"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "binary2"
+					"property": "binary2",
+					"rdf:type": "file"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "boolean1"
+					"property": "boolean1",
+					"rdf:type": "boolean"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "boolean2"
+					"property": "boolean2",
+					"rdf:type": "boolean"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "booleanList1"
+					"manages": {
+						"object": "boolean",
+						"property": "rdf:type"
+					},
+					"property": "booleanList1",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "booleanList2"
+					"manages": {
+						"object": "boolean",
+						"property": "rdf:type"
+					},
+					"property": "booleanList2",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "link1"
+					"property": "link1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "link2"
+					"property": "link2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "localizedString1"
+					"property": "localizedString1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "localizedString2"
+					"property": "localizedString2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
@@ -110,71 +129,127 @@
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "number1"
+					"property": "nested1"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "number2"
+					"property": "nested2"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "numberList1"
+					"property": "number1",
+					"rdf:type": "number"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "numberList2"
+					"property": "number2",
+					"rdf:type": "number"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relativeURL1"
+					"manages": {
+						"object": "number",
+						"property": "rdf:type"
+					},
+					"property": "numberList1",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relativeURL2"
+					"manages": {
+						"object": "number",
+						"property": "rdf:type"
+					},
+					"property": "numberList2",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relativeURL3"
+					"property": "relativeURL1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "date1"
+					"property": "relativeURL2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "date2"
+					"property": "relativeURL3",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "string1"
+					"property": "date1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "string2"
+					"property": "date2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "stringList1"
+					"property": "string1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "stringList2"
+					"property": "string2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "embedded1"
+					"manages": {
+						"object": "string",
+						"property": "rdf:type"
+					},
+					"property": "stringList1",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "embedded2"
+					"manages": {
+						"object": "string",
+						"property": "rdf:type"
+					},
+					"property": "stringList2",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "linked1"
+					"property": "embedded1",
+					"rdf:type": "FirstEmbeddedId"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "linked2"
+					"property": "embedded2",
+					"rdf:type": "FirstEmbeddedId"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "linked1",
+					"rdf:type": "FirstEmbeddedId"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "linked2",
+					"rdf:type": "FirstEmbeddedId"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "number1",
+					"rdf:type": "number"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string1",
+					"rdf:type": "string"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
@@ -182,15 +257,55 @@
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "linked3"
+					"property": "nested3"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relatedCollection1"
+					"property": "number1",
+					"rdf:type": "number"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relatedCollection2"
+					"property": "number1",
+					"rdf:type": "number"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string1",
+					"rdf:type": "string"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string1",
+					"rdf:type": "string"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "linked3",
+					"rdf:type": "ThirdEmbeddedId"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string1",
+					"rdf:type": "string"
+				},
+				{
+					"@type": "SupportedProperty",
+					"manages": {
+						"object": "FirstEmbeddedId",
+						"property": "rdf:type"
+					},
+					"property": "relatedCollection1",
+					"rdf:type": "collection"
+				},
+				{
+					"@type": "SupportedProperty",
+					"manages": {
+						"object": "FirstEmbeddedId",
+						"property": "rdf:type"
+					},
+					"property": "relatedCollection2",
+					"rdf:type": "collection"
 				}
 			],
 			"title": "Type 1"
@@ -230,48 +345,67 @@
 			"supportedProperty": [
 				{
 					"@type": "SupportedProperty",
-					"property": "applicationRelativeURL1"
+					"property": "applicationRelativeURL1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
 					"comment": "binary description",
-					"property": "binary1"
+					"property": "binary1",
+					"rdf:type": "file"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "binary2"
+					"property": "binary2",
+					"rdf:type": "file"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "boolean1"
+					"property": "boolean1",
+					"rdf:type": "boolean"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "boolean2"
+					"property": "boolean2",
+					"rdf:type": "boolean"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "booleanList1"
+					"manages": {
+						"object": "boolean",
+						"property": "rdf:type"
+					},
+					"property": "booleanList1",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "booleanList2"
+					"manages": {
+						"object": "boolean",
+						"property": "rdf:type"
+					},
+					"property": "booleanList2",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "link1"
+					"property": "link1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "link2"
+					"property": "link2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "localizedString1"
+					"property": "localizedString1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "localizedString2"
+					"property": "localizedString2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
@@ -283,71 +417,127 @@
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "number1"
+					"property": "nested1"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "number2"
+					"property": "nested2"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "numberList1"
+					"property": "number1",
+					"rdf:type": "number"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "numberList2"
+					"property": "number2",
+					"rdf:type": "number"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relativeURL1"
+					"manages": {
+						"object": "number",
+						"property": "rdf:type"
+					},
+					"property": "numberList1",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relativeURL2"
+					"manages": {
+						"object": "number",
+						"property": "rdf:type"
+					},
+					"property": "numberList2",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relativeURL3"
+					"property": "relativeURL1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "date1"
+					"property": "relativeURL2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "date2"
+					"property": "relativeURL3",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "string1"
+					"property": "date1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "string2"
+					"property": "date2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "stringList1"
+					"property": "string1",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "stringList2"
+					"property": "string2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "embedded1"
+					"manages": {
+						"object": "string",
+						"property": "rdf:type"
+					},
+					"property": "stringList1",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "embedded2"
+					"manages": {
+						"object": "string",
+						"property": "rdf:type"
+					},
+					"property": "stringList2",
+					"rdf:type": "collection"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "linked1"
+					"property": "embedded1",
+					"rdf:type": "FirstEmbeddedId"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "linked2"
+					"property": "embedded2",
+					"rdf:type": "FirstEmbeddedId"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "linked1",
+					"rdf:type": "FirstEmbeddedId"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "linked2",
+					"rdf:type": "FirstEmbeddedId"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "number1",
+					"rdf:type": "number"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string1",
+					"rdf:type": "string"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string2",
+					"rdf:type": "string"
 				},
 				{
 					"@type": "SupportedProperty",
@@ -355,15 +545,55 @@
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "linked3"
+					"property": "nested3"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relatedCollection1"
+					"property": "number1",
+					"rdf:type": "number"
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "relatedCollection2"
+					"property": "number1",
+					"rdf:type": "number"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string1",
+					"rdf:type": "string"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string1",
+					"rdf:type": "string"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "linked3",
+					"rdf:type": "ThirdEmbeddedId"
+				},
+				{
+					"@type": "SupportedProperty",
+					"property": "string1",
+					"rdf:type": "string"
+				},
+				{
+					"@type": "SupportedProperty",
+					"manages": {
+						"object": "FirstEmbeddedId",
+						"property": "rdf:type"
+					},
+					"property": "relatedCollection1",
+					"rdf:type": "collection"
+				},
+				{
+					"@type": "SupportedProperty",
+					"manages": {
+						"object": "FirstEmbeddedId",
+						"property": "rdf:type"
+					},
+					"property": "relatedCollection2",
+					"rdf:type": "collection"
 				}
 			],
 			"title": "Type 2"
@@ -396,7 +626,8 @@
 			"supportedProperty": [
 				{
 					"@type": "SupportedProperty",
-					"property": "totalItems"
+					"property": "totalItems",
+					"rdf:type": "number"
 				},
 				{
 					"@type": "SupportedProperty",
@@ -404,7 +635,8 @@
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "numberOfItems"
+					"property": "numberOfItems",
+					"rdf:type": "number"
 				}
 			],
 			"title": "Type 1Collection"
@@ -437,7 +669,8 @@
 			"supportedProperty": [
 				{
 					"@type": "SupportedProperty",
-					"property": "totalItems"
+					"property": "totalItems",
+					"rdf:type": "number"
 				},
 				{
 					"@type": "SupportedProperty",
@@ -445,7 +678,8 @@
 				},
 				{
 					"@type": "SupportedProperty",
-					"property": "numberOfItems"
+					"property": "numberOfItems",
+					"rdf:type": "number"
 				}
 			],
 			"title": "Type 2Collection"
