@@ -393,17 +393,17 @@ public class JSONLDDocumentationMessageMapper
 		else if (FILE.equals(type)) {
 			typeString = "file";
 		}
+		else if (LINKED_MODEL.equals(type)) {
+			Optional<String> extraType = documentationField.getExtraType();
+
+			typeString = extraType.orElse(null);
+		}
 		else if (NUMBER.equals(type)) {
 			typeString = "number";
 		}
 		else if (NUMBER_LIST.equals(type)) {
 			typeString = "collection";
 			_addExtraType(jsonObjectBuilder, "number");
-		}
-		else if (LINKED_MODEL.equals(type)) {
-			Optional<String> extraType = documentationField.getExtraType();
-
-			typeString = extraType.orElse(null);
 		}
 		else if (RELATED_COLLECTION.equals(type)) {
 			typeString = "collection";
