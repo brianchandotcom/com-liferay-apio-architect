@@ -123,9 +123,16 @@ public final class ActionRouterUtil {
 			if (result instanceof PageItems) {
 				PageItems<?> pageItems = (PageItems<?>)result;
 
-				Pagination pagination = getInstanceOf(
-					params, Pagination.class,
-					new PaginationImpl(pageItems.getTotalCount(), 1));
+				for (Object param : params) {
+					if (param instanceof Pagination) {
+						return new PageImpl<>(
+							resource.name(), pageItems, (Pagination)param,
+							emptyList());
+					}
+				}
+
+				Pagination pagination = new PaginationImpl(
+					pageItems.getTotalCount(), 1);
 
 				return new PageImpl<>(
 					resource.name(), pageItems, pagination, emptyList());
@@ -193,29 +200,6 @@ public final class ActionRouterUtil {
 		}
 
 		return null;
-	}
-
-	/**
-	 * Returns the first occurrence of an instance of the searched class in the
-	 * provided list. Returns the default value if none is found.
-	 *
-	 * @param  list the list in which to look for
-	 * @param  searchedClass the class whose instance is searched
-	 * @param  defaultValue the fallback value
-	 * @return the first occurrence of the searched class; the default value if
-	 *         none is found
-	 * @review
-	 */
-	public static <T> T getInstanceOf(
-		List<?> list, Class<T> searchedClass, T defaultValue) {
-
-		for (Object object : list) {
-			if (searchedClass.isInstance(object)) {
-				return searchedClass.cast(object);
-			}
-		}
-
-		return defaultValue;
 	}
 
 	/**
