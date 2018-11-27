@@ -21,6 +21,7 @@ import java.util.Optional;
  * collection or model, it also contains information about the related type
  *
  * @author Víctor Galán
+ * @review
  */
 public class DocumentationField {
 
