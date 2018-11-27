@@ -14,6 +14,18 @@
 
 package com.liferay.apio.architect.internal.writer;
 
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN_LIST;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.FILE;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.LINKED_MODEL;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.NESTED_MODEL;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.NESTED_MODEL_LIST;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.NUMBER;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.NUMBER_LIST;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.RELATED_COLLECTION;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.STRING_LIST;
+
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
@@ -27,6 +39,8 @@ import com.liferay.apio.architect.internal.operation.DeleteOperation;
 import com.liferay.apio.architect.internal.operation.RetrieveOperation;
 import com.liferay.apio.architect.internal.operation.UpdateOperation;
 import com.liferay.apio.architect.internal.request.RequestInfo;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField;
+import com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType;
 import com.liferay.apio.architect.language.AcceptLanguage;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.related.RelatedCollection;
@@ -37,7 +51,6 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +85,7 @@ public class DocumentationWriter {
 		_documentation = builder._documentation;
 		_documentationMessageMapper = builder._documentationMessageMapper;
 		_requestInfo = builder._requestInfo;
+		_typeFunction = builder._typeFunction;
 
 		_customDocumentation = _documentation.getCustomDocumentation();
 	}
@@ -230,38 +244,58 @@ public class DocumentationWriter {
 
 	}
 
-	private Stream<String> _calculateNestableFieldNames(
+	private Stream<DocumentationField> _calculateNestableFieldNames(
 		BaseRepresentor representor) {
 
-		List<FieldFunction> fieldFunctions = new ArrayList<>();
-
-		fieldFunctions.addAll(representor.getApplicationRelativeURLFunctions());
-		fieldFunctions.addAll(representor.getBinaryFunctions());
-		fieldFunctions.addAll(representor.getBooleanFunctions());
-		fieldFunctions.addAll(representor.getBooleanListFunctions());
-		fieldFunctions.addAll(representor.getLinkFunctions());
-		fieldFunctions.addAll(representor.getLocalizedStringFunctions());
-		fieldFunctions.addAll(representor.getNestedFieldFunctions());
-		fieldFunctions.addAll(representor.getNumberFunctions());
-		fieldFunctions.addAll(representor.getNumberListFunctions());
-		fieldFunctions.addAll(representor.getRelativeURLFunctions());
-		fieldFunctions.addAll(representor.getStringFunctions());
-		fieldFunctions.addAll(representor.getStringListFunctions());
-
-		Stream<FieldFunction> fieldFunctionStream = fieldFunctions.stream();
-
-		Stream<String> fieldNamesStream = fieldFunctionStream.map(
-			fieldFunction -> fieldFunction.getKey());
+		Stream<DocumentationField> applicationRelativeURLStream =
+			_getDocumentationFieldStream(
+				representor.getApplicationRelativeURLFunctions(), STRING);
+		Stream<DocumentationField> binaryStream = _getDocumentationFieldStream(
+			representor.getBinaryFunctions(), FILE);
+		Stream<DocumentationField> booleanStream = _getDocumentationFieldStream(
+			representor.getBooleanFunctions(), BOOLEAN);
+		Stream<DocumentationField> booleanListStream =
+			_getDocumentationFieldStream(
+				representor.getBooleanListFunctions(), BOOLEAN_LIST);
+		Stream<DocumentationField> linkStream = _getDocumentationFieldStream(
+			representor.getLinkFunctions(), STRING);
+		Stream<DocumentationField> localizedStringStream =
+			_getDocumentationFieldStream(
+				representor.getLocalizedStringFunctions(), STRING);
+		Stream<DocumentationField> nestedStream = _getDocumentationFieldStream(
+			representor.getNestedFieldFunctions(), NESTED_MODEL);
+		Stream<DocumentationField> nestedListStream =
+			_getDocumentationFieldStream(
+				representor.getNestedFieldFunctions(), NESTED_MODEL_LIST);
+		Stream<DocumentationField> numberStream = _getDocumentationFieldStream(
+			representor.getNumberFunctions(), NUMBER);
+		Stream<DocumentationField> numberListStream =
+			_getDocumentationFieldStream(
+				representor.getNumberListFunctions(), NUMBER_LIST);
+		Stream<DocumentationField> relativeURLStream =
+			_getDocumentationFieldStream(
+				representor.getRelativeURLFunctions(), STRING);
+		Stream<DocumentationField> stringStream = _getDocumentationFieldStream(
+			representor.getStringFunctions(), STRING);
+		Stream<DocumentationField> stringListStream =
+			_getDocumentationFieldStream(
+				representor.getStringListFunctions(), STRING_LIST);
 
 		List<RelatedModel> relatedModels = representor.getRelatedModels();
 
 		Stream<RelatedModel> relatedModelStream = relatedModels.stream();
 
-		Stream<String> relatedModelNamesStream = relatedModelStream.map(
-			RelatedModel::getKey);
+		Stream<DocumentationField> relatedModelDocumentationFieldStream =
+			relatedModelStream.map(_createDocumentationFieldFromModel());
 
-		fieldNamesStream = Stream.concat(
-			fieldNamesStream, relatedModelNamesStream);
+		Stream<DocumentationField> fieldsStream = Stream.of(
+			applicationRelativeURLStream, binaryStream, booleanStream,
+			booleanListStream, linkStream, localizedStringStream, nestedStream,
+			nestedListStream, numberStream, numberListStream, relativeURLStream,
+			stringStream, stringListStream, relatedModelDocumentationFieldStream
+		).flatMap(
+			Function.identity()
+		);
 
 		List<NestedFieldFunction> nestedFieldFunctions =
 			representor.getNestedFieldFunctions();
@@ -269,16 +303,47 @@ public class DocumentationWriter {
 		Stream<NestedFieldFunction> nestedFieldFunctionStream =
 			nestedFieldFunctions.stream();
 
-		Stream<String> nestedFieldNamesStream = nestedFieldFunctionStream.map(
-			nestedFieldFunction -> _calculateNestableFieldNames(
-				nestedFieldFunction.getNestedRepresentor())
-		).reduce(
-			Stream::concat
-		).orElseGet(
-			Stream::empty
-		);
+		Stream<DocumentationField> nestedFieldNamesStream =
+			nestedFieldFunctionStream.map(
+				nestedFieldFunction -> _calculateNestableFieldNames(
+					nestedFieldFunction.getNestedRepresentor())
+			).reduce(
+				Stream::concat
+			).orElseGet(
+				Stream::empty
+			);
 
-		return Stream.concat(fieldNamesStream, nestedFieldNamesStream);
+		return Stream.concat(fieldsStream, nestedFieldNamesStream);
+	}
+
+	private Function<RelatedCollection, DocumentationField>
+		_createDocumentationFieldFromCollection() {
+
+		return relatedCollection -> {
+			String extraType = _typeFunction.apply(
+				relatedCollection.getIdentifierClass()
+			).orElse(
+				null
+			);
+
+			return DocumentationField.of(
+				relatedCollection.getKey(), RELATED_COLLECTION, extraType);
+		};
+	}
+
+	private Function<RelatedModel, DocumentationField>
+		_createDocumentationFieldFromModel() {
+
+		return relatedCollection -> {
+			String extraType = _typeFunction.apply(
+				relatedCollection.getIdentifierClass()
+			).orElse(
+				null
+			);
+
+			return DocumentationField.of(
+				relatedCollection.getKey(), LINKED_MODEL, extraType);
+		};
 	}
 
 	private String _getCustomDocumentation(String name) {
@@ -295,6 +360,16 @@ public class DocumentationWriter {
 		).orElse(
 			null
 		);
+	}
+
+	private Stream<DocumentationField> _getDocumentationFieldStream(
+		List<FieldFunction> fieldFunctionList, FieldType fieldType) {
+
+		Stream<FieldFunction> stream = fieldFunctionList.stream();
+
+		return stream.map(
+			fieldFunction -> DocumentationField.of(
+				fieldFunction.getKey(), fieldType));
 	}
 
 	private Optional<String> _getNestedCollectionRouteOptional(
@@ -320,14 +395,14 @@ public class DocumentationWriter {
 	private void _writeAllFields(
 		Representor representor, JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		Stream<String> fieldNamesStream = _calculateNestableFieldNames(
-			representor);
+		Stream<DocumentationField> fieldNamesStream =
+			_calculateNestableFieldNames(representor);
 
 		Stream<RelatedCollection> relatedCollections =
 			representor.getRelatedCollections();
 
-		Stream<String> relatedCollectionsNamesStream = relatedCollections.map(
-			RelatedCollection::getKey);
+		Stream<DocumentationField> relatedCollectionsNamesStream =
+			relatedCollections.map(_createDocumentationFieldFromCollection());
 
 		fieldNamesStream = Stream.concat(
 			fieldNamesStream, relatedCollectionsNamesStream);
@@ -362,26 +437,30 @@ public class DocumentationWriter {
 	}
 
 	private void _writeFields(
-		Stream<String> fields, JSONObjectBuilder resourceJsonObjectBuilder) {
+		Stream<DocumentationField> fields,
+		JSONObjectBuilder resourceJsonObjectBuilder) {
 
-		Stream<String> stream = fields.distinct();
+		Stream<DocumentationField> stream = fields.distinct();
 
 		stream.forEach(
 			field -> _writeFormField(resourceJsonObjectBuilder, field));
 	}
 
 	private void _writeFormField(
-		JSONObjectBuilder resourceJsonObjectBuilder, String fieldName) {
+		JSONObjectBuilder resourceJsonObjectBuilder,
+		DocumentationField documentationField) {
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
 
-		String customDocumentation = _getCustomDocumentation(fieldName);
+		String customDocumentation = _getCustomDocumentation(
+			documentationField.getName());
 
 		_documentationMessageMapper.mapProperty(
-			jsonObjectBuilder, fieldName, customDocumentation);
+			jsonObjectBuilder, documentationField, customDocumentation);
 
 		_documentationMessageMapper.onFinishProperty(
-			resourceJsonObjectBuilder, jsonObjectBuilder, fieldName);
+			resourceJsonObjectBuilder, jsonObjectBuilder,
+			documentationField.getName());
 	}
 
 	private void _writeItemOperations(
@@ -498,5 +577,6 @@ public class DocumentationWriter {
 	private final Documentation _documentation;
 	private final DocumentationMessageMapper _documentationMessageMapper;
 	private final RequestInfo _requestInfo;
+	private final Function<Class<?>, Optional<String>> _typeFunction;
 
 }
