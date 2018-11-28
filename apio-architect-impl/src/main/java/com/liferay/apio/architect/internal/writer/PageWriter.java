@@ -15,8 +15,7 @@
 package com.liferay.apio.architect.internal.writer;
 
 import static com.liferay.apio.architect.internal.url.URLCreator.createCollectionPageURL;
-import static com.liferay.apio.architect.internal.url.URLCreator.createNestedResourceURL;
-import static com.liferay.apio.architect.internal.url.URLCreator.createPagedResourceURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createResourceURL;
 import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getPathOptional;
 
@@ -32,13 +31,8 @@ import com.liferay.apio.architect.internal.message.json.PageMessageMapper;
 import com.liferay.apio.architect.internal.pagination.PageType;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
-import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.representor.BaseRepresentor;
-import com.liferay.apio.architect.resource.Resource.Id;
-import com.liferay.apio.architect.resource.Resource.Item;
-import com.liferay.apio.architect.resource.Resource.Nested;
-import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
@@ -102,9 +96,12 @@ public class PageWriter<T> {
 
 		_writePageURLs();
 
-		String url = _getCollectionURL();
+		Optional<String> optionalURL = createResourceURL(
+			_requestInfo.getApplicationURL(), _page.getResource());
 
-		_pageMessageMapper.mapCollectionURL(_jsonObjectBuilder, url);
+		optionalURL.ifPresent(
+			url -> _pageMessageMapper.mapCollectionURL(
+				_jsonObjectBuilder, url));
 
 		String resourceName = _page.getResourceName();
 
@@ -284,23 +281,6 @@ public class PageWriter<T> {
 		private ResourceNameFunction _resourceNameFunction;
 		private SingleModelFunction _singleModelFunction;
 
-	}
-
-	private String _getCollectionURL() {
-		Optional<Path> optional = _page.getPathOptional();
-
-		ApplicationURL applicationURL = _requestInfo.getApplicationURL();
-
-		return optional.map(
-			path -> Item.of(path.getName(), Id.of("", path.getId()))
-		).map(
-			parent -> Nested.of(parent, _page.getResourceName())
-		).flatMap(
-			nested -> createNestedResourceURL(applicationURL, nested)
-		).orElseGet(
-			() -> createPagedResourceURL(
-				applicationURL, Paged.of(_page.getResourceName()))
-		);
 	}
 
 	private Consumer<BaseRepresentor> _mapPageSemantics(
@@ -700,31 +680,35 @@ public class PageWriter<T> {
 	}
 
 	private void _writePageURLs() {
-		String url = _getCollectionURL();
+		Optional<String> optionalURL = createResourceURL(
+			_requestInfo.getApplicationURL(), _page.getResource());
 
-		_pageMessageMapper.mapCurrentPageURL(
-			_jsonObjectBuilder,
-			createCollectionPageURL(url, _page, PageType.CURRENT));
+		optionalURL.ifPresent(
+			url -> {
+				_pageMessageMapper.mapCurrentPageURL(
+					_jsonObjectBuilder,
+					createCollectionPageURL(url, _page, PageType.CURRENT));
 
-		_pageMessageMapper.mapFirstPageURL(
-			_jsonObjectBuilder,
-			createCollectionPageURL(url, _page, PageType.FIRST));
+				_pageMessageMapper.mapFirstPageURL(
+					_jsonObjectBuilder,
+					createCollectionPageURL(url, _page, PageType.FIRST));
 
-		_pageMessageMapper.mapLastPageURL(
-			_jsonObjectBuilder,
-			createCollectionPageURL(url, _page, PageType.LAST));
+				_pageMessageMapper.mapLastPageURL(
+					_jsonObjectBuilder,
+					createCollectionPageURL(url, _page, PageType.LAST));
 
-		if (_page.hasNext()) {
-			_pageMessageMapper.mapNextPageURL(
-				_jsonObjectBuilder,
-				createCollectionPageURL(url, _page, PageType.NEXT));
-		}
+				if (_page.hasNext()) {
+					_pageMessageMapper.mapNextPageURL(
+						_jsonObjectBuilder,
+						createCollectionPageURL(url, _page, PageType.NEXT));
+				}
 
-		if (_page.hasPrevious()) {
-			_pageMessageMapper.mapPreviousPageURL(
-				_jsonObjectBuilder,
-				createCollectionPageURL(url, _page, PageType.PREVIOUS));
-		}
+				if (_page.hasPrevious()) {
+					_pageMessageMapper.mapPreviousPageURL(
+						_jsonObjectBuilder,
+						createCollectionPageURL(url, _page, PageType.PREVIOUS));
+				}
+			});
 	}
 
 	private final JSONObjectBuilder _jsonObjectBuilder;

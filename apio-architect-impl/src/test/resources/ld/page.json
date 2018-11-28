@@ -5,7 +5,7 @@
 		},
 		"https://www.w3.org/ns/hydra/core#"
 	],
-	"@id": "localhost/o/api/name/id/root",
+	"@id": "localhost/o/api/root",
 	"@type": [
 		"Collection"
 	],
@@ -975,13 +975,13 @@
 	"numberOfItems": 3,
 	"totalItems": 9,
 	"view": {
-		"@id": "localhost/o/api/name/id/root?page=2&per_page=3",
+		"@id": "localhost/o/api/root?page=2&per_page=3",
 		"@type": [
 			"PartialCollectionView"
 		],
-		"first": "localhost/o/api/name/id/root?page=1&per_page=3",
-		"last": "localhost/o/api/name/id/root?page=3&per_page=3",
-		"next": "localhost/o/api/name/id/root?page=3&per_page=3",
-		"previous": "localhost/o/api/name/id/root?page=1&per_page=3"
+		"first": "localhost/o/api/root?page=1&per_page=3",
+		"last": "localhost/o/api/root?page=3&per_page=3",
+		"next": "localhost/o/api/root?page=3&per_page=3",
+		"previous": "localhost/o/api/root?page=1&per_page=3"
 	}
 }

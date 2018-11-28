@@ -1,5 +1,5 @@
 {
-	"collection": "localhost/o/api/name/id/root",
+	"collection": "localhost/o/api/root",
 	"elements": [
 		{
 			"applicationRelativeURL1": "localhost/o/api/first",
@@ -541,11 +541,11 @@
 	],
 	"numberOfItems": 3,
 	"pages": {
-		"first": "localhost/o/api/name/id/root?page=1&per_page=3",
-		"last": "localhost/o/api/name/id/root?page=3&per_page=3",
-		"next": "localhost/o/api/name/id/root?page=3&per_page=3",
-		"prev": "localhost/o/api/name/id/root?page=1&per_page=3"
+		"first": "localhost/o/api/root?page=1&per_page=3",
+		"last": "localhost/o/api/root?page=3&per_page=3",
+		"next": "localhost/o/api/root?page=3&per_page=3",
+		"prev": "localhost/o/api/root?page=1&per_page=3"
 	},
-	"self": "localhost/o/api/name/id/root?page=2&per_page=3",
+	"self": "localhost/o/api/root?page=2&per_page=3",
 	"totalNumberOfItems": 9
 }

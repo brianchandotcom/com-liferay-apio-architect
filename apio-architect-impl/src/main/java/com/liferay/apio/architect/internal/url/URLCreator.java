@@ -85,8 +85,7 @@ public final class URLCreator {
 	public static Optional<String> createActionURL(
 		ApplicationURL applicationURL, Resource resource, String actionName) {
 
-		Optional<String> optional = _createResourceURL(
-			applicationURL, resource);
+		Optional<String> optional = createResourceURL(applicationURL, resource);
 
 		return optional.map(
 			url -> {
@@ -223,6 +222,38 @@ public final class URLCreator {
 	}
 
 	/**
+	 * Returns the URL for a resource.
+	 *
+	 * @param  applicationURL the application URL
+	 * @param  resource the resource
+	 * @return the resource's URL
+	 * @review
+	 */
+	public static Optional<String> createResourceURL(
+		ApplicationURL applicationURL, Resource resource) {
+
+		if (resource instanceof Paged) {
+			Paged paged = (Paged)resource;
+
+			return Optional.of(createPagedResourceURL(applicationURL, paged));
+		}
+
+		if (resource instanceof Nested) {
+			Nested nested = (Nested)resource;
+
+			return createNestedResourceURL(applicationURL, nested);
+		}
+
+		if (resource instanceof Item) {
+			Item item = (Item)resource;
+
+			return createItemResourceURL(applicationURL, item);
+		}
+
+		return Optional.empty();
+	}
+
+	/**
 	 * Returns a {@link Path} from the URL if it's a valid URL for a resource
 	 * with the provided name. Returns {@link Optional#empty()} otherwise.
 	 *
@@ -266,30 +297,6 @@ public final class URLCreator {
 		}
 
 		return join("/", baseUrl, relativeURL);
-	}
-
-	private static Optional<String> _createResourceURL(
-		ApplicationURL applicationURL, Resource resource) {
-
-		if (resource instanceof Paged) {
-			Paged paged = (Paged)resource;
-
-			return Optional.of(createPagedResourceURL(applicationURL, paged));
-		}
-
-		if (resource instanceof Nested) {
-			Nested nested = (Nested)resource;
-
-			return createNestedResourceURL(applicationURL, nested);
-		}
-
-		if (resource instanceof Item) {
-			Item item = (Item)resource;
-
-			return createItemResourceURL(applicationURL, item);
-		}
-
-		return Optional.empty();
 	}
 
 	private static Predicate<Path> _isNotEmpty(
