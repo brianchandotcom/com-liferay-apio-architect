@@ -25,28 +25,73 @@ import java.util.Optional;
  */
 public class DocumentationField {
 
+	/**
+	 * Creates a {@code DocumentationField} using the name and type given.
+	 *
+	 * @param  name the name of the field
+	 * @param  fieldType the type of the field
+	 * @return a Documentation field
+	 * @review
+	 */
 	public static DocumentationField of(String name, FieldType fieldType) {
 		return of(name, fieldType, null);
 	}
 
+	/**
+	 * Creates a {@code DocumentationField} using the name, type and extra type
+	 * given.
+	 *
+	 * @param  name the name of the field
+	 * @param  fieldType the type of the field
+	 * @return a Documentation field
+	 * @review
+	 */
 	public static DocumentationField of(
 		String name, FieldType fieldType, String extraType) {
 
 		return new DocumentationField(name, fieldType, extraType);
 	}
 
+	/**
+	 * Returns the extra type.
+	 *
+	 * <p>
+	 * This property only exist when the primary type has no enough information,
+	 * like
+	 * </p>
+	 *
+	 * @return the extra type
+	 * @review
+	 */
 	public Optional<String> getExtraType() {
 		return Optional.ofNullable(_extraType);
 	}
 
+	/**
+	 * Returns the name.
+	 *
+	 * @return the name
+	 * @review
+	 */
 	public String getName() {
 		return _name;
 	}
 
+	/**
+	 * Returns the type
+	 *
+	 * @return the type
+	 * @review
+	 */
 	public FieldType getType() {
 		return _type;
 	}
 
+	/**
+	 * Represent all the field type that the profile should show
+	 *
+	 * @review
+	 */
 	public enum FieldType {
 
 		BOOLEAN, BOOLEAN_LIST, DATE, DATE_LIST, FILE, LINKED_MODEL,

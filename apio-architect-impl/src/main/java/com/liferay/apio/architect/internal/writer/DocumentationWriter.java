@@ -226,6 +226,7 @@ public class DocumentationWriter {
 			 *
 			 * @param  typeFunction the information obtained from the request.
 			 * @return the updated builder
+			 * @review
 			 */
 			public BuildStep typeFunction(
 				Function<Class<?>, Optional<String>> typeFunction) {
