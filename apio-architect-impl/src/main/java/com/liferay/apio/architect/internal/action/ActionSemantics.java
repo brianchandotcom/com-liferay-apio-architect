@@ -251,10 +251,6 @@ public final class ActionSemantics {
 	 * @review
 	 */
 	public ActionSemantics withResource(Resource resource) {
-		if (_resource.equals(resource)) {
-			return this;
-		}
-
 		ActionSemantics actionSemantics = new ActionSemantics();
 
 		actionSemantics._annotations = _annotations;

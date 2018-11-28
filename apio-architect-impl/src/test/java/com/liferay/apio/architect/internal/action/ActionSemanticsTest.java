@@ -293,8 +293,6 @@ public class ActionSemanticsTest {
 		ActionSemantics newActionSemantics = actionSemantics.withResource(
 			Item.of("name"));
 
-		assertEquals(
-			actionSemantics, actionSemantics.withResource(Paged.of("name")));
 		assertThat(actionSemantics.getResource(), is(Paged.of("name")));
 
 		assertThat(newActionSemantics.getResource(), is(Item.of("name")));
