@@ -24,9 +24,9 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.resource.Resource;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

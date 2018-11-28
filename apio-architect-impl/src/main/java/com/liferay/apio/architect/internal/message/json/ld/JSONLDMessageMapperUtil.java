@@ -19,9 +19,9 @@ import static java.lang.String.join;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Nested;
 
 import java.util.List;
 
@@ -48,12 +48,12 @@ public class JSONLDMessageMapperUtil {
 		String resourceName = "";
 
 		if (resource instanceof Nested) {
-			Item parent = ((Nested)resource).parent();
+			Item parent = ((Nested)resource).getParentItem();
 
-			resourceName = join("/", parent.name(), resource.name());
+			resourceName = join("/", parent.getName(), resource.getName());
 		}
 		else {
-			resourceName = resource.name();
+			resourceName = resource.getName();
 		}
 
 		return "_:" + join("/", resourceName, actionName);

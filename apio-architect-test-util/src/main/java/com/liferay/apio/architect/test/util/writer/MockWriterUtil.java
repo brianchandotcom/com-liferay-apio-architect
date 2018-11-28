@@ -24,13 +24,13 @@ import static com.liferay.apio.architect.test.util.representor.MockRepresentorCr
 
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.identifier.FirstEmbeddedId;
 import com.liferay.apio.architect.test.util.identifier.SecondEmbeddedId;

@@ -21,9 +21,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Nested;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.test.util.internal.util.DescriptionUtil;
 
 import java.lang.reflect.Constructor;

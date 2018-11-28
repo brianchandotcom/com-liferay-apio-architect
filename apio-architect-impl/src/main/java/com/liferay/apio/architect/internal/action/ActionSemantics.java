@@ -18,10 +18,10 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 
 import com.liferay.apio.architect.form.Body;
-import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.operation.HTTPMethod;
+import com.liferay.apio.architect.resource.Resource;
 
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;

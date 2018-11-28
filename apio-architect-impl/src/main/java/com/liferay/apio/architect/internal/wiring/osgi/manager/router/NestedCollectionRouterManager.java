@@ -24,8 +24,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl.BuilderImpl;
@@ -34,6 +32,8 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.Nam
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.router.NestedCollectionRouter;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;

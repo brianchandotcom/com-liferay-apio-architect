@@ -33,9 +33,9 @@ import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 
@@ -191,7 +191,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				SingleModel.class
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
+					t -> new SingleModelImpl<>(t, _item.getName())
 				).apply(
 					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
@@ -256,7 +256,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				SingleModel.class
 			).executeFunction(
 				params -> updaterThrowableHexaFunction.andThen(
-					t -> new SingleModelImpl<>(t, _item.name())
+					t -> new SingleModelImpl<>(t, _item.getName())
 				).apply(
 					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),

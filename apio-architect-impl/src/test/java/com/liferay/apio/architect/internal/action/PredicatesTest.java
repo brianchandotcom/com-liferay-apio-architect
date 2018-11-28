@@ -38,9 +38,9 @@ import static org.junit.Assert.assertTrue;
 
 import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.annotation.EntryPoint;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Paged;
 
 import java.util.List;
 import java.util.function.Predicate;

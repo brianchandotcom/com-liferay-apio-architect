@@ -30,11 +30,11 @@ import static org.hamcrest.core.Is.is;
 
 import static org.junit.Assert.assertEquals;
 
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Paged;
 
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;

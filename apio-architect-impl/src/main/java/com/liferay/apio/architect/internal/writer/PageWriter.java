@@ -21,10 +21,6 @@ import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getFiel
 import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getPathOptional;
 
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
-import com.liferay.apio.architect.internal.action.resource.Resource.Id;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.alias.RepresentorFunction;
@@ -39,6 +35,10 @@ import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.representor.BaseRepresentor;
+import com.liferay.apio.architect.resource.Resource.Id;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Nested;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 

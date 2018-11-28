@@ -33,8 +33,6 @@ import static org.hamcrest.core.Is.is;
 
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotAllowed;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotFound;
@@ -43,6 +41,8 @@ import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.internal.test.base.BaseTest;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import io.vavr.CheckedFunction3;

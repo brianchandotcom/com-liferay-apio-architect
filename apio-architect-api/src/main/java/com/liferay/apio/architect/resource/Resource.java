@@ -12,21 +12,22 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.action.resource;
+package com.liferay.apio.architect.resource;
+
+import aQute.bnd.annotation.ProviderType;
 
 import java.util.Optional;
 
 /**
- * Instances of this class represent an API resource name.
+ * Instances of this class represent an API resource.
  *
- * <p>
- * Only three implementations are allowed: {@link Item}, {@link Paged} and
+ * <p>Only three implementations are allowed: {@link Item}, {@link Paged} and
  * {@link Nested}.
- * </p>
  *
- * <p>
- * This class should never be instantiated.
- * </p>
+ * <p>This class should never be directly instantiated. Use one of its
+ * descendants
+ * static methods ({@link Paged#of}, {@link Item#of} and {@link Nested#of})
+ * instead.
  *
  * @author Alejandro Hernández
  * @see    Item
@@ -34,58 +35,30 @@ import java.util.Optional;
  * @see    Nested
  * @review
  */
+@ProviderType
 public class Resource {
-
-	/**
-	 * Returns {@code true} if this {@link Resource} is a {@link Item}.
-	 *
-	 * @review
-	 */
-	public boolean isItem() {
-		return this instanceof Item;
-	}
-
-	/**
-	 * Returns {@code true} if this {@link Resource} is a {@link Nested}.
-	 *
-	 * @review
-	 */
-	public boolean isNested() {
-		return this instanceof Nested;
-	}
-
-	/**
-	 * Returns {@code true} if this {@link Resource} is a {@link Paged}.
-	 *
-	 * @review
-	 */
-	public boolean isPaged() {
-		return this instanceof Paged;
-	}
 
 	/**
 	 * The resource's name
 	 *
 	 * @review
 	 */
-	public String name() {
+	public String getName() {
 		return _name;
 	}
 
 	/**
 	 * Instances of this class represent an item's ID.
 	 *
-	 * <p>
-	 * This class should never be instantiated. Always use {@link #of(Object,
-	 * String)} method to create a new instance.
-	 * </p>
+	 * <p>This class should never be directly instantiated. Always use {@link
+	 * #of} method to create a new instance.
 	 *
 	 * @review
 	 */
 	public static class Id {
 
 		/**
-		 * Creates a new {@link ID} with the provided {@code object}-{@code
+		 * Creates a new {@link Id} with the provided {@code object}-{@code
 		 * string} pair.
 		 *
 		 * @review
@@ -95,8 +68,9 @@ public class Resource {
 		}
 
 		/**
-		 * The ID as an object instance. This can be any class supported by a
-		 * {@link com.liferay.apio.architect.uri.mapper.PathIdentifierMapper}.
+		 * The {@link Id} as an object instance. The result of this method can
+		 * be any class supported by a {@link
+		 * com.liferay.apio.architect.uri.mapper.PathIdentifierMapper}.
 		 *
 		 * @review
 		 */
@@ -105,7 +79,7 @@ public class Resource {
 		}
 
 		/**
-		 * The ID as an string instance.
+		 * The {@link Id} as an string instance.
 		 *
 		 * @review
 		 */
@@ -157,10 +131,9 @@ public class Resource {
 	/**
 	 * Instances of this class represent an item resource.
 	 *
-	 * <p>
-	 * This class should never be instantiated. Always use {@link #of(String)}
+	 * <p>This class should never be directly instantiated. Always use {@link
+	 * #of}
 	 * method to create a new instance.
-	 * </p>
 	 *
 	 * @review
 	 */
@@ -177,7 +150,7 @@ public class Resource {
 
 		/**
 		 * Creates a new {@link Item} with the provided {@code name} and {@code
-		 * ID}.
+		 * Id}.
 		 *
 		 * @review
 		 */
@@ -191,39 +164,60 @@ public class Resource {
 				return true;
 			}
 
-			if (obj instanceof Item && name().equals(((Item)obj).name())) {
+			if (obj instanceof Item &&
+				getName().equals(((Item)obj).getName())) {
+
 				return true;
 			}
 
 			return false;
 		}
 
+		/**
+		 * The resource's Id, if present; {@code Optional#empty} otherwise. This
+		 * component is not taken into account when performing an {@link
+		 * #equals)} check.
+		 *
+		 * @review
+		 */
+		public Optional<Id> getIdOptional() {
+			return Optional.ofNullable(_id);
+		}
+
 		@Override
 		public int hashCode() {
 			int h = 5381;
 
-			h += (h << 5) + name().hashCode();
+			h += (h << 5) + getName().hashCode();
 
 			return h;
-		}
-
-		/**
-		 * The resource's ID. This component is not taken into account when
-		 * performing an {@link #equals(Object)} check.
-		 *
-		 * @review
-		 */
-		public Optional<Id> id() {
-			return Optional.ofNullable(_id);
 		}
 
 		@Override
 		public String toString() {
 			if (_id != null) {
-				return "Item{name=" + name() + ", id=" + _id + "}";
+				return "Item{name=" + getName() + ", id=" + _id + "}";
 			}
 
-			return "Item{name=" + name() + "}";
+			return "Item{name=" + getName() + "}";
+		}
+
+		/**
+		 * Copies the current {@link Item} by setting a value for the {@link
+		 * Item#getIdOptional() ID} attribute. A shallow reference equality
+		 * check is used to prevent copying of the same value by returning
+		 * {@code this}.
+		 *
+		 * @param  id the new ID
+		 * @return A modified copy of {@code this} object
+		 * @review
+		 */
+		public Item withId(Id id) {
+			if ((_id != null) && _id.equals(id)) {
+				return this;
+			}
+
+			return new Item(getName(), id);
 		}
 
 		private Item(String name, Id id) {
@@ -239,10 +233,8 @@ public class Resource {
 	/**
 	 * Instances of this class represent a nested resource.
 	 *
-	 * <p>
-	 * This class should never be instantiated. Always use {@link #of(Item,
-	 * String)} method to create a new instance.
-	 * </p>
+	 * <p>This class should never be directly instantiated. Always use {@link
+	 * #of} method to create a new instance.
 	 *
 	 * @review
 	 */
@@ -254,14 +246,14 @@ public class Resource {
 		 *
 		 * @review
 		 */
-		public static Nested of(Item parent, String name) {
-			return new Nested(parent, name);
+		public static Nested of(Item parentItem, String name) {
+			return new Nested(parentItem, name);
 		}
 
-		public Nested(Item parent, String name) {
+		public Nested(Item parentItem, String name) {
 			super(name);
 
-			_parent = parent;
+			_parentItem = parentItem;
 		}
 
 		@Override
@@ -271,8 +263,8 @@ public class Resource {
 			}
 
 			if ((obj instanceof Nested) &&
-				name().equals(((Nested)obj).name()) &&
-				_parent.equals(((Nested)obj)._parent)) {
+				getName().equals(((Nested)obj).getName()) &&
+				_parentItem.equals(((Nested)obj)._parentItem)) {
 
 				return true;
 			}
@@ -280,31 +272,49 @@ public class Resource {
 			return false;
 		}
 
+		/**
+		 * The resource's parent {@link Item}
+		 *
+		 * @review
+		 */
+		public Item getParentItem() {
+			return _parentItem;
+		}
+
 		@Override
 		public int hashCode() {
 			int h = 5381;
 
-			h += (h << 5) + name().hashCode();
-			h += (h << 5) + _parent.hashCode();
+			h += (h << 5) + getName().hashCode();
+			h += (h << 5) + _parentItem.hashCode();
 
 			return h;
 		}
 
-		/**
-		 * The resource's parent
-		 *
-		 * @review
-		 */
-		public Item parent() {
-			return _parent;
-		}
-
 		@Override
 		public String toString() {
-			return "Nested{name=" + name() + ", parent=" + _parent + "}";
+			return "Nested{name=" + getName() + ", parent=" + _parentItem + "}";
 		}
 
-		private final Item _parent;
+		/**
+		 * Copies the current {@link Nested} by setting a value for the parent's
+		 * {@link Item#getIdOptional() ID} attribute. A shallow reference
+		 * equality check is used to prevent copying of the same value by
+		 * returning {@code this}.
+		 *
+		 * @param  id the new ID
+		 * @return A modified copy of {@code this} object
+		 * @review
+		 */
+		public Nested withParentId(Id id) {
+			if ((_parentItem._id != null) && _parentItem._id.equals(id)) {
+				return this;
+			}
+
+			return new Nested(_parentItem.withId(id), getName());
+		}
+
+		private final Item _parentItem;
 
 	}
 
@@ -312,7 +322,7 @@ public class Resource {
 	 * Instances of this class represent a paged resource.
 	 *
 	 * <p>
-	 * This class should never be instantiated. Always use {@link #of(String)}
+	 * This class should never be directly instantiated. Always use {@link #of}
 	 * method to create a new instance.
 	 * </p>
 	 *
@@ -335,7 +345,9 @@ public class Resource {
 				return true;
 			}
 
-			if (obj instanceof Paged && name().equals(((Paged)obj).name())) {
+			if (obj instanceof Paged &&
+				getName().equals(((Paged)obj).getName())) {
+
 				return true;
 			}
 
@@ -346,14 +358,14 @@ public class Resource {
 		public int hashCode() {
 			int h = 5381;
 
-			h += (h << 5) + name().hashCode();
+			h += (h << 5) + getName().hashCode();
 
 			return h;
 		}
 
 		@Override
 		public String toString() {
-			return "Paged{name=" + name() + "}";
+			return "Paged{name=" + getName() + "}";
 		}
 
 		private Paged(String name) {

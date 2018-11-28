@@ -45,12 +45,12 @@ import com.liferay.apio.architect.annotation.EntryPoint;
 import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.routes.RoutesTestUtil.CustomIdentifier;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 

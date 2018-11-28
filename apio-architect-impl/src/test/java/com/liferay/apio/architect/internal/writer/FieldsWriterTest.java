@@ -32,14 +32,14 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import static org.junit.Assert.assertEquals;
 
-import com.liferay.apio.architect.internal.action.resource.Resource.Id;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.list.FunctionalList;
 import com.liferay.apio.architect.internal.related.RelatedModelImpl;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.related.RelatedModel;
+import com.liferay.apio.architect.resource.Resource.Id;
+import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.identifier.FirstEmbeddedId;
 import com.liferay.apio.architect.test.util.model.FirstEmbeddedModel;
@@ -141,9 +141,9 @@ public class FieldsWriterTest {
 
 		Item item = items.get(0);
 
-		assertThat(item.name(), is("root"));
+		assertThat(item.getName(), is("root"));
 
-		Optional<Id> optional = item.id();
+		Optional<Id> optional = item.getIdOptional();
 
 		assertThat(optional, is(optionalWithValue()));
 

@@ -21,10 +21,10 @@ import static org.hamcrest.core.Is.is;
 
 import static org.junit.Assert.assertEquals;
 
-import com.liferay.apio.architect.internal.action.resource.Resource.Id;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
+import com.liferay.apio.architect.resource.Resource.Id;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Nested;
+import com.liferay.apio.architect.resource.Resource.Paged;
 
 import java.util.Optional;
 
@@ -48,7 +48,7 @@ public class ResourceTest {
 	public void testItemOfCreatesValidResourceItem() {
 		Item item = Item.of("name");
 
-		assertThat(item.name(), is("name"));
+		assertThat(item.getName(), is("name"));
 		assertEquals(item, Item.of("name"));
 	}
 
@@ -56,9 +56,9 @@ public class ResourceTest {
 	public void testItemOfWithIdCreatesValidResourceItem() {
 		Item itemResource = Item.of("name", Id.of(42L, "42"));
 
-		assertThat(itemResource.name(), is("name"));
+		assertThat(itemResource.getName(), is("name"));
 
-		Optional<Id> optional = itemResource.id();
+		Optional<Id> optional = itemResource.getIdOptional();
 
 		assertThat(optional, is(optionalWithValue()));
 
@@ -73,8 +73,8 @@ public class ResourceTest {
 
 		Nested nested = Nested.of(parent, "name");
 
-		assertThat(nested.name(), is("name"));
-		assertThat(nested.parent(), is(parent));
+		assertThat(nested.getName(), is("name"));
+		assertThat(nested.getParentItem(), is(parent));
 		assertEquals(nested, Nested.of(Item.of("parent"), "name"));
 	}
 
@@ -82,7 +82,7 @@ public class ResourceTest {
 	public void testPagedOfCreatesValidResourcePaged() {
 		Paged paged = Paged.of("name");
 
-		assertThat(paged.name(), is("name"));
+		assertThat(paged.getName(), is("name"));
 		assertEquals(paged, Paged.of("name"));
 	}
 

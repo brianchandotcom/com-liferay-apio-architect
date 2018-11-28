@@ -19,7 +19,6 @@ import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.Mana
 import static org.slf4j.LoggerFactory.getLogger;
 
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl;
 import com.liferay.apio.architect.internal.routes.CollectionRoutesImpl.BuilderImpl;
@@ -28,6 +27,7 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.Nam
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;

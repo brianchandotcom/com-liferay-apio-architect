@@ -21,15 +21,15 @@ import static java.util.Collections.singletonList;
 
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.documentation.contributor.CustomDocumentationImpl;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.writer.DocumentationWriter;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.representor.MockRepresentorCreator;

@@ -17,9 +17,9 @@ package com.liferay.apio.architect.internal.action;
 import static java.util.Arrays.asList;
 
 import com.liferay.apio.architect.annotation.EntryPoint;
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Paged;
 
 import java.lang.annotation.Annotation;
 

@@ -18,13 +18,13 @@ import static java.lang.String.join;
 
 import static java.util.Arrays.asList;
 
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Id;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.pagination.PageType;
 import com.liferay.apio.architect.pagination.Page;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Id;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Nested;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.uri.Path;
 
 import java.net.URI;
@@ -155,7 +155,7 @@ public final class URLCreator {
 	public static Optional<String> createItemResourceURL(
 		ApplicationURL applicationURL, Item item) {
 
-		Optional<Id> optional = item.id();
+		Optional<Id> optional = item.getIdOptional();
 
 		return optional.map(
 			id -> UriBuilder.fromPath(
@@ -163,7 +163,7 @@ public final class URLCreator {
 			).path(
 				"{id}"
 			).build(
-				item.name(), id.asString()
+				item.getName(), id.asString()
 			)
 		).map(
 			uri -> createAbsoluteURL(applicationURL, uri.toString())
@@ -183,9 +183,9 @@ public final class URLCreator {
 	public static Optional<String> createNestedResourceURL(
 		ApplicationURL applicationURL, Nested nested) {
 
-		Item parent = nested.parent();
+		Item parent = nested.getParentItem();
 
-		Optional<Id> optional = parent.id();
+		Optional<Id> optional = parent.getIdOptional();
 
 		return optional.map(
 			id -> UriBuilder.fromPath(
@@ -195,7 +195,7 @@ public final class URLCreator {
 			).path(
 				"{name}"
 			).build(
-				parent.name(), id.asString(), nested.name()
+				parent.getName(), id.asString(), nested.getName()
 			)
 		).map(
 			uri -> createAbsoluteURL(applicationURL, uri.toString())
@@ -216,7 +216,7 @@ public final class URLCreator {
 		URI uri = UriBuilder.fromPath(
 			"{name}"
 		).build(
-			paged.name()
+			paged.getName()
 		);
 
 		return createAbsoluteURL(applicationURL, uri.toString());
@@ -271,19 +271,19 @@ public final class URLCreator {
 	private static Optional<String> _createResourceURL(
 		ApplicationURL applicationURL, Resource resource) {
 
-		if (resource.isPaged()) {
+		if (resource instanceof Paged) {
 			Paged paged = (Paged)resource;
 
 			return Optional.of(createPagedResourceURL(applicationURL, paged));
 		}
 
-		if (resource.isNested()) {
+		if (resource instanceof Nested) {
 			Nested nested = (Nested)resource;
 
 			return createNestedResourceURL(applicationURL, nested);
 		}
 
-		if (resource.isItem()) {
+		if (resource instanceof Item) {
 			Item item = (Item)resource;
 
 			return createItemResourceURL(applicationURL, item);

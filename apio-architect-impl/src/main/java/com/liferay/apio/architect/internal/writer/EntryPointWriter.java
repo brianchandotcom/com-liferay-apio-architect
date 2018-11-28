@@ -16,12 +16,12 @@ package com.liferay.apio.architect.internal.writer;
 
 import static com.liferay.apio.architect.internal.url.URLCreator.createPagedResourceURL;
 
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
 import com.liferay.apio.architect.internal.message.json.EntryPointMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
+import com.liferay.apio.architect.resource.Resource.Paged;
 
 import java.util.List;
 import java.util.Optional;

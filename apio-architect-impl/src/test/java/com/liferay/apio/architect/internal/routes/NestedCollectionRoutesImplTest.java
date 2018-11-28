@@ -42,12 +42,12 @@ import com.liferay.apio.architect.annotation.ParentId;
 import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
 import com.liferay.apio.architect.internal.routes.NestedCollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 

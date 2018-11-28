@@ -37,9 +37,9 @@ import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.form.FormImpl;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource;
 import com.liferay.apio.architect.test.util.pagination.PaginationRequest;
 
 import java.util.ArrayList;

@@ -41,10 +41,6 @@ import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.annotation.Action.Error;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotFound;
 import com.liferay.apio.architect.internal.documentation.Documentation;
@@ -58,6 +54,10 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ItemRouter
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Nested;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
@@ -296,7 +296,7 @@ public class ActionManagerImpl implements ActionManager {
 		Item item, String binaryId) {
 
 		return Option.ofOptional(
-			_representableManager.getRepresentorOptional(item.name())
+			_representableManager.getRepresentorOptional(item.getName())
 		).flatMap(
 			representor -> Option.ofOptional(
 				representor.getBinaryFunction(binaryId))
@@ -366,7 +366,7 @@ public class ActionManagerImpl implements ActionManager {
 			).map(
 				Item.class::cast
 			).flatMap(
-				Item::id
+				Item::getIdOptional
 			).orElseThrow(
 				NotFoundException::new
 			);
@@ -380,9 +380,9 @@ public class ActionManagerImpl implements ActionManager {
 			).map(
 				Nested.class::cast
 			).map(
-				Nested::parent
+				Nested::getParentItem
 			).flatMap(
-				Item::id
+				Item::getIdOptional
 			).orElseThrow(
 				NotFoundException::new
 			);

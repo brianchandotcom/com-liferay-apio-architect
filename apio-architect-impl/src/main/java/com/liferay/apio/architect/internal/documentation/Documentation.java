@@ -18,9 +18,9 @@ import com.liferay.apio.architect.documentation.APIDescription;
 import com.liferay.apio.architect.documentation.APITitle;
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.resource.Resource;
 
 import java.util.Map;
 import java.util.Optional;

@@ -19,8 +19,8 @@ import static com.liferay.apio.architect.internal.action.Predicates.isRootCollec
 import static java.util.stream.Collectors.toList;
 
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
+import com.liferay.apio.architect.resource.Resource.Paged;
 
 import java.util.stream.Stream;
 
@@ -53,7 +53,7 @@ public final class EntryPointConverter {
 		).map(
 			Paged.class::cast
 		).map(
-			Paged::name
+			Paged::getName
 		).collect(
 			toList()
 		);

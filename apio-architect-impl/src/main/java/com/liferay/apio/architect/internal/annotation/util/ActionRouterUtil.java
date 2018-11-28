@@ -26,16 +26,16 @@ import com.liferay.apio.architect.annotation.ParentId;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.pagination.PageImpl;
 import com.liferay.apio.architect.internal.pagination.PaginationImpl;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Nested;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import io.vavr.CheckedFunction1;
@@ -115,7 +115,8 @@ public final class ActionRouterUtil {
 
 				Pagination pagination = new PaginationImpl(list.size(), 1);
 
-				return new PageImpl<>(resource.name(), pageItems, pagination);
+				return new PageImpl<>(
+					resource.getName(), pageItems, pagination);
 			}
 
 			if (result instanceof PageItems) {
@@ -124,17 +125,18 @@ public final class ActionRouterUtil {
 				for (Object param : params) {
 					if (param instanceof Pagination) {
 						return new PageImpl<>(
-							resource.name(), pageItems, (Pagination)param);
+							resource.getName(), pageItems, (Pagination)param);
 					}
 				}
 
 				Pagination pagination = new PaginationImpl(
 					pageItems.getTotalCount(), 1);
 
-				return new PageImpl<>(resource.name(), pageItems, pagination);
+				return new PageImpl<>(
+					resource.getName(), pageItems, pagination);
 			}
 
-			return new SingleModelImpl<>(result, resource.name());
+			return new SingleModelImpl<>(result, resource.getName());
 		}
 		catch (Throwable throwable) {
 			if (nonNull(throwable.getCause())) {

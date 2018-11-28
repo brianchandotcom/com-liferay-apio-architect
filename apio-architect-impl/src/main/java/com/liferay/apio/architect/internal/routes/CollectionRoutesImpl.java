@@ -35,12 +35,12 @@ import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.pagination.PageImpl;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 
@@ -161,7 +161,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					BatchResult.class
 				).executeFunction(
 					params -> batchCreatorThrowablePentaFunction.andThen(
-						t -> new BatchResult<>(t, _paged.name())
+						t -> new BatchResult<>(t, _paged.getName())
 					).apply(
 						unsafeCast(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
@@ -185,7 +185,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				SingleModel.class
 			).executeFunction(
 				params -> creatorThrowablePentaFunction.andThen(
-					t -> new SingleModelImpl<>(t, _paged.name())
+					t -> new SingleModelImpl<>(t, _paged.getName())
 				).apply(
 					unsafeCast(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
@@ -276,7 +276,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
 					pageItems -> new PageImpl<>(
-						_paged.name(), pageItems, (Pagination)params.get(0))
+						_paged.getName(), pageItems, (Pagination)params.get(0))
 				).apply(
 					(Pagination)params.get(0), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),

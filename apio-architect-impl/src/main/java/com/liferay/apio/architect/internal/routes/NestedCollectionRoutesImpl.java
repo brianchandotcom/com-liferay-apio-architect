@@ -28,13 +28,13 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
-import com.liferay.apio.architect.internal.action.resource.Resource.Nested;
 import com.liferay.apio.architect.internal.pagination.PageImpl;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 
@@ -147,7 +147,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					BatchResult.class
 				).executeFunction(
 					params -> batchCreatorThrowableHexaFunction.andThen(
-						t -> new BatchResult<>(t, _nested.name())
+						t -> new BatchResult<>(t, _nested.getName())
 					).apply(
 						_getId(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
@@ -171,7 +171,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				SingleModel.class
 			).executeFunction(
 				params -> creatorThrowableHexaFunction.andThen(
-					t -> new SingleModelImpl<>(t, _nested.name())
+					t -> new SingleModelImpl<>(t, _nested.getName())
 				).apply(
 					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
@@ -206,7 +206,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			).executeFunction(
 				params -> getterThrowableHexaFunction.andThen(
 					pageItems -> new PageImpl<>(
-						_nested.name(), pageItems, (Pagination)params.get(0))
+						_nested.getName(), pageItems, (Pagination)params.get(0))
 				).apply(
 					(Pagination)params.get(0), _getId(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),

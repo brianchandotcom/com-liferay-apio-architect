@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.internal.alias;
 
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
+import com.liferay.apio.architect.resource.Resource;
 
 import java.util.function.Function;
 import java.util.stream.Stream;

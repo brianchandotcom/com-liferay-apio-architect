@@ -44,9 +44,9 @@ import static org.hamcrest.core.Is.is;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.routes.ItemRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.internal.routes.RoutesTestUtil.CustomIdentifier;
+import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 

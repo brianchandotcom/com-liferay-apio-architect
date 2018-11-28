@@ -19,8 +19,6 @@ import static java.util.Collections.singletonList;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.internal.action.resource.Resource.Id;
-import com.liferay.apio.architect.internal.action.resource.Resource.Item;
 import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.message.json.MessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
@@ -32,6 +30,8 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.Provider
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.NameManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.language.AcceptLanguage;
+import com.liferay.apio.architect.resource.Resource.Id;
+import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 

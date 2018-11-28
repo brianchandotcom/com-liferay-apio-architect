@@ -33,7 +33,6 @@ import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.documentation.contributor.CustomDocumentation;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.internal.message.json.JSONObjectBuilder;
@@ -45,6 +44,9 @@ import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Item;
+import com.liferay.apio.architect.resource.Resource.Paged;
 
 import java.util.List;
 import java.util.Map;
@@ -100,10 +102,10 @@ public class DocumentationWriter {
 		Stream<Resource> stream = _documentation.getResourceStream();
 
 		stream.filter(
-			resource -> resource.isItem() || resource.isPaged()
+			resource -> resource instanceof Item || resource instanceof Paged
 		).forEach(
 			resource -> {
-				String name = resource.name();
+				String name = resource.getName();
 
 				Representor representor = representors.get(name);
 
@@ -338,7 +340,7 @@ public class DocumentationWriter {
 	private TriConsumer<JSONObjectBuilder, String, String>
 		_getResourceMapperTriConsumer(Resource resource) {
 
-		if (resource.isPaged()) {
+		if (resource instanceof Paged) {
 			return _documentationMessageMapper::mapResourceCollection;
 		}
 
@@ -348,7 +350,7 @@ public class DocumentationWriter {
 	private Consumer<JSONObjectBuilder> _getWriteFieldsRepresentorConsumer(
 		Resource resource, Representor representor) {
 
-		if (resource.isPaged()) {
+		if (resource instanceof Paged) {
 			return __ -> {
 			};
 		}

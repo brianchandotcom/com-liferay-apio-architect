@@ -43,11 +43,11 @@ import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
-import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.url.ServerURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource;
 import com.liferay.apio.architect.router.ActionRouter;
 
 import io.vavr.control.Option;
