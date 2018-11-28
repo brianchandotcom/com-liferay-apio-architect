@@ -19,6 +19,7 @@ import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 import static java.util.Collections.emptyList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
 
@@ -46,8 +47,7 @@ public class PageTest {
 
 		_path = new Path("name", "id");
 
-		_page = new PageImpl<>(
-			"name", _pageItems, pagination, _path, emptyList());
+		_page = new PageImpl<>("name", _pageItems, pagination, _path);
 	}
 
 	@Test
@@ -66,8 +66,7 @@ public class PageTest {
 
 		PageItems<String> pageItems = new PageItems<>(emptyList(), 0);
 
-		Page<String> page = new PageImpl<>(
-			"", pageItems, pagination, _path, emptyList());
+		Page<String> page = new PageImpl<>("", pageItems, pagination, _path);
 
 		assertThat(page.getLastPageNumber(), is(1));
 	}
@@ -75,6 +74,11 @@ public class PageTest {
 	@Test
 	public void testGetLastPageNumberReturnsLastPageNumber() {
 		assertThat(_page.getLastPageNumber(), is(10));
+	}
+
+	@Test
+	public void testGetOperationsReturnsEmptyList() {
+		assertThat(_page.getOperations(), is(empty()));
 	}
 
 	@Test
@@ -109,8 +113,7 @@ public class PageTest {
 	public void testHasNextReturnsFalseWhenIsLast() {
 		Pagination pagination = new PaginationImpl(1, 10);
 
-		Page<String> page = new PageImpl<>(
-			"", _pageItems, pagination, _path, emptyList());
+		Page<String> page = new PageImpl<>("", _pageItems, pagination, _path);
 
 		assertThat(page.hasNext(), is(false));
 	}
@@ -125,8 +128,7 @@ public class PageTest {
 	public void testHasPreviousReturnsFalseWhenIsFirst() {
 		Pagination pagination = new PaginationImpl(1, 1);
 
-		Page<String> page = new PageImpl<>(
-			"", _pageItems, pagination, _path, emptyList());
+		Page<String> page = new PageImpl<>("", _pageItems, pagination, _path);
 
 		assertThat(page.hasPrevious(), is(false));
 	}

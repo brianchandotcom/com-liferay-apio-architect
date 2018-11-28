@@ -40,19 +40,12 @@ public class PageImpl<T> implements Page<T> {
 	public PageImpl(
 		String resourceName, PageItems<T> pageItems, Pagination pagination) {
 
-		this(resourceName, pageItems, pagination, null, emptyList());
+		this(resourceName, pageItems, pagination, null);
 	}
 
 	public PageImpl(
 		String resourceName, PageItems<T> pageItems, Pagination pagination,
-		List<Operation> operations) {
-
-		this(resourceName, pageItems, pagination, null, operations);
-	}
-
-	public PageImpl(
-		String resourceName, PageItems<T> pageItems, Pagination pagination,
-		Path path, List<Operation> operations) {
+		Path path) {
 
 		_resourceName = resourceName;
 
@@ -61,7 +54,6 @@ public class PageImpl<T> implements Page<T> {
 		_pageNumber = pagination.getPageNumber();
 		_totalCount = pageItems.getTotalCount();
 		_path = path;
-		_operations = operations;
 	}
 
 	@Override
@@ -85,7 +77,7 @@ public class PageImpl<T> implements Page<T> {
 
 	@Override
 	public List<Operation> getOperations() {
-		return _operations;
+		return emptyList();
 	}
 
 	@Override
@@ -128,7 +120,6 @@ public class PageImpl<T> implements Page<T> {
 
 	private final Collection<T> _items;
 	private final int _itemsPerPage;
-	private final List<Operation> _operations;
 	private final int _pageNumber;
 	private final Path _path;
 	private final String _resourceName;

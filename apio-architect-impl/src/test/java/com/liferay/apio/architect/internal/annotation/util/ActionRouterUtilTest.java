@@ -33,7 +33,6 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 
 import static org.junit.Assert.assertFalse;
@@ -88,7 +87,6 @@ public class ActionRouterUtilTest {
 		assertThat(page.getItems(), contains("1"));
 		assertThat(page.getItemsPerPage(), is(1));
 		assertThat(page.getLastPageNumber(), is(1));
-		assertThat(page.getOperations(), is(empty()));
 		assertThat(page.getPageNumber(), is(1));
 		assertThat(page.getPathOptional(), is(emptyOptional()));
 		assertThat(page.getResourceName(), is("name"));
@@ -113,7 +111,6 @@ public class ActionRouterUtilTest {
 		assertThat(page.getItems(), contains("1"));
 		assertThat(page.getItemsPerPage(), is(31));
 		assertThat(page.getLastPageNumber(), is(1));
-		assertThat(page.getOperations(), is(empty()));
 		assertThat(page.getPageNumber(), is(1));
 		assertThat(page.getPathOptional(), is(emptyOptional()));
 		assertThat(page.getResourceName(), is("name"));
@@ -141,7 +138,6 @@ public class ActionRouterUtilTest {
 		assertThat(page.getItems(), contains("1"));
 		assertThat(page.getItemsPerPage(), is(30));
 		assertThat(page.getLastPageNumber(), is(2));
-		assertThat(page.getOperations(), is(empty()));
 		assertThat(page.getPageNumber(), is(2));
 		assertThat(page.getPathOptional(), is(emptyOptional()));
 		assertThat(page.getResourceName(), is("name"));

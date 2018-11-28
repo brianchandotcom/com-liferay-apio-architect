@@ -59,8 +59,10 @@ public interface Page<T> {
 	/**
 	 * Returns the list of operations for the page.
 	 *
-	 * @return the list of operations
+	 * @return     the list of operations
+	 * @deprecated As of 1.9.0, with no direct replacement
 	 */
+	@Deprecated
 	public List<Operation> getOperations();
 
 	/**

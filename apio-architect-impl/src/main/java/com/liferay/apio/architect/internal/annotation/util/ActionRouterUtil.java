@@ -19,7 +19,6 @@ import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil
 
 import static io.leangen.geantyref.GenericTypeReflector.getTypeParameter;
 
-import static java.util.Collections.emptyList;
 import static java.util.Objects.nonNull;
 
 import com.liferay.apio.architect.annotation.Id;
@@ -116,8 +115,7 @@ public final class ActionRouterUtil {
 
 				Pagination pagination = new PaginationImpl(list.size(), 1);
 
-				return new PageImpl<>(
-					resource.name(), pageItems, pagination, emptyList());
+				return new PageImpl<>(resource.name(), pageItems, pagination);
 			}
 
 			if (result instanceof PageItems) {
@@ -126,16 +124,14 @@ public final class ActionRouterUtil {
 				for (Object param : params) {
 					if (param instanceof Pagination) {
 						return new PageImpl<>(
-							resource.name(), pageItems, (Pagination)param,
-							emptyList());
+							resource.name(), pageItems, (Pagination)param);
 					}
 				}
 
 				Pagination pagination = new PaginationImpl(
 					pageItems.getTotalCount(), 1);
 
-				return new PageImpl<>(
-					resource.name(), pageItems, pagination, emptyList());
+				return new PageImpl<>(resource.name(), pageItems, pagination);
 			}
 
 			return new SingleModelImpl<>(result, resource.name());

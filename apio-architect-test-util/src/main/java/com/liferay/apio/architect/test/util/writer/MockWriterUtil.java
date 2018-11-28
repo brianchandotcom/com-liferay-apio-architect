@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.test.util.writer;
 
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
+import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createFirstEmbeddedModelRepresentor;
 import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createRootModelRepresentor;
@@ -25,6 +26,7 @@ import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.action.resource.Resource;
 import com.liferay.apio.architect.internal.action.resource.Resource.Item;
+import com.liferay.apio.architect.internal.action.resource.Resource.Paged;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.operation.HTTPMethod;
@@ -73,6 +75,10 @@ public class MockWriterUtil {
 		if (resource.equals(Item.of("first"))) {
 			return Stream.of(
 				_createActionSemantics(resource, "remove", DELETE));
+		}
+
+		if (resource.equals(Paged.of("root"))) {
+			return Stream.of(_createActionSemantics(resource, "create", POST));
 		}
 
 		return Stream.empty();

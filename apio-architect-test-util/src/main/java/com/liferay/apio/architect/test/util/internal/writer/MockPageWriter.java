@@ -14,15 +14,12 @@
 
 package com.liferay.apio.architect.test.util.internal.writer;
 
-import static com.liferay.apio.architect.test.util.form.MockFormCreator.createForm;
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
 import com.liferay.apio.architect.internal.message.json.PageMessageMapper;
-import com.liferay.apio.architect.internal.operation.CreateOperation;
 import com.liferay.apio.architect.internal.pagination.PageImpl;
 import com.liferay.apio.architect.internal.pagination.PaginationImpl;
 import com.liferay.apio.architect.internal.writer.PageWriter;
-import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
@@ -32,8 +29,6 @@ import com.liferay.apio.architect.uri.Path;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -65,11 +60,8 @@ public class MockPageWriter {
 
 		Path path = new Path("name", "id");
 
-		List<Operation> operations = Collections.singletonList(
-			new CreateOperation(createForm("c", "p"), "resource"));
-
 		Page<RootModel> page = new PageImpl<>(
-			"root", pageItems, pagination, path, operations);
+			"root", pageItems, pagination, path);
 
 		PageWriter<RootModel> pageWriter = PageWriter.create(
 			builder -> builder.page(

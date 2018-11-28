@@ -405,7 +405,6 @@ public class NestedCollectionRoutesImplTest {
 		assertThat(page.getItems(), contains("Apio"));
 		assertThat(page.getItemsPerPage(), is(10));
 		assertThat(page.getLastPageNumber(), is(1));
-		assertThat(page.getOperations(), is(empty()));
 		assertThat(page.getPageNumber(), is(1));
 		assertThat(page.getPathOptional(), is(emptyOptional()));
 		assertThat(page.getResourceName(), is("name"));
