@@ -11,49 +11,49 @@
 	],
 	"member": [
 		{
-			"@id": "localhost/o/api/model/1",
+			"@id": "/model/1",
 			"@type": [
 				"Type 1",
 				"Type 2"
 			]
 		},
 		{
-			"@id": "localhost/o/api/model/2",
+			"@id": "/model/2",
 			"@type": [
 				"Type 1",
 				"Type 2"
 			]
 		},
 		{
-			"@id": "localhost/o/api/model/3",
+			"@id": "/model/3",
 			"@type": [
 				"Type 1",
 				"Type 2"
 			]
 		},
 		{
-			"@id": "localhost/o/api/model/4",
+			"@id": "/model/4",
 			"@type": [
 				"Type 1",
 				"Type 2"
 			]
 		},
 		{
-			"@id": "localhost/o/api/model/5",
+			"@id": "/model/5",
 			"@type": [
 				"Type 1",
 				"Type 2"
 			]
 		},
 		{
-			"@id": "localhost/o/api/model/6",
+			"@id": "/model/6",
 			"@type": [
 				"Type 1",
 				"Type 2"
 			]
 		},
 		{
-			"@id": "localhost/o/api/model/7",
+			"@id": "/model/7",
 			"@type": [
 				"Type 1",
 				"Type 2"

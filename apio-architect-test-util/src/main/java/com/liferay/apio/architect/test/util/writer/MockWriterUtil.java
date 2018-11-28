@@ -144,9 +144,9 @@ public class MockWriterUtil {
 			builder -> builder.httpServletRequest(
 				null
 			).serverURL(
-				() -> "localhost"
+				() -> "/"
 			).applicationURL(
-				() -> "localhost/o/api"
+				() -> "/"
 			).embedded(
 				Arrays.asList("embedded1", "embedded1.embedded")::contains
 			).fields(

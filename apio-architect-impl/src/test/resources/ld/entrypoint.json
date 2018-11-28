@@ -5,11 +5,11 @@
 		},
 		"https://www.w3.org/ns/hydra/core#"
 	],
-	"@id": "localhost/o/api",
+	"@id": "/",
 	"@type": "EntryPoint",
 	"collection": [
 		{
-			"@id": "localhost/o/api/type1",
+			"@id": "/type1",
 			"@type": [
 				"Collection"
 			],
@@ -19,7 +19,7 @@
 			}
 		},
 		{
-			"@id": "localhost/o/api/type2",
+			"@id": "/type2",
 			"@type": [
 				"Collection"
 			],
@@ -29,7 +29,7 @@
 			}
 		},
 		{
-			"@id": "localhost/o/api/type3",
+			"@id": "/type3",
 			"@type": [
 				"Collection"
 			],

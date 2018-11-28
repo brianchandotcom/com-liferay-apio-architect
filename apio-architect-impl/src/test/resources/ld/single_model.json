@@ -30,14 +30,14 @@
 		},
 		"https://www.w3.org/ns/hydra/core#"
 	],
-	"@id": "localhost/o/api/model/first",
+	"@id": "/model/first",
 	"@type": [
 		"Type 1",
 		"Type 2"
 	],
-	"applicationRelativeURL1": "localhost/o/api/first",
-	"binary1": "localhost/o/api/model/first/binary1",
-	"binary2": "localhost/o/api/model/first/binary2",
+	"applicationRelativeURL1": "/first",
+	"binary1": "/model/first/binary1",
+	"binary2": "/model/first/binary2",
 	"boolean1": true,
 	"boolean2": false,
 	"booleanList1": [
@@ -67,11 +67,11 @@
 				}
 			}
 		],
-		"@id": "localhost/o/api/first-inner-model/first",
+		"@id": "/first-inner-model/first",
 		"@type": [
 			"Type"
 		],
-		"binary": "localhost/o/api/first-inner-model/first/binary",
+		"binary": "/first-inner-model/first/binary",
 		"boolean": true,
 		"booleanList": [
 			true,
@@ -95,30 +95,30 @@
 					}
 				}
 			],
-			"@id": "localhost/o/api/second-inner-model/first",
+			"@id": "/second-inner-model/first",
 			"@type": [
 				"Type"
 			],
-			"binary": "localhost/o/api/second-inner-model/first/binary",
+			"binary": "/second-inner-model/first/binary",
 			"boolean": false,
 			"booleanList": [
 				true
 			],
-			"embedded": "localhost/o/api/third-inner-model/first",
+			"embedded": "/third-inner-model/first",
 			"link": "community.liferay.com",
-			"linked": "localhost/o/api/third-inner-model/second",
+			"linked": "/third-inner-model/second",
 			"number": 2017,
 			"numberList": [
 				1
 			],
-			"relatedCollection": "localhost/o/api/second/first/models",
+			"relatedCollection": "/second/first/models",
 			"string": "A string",
 			"stringList": [
 				"a"
 			]
 		},
 		"link": "www.liferay.com",
-		"linked": "localhost/o/api/second-inner-model/second",
+		"linked": "/second-inner-model/second",
 		"localizedString": "Translated",
 		"nestedList": {
 			"@type": [
@@ -163,18 +163,18 @@
 				"method": "DELETE"
 			}
 		],
-		"relatedCollection": "localhost/o/api/first/first/models",
+		"relatedCollection": "/first/first/models",
 		"string": "A string",
 		"stringList": [
 			"a",
 			"b"
 		]
 	},
-	"embedded2": "localhost/o/api/first-inner-model/second",
+	"embedded2": "/first-inner-model/second",
 	"link1": "www.liferay.com",
 	"link2": "community.liferay.com",
-	"linked1": "localhost/o/api/first-inner-model/third",
-	"linked2": "localhost/o/api/first-inner-model/fourth",
+	"linked1": "/first-inner-model/third",
+	"linked2": "/first-inner-model/fourth",
 	"localizedString1": "Translated 1",
 	"localizedString2": "Translated 2",
 	"nested1": {
@@ -196,7 +196,7 @@
 		"@type": [
 			"Type 4"
 		],
-		"linked3": "localhost/o/api/third-inner-model/fifth",
+		"linked3": "/third-inner-model/fifth",
 		"nested3": {
 			"@type": [
 				"Type 5"
@@ -318,7 +318,7 @@
 				"Operation"
 			],
 			"method": "PUT",
-			"target": "localhost/o/api/root/first"
+			"target": "/root/first"
 		},
 		{
 			"@id": "_:root/remove",
@@ -327,13 +327,13 @@
 				"Operation"
 			],
 			"method": "DELETE",
-			"target": "localhost/o/api/root/first"
+			"target": "/root/first"
 		}
 	],
-	"relatedCollection1": "localhost/o/api/root/first/models",
-	"relatedCollection2": "localhost/o/api/root/first/models",
-	"relativeURL1": "localhost/first",
-	"relativeURL2": "localhost/second",
+	"relatedCollection1": "/root/first/models",
+	"relatedCollection2": "/root/first/models",
+	"relativeURL1": "/first",
+	"relativeURL2": "/second",
 	"string1": "Live long and prosper",
 	"string2": "Hypermedia",
 	"stringList1": [
