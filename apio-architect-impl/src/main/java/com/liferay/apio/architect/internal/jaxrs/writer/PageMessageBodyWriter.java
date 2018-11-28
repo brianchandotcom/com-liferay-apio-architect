@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.jaxrs.writer;
 
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
+import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.internal.jaxrs.writer.base.BaseMessageBodyWriter;
 import com.liferay.apio.architect.internal.message.json.PageMessageMapper;
 import com.liferay.apio.architect.internal.request.RequestInfo;
@@ -70,6 +71,9 @@ public class PageMessageBodyWriter<T>
 		Page<T> page, PageMessageMapper<T> pageMessageMapper,
 		RequestInfo requestInfo) {
 
+		Credentials credentials = providerManager.provideMandatory(
+			request, Credentials.class);
+
 		PageWriter<T> pageWriter = PageWriter.create(
 			builder -> builder.page(
 				page
@@ -86,6 +90,9 @@ public class PageMessageBodyWriter<T>
 				requestInfo
 			).singleModelFunction(
 				this::getSingleModelOptional
+			).actionSemanticsFunction(
+				resource -> actionManager.getActionSemantics(
+					resource, credentials)
 			).build());
 
 		return pageWriter.write();

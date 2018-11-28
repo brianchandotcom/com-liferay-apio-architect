@@ -20,6 +20,7 @@ import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getFiel
 import static com.liferay.apio.architect.internal.writer.util.WriterUtil.getPathOptional;
 
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
+import com.liferay.apio.architect.internal.alias.ActionSemanticsFunction;
 import com.liferay.apio.architect.internal.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.internal.alias.PathFunction;
 import com.liferay.apio.architect.internal.alias.RepresentorFunction;
@@ -65,6 +66,7 @@ public class PageWriter<T> {
 
 	public PageWriter(Builder<T> builder) {
 		_page = builder._page;
+		_actionSemanticsFunction = builder._actionSemanticsFunction;
 		_pageMessageMapper = builder._pageMessageMapper;
 		_pathFunction = builder._pathFunction;
 		_representorFunction = builder._representorFunction;
@@ -108,6 +110,15 @@ public class PageWriter<T> {
 		items.forEach(
 			model -> _writeItem(new SingleModelImpl<>(model, resourceName)));
 
+		ActionWriter actionWriter = new ActionWriter(
+			_pageMessageMapper, _requestInfo, _jsonObjectBuilder);
+
+		_actionSemanticsFunction.apply(
+			_page.getResource()
+		).forEach(
+			actionWriter::write
+		);
+
 		_representorFunction.apply(
 			resourceName
 		).ifPresent(
@@ -136,6 +147,26 @@ public class PageWriter<T> {
 			_page = page;
 
 			return new PageMessageMapperStep();
+		}
+
+		public class ActionSemanticsFunctionStep {
+
+			/**
+			 * Adds information to the builder about the function that gets the
+			 * {@code ActionSemantics} of a resource.
+			 *
+			 * @param  actionSemanticsFunction the function that gets the {@code
+			 *         ActionSemantics} of a resource
+			 * @return the updated builder
+			 */
+			public BuildStep actionSemanticsFunction(
+				ActionSemanticsFunction actionSemanticsFunction) {
+
+				_actionSemanticsFunction = actionSemanticsFunction;
+
+				return new BuildStep();
+			}
+
 		}
 
 		public class BuildStep {
@@ -263,16 +294,17 @@ public class PageWriter<T> {
 			 *         SingleModel} of a class
 			 * @return the updated builder
 			 */
-			public BuildStep singleModelFunction(
+			public ActionSemanticsFunctionStep singleModelFunction(
 				SingleModelFunction singleModelFunction) {
 
 				_singleModelFunction = singleModelFunction;
 
-				return new BuildStep();
+				return new ActionSemanticsFunctionStep();
 			}
 
 		}
 
+		private ActionSemanticsFunction _actionSemanticsFunction;
 		private Page<T> _page;
 		private PageMessageMapper<T> _pageMessageMapper;
 		private PathFunction _pathFunction;
@@ -709,6 +741,7 @@ public class PageWriter<T> {
 			});
 	}
 
+	private final ActionSemanticsFunction _actionSemanticsFunction;
 	private final JSONObjectBuilder _jsonObjectBuilder;
 	private final Page<T> _page;
 	private final PageMessageMapper<T> _pageMessageMapper;

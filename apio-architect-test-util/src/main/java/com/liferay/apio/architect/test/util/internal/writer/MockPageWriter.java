@@ -76,6 +76,8 @@ public class MockPageWriter {
 				getRequestInfo()
 			).singleModelFunction(
 				MockWriterUtil::getSingleModel
+			).actionSemanticsFunction(
+				MockWriterUtil::getActionSemantics
 			).build());
 
 		return pageWriter.write();

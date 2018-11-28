@@ -973,6 +973,17 @@
 		}
 	],
 	"numberOfItems": 3,
+	"operation": [
+		{
+			"@id": "_:root/create",
+			"@type": [
+				"CreateAction",
+				"Operation"
+			],
+			"method": "POST",
+			"target": "localhost/o/api/root"
+		}
+	],
 	"totalItems": 9,
 	"view": {
 		"@id": "localhost/o/api/root?page=2&per_page=3",
