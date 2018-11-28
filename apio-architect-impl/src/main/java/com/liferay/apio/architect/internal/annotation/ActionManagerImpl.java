@@ -383,8 +383,6 @@ public class ActionManagerImpl implements ActionManager {
 				Nested::parent
 			).flatMap(
 				Item::id
-			).map(
-				Resource.Id::asObject
 			).orElseThrow(
 				NotFoundException::new
 			);
