@@ -25,7 +25,6 @@ import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
-import com.liferay.apio.architect.uri.Path;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -58,10 +57,7 @@ public class MockPageWriter {
 
 		Pagination pagination = new PaginationImpl(3, 2);
 
-		Path path = new Path("name", "id");
-
-		Page<RootModel> page = new PageImpl<>(
-			"root", pageItems, pagination, path);
+		Page<RootModel> page = new PageImpl<>("root", pageItems, pagination);
 
 		PageWriter<RootModel> pageWriter = PageWriter.create(
 			builder -> builder.page(

@@ -22,8 +22,6 @@ import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUt
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.isListBody;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.needsParameterFromBody;
 
-import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -88,7 +86,6 @@ public class ActionRouterUtilTest {
 		assertThat(page.getItemsPerPage(), is(1));
 		assertThat(page.getLastPageNumber(), is(1));
 		assertThat(page.getPageNumber(), is(1));
-		assertThat(page.getPathOptional(), is(emptyOptional()));
 		assertThat(page.getResourceName(), is("name"));
 		assertThat(page.getTotalCount(), is(1));
 		assertThat(page.hasNext(), is(false));
@@ -112,7 +109,6 @@ public class ActionRouterUtilTest {
 		assertThat(page.getItemsPerPage(), is(31));
 		assertThat(page.getLastPageNumber(), is(1));
 		assertThat(page.getPageNumber(), is(1));
-		assertThat(page.getPathOptional(), is(emptyOptional()));
 		assertThat(page.getResourceName(), is("name"));
 		assertThat(page.getTotalCount(), is(31));
 		assertThat(page.hasNext(), is(false));
@@ -139,7 +135,6 @@ public class ActionRouterUtilTest {
 		assertThat(page.getItemsPerPage(), is(30));
 		assertThat(page.getLastPageNumber(), is(2));
 		assertThat(page.getPageNumber(), is(2));
-		assertThat(page.getPathOptional(), is(emptyOptional()));
 		assertThat(page.getResourceName(), is("name"));
 		assertThat(page.getTotalCount(), is(31));
 		assertThat(page.hasNext(), is(false));

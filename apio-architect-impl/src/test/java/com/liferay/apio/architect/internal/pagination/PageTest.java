@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.internal.pagination;
 
-import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
+import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 
 import static java.util.Collections.emptyList;
 
@@ -26,10 +26,8 @@ import static org.hamcrest.core.Is.is;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
-import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collections;
-import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,9 +43,7 @@ public class PageTest {
 
 		Pagination pagination = new PaginationImpl(1, 4);
 
-		_path = new Path("name", "id");
-
-		_page = new PageImpl<>("name", _pageItems, pagination, _path);
+		_page = new PageImpl<>("name", _pageItems, pagination);
 	}
 
 	@Test
@@ -66,7 +62,7 @@ public class PageTest {
 
 		PageItems<String> pageItems = new PageItems<>(emptyList(), 0);
 
-		Page<String> page = new PageImpl<>("", pageItems, pagination, _path);
+		Page<String> page = new PageImpl<>("", pageItems, pagination);
 
 		assertThat(page.getLastPageNumber(), is(1));
 	}
@@ -87,16 +83,8 @@ public class PageTest {
 	}
 
 	@Test
-	public void testGetPathReturnsPath() {
-		Optional<Path> optional = _page.getPathOptional();
-
-		assertThat(optional, is(optionalWithValue()));
-
-		optional.ifPresent(
-			path -> {
-				assertThat(path.getId(), is("id"));
-				assertThat(path.getName(), is("name"));
-			});
+	public void testGetPathReturnsOptionalEmpty() {
+		assertThat(_page.getPathOptional(), is(emptyOptional()));
 	}
 
 	@Test
@@ -113,7 +101,7 @@ public class PageTest {
 	public void testHasNextReturnsFalseWhenIsLast() {
 		Pagination pagination = new PaginationImpl(1, 10);
 
-		Page<String> page = new PageImpl<>("", _pageItems, pagination, _path);
+		Page<String> page = new PageImpl<>("", _pageItems, pagination);
 
 		assertThat(page.hasNext(), is(false));
 	}
@@ -123,12 +111,11 @@ public class PageTest {
 		assertThat(_page.hasNext(), is(true));
 	}
 
-	@SuppressWarnings("ResultOfMethodCallIgnored")
 	@Test
 	public void testHasPreviousReturnsFalseWhenIsFirst() {
 		Pagination pagination = new PaginationImpl(1, 1);
 
-		Page<String> page = new PageImpl<>("", _pageItems, pagination, _path);
+		Page<String> page = new PageImpl<>("", _pageItems, pagination);
 
 		assertThat(page.hasPrevious(), is(false));
 	}
@@ -140,6 +127,5 @@ public class PageTest {
 
 	private Page<String> _page;
 	private PageItems<String> _pageItems;
-	private Path _path;
 
 }

@@ -76,8 +76,10 @@ public interface Page<T> {
 	 * Returns the page path, if present. Returns {@code Optional#empty()}
 	 * otherwise.
 	 *
-	 * @return the path, if present; {@code Optional#empty()} otherwise
+	 * @return     the path, if present; {@code Optional#empty()} otherwise
+	 * @deprecated As of 1.9.0, with no direct replacement
 	 */
+	@Deprecated
 	public Optional<Path> getPathOptional();
 
 	/**

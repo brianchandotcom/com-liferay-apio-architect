@@ -27,8 +27,6 @@ import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.hasNeste
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.prependWith;
 import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
 
-import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
@@ -406,7 +404,6 @@ public class NestedCollectionRoutesImplTest {
 		assertThat(page.getItemsPerPage(), is(10));
 		assertThat(page.getLastPageNumber(), is(1));
 		assertThat(page.getPageNumber(), is(1));
-		assertThat(page.getPathOptional(), is(emptyOptional()));
 		assertThat(page.getResourceName(), is("name"));
 		assertThat(page.getTotalCount(), is(1));
 	}
