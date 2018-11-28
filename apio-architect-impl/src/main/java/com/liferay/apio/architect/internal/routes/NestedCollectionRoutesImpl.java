@@ -34,6 +34,7 @@ import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.Id;
 import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
@@ -206,7 +207,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			).executeFunction(
 				params -> getterThrowableHexaFunction.andThen(
 					pageItems -> new PageImpl<>(
-						_nested.getName(), pageItems, (Pagination)params.get(0))
+						_nested.withParentId((Id)params.get(1)), pageItems,
+						(Pagination)params.get(0))
 				).apply(
 					(Pagination)params.get(0), _getId(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),

@@ -97,7 +97,17 @@ public final class ActionRouterUtil {
 
 		for (int i = 0; i < params.size(); i++) {
 			if (updatedParams[i] instanceof Resource.Id) {
-				updatedParams[i] = ((Resource.Id)updatedParams[i]).asObject();
+				Resource.Id id = (Resource.Id)updatedParams[i];
+
+				updatedParams[i] = id.asObject();
+
+				if (resource instanceof Item) {
+					resource = ((Item)resource).withId(id);
+				}
+
+				if (resource instanceof Nested) {
+					resource = ((Nested)resource).withParentId(id);
+				}
 			}
 		}
 
@@ -115,8 +125,7 @@ public final class ActionRouterUtil {
 
 				Pagination pagination = new PaginationImpl(list.size(), 1);
 
-				return new PageImpl<>(
-					resource.getName(), pageItems, pagination);
+				return new PageImpl<>(resource, pageItems, pagination);
 			}
 
 			if (result instanceof PageItems) {
@@ -125,15 +134,14 @@ public final class ActionRouterUtil {
 				for (Object param : params) {
 					if (param instanceof Pagination) {
 						return new PageImpl<>(
-							resource.getName(), pageItems, (Pagination)param);
+							resource, pageItems, (Pagination)param);
 					}
 				}
 
 				Pagination pagination = new PaginationImpl(
 					pageItems.getTotalCount(), 1);
 
-				return new PageImpl<>(
-					resource.getName(), pageItems, pagination);
+				return new PageImpl<>(resource, pageItems, pagination);
 			}
 
 			return new SingleModelImpl<>(result, resource.getName());
@@ -206,7 +214,7 @@ public final class ActionRouterUtil {
 	 * position and with the same class as the method declaration, with the
 	 * following exceptions:
 	 *
-	 * <p>If the parameter is annotated with {@link ID}, the {@link ID} class is
+	 * <p>If the parameter is annotated with {@link Id}, the {@link Id} class is
 	 * stored.
 	 * <p>If the parameter is annotated with {@link ParentId}, the {@link
 	 * ParentId} class is stored.

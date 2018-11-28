@@ -26,6 +26,7 @@ import static org.hamcrest.core.Is.is;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource.Paged;
 
 import java.util.Collections;
 
@@ -43,7 +44,9 @@ public class PageTest {
 
 		Pagination pagination = new PaginationImpl(1, 4);
 
-		_page = new PageImpl<>("name", _pageItems, pagination);
+		_paged = Paged.of("name");
+
+		_page = new PageImpl<>(_paged, _pageItems, pagination);
 	}
 
 	@Test
@@ -62,7 +65,7 @@ public class PageTest {
 
 		PageItems<String> pageItems = new PageItems<>(emptyList(), 0);
 
-		Page<String> page = new PageImpl<>("", pageItems, pagination);
+		Page<String> page = new PageImpl<>(_paged, pageItems, pagination);
 
 		assertThat(page.getLastPageNumber(), is(1));
 	}
@@ -101,7 +104,7 @@ public class PageTest {
 	public void testHasNextReturnsFalseWhenIsLast() {
 		Pagination pagination = new PaginationImpl(1, 10);
 
-		Page<String> page = new PageImpl<>("", _pageItems, pagination);
+		Page<String> page = new PageImpl<>(_paged, _pageItems, pagination);
 
 		assertThat(page.hasNext(), is(false));
 	}
@@ -115,7 +118,7 @@ public class PageTest {
 	public void testHasPreviousReturnsFalseWhenIsFirst() {
 		Pagination pagination = new PaginationImpl(1, 1);
 
-		Page<String> page = new PageImpl<>("", _pageItems, pagination);
+		Page<String> page = new PageImpl<>(_paged, _pageItems, pagination);
 
 		assertThat(page.hasPrevious(), is(false));
 	}
@@ -126,6 +129,7 @@ public class PageTest {
 	}
 
 	private Page<String> _page;
+	private Paged _paged;
 	private PageItems<String> _pageItems;
 
 }

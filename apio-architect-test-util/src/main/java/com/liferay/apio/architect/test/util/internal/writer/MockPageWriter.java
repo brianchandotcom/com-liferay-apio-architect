@@ -23,6 +23,7 @@ import com.liferay.apio.architect.internal.writer.PageWriter;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.test.util.model.RootModel;
 import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 
@@ -57,7 +58,8 @@ public class MockPageWriter {
 
 		Pagination pagination = new PaginationImpl(3, 2);
 
-		Page<RootModel> page = new PageImpl<>("root", pageItems, pagination);
+		Page<RootModel> page = new PageImpl<>(
+			Paged.of("root"), pageItems, pagination);
 
 		PageWriter<RootModel> pageWriter = PageWriter.create(
 			builder -> builder.page(

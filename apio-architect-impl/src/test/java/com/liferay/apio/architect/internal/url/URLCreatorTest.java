@@ -172,7 +172,7 @@ public class URLCreatorTest {
 
 		PageItems<String> pageItems = new PageItems<>(emptyList(), 0);
 
-		Page page = new PageImpl<>("", pageItems, pagination);
+		Page page = new PageImpl<>(Paged.of("name"), pageItems, pagination);
 
 		String firstPageURL = createCollectionPageURL(
 			"www.liferay.com", page, PageType.FIRST);

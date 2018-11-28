@@ -20,6 +20,7 @@ import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.resource.Resource;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collection;
@@ -38,9 +39,9 @@ import java.util.Optional;
 public class PageImpl<T> implements Page<T> {
 
 	public PageImpl(
-		String resourceName, PageItems<T> pageItems, Pagination pagination) {
+		Resource resource, PageItems<T> pageItems, Pagination pagination) {
 
-		_resourceName = resourceName;
+		_resource = resource;
 		_items = pageItems.getItems();
 		_itemsPerPage = pagination.getItemsPerPage();
 		_pageNumber = pagination.getPageNumber();
@@ -82,8 +83,13 @@ public class PageImpl<T> implements Page<T> {
 	}
 
 	@Override
+	public Resource getResource() {
+		return _resource;
+	}
+
+	@Override
 	public String getResourceName() {
-		return _resourceName;
+		return _resource.getName();
 	}
 
 	@Override
@@ -112,7 +118,7 @@ public class PageImpl<T> implements Page<T> {
 	private final Collection<T> _items;
 	private final int _itemsPerPage;
 	private final int _pageNumber;
-	private final String _resourceName;
+	private final Resource _resource;
 	private final int _totalCount;
 
 }

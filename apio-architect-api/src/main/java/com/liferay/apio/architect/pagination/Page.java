@@ -17,6 +17,7 @@ package com.liferay.apio.architect.pagination;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.apio.architect.operation.Operation;
+import com.liferay.apio.architect.resource.Resource;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.Collection;
@@ -77,16 +78,26 @@ public interface Page<T> {
 	 * otherwise.
 	 *
 	 * @return     the path, if present; {@code Optional#empty()} otherwise
-	 * @deprecated As of 1.9.0, with no direct replacement
+	 * @deprecated As of 1.9.0, use {@link #getResource()} instead
 	 */
 	@Deprecated
 	public Optional<Path> getPathOptional();
 
 	/**
+	 * The page's resource. It can be either a {@link Resource.Paged} or a
+	 * {@link Resource.Nested}
+	 *
+	 * @review
+	 */
+	public Resource getResource();
+
+	/**
 	 * Returns the resource's name.
 	 *
-	 * @return the resource's name
+	 * @return     the resource's name
+	 * @deprecated As of 1.9.0, use {@link #getResource()} instead
 	 */
+	@Deprecated
 	public String getResourceName();
 
 	/**

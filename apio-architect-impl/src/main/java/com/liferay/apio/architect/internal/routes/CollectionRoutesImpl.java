@@ -276,7 +276,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
 					pageItems -> new PageImpl<>(
-						_paged.getName(), pageItems, (Pagination)params.get(0))
+						_paged, pageItems, (Pagination)params.get(0))
 				).apply(
 					(Pagination)params.get(0), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
