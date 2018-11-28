@@ -123,7 +123,7 @@
 					"numberList": [
 						1
 					],
-					"relatedCollection": "localhost/o/api/second-inner-model/first/models",
+					"relatedCollection": "localhost/o/api/second/first/models",
 					"string": "A string",
 					"stringList": [
 						"a"
@@ -165,7 +165,7 @@
 					1,
 					2
 				],
-				"relatedCollection": "localhost/o/api/first-inner-model/first/models",
+				"relatedCollection": "localhost/o/api/first/first/models",
 				"string": "A string",
 				"stringList": [
 					"a",
@@ -312,8 +312,8 @@
 				9,
 				10
 			],
-			"relatedCollection1": "localhost/o/api/model/1/models",
-			"relatedCollection2": "localhost/o/api/model/1/models",
+			"relatedCollection1": "localhost/o/api/root/1/models",
+			"relatedCollection2": "localhost/o/api/root/1/models",
 			"relativeURL1": "localhost/first",
 			"relativeURL2": "localhost/second",
 			"string1": "Live long and prosper",
@@ -442,7 +442,7 @@
 					"numberList": [
 						1
 					],
-					"relatedCollection": "localhost/o/api/second-inner-model/first/models",
+					"relatedCollection": "localhost/o/api/second/first/models",
 					"string": "A string",
 					"stringList": [
 						"a"
@@ -484,7 +484,7 @@
 					1,
 					2
 				],
-				"relatedCollection": "localhost/o/api/first-inner-model/first/models",
+				"relatedCollection": "localhost/o/api/first/first/models",
 				"string": "A string",
 				"stringList": [
 					"a",
@@ -631,8 +631,8 @@
 				9,
 				10
 			],
-			"relatedCollection1": "localhost/o/api/model/2/models",
-			"relatedCollection2": "localhost/o/api/model/2/models",
+			"relatedCollection1": "localhost/o/api/root/2/models",
+			"relatedCollection2": "localhost/o/api/root/2/models",
 			"relativeURL1": "localhost/first",
 			"relativeURL2": "localhost/second",
 			"string1": "Live long and prosper",
@@ -761,7 +761,7 @@
 					"numberList": [
 						1
 					],
-					"relatedCollection": "localhost/o/api/second-inner-model/first/models",
+					"relatedCollection": "localhost/o/api/second/first/models",
 					"string": "A string",
 					"stringList": [
 						"a"
@@ -803,7 +803,7 @@
 					1,
 					2
 				],
-				"relatedCollection": "localhost/o/api/first-inner-model/first/models",
+				"relatedCollection": "localhost/o/api/first/first/models",
 				"string": "A string",
 				"stringList": [
 					"a",
@@ -950,8 +950,8 @@
 				9,
 				10
 			],
-			"relatedCollection1": "localhost/o/api/model/3/models",
-			"relatedCollection2": "localhost/o/api/model/3/models",
+			"relatedCollection1": "localhost/o/api/root/3/models",
+			"relatedCollection2": "localhost/o/api/root/3/models",
 			"relativeURL1": "localhost/first",
 			"relativeURL2": "localhost/second",
 			"string1": "Live long and prosper",

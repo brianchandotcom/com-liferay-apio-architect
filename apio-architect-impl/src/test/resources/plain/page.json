@@ -41,7 +41,7 @@
 					"numberList": [
 						1
 					],
-					"relatedCollection": "localhost/o/api/second-inner-model/first/models",
+					"relatedCollection": "localhost/o/api/second/first/models",
 					"self": "localhost/o/api/second-inner-model/first",
 					"string": "A string",
 					"stringList": [
@@ -71,7 +71,7 @@
 					1,
 					2
 				],
-				"relatedCollection": "localhost/o/api/first-inner-model/first/models",
+				"relatedCollection": "localhost/o/api/first/first/models",
 				"self": "localhost/o/api/first-inner-model/first",
 				"string": "A string",
 				"stringList": [
@@ -158,8 +158,8 @@
 				9,
 				10
 			],
-			"relatedCollection1": "localhost/o/api/model/1/models",
-			"relatedCollection2": "localhost/o/api/model/1/models",
+			"relatedCollection1": "localhost/o/api/root/1/models",
+			"relatedCollection2": "localhost/o/api/root/1/models",
 			"relativeURL1": "localhost/first",
 			"relativeURL2": "localhost/second",
 			"self": "localhost/o/api/model/1",
@@ -220,7 +220,7 @@
 					"numberList": [
 						1
 					],
-					"relatedCollection": "localhost/o/api/second-inner-model/first/models",
+					"relatedCollection": "localhost/o/api/second/first/models",
 					"self": "localhost/o/api/second-inner-model/first",
 					"string": "A string",
 					"stringList": [
@@ -250,7 +250,7 @@
 					1,
 					2
 				],
-				"relatedCollection": "localhost/o/api/first-inner-model/first/models",
+				"relatedCollection": "localhost/o/api/first/first/models",
 				"self": "localhost/o/api/first-inner-model/first",
 				"string": "A string",
 				"stringList": [
@@ -337,8 +337,8 @@
 				9,
 				10
 			],
-			"relatedCollection1": "localhost/o/api/model/2/models",
-			"relatedCollection2": "localhost/o/api/model/2/models",
+			"relatedCollection1": "localhost/o/api/root/2/models",
+			"relatedCollection2": "localhost/o/api/root/2/models",
 			"relativeURL1": "localhost/first",
 			"relativeURL2": "localhost/second",
 			"self": "localhost/o/api/model/2",
@@ -399,7 +399,7 @@
 					"numberList": [
 						1
 					],
-					"relatedCollection": "localhost/o/api/second-inner-model/first/models",
+					"relatedCollection": "localhost/o/api/second/first/models",
 					"self": "localhost/o/api/second-inner-model/first",
 					"string": "A string",
 					"stringList": [
@@ -429,7 +429,7 @@
 					1,
 					2
 				],
-				"relatedCollection": "localhost/o/api/first-inner-model/first/models",
+				"relatedCollection": "localhost/o/api/first/first/models",
 				"self": "localhost/o/api/first-inner-model/first",
 				"string": "A string",
 				"stringList": [
@@ -516,8 +516,8 @@
 				9,
 				10
 			],
-			"relatedCollection1": "localhost/o/api/model/3/models",
-			"relatedCollection2": "localhost/o/api/model/3/models",
+			"relatedCollection1": "localhost/o/api/root/3/models",
+			"relatedCollection2": "localhost/o/api/root/3/models",
 			"relativeURL1": "localhost/first",
 			"relativeURL2": "localhost/second",
 			"self": "localhost/o/api/model/3",

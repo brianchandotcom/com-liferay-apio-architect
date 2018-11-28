@@ -52,7 +52,6 @@ public class WriterUtil {
 	 *         BaseRepresentor}
 	 * @param  singleModelFunction the function to get other {@link SingleModel}
 	 * @param  path the path for the single model
-	 * @param  pathFunction
 	 * @return the {@code FieldsWriter} for the model, if the model's {@code
 	 *         Representor} exists; returns {@code Optional#empty()} otherwise
 	 */
@@ -60,8 +59,7 @@ public class WriterUtil {
 		SingleModel<T> singleModel, FunctionalList<String> embeddedPathElements,
 		RequestInfo requestInfo,
 		BaseRepresentorFunction baseRepresentorFunction,
-		SingleModelFunction singleModelFunction, Path path,
-		PathFunction pathFunction) {
+		SingleModelFunction singleModelFunction, Path path) {
 
 		return baseRepresentorFunction.apply(
 			singleModel.getResourceName()
@@ -70,7 +68,7 @@ public class WriterUtil {
 		).map(
 			baseRepresentor -> new FieldsWriter<>(
 				singleModel, requestInfo, baseRepresentor, path,
-				embeddedPathElements, singleModelFunction, pathFunction)
+				embeddedPathElements, singleModelFunction)
 		);
 	}
 

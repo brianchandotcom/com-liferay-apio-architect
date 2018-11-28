@@ -103,8 +103,8 @@ public class FieldsWriterTest {
 		_fieldsWriter = new FieldsWriter<>(
 			new SingleModelImpl<>(() -> "first", "root"), _requestInfo,
 			createRootModelRepresentor(true), new Path("name", "id"),
-			new FunctionalList<>(null, "first"), MockWriterUtil::getSingleModel,
-			null);
+			new FunctionalList<>(null, "first"),
+			MockWriterUtil::getSingleModel);
 	}
 
 	@Test
@@ -627,8 +627,8 @@ public class FieldsWriterTest {
 		assertThat(
 			relatedCollectionURLs,
 			contains(
-				"www.liferay.com/o/name/id/first",
-				"www.liferay.com/o/name/id/second"));
+				"www.liferay.com/o/root/id/first",
+				"www.liferay.com/o/root/id/second"));
 
 		assertThat(
 			embeddedPathElementsList,
@@ -669,7 +669,7 @@ public class FieldsWriterTest {
 		assertThat(relatedCollectionURLs, hasSize(equalTo(1)));
 		assertThat(
 			relatedCollectionURLs,
-			contains("www.liferay.com/o/name/id/second"));
+			contains("www.liferay.com/o/root/id/second"));
 
 		assertThat(
 			embeddedPathElementsList,

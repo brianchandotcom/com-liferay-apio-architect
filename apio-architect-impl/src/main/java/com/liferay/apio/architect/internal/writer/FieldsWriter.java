@@ -25,7 +25,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedListFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
-import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.alias.BaseRepresentorFunction;
 import com.liferay.apio.architect.internal.alias.PathFunction;
@@ -91,7 +90,7 @@ public class FieldsWriter<T> {
 		SingleModel<T> singleModel, RequestInfo requestInfo,
 		BaseRepresentor<T> baseRepresentor, Path path,
 		FunctionalList<String> embeddedPathElements,
-		SingleModelFunction singleModelFunction, PathFunction pathFunction) {
+		SingleModelFunction singleModelFunction) {
 
 		_singleModel = singleModel;
 		_requestInfo = requestInfo;
@@ -99,7 +98,6 @@ public class FieldsWriter<T> {
 		_path = path;
 		_embeddedPathElements = embeddedPathElements;
 		_singleModelFunction = singleModelFunction;
-		_pathFunction = pathFunction;
 	}
 
 	/**
@@ -446,20 +444,10 @@ public class FieldsWriter<T> {
 			return;
 		}
 
-		Path path = Try.fromFallible(
-			relatedCollection::getModelToIdentifierFunction
-		).map(
-			function -> function.apply(_singleModel.getModel())
-		).map(
-			model -> _pathFunction.apply(resourceName, model)
-		).map(
-			Optional::get
-		).orElse(
-			_path
-		);
-
-		_writeNestedResourceURL(
-			resourceName, parentEmbeddedPathElements, biConsumer, key, path);
+		withItem(
+			item -> _writeNestedResourceURL(
+				Nested.of(item, resourceName), parentEmbeddedPathElements,
+				biConsumer, key));
 	}
 
 	/**
@@ -708,13 +696,8 @@ public class FieldsWriter<T> {
 	}
 
 	private void _writeNestedResourceURL(
-		String resourceName, FunctionalList<String> parentEmbeddedPathElements,
-		BiConsumer<String, FunctionalList<String>> biConsumer, String key,
-		Path path) {
-
-		Item parent = Item.of(path.getName(), Id.of("", path.getId()));
-
-		Nested nested = Nested.of(parent, resourceName);
+		Nested nested, FunctionalList<String> parentEmbeddedPathElements,
+		BiConsumer<String, FunctionalList<String>> biConsumer, String key) {
 
 		Optional<String> optional = createNestedResourceURL(
 			_requestInfo.getApplicationURL(), nested);
@@ -734,7 +717,6 @@ public class FieldsWriter<T> {
 	private final FunctionalList<String> _embeddedPathElements;
 	private final Logger _logger = getLogger(getClass());
 	private final Path _path;
-	private final PathFunction _pathFunction;
 	private final RequestInfo _requestInfo;
 	private final SingleModel<T> _singleModel;
 	private final SingleModelFunction _singleModelFunction;

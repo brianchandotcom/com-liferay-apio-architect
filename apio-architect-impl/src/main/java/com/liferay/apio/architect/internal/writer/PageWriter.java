@@ -361,8 +361,7 @@ public class PageWriter<T> {
 
 		Optional<FieldsWriter<U>> fieldsWriterOptional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo,
-			baseRepresentorFunction, _singleModelFunction, pathOptional.get(),
-			_pathFunction);
+			baseRepresentorFunction, _singleModelFunction, pathOptional.get());
 
 		if (!fieldsWriterOptional.isPresent()) {
 			return;
@@ -377,7 +376,7 @@ public class PageWriter<T> {
 		Optional<FieldsWriter<U>> relatedModelsFieldsWriterOptional =
 			getFieldsWriter(
 				singleModel, null, _requestInfo, baseRepresentorFunction,
-				_singleModelFunction, pathOptional.get(), _pathFunction);
+				_singleModelFunction, pathOptional.get());
 
 		relatedModelsFieldsWriterOptional.ifPresent(
 			relatedModelFieldsWriter -> {
@@ -432,7 +431,7 @@ public class PageWriter<T> {
 
 		Optional<FieldsWriter<T>> optional = getFieldsWriter(
 			singleModel, null, _requestInfo, _representorFunction::apply,
-			_singleModelFunction, pathOptional.get(), _pathFunction);
+			_singleModelFunction, pathOptional.get());
 
 		if (!optional.isPresent()) {
 			return;
@@ -512,8 +511,7 @@ public class PageWriter<T> {
 
 		Optional<FieldsWriter<S>> fieldsWriterOptional = getFieldsWriter(
 			singleModel, embeddedPathElements, _requestInfo,
-			baseRepresentorFunction, _singleModelFunction, pathOptional.get(),
-			_pathFunction);
+			baseRepresentorFunction, _singleModelFunction, pathOptional.get());
 
 		if (!fieldsWriterOptional.isPresent()) {
 			return;

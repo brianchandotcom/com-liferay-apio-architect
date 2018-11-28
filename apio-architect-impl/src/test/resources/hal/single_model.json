@@ -17,7 +17,7 @@
 							"href": "localhost/o/api/third-inner-model/second"
 						},
 						"relatedCollection": {
-							"href": "localhost/o/api/second-inner-model/first/models"
+							"href": "localhost/o/api/second/first/models"
 						},
 						"self": {
 							"href": "localhost/o/api/second-inner-model/first"
@@ -48,7 +48,7 @@
 					"href": "localhost/o/api/second-inner-model/second"
 				},
 				"relatedCollection": {
-					"href": "localhost/o/api/first-inner-model/first/models"
+					"href": "localhost/o/api/first/first/models"
 				},
 				"self": {
 					"href": "localhost/o/api/first-inner-model/first"
@@ -161,10 +161,10 @@
 			"href": "localhost/o/api/first-inner-model/fourth"
 		} ,
 		"relatedCollection1": {
-			"href": "localhost/o/api/model/first/models"
+			"href": "localhost/o/api/root/first/models"
 		} ,
 		"relatedCollection2": {
-			"href": "localhost/o/api/model/first/models"
+			"href": "localhost/o/api/root/first/models"
 		} ,
 		"self": {
 			"href": "localhost/o/api/model/first"

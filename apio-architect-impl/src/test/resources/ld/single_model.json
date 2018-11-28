@@ -111,7 +111,7 @@
 			"numberList": [
 				1
 			],
-			"relatedCollection": "localhost/o/api/second-inner-model/first/models",
+			"relatedCollection": "localhost/o/api/second/first/models",
 			"string": "A string",
 			"stringList": [
 				"a"
@@ -163,7 +163,7 @@
 				"method": "DELETE"
 			}
 		],
-		"relatedCollection": "localhost/o/api/first-inner-model/first/models",
+		"relatedCollection": "localhost/o/api/first/first/models",
 		"string": "A string",
 		"stringList": [
 			"a",
@@ -330,8 +330,8 @@
 			"target": "localhost/o/api/root/first"
 		}
 	],
-	"relatedCollection1": "localhost/o/api/model/first/models",
-	"relatedCollection2": "localhost/o/api/model/first/models",
+	"relatedCollection1": "localhost/o/api/root/first/models",
+	"relatedCollection2": "localhost/o/api/root/first/models",
 	"relativeURL1": "localhost/first",
 	"relativeURL2": "localhost/second",
 	"string1": "Live long and prosper",
