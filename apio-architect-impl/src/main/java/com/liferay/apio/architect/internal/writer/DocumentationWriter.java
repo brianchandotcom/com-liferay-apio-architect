@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.internal.writer;
 
+import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.BOOLEAN_LIST;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.message.json.DocumentationField.FieldType.FILE;
@@ -248,40 +249,6 @@ public class DocumentationWriter {
 	private Stream<DocumentationField> _calculateNestableFieldNames(
 		BaseRepresentor representor) {
 
-		Stream<DocumentationField> applicationRelativeURLStream =
-			_getDocumentationFieldStream(
-				representor.getApplicationRelativeURLFunctions(), STRING);
-		Stream<DocumentationField> binaryStream = _getDocumentationFieldStream(
-			representor.getBinaryFunctions(), FILE);
-		Stream<DocumentationField> booleanStream = _getDocumentationFieldStream(
-			representor.getBooleanFunctions(), BOOLEAN);
-		Stream<DocumentationField> booleanListStream =
-			_getDocumentationFieldStream(
-				representor.getBooleanListFunctions(), BOOLEAN_LIST);
-		Stream<DocumentationField> linkStream = _getDocumentationFieldStream(
-			representor.getLinkFunctions(), STRING);
-		Stream<DocumentationField> localizedStringStream =
-			_getDocumentationFieldStream(
-				representor.getLocalizedStringFunctions(), STRING);
-		Stream<DocumentationField> nestedStream = _getDocumentationFieldStream(
-			representor.getNestedFieldFunctions(), NESTED_MODEL);
-		Stream<DocumentationField> nestedListStream =
-			_getDocumentationFieldStream(
-				representor.getNestedFieldFunctions(), NESTED_MODEL_LIST);
-		Stream<DocumentationField> numberStream = _getDocumentationFieldStream(
-			representor.getNumberFunctions(), NUMBER);
-		Stream<DocumentationField> numberListStream =
-			_getDocumentationFieldStream(
-				representor.getNumberListFunctions(), NUMBER_LIST);
-		Stream<DocumentationField> relativeURLStream =
-			_getDocumentationFieldStream(
-				representor.getRelativeURLFunctions(), STRING);
-		Stream<DocumentationField> stringStream = _getDocumentationFieldStream(
-			representor.getStringFunctions(), STRING);
-		Stream<DocumentationField> stringListStream =
-			_getDocumentationFieldStream(
-				representor.getStringListFunctions(), STRING_LIST);
-
 		List<RelatedModel> relatedModels = representor.getRelatedModels();
 
 		Stream<RelatedModel> relatedModelStream = relatedModels.stream();
@@ -290,12 +257,35 @@ public class DocumentationWriter {
 			relatedModelStream.map(_createDocumentationFieldFromModel());
 
 		Stream<DocumentationField> fieldsStream = Stream.of(
-			applicationRelativeURLStream, binaryStream, booleanStream,
-			booleanListStream, linkStream, localizedStringStream, nestedStream,
-			nestedListStream, numberStream, numberListStream, relativeURLStream,
-			stringStream, stringListStream, relatedModelDocumentationFieldStream
+			_getDocumentationFieldStream(
+				representor.getApplicationRelativeURLFunctions(), STRING),
+			_getDocumentationFieldStream(
+				representor.getBinaryFunctions(), FILE),
+			_getDocumentationFieldStream(
+				representor.getBooleanFunctions(), BOOLEAN),
+			_getDocumentationFieldStream(
+				representor.getBooleanListFunctions(), BOOLEAN_LIST),
+			_getDocumentationFieldStream(
+				representor.getLinkFunctions(), STRING),
+			_getDocumentationFieldStream(
+				representor.getLocalizedStringFunctions(), STRING),
+			_getDocumentationFieldStream(
+				representor.getNestedFieldFunctions(), NESTED_MODEL),
+			_getDocumentationFieldStream(
+				representor.getNestedFieldFunctions(), NESTED_MODEL_LIST),
+			_getDocumentationFieldStream(
+				representor.getNumberFunctions(), NUMBER),
+			_getDocumentationFieldStream(
+				representor.getNumberListFunctions(), NUMBER_LIST),
+			_getDocumentationFieldStream(
+				representor.getRelativeURLFunctions(), STRING),
+			_getDocumentationFieldStream(
+				representor.getStringFunctions(), STRING),
+			_getDocumentationFieldStream(
+				representor.getStringListFunctions(), STRING_LIST),
+			relatedModelDocumentationFieldStream
 		).flatMap(
-			Function.identity()
+			unsafeCast(Function.identity())
 		);
 
 		List<NestedFieldFunction> nestedFieldFunctions =
