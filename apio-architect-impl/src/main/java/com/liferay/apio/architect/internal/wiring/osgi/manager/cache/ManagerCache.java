@@ -722,7 +722,7 @@ public class ManagerCache {
 	}
 
 	private static final MediaType _MEDIA_TYPE = MediaType.valueOf(
-		"application/ld+json");
+		"application/hal+json");
 
 	private List<ActionSemantics> _actionSemantics;
 	private Map<MediaType, BatchResultMessageMapper> _batchResultMessageMappers;
