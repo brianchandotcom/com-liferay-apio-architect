@@ -32,7 +32,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -69,15 +68,6 @@ import org.junit.Test;
  * @author Alejandro Hernández
  */
 public class FormTest {
-
-	@Test
-	public void testEmptyCreatesEmptyPathBuilder() {
-		Builder<Object> builder = BuilderImpl.empty();
-
-		Form<Object> form = _getEmptyObjectForm(builder);
-
-		assertThat(form, is(notNullValue()));
-	}
 
 	@Test
 	public void testFormCreatesValidForm() {
@@ -399,16 +389,6 @@ public class FormTest {
 		assertThat(_readBinaryFile(binaryFile2), is("Input Stream 2"));
 		assertThat(binaryFile2.getMimeType(), is("mimetype2"));
 		assertThat(binaryFile2.getName(), is("fileName2"));
-	}
-
-	private Form<Object> _getEmptyObjectForm(Builder<Object> builder) {
-		return builder.title(
-			__ -> ""
-		).description(
-			__ -> ""
-		).constructor(
-			Object::new
-		).build();
 	}
 
 	private Form<Map<String, Object>> _getForm() {

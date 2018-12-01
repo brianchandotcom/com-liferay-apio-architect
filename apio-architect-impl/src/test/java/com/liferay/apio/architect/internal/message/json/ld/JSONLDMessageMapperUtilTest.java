@@ -24,7 +24,6 @@ import static org.hamcrest.junit.MatcherAssert.assertThat;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.resource.Resource.Paged;
-import com.liferay.apio.architect.test.util.internal.util.DescriptionUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +40,7 @@ public class JSONLDMessageMapperUtilTest {
 	@Test(expected = UnsupportedOperationException.class)
 	public void testConstructorThrowsException() throws Throwable {
 		Constructor<?> constructor =
-			DescriptionUtil.class.getDeclaredConstructors()[0];
+			JSONLDMessageMapperUtil.class.getDeclaredConstructors()[0];
 
 		constructor.setAccessible(true);
 

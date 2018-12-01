@@ -35,7 +35,6 @@ import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +95,6 @@ public class ManagerCache {
 		_batchResultMessageMappers = null;
 		_representors = null;
 		_reusableNestedCollectionRoutes = null;
-		_rootResourceNames = null;
 		_rootResourceNamesSdk = null;
 		_singleModelMessageMappers = null;
 	}
@@ -260,30 +258,6 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the item routes for the item resource's name.
-	 *
-	 * @param  name the item resource's name
-	 * @param  computeEmptyFunction the function that can be called to compute
-	 *         the data
-	 * @return the item routes
-	 */
-	public <T, S> Optional<ItemRoutes<T, S>> getItemRoutesOptional(
-		String name, EmptyFunction computeEmptyFunction) {
-
-		if (_itemRoutes == null) {
-			computeEmptyFunction.invoke();
-		}
-
-		return Optional.ofNullable(
-			_itemRoutes
-		).map(
-			map -> map.get(name)
-		).map(
-			Unsafe::unsafeCast
-		);
-	}
-
-	/**
 	 * Returns the name of a collection resource that matches the specified
 	 * class name.
 	 *
@@ -442,34 +416,6 @@ public class ManagerCache {
 			map -> map.get(name)
 		).map(
 			Unsafe::unsafeCast
-		);
-	}
-
-	/**
-	 * Returns a list containing the names of the root resources with routes.
-	 *
-	 * @return the list of root resources
-	 * @review
-	 */
-	public List<String> getRootResourceNames() {
-		return Optional.ofNullable(
-			_rootResourceNames
-		).orElseGet(
-			Collections::emptyList
-		);
-	}
-
-	/**
-	 * Returns a list containing the names of the root resources with routes.
-	 *
-	 * @return the list of root resources
-	 * @review
-	 */
-	public List<String> getRootResourceNamesSdk() {
-		return Optional.ofNullable(
-			_rootResourceNamesSdk
-		).orElseGet(
-			Collections::emptyList
 		);
 	}
 
@@ -721,20 +667,6 @@ public class ManagerCache {
 	/**
 	 * Adds a root resource name.
 	 *
-	 * @param  rootResourceName the root resource name
-	 * @review
-	 */
-	public void putRootResourceName(String rootResourceName) {
-		if (_rootResourceNames == null) {
-			_rootResourceNames = new ArrayList<>();
-		}
-
-		_rootResourceNames.add(rootResourceName);
-	}
-
-	/**
-	 * Adds a root resource name.
-	 *
 	 * @param  rootResourceNameSdk the root resource name
 	 * @review
 	 */
@@ -831,7 +763,6 @@ public class ManagerCache {
 	private Map<String, Representor> _representors;
 	private Map<String, Class<?>> _reusableIdentifierClasses;
 	private Map<String, NestedCollectionRoutes> _reusableNestedCollectionRoutes;
-	private List<String> _rootResourceNames;
 	private List<String> _rootResourceNamesSdk;
 	private Map<MediaType, SingleModelMessageMapper> _singleModelMessageMappers;
 

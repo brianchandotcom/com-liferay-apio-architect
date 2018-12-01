@@ -50,13 +50,6 @@ public class JSONLDBatchResultMessageMapper<T>
 	}
 
 	@Override
-	public void mapCollectionURL(
-		JSONObjectBuilder jsonObjectBuilder, String url) {
-
-		_singleModelMessageMapper.mapSelfURL(jsonObjectBuilder, url);
-	}
-
-	@Override
 	public void mapItemTotalCount(
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
 

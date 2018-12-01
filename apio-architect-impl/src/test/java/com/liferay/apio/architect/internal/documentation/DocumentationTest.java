@@ -29,11 +29,8 @@ import com.liferay.apio.architect.internal.documentation.contributor.CustomDocum
 
 import java.util.Collections;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-
-import org.hamcrest.Matcher;
 
 import org.junit.Test;
 
@@ -87,11 +84,9 @@ public class DocumentationTest {
 		assertThat(optionalTitle, is(optionalWithValue(equalTo("A"))));
 		assertThat(optionalDescription, is(optionalWithValue(equalTo("B"))));
 		assertThat(optionalApplicationURL, is(optionalWithValue(equalTo("C"))));
-		assertThat(documentation.getRepresentors(), _HAS_SIZE_ONE);
+		assertThat(documentation.getRepresentors(), is(aMapWithSize(1)));
 		assertThat(documentation.getRepresentors(), hasKey("r"));
 		assertThat(descriptionFunction.apply(null), is("value"));
 	}
-
-	private static final Matcher<Map<?, ?>> _HAS_SIZE_ONE = is(aMapWithSize(1));
 
 }

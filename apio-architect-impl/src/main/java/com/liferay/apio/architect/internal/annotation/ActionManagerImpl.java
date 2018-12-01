@@ -61,14 +61,11 @@ import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
-import io.vavr.CheckedFunction3;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -109,15 +106,6 @@ public class ActionManagerImpl implements ActionManager {
 		).flatMap(
 			identity()
 		);
-	}
-
-	@Override
-	public void add(
-		ActionKey actionKey,
-		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
-		Class... providers) {
-
-		_actionsMap.put(actionKey, actionFunction);
 	}
 
 	@Override
@@ -396,9 +384,6 @@ public class ActionManagerImpl implements ActionManager {
 
 	@Reference
 	private ActionRouterManager _actionRouterManager;
-
-	private final Map<ActionKey, CheckedFunction3<Object, ?, List<Object>, ?>>
-		_actionsMap = new HashMap<>();
 
 	@Reference
 	private CollectionRouterManager _collectionRouterManager;

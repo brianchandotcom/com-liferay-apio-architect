@@ -141,15 +141,6 @@ public class FormImpl<T> implements Form<T> {
 				   Form.Builder.ConstructorStep<T>,
 				   Form.Builder.DescriptionStep<T> {
 
-		/**
-		 * Creates a new builder with empty paths.
-		 *
-		 * @return the new builder
-		 */
-		public static <T> BuilderImpl<T> empty() {
-			return new BuilderImpl<>(__ -> null, __ -> Optional.empty());
-		}
-
 		public BuilderImpl(
 			IdentifierFunction<?> pathToIdentifierFunction,
 			Function<String, Optional<String>> nameFunction) {

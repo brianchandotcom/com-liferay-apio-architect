@@ -58,16 +58,6 @@ public interface BatchResultMessageMapper<T>
 	}
 
 	/**
-	 * Maps a collection URL to its JSON object representation.
-	 *
-	 * @param jsonObjectBuilder the JSON object builder for the batch result
-	 * @param url the collection's URL
-	 */
-	public default void mapCollectionURL(
-		JSONObjectBuilder jsonObjectBuilder, String url) {
-	}
-
-	/**
 	 * Maps a resource URL to its JSON object representation.
 	 *
 	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
@@ -127,19 +117,6 @@ public interface BatchResultMessageMapper<T>
 	 * @param itemJSONObjectBuilder the JSON object builder for the item
 	 */
 	public default void onFinishItem(
-		JSONObjectBuilder batchResultJSONObjectBuilder,
-		JSONObjectBuilder itemJSONObjectBuilder) {
-	}
-
-	/**
-	 * Starts the item. This is the first batch result message mapper method the
-	 * writer calls for the item.
-	 *
-	 * @param batchResultJSONObjectBuilder the JSON object builder for the batch
-	 *        result
-	 * @param itemJSONObjectBuilder the JSON object builder for the item
-	 */
-	public default void onStartItem(
 		JSONObjectBuilder batchResultJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder) {
 	}

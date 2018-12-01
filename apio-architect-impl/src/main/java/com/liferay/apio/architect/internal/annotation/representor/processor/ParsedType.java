@@ -16,6 +16,8 @@ package com.liferay.apio.architect.internal.annotation.representor.processor;
 
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 
+import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,13 +50,12 @@ public class ParsedType {
 	}
 
 	/**
-	 * Returns the list of Idfield data.
+	 * The method used to obtain the ID of the type.
 	 *
-	 * @return the list of Idfield data
 	 * @review
 	 */
-	public IdFieldData getIdFieldData() {
-		return _idFieldData;
+	public Method getIdMethod() {
+		return _method;
 	}
 
 	/**
@@ -209,8 +210,8 @@ public class ParsedType {
 			return _parsedType;
 		}
 
-		public Builder idFieldData(IdFieldData idFieldData) {
-			_parsedType._idFieldData = idFieldData;
+		public Builder idMethod(Method method) {
+			_parsedType._method = method;
 
 			return this;
 		}
@@ -225,11 +226,11 @@ public class ParsedType {
 	private List<BidirectionalFieldData> _bidirectionalFieldData =
 		new ArrayList<>();
 	private List<FieldData> _fieldDataList = new ArrayList<>();
-	private IdFieldData _idFieldData;
 	private List<LinkedModelFieldData> _linkedModelFieldData =
 		new ArrayList<>();
 	private List<ListFieldData> _listFieldData = new ArrayList<>();
 	private List<NestedParsedType> _listParsedTypes = new ArrayList<>();
+	private Method _method;
 	private List<NestedParsedType> _parsedTypes = new ArrayList<>();
 	private List<RelatedCollectionFieldData> _relatedCollectionFieldData =
 		new ArrayList<>();

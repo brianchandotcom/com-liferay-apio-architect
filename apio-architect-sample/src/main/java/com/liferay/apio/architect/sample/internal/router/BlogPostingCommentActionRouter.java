@@ -117,7 +117,7 @@ public class BlogPostingCommentActionRouter implements ActionRouter<Comment> {
 		);
 	}
 
-	@Actions.Action(httpMethod = "GET", name = "comments", reusable = true)
+	@Actions.Action(httpMethod = "GET", name = "comments")
 	public PageItems<Comment> retrieveCommentsForAModel(
 		@Id ModelNameModelIdIdentifier modelNameModelIdIdentifier) {
 

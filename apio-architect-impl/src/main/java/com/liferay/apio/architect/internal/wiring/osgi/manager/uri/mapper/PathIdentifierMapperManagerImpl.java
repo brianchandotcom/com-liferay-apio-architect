@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper;
 
-import static com.liferay.apio.architect.internal.annotation.ActionKey.ANY_ROUTE;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 import static com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
 
@@ -107,7 +106,7 @@ public class PathIdentifierMapperManagerImpl
 			_getReusablePathIdentifierMapper(path.getName());
 
 		return pathIdentifierMapper.filter(
-			__ -> path.getId() != null && !ANY_ROUTE.equals(path.getId())
+			__ -> path.getId() != null && !"__".equals(path.getId())
 		).map(
 			service -> service.map(path)
 		).orElseThrow(

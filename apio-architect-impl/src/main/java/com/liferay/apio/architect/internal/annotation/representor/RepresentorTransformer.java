@@ -21,14 +21,10 @@ import static com.liferay.apio.architect.internal.annotation.representor.StringU
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
-import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnnotation;
-
-import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.Vocabulary;
 import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
-import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.annotation.representor.processor.BidirectionalFieldData;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
@@ -37,6 +33,8 @@ import com.liferay.apio.architect.internal.representor.RepresentorImpl;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.FirstStep;
+
+import io.vavr.control.Try;
 
 import java.lang.reflect.Method;
 
@@ -82,17 +80,11 @@ public class RepresentorTransformer {
 		FirstStep<T> firstStep = builder.types(
 			type.value()
 		).identifier(
-			s -> Try.fromFallible(
-				() -> getMethodsListWithAnnotation(typeClass, Id.class)
-			).filter(
-				methods -> !methods.isEmpty()
-			).map(
-				methods -> methods.get(0)
-			).map(
-				identifierMethod -> (S)identifierMethod.invoke(s)
-			).orElse(
-				null
-			)
+			t -> Try.of(
+				parsedType::getIdMethod
+			).mapTry(
+				method -> (S)method.invoke(t)
+			).getOrNull()
 		);
 
 		_processFields(parsedType, firstStep);
@@ -159,11 +151,9 @@ public class RepresentorTransformer {
 				if (relatedCollection.reusable()) {
 					firstStep.addRelatedCollection(
 						key, relatedCollection.value(),
-						model -> Try.fromFallible(
+						model -> Try.of(
 							() -> method.invoke(model)
-						).orElse(
-							null
-						));
+						).getOrNull());
 
 					Class<? extends Identifier<?>> typeClass =
 						relatedCollection.value();

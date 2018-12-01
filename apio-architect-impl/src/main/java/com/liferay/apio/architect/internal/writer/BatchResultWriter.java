@@ -76,9 +76,6 @@ public class BatchResultWriter<T> {
 				path -> Item.of(path.getName(), Id.of("", path.getId()))
 			).ifPresent(
 				item -> {
-					_batchResultMessageMapper.onStartItem(
-						_jsonObjectBuilder, itemJsonObjectBuilder);
-
 					Optional<String> optionalURL = createItemResourceURL(
 						applicationURL, item);
 

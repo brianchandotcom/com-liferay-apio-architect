@@ -79,11 +79,9 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testId() throws Exception {
-		IdFieldData idFieldData = _parsedType.getIdFieldData();
+		Method idMethod = _parsedType.getIdMethod();
 
-		Method method = idFieldData.getMethod();
-
-		Long id = (Long)method.invoke(new DummyImpl());
+		Long id = (Long)idMethod.invoke(new DummyImpl());
 
 		assertThat(id, is(1L));
 	}

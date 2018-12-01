@@ -22,7 +22,6 @@ import com.liferay.apio.architect.resource.Resource;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import io.vavr.CheckedFunction3;
 import io.vavr.control.Either;
 
 import java.util.List;
@@ -48,21 +47,6 @@ import javax.servlet.http.HttpServletRequest;
  * @review
  */
 public interface ActionManager {
-
-	/**
-	 * Adds an action with the key specified by the actionKey parameter, that
-	 * calls a actionFunction with ID, body and parameters based on a varags of
-	 * providers
-	 *
-	 * @param  actionKey the path parameters to add an Action
-	 * @param  actionFunction the method to call in that path
-	 * @param  providers the list of providers to supply to the action
-	 * @review
-	 */
-	public void add(
-		ActionKey actionKey,
-		CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
-		Class... providers);
 
 	/**
 	 * Returns the action for the provided combination of parameters and method,

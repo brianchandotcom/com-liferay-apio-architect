@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.internal.annotation;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -28,14 +27,6 @@ import javax.servlet.http.HttpServletRequest;
  * @review
  */
 public interface Action extends Function<HttpServletRequest, Object> {
-
-	public default ActionKey getActionKey() {
-		return null;
-	}
-
-	public default Optional<String> getURIOptional() {
-		return Optional.empty();
-	}
 
 	/**
 	 * Types implementing this interface represent errors relative to an action.

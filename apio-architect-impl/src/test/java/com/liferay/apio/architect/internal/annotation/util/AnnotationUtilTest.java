@@ -68,19 +68,16 @@ public class AnnotationUtilTest {
 		assertThat(actionMethodAction, is(notNullValue()));
 		assertThat(actionMethodAction.name(), is("name"));
 		assertThat(actionMethodAction.httpMethod(), is("GET"));
-		assertThat(actionMethodAction.reusable(), is(false));
 
 		assertThat(createMethodAction, is(notNullValue()));
 		assertThat(createMethodAction.name(), is("create"));
 		assertThat(createMethodAction.httpMethod(), is("POST"));
-		assertThat(createMethodAction.reusable(), is(false));
 
 		assertThat(nullAction, is(nullValue()));
 
 		assertThat(removeMethodAction, is(notNullValue()));
 		assertThat(removeMethodAction.name(), is("remove"));
 		assertThat(removeMethodAction.httpMethod(), is("DELETE"));
-		assertThat(removeMethodAction.reusable(), is(false));
 	}
 
 	@Test

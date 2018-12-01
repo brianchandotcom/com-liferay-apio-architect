@@ -30,19 +30,6 @@ import java.lang.reflect.Type;
 public class GenericUtil {
 
 	/**
-	 * Returns the class of the first type argument in the {@code Type}.
-	 *
-	 * @param  type the type
-	 * @param  interfaceClass the interface class
-	 * @return the class of the type's first type argument
-	 */
-	public static <S> Try<Class<S>> getFirstGenericTypeArgumentFromTypeTry(
-		Type type, Class<?> interfaceClass) {
-
-		return getGenericTypeArgumentFromTypeTry(type, interfaceClass, 0);
-	}
-
-	/**
 	 * Returns the class of the n-th type argument in the {@code Type}.
 	 *
 	 * @param  type the type

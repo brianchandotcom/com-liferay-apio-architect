@@ -87,14 +87,6 @@ public @interface Actions {
 		 */
 		public String name();
 
-		/**
-		 * Returns if the action is reusable
-		 *
-		 * @return if the action is reusable
-		 * @review
-		 */
-		public boolean reusable() default false;
-
 	}
 
 	/**

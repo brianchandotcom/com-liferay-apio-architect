@@ -36,7 +36,6 @@ import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotAllowed;
 import com.liferay.apio.architect.internal.annotation.Action.Error.NotFound;
-import com.liferay.apio.architect.internal.annotation.ActionKey;
 import com.liferay.apio.architect.internal.annotation.ActionManager;
 import com.liferay.apio.architect.internal.documentation.Documentation;
 import com.liferay.apio.architect.internal.entrypoint.EntryPoint;
@@ -45,7 +44,6 @@ import com.liferay.apio.architect.resource.Resource;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.single.model.SingleModel;
 
-import io.vavr.CheckedFunction3;
 import io.vavr.control.Either;
 
 import java.util.Collections;
@@ -204,13 +202,6 @@ public class RootResourceTest extends BaseTest {
 	}
 
 	private static class ActionManagerImpl implements ActionManager {
-
-		@Override
-		public void add(
-			ActionKey actionKey,
-			CheckedFunction3<Object, ?, List<Object>, ?> actionFunction,
-			Class... providers) {
-		}
 
 		@Override
 		public Either<Action.Error, Action> getAction(

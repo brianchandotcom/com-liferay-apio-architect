@@ -77,20 +77,6 @@ public class TypeProcessor {
 		}
 	}
 
-	private static IdFieldData _getIdField(Class<?> typeClass) {
-		return Try.fromFallible(
-			() -> getMethodsListWithAnnotation(typeClass, Id.class)
-		).filter(
-			methods -> !methods.isEmpty()
-		).map(
-			methods -> methods.get(0)
-		).map(
-			method -> new IdFieldData(method, method.getAnnotation(Id.class))
-		).orElse(
-			null
-		);
-	}
-
 	private static void _processMethod(Builder builder, Method method) {
 		LinkedModel linkedModel = method.getAnnotation(LinkedModel.class);
 		Field field = method.getAnnotation(Field.class);
@@ -164,9 +150,17 @@ public class TypeProcessor {
 		Builder builder = new Builder(type, typeClass);
 
 		if (!nested) {
-			IdFieldData idFieldData = _getIdField(typeClass);
+			Method idMethod = Try.fromFallible(
+				() -> getMethodsListWithAnnotation(typeClass, Id.class)
+			).filter(
+				methods -> !methods.isEmpty()
+			).map(
+				methods -> methods.get(0)
+			).orElse(
+				null
+			);
 
-			builder.idFieldData(idFieldData);
+			builder.idMethod(idMethod);
 		}
 
 		List<Method> methods = getMethodsListWithAnnotation(
