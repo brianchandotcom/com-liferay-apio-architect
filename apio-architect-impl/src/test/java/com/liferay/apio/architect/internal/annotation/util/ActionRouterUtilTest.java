@@ -85,11 +85,11 @@ public class ActionRouterUtilTest {
 		assertThat(page.getItems(), contains("1"));
 		assertThat(page.getItemsPerPage(), is(1));
 		assertThat(page.getLastPageNumber(), is(1));
+		assertThat(page.hasNext(), is(false));
 		assertThat(page.getPageNumber(), is(1));
+		assertThat(page.hasPrevious(), is(false));
 		assertThat(page.getResourceName(), is("name"));
 		assertThat(page.getTotalCount(), is(1));
-		assertThat(page.hasNext(), is(false));
-		assertThat(page.hasPrevious(), is(false));
 	}
 
 	@Test
@@ -108,11 +108,11 @@ public class ActionRouterUtilTest {
 		assertThat(page.getItems(), contains("1"));
 		assertThat(page.getItemsPerPage(), is(31));
 		assertThat(page.getLastPageNumber(), is(1));
+		assertThat(page.hasNext(), is(false));
 		assertThat(page.getPageNumber(), is(1));
+		assertThat(page.hasPrevious(), is(false));
 		assertThat(page.getResourceName(), is("name"));
 		assertThat(page.getTotalCount(), is(31));
-		assertThat(page.hasNext(), is(false));
-		assertThat(page.hasPrevious(), is(false));
 	}
 
 	@Test
@@ -134,11 +134,11 @@ public class ActionRouterUtilTest {
 		assertThat(page.getItems(), contains("1"));
 		assertThat(page.getItemsPerPage(), is(30));
 		assertThat(page.getLastPageNumber(), is(2));
+		assertThat(page.hasNext(), is(false));
 		assertThat(page.getPageNumber(), is(2));
+		assertThat(page.hasPrevious(), is(true));
 		assertThat(page.getResourceName(), is("name"));
 		assertThat(page.getTotalCount(), is(31));
-		assertThat(page.hasNext(), is(false));
-		assertThat(page.hasPrevious(), is(true));
 	}
 
 	@Test
@@ -192,18 +192,19 @@ public class ActionRouterUtilTest {
 	public void testGetBodyResourceClass() throws NoSuchMethodException {
 		Method listBodyMethod = MyAnnotatedInterface.class.getMethod(
 			"withListBodyParameters", List.class);
+		Method notAnnotatedMethod = MyAnnotatedInterface.class.getMethod(
+			"notAnnotated");
 		Method singleBodyMethod = MyAnnotatedInterface.class.getMethod(
 			"withIdAndBodyParameters", Pagination.class, Credentials.class,
 			Long.class, MyType.class);
-		Method notAnnotatedMethod = MyAnnotatedInterface.class.getMethod(
-			"notAnnotated");
 
 		String myType = MyType.class.getName();
 
 		assertThat(getBodyResourceClassName(listBodyMethod), is(myType));
-		assertThat(getBodyResourceClassName(singleBodyMethod), is(myType));
 
 		assertNull(getBodyResourceClassName(notAnnotatedMethod));
+
+		assertThat(getBodyResourceClassName(singleBodyMethod), is(myType));
 	}
 
 	@Test
@@ -298,32 +299,32 @@ public class ActionRouterUtilTest {
 
 	@Test
 	public void testIsListBody() throws NoSuchMethodException {
-		Method listBodyMethod = MyAnnotatedInterface.class.getMethod(
-			"withListBodyParameters", List.class);
+		Method notAnnotatedMethod = MyAnnotatedInterface.class.getMethod(
+			"notAnnotated");
 		Method singleBodyMethod = MyAnnotatedInterface.class.getMethod(
 			"withIdAndBodyParameters", Pagination.class, Credentials.class,
 			Long.class, MyType.class);
-		Method notAnnotatedMethod = MyAnnotatedInterface.class.getMethod(
-			"notAnnotated");
+		Method listBodyMethod = MyAnnotatedInterface.class.getMethod(
+			"withListBodyParameters", List.class);
 
-		assertTrue(isListBody(listBodyMethod));
-		assertFalse(isListBody(singleBodyMethod));
 		assertFalse(isListBody(notAnnotatedMethod));
+		assertFalse(isListBody(singleBodyMethod));
+		assertTrue(isListBody(listBodyMethod));
 	}
 
 	@Test
 	public void testNeedsParameterFromBody() throws NoSuchMethodException {
+		Method notAnnotatedMethod = MyAnnotatedInterface.class.getMethod(
+			"notAnnotated");
 		Method listBodyMethod = MyAnnotatedInterface.class.getMethod(
 			"withListBodyParameters", List.class);
 		Method singleBodyMethod = MyAnnotatedInterface.class.getMethod(
 			"withIdAndBodyParameters", Pagination.class, Credentials.class,
 			Long.class, MyType.class);
-		Method notAnnotatedMethod = MyAnnotatedInterface.class.getMethod(
-			"notAnnotated");
 
+		assertFalse(needsParameterFromBody(notAnnotatedMethod));
 		assertTrue(needsParameterFromBody(listBodyMethod));
 		assertTrue(needsParameterFromBody(singleBodyMethod));
-		assertFalse(needsParameterFromBody(notAnnotatedMethod));
 	}
 
 }

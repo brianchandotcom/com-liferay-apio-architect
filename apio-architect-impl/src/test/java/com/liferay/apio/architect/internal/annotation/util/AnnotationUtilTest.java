@@ -40,12 +40,12 @@ public class AnnotationUtilTest {
 
 	@BeforeClass
 	public static void setUpClass() throws NoSuchMethodException {
-		_annotatedWithRemoveMethod = MyAnnotatedInterface.class.getMethod(
-			"annotatedWithRemove");
-		_annotatedWithCreateMethod = MyAnnotatedInterface.class.getMethod(
-			"annotatedWithCreate");
 		_annotatedWithActionMethod = MyAnnotatedInterface.class.getMethod(
 			"annotatedWithAction");
+		_annotatedWithCreateMethod = MyAnnotatedInterface.class.getMethod(
+			"annotatedWithCreate");
+		_annotatedWithRemoveMethod = MyAnnotatedInterface.class.getMethod(
+			"annotatedWithRemove");
 		_notAnnotatedMethod = MyAnnotatedInterface.class.getMethod(
 			"notAnnotated");
 		_withParameterAnnotatedMethod = MyAnnotatedInterface.class.getMethod(
@@ -56,31 +56,31 @@ public class AnnotationUtilTest {
 
 	@Test
 	public void test() {
-		Action removeMethodAction = findAnnotationInMethodOrInItsAnnotations(
-			_annotatedWithRemoveMethod, Action.class);
-		Action createMethodAction = findAnnotationInMethodOrInItsAnnotations(
-			_annotatedWithCreateMethod, Action.class);
 		Action actionMethodAction = findAnnotationInMethodOrInItsAnnotations(
 			_annotatedWithActionMethod, Action.class);
+		Action createMethodAction = findAnnotationInMethodOrInItsAnnotations(
+			_annotatedWithCreateMethod, Action.class);
 		Action nullAction = findAnnotationInMethodOrInItsAnnotations(
 			_notAnnotatedMethod, Action.class);
-
-		assertThat(removeMethodAction, is(notNullValue()));
-		assertThat(removeMethodAction.name(), is("remove"));
-		assertThat(removeMethodAction.httpMethod(), is("DELETE"));
-		assertThat(removeMethodAction.reusable(), is(false));
-
-		assertThat(createMethodAction, is(notNullValue()));
-		assertThat(createMethodAction.name(), is("create"));
-		assertThat(createMethodAction.httpMethod(), is("POST"));
-		assertThat(createMethodAction.reusable(), is(false));
+		Action removeMethodAction = findAnnotationInMethodOrInItsAnnotations(
+			_annotatedWithRemoveMethod, Action.class);
 
 		assertThat(actionMethodAction, is(notNullValue()));
 		assertThat(actionMethodAction.name(), is("name"));
 		assertThat(actionMethodAction.httpMethod(), is("GET"));
 		assertThat(actionMethodAction.reusable(), is(false));
 
+		assertThat(createMethodAction, is(notNullValue()));
+		assertThat(createMethodAction.name(), is("create"));
+		assertThat(createMethodAction.httpMethod(), is("POST"));
+		assertThat(createMethodAction.reusable(), is(false));
+
 		assertThat(nullAction, is(nullValue()));
+
+		assertThat(removeMethodAction, is(notNullValue()));
+		assertThat(removeMethodAction.name(), is("remove"));
+		assertThat(removeMethodAction.httpMethod(), is("DELETE"));
+		assertThat(removeMethodAction.reusable(), is(false));
 	}
 
 	@Test
