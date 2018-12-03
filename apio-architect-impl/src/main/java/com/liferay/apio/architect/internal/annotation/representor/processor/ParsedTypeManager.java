@@ -16,18 +16,24 @@ package com.liferay.apio.architect.internal.annotation.representor.processor;
 
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
+import static io.leangen.geantyref.GenericTypeReflector.annotate;
+
 import static org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import com.liferay.apio.architect.internal.annotation.representor.ActionRouterTypeExtractor;
+import com.liferay.apio.architect.annotation.Vocabulary.Type;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.router.ActionRouter;
+
+import io.leangen.geantyref.GenericTypeReflector;
+
+import java.lang.reflect.AnnotatedType;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -58,7 +64,8 @@ public class ParsedTypeManager {
 	 * @review
 	 */
 	public Optional<ParsedType> getParsedType(String key) {
-		return INSTANCE.getParsedTypeOptional(key, this::_computeParsedTypes);
+		return INSTANCE.getParsedTypeOptional(
+			key, () -> _actionRouters.forEach(this::_compute));
 	}
 
 	/**
@@ -68,25 +75,48 @@ public class ParsedTypeManager {
 	 * @review
 	 */
 	public Map<String, ParsedType> getParsedTypes() {
-		return INSTANCE.getParsedTypesMap(this::_computeParsedTypes);
+		return INSTANCE.getParsedTypesMap(
+			() -> _actionRouters.forEach(this::_compute));
 	}
 
-	private void _computeParsedTypes() {
-		Stream<ActionRouter<?>> actionRouterStream = _actionRouters.stream();
+	private void _compute(ActionRouter actionRouter) {
+		AnnotatedType annotatedType = GenericTypeReflector.getTypeParameter(
+			annotate(actionRouter.getClass()),
+			ActionRouter.class.getTypeParameters()[0]);
 
-		actionRouterStream.map(
-			ActionRouterTypeExtractor::extractTypeClass
-		).forEach(
-			typeClassTry -> typeClassTry.voidFold(
-				__ -> _logger.warn(
-					"Unable to extract class from action router"),
-				typeClass -> {
-					ParsedType parsedType = TypeProcessor.processType(
-						typeClass);
+		if (annotatedType == null) {
+			_logger.warn(
+				"Unable to extract class from action router {}", actionRouter);
 
-					INSTANCE.putParsedType(typeClass.getName(), parsedType);
-				})
-		);
+			return;
+		}
+
+		if (!(annotatedType.getType() instanceof Class)) {
+			_logger.warn("{} is not a valid class", annotatedType.getType());
+
+			return;
+		}
+
+		Class<?> clazz = (Class)annotatedType.getType();
+
+		if (!Identifier.class.isAssignableFrom(clazz)) {
+			_logger.warn("Class {} must implement {}", clazz, Identifier.class);
+
+			return;
+		}
+
+		if (!clazz.isAnnotationPresent(Type.class)) {
+			_logger.warn(
+				"ActionRouter {} resource ({}) is not annotated with {}",
+				actionRouter, annotatedType.getType(), Type.class);
+
+			return;
+		}
+
+		ParsedType parsedType = TypeProcessor.processType(
+			(Class<? extends Identifier>)clazz);
+
+		INSTANCE.putParsedType(clazz.getName(), parsedType);
 	}
 
 	@Reference(
