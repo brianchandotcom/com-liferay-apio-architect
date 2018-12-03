@@ -153,71 +153,48 @@ public class ParsedType {
 			_parsedType._typeClass = typeClass;
 		}
 
-		public Builder addBidirectionalFieldData(
-			FieldData<BidirectionalModel> bidirectionalFieldData) {
+		public void addBidirectionalFieldData(
+			FieldData<BidirectionalModel> fieldData) {
 
-			_parsedType._bidirectionalFieldData.add(bidirectionalFieldData);
-
-			return this;
+			_parsedType._bidirectionalFieldData.add(fieldData);
 		}
 
-		public Builder addFieldData(FieldData fieldData) {
+		public void addFieldData(FieldData fieldData) {
 			_parsedType._fieldDataList.add(fieldData);
-
-			return this;
 		}
 
-		public Builder addLinkedModelFieldData(
-			FieldData<LinkedModel> linkedModelFieldData) {
-
-			_parsedType._linkedModelFieldData.add(linkedModelFieldData);
-
-			return this;
+		public void addLinkedModelFieldData(FieldData<LinkedModel> fieldData) {
+			_parsedType._linkedModelFieldData.add(fieldData);
 		}
 
-		public Builder addListFieldData(FieldData<Class<?>> listFieldData) {
-			_parsedType._listFieldData.add(listFieldData);
-
-			return this;
+		public void addListFieldData(FieldData<Class<?>> fieldData) {
+			_parsedType._listFieldData.add(fieldData);
 		}
 
-		public Builder addListParsedType(FieldData<ParsedType> parsedType) {
-			_parsedType._listParsedTypes.add(parsedType);
-
-			return this;
+		public void addListParsedType(FieldData<ParsedType> fieldData) {
+			_parsedType._listParsedTypes.add(fieldData);
 		}
 
-		public Builder addParsedType(FieldData<ParsedType> parsedType) {
-			_parsedType._parsedTypes.add(parsedType);
-
-			return this;
+		public void addParsedType(FieldData<ParsedType> fieldData) {
+			_parsedType._parsedTypes.add(fieldData);
 		}
 
-		public Builder addRelatedCollectionFieldData(
-			FieldData<RelatedCollection> relatedCollectionFieldData) {
+		public void addRelatedCollectionFieldData(
+			FieldData<RelatedCollection> fieldData) {
 
-			_parsedType._relatedCollectionFieldData.add(
-				relatedCollectionFieldData);
-
-			return this;
+			_parsedType._relatedCollectionFieldData.add(fieldData);
 		}
 
-		public Builder addRelativeURLFieldData(
-			FieldData<RelativeURL> relativeURLFieldData) {
-
-			_parsedType._relativeURLFieldData.add(relativeURLFieldData);
-
-			return this;
+		public void addRelativeURLFieldData(FieldData<RelativeURL> fieldData) {
+			_parsedType._relativeURLFieldData.add(fieldData);
 		}
 
 		public ParsedType build() {
 			return _parsedType;
 		}
 
-		public Builder idMethod(Method method) {
+		public void idMethod(Method method) {
 			_parsedType._method = method;
-
-			return this;
 		}
 
 		private final ParsedType _parsedType;
