@@ -22,15 +22,12 @@ import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.annotation.FieldMode;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
 import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.Form.Builder;
 import com.liferay.apio.architect.internal.annotation.representor.processor.FieldData;
-import com.liferay.apio.architect.internal.annotation.representor.processor.LinkedModelFieldData;
-import com.liferay.apio.architect.internal.annotation.representor.processor.ListFieldData;
-import com.liferay.apio.architect.internal.annotation.representor.processor.NestedParsedType;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
-import com.liferay.apio.architect.internal.annotation.representor.processor.RelativeURLFieldData;
 import com.liferay.apio.architect.internal.form.FormImpl;
 
 import java.lang.reflect.InvocationHandler;
@@ -102,7 +99,7 @@ public class FormTransformer {
 				invocationHandler)
 		);
 
-		List<RelativeURLFieldData> relativeURLFieldDataList =
+		List<FieldData<RelativeURL>> relativeURLFieldDataList =
 			_filterReadableFields(parsedType::getRelativeURLFieldDataList);
 
 		relativeURLFieldDataList.forEach(
@@ -151,12 +148,12 @@ public class FormTransformer {
 				}
 			});
 
-		List<ListFieldData> listFieldDataList = _filterReadableFields(
+		List<FieldData<Class<?>>> listFieldDataList = _filterReadableFields(
 			parsedType::getListFieldDataList);
 
 		listFieldDataList.forEach(
 			listFieldData -> {
-				Class<?> listClass = listFieldData.getListType();
+				Class<?> listClass = listFieldData.getData();
 				String key = listFieldData.getFieldName();
 				String methodName = listFieldData.getMethodName();
 
@@ -186,12 +183,12 @@ public class FormTransformer {
 				}
 			});
 
-		List<LinkedModelFieldData> linkedModelFieldDataList =
+		List<FieldData<LinkedModel>> linkedModelFieldDataList =
 			_filterReadableFields(parsedType::getLinkedModelFieldDataList);
 
 		linkedModelFieldDataList.forEach(
 			linkedModelFieldData -> {
-				LinkedModel linkedModel = linkedModelFieldData.getLinkedModel();
+				LinkedModel linkedModel = linkedModelFieldData.getData();
 
 				String key = linkedModelFieldData.getFieldName();
 				String methodName = linkedModelFieldData.getMethodName();
@@ -201,12 +198,12 @@ public class FormTransformer {
 					unsafeCast(formFunction.apply(methodName)));
 			});
 
-		List<NestedParsedType> nestedParsedTypes = _filterReadableFields(
+		List<FieldData<ParsedType>> nestedParsedTypes = _filterReadableFields(
 			parsedType::getParsedTypes);
 
 		nestedParsedTypes.forEach(
 			nestedParsedType -> {
-				ParsedType parsedTypeNested = nestedParsedType.getParsedType();
+				ParsedType parsedTypeNested = nestedParsedType.getData();
 
 				fieldStep.addOptionalNestedModel(
 					nestedParsedType.getFieldName(),
@@ -214,12 +211,12 @@ public class FormTransformer {
 					formFunction.apply(nestedParsedType.getMethodName()));
 			});
 
-		List<NestedParsedType> nestedListParsedTypes = _filterReadableFields(
-			parsedType::getListParsedTypes);
+		List<FieldData<ParsedType>> nestedListParsedTypes =
+			_filterReadableFields(parsedType::getListParsedTypes);
 
 		nestedListParsedTypes.forEach(
 			nestedParsedType -> {
-				ParsedType parsedTypeNested = nestedParsedType.getParsedType();
+				ParsedType parsedTypeNested = nestedParsedType.getData();
 
 				String methodName = nestedParsedType.getMethodName();
 

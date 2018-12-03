@@ -22,6 +22,8 @@ import static org.junit.Assert.assertThat;
 import com.liferay.apio.architect.annotation.Vocabulary;
 import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
 import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil;
@@ -56,11 +58,11 @@ public class TypeProcessorTestUtil {
 	}
 
 	public static void testBidirectionalData(
-		BidirectionalFieldData bidirectionalFieldData, String fieldName,
+		FieldData<BidirectionalModel> bidirectionalFieldData, String fieldName,
 		String bidirectionalName, Class<?> identifierClass) {
 
 		BidirectionalModel bidirectionalModel =
-			bidirectionalFieldData.getBidirectionalModel();
+			bidirectionalFieldData.getData();
 
 		Class<?> identifierType = getIdentifierType(identifierClass);
 
@@ -82,11 +84,11 @@ public class TypeProcessorTestUtil {
 	}
 
 	public static void testLinkedModelData(
-		LinkedModelFieldData linkedModelFieldData, String fieldName,
+		FieldData<LinkedModel> linkedModelFieldData, String fieldName,
 		Class<?> identifierClass) {
 
-		Vocabulary.LinkedModel linkedModel =
-			linkedModelFieldData.getLinkedModel();
+		Vocabulary.LinkedModel linkedModel = linkedModelFieldData.getData();
+
 		Class<?> identifierType = getIdentifierType(identifierClass);
 
 		assertThat(linkedModel.value(), equalTo(identifierClass));
@@ -95,19 +97,21 @@ public class TypeProcessorTestUtil {
 	}
 
 	public static void testListFieldData(
-		ListFieldData listFieldData, String fieldName, Class<?> listType) {
+		FieldData<Class<?>> listFieldData, String fieldName,
+		Class<?> listType) {
 
-		assertThat(listFieldData.getListType(), equalTo(listType));
+		assertThat(listFieldData.getData(), equalTo(listType));
 
 		testFieldData(listFieldData, fieldName, List.class);
 	}
 
 	public static void testRelatedCollectionData(
-		RelatedCollectionFieldData relatedCollectionFieldData, String fieldName,
-		Class<?> identifierClass) {
+		FieldData<RelatedCollection> relatedCollectionFieldData,
+		String fieldName, Class<?> identifierClass) {
 
 		Vocabulary.RelatedCollection relatedCollection =
-			relatedCollectionFieldData.getRelatedCollection();
+			relatedCollectionFieldData.getData();
+
 		Class<?> identifierType = getIdentifierType(identifierClass);
 
 		assertThat(relatedCollection.value(), is(equalTo(identifierClass)));
@@ -116,10 +120,10 @@ public class TypeProcessorTestUtil {
 	}
 
 	public static void testRelativeURLData(
-		RelativeURLFieldData relativeURLFieldData, String fieldName,
+		FieldData<RelativeURL> relativeURLFieldData, String fieldName,
 		boolean fromApplication) {
 
-		RelativeURL relativeURL = relativeURLFieldData.getRelativeURL();
+		RelativeURL relativeURL = relativeURLFieldData.getData();
 
 		assertThat(relativeURL.fromApplication(), is(fromApplication));
 

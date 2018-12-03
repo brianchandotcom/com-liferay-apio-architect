@@ -24,6 +24,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import static org.junit.Assert.assertThat;
 
+import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.IntegerIdentifier;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyWithNested;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyWithNested.NestedDummy;
@@ -43,11 +45,11 @@ public class TypeProcessorNestedTest {
 		ParsedType parsedType = TypeProcessor.processType(
 			DummyWithNested.class);
 
-		List<NestedParsedType> parsedTypes = parsedType.getParsedTypes();
+		List<FieldData<ParsedType>> parsedTypes = parsedType.getParsedTypes();
 
 		_nestedParsedType = parsedTypes.get(0);
 
-		_parsedType = _nestedParsedType.getParsedType();
+		_parsedType = _nestedParsedType.getData();
 	}
 
 	@Test
@@ -60,7 +62,7 @@ public class TypeProcessorNestedTest {
 
 	@Test
 	public void testLinkedModels() {
-		List<LinkedModelFieldData> linkedModelFieldData = getOrderedList(
+		List<FieldData<LinkedModel>> linkedModelFieldData = getOrderedList(
 			_parsedType::getLinkedModelFieldDataList);
 
 		testLinkedModelData(
@@ -70,7 +72,7 @@ public class TypeProcessorNestedTest {
 
 	@Test
 	public void testListFields() {
-		List<ListFieldData> listFieldData = getOrderedList(
+		List<FieldData<Class<?>>> listFieldData = getOrderedList(
 			_parsedType::getListFieldDataList);
 
 		testListFieldData(
@@ -79,15 +81,16 @@ public class TypeProcessorNestedTest {
 
 	@Test
 	public void testNested() {
-		assertThat(
-			_nestedParsedType.getParsedTypeClass(), equalTo(NestedDummy.class));
+		ParsedType parsedType = _nestedParsedType.getData();
+
+		assertThat(parsedType.getTypeClass(), equalTo(NestedDummy.class));
 
 		testFieldData(_nestedParsedType, "nestedDummy", NestedDummy.class);
 	}
 
 	@Test
 	public void testRelatedCollections() {
-		List<RelatedCollectionFieldData> relatedCollectionFieldData =
+		List<FieldData<RelatedCollection>> relatedCollectionFieldData =
 			getOrderedList(_parsedType::getRelatedCollectionFieldDataList);
 
 		testRelatedCollectionData(
@@ -95,7 +98,7 @@ public class TypeProcessorNestedTest {
 			IntegerIdentifier.class);
 	}
 
-	private static NestedParsedType _nestedParsedType;
+	private static FieldData<ParsedType> _nestedParsedType;
 	private static ParsedType _parsedType;
 
 }

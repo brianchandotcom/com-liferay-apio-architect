@@ -14,6 +14,10 @@
 
 package com.liferay.apio.architect.internal.annotation.representor.processor;
 
+import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 
 import java.lang.reflect.Method;
@@ -35,7 +39,7 @@ public class ParsedType {
 	 * @return the list of bidirectionalfield data
 	 * @review
 	 */
-	public List<BidirectionalFieldData> getBidirectionalFieldDataList() {
+	public List<FieldData<BidirectionalModel>> getBidirectionalFieldDataList() {
 		return _bidirectionalFieldData;
 	}
 
@@ -64,7 +68,7 @@ public class ParsedType {
 	 * @return the list of linkedModelField data
 	 * @review
 	 */
-	public List<LinkedModelFieldData> getLinkedModelFieldDataList() {
+	public List<FieldData<LinkedModel>> getLinkedModelFieldDataList() {
 		return _linkedModelFieldData;
 	}
 
@@ -74,7 +78,7 @@ public class ParsedType {
 	 * @return the list of listField data
 	 * @review
 	 */
-	public List<ListFieldData> getListFieldDataList() {
+	public List<FieldData<Class<?>>> getListFieldDataList() {
 		return _listFieldData;
 	}
 
@@ -84,7 +88,7 @@ public class ParsedType {
 	 * @return the list of listParsedTypes data
 	 * @review
 	 */
-	public List<NestedParsedType> getListParsedTypes() {
+	public List<FieldData<ParsedType>> getListParsedTypes() {
 		return _listParsedTypes;
 	}
 
@@ -94,7 +98,7 @@ public class ParsedType {
 	 * @return the list of nestedList parsed type data
 	 * @review
 	 */
-	public List<NestedParsedType> getParsedTypes() {
+	public List<FieldData<ParsedType>> getParsedTypes() {
 		return _parsedTypes;
 	}
 
@@ -104,7 +108,7 @@ public class ParsedType {
 	 * @return the list of relatedCollectionField data
 	 * @review
 	 */
-	public List<RelatedCollectionFieldData>
+	public List<FieldData<RelatedCollection>>
 		getRelatedCollectionFieldDataList() {
 
 		return _relatedCollectionFieldData;
@@ -116,7 +120,7 @@ public class ParsedType {
 	 * @return the list of relativeURLData data
 	 * @review
 	 */
-	public List<RelativeURLFieldData> getRelativeURLFieldDataList() {
+	public List<FieldData<RelativeURL>> getRelativeURLFieldDataList() {
 		return _relativeURLFieldData;
 	}
 
@@ -150,7 +154,7 @@ public class ParsedType {
 		}
 
 		public Builder addBidirectionalFieldData(
-			BidirectionalFieldData bidirectionalFieldData) {
+			FieldData<BidirectionalModel> bidirectionalFieldData) {
 
 			_parsedType._bidirectionalFieldData.add(bidirectionalFieldData);
 
@@ -164,33 +168,33 @@ public class ParsedType {
 		}
 
 		public Builder addLinkedModelFieldData(
-			LinkedModelFieldData linkedModelFieldData) {
+			FieldData<LinkedModel> linkedModelFieldData) {
 
 			_parsedType._linkedModelFieldData.add(linkedModelFieldData);
 
 			return this;
 		}
 
-		public Builder addListFieldData(ListFieldData listFieldData) {
+		public Builder addListFieldData(FieldData<Class<?>> listFieldData) {
 			_parsedType._listFieldData.add(listFieldData);
 
 			return this;
 		}
 
-		public Builder addListParsedType(NestedParsedType parsedType) {
+		public Builder addListParsedType(FieldData<ParsedType> parsedType) {
 			_parsedType._listParsedTypes.add(parsedType);
 
 			return this;
 		}
 
-		public Builder addParsedType(NestedParsedType parsedType) {
+		public Builder addParsedType(FieldData<ParsedType> parsedType) {
 			_parsedType._parsedTypes.add(parsedType);
 
 			return this;
 		}
 
 		public Builder addRelatedCollectionFieldData(
-			RelatedCollectionFieldData relatedCollectionFieldData) {
+			FieldData<RelatedCollection> relatedCollectionFieldData) {
 
 			_parsedType._relatedCollectionFieldData.add(
 				relatedCollectionFieldData);
@@ -199,7 +203,7 @@ public class ParsedType {
 		}
 
 		public Builder addRelativeURLFieldData(
-			RelativeURLFieldData relativeURLFieldData) {
+			FieldData<RelativeURL> relativeURLFieldData) {
 
 			_parsedType._relativeURLFieldData.add(relativeURLFieldData);
 
@@ -223,18 +227,18 @@ public class ParsedType {
 	private ParsedType() {
 	}
 
-	private List<BidirectionalFieldData> _bidirectionalFieldData =
+	private List<FieldData<BidirectionalModel>> _bidirectionalFieldData =
 		new ArrayList<>();
 	private List<FieldData> _fieldDataList = new ArrayList<>();
-	private List<LinkedModelFieldData> _linkedModelFieldData =
+	private List<FieldData<LinkedModel>> _linkedModelFieldData =
 		new ArrayList<>();
-	private List<ListFieldData> _listFieldData = new ArrayList<>();
-	private List<NestedParsedType> _listParsedTypes = new ArrayList<>();
+	private List<FieldData<Class<?>>> _listFieldData = new ArrayList<>();
+	private List<FieldData<ParsedType>> _listParsedTypes = new ArrayList<>();
 	private Method _method;
-	private List<NestedParsedType> _parsedTypes = new ArrayList<>();
-	private List<RelatedCollectionFieldData> _relatedCollectionFieldData =
+	private List<FieldData<ParsedType>> _parsedTypes = new ArrayList<>();
+	private List<FieldData<RelatedCollection>> _relatedCollectionFieldData =
 		new ArrayList<>();
-	private List<RelativeURLFieldData> _relativeURLFieldData =
+	private List<FieldData<RelativeURL>> _relativeURLFieldData =
 		new ArrayList<>();
 	private Type _type;
 	private Class<?> _typeClass;

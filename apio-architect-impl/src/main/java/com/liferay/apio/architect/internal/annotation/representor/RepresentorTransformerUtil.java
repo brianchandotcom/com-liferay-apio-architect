@@ -26,11 +26,7 @@ import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.internal.annotation.representor.processor.FieldData;
-import com.liferay.apio.architect.internal.annotation.representor.processor.LinkedModelFieldData;
-import com.liferay.apio.architect.internal.annotation.representor.processor.ListFieldData;
-import com.liferay.apio.architect.internal.annotation.representor.processor.NestedParsedType;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
-import com.liferay.apio.architect.internal.annotation.representor.processor.RelativeURLFieldData;
 import com.liferay.apio.architect.language.AcceptLanguage;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 
@@ -65,12 +61,12 @@ public class RepresentorTransformerUtil {
 		BaseRepresentor.BaseFirstStep<?, ?, ?> firstStep,
 		ParsedType parsedType) {
 
-		List<LinkedModelFieldData> linkedModelFieldDataList =
+		List<FieldData<LinkedModel>> linkedModelFieldDataList =
 			filterWritableFields(parsedType::getLinkedModelFieldDataList);
 
 		linkedModelFieldDataList.forEach(
 			linkedModelFieldData -> {
-				LinkedModel linkedModel = linkedModelFieldData.getLinkedModel();
+				LinkedModel linkedModel = linkedModelFieldData.getData();
 
 				firstStep.addLinkedModel(
 					linkedModelFieldData.getFieldName(),
@@ -84,18 +80,18 @@ public class RepresentorTransformerUtil {
 		fieldDataList.forEach(
 			fieldData -> _addBasicFields(firstStep, fieldData));
 
-		List<ListFieldData> listFieldData = filterWritableFields(
+		List<FieldData<Class<?>>> listFieldData = filterWritableFields(
 			parsedType::getListFieldDataList);
 
 		listFieldData.forEach(
 			listField -> _addListFields(firstStep, listField));
 
-		List<RelativeURLFieldData> relativeURLFieldDataList =
+		List<FieldData<RelativeURL>> relativeURLFieldDataList =
 			filterWritableFields(parsedType::getRelativeURLFieldDataList);
 
 		relativeURLFieldDataList.forEach(
 			relativeURLFieldData -> {
-				RelativeURL relativeURL = relativeURLFieldData.getRelativeURL();
+				RelativeURL relativeURL = relativeURLFieldData.getData();
 				String key = relativeURLFieldData.getFieldName();
 				Method method = relativeURLFieldData.getMethod();
 
@@ -108,12 +104,12 @@ public class RepresentorTransformerUtil {
 				}
 			});
 
-		List<NestedParsedType> nestedParsedTypes = filterWritableFields(
+		List<FieldData<ParsedType>> nestedParsedTypes = filterWritableFields(
 			parsedType::getParsedTypes);
 
 		nestedParsedTypes.forEach(
 			nestedParsedType -> {
-				ParsedType nested = nestedParsedType.getParsedType();
+				ParsedType nested = nestedParsedType.getData();
 
 				firstStep.addNested(
 					nestedParsedType.getFieldName(),
@@ -123,12 +119,12 @@ public class RepresentorTransformerUtil {
 							nested, builder)));
 			});
 
-		List<NestedParsedType> nestedListParsedTypes = filterWritableFields(
-			parsedType::getListParsedTypes);
+		List<FieldData<ParsedType>> nestedListParsedTypes =
+			filterWritableFields(parsedType::getListParsedTypes);
 
 		nestedListParsedTypes.forEach(
 			nestedParsedType -> {
-				ParsedType nested = nestedParsedType.getParsedType();
+				ParsedType nested = nestedParsedType.getData();
 
 				firstStep.addNestedList(
 					nestedParsedType.getFieldName(),
@@ -201,9 +197,9 @@ public class RepresentorTransformerUtil {
 
 	private static void _addListFields(
 		BaseRepresentor.BaseFirstStep<?, ?, ?> firstStep,
-		ListFieldData listFieldData) {
+		FieldData<Class<?>> listFieldData) {
 
-		Class<?> listClass = listFieldData.getListType();
+		Class<?> listClass = listFieldData.getData();
 		String key = listFieldData.getFieldName();
 		Method method = listFieldData.getMethod();
 

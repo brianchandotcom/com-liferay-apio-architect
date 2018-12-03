@@ -27,6 +27,10 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import com.liferay.apio.architect.annotation.Vocabulary;
+import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.DummyImpl;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.IntegerIdentifier;
@@ -65,8 +69,8 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testBidirectionalModels() {
-		List<BidirectionalFieldData> bidirectionalFieldData = getOrderedList(
-			_parsedType::getBidirectionalFieldDataList);
+		List<FieldData<BidirectionalModel>> bidirectionalFieldData =
+			getOrderedList(_parsedType::getBidirectionalFieldDataList);
 
 		testBidirectionalData(
 			bidirectionalFieldData.get(0), "bidirectional1", "linked1",
@@ -88,7 +92,7 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testLinkedModels() {
-		List<LinkedModelFieldData> linkedModelFieldData = getOrderedList(
+		List<FieldData<LinkedModel>> linkedModelFieldData = getOrderedList(
 			_parsedType::getLinkedModelFieldDataList);
 
 		testLinkedModelData(
@@ -102,7 +106,7 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testListFields() {
-		List<ListFieldData> listFieldData = getOrderedList(
+		List<FieldData<Class<?>>> listFieldData = getOrderedList(
 			_parsedType::getListFieldDataList);
 
 		testListFieldData(
@@ -119,7 +123,7 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testRelatedCollections() {
-		List<RelatedCollectionFieldData> relatedCollectionFieldData =
+		List<FieldData<RelatedCollection>> relatedCollectionFieldData =
 			getOrderedList(_parsedType::getRelatedCollectionFieldDataList);
 
 		testRelatedCollectionData(
@@ -133,7 +137,7 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testRelativeUrls() {
-		List<RelativeURLFieldData> relativeURLFieldData = getOrderedList(
+		List<FieldData<RelativeURL>> relativeURLFieldData = getOrderedList(
 			_parsedType::getRelativeURLFieldDataList);
 
 		testRelativeURLData(

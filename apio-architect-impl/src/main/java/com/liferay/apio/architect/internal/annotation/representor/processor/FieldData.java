@@ -24,11 +24,16 @@ import java.lang.reflect.Method;
  * @author Víctor Galán
  * @review
  */
-public class FieldData {
+public class FieldData<T> {
 
-	public FieldData(Field field, Method method) {
+	public FieldData(Field field, Method method, T data) {
 		_field = field;
 		_method = method;
+		_data = data;
+	}
+
+	public T getData() {
+		return _data;
 	}
 
 	/**
@@ -71,6 +76,7 @@ public class FieldData {
 		return _method.getName();
 	}
 
+	private final T _data;
 	private final Field _field;
 	private final Method _method;
 

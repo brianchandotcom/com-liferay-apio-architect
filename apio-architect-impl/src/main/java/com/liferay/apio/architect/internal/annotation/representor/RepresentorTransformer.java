@@ -26,9 +26,8 @@ import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.internal.annotation.representor.processor.BidirectionalFieldData;
+import com.liferay.apio.architect.internal.annotation.representor.processor.FieldData;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
-import com.liferay.apio.architect.internal.annotation.representor.processor.RelatedCollectionFieldData;
 import com.liferay.apio.architect.internal.representor.RepresentorImpl;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.representor.Representor;
@@ -121,13 +120,13 @@ public class RepresentorTransformer {
 	private static <T extends Identifier<?>> void
 		_processFields(ParsedType parsedType, FirstStep<T> firstStep) {
 
-		List<BidirectionalFieldData> bidirectionalFieldDataList =
+		List<FieldData<BidirectionalModel>> bidirectionalFieldDataList =
 			filterWritableFields(parsedType::getBidirectionalFieldDataList);
 
 		bidirectionalFieldDataList.forEach(
 			bidirectionalFieldData -> {
 				BidirectionalModel bidirectionalModel =
-					bidirectionalFieldData.getBidirectionalModel();
+					bidirectionalFieldData.getData();
 
 				Field field = bidirectionalModel.field();
 
@@ -137,13 +136,14 @@ public class RepresentorTransformer {
 					getMethodFunction(bidirectionalFieldData.getMethod()));
 			});
 
-		List<RelatedCollectionFieldData> relatedCollectionFieldDataList =
-			filterWritableFields(parsedType::getRelatedCollectionFieldDataList);
+		List<FieldData<Vocabulary.RelatedCollection>>
+			relatedCollectionFieldDataList = filterWritableFields(
+				parsedType::getRelatedCollectionFieldDataList);
 
 		relatedCollectionFieldDataList.forEach(
 			relatedCollectionFieldData -> {
 				Vocabulary.RelatedCollection relatedCollection =
-					relatedCollectionFieldData.getRelatedCollection();
+					relatedCollectionFieldData.getData();
 
 				String key = relatedCollectionFieldData.getFieldName();
 				Method method = relatedCollectionFieldData.getMethod();

@@ -19,8 +19,8 @@ import static com.liferay.apio.architect.internal.annotation.representor.Represe
 
 import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
+import com.liferay.apio.architect.internal.annotation.representor.processor.FieldData;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
-import com.liferay.apio.architect.internal.annotation.representor.processor.RelatedCollectionFieldData;
 import com.liferay.apio.architect.representor.NestedRepresentor;
 
 import java.util.List;
@@ -60,13 +60,13 @@ public class NestedRepresentorTransformer {
 	private static void _processFields(
 		ParsedType parsedType, NestedRepresentor.FirstStep<?> firstStep) {
 
-		List<RelatedCollectionFieldData> relatedCollectionFieldDataList =
+		List<FieldData<RelatedCollection>> relatedCollectionFieldDataList =
 			parsedType.getRelatedCollectionFieldDataList();
 
 		relatedCollectionFieldDataList.forEach(
 			relatedCollectionFieldData -> {
 				RelatedCollection relatedCollection =
-					relatedCollectionFieldData.getRelatedCollection();
+					relatedCollectionFieldData.getData();
 
 				firstStep.addRelatedCollection(
 					relatedCollectionFieldData.getFieldName(),

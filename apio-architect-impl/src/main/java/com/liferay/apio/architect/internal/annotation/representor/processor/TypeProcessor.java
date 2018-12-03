@@ -67,10 +67,10 @@ public class TypeProcessor {
 			ParsedType parsedType = _processType(listClass, true);
 
 			builder.addListParsedType(
-				new NestedParsedType(field, method, parsedType));
+				new FieldData<>(field, method, parsedType));
 		}
 		else {
-			ListFieldData listFieldData = new ListFieldData(
+			FieldData<Class<?>> listFieldData = new FieldData<>(
 				field, method, listClass);
 
 			builder.addListFieldData(listFieldData);
@@ -82,8 +82,8 @@ public class TypeProcessor {
 		Field field = method.getAnnotation(Field.class);
 
 		if (linkedModel != null) {
-			LinkedModelFieldData linkedModelFieldData =
-				new LinkedModelFieldData(field, method, linkedModel);
+			FieldData<LinkedModel> linkedModelFieldData = new FieldData<>(
+				field, method, linkedModel);
 
 			builder.addLinkedModelFieldData(linkedModelFieldData);
 
@@ -94,9 +94,8 @@ public class TypeProcessor {
 			RelatedCollection.class);
 
 		if (relatedCollection != null) {
-			RelatedCollectionFieldData relatedCollectionFieldData =
-				new RelatedCollectionFieldData(
-					field, method, relatedCollection);
+			FieldData<RelatedCollection> relatedCollectionFieldData =
+				new FieldData<>(field, method, relatedCollection);
 
 			builder.addRelatedCollectionFieldData(relatedCollectionFieldData);
 
@@ -106,8 +105,8 @@ public class TypeProcessor {
 		RelativeURL relativeURL = method.getAnnotation(RelativeURL.class);
 
 		if (relativeURL != null) {
-			RelativeURLFieldData relativeURLFieldData =
-				new RelativeURLFieldData(field, method, relativeURL);
+			FieldData<RelativeURL> relativeURLFieldData = new FieldData<>(
+				field, method, relativeURL);
 
 			builder.addRelativeURLFieldData(relativeURLFieldData);
 
@@ -118,8 +117,8 @@ public class TypeProcessor {
 			BidirectionalModel.class);
 
 		if (bidirectionalModel != null) {
-			BidirectionalFieldData bidirectionalFieldData =
-				new BidirectionalFieldData(field, method, bidirectionalModel);
+			FieldData<BidirectionalModel> bidirectionalFieldData =
+				new FieldData<>(field, method, bidirectionalModel);
 
 			builder.addBidirectionalFieldData(bidirectionalFieldData);
 
@@ -134,11 +133,10 @@ public class TypeProcessor {
 		else if (returnType.isAnnotationPresent(Type.class)) {
 			ParsedType parsedType = _processType(returnType, true);
 
-			builder.addParsedType(
-				new NestedParsedType(field, method, parsedType));
+			builder.addParsedType(new FieldData<>(field, method, parsedType));
 		}
 		else {
-			FieldData fieldData = new FieldData(field, method);
+			FieldData fieldData = new FieldData<>(field, method, null);
 
 			builder.addFieldData(fieldData);
 		}
