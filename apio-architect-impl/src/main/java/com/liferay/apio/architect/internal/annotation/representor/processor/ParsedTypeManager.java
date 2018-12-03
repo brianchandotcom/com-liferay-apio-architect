@@ -64,8 +64,9 @@ public class ParsedTypeManager {
 	 * @review
 	 */
 	public Optional<ParsedType> getParsedType(String key) {
-		return INSTANCE.getParsedTypeOptional(
-			key, () -> _actionRouters.forEach(this::_compute));
+		Map<String, ParsedType> parsedTypes = getParsedTypes();
+
+		return Optional.ofNullable(parsedTypes.get(key));
 	}
 
 	/**

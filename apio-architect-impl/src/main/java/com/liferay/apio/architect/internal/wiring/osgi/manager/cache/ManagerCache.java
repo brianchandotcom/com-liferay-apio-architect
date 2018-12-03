@@ -325,28 +325,6 @@ public class ManagerCache {
 	}
 
 	/**
-	 * Returns the parsed type, if present, for the current key; {@code
-	 * Optional#empty()} otherwise.
-	 *
-	 * @param  key the key
-	 * @param  computeEmptyFunction the function that can be called to compute
-	 *         the data
-	 * @return the parsed type, if present, for the current key; {@code
-	 *         Optional#empty()} otherwise.
-	 * @review
-	 */
-	public Optional<ParsedType> getParsedTypeOptional(
-		String key, EmptyFunction computeEmptyFunction) {
-
-		if (_parsedTypes == null) {
-			_parsedTypes = new HashMap<>();
-			computeEmptyFunction.invoke();
-		}
-
-		return Optional.ofNullable(_parsedTypes.get(key));
-	}
-
-	/**
 	 * Returns the parsed types.
 	 *
 	 * @param  computeEmptyFunction the function that can be called to compute
