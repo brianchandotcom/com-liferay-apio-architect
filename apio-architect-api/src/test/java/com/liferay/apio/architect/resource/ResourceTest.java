@@ -14,6 +14,7 @@
 
 package com.liferay.apio.architect.resource;
 
+import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,6 +23,7 @@ import static org.hamcrest.core.Is.is;
 
 import static org.junit.Assert.assertEquals;
 
+import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.resource.Resource.Id;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.resource.Resource.Nested;
@@ -35,6 +37,46 @@ import org.junit.Test;
  * @author Alejandro Hernández
  */
 public class ResourceTest {
+
+	@Test
+	public void testGenericParentOfCreatesValidGenericParent() {
+		GenericParent genericParent = GenericParent.of("parent", "name");
+
+		assertThat(genericParent.getName(), is("name"));
+		assertThat(genericParent.getParentName(), is("parent"));
+		assertThat(genericParent.getParentIdOptional(), is(emptyOptional()));
+		assertEquals(genericParent, GenericParent.of("parent", "name"));
+	}
+
+	@Test
+	public void testGenericParentOfWithIdCreatesValidGenericParent() {
+		Id id = Id.of(42L, "42");
+
+		GenericParent genericParent = GenericParent.of("parent", id, "name");
+
+		assertThat(genericParent.getName(), is("name"));
+		assertThat(genericParent.getParentName(), is("parent"));
+		assertThat(
+			genericParent.getParentIdOptional(),
+			is(optionalWithValue(equalTo(id))));
+		assertEquals(genericParent, GenericParent.of("parent", "name"));
+	}
+
+	@Test
+	public void testGenericParentWithParentIdCreatesValidGenericParentWithId() {
+		GenericParent genericParent = GenericParent.of("parent", "name");
+
+		GenericParent genericParentWithId = genericParent.withParentId(
+			Id.of(42L, "42"));
+
+		assertThat(genericParentWithId.getName(), is("name"));
+
+		Optional<Id> idOptional = genericParentWithId.getParentIdOptional();
+
+		Id expectedId = Id.of(42L, "42");
+
+		assertThat(idOptional, is(optionalWithValue(equalTo(expectedId))));
+	}
 
 	@Test
 	public void testIdOfCreatesValidId() {
@@ -54,6 +96,21 @@ public class ResourceTest {
 	}
 
 	@Test
+	public void testItemOfWithIdCreatesValidResourceItem() {
+		Item itemResource = Item.of("name", Id.of(42L, "42"));
+
+		assertThat(itemResource.getName(), is("name"));
+
+		Optional<Id> optional = itemResource.getIdOptional();
+
+		assertThat(optional, is(optionalWithValue()));
+
+		optional.ifPresent(id -> assertThat(id, is(Id.of(42L, "42"))));
+
+		assertEquals(itemResource, Item.of("name"));
+	}
+
+	@Test
 	public void testItemWithIdCreatesValidResourceItemWithId() {
 		Item item = Item.of("name");
 
@@ -66,6 +123,17 @@ public class ResourceTest {
 		Id expectedId = Id.of(42L, "42");
 
 		assertThat(idOptional, is(optionalWithValue(equalTo(expectedId))));
+	}
+
+	@Test
+	public void testNestedOfCreatesValidResourceNested() {
+		Item parent = Item.of("parent");
+
+		Nested nested = Nested.of(parent, "name");
+
+		assertThat(nested.getName(), is("name"));
+		assertThat(nested.getParentItem(), is(parent));
+		assertEquals(nested, Nested.of(Item.of("parent"), "name"));
 	}
 
 	@Test
@@ -86,32 +154,6 @@ public class ResourceTest {
 		Id expectedId = Id.of(42L, "42");
 
 		assertThat(idOptional, is(optionalWithValue(equalTo(expectedId))));
-	}
-
-	@Test
-	public void testItemOfWithIdCreatesValidResourceItem() {
-		Item itemResource = Item.of("name", Id.of(42L, "42"));
-
-		assertThat(itemResource.getName(), is("name"));
-
-		Optional<Id> optional = itemResource.getIdOptional();
-
-		assertThat(optional, is(optionalWithValue()));
-
-		optional.ifPresent(id -> assertThat(id, is(Id.of(42L, "42"))));
-
-		assertEquals(itemResource, Item.of("name"));
-	}
-
-	@Test
-	public void testNestedOfCreatesValidResourceNested() {
-		Item parent = Item.of("parent");
-
-		Nested nested = Nested.of(parent, "name");
-
-		assertThat(nested.getName(), is("name"));
-		assertThat(nested.getParentItem(), is(parent));
-		assertEquals(nested, Nested.of(Item.of("parent"), "name"));
 	}
 
 	@Test

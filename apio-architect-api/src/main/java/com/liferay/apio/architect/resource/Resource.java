@@ -48,6 +48,129 @@ public class Resource {
 	}
 
 	/**
+	 * Instances of this class represent a generic parent resource.
+	 *
+	 * <p>This class is intended for those kind of resources that must be
+	 * scoped,
+	 * but that scope (a.k.a. parent) cannot be another resource.
+	 *
+	 * <p>Example:
+	 *
+	 * <p>- Comments of a blog post ({@link Nested}): {@code
+	 * /blog-post/42/comment}
+	 *
+	 * <p>- Comments by generic parent ({@link GenericParent}: {@code
+	 * /comment/by-generic-parent/blog-post:42}
+	 *
+	 * <p>This class should never be directly instantiated. Always use {@link
+	 * #of} method to create a new instance.
+	 *
+	 * @review
+	 */
+	public static class GenericParent extends Resource {
+
+		/**
+		 * Creates a new {@link GenericParent} with the provided parent and
+		 * {@code name} information.
+		 *
+		 * @review
+		 */
+		public static GenericParent of(
+			String parentName, Id parentId, String name) {
+
+			return new GenericParent(parentName, parentId, name);
+		}
+
+		/**
+		 * Creates a new {@link GenericParent} with the provided parent and
+		 * {@code name} information.
+		 *
+		 * @review
+		 */
+		public static GenericParent of(String parentName, String name) {
+			return new GenericParent(parentName, null, name);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+
+			if ((obj instanceof GenericParent) &&
+				getName().equals(((GenericParent)obj).getName()) &&
+				_parentName.equals(((GenericParent)obj)._parentName)) {
+
+				return true;
+			}
+
+			return false;
+		}
+
+		/**
+		 * The resource's generic parent ID.
+		 *
+		 * @review
+		 */
+		public Optional<Id> getParentIdOptional() {
+			return Optional.ofNullable(_parentId);
+		}
+
+		/**
+		 * The resource's generic parent name.
+		 *
+		 * @review
+		 */
+		public String getParentName() {
+			return _parentName;
+		}
+
+		@Override
+		public int hashCode() {
+			int h = 5381;
+
+			h += (h << 5) + getName().hashCode();
+			h += (h << 5) + _parentName.hashCode();
+
+			return h;
+		}
+
+		@Override
+		public String toString() {
+			return "GenericParent{name=" + getName() + ", parentName=" +
+				_parentName + ", parentId=" + _parentId + "}";
+		}
+
+		/**
+		 * Copies the current {@link GenericParent} by setting a value for the
+		 * generic parent's ID attribute. A shallow reference equality check is
+		 * used to prevent copying of the same value by returning {@code this}.
+		 *
+		 * @param  id the new ID
+		 * @return A modified copy of {@code this} object
+		 * @review
+		 */
+		public GenericParent withParentId(Id id) {
+			if ((_parentId != null) && _parentId.equals(id)) {
+				return this;
+			}
+
+			return new GenericParent(_parentName, id, getName());
+		}
+
+		private GenericParent(String parentName, Id parentId, String name) {
+			super(name);
+
+			_parentName = parentName;
+			_parentId = parentId;
+		}
+
+		private final Id _parentId;
+		private final String _parentName;
+
+	}
+
+	/**
 	 * Instances of this class represent an item's ID.
 	 *
 	 * <p>This class should never be directly instantiated. Always use {@link
