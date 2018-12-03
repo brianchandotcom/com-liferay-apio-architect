@@ -150,7 +150,7 @@ public class Resource {
 
 		/**
 		 * Creates a new {@link Item} with the provided {@code name} and {@code
-		 * Id}.
+		 * ID}.
 		 *
 		 * @review
 		 */
@@ -174,7 +174,7 @@ public class Resource {
 		}
 
 		/**
-		 * The resource's Id, if present; {@code Optional#empty} otherwise. This
+		 * The resource's ID, if present; {@code Optional#empty} otherwise. This
 		 * component is not taken into account when performing an {@link
 		 * #equals)} check.
 		 *

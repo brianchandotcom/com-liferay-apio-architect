@@ -12,11 +12,12 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.action.resource;
+package com.liferay.apio.architect.resource;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 
 import static org.junit.Assert.assertEquals;
@@ -50,6 +51,41 @@ public class ResourceTest {
 
 		assertThat(item.getName(), is("name"));
 		assertEquals(item, Item.of("name"));
+	}
+
+	@Test
+	public void testItemWithIdCreatesValidResourceItemWithId() {
+		Item item = Item.of("name");
+
+		Item itemWithId = item.withId(Id.of(42L, "42"));
+
+		assertThat(itemWithId.getName(), is("name"));
+
+		Optional<Id> idOptional = itemWithId.getIdOptional();
+
+		Id expectedId = Id.of(42L, "42");
+
+		assertThat(idOptional, is(optionalWithValue(equalTo(expectedId))));
+	}
+
+	@Test
+	public void testNestedWithIdCreatesValidResourceNestedWithId() {
+		Item parent = Item.of("parent");
+
+		Nested nested = Nested.of(parent, "name");
+
+		assertThat(nested.getName(), is("name"));
+		assertThat(nested.getParentItem(), is(parent));
+
+		Nested nestedWithParentId = nested.withParentId(Id.of(42L, "42"));
+
+		Item nestedWithParentIdParent = nestedWithParentId.getParentItem();
+
+		Optional<Id> idOptional = nestedWithParentIdParent.getIdOptional();
+
+		Id expectedId = Id.of(42L, "42");
+
+		assertThat(idOptional, is(optionalWithValue(equalTo(expectedId))));
 	}
 
 	@Test
