@@ -36,6 +36,7 @@ Import-Package:\
 	com.liferay.apio.architect.internal.wiring.osgi.manager.base,\
 	com.liferay.apio.architect.internal.wiring.osgi.manager.cache,\
 	com.liferay.apio.architect.internal.wiring.osgi.manager.documentation.contributor,\
+	com.liferay.apio.architect.internal.wiring.osgi.manager.message.json,\
 	com.liferay.apio.architect.internal.wiring.osgi.manager.provider,\
 	com.liferay.apio.architect.internal.wiring.osgi.manager.representable,\
 	com.liferay.apio.architect.internal.wiring.osgi.manager.router,\
