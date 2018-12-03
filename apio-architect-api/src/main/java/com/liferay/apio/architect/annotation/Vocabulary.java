@@ -165,6 +165,68 @@ public @interface Vocabulary {
 	}
 
 	/**
+	 * Defines an annotation that indicates a field should be expressed as a
+	 * link (URI) to another resource. The linked resource class must be
+	 * provided as the value {@link #resource()}.
+	 *
+	 * <p>The value {@link #resourceType()} can be used to differentiate between
+	 * links to single resources ({@link ResourceType#SINGLE}) and links to
+	 * collections ({@link ResourceType#CHILD_COLLECTION}).
+	 *
+	 * @review
+	 */
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface LinkTo {
+
+		/**
+		 * The class of the resource being linked to. It must be annotated with
+		 * {@link Type}.
+		 *
+		 * @review
+		 */
+		public Class<? extends Identifier<?>> resource();
+
+		/**
+		 * The type of the resource being linked to. This value election will
+		 * affect the way the link is created.
+		 *
+		 * @review
+		 */
+		public ResourceType resourceType() default ResourceType.SINGLE;
+
+		/**
+		 * The different type of resources with which another resource can be
+		 * linked to via {@link LinkTo}.
+		 *
+		 * @review
+		 */
+		public enum ResourceType {
+
+			/**
+			 * This resource type denotes that the linked resource is a
+			 * collection whose parent is the resource being linked.
+			 *
+			 * <p>This type should only be used on fields returning the
+			 * resource's ID.
+			 *
+			 * @review
+			 */
+			CHILD_COLLECTION,
+
+			/**
+			 * This resource type denotes that the linked resource is a single
+			 * one and the field is returning its ID.
+			 *
+			 * @review
+			 */
+			SINGLE
+
+		}
+
+	}
+
+	/**
 	 * Defines an annotation that indicates a type has a link to another
 	 * resource's page.
 	 */
