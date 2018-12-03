@@ -26,8 +26,8 @@ import java.lang.reflect.Method;
  */
 public class FieldData<T> {
 
-	public FieldData(Field field, Method method, T data) {
-		_field = field;
+	public FieldData(Method method, T data) {
+		_field = method.getAnnotation(Field.class);
 		_method = method;
 		_data = data;
 	}

@@ -54,9 +54,7 @@ public class TypeProcessor {
 		return _processType(typeClass, false);
 	}
 
-	private static void _addListType(
-		Builder builder, Field field, Method method) {
-
+	private static void _addListType(Builder builder, Method method) {
 		ParameterizedType parameterizedType =
 			(ParameterizedType)method.getGenericReturnType();
 
@@ -66,12 +64,11 @@ public class TypeProcessor {
 		if (listClass.isAnnotationPresent(Type.class)) {
 			ParsedType parsedType = _processType(listClass, true);
 
-			builder.addListParsedType(
-				new FieldData<>(field, method, parsedType));
+			builder.addListParsedType(new FieldData<>(method, parsedType));
 		}
 		else {
 			FieldData<Class<?>> listFieldData = new FieldData<>(
-				field, method, listClass);
+				method, listClass);
 
 			builder.addListFieldData(listFieldData);
 		}
@@ -79,11 +76,10 @@ public class TypeProcessor {
 
 	private static void _processMethod(Builder builder, Method method) {
 		LinkedModel linkedModel = method.getAnnotation(LinkedModel.class);
-		Field field = method.getAnnotation(Field.class);
 
 		if (linkedModel != null) {
 			FieldData<LinkedModel> linkedModelFieldData = new FieldData<>(
-				field, method, linkedModel);
+				method, linkedModel);
 
 			builder.addLinkedModelFieldData(linkedModelFieldData);
 
@@ -95,7 +91,7 @@ public class TypeProcessor {
 
 		if (relatedCollection != null) {
 			FieldData<RelatedCollection> relatedCollectionFieldData =
-				new FieldData<>(field, method, relatedCollection);
+				new FieldData<>(method, relatedCollection);
 
 			builder.addRelatedCollectionFieldData(relatedCollectionFieldData);
 
@@ -106,7 +102,7 @@ public class TypeProcessor {
 
 		if (relativeURL != null) {
 			FieldData<RelativeURL> relativeURLFieldData = new FieldData<>(
-				field, method, relativeURL);
+				method, relativeURL);
 
 			builder.addRelativeURLFieldData(relativeURLFieldData);
 
@@ -118,7 +114,7 @@ public class TypeProcessor {
 
 		if (bidirectionalModel != null) {
 			FieldData<BidirectionalModel> bidirectionalFieldData =
-				new FieldData<>(field, method, bidirectionalModel);
+				new FieldData<>(method, bidirectionalModel);
 
 			builder.addBidirectionalFieldData(bidirectionalFieldData);
 
@@ -128,15 +124,15 @@ public class TypeProcessor {
 		Class<?> returnType = method.getReturnType();
 
 		if (returnType == List.class) {
-			_addListType(builder, field, method);
+			_addListType(builder, method);
 		}
 		else if (returnType.isAnnotationPresent(Type.class)) {
 			ParsedType parsedType = _processType(returnType, true);
 
-			builder.addParsedType(new FieldData<>(field, method, parsedType));
+			builder.addParsedType(new FieldData<>(method, parsedType));
 		}
 		else {
-			FieldData fieldData = new FieldData<>(field, method, null);
+			FieldData fieldData = new FieldData<>(method, null);
 
 			builder.addFieldData(fieldData);
 		}
