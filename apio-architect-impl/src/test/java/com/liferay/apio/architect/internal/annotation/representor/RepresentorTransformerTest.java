@@ -17,6 +17,7 @@ package com.liferay.apio.architect.internal.annotation.representor;
 import static com.liferay.apio.architect.internal.representor.RepresentorTestUtil.testRelatedModel;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -53,19 +54,18 @@ public class RepresentorTransformerTest {
 
 	@Before
 	public void setUp() {
-		_relatedCollections = new HashMap<>();
-
 		ParsedType parsedType = TypeProcessor.processType(Dummy.class);
 
 		_representor = RepresentorTransformer.toRepresentor(
-			parsedType, null, _relatedCollections);
+			parsedType, null, new HashMap<>());
 	}
 
 	@Test
 	public void testApplicationRelativeUrlFields() {
 		_testFields(
 			_representor.getApplicationRelativeURLFunctions(),
-			asList("applicationRelativeUrl"), asList("/application"));
+			singletonList("applicationRelativeUrl"),
+			singletonList("/application"));
 	}
 
 	@Test
@@ -98,11 +98,11 @@ public class RepresentorTransformerTest {
 			StringIdentifier.class, "2d1d");
 
 		testRelatedModel(
-			relatedModels.get(2), _dummy, "linkedModel1",
+			relatedModels.get(2), _dummy, "linkToSingle1",
 			IntegerIdentifier.class, 1);
 
 		testRelatedModel(
-			relatedModels.get(3), _dummy, "linkedModel2",
+			relatedModels.get(3), _dummy, "linkToSingle2",
 			StringIdentifier.class, "2d1d");
 	}
 
@@ -145,8 +145,8 @@ public class RepresentorTransformerTest {
 					StringIdentifier.class)
 		).filter(
 			relatedCollection ->
-				relatedCollection.getKey().equals("relatedCollection1") ||
-				relatedCollection.getKey().equals("relatedCollection2")
+				relatedCollection.getKey().equals("linkToChildCollection1") ||
+				relatedCollection.getKey().equals("linkToChildCollection2")
 		).collect(
 			Collectors.toList()
 		);
@@ -157,8 +157,8 @@ public class RepresentorTransformerTest {
 	@Test
 	public void testRelativeUrlFields() {
 		_testFields(
-			_representor.getRelativeURLFunctions(), asList("relativeUrl2"),
-			asList("/second"));
+			_representor.getRelativeURLFunctions(),
+			singletonList("relativeUrl2"), singletonList("/second"));
 	}
 
 	@Test
@@ -185,7 +185,6 @@ public class RepresentorTransformerTest {
 	}
 
 	private final Dummy _dummy = new DummyImpl();
-	private HashMap<String, List<RelatedCollection<?, ?>>> _relatedCollections;
 	private Representor<Dummy> _representor;
 
 }

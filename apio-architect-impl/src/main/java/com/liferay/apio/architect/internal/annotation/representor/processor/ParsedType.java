@@ -15,8 +15,7 @@
 package com.liferay.apio.architect.internal.annotation.representor.processor;
 
 import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
-import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 
@@ -68,8 +67,8 @@ public class ParsedType {
 	 * @return the list of linkedModelField data
 	 * @review
 	 */
-	public List<FieldData<LinkedModel>> getLinkedModelFieldDataList() {
-		return _linkedModelFieldData;
+	public List<FieldData<LinkTo>> getLinkToFieldDataList() {
+		return _linkToFieldData;
 	}
 
 	/**
@@ -100,18 +99,6 @@ public class ParsedType {
 	 */
 	public List<FieldData<ParsedType>> getParsedTypes() {
 		return _parsedTypes;
-	}
-
-	/**
-	 * Returns the list of relatedCollectionField data.
-	 *
-	 * @return the list of relatedCollectionField data
-	 * @review
-	 */
-	public List<FieldData<RelatedCollection>>
-		getRelatedCollectionFieldDataList() {
-
-		return _relatedCollectionFieldData;
 	}
 
 	/**
@@ -163,8 +150,8 @@ public class ParsedType {
 			_parsedType._fieldDataList.add(fieldData);
 		}
 
-		public void addLinkedModelFieldData(FieldData<LinkedModel> fieldData) {
-			_parsedType._linkedModelFieldData.add(fieldData);
+		public void addLinkToFieldData(FieldData<LinkTo> fieldData) {
+			_parsedType._linkToFieldData.add(fieldData);
 		}
 
 		public void addListFieldData(FieldData<Class<?>> fieldData) {
@@ -177,12 +164,6 @@ public class ParsedType {
 
 		public void addParsedType(FieldData<ParsedType> fieldData) {
 			_parsedType._parsedTypes.add(fieldData);
-		}
-
-		public void addRelatedCollectionFieldData(
-			FieldData<RelatedCollection> fieldData) {
-
-			_parsedType._relatedCollectionFieldData.add(fieldData);
 		}
 
 		public void addRelativeURLFieldData(FieldData<RelativeURL> fieldData) {
@@ -207,14 +188,11 @@ public class ParsedType {
 	private List<FieldData<BidirectionalModel>> _bidirectionalFieldData =
 		new ArrayList<>();
 	private List<FieldData> _fieldDataList = new ArrayList<>();
-	private List<FieldData<LinkedModel>> _linkedModelFieldData =
-		new ArrayList<>();
+	private List<FieldData<LinkTo>> _linkToFieldData = new ArrayList<>();
 	private List<FieldData<Class<?>>> _listFieldData = new ArrayList<>();
 	private List<FieldData<ParsedType>> _listParsedTypes = new ArrayList<>();
 	private Method _method;
 	private List<FieldData<ParsedType>> _parsedTypes = new ArrayList<>();
-	private List<FieldData<RelatedCollection>> _relatedCollectionFieldData =
-		new ArrayList<>();
 	private List<FieldData<RelativeURL>> _relativeURLFieldData =
 		new ArrayList<>();
 	private Type _type;

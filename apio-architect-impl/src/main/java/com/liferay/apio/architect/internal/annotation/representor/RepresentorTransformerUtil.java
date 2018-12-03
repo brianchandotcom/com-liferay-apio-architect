@@ -16,12 +16,13 @@ package com.liferay.apio.architect.internal.annotation.representor;
 
 import static com.liferay.apio.architect.annotation.FieldMode.READ_WRITE;
 import static com.liferay.apio.architect.annotation.FieldMode.WRITE_ONLY;
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.SINGLE;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.alias.BinaryFunction;
 import com.liferay.apio.architect.annotation.FieldMode;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.functional.Try;
@@ -61,18 +62,20 @@ public class RepresentorTransformerUtil {
 		BaseRepresentor.BaseFirstStep<?, ?, ?> firstStep,
 		ParsedType parsedType) {
 
-		List<FieldData<LinkedModel>> linkedModelFieldDataList =
-			filterWritableFields(parsedType::getLinkedModelFieldDataList);
+		List<FieldData<LinkTo>> linkToFieldDataList = filterWritableFields(
+			parsedType::getLinkToFieldDataList);
 
-		linkedModelFieldDataList.forEach(
-			linkedModelFieldData -> {
-				LinkedModel linkedModel = linkedModelFieldData.getData();
+		for (FieldData<LinkTo> fieldData : linkToFieldDataList) {
+			LinkTo linkTo = fieldData.getData();
 
-				firstStep.addLinkedModel(
-					linkedModelFieldData.getFieldName(),
-					unsafeCast(linkedModel.value()),
-					getMethodFunction(linkedModelFieldData.getMethod()));
-			});
+			if (!SINGLE.equals(linkTo.resourceType())) {
+				continue;
+			}
+
+			firstStep.addLinkedModel(
+				fieldData.getFieldName(), unsafeCast(linkTo.resource()),
+				getMethodFunction(fieldData.getMethod()));
+		}
 
 		List<FieldData> fieldDataList = filterWritableFields(
 			parsedType::getFieldDataList);

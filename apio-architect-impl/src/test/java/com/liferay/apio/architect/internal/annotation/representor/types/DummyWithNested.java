@@ -14,12 +14,13 @@
 
 package com.liferay.apio.architect.internal.annotation.representor.types;
 
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.CHILD_COLLECTION;
+
 import static java.util.Arrays.asList;
 
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
-import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.IntegerIdentifier;
@@ -51,16 +52,18 @@ public interface DummyWithNested extends Identifier<Long> {
 	@Type("NestedDummy")
 	public interface NestedDummy {
 
-		@Field("linkedModel")
-		@LinkedModel(IntegerIdentifier.class)
-		public default Integer getLinkedModel() {
-			return 1;
+		@Field("linkToChildCollection")
+		@LinkTo(
+			resource = IntegerIdentifier.class, resourceType = CHILD_COLLECTION
+		)
+		public default Integer getLinkToChildCollection() {
+			return 2;
 		}
 
-		@Field("relatedCollection")
-		@RelatedCollection(IntegerIdentifier.class)
-		public default Integer getRelatedCollection() {
-			return 2;
+		@Field("linkToSingle")
+		@LinkTo(resource = IntegerIdentifier.class)
+		public default Integer getLinkToSingle() {
+			return 1;
 		}
 
 		@Field("stringField")

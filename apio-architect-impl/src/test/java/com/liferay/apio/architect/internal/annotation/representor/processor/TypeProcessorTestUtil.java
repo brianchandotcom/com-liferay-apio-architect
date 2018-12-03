@@ -19,11 +19,10 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import static org.junit.Assert.assertThat;
 
-import com.liferay.apio.architect.annotation.Vocabulary;
 import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
-import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType;
 import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil;
@@ -83,17 +82,18 @@ public class TypeProcessorTestUtil {
 		assertThat(method.getReturnType(), equalTo(returnType));
 	}
 
-	public static void testLinkedModelData(
-		FieldData<LinkedModel> linkedModelFieldData, String fieldName,
-		Class<?> identifierClass) {
+	public static void testLinkToFieldData(
+		FieldData<LinkTo> fieldData, ResourceType resourceType,
+		String fieldName, Class<?> identifierClass) {
 
-		Vocabulary.LinkedModel linkedModel = linkedModelFieldData.getData();
+		LinkTo linkTo = fieldData.getData();
 
 		Class<?> identifierType = getIdentifierType(identifierClass);
 
-		assertThat(linkedModel.value(), equalTo(identifierClass));
+		assertThat(linkTo.resource(), equalTo(identifierClass));
+		assertThat(linkTo.resourceType(), is(resourceType));
 
-		testFieldData(linkedModelFieldData, fieldName, identifierType);
+		testFieldData(fieldData, fieldName, identifierType);
 	}
 
 	public static void testListFieldData(
@@ -103,20 +103,6 @@ public class TypeProcessorTestUtil {
 		assertThat(listFieldData.getData(), equalTo(listType));
 
 		testFieldData(listFieldData, fieldName, List.class);
-	}
-
-	public static void testRelatedCollectionData(
-		FieldData<RelatedCollection> relatedCollectionFieldData,
-		String fieldName, Class<?> identifierClass) {
-
-		Vocabulary.RelatedCollection relatedCollection =
-			relatedCollectionFieldData.getData();
-
-		Class<?> identifierType = getIdentifierType(identifierClass);
-
-		assertThat(relatedCollection.value(), is(equalTo(identifierClass)));
-
-		testFieldData(relatedCollectionFieldData, fieldName, identifierType);
 	}
 
 	public static void testRelativeURLData(

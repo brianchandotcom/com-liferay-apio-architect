@@ -19,8 +19,7 @@ import static org.apache.commons.lang3.reflect.MethodUtils.getMethodsListWithAnn
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
-import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.functional.Try;
@@ -75,25 +74,10 @@ public class TypeProcessor {
 	}
 
 	private static void _processMethod(Builder builder, Method method) {
-		LinkedModel linkedModel = method.getAnnotation(LinkedModel.class);
+		LinkTo linkTo = method.getAnnotation(LinkTo.class);
 
-		if (linkedModel != null) {
-			FieldData<LinkedModel> linkedModelFieldData = new FieldData<>(
-				method, linkedModel);
-
-			builder.addLinkedModelFieldData(linkedModelFieldData);
-
-			return;
-		}
-
-		RelatedCollection relatedCollection = method.getAnnotation(
-			RelatedCollection.class);
-
-		if (relatedCollection != null) {
-			FieldData<RelatedCollection> relatedCollectionFieldData =
-				new FieldData<>(method, relatedCollection);
-
-			builder.addRelatedCollectionFieldData(relatedCollectionFieldData);
+		if (linkTo != null) {
+			builder.addLinkToFieldData(new FieldData<>(method, linkTo));
 
 			return;
 		}

@@ -16,12 +16,13 @@ package com.liferay.apio.architect.internal.annotation.form;
 
 import static com.liferay.apio.architect.annotation.FieldMode.READ_ONLY;
 import static com.liferay.apio.architect.annotation.FieldMode.READ_WRITE;
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.SINGLE;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.annotation.FieldMode;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Form;
@@ -183,20 +184,23 @@ public class FormTransformer {
 				}
 			});
 
-		List<FieldData<LinkedModel>> linkedModelFieldDataList =
-			_filterReadableFields(parsedType::getLinkedModelFieldDataList);
+		List<FieldData<LinkTo>> linkToFieldDataList = _filterReadableFields(
+			parsedType::getLinkToFieldDataList);
 
-		linkedModelFieldDataList.forEach(
-			linkedModelFieldData -> {
-				LinkedModel linkedModel = linkedModelFieldData.getData();
+		for (FieldData<LinkTo> fieldData : linkToFieldDataList) {
+			LinkTo linkTo = fieldData.getData();
 
-				String key = linkedModelFieldData.getFieldName();
-				String methodName = linkedModelFieldData.getMethodName();
+			if (!SINGLE.equals(linkTo.resourceType())) {
+				continue;
+			}
 
-				fieldStep.addOptionalLinkedModel(
-					key, (Class)linkedModel.value(),
-					unsafeCast(formFunction.apply(methodName)));
-			});
+			String key = fieldData.getFieldName();
+			String methodName = fieldData.getMethodName();
+
+			fieldStep.addOptionalLinkedModel(
+				key, unsafeCast(linkTo.resource()),
+				unsafeCast(formFunction.apply(methodName)));
+		}
 
 		List<FieldData<ParsedType>> nestedParsedTypes = _filterReadableFields(
 			parsedType::getParsedTypes);

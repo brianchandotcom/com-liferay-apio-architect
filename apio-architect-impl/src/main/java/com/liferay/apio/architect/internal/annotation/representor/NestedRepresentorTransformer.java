@@ -14,16 +14,15 @@
 
 package com.liferay.apio.architect.internal.annotation.representor;
 
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.CHILD_COLLECTION;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.addCommonFields;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.getMethodFunction;
 
-import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.internal.annotation.representor.processor.FieldData;
 import com.liferay.apio.architect.internal.annotation.representor.processor.ParsedType;
 import com.liferay.apio.architect.representor.NestedRepresentor;
-
-import java.util.List;
 
 /**
  * Provides a utility function to transform a class annotated with {@code Type}
@@ -60,19 +59,19 @@ public class NestedRepresentorTransformer {
 	private static void _processFields(
 		ParsedType parsedType, NestedRepresentor.FirstStep<?> firstStep) {
 
-		List<FieldData<RelatedCollection>> relatedCollectionFieldDataList =
-			parsedType.getRelatedCollectionFieldDataList();
+		for (FieldData<LinkTo> fieldData :
+				parsedType.getLinkToFieldDataList()) {
 
-		relatedCollectionFieldDataList.forEach(
-			relatedCollectionFieldData -> {
-				RelatedCollection relatedCollection =
-					relatedCollectionFieldData.getData();
+			LinkTo linkTo = fieldData.getData();
 
-				firstStep.addRelatedCollection(
-					relatedCollectionFieldData.getFieldName(),
-					relatedCollection.value(),
-					getMethodFunction(relatedCollectionFieldData.getMethod()));
-			});
+			if (!CHILD_COLLECTION.equals(linkTo.resourceType())) {
+				continue;
+			}
+
+			firstStep.addRelatedCollection(
+				fieldData.getFieldName(), linkTo.resource(),
+				getMethodFunction(fieldData.getMethod()));
+		}
 
 		addCommonFields(firstStep, parsedType);
 	}

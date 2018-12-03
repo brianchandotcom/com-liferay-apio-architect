@@ -15,14 +15,14 @@
 package com.liferay.apio.architect.internal.annotation.representor.types;
 
 import static com.liferay.apio.architect.annotation.FieldMode.READ_ONLY;
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.CHILD_COLLECTION;
 
 import static java.util.Arrays.asList;
 
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
-import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
@@ -93,15 +93,27 @@ public interface Dummy extends Identifier<Long> {
 		return 1L;
 	}
 
-	@Field("linkedModel1")
-	@LinkedModel(IntegerIdentifier.class)
-	public default Integer getLinkedModel1() {
+	@Field("linkToChildCollection1")
+	@LinkTo(resource = IntegerIdentifier.class, resourceType = CHILD_COLLECTION)
+	public default Integer getLinkToChildCollection1() {
 		return 1;
 	}
 
-	@Field("linkedModel2")
-	@LinkedModel(StringIdentifier.class)
-	public default String getLinkedModel2() {
+	@Field("linkToChildCollection2")
+	@LinkTo(resource = StringIdentifier.class, resourceType = CHILD_COLLECTION)
+	public default String getLinkToChildCollection2() {
+		return "2d1d";
+	}
+
+	@Field("linkToSingle1")
+	@LinkTo(resource = IntegerIdentifier.class)
+	public default Integer getLinkToSingle1() {
+		return 1;
+	}
+
+	@Field("linkToSingle2")
+	@LinkTo(resource = StringIdentifier.class)
+	public default String getLinkToSingle2() {
 		return "2d1d";
 	}
 
@@ -123,18 +135,6 @@ public interface Dummy extends Identifier<Long> {
 	@Field("numberListField2")
 	public default List<Long> getNumberListField2() {
 		return asList(4L, 5L, 6L);
-	}
-
-	@Field("relatedCollection1")
-	@RelatedCollection(IntegerIdentifier.class)
-	public default Integer getRelatedCollection1() {
-		return 1;
-	}
-
-	@Field("relatedCollection2")
-	@RelatedCollection(StringIdentifier.class)
-	public default String getRelatedCollection2() {
-		return "2d1d";
 	}
 
 	@Field(mode = READ_ONLY, value = "relativeUrl1")

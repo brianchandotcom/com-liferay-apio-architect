@@ -14,16 +14,15 @@
 
 package com.liferay.apio.architect.internal.annotation.representor;
 
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.SINGLE;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.addCommonFields;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.filterWritableFields;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.getMethodFunction;
-import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
-import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
-import com.liferay.apio.architect.annotation.Vocabulary;
 import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.annotation.representor.processor.FieldData;
@@ -34,8 +33,6 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.FirstStep;
 
 import io.vavr.control.Try;
-
-import java.lang.reflect.Method;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,10 +88,6 @@ public class RepresentorTransformer {
 		return firstStep.build();
 	}
 
-	private static void _addReusableClass(String name, Class returnType) {
-		INSTANCE.putReusableIdentifierClass(name, returnType);
-	}
-
 	private static <T extends Identifier<S>, S> Representor.Builder<T, S>
 		_createBuilder(
 			Class<T> typeClass,
@@ -136,39 +129,19 @@ public class RepresentorTransformer {
 					getMethodFunction(bidirectionalFieldData.getMethod()));
 			});
 
-		List<FieldData<Vocabulary.RelatedCollection>>
-			relatedCollectionFieldDataList = filterWritableFields(
-				parsedType::getRelatedCollectionFieldDataList);
+		List<FieldData<LinkTo>> linkToFieldDataList = filterWritableFields(
+			parsedType::getLinkToFieldDataList);
 
-		relatedCollectionFieldDataList.forEach(
-			relatedCollectionFieldData -> {
-				Vocabulary.RelatedCollection relatedCollection =
-					relatedCollectionFieldData.getData();
+		for (FieldData<LinkTo> fieldData : linkToFieldDataList) {
+			LinkTo linkTo = fieldData.getData();
 
-				String key = relatedCollectionFieldData.getFieldName();
-				Method method = relatedCollectionFieldData.getMethod();
+			if (SINGLE.equals(linkTo.resourceType())) {
+				continue;
+			}
 
-				if (relatedCollection.reusable()) {
-					firstStep.addRelatedCollection(
-						key, relatedCollection.value(),
-						model -> Try.of(
-							() -> method.invoke(model)
-						).getOrNull());
-
-					Class<? extends Identifier<?>> typeClass =
-						relatedCollection.value();
-
-					Type type = typeClass.getAnnotation(Type.class);
-
-					String name = toLowercaseSlug(type.value());
-
-					_addReusableClass(name, method.getReturnType());
-				}
-				else {
-					firstStep.addRelatedCollection(
-						key, relatedCollection.value());
-				}
-			});
+			firstStep.addRelatedCollection(
+				fieldData.getFieldName(), linkTo.resource());
+		}
 
 		addCommonFields(firstStep, parsedType);
 	}

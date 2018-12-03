@@ -14,18 +14,18 @@
 
 package com.liferay.apio.architect.internal.annotation.representor.processor;
 
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.CHILD_COLLECTION;
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.SINGLE;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.getOrderedList;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testFieldData;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testLinkedModelData;
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testLinkToFieldData;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testListFieldData;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testRelatedCollectionData;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 
 import static org.junit.Assert.assertThat;
 
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
-import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.IntegerIdentifier;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyWithNested;
 import com.liferay.apio.architect.internal.annotation.representor.types.DummyWithNested.NestedDummy;
@@ -62,11 +62,15 @@ public class TypeProcessorNestedTest {
 
 	@Test
 	public void testLinkedModels() {
-		List<FieldData<LinkedModel>> linkedModelFieldData = getOrderedList(
-			_parsedType::getLinkedModelFieldDataList);
+		List<FieldData<LinkTo>> linkToFieldDataList = getOrderedList(
+			_parsedType::getLinkToFieldDataList);
 
-		testLinkedModelData(
-			linkedModelFieldData.get(0), "linkedModel",
+		testLinkToFieldData(
+			linkToFieldDataList.get(0), CHILD_COLLECTION,
+			"linkToChildCollection", IntegerIdentifier.class);
+
+		testLinkToFieldData(
+			linkToFieldDataList.get(1), SINGLE, "linkToSingle",
 			IntegerIdentifier.class);
 	}
 
@@ -86,16 +90,6 @@ public class TypeProcessorNestedTest {
 		assertThat(parsedType.getTypeClass(), equalTo(NestedDummy.class));
 
 		testFieldData(_nestedParsedType, "nestedDummy", NestedDummy.class);
-	}
-
-	@Test
-	public void testRelatedCollections() {
-		List<FieldData<RelatedCollection>> relatedCollectionFieldData =
-			getOrderedList(_parsedType::getRelatedCollectionFieldDataList);
-
-		testRelatedCollectionData(
-			relatedCollectionFieldData.get(0), "relatedCollection",
-			IntegerIdentifier.class);
 	}
 
 	private static FieldData<ParsedType> _nestedParsedType;

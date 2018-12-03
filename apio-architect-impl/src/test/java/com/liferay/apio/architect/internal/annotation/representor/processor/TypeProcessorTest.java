@@ -14,12 +14,13 @@
 
 package com.liferay.apio.architect.internal.annotation.representor.processor;
 
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.CHILD_COLLECTION;
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.SINGLE;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.getOrderedList;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testBidirectionalData;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testFieldData;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testLinkedModelData;
+import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testLinkToFieldData;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testListFieldData;
-import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testRelatedCollectionData;
 import static com.liferay.apio.architect.internal.annotation.representor.processor.TypeProcessorTestUtil.testRelativeURLData;
 
 import static org.hamcrest.core.Is.is;
@@ -28,8 +29,7 @@ import static org.junit.Assert.assertThat;
 
 import com.liferay.apio.architect.annotation.Vocabulary;
 import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
-import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.RelativeURL;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy;
 import com.liferay.apio.architect.internal.annotation.representor.types.Dummy.DummyImpl;
@@ -91,20 +91,6 @@ public class TypeProcessorTest {
 	}
 
 	@Test
-	public void testLinkedModels() {
-		List<FieldData<LinkedModel>> linkedModelFieldData = getOrderedList(
-			_parsedType::getLinkedModelFieldDataList);
-
-		testLinkedModelData(
-			linkedModelFieldData.get(0), "linkedModel1",
-			IntegerIdentifier.class);
-
-		testLinkedModelData(
-			linkedModelFieldData.get(1), "linkedModel2",
-			StringIdentifier.class);
-	}
-
-	@Test
 	public void testListFields() {
 		List<FieldData<Class<?>>> listFieldData = getOrderedList(
 			_parsedType::getListFieldDataList);
@@ -123,15 +109,23 @@ public class TypeProcessorTest {
 
 	@Test
 	public void testRelatedCollections() {
-		List<FieldData<RelatedCollection>> relatedCollectionFieldData =
-			getOrderedList(_parsedType::getRelatedCollectionFieldDataList);
+		List<FieldData<LinkTo>> linkToFieldDataList = getOrderedList(
+			_parsedType::getLinkToFieldDataList);
 
-		testRelatedCollectionData(
-			relatedCollectionFieldData.get(0), "relatedCollection1",
+		testLinkToFieldData(
+			linkToFieldDataList.get(0), CHILD_COLLECTION,
+			"linkToChildCollection1", IntegerIdentifier.class);
+
+		testLinkToFieldData(
+			linkToFieldDataList.get(1), CHILD_COLLECTION,
+			"linkToChildCollection2", StringIdentifier.class);
+
+		testLinkToFieldData(
+			linkToFieldDataList.get(2), SINGLE, "linkToSingle1",
 			IntegerIdentifier.class);
 
-		testRelatedCollectionData(
-			relatedCollectionFieldData.get(1), "relatedCollection2",
+		testLinkToFieldData(
+			linkToFieldDataList.get(3), SINGLE, "linkToSingle2",
 			StringIdentifier.class);
 	}
 

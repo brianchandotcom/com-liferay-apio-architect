@@ -44,8 +44,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.hamcrest.MatcherAssert;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -147,12 +145,12 @@ public class NestedRepresentorTransformerTest {
 					IntegerIdentifier.class
 		).filter(
 			relatedCollection ->
-				relatedCollection.getKey().equals("relatedCollection")
+				relatedCollection.getKey().equals("linkToChildCollection")
 		).collect(
 			Collectors.toList()
 		);
 
-		MatcherAssert.assertThat(list0, hasSize(1));
+		assertThat(list0, hasSize(1));
 	}
 
 	private void _testRelatedModels(
@@ -162,7 +160,7 @@ public class NestedRepresentorTransformerTest {
 			nestedRepresentor.getRelatedModels();
 
 		testRelatedModel(
-			relatedModels.get(0), _nestedDummy, "linkedModel",
+			relatedModels.get(0), _nestedDummy, "linkToSingle",
 			IntegerIdentifier.class, 1);
 	}
 
