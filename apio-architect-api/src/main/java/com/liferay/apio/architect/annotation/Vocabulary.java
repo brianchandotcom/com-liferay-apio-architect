@@ -150,7 +150,11 @@ public @interface Vocabulary {
 	 * Defines an annotation that indicates a field should be expressed as a
 	 * link to another resource. For this to be possible, the method must
 	 * provide information about another resource's ID.
+	 *
+	 * @deprecated As of 1.9.0, use {@link LinkTo} instead
+	 * @review
 	 */
+	@Deprecated
 	@Retention(RUNTIME)
 	@Target(METHOD)
 	public @interface LinkedModel {
@@ -229,7 +233,13 @@ public @interface Vocabulary {
 	/**
 	 * Defines an annotation that indicates a type has a link to another
 	 * resource's page.
+	 *
+	 * @deprecated As of 1.9.0, use {@link LinkTo} with {@link
+	 *             LinkTo.ResourceType#CHILD_COLLECTION CHILD_COLLECTION} as
+	 *             {@link LinkTo#resourceType()} instead
+	 * @review
 	 */
+	@Deprecated
 	@Retention(RUNTIME)
 	@Target(METHOD)
 	public @interface RelatedCollection {

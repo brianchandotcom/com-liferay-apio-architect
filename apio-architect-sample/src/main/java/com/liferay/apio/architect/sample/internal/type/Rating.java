@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.sample.internal.type;
 
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 
 /**
@@ -46,7 +46,7 @@ public interface Rating {
 	 * @return the rating's creator
 	 */
 	@Field("creator")
-	@LinkedModel(Person.class)
+	@LinkTo(resource = Person.class)
 	public Long getCreatorId();
 
 	/**

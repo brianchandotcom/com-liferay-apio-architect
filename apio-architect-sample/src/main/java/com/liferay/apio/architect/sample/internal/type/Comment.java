@@ -16,7 +16,7 @@ package com.liferay.apio.architect.sample.internal.type;
 
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 
@@ -38,7 +38,7 @@ public interface Comment extends Identifier<Long> {
 	 * @return the comment's creator
 	 */
 	@Field("creator")
-	@LinkedModel(Person.class)
+	@LinkTo(resource = Person.class)
 	public Long getCreatorId();
 
 	/**

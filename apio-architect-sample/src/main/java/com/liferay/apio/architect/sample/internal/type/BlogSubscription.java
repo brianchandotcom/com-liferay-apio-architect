@@ -16,7 +16,7 @@ package com.liferay.apio.architect.sample.internal.type;
 
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
-import com.liferay.apio.architect.annotation.Vocabulary.LinkedModel;
+import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 
@@ -40,7 +40,7 @@ public interface BlogSubscription extends Identifier<Long> {
 		description = "The blog being subscribed", readOnly = true,
 		value = "blog"
 	)
-	@LinkedModel(BlogPosting.class)
+	@LinkTo(resource = BlogPosting.class)
 	public Long getBlogPostingId();
 
 	/**
@@ -60,7 +60,7 @@ public interface BlogSubscription extends Identifier<Long> {
 		description = "The person being subscribed to the blog",
 		value = "person"
 	)
-	@LinkedModel(Person.class)
+	@LinkTo(resource = Person.class)
 	public Long getPersonId();
 
 }
