@@ -15,11 +15,10 @@
 package com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper;
 
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
-import static com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
 
-import com.liferay.apio.architect.functional.Try;
+import static io.leangen.geantyref.GenericTypeReflector.getTypeParameter;
+
 import com.liferay.apio.architect.identifier.Identifier;
-import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.internal.wiring.osgi.error.ApioDeveloperError.MustHavePathIdentifierMapper;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.IdentifierClassManager;
@@ -45,85 +44,58 @@ public class PathIdentifierMapperManagerImpl
 
 	@Override
 	public boolean hasPathIdentifierMapper(String name) {
-		return _getPathIdentifierMapperTry(name).isSuccess();
+		Optional<PathIdentifierMapper<Object>> optional =
+			_getPathIdentifierMapperOptional(name);
+
+		return optional.isPresent();
 	}
 
 	@Override
 	public <T> T mapToIdentifierOrFail(Path path) {
-		Try<PathIdentifierMapper<T>> pathIdentifierMapperTry =
-			_getPathIdentifierMapperTry(path.getName());
+		Optional<PathIdentifierMapper<T>> optional =
+			_getPathIdentifierMapperOptional(path.getName());
 
-		return pathIdentifierMapperTry.map(
-			service -> service.map(path)
-		).orElseGet(
-			() -> _getReusablePathIdentifierMapper(path)
-		);
-	}
-
-	@Override
-	public <T> Optional<Path> mapToPath(String name, T identifier) {
-		Try<PathIdentifierMapper<T>> pathIdentifierMapperTry =
-			_getPathIdentifierMapperTry(name);
-
-		Path value = pathIdentifierMapperTry.map(
-			service -> service.map(name, identifier)
-		).orElseGet(
-			() -> _getReusablePath(name, identifier)
-		);
-
-		return Optional.ofNullable(value);
-	}
-
-	private <T> Try<PathIdentifierMapper<T>> _getPathIdentifierMapperTry(
-		String name) {
-
-		return Try.success(
-			name
-		).mapOptional(
-			_identifierClassManager::getIdentifierClassOptional
-		).flatMap(
-			clazz -> getGenericTypeArgumentTry(clazz, Identifier.class, 0)
-		).mapOptional(
-			this::getServiceOptional
-		).map(
-			Unsafe::unsafeCast
-		);
-	}
-
-	private <T> Path _getReusablePath(String name, T identifier) {
-		Optional<PathIdentifierMapper<T>> pathIdentifierMapper =
-			_getReusablePathIdentifierMapper(name);
-
-		return pathIdentifierMapper.map(
-			service -> service.map(name, identifier)
-		).orElse(
-			null
-		);
-	}
-
-	private <T> T _getReusablePathIdentifierMapper(Path path) {
-		Optional<PathIdentifierMapper<T>> pathIdentifierMapper =
-			_getReusablePathIdentifierMapper(path.getName());
-
-		return pathIdentifierMapper.filter(
-			__ -> path.getId() != null && !"__".equals(path.getId())
-		).map(
-			service -> service.map(path)
+		return optional.map(
+			pathIdentifierMapper -> pathIdentifierMapper.map(path)
 		).orElseThrow(
 			() -> new MustHavePathIdentifierMapper(path)
 		);
 	}
 
-	private <T> Optional<PathIdentifierMapper<T>>
-		_getReusablePathIdentifierMapper(String name) {
+	@Override
+	public <T> Optional<Path> mapToPath(String name, T identifier) {
+		Optional<PathIdentifierMapper<Object>> optional =
+			_getPathIdentifierMapperOptional(name);
 
-		Optional<Class<?>> reusableIdentifierClassOptional =
+		return optional.map(
+			pathIdentifierMapper -> pathIdentifierMapper.map(name, identifier));
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> Optional<PathIdentifierMapper<T>>
+		_getPathIdentifierMapperOptional(String name) {
+
+		Optional<Class<Identifier>> identifierClassOptional =
+			_identifierClassManager.getIdentifierClassOptional(name);
+
+		Optional<Class<?>> genericParentClassOptional =
 			INSTANCE.getReusableIdentifierClassOptional(name);
 
-		return reusableIdentifierClassOptional.flatMap(
+		return identifierClassOptional.map(
+			clazz -> getTypeParameter(
+				clazz, Identifier.class.getTypeParameters()[0])
+		).filter(
+			Class.class::isInstance
+		).map(
+			type -> (Class)type
+		).flatMap(
 			this::getServiceOptional
 		).map(
-			Unsafe::unsafeCast
+			Optional::of
+		).orElseGet(
+			() -> genericParentClassOptional.flatMap(this::getServiceOptional)
+		).map(
+			service -> (PathIdentifierMapper<T>)service
 		);
 	}
 
