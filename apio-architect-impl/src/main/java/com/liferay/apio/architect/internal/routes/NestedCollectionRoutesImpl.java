@@ -34,6 +34,7 @@ import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.resource.Resource.Id;
 import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
@@ -93,10 +94,17 @@ public class NestedCollectionRoutesImpl<T, S, U>
 	public static class BuilderImpl<T, S, U> implements Builder<T, S, U> {
 
 		public BuilderImpl(
-			Nested nested, Supplier<Form.Builder> formBuilderSupplier,
+			Resource resource, Supplier<Form.Builder> formBuilderSupplier,
 			Function<T, S> modelToIdentifierFunction) {
 
-			_nested = nested;
+			if (!(resource instanceof Nested) &&
+				!(resource instanceof GenericParent)) {
+
+				throw new IllegalArgumentException(
+					"Resource must be either Nested or GenericParent");
+			}
+
+			_resource = resource;
 			_formBuilderSupplier = formBuilderSupplier;
 			_modelToIdentifierFunction = modelToIdentifierFunction;
 		}
@@ -139,7 +147,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 			ActionSemantics batchCreateActionSemantics =
 				ActionSemantics.ofResource(
-					_nested
+					_resource
 				).name(
 					"batch-create"
 				).method(
@@ -148,7 +156,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					BatchResult.class
 				).executeFunction(
 					params -> batchCreatorThrowableHexaFunction.andThen(
-						t -> new BatchResult<>(t, _nested.getName())
+						t -> new BatchResult<>(t, _resource.getName())
 					).apply(
 						_getId(params.get(0)), unsafeCast(params.get(1)),
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
@@ -163,7 +171,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			_actionSemantics.add(batchCreateActionSemantics);
 
 			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
-				_nested
+				_resource
 			).name(
 				"create"
 			).method(
@@ -172,7 +180,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				SingleModel.class
 			).executeFunction(
 				params -> creatorThrowableHexaFunction.andThen(
-					t -> new SingleModelImpl<>(t, _nested.getName())
+					t -> new SingleModelImpl<>(t, _resource.getName())
 				).apply(
 					_getId(params.get(0)), unsafeCast(params.get(1)),
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
@@ -197,7 +205,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Class<D> dClass) {
 
 			ActionSemantics actionSemantics = ActionSemantics.ofResource(
-				_nested
+				_resource
 			).name(
 				"retrieve"
 			).method(
@@ -207,7 +215,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			).executeFunction(
 				params -> getterThrowableHexaFunction.andThen(
 					pageItems -> new PageImpl<>(
-						_nested.withParentId((Id)params.get(1)), pageItems,
+						_resourceWithParentId((Id)params.get(1)), pageItems,
 						(Pagination)params.get(0))
 				).apply(
 					(Pagination)params.get(0), _getId(params.get(1)),
@@ -234,6 +242,14 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			return unsafeCast(id.asObject());
 		}
 
+		private Resource _resourceWithParentId(Id id) {
+			if (_resource instanceof Nested) {
+				return ((Nested)_resource).withParentId(id);
+			}
+
+			return ((GenericParent)_resource).withParentId(id);
+		}
+
 		private <V> List<S> _transformList(
 				List<V> list,
 				ThrowableFunction<V, T> transformThrowableFunction)
@@ -258,7 +274,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			new ArrayList<>();
 		private final Supplier<Form.Builder> _formBuilderSupplier;
 		private final Function<T, S> _modelToIdentifierFunction;
-		private final Nested _nested;
+		private final Resource _resource;
 
 	}
 

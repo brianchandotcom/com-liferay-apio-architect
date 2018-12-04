@@ -21,6 +21,7 @@ import static io.leangen.geantyref.GenericTypeReflector.getTypeParameter;
 
 import static java.util.Objects.nonNull;
 
+import com.liferay.apio.architect.annotation.GenericParentId;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.ParentId;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
@@ -33,6 +34,7 @@ import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.resource.Resource.Paged;
@@ -45,6 +47,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -260,6 +263,23 @@ public final class ActionRouterUtil {
 	 * @review
 	 */
 	public static Resource getResource(Method method, String name) {
+		Optional<Parameter> optionalParameter = Stream.of(
+			method.getParameters()
+		).filter(
+			parameter -> parameter.isAnnotationPresent(GenericParentId.class)
+		).findFirst();
+
+		if (optionalParameter.isPresent()) {
+			Parameter parameter = optionalParameter.get();
+
+			Class<?> identifierClass = parameter.getType();
+
+			String parentName = toLowercaseSlug(
+				identifierClass.getSimpleName());
+
+			return GenericParent.of(parentName, name);
+		}
+
 		ParentId parentId = findAnnotationInAnyParameter(
 			method, ParentId.class);
 

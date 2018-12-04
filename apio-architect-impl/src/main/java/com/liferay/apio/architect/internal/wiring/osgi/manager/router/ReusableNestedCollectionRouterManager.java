@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.internal.wiring.osgi.manager.router;
 
+import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
-import static com.liferay.apio.architect.internal.wiring.osgi.util.GenericUtil.getGenericTypeArgumentTry;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -27,11 +27,15 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.Nam
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.resource.Resource.Item;
-import com.liferay.apio.architect.resource.Resource.Nested;
+import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.router.ReusableNestedCollectionRouter;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes.Builder;
+
+import io.leangen.geantyref.GenericTypeReflector;
+
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -112,10 +116,24 @@ public class ReusableNestedCollectionRouterManager
 					return;
 				}
 
+				Type identifierType = GenericTypeReflector.getTypeParameter(
+					reusableNestedCollectionRouter.getClass(), _typeVariable);
+
+				if (!(identifierType instanceof Class)) {
+					_logger.warn("{} is not a valid class", identifierType);
+
+					return;
+				}
+
+				Class<?> identifierClass = (Class)identifierType;
+
+				String genericParentName = toLowercaseSlug(
+					identifierClass.getName());
+
 				Representor<Object> representor = representorOptional.get();
 
 				Builder builder = new NestedCollectionRoutesImpl.BuilderImpl<>(
-					Nested.of(Item.of("r"), name),
+					GenericParent.of(genericParentName, name),
 					() -> new FormImpl.BuilderImpl<>(
 						_pathIdentifierMapperManager::mapToIdentifierOrFail,
 						_nameManager::getNameOptional),
@@ -127,14 +145,6 @@ public class ReusableNestedCollectionRouterManager
 
 				INSTANCE.putReusableNestedCollectionRoutes(
 					name, nestedCollectionRoutes);
-
-				getGenericTypeArgumentTry(
-					reusableNestedCollectionRouter.getClass(),
-					ReusableNestedCollectionRouter.class, 3
-				).ifSuccess(
-					objectClass -> INSTANCE.putReusableIdentifierClass(
-						name, objectClass)
-				);
 			});
 	}
 
@@ -148,5 +158,8 @@ public class ReusableNestedCollectionRouterManager
 
 	@Reference
 	private RepresentableManager _representableManager;
+
+	private TypeVariable<Class<ReusableNestedCollectionRouter>> _typeVariable =
+		ReusableNestedCollectionRouter.class.getTypeParameters()[3];
 
 }
