@@ -219,6 +219,15 @@ public @interface Vocabulary {
 			CHILD_COLLECTION,
 
 			/**
+			 * This resource type denotes that the linked resource is a
+			 * collection whose "generic" parent is the ID being returned.
+			 *
+			 * @see    GenericParentId
+			 * @review
+			 */
+			GENERIC_PARENT_COLLECTION,
+
+			/**
 			 * This resource type denotes that the linked resource is a single
 			 * one and the field is returning its ID.
 			 *
