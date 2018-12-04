@@ -15,11 +15,11 @@
 package com.liferay.apio.architect.sample.internal.type;
 
 import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.CHILD_COLLECTION;
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.GENERIC_PARENT_COLLECTION;
 
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
 import com.liferay.apio.architect.annotation.Vocabulary.LinkTo;
-import com.liferay.apio.architect.annotation.Vocabulary.RelatedCollection;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.sample.internal.identifier.ModelNameModelIdIdentifier;
@@ -132,7 +132,7 @@ public interface BlogPosting extends Identifier<Long> {
 	 * @review
 	 */
 	@Field("comment-for-this-blog")
-	@RelatedCollection(reusable = true, value = Comment.class)
+	@LinkTo(resource = Comment.class, resourceType = GENERIC_PARENT_COLLECTION)
 	public default ModelNameModelIdIdentifier getModelNameModelIdIdentifier() {
 		return new ModelNameModelIdIdentifier() {
 

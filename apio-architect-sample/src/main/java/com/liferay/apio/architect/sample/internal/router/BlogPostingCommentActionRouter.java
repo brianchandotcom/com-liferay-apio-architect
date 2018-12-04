@@ -17,12 +17,12 @@ package com.liferay.apio.architect.sample.internal.router;
 import static com.liferay.apio.architect.sample.internal.auth.PermissionChecker.hasPermission;
 import static com.liferay.apio.architect.sample.internal.converter.CommentConverter.toComment;
 
-import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.annotation.Actions.Create;
 import com.liferay.apio.architect.annotation.Actions.Remove;
 import com.liferay.apio.architect.annotation.Actions.Replace;
 import com.liferay.apio.architect.annotation.Actions.Retrieve;
 import com.liferay.apio.architect.annotation.Body;
+import com.liferay.apio.architect.annotation.GenericParentId;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.ParentId;
 import com.liferay.apio.architect.credentials.Credentials;
@@ -117,9 +117,10 @@ public class BlogPostingCommentActionRouter implements ActionRouter<Comment> {
 		);
 	}
 
-	@Actions.Action(httpMethod = "GET", name = "comments")
+	@Retrieve
 	public PageItems<Comment> retrieveCommentsForAModel(
-		@Id ModelNameModelIdIdentifier modelNameModelIdIdentifier) {
+		@GenericParentId ModelNameModelIdIdentifier
+			modelNameModelIdIdentifier) {
 
 		List<BlogPostingCommentModel> blogPostingCommentModels =
 			_blogPostingCommentModelService.getPage(
