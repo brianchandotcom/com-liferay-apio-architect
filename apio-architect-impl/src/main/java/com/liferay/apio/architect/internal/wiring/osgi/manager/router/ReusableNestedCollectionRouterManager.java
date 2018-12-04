@@ -128,7 +128,7 @@ public class ReusableNestedCollectionRouterManager
 				Class<?> identifierClass = (Class)identifierType;
 
 				String genericParentName = toLowercaseSlug(
-					identifierClass.getName());
+					identifierClass.getSimpleName());
 
 				Representor<Object> representor = representorOptional.get();
 
@@ -145,6 +145,8 @@ public class ReusableNestedCollectionRouterManager
 
 				INSTANCE.putReusableNestedCollectionRoutes(
 					name, nestedCollectionRoutes);
+
+				INSTANCE.putReusableIdentifierClass(name, identifierClass);
 			});
 	}
 

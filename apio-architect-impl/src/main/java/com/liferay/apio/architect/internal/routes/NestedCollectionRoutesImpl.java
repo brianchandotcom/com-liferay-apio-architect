@@ -21,6 +21,7 @@ import com.liferay.apio.architect.alias.routes.NestedBatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedGetPageFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasNestedAddingPermissionFunction;
+import com.liferay.apio.architect.annotation.GenericParentId;
 import com.liferay.apio.architect.annotation.ParentId;
 import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.form.Body;
@@ -165,7 +166,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				).bodyFunction(
 					form::getList
 				).receivesParams(
-					ParentId.class, Body.class, aClass, bClass, cClass, dClass
+					_getIdClass(), Body.class, aClass, bClass, cClass, dClass
 				).build();
 
 			_actionSemantics.add(batchCreateActionSemantics);
@@ -189,7 +190,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			).bodyFunction(
 				form::get
 			).receivesParams(
-				ParentId.class, Body.class, aClass, bClass, cClass, dClass
+				_getIdClass(), Body.class, aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(createActionSemantics);
@@ -223,7 +224,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
 			).receivesParams(
-				Pagination.class, ParentId.class, aClass, bClass, cClass, dClass
+				Pagination.class, _getIdClass(), aClass, bClass, cClass, dClass
 			).build();
 
 			_actionSemantics.add(actionSemantics);
@@ -240,6 +241,14 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Resource.Id id = (Resource.Id)object;
 
 			return unsafeCast(id.asObject());
+		}
+
+		private Class<?> _getIdClass() {
+			if (_resource instanceof Nested) {
+				return ParentId.class;
+			}
+
+			return GenericParentId.class;
 		}
 
 		private Resource _resourceWithParentId(Id id) {

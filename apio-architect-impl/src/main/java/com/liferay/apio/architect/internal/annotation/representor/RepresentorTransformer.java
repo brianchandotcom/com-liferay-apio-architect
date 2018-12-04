@@ -14,11 +14,14 @@
 
 package com.liferay.apio.architect.internal.annotation.representor;
 
-import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.SINGLE;
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.CHILD_COLLECTION;
+import static com.liferay.apio.architect.annotation.Vocabulary.LinkTo.ResourceType.GENERIC_PARENT_COLLECTION;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.addCommonFields;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.filterWritableFields;
 import static com.liferay.apio.architect.internal.annotation.representor.RepresentorTransformerUtil.getMethodFunction;
+import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
+import static com.liferay.apio.architect.internal.wiring.osgi.manager.cache.ManagerCache.INSTANCE;
 
 import com.liferay.apio.architect.annotation.Vocabulary.BidirectionalModel;
 import com.liferay.apio.architect.annotation.Vocabulary.Field;
@@ -33,6 +36,8 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.representor.Representor.FirstStep;
 
 import io.vavr.control.Try;
+
+import java.lang.reflect.Method;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,12 +140,28 @@ public class RepresentorTransformer {
 		for (FieldData<LinkTo> fieldData : linkToFieldDataList) {
 			LinkTo linkTo = fieldData.getData();
 
-			if (SINGLE.equals(linkTo.resourceType())) {
-				continue;
+			if (CHILD_COLLECTION.equals(linkTo.resourceType())) {
+				firstStep.addRelatedCollection(
+					fieldData.getFieldName(), linkTo.resource());
 			}
+			else if (GENERIC_PARENT_COLLECTION.equals(linkTo.resourceType())) {
+				Method method = fieldData.getMethod();
 
-			firstStep.addRelatedCollection(
-				fieldData.getFieldName(), linkTo.resource());
+				firstStep.addRelatedCollection(
+					fieldData.getFieldName(), linkTo.resource(),
+					model -> Try.of(
+						() -> method.invoke(model)
+					).getOrNull());
+
+				Class<? extends Identifier<?>> typeClass = linkTo.resource();
+
+				Type type = typeClass.getAnnotation(Type.class);
+
+				String name = toLowercaseSlug(type.value());
+
+				INSTANCE.putReusableIdentifierClass(
+					name, method.getReturnType());
+			}
 		}
 
 		addCommonFields(firstStep, parsedType);
