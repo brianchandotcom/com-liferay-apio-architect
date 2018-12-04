@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.internal.url.URLCreator.createAbsoluteU
 import static com.liferay.apio.architect.internal.url.URLCreator.createActionURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createBinaryURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createCollectionPageURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createGenericParentResourceURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createItemResourceURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createNestedResourceURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createPagedResourceURL;
@@ -40,6 +41,7 @@ import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.resource.Resource.Id;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.resource.Resource.Nested;
@@ -48,8 +50,6 @@ import com.liferay.apio.architect.uri.Path;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import io.vavr.collection.HashMap;
-import io.vavr.collection.Map;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -101,11 +101,14 @@ public class URLCreatorTest {
 
 		Nested nested = Nested.of(item, "nested");
 
+		GenericParent genericParent = GenericParent.of("parent", "name");
+
 		List<Tuple2<Resource, String>> list = asList(
 			Tuple.of(item, "retrieve"), Tuple.of(item, "remove"),
 			Tuple.of(item, "replace"), Tuple.of(item, "merge"),
 			Tuple.of(nested, "retrieve"), Tuple.of(nested, "create"),
-			Tuple.of(nested, "peek"));
+			Tuple.of(nested, "peek"), Tuple.of(genericParent, "retrieve"),
+			Tuple.of(genericParent, "create"));
 
 		list.forEach(
 			tuple -> {
@@ -124,25 +127,101 @@ public class URLCreatorTest {
 
 		Nested nested = Nested.of(item, "nested");
 
-		Map<Tuple2<Resource, String>, String> map = HashMap.of(
-			Tuple.of(paged, "retrieve"), "www.liferay.com/paged",
-			Tuple.of(paged, "create"), "www.liferay.com/paged",
-			Tuple.of(paged, "subscribe"), "www.liferay.com/paged/subscribe",
-			Tuple.of(item, "retrieve"), "www.liferay.com/item/id",
-			Tuple.of(item, "remove"), "www.liferay.com/item/id",
-			Tuple.of(item, "replace"), "www.liferay.com/item/id",
-			Tuple.of(item, "merge"), "www.liferay.com/item/id/merge",
-			Tuple.of(nested, "retrieve"), "www.liferay.com/item/id/nested",
-			Tuple.of(nested, "create"), "www.liferay.com/item/id/nested",
-			Tuple.of(nested, "peek"), "www.liferay.com/item/id/nested/peek");
+		GenericParent genericParent = GenericParent.of(
+			"parent", Id.of("id", "id"), "name");
 
-		map.forEach(
-			(tuple, expected) -> {
-				Optional<String> optional = createActionURL(
-					_applicationURL, tuple._1, tuple._2);
+		Optional<String> optional1 = createActionURL(
+			_applicationURL, paged, "retrieve");
 
-				assertThat(optional, is(optionalWithValue(equalTo(expected))));
-			});
+		assertThat(
+			optional1, is(optionalWithValue(equalTo("www.liferay.com/paged"))));
+
+		Optional<String> optional2 = createActionURL(
+			_applicationURL, paged, "create");
+
+		assertThat(
+			optional2, is(optionalWithValue(equalTo("www.liferay.com/paged"))));
+
+		Optional<String> optional3 = createActionURL(
+			_applicationURL, paged, "subscribe");
+
+		assertThat(
+			optional3,
+			is(optionalWithValue(equalTo("www.liferay.com/paged/subscribe"))));
+
+		Optional<String> optional4 = createActionURL(
+			_applicationURL, item, "retrieve");
+
+		assertThat(
+			optional4,
+			is(optionalWithValue(equalTo("www.liferay.com/item/id"))));
+
+		Optional<String> optional5 = createActionURL(
+			_applicationURL, item, "remove");
+
+		assertThat(
+			optional5,
+			is(optionalWithValue(equalTo("www.liferay.com/item/id"))));
+
+		Optional<String> optional6 = createActionURL(
+			_applicationURL, item, "replace");
+
+		assertThat(
+			optional6,
+			is(optionalWithValue(equalTo("www.liferay.com/item/id"))));
+
+		Optional<String> optional7 = createActionURL(
+			_applicationURL, item, "merge");
+
+		assertThat(
+			optional7,
+			is(optionalWithValue(equalTo("www.liferay.com/item/id/merge"))));
+
+		Optional<String> optional8 = createActionURL(
+			_applicationURL, nested, "retrieve");
+
+		assertThat(
+			optional8,
+			is(optionalWithValue(equalTo("www.liferay.com/item/id/nested"))));
+
+		Optional<String> optional = createActionURL(
+			_applicationURL, nested, "create");
+
+		assertThat(
+			optional,
+			is(optionalWithValue(equalTo("www.liferay.com/item/id/nested"))));
+
+		Optional<String> optional9 = createActionURL(
+			_applicationURL, nested, "peek");
+
+		assertThat(
+			optional9,
+			is(
+				optionalWithValue(
+					equalTo("www.liferay.com/item/id/nested/peek"))));
+
+		Optional<String> optional10 = createActionURL(
+			_applicationURL, genericParent, "retrieve");
+
+		assertThat(
+			optional10,
+			is(optionalWithValue(equalTo("www.liferay.com/name/parent/id"))));
+
+		Optional<String> optional11 = createActionURL(
+			_applicationURL, genericParent, "create");
+
+		assertThat(
+			optional11,
+			is(optionalWithValue(equalTo("www.liferay.com/name/parent/id"))));
+
+		Optional<String> optional12 = createActionURL(
+			_applicationURL, genericParent, "fix");
+
+		assertThat(
+			optional12,
+			is(
+				optionalWithValue(
+					equalTo("www.liferay.com/name/parent/id/fix"))));
 	}
 
 	@Test
@@ -187,6 +266,16 @@ public class URLCreatorTest {
 		String url = createPagedResourceURL(_applicationURL, paged);
 
 		assertThat(url, is("www.liferay.com/resource"));
+	}
+
+	@Test
+	public void testCreateGenericParentResourceURLReturnsEmptyIfMissingId() {
+		GenericParent genericParent = GenericParent.of("parent", "name");
+
+		Optional<String> optional = createGenericParentResourceURL(
+			_applicationURL, genericParent);
+
+		assertThat(optional, is(emptyOptional()));
 	}
 
 	@Test

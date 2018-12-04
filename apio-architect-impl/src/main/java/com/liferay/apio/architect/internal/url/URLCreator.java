@@ -21,6 +21,7 @@ import static java.util.Arrays.asList;
 import com.liferay.apio.architect.internal.pagination.PageType;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.resource.Resource.Id;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.resource.Resource.Nested;
@@ -142,6 +143,37 @@ public final class URLCreator {
 	}
 
 	/**
+	 * Returns the URL for a generic parent resource, if an ID for the generic
+	 * parent is present. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @param  applicationURL the application URL
+	 * @param  genericParent the resource
+	 * @return the resource's URL, if an ID for the generic parent is present;
+	 *         {@code Optional#empty()} otherwise
+	 * @review
+	 */
+	public static Optional<String> createGenericParentResourceURL(
+		ApplicationURL applicationURL, GenericParent genericParent) {
+
+		Optional<Id> optional = genericParent.getParentIdOptional();
+
+		return optional.map(
+			id -> UriBuilder.fromPath(
+				"{name}"
+			).path(
+				"{parentName}"
+			).path(
+				"{parentId}"
+			).build(
+				genericParent.getName(), genericParent.getParentName(),
+				id.asString()
+			)
+		).map(
+			uri -> createAbsoluteURL(applicationURL, uri.toString())
+		);
+	}
+
+	/**
 	 * Returns the URL for an item resource, if the resource ID is present.
 	 * Returns {@code Optional#empty()} otherwise.
 	 *
@@ -170,12 +202,12 @@ public final class URLCreator {
 	}
 
 	/**
-	 * Returns the URL for a nested resource, if and ID for the parent resource
+	 * Returns the URL for a nested resource, if an ID for the parent resource
 	 * is present. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @param  applicationURL the application URL
 	 * @param  nested the resource
-	 * @return the resource's URL, if and ID for the parent resource is present;
+	 * @return the resource's URL, if an ID for the parent resource is present;
 	 *         {@code Optional#empty()} otherwise
 	 * @review
 	 */
@@ -242,6 +274,13 @@ public final class URLCreator {
 			Nested nested = (Nested)resource;
 
 			return createNestedResourceURL(applicationURL, nested);
+		}
+
+		if (resource instanceof GenericParent) {
+			GenericParent genericParent = (GenericParent)resource;
+
+			return createGenericParentResourceURL(
+				applicationURL, genericParent);
 		}
 
 		if (resource instanceof Item) {
