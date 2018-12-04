@@ -111,6 +111,10 @@ public final class ActionRouterUtil {
 				if (resource instanceof Nested) {
 					resource = ((Nested)resource).withParentId(id);
 				}
+
+				if (resource instanceof GenericParent) {
+					resource = ((GenericParent)resource).withParentId(id);
+				}
 			}
 		}
 
@@ -240,6 +244,11 @@ public final class ActionRouterUtil {
 				}
 				else if (parameter.getAnnotation(ParentId.class) != null) {
 					return ParentId.class;
+				}
+				else if (parameter.getAnnotation(GenericParentId.class) !=
+							null) {
+
+					return GenericParentId.class;
 				}
 				else if (parameter.getAnnotation(_BODY_ANNOTATION) != null) {
 					return Body.class;

@@ -34,6 +34,7 @@ import static java.util.function.Function.identity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA_TYPE;
 
+import com.liferay.apio.architect.annotation.GenericParentId;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.ParentId;
 import com.liferay.apio.architect.credentials.Credentials;
@@ -55,6 +56,7 @@ import com.liferay.apio.architect.internal.wiring.osgi.manager.router.NestedColl
 import com.liferay.apio.architect.internal.wiring.osgi.manager.router.ReusableNestedCollectionRouterManager;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.resource.Resource.Paged;
@@ -135,53 +137,77 @@ public class ActionManagerImpl implements ActionManager {
 				return pagedActionEither;
 			}
 
-			Item item = Item.of(
-				params.get(0), _getId(params.get(0), params.get(1)));
+			Item item = _getItem(params.get(0), params.get(1));
 
-			if ("DELETE".equals(method)) {
-				return _getAction(item, isRemoveAction);
-			}
-			else if ("PUT".equals(method)) {
-				return _getAction(item, isReplaceAction);
-			}
-			else if ("GET".equals(method)) {
-				return _getAction(item, isRetrieveAction);
+			if (item != null) {
+				if ("DELETE".equals(method)) {
+					return _getAction(item, isRemoveAction);
+				}
+				else if ("PUT".equals(method)) {
+					return _getAction(item, isReplaceAction);
+				}
+				else if ("GET".equals(method)) {
+					return _getAction(item, isRetrieveAction);
+				}
 			}
 		}
 		else if (numberOfParams == 3) {
-			Item item = Item.of(
-				params.get(0), _getId(params.get(0), params.get(1)));
+			GenericParent genericParent = _getGenericParent(
+				params.get(0), params.get(1), params.get(2));
 
-			Either<Error, Action> binaryFileActionEither = _getBinaryFileAction(
-				item, params.get(2));
-
-			if (binaryFileActionEither.isRight()) {
-				return binaryFileActionEither;
+			if (genericParent != null) {
+				if ("GET".equals(method)) {
+					return _getAction(genericParent, isRetrieveAction);
+				}
+				else if ("POST".equals(method)) {
+					return _getAction(genericParent, isCreateAction);
+				}
 			}
+			else {
+				Item item = _getItem(params.get(0), params.get(1));
 
-			Either<Error, Action> itemEither = _getAction(
-				item, isAction(params.get(2), method));
+				if (item != null) {
+					Either<Error, Action> binaryFileActionEither =
+						_getBinaryFileAction(item, params.get(2));
 
-			if (itemEither.isRight()) {
-				return itemEither;
-			}
+					if (binaryFileActionEither.isRight()) {
+						return binaryFileActionEither;
+					}
 
-			Nested nested = Nested.of(item, params.get(2));
+					Either<Error, Action> itemEither = _getAction(
+						item, isAction(params.get(2), method));
 
-			if ("GET".equals(method)) {
-				return _getAction(nested, isRetrieveAction);
-			}
-			else if ("POST".equals(method)) {
-				return _getAction(nested, isCreateAction);
+					if (itemEither.isRight()) {
+						return itemEither;
+					}
+
+					Nested nested = Nested.of(item, params.get(2));
+
+					if ("GET".equals(method)) {
+						return _getAction(nested, isRetrieveAction);
+					}
+					else if ("POST".equals(method)) {
+						return _getAction(nested, isCreateAction);
+					}
+				}
 			}
 		}
 		else if (numberOfParams == 4) {
-			Item item = Item.of(
-				params.get(0), _getId(params.get(0), params.get(1)));
+			GenericParent genericParent = _getGenericParent(
+				params.get(0), params.get(1), params.get(2));
 
-			Nested nested = Nested.of(item, params.get(2));
+			if (genericParent != null) {
+				return _getAction(
+					genericParent, isAction(params.get(3), method));
+			}
 
-			return _getAction(nested, isAction(params.get(3), method));
+			Item item = _getItem(params.get(0), params.get(1));
+
+			if (item != null) {
+				Nested nested = Nested.of(item, params.get(2));
+
+				return _getAction(nested, isAction(params.get(3), method));
+			}
 		}
 
 		return left(_notFound);
@@ -321,7 +347,18 @@ public class ActionManagerImpl implements ActionManager {
 		throw new NotSupportedException();
 	}
 
-	@SuppressWarnings("Convert2MethodRef")
+	private GenericParent _getGenericParent(
+		String name, String genericParentName, String genericParentStringId) {
+
+		return Optional.ofNullable(
+			_getId(name, genericParentStringId)
+		).map(
+			id -> GenericParent.of(genericParentName, id, name)
+		).orElse(
+			null
+		);
+	}
+
 	private Resource.Id _getId(String name, String id) {
 		return Try.success(
 			new Path(name, id)
@@ -329,8 +366,16 @@ public class ActionManagerImpl implements ActionManager {
 			pathIdentifierMapperManager::mapToIdentifierOrFail
 		).map(
 			object -> Resource.Id.of(object, id)
-		).getOrElseThrow(
-			t -> new NotFoundException(t)
+		).getOrNull();
+	}
+
+	private Item _getItem(String name, String stringId) {
+		return Optional.ofNullable(
+			_getId(name, stringId)
+		).map(
+			id -> Item.of(name, id)
+		).orElse(
+			null
 		);
 	}
 
@@ -371,6 +416,20 @@ public class ActionManagerImpl implements ActionManager {
 				Nested::getParentItem
 			).flatMap(
 				Item::getIdOptional
+			).orElseThrow(
+				NotFoundException::new
+			);
+		}
+
+		if (GenericParentId.class.equals(clazz)) {
+			return Optional.of(
+				actionSemantics.getResource()
+			).filter(
+				instanceOf(GenericParent.class)
+			).map(
+				GenericParent.class::cast
+			).flatMap(
+				GenericParent::getParentIdOptional
 			).orElseThrow(
 				NotFoundException::new
 			);
