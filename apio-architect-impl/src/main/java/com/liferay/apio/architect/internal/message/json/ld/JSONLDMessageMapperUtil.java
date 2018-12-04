@@ -20,6 +20,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 import com.liferay.apio.architect.resource.Resource;
+import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.resource.Resource.Nested;
 
@@ -51,6 +52,12 @@ public class JSONLDMessageMapperUtil {
 			Item parent = ((Nested)resource).getParentItem();
 
 			resourceName = join("/", parent.getName(), resource.getName());
+		}
+		else if (resource instanceof GenericParent) {
+			GenericParent genericParent = (GenericParent)resource;
+
+			resourceName = join(
+				"/", genericParent.getName(), genericParent.getParentName());
 		}
 		else {
 			resourceName = resource.getName();
