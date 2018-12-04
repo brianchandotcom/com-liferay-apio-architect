@@ -132,7 +132,7 @@ public class SingleModelWriter<T> {
 					_jsonObjectBuilder, embeddedPathElements, resourceURL));
 
 		fieldsWriter.writeRelatedCollections(
-			_resourceNameFunction,
+			_pathFunction, _resourceNameFunction,
 			(url, embeddedPathElements) ->
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					_jsonObjectBuilder, embeddedPathElements, url));
@@ -232,7 +232,7 @@ public class SingleModelWriter<T> {
 					resourceURL));
 
 		fieldsWriter.writeRelatedCollections(
-			_resourceNameFunction,
+			_pathFunction, _resourceNameFunction,
 			(url, resourceEmbeddedPathElements) ->
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					jsonObjectBuilder, resourceEmbeddedPathElements, url));
@@ -614,7 +614,7 @@ public class SingleModelWriter<T> {
 							resourceURL)));
 
 		fieldsWriter.writeRelatedCollections(
-			_resourceNameFunction,
+			_pathFunction, _resourceNameFunction,
 			(url, embeddedPathElements1) ->
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					itemJsonObjectBuilder, embeddedPathElements1, url));
@@ -673,7 +673,7 @@ public class SingleModelWriter<T> {
 					resourceURL));
 
 		fieldsWriter.writeRelatedCollections(
-			_resourceNameFunction,
+			_pathFunction, _resourceNameFunction,
 			(url, embeddedPathElements1) ->
 				_singleModelMessageMapper.mapLinkedResourceURL(
 					itemJsonObjectBuilder, embeddedPathElements1, url));

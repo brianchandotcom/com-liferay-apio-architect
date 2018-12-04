@@ -334,7 +334,6 @@ public class FieldsWriterTest {
 			contains(aFunctionalListThat(contains("first", "embedded2"))));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testWriteEmbeddedRelatedModelsWithFieldsFilter() {
 		Mockito.when(
@@ -464,7 +463,6 @@ public class FieldsWriterTest {
 				aFunctionalListThat(contains("first", "linked2"))));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testWriteLinkedRelatedModelsWithFieldsFilter() {
 		Mockito.when(
@@ -617,7 +615,7 @@ public class FieldsWriterTest {
 		);
 
 		_fieldsWriter.writeRelatedCollections(
-			nameFunction,
+			null, nameFunction,
 			(url, embeddedPathElements) -> {
 				relatedCollectionURLs.add(url);
 				embeddedPathElementsList.add(embeddedPathElements);
@@ -660,7 +658,7 @@ public class FieldsWriterTest {
 		);
 
 		_fieldsWriter.writeRelatedCollections(
-			nameFunction,
+			null, nameFunction,
 			(url, embeddedPathElements) -> {
 				relatedCollectionURLs.add(url);
 				embeddedPathElementsList.add(embeddedPathElements);
@@ -716,7 +714,6 @@ public class FieldsWriterTest {
 		assertThat(strings, hasEntry("relativeURL2", "localhost/second"));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testWriteSingleURL() {
 		_fieldsWriter.writeSingleURL(

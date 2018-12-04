@@ -429,7 +429,7 @@ public class PageWriter<T> {
 							embeddedPathElements1, resourceURL));
 
 				relatedModelFieldsWriter.writeRelatedCollections(
-					_resourceNameFunction,
+					_pathFunction, _resourceNameFunction,
 					(url, embeddedPathElements1) ->
 						_pageMessageMapper.mapItemLinkedResourceURL(
 							_jsonObjectBuilder, itemJsonObjectBuilder,
@@ -495,7 +495,7 @@ public class PageWriter<T> {
 					embeddedPathElements, resourceURL));
 
 		fieldsWriter.writeRelatedCollections(
-			_resourceNameFunction,
+			_pathFunction, _resourceNameFunction,
 			(url, embeddedPathElements) ->
 				_pageMessageMapper.mapItemLinkedResourceURL(
 					_jsonObjectBuilder, itemJsonObjectBuilder,
@@ -642,7 +642,7 @@ public class PageWriter<T> {
 					resourceEmbeddedPathElements, resourceURL));
 
 		fieldsWriter.writeRelatedCollections(
-			_resourceNameFunction,
+			_pathFunction, _resourceNameFunction,
 			(url, resourceEmbeddedPathElements) ->
 				_pageMessageMapper.mapItemLinkedResourceURL(
 					_jsonObjectBuilder, itemJsonObjectBuilder,

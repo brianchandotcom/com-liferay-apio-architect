@@ -17,6 +17,7 @@ package com.liferay.apio.architect.internal.writer;
 import static com.liferay.apio.architect.internal.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.internal.url.URLCreator.createAbsoluteURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createBinaryURL;
+import static com.liferay.apio.architect.internal.url.URLCreator.createGenericParentResourceURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createItemResourceURL;
 import static com.liferay.apio.architect.internal.url.URLCreator.createNestedResourceURL;
 
@@ -38,11 +39,15 @@ import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.representor.BaseRepresentor;
 import com.liferay.apio.architect.representor.Representor;
+import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.resource.Resource.Id;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
+
+import io.vavr.Tuple;
+import io.vavr.control.Try;
 
 import java.util.List;
 import java.util.Optional;
@@ -426,14 +431,15 @@ public class FieldsWriter<T> {
 	/**
 	 * Writes the related collection's URL, using a {@code BiConsumer}.
 	 *
+	 * @param pathFunction the function that returns the path of a resource
 	 * @param relatedCollection the related collection
 	 * @param parentEmbeddedPathElements the list of embedded path elements
 	 * @param biConsumer the {@code BiConsumer} that writes the related
 	 *        collection URL
 	 */
 	public <U extends Identifier> void writeRelatedCollection(
-		RelatedCollection<T, U> relatedCollection, String resourceName,
-		FunctionalList<String> parentEmbeddedPathElements,
+		PathFunction pathFunction, RelatedCollection<T, U> relatedCollection,
+		String resourceName, FunctionalList<String> parentEmbeddedPathElements,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
 		Predicate<String> fieldsPredicate = getFieldsPredicate();
@@ -444,10 +450,46 @@ public class FieldsWriter<T> {
 			return;
 		}
 
-		withItem(
-			item -> _writeNestedResourceURL(
-				Nested.of(item, resourceName), parentEmbeddedPathElements,
-				biConsumer, key));
+		Function<T, ?> modelToIdentifierFunction =
+			relatedCollection.getModelToIdentifierFunction();
+
+		if (modelToIdentifierFunction == null) {
+			withItem(
+				item -> {
+					Optional<String> optional = createNestedResourceURL(
+						_requestInfo.getApplicationURL(),
+						Nested.of(item, resourceName));
+
+					optional.ifPresent(
+						url -> _writeResourceURL(
+							url, parentEmbeddedPathElements, biConsumer, key));
+				});
+
+			return;
+		}
+
+		Try.of(
+			() -> modelToIdentifierFunction.apply(_singleModel.getModel())
+		).map(
+			model -> Tuple.of(pathFunction.apply(resourceName, model), model)
+		).filter(
+			tuple -> tuple._1.isPresent()
+		).map(
+			tuple -> tuple.map1(Optional::get)
+		).map(
+			tuple -> GenericParent.of(
+				tuple._1.getName(), Id.of(tuple._2, tuple._1.getId()),
+				resourceName)
+		).map(
+			genericParent -> createGenericParentResourceURL(
+				_requestInfo.getApplicationURL(), genericParent)
+		).toJavaOptional(
+		).flatMap(
+			Function.identity()
+		).ifPresent(
+			url -> _writeResourceURL(
+				url, parentEmbeddedPathElements, biConsumer, key)
+		);
 	}
 
 	/**
@@ -456,11 +498,13 @@ public class FieldsWriter<T> {
 	 * javax.ws.rs.ext.MessageBodyWriter} can write the related model
 	 * differently.
 	 *
+	 * @param pathFunction the function that returns the path of a resource
 	 * @param nameFunction the function that gets a class's {@code
 	 *        com.liferay.apio.architect.resource.CollectionResource} name
 	 * @param biConsumer the consumer that writes a linked related model's URL
 	 */
 	public void writeRelatedCollections(
+		PathFunction pathFunction,
 		Function<String, Optional<String>> nameFunction,
 		BiConsumer<String, FunctionalList<String>> biConsumer) {
 
@@ -477,8 +521,8 @@ public class FieldsWriter<T> {
 
 				optional.ifPresent(
 					name -> writeRelatedCollection(
-						relatedCollection, name, _embeddedPathElements,
-						biConsumer));
+						pathFunction, relatedCollection, name,
+						_embeddedPathElements, biConsumer));
 			});
 	}
 
@@ -695,22 +739,15 @@ public class FieldsWriter<T> {
 		}
 	}
 
-	private void _writeNestedResourceURL(
-		Nested nested, FunctionalList<String> parentEmbeddedPathElements,
+	private void _writeResourceURL(
+		String url, FunctionalList<String> parentEmbeddedPathElements,
 		BiConsumer<String, FunctionalList<String>> biConsumer, String key) {
-
-		Optional<String> optional = createNestedResourceURL(
-			_requestInfo.getApplicationURL(), nested);
-
-		if (!optional.isPresent()) {
-			return;
-		}
 
 		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
 			parentEmbeddedPathElements, key);
 
 		_tryToWriteField(
-			key, __ -> biConsumer.accept(optional.get(), embeddedPathElements));
+			key, __ -> biConsumer.accept(url, embeddedPathElements));
 	}
 
 	private final BaseRepresentor<T> _baseRepresentor;

@@ -94,18 +94,6 @@ public class ItemRouterManager extends ClassNameBaseManager<ItemRouter> {
 
 				String name = nameOptional.get();
 
-				boolean hasPathIdentifierMapper =
-					_pathIdentifierMapperManager.hasPathIdentifierMapper(name);
-
-				if (!hasPathIdentifierMapper) {
-					_logger.warn(
-						"Missing path identifier mapper for resource with " +
-							"name {}",
-						name);
-
-					return;
-				}
-
 				Builder<Object, Object> builder = new BuilderImpl<>(
 					Item.of(name),
 					() -> new FormImpl.BuilderImpl<>(
