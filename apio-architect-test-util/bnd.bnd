@@ -12,8 +12,16 @@ Import-Package:\
 	\
 	*
 -conditionalpackage:\
+	com.liferay.apio.architect.internal.action,\
+	com.liferay.apio.architect.internal.action.converter,\
 	com.liferay.apio.architect.internal.alias,\
 	com.liferay.apio.architect.internal.alias.form,\
+	com.liferay.apio.architect.internal.annotation,\
+	com.liferay.apio.architect.internal.annotation.form,\
+	com.liferay.apio.architect.internal.annotation.representor,\
+	com.liferay.apio.architect.internal.annotation.representor.processor,\
+	com.liferay.apio.architect.internal.annotation.util,\
+	com.liferay.apio.architect.internal.body,\
 	com.liferay.apio.architect.internal.date,\
 	com.liferay.apio.architect.internal.documentation,\
 	com.liferay.apio.architect.internal.documentation.contributor,\
@@ -48,5 +56,9 @@ Import-Package:\
 	com.liferay.apio.architect.internal.wiring.osgi.validator,\
 	com.liferay.apio.architect.internal.writer,\
 	com.liferay.apio.architect.internal.writer.util,\
+	com.liferay.osgi.service.tracker.collections,\
 	com.liferay.osgi.service.tracker.collections.internal,\
-	com.liferay.osgi.service.tracker.collections.internal.map
+	com.liferay.osgi.service.tracker.collections.internal.list,\
+	com.liferay.osgi.service.tracker.collections.internal.map,\
+	com.liferay.osgi.service.tracker.collections.list,\
+	com.liferay.osgi.service.tracker.collections.map
