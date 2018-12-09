@@ -43,8 +43,8 @@ public class ResourceTest {
 		GenericParent genericParent = GenericParent.of("parent", "name");
 
 		assertThat(genericParent.getName(), is("name"));
-		assertThat(genericParent.getParentName(), is("parent"));
 		assertThat(genericParent.getParentIdOptional(), is(emptyOptional()));
+		assertThat(genericParent.getParentName(), is("parent"));
 		assertEquals(genericParent, GenericParent.of("parent", "name"));
 	}
 
