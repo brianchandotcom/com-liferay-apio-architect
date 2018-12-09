@@ -166,8 +166,6 @@ public class NestedCollectionRouterManager
 					return;
 				}
 
-				String parentName = nameOptional.get();
-
 				String nestedName = nestedNameOptional.get();
 
 				Optional<Representor<Object>> representorOptional =
@@ -180,6 +178,8 @@ public class NestedCollectionRouterManager
 
 					return;
 				}
+
+				String parentName = nameOptional.get();
 
 				Representor<Object> representor = representorOptional.get();
 
