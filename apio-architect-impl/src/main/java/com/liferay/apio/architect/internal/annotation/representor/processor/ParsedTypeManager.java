@@ -57,13 +57,12 @@ public class ParsedTypeManager {
 	}
 
 	/**
-	 * Returns the parsed type extracted from a given className.
+	 * Returns the parsed type extracted from a given {@code className}, if
+	 * present; otherwise returns {@code Optional#empty()}.
 	 *
-	 * @param  key the className of the annotated type
-	 * @return the parsed type extracted from the type
 	 * @review
 	 */
-	public Optional<ParsedType> getParsedType(String key) {
+	public Optional<ParsedType> getParsedTypeOptional(String key) {
 		Map<String, ParsedType> parsedTypes = getParsedTypes();
 
 		return Optional.ofNullable(parsedTypes.get(key));

@@ -46,7 +46,7 @@ public class FormManager {
 	 */
 	public <T> Form<T> getForm(String className) {
 		Optional<ParsedType> parsedTypeOptional =
-			_parsedTypeManager.getParsedType(className);
+			_parsedTypeManager.getParsedTypeOptional(className);
 
 		return parsedTypeOptional.<Form<T>>map(
 			parsedType -> toForm(
