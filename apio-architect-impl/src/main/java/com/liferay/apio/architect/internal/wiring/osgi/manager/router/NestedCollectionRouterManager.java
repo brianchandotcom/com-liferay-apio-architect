@@ -139,7 +139,6 @@ public class NestedCollectionRouterManager
 				}
 
 				String parentClassName = classNames[0];
-				String nestedClassName = classNames[1];
 
 				Optional<String> nameOptional = _nameManager.getNameOptional(
 					parentClassName);
@@ -153,7 +152,7 @@ public class NestedCollectionRouterManager
 					return;
 				}
 
-				String parentName = nameOptional.get();
+				String nestedClassName = classNames[1];
 
 				Optional<String> nestedNameOptional =
 					_nameManager.getNameOptional(nestedClassName);
@@ -166,6 +165,8 @@ public class NestedCollectionRouterManager
 
 					return;
 				}
+
+				String parentName = nameOptional.get();
 
 				String nestedName = nestedNameOptional.get();
 

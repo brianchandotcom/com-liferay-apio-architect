@@ -105,7 +105,7 @@ public class FormTransformerTest {
 	}
 
 	@Test
-	public void testNonKeyInBodyShouldReturnNull() {
+	public void testNotKeyInBodyShouldReturnNull() {
 		assertThat(_dummy.getStringField2(), is(nullValue()));
 	}
 

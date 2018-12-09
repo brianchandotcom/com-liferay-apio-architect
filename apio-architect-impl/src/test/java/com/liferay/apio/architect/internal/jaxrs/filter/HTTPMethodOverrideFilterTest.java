@@ -55,7 +55,7 @@ public class HTTPMethodOverrideFilterTest {
 	}
 
 	@Test
-	public void testFilterTransformsAnyNonDefaultHTTPMethod() {
+	public void testFilterTransformsAnyNotDefaultHTTPMethod() {
 		List.of(
 			"LINK", "MERGE", "REMOVE", "SUBSCRIBE", "UNLINK"
 		).forEach(

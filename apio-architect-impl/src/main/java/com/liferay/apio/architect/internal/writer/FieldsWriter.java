@@ -604,9 +604,6 @@ public class FieldsWriter<T> {
 			return;
 		}
 
-		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
-			_embeddedPathElements, key);
-
 		Function<T, U> modelToIdentifierFunction =
 			relatedModel.getModelToIdentifierFunction();
 
@@ -616,6 +613,9 @@ public class FieldsWriter<T> {
 		if (relatedIdentifier == null) {
 			return;
 		}
+
+		FunctionalList<String> embeddedPathElements = new FunctionalList<>(
+			_embeddedPathElements, key);
 
 		pathFunction.apply(
 			relatedModel.getIdentifierName(), relatedIdentifier
@@ -719,7 +719,7 @@ public class FieldsWriter<T> {
 	}
 
 	/**
-	 * Writes the model's types. This method uses a consumer so each {@link
+	 * Writes the model's types. This method uses a consumer so each {@code
 	 * javax.ws.rs.ext.MessageBodyWriter} can write the types differently.
 	 *
 	 * @param consumer the consumer that writes the types

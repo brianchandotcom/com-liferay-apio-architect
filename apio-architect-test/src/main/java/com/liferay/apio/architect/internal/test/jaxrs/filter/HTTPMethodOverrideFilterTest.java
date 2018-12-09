@@ -61,7 +61,7 @@ public class HTTPMethodOverrideFilterTest extends BaseTest {
 	}
 
 	@Test
-	public void testNonDefaultHTTPMethodIsChanged() {
+	public void testNotDefaultHTTPMethodIsChanged() {
 		WebTarget webTarget = createDefaultTarget();
 
 		Response response = webTarget.path(
