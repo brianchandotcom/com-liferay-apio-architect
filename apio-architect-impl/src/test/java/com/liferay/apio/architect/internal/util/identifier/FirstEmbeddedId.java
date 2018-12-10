@@ -12,28 +12,14 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.message.json.home;
+package com.liferay.apio.architect.internal.util.identifier;
 
-import com.liferay.apio.architect.internal.util.json.MessageMapperTesterBuilder;
-
-import java.nio.file.Paths;
-
-import org.junit.Test;
+import com.liferay.apio.architect.identifier.Identifier;
 
 /**
+ * Represents the identifier for the {@code FirstEmbeddedModel}.
+ *
  * @author Alejandro Hernández
  */
-public class JSONHomeMessageMapperTest {
-
-	@Test
-	public void testProblemJSONErrorMessageMapper() {
-		MessageMapperTesterBuilder.path(
-			Paths.get("src", "test", "resources", "home")
-		).mediaType(
-			"application/json-home"
-		).validateEntryPointMessageMapper(
-			new JSONHomeEntryPointMessageMapper()
-		);
-	}
-
+public interface FirstEmbeddedId extends Identifier<String> {
 }

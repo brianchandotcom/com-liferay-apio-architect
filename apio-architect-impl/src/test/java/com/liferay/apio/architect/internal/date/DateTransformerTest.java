@@ -14,12 +14,12 @@
 
 package com.liferay.apio.architect.internal.date;
 
-import static com.liferay.apio.architect.test.util.result.TryMatchers.aFailTry;
-
 import static org.exparity.hamcrest.date.DateMatchers.sameInstant;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.apio.architect.functional.Try;
 
@@ -39,7 +39,7 @@ public class DateTransformerTest {
 	public void testAsDateWithInvalidDateReturnsFailure() {
 		Try<Date> dateTry = DateTransformer.asDate("2016-06-15");
 
-		assertThat(dateTry, is(aFailTry()));
+		assertTrue(dateTry.isFailure());
 	}
 
 	@Test

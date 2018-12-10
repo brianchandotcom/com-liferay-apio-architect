@@ -28,7 +28,7 @@ import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.POST_CUS
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.filterActionSemantics;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.getParams;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.prependWith;
-import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
+import static com.liferay.apio.architect.internal.util.matcher.FailsWith.failsWith;
 
 import static io.vavr.Predicates.isNull;
 

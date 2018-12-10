@@ -15,11 +15,11 @@
 package com.liferay.apio.architect.internal.message.json.hal;
 
 import com.liferay.apio.architect.internal.unsafe.Unsafe;
+import com.liferay.apio.architect.internal.util.json.MessageMapperTesterBuilder;
+import com.liferay.apio.architect.internal.util.model.RootModel;
+import com.liferay.apio.architect.internal.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.representor.Representor;
-import com.liferay.apio.architect.test.util.json.MessageMapperTesterBuilder;
-import com.liferay.apio.architect.test.util.model.RootModel;
-import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 
 import java.nio.file.Paths;
 

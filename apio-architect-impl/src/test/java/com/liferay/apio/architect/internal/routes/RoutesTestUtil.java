@@ -38,9 +38,9 @@ import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
 import com.liferay.apio.architect.internal.form.FormImpl;
+import com.liferay.apio.architect.internal.pagination.PaginationImpl;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.resource.Resource;
-import com.liferay.apio.architect.test.util.pagination.PaginationRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,7 +159,7 @@ public class RoutesTestUtil {
 	/**
 	 * A mock {@code Pagination} object.
 	 */
-	public static final Pagination PAGINATION = PaginationRequest.of(10, 1);
+	public static final Pagination PAGINATION = new PaginationImpl(10, 1);
 
 	/**
 	 * A mock {@link CustomRoute} with name {@code write} and method {@code

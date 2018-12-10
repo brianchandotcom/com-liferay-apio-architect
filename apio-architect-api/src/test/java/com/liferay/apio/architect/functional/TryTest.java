@@ -14,9 +14,9 @@
 
 package com.liferay.apio.architect.functional;
 
-import static com.liferay.apio.architect.test.util.result.TryMatchers.aFailTry;
-import static com.liferay.apio.architect.test.util.result.TryMatchers.aSuccessTry;
-import static com.liferay.apio.architect.test.util.result.TryMatchers.aTryWithValueThat;
+import static com.liferay.apio.architect.matchers.TryMatchers.aFailTry;
+import static com.liferay.apio.architect.matchers.TryMatchers.aSuccessTry;
+import static com.liferay.apio.architect.matchers.TryMatchers.aTryWithValueThat;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;

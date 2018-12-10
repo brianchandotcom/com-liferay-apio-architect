@@ -25,7 +25,7 @@ import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.filterAc
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.getParams;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.hasNestedAddingPermissionFunction;
 import static com.liferay.apio.architect.internal.routes.RoutesTestUtil.prependWith;
-import static com.liferay.apio.architect.test.util.matcher.FailsWith.failsWith;
+import static com.liferay.apio.architect.internal.util.matcher.FailsWith.failsWith;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;

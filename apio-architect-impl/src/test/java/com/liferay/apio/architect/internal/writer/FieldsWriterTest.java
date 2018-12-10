@@ -14,8 +14,8 @@
 
 package com.liferay.apio.architect.internal.writer;
 
-import static com.liferay.apio.architect.test.util.list.FunctionalListMatchers.aFunctionalListThat;
-import static com.liferay.apio.architect.test.util.representor.MockRepresentorCreator.createRootModelRepresentor;
+import static com.liferay.apio.architect.internal.util.matcher.IsAFunctionalList.aFunctionalListThat;
+import static com.liferay.apio.architect.internal.util.representor.MockRepresentorCreator.createRootModelRepresentor;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.optionalWithValue;
 
@@ -37,14 +37,14 @@ import com.liferay.apio.architect.internal.list.FunctionalList;
 import com.liferay.apio.architect.internal.related.RelatedModelImpl;
 import com.liferay.apio.architect.internal.request.RequestInfo;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
+import com.liferay.apio.architect.internal.util.identifier.FirstEmbeddedId;
+import com.liferay.apio.architect.internal.util.model.FirstEmbeddedModel;
+import com.liferay.apio.architect.internal.util.model.RootModel;
+import com.liferay.apio.architect.internal.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.related.RelatedModel;
 import com.liferay.apio.architect.resource.Resource.Id;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.single.model.SingleModel;
-import com.liferay.apio.architect.test.util.identifier.FirstEmbeddedId;
-import com.liferay.apio.architect.test.util.model.FirstEmbeddedModel;
-import com.liferay.apio.architect.test.util.model.RootModel;
-import com.liferay.apio.architect.test.util.writer.MockWriterUtil;
 import com.liferay.apio.architect.uri.Path;
 
 import java.util.ArrayList;

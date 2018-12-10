@@ -12,28 +12,23 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.message.json.home;
-
-import com.liferay.apio.architect.internal.util.json.MessageMapperTesterBuilder;
-
-import java.nio.file.Paths;
-
-import org.junit.Test;
+package com.liferay.apio.architect.internal.util.model;
 
 /**
+ * Represents a first-layer embeddable mock model that can be mapped to a {@link
+ * com.liferay.apio.architect.representor.Representor} using {@link
+ * MockRepresentorCreator} methods.
+ *
  * @author Alejandro Hernández
  */
-public class JSONHomeMessageMapperTest {
+@FunctionalInterface
+public interface FirstEmbeddedModel {
 
-	@Test
-	public void testProblemJSONErrorMessageMapper() {
-		MessageMapperTesterBuilder.path(
-			Paths.get("src", "test", "resources", "home")
-		).mediaType(
-			"application/json-home"
-		).validateEntryPointMessageMapper(
-			new JSONHomeEntryPointMessageMapper()
-		);
-	}
+	/**
+	 * Returns the ID.
+	 *
+	 * @return the ID
+	 */
+	public String getId();
 
 }

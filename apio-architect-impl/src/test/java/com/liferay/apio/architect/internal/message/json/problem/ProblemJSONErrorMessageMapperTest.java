@@ -14,7 +14,7 @@
 
 package com.liferay.apio.architect.internal.message.json.problem;
 
-import com.liferay.apio.architect.test.util.json.MessageMapperTesterBuilder;
+import com.liferay.apio.architect.internal.util.json.MessageMapperTesterBuilder;
 
 import java.nio.file.Paths;
 
