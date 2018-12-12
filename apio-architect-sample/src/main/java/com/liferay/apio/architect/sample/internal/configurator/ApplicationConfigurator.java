@@ -40,8 +40,7 @@ public class ApplicationConfigurator {
 	@Activate
 	public void activate() throws IOException {
 		_configuration = _configurationAdmin.getConfiguration(
-			"com.liferay.apio.architect.internal.jaxrs.application." +
-				"ApioApplication",
+			"com.liferay.apio.architect.internal.application.ApioApplication",
 			"?");
 
 		Dictionary<String, Object> properties = new Hashtable<>();

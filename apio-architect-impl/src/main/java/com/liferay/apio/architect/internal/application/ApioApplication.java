@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.apio.architect.internal.jaxrs.application;
+package com.liferay.apio.architect.internal.application;
 
 import static java.util.Collections.singleton;
 
@@ -33,12 +33,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jorge Ferrer
  */
 @Component(
-	configurationPid = {
-		"com.liferay.apio.architect.impl.application.ApioApplication",
-		"com.liferay.apio.architect.impl.internal.application.ApioApplication",
-		"com.liferay.apio.architect.internal.application.ApioApplication",
-		Component.NAME
-	},
 	property = {
 		"liferay.apio.architect.application=true",
 		"osgi.jaxrs.application.base=/api", "osgi.jaxrs.name=apio-application"
