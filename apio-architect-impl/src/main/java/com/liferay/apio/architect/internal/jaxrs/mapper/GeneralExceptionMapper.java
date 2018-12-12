@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	property = {
 		"osgi.jaxrs.application.select=(liferay.apio.architect.application=true)",
-		"osgi.jaxrs.extension=true"
+		"osgi.jaxrs.extension=true", "osgi.jaxrs.name=ExceptionMapper.General"
 	},
 	service = ExceptionMapper.class
 )
