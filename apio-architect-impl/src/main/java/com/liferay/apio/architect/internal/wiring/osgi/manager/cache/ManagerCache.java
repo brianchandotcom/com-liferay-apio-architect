@@ -95,7 +95,7 @@ public class ManagerCache {
 		_batchResultMessageMappers = null;
 		_representors = null;
 		_reusableNestedCollectionRoutes = null;
-		_rootResourceNamesSdk = null;
+		_rootResourceNameSdks = null;
 		_singleModelMessageMappers = null;
 	}
 
@@ -649,11 +649,11 @@ public class ManagerCache {
 	 * @review
 	 */
 	public void putRootResourceNameSdk(String rootResourceNameSdk) {
-		if (_rootResourceNamesSdk == null) {
-			_rootResourceNamesSdk = new ArrayList<>();
+		if (_rootResourceNameSdks == null) {
+			_rootResourceNameSdks = new ArrayList<>();
 		}
 
-		_rootResourceNamesSdk.add(rootResourceNameSdk);
+		_rootResourceNameSdks.add(rootResourceNameSdk);
 	}
 
 	/**
@@ -741,7 +741,7 @@ public class ManagerCache {
 	private Map<String, Representor> _representors;
 	private Map<String, Class<?>> _reusableIdentifierClasses;
 	private Map<String, NestedCollectionRoutes> _reusableNestedCollectionRoutes;
-	private List<String> _rootResourceNamesSdk;
+	private List<String> _rootResourceNameSdks;
 	private Map<MediaType, SingleModelMessageMapper> _singleModelMessageMappers;
 
 }
