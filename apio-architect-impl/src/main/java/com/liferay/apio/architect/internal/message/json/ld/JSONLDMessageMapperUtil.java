@@ -72,10 +72,10 @@ public class JSONLDMessageMapperUtil {
 	 * @review
 	 */
 	public static List<String> getActionTypes(String actionName) {
-		if ("create".equals(actionName)) {
+		if ("batch-create".equals(actionName)) {
 			return asList("CreateAction", "Operation");
 		}
-		else if ("batch-create".equals(actionName)) {
+		else if ("create".equals(actionName)) {
 			return asList("CreateAction", "Operation");
 		}
 		else if ("remove".equals(actionName)) {
