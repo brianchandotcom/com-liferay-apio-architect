@@ -34,10 +34,10 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	configurationPid = {
-		Component.NAME,
-		"com.liferay.apio.architect.impl.internal.application.ApioApplication",
 		"com.liferay.apio.architect.impl.application.ApioApplication",
-		"com.liferay.apio.architect.internal.application.ApioApplication"
+		"com.liferay.apio.architect.impl.internal.application.ApioApplication",
+		"com.liferay.apio.architect.internal.application.ApioApplication",
+		Component.NAME
 	},
 	property = {
 		"liferay.apio.architect.application=true",
