@@ -66,12 +66,12 @@ public class ResourceTest {
 	public void testGenericParentWithParentIdCreatesValidGenericParentWithId() {
 		GenericParent genericParent = GenericParent.of("parent", "name");
 
-		GenericParent genericParentWithId = genericParent.withParentId(
+		GenericParent withIdGenericParent = genericParent.withParentId(
 			Id.of(42L, "42"));
 
-		assertThat(genericParentWithId.getName(), is("name"));
+		assertThat(withIdGenericParent.getName(), is("name"));
 
-		Optional<Id> idOptional = genericParentWithId.getParentIdOptional();
+		Optional<Id> idOptional = withIdGenericParent.getParentIdOptional();
 
 		Id expectedId = Id.of(42L, "42");
 
