@@ -253,10 +253,14 @@ public class NestedCollectionRoutesImpl<T, S, U>
 
 		private Resource _resourceWithParentId(Id id) {
 			if (_resource instanceof Nested) {
-				return ((Nested)_resource).withParentId(id);
+				Nested nested = (Nested)_resource;
+
+				return nested.withParentId(id);
 			}
 
-			return ((GenericParent)_resource).withParentId(id);
+			GenericParent genericParent = (GenericParent)_resource;
+
+			return genericParent.withParentId(id);
 		}
 
 		private <V> List<S> _transformList(
