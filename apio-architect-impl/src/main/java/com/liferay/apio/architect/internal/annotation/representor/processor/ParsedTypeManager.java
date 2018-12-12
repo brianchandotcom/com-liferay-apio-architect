@@ -31,6 +31,7 @@ import io.leangen.geantyref.GenericTypeReflector;
 
 import java.lang.reflect.AnnotatedType;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -75,8 +76,12 @@ public class ParsedTypeManager {
 	 * @review
 	 */
 	public Map<String, ParsedType> getParsedTypes() {
-		return INSTANCE.getParsedTypesMap(
-			() -> _actionRouters.forEach(this::_compute));
+		return Optional.ofNullable(
+			INSTANCE.getParsedTypesMap(
+				() -> _actionRouters.forEach(this::_compute))
+		).orElseGet(
+			Collections::emptyMap
+		);
 	}
 
 	private void _compute(ActionRouter actionRouter) {
