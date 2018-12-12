@@ -118,7 +118,7 @@ public class ActionRouterManager {
 			);
 
 			if (optionName.isEmpty()) {
-				_logger.warn("Unable to get name for ActionRouter {}", clazz);
+				_logger.warn("Unable to get name for action router {}", clazz);
 
 				continue;
 			}
