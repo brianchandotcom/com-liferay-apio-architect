@@ -16,6 +16,7 @@ package com.liferay.apio.architect.resource;
 
 import aQute.bnd.annotation.ProviderType;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -97,9 +98,14 @@ public class Resource {
 				return true;
 			}
 
-			if ((obj instanceof GenericParent) &&
-				getName().equals(((GenericParent)obj).getName()) &&
-				_parentName.equals(((GenericParent)obj)._parentName)) {
+			if (!(obj instanceof GenericParent)) {
+				return false;
+			}
+
+			GenericParent genericParent = (GenericParent)obj;
+
+			if (Objects.equals(getName(), genericParent.getName()) &&
+				Objects.equals(_parentName, genericParent._parentName)) {
 
 				return true;
 			}
@@ -129,7 +135,10 @@ public class Resource {
 		public int hashCode() {
 			int h = 5381;
 
-			h += (h << 5) + getName().hashCode();
+			String name = getName();
+
+			h += (h << 5) + name.hashCode();
+
 			h += (h << 5) + _parentName.hashCode();
 
 			return h;
@@ -137,8 +146,8 @@ public class Resource {
 
 		@Override
 		public String toString() {
-			return "GenericParent{name=" + getName() + ", parentName=" +
-				_parentName + ", parentId=" + _parentId + "}";
+			return "{name=" + getName() + ", parentId=" + _parentId +
+				", parentName=" + _parentName + "}";
 		}
 
 		/**
@@ -216,9 +225,14 @@ public class Resource {
 				return true;
 			}
 
-			if (obj instanceof Id &&
-				_objectVersion.equals(((Id)obj)._objectVersion) &&
-				_stringVersion.equals(((Id)obj)._stringVersion)) {
+			if (!(obj instanceof Id)) {
+				return false;
+			}
+
+			Id id = (Id)obj;
+
+			if (Objects.equals(_objectVersion, id._objectVersion) &&
+				Objects.equals(_stringVersion, id._stringVersion)) {
 
 				return true;
 			}
@@ -238,7 +252,7 @@ public class Resource {
 
 		@Override
 		public String toString() {
-			return "Id{" + _stringVersion + "}";
+			return "{" + _stringVersion + "}";
 		}
 
 		private Id(Object objectVersion, String stringVersion) {
@@ -287,9 +301,13 @@ public class Resource {
 				return true;
 			}
 
-			if (obj instanceof Item &&
-				getName().equals(((Item)obj).getName())) {
+			if (!(obj instanceof Item)) {
+				return false;
+			}
 
+			Item item = (Item)obj;
+
+			if (Objects.equals(getName(), item.getName())) {
 				return true;
 			}
 
@@ -311,7 +329,9 @@ public class Resource {
 		public int hashCode() {
 			int h = 5381;
 
-			h += (h << 5) + getName().hashCode();
+			String name = getName();
+
+			h += (h << 5) + name.hashCode();
 
 			return h;
 		}
@@ -319,10 +339,10 @@ public class Resource {
 		@Override
 		public String toString() {
 			if (_id != null) {
-				return "Item{name=" + getName() + ", id=" + _id + "}";
+				return "{id=" + _id + ", name=" + getName() + "}";
 			}
 
-			return "Item{name=" + getName() + "}";
+			return "{name=" + getName() + "}";
 		}
 
 		/**
@@ -385,9 +405,14 @@ public class Resource {
 				return true;
 			}
 
-			if ((obj instanceof Nested) &&
-				getName().equals(((Nested)obj).getName()) &&
-				_parentItem.equals(((Nested)obj)._parentItem)) {
+			if (!(obj instanceof Nested)) {
+				return false;
+			}
+
+			Nested nested = (Nested)obj;
+
+			if (Objects.equals(getName(), nested.getName()) &&
+				Objects.equals(_parentItem, nested._parentItem)) {
 
 				return true;
 			}
@@ -408,7 +433,10 @@ public class Resource {
 		public int hashCode() {
 			int h = 5381;
 
-			h += (h << 5) + getName().hashCode();
+			String name = getName();
+
+			h += (h << 5) + name.hashCode();
+
 			h += (h << 5) + _parentItem.hashCode();
 
 			return h;
@@ -416,7 +444,7 @@ public class Resource {
 
 		@Override
 		public String toString() {
-			return "Nested{name=" + getName() + ", parent=" + _parentItem + "}";
+			return "{name=" + getName() + ", parentItem=" + _parentItem + "}";
 		}
 
 		/**
@@ -468,9 +496,13 @@ public class Resource {
 				return true;
 			}
 
-			if (obj instanceof Paged &&
-				getName().equals(((Paged)obj).getName())) {
+			if (!(obj instanceof Paged)) {
+				return false;
+			}
 
+			Paged paged = (Paged)obj;
+
+			if (Objects.equals(getName(), paged.getName())) {
 				return true;
 			}
 
@@ -481,14 +513,16 @@ public class Resource {
 		public int hashCode() {
 			int h = 5381;
 
-			h += (h << 5) + getName().hashCode();
+			String name = getName();
+
+			h += (h << 5) + name.hashCode();
 
 			return h;
 		}
 
 		@Override
 		public String toString() {
-			return "Paged{name=" + getName() + "}";
+			return "{name=" + getName() + "}";
 		}
 
 		private Paged(String name) {
