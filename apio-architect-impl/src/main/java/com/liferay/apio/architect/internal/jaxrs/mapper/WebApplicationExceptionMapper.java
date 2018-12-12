@@ -44,8 +44,10 @@ public class WebApplicationExceptionMapper
 	implements ExceptionMapper<WebApplicationException> {
 
 	@Override
-	public Response toResponse(WebApplicationException exception) {
-		return _errorUtil.getErrorResponse(exception, _request);
+	public Response toResponse(
+		WebApplicationException webApplicationException) {
+
+		return _errorUtil.getErrorResponse(webApplicationException, _request);
 	}
 
 	@Reference
