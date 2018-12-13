@@ -73,7 +73,7 @@ public class HTTPMethodOverrideFilterTest extends BaseTest {
 
 		assertThat(response.getStatus(), is(200));
 
-		String expected = "Hello World! Method = GREET";
+		String expected = "Hello World! Method GREET.";
 
 		assertThat(response.readEntity(String.class), is(expected));
 	}
@@ -88,7 +88,7 @@ public class HTTPMethodOverrideFilterTest extends BaseTest {
 
 		@CUSTOM
 		public String hello(@Context HttpServletRequest request) {
-			return "Hello World! Method = " + request.getMethod();
+			return "Hello World! Method " + request.getMethod() + ".";
 		}
 
 	}
