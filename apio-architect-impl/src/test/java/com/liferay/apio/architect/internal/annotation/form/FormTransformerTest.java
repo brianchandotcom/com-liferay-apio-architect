@@ -65,10 +65,10 @@ public class FormTransformerTest {
 				{
 					put("booleanListField1", asList("true", "false"));
 					put("booleanListField2", asList("false", "true"));
-					put("stringListField1", asList("one", "two"));
-					put("stringListField2", asList("three", "four"));
 					put("numberListField1", asList("1", "2"));
 					put("numberListField2", asList("3", "4"));
+					put("stringListField1", asList("one", "two"));
+					put("stringListField2", asList("three", "four"));
 				}
 			};
 
@@ -98,10 +98,10 @@ public class FormTransformerTest {
 	public void testListFields() {
 		assertThat(_dummy.getBooleanListField1(), is(asList(true, false)));
 		assertThat(_dummy.getBooleanListField2(), is(asList(false, true)));
-		assertThat(_dummy.getStringListField1(), is(asList("one", "two")));
-		assertThat(_dummy.getStringListField2(), is(asList("three", "four")));
 		assertThat(_dummy.getNumberListField1(), is(asList(1L, 2L)));
 		assertThat(_dummy.getNumberListField2(), is(asList(3L, 4L)));
+		assertThat(_dummy.getStringListField1(), is(asList("one", "two")));
+		assertThat(_dummy.getStringListField2(), is(asList("three", "four")));
 	}
 
 	@Test
