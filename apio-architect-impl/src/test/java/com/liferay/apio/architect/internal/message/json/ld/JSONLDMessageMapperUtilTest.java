@@ -54,34 +54,34 @@ public class JSONLDMessageMapperUtilTest {
 
 	@Test
 	public void testGetActionId() {
-		Paged paged = Paged.of("paged");
-
 		Item item = Item.of("item");
 
 		Nested nested = Nested.of(item, "nested");
 
-		String pagedId = getActionId(paged, "retrieve");
+		Paged paged = Paged.of("paged");
+
 		String itemId = getActionId(item, "remove");
 		String nestedId = getActionId(nested, "create");
+		String pagedId = getActionId(paged, "retrieve");
 
-		assertThat(pagedId, is("_:paged/retrieve"));
 		assertThat(itemId, is("_:item/remove"));
 		assertThat(nestedId, is("_:item/nested/create"));
+		assertThat(pagedId, is("_:paged/retrieve"));
 	}
 
 	@Test
 	public void testGetActionType() {
-		List<String> retrieveTypes = getActionTypes("retrieve");
 		List<String> createTypes = getActionTypes("create");
+		List<String> customActionTypes = getActionTypes("subscribe");
 		List<String> removeTypes = getActionTypes("remove");
 		List<String> replaceTypes = getActionTypes("replace");
-		List<String> customActionTypes = getActionTypes("subscribe");
+		List<String> retrieveTypes = getActionTypes("retrieve");
 
-		assertThat(retrieveTypes, contains("Operation"));
 		assertThat(createTypes, contains("CreateAction", "Operation"));
+		assertThat(customActionTypes, contains("Operation"));
 		assertThat(removeTypes, contains("DeleteAction", "Operation"));
 		assertThat(replaceTypes, contains("ReplaceAction", "Operation"));
-		assertThat(customActionTypes, contains("Operation"));
+		assertThat(retrieveTypes, contains("Operation"));
 	}
 
 }
