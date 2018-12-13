@@ -17,19 +17,7 @@ allprojects {
 }
 
 configure(subprojects.findAll {!it.childProjects}) {
-	test {
-		ignoreFailures = false
-	}
-
 	buildCSS {
-		enabled = false
-	}
-
-	processResources {
-		enabled = false
-	}
-
-	transpileJS {
 		enabled = false
 	}
 
@@ -41,11 +29,11 @@ configure(subprojects.findAll {!it.childProjects}) {
 		enabled = false
 	}
 
-	replaceSoyTranslation {
+	processResources {
 		enabled = false
 	}
 
-	wrapSoyAlloyTemplate {
+	replaceSoyTranslation {
 		enabled = false
 	}
 
@@ -58,6 +46,18 @@ configure(subprojects.findAll {!it.childProjects}) {
 	}
 
 	stopTestableTomcat {
+		enabled = false
+	}
+
+	test {
+		ignoreFailures = false
+	}
+
+	transpileJS {
+		enabled = false
+	}
+
+	wrapSoyAlloyTemplate {
 		enabled = false
 	}
 }
