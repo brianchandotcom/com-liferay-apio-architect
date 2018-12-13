@@ -75,7 +75,7 @@ public class AvatarResource {
 			).build()
 		).orElseThrow(
 			() -> new NotFoundException(
-				"Unable to find the image of user with id " + id)
+				"Unable to find image for user " + id)
 		);
 	}
 

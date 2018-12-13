@@ -51,7 +51,7 @@ public class AvatarResourceTest extends BaseTest {
 			builder -> builder.put(
 				"@type", "not-found"
 			).put(
-				"description", "Unable to find the image of user with id 9999"
+				"description", "Unable to find image for user 9999"
 			).put(
 				"statusCode", 404
 			).put(
