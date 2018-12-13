@@ -17,27 +17,49 @@ allprojects {
 }
 
 configure(subprojects.findAll {!it.childProjects}) {
-	test.ignoreFailures = false
+	test {
+		ignoreFailures = false
+	}
 
-	buildCSS.enabled = false
+	buildCSS {
+		enabled = false
+	}
 
-	processResources.enabled = false
+	processResources {
+		enabled = false
+	}
 
-	transpileJS.enabled = false
+	transpileJS {
+		enabled = false
+	}
 
-	configJSModules.enabled = false
+	configJSModules {
+		enabled = false
+	}
 
-	copyLibs.enabled = false
+	copyLibs {
+		enabled = false
+	}
 
-	replaceSoyTranslation.enabled = false
+	replaceSoyTranslation {
+		enabled = false
+	}
 
-	wrapSoyAlloyTemplate.enabled = false
+	wrapSoyAlloyTemplate {
+		enabled = false
+	}
 
-	setUpTestableTomcat.enabled = false
+	setUpTestableTomcat {
+		enabled = false
+	}
 
-	startTestableTomcat.enabled = false
+	startTestableTomcat {
+		enabled = false
+	}
 
-	stopTestableTomcat.enabled = false
+	stopTestableTomcat {
+		enabled = false
+	}
 }
 
 task codeCoverageReport(type: JacocoReport)
@@ -59,9 +81,17 @@ codeCoverageReport {
 	}
 
 	reports {
-		csv.enabled = false
-		html.enabled = false
-		xml.destination "${buildDir}/reports/jacoco/report.xml"
-		xml.enabled = true
+		csv {
+			enabled = false
+		}
+
+		html {
+			enabled = false
+		}
+
+		xml {
+			enabled = true
+			destination "${buildDir}/reports/jacoco/report.xml"
+		}
 	}
 }

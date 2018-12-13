@@ -1,1 +1,3 @@
-deploy.enabled = false
+deploy {
+	enabled = false
+}
