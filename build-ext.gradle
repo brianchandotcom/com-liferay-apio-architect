@@ -29,10 +29,6 @@ configure(subprojects.findAll {!it.childProjects}) {
 		enabled = false
 	}
 
-	processResources {
-		enabled = false
-	}
-
 	replaceSoyTranslation {
 		enabled = false
 	}
