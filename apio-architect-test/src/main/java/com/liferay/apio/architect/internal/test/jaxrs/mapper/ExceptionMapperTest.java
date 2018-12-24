@@ -64,12 +64,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testAnyExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/any"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/any");
 
 		assertThat(response.getStatus(), is(500));
 
@@ -87,12 +82,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testBadRequestExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/bad-request"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/bad-request");
 
 		assertThat(response.getStatus(), is(400));
 
@@ -112,12 +102,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testClientErrorExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/any-client-error"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/any-client-error");
 
 		assertThat(response.getStatus(), is(403));
 
@@ -137,12 +122,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testForbiddenExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/forbidden"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/forbidden");
 
 		assertThat(response.getStatus(), is(403));
 
@@ -162,12 +142,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testInternalServerErrorExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/internal-server-error"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/internal-server-error");
 
 		assertThat(response.getStatus(), is(500));
 
@@ -187,12 +162,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testNotAcceptableExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/not-acceptable"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/not-acceptable");
 
 		assertThat(response.getStatus(), is(406));
 
@@ -212,12 +182,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testNotAllowedExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/not-allowed"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/not-allowed");
 
 		assertThat(response.getStatus(), is(405));
 
@@ -237,12 +202,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testNotAuthorizedExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/not-authorized"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/not-authorized");
 
 		assertThat(response.getStatus(), is(401));
 
@@ -262,12 +222,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testNotFoundExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/not-found"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/not-found");
 
 		assertThat(response.getStatus(), is(404));
 
@@ -287,12 +242,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testNotSupportedExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/not-supported"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/not-supported");
 
 		assertThat(response.getStatus(), is(415));
 
@@ -312,12 +262,7 @@ public class ExceptionMapperTest extends BaseTest {
 
 	@Test
 	public void testServiceUnavailableExceptionIsTransformed() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.path(
-			"throw/service-unavailable"
-		).request(
-		).get();
+		Response response = _makeRequestTo("throw/service-unavailable");
 
 		assertThat(response.getStatus(), is(503));
 
@@ -416,6 +361,17 @@ public class ExceptionMapperTest extends BaseTest {
 			throw new ServiceUnavailableException("Nope");
 		}
 
+	}
+
+	private Response _makeRequestTo(String path) {
+		WebTarget webTarget = createDefaultTarget();
+
+		return webTarget.path(
+			path
+		).request(
+		).header(
+			"Accept", "application/ld+json"
+		).get();
 	}
 
 }

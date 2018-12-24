@@ -55,6 +55,7 @@ import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
@@ -115,9 +116,7 @@ public class RootResourceTest extends BaseTest {
 
 	@Test
 	public void testEntryPointEndpoint() {
-		WebTarget webTarget = createDefaultTarget();
-
-		Response response = webTarget.request().get();
+		Response response = _makeRequestTo("").get();
 
 		String entity = response.readEntity(String.class);
 
@@ -180,15 +179,19 @@ public class RootResourceTest extends BaseTest {
 		return asList(allow.split("\\s*,\\s*"));
 	}
 
-	private Response _makeRequestTo(String path, String method) {
+	private Invocation.Builder _makeRequestTo(String path) {
 		WebTarget webTarget = createDefaultTarget();
 
 		return webTarget.path(
 			path
 		).request(
-		).method(
-			method
+		).header(
+			"Accept", "application/ld+json"
 		);
+	}
+
+	private Response _makeRequestTo(String path, String method) {
+		return _makeRequestTo(path).method(method);
 	}
 
 	private void _testEndpoint(String endpoint, String method) {

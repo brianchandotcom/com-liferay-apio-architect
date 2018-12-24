@@ -59,6 +59,8 @@ public class FailureFilterTest extends BaseTest {
 		Response response = webTarget.path(
 			"hello/failure-exception"
 		).request(
+		).header(
+			"Accept", "application/ld+json"
 		).get();
 
 		assertThat(response.getStatus(), is(404));

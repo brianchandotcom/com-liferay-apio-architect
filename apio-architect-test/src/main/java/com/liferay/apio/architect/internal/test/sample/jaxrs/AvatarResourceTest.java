@@ -83,6 +83,8 @@ public class AvatarResourceTest extends BaseTest {
 		).resolveTemplate(
 			"id", id
 		).request(
+		).header(
+			"Accept", "application/ld+json"
 		).get();
 	}
 
