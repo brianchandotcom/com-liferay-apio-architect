@@ -16,6 +16,7 @@ package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.execute;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.findPermissionMethod;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getBodyResourceClassName;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParamClasses;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getResource;
@@ -43,6 +44,7 @@ import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.credentials.Credentials;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil;
 import com.liferay.apio.architect.internal.url.ApplicationURL;
 import com.liferay.apio.architect.internal.url.ServerURL;
 import com.liferay.apio.architect.internal.wiring.osgi.manager.provider.ProviderManager;
@@ -50,6 +52,7 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.resource.Resource;
 import com.liferay.apio.architect.router.ActionRouter;
 
+import io.vavr.CheckedFunction1;
 import io.vavr.control.Option;
 
 import java.lang.reflect.Method;
@@ -162,6 +165,9 @@ public class ActionRouterManager {
 
 		Resource resource = getResource(method, name);
 
+		Optional<Method> permissionMethodOptional = findPermissionMethod(
+			action, actionRouter, resource);
+
 		ActionSemantics actionSemantics = ActionSemantics.ofResource(
 			resource
 		).name(
@@ -170,6 +176,19 @@ public class ActionRouterManager {
 			action.httpMethod()
 		).returns(
 			getReturnClass(method)
+		).permissionMethod(
+			permissionMethodOptional.map(
+				permissionMethod -> _getPermissionMethodForActionRouter(
+					permissionMethod, actionRouter)
+			).orElse(
+				params -> true
+			)
+		).permissionClasses(
+			permissionMethodOptional.map(
+				ActionRouterUtil::getParamClasses
+			).orElse(
+				new Class<?>[0]
+			)
 		).executeFunction(
 			params -> execute(
 				resource, params, array -> method.invoke(actionRouter, array))
@@ -182,6 +201,14 @@ public class ActionRouterManager {
 		).build();
 
 		return some(actionSemantics);
+	}
+
+	private CheckedFunction1<List<?>, Boolean>
+		_getPermissionMethodForActionRouter(
+			Method permissionMethod, ActionRouter actionRouter) {
+
+		return arguments -> (Boolean)permissionMethod.invoke(
+			actionRouter, arguments.toArray(new Object[0]));
 	}
 
 	private static final TypeVariable<Class<ActionRouter>>
