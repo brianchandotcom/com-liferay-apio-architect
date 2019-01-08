@@ -299,7 +299,7 @@ public final class ActionRouterUtil {
 	 *
 	 * @param  method the action's method
 	 * @param  name the name of the resource, extracted from the {@link
-	 *         com.liferay.apio.architect.router.ActionRouter}
+	 *         ActionRouter}
 	 * @return the action's {@link Resource}
 	 * @review
 	 */
