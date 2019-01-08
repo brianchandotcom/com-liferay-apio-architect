@@ -61,6 +61,7 @@ public class ActionSemanticsTest {
 			GET
 		).returns(
 			Long.class
+		).permissionMethod(
 		).executeFunction(
 			_join
 		).receivesParams(
@@ -97,6 +98,7 @@ public class ActionSemanticsTest {
 			GET
 		).returns(
 			Void.class
+		).permissionMethod(
 		).executeFunction(
 			_join
 		).build();
@@ -125,6 +127,7 @@ public class ActionSemanticsTest {
 			GET
 		).returns(
 			Long.class
+		).permissionMethod(
 		).executeFunction(
 			_join
 		).annotatedWith(
@@ -155,6 +158,7 @@ public class ActionSemanticsTest {
 			"POST"
 		).returns(
 			Void.class
+		).permissionMethod(
 		).executeFunction(
 			_join
 		).annotatedWith(
@@ -183,6 +187,7 @@ public class ActionSemanticsTest {
 			GET
 		).returns(
 			String.class
+		).permissionMethod(
 		).executeFunction(
 			_join
 		).receivesParams(
@@ -214,6 +219,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
+		).permissionMethod(
 		).executeFunction(
 			__ -> null
 		).annotatedWith(
@@ -241,6 +247,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
+		).permissionMethod(
 		).executeFunction(
 			__ -> null
 		).build();
@@ -264,6 +271,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
+		).permissionMethod(
 		).executeFunction(
 			__ -> null
 		).build();
@@ -286,6 +294,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
+		).permissionMethod(
 		).executeFunction(
 			__ -> null
 		).build();
@@ -308,6 +317,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
+		).permissionMethod(
 		).executeFunction(
 			__ -> null
 		).build();
