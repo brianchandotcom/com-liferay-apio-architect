@@ -234,8 +234,7 @@ public class RootResourceTest extends BaseTest {
 
 		@Override
 		public Stream<ActionSemantics> getActionSemantics(
-			Resource resource, Credentials credentials,
-			HttpServletRequest httpServletRequest) {
+			Resource resource, Credentials credentials) {
 
 			return Stream.empty();
 		}

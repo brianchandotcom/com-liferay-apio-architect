@@ -64,7 +64,6 @@ import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
-import io.vavr.CheckedFunction1;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -73,7 +72,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -221,8 +219,7 @@ public class ActionManagerImpl implements ActionManager {
 
 	@Override
 	public Stream<ActionSemantics> getActionSemantics(
-		Resource resource, Credentials credentials,
-		HttpServletRequest httpServletRequest) {
+		Resource resource, Credentials credentials) {
 
 		Stream<ActionSemantics> stream = actionSemantics();
 
@@ -230,20 +227,6 @@ public class ActionManagerImpl implements ActionManager {
 			isActionFor(resource)
 		).map(
 			actionSemantics -> actionSemantics.withResource(resource)
-		).filter(
-			actionSemantics -> Try.of(
-				() -> {
-					List<Object> params = _getPermissionParams(
-						httpServletRequest, actionSemantics);
-
-					CheckedFunction1<List<?>, Boolean> checkedFunction1 =
-						actionSemantics.getPermissionMethod();
-
-					return checkedFunction1.apply(params);
-				}
-			).getOrElse(
-				false
-			)
 		);
 	}
 
@@ -272,7 +255,7 @@ public class ActionManagerImpl implements ActionManager {
 		return new Documentation(
 			apiTitleSupplier, apiDescriptionSupplier, applicationUrlSupplier,
 			() -> _representableManager.getRepresentors(), resourceStream,
-			resource -> getActionSemantics(resource, null, null),
+			resource -> getActionSemantics(resource, null),
 			() -> _customDocumentationManager.getCustomDocumentation());
 	}
 
@@ -397,29 +380,6 @@ public class ActionManagerImpl implements ActionManager {
 			id -> Item.of(name, id)
 		).orElse(
 			null
-		);
-	}
-
-	private List<Object> _getPermissionParams(
-		HttpServletRequest httpServletRequest,
-		ActionSemantics actionSemantics) {
-
-		List<Class<?>> permissionClasses =
-			actionSemantics.getPermissionClasses();
-
-		Stream<Class<?>> paramsStream = permissionClasses.stream();
-
-		return paramsStream.map(
-			aClass -> _provide(actionSemantics, httpServletRequest, aClass)
-		).map(
-			param -> {
-				if (param instanceof Resource.Id) {
-					return ((Resource.Id)param).asObject();
-				}
-				return param;
-			}
-		).collect(
-			Collectors.toList()
 		);
 	}
 
