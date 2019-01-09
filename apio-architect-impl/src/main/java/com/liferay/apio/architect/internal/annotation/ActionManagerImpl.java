@@ -73,6 +73,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -232,9 +233,8 @@ public class ActionManagerImpl implements ActionManager {
 		).filter(
 			actionSemantics -> Try.of(
 				() -> {
-					List<Object> params = actionSemantics.getPermissionParams(
-						aClass -> _provide(
-							actionSemantics, httpServletRequest, aClass));
+					List<Object> params = _getPermissionParams(
+						httpServletRequest, actionSemantics);
 
 					CheckedFunction1<List<?>, Boolean> checkedFunction1 =
 						actionSemantics.getPermissionMethod();
@@ -397,6 +397,29 @@ public class ActionManagerImpl implements ActionManager {
 			id -> Item.of(name, id)
 		).orElse(
 			null
+		);
+	}
+
+	private List<Object> _getPermissionParams(
+		HttpServletRequest httpServletRequest,
+		ActionSemantics actionSemantics) {
+
+		List<Class<?>> permissionClasses =
+			actionSemantics.getPermissionProvidedClasses();
+
+		Stream<Class<?>> paramsStream = permissionClasses.stream();
+
+		return paramsStream.map(
+			clazz -> _provide(actionSemantics, httpServletRequest, clazz)
+		).map(
+			param -> {
+				if (param instanceof Resource.Id) {
+					return ((Resource.Id)param).asObject();
+				}
+				return param;
+			}
+		).collect(
+			Collectors.toList()
 		);
 	}
 

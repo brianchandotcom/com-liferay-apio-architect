@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.internal.action;
 
 import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
 
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.form.Body;
@@ -33,7 +34,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.servlet.http.HttpServletRequest;
 
 import javax.ws.rs.ForbiddenException;
 
@@ -118,16 +120,6 @@ public final class ActionSemantics {
 		return unmodifiableList(_paramClasses);
 	}
 
-	public List<Object> getParams(Function<Class<?>, Object> provideFunction) {
-		Stream<Class<?>> stream = getParamClasses().stream();
-
-		return stream.map(
-			provideFunction
-		).collect(
-			Collectors.toList()
-		);
-	}
-
 	/**
 	 * The permission method that checks if we can execute an action.
 	 *
@@ -135,26 +127,6 @@ public final class ActionSemantics {
 	 */
 	public CheckedFunction1<List<?>, Boolean> getPermissionMethod() {
 		return _permissionMethod;
-	}
-
-	public List<Object> getPermissionParams(
-		Function<Class<?>, Object> provideFunction) {
-
-		Stream<Class<?>> stream = getPermissionProvidedClasses().stream();
-
-		return stream.map(
-			provideFunction
-		).map(
-			param -> {
-				if (param instanceof Resource.Id) {
-					return ((Resource.Id)param).asObject();
-				}
-
-				return param;
-			}
-		).collect(
-			Collectors.toList()
-		);
 	}
 
 	/**
@@ -192,24 +164,15 @@ public final class ActionSemantics {
 	 * @review
 	 */
 	public Action toAction(ProvideFunction provideFunction) {
-		return request -> Try.of(
-			() -> getPermissionParams(provideFunction.apply(this, request))
-		).mapTry(
-			getPermissionMethod()::apply
-		).filter(
-			aBoolean -> aBoolean
-		).<Try<List<?>>>transform(
-			aTry -> {
-				if (aTry.isSuccess()) {
-					return Try.of(
-						() -> getParams(provideFunction.apply(this, request)));
-				}
+		return request -> {
+			_checkPermissions(provideFunction, request);
 
-				return Try.failure(new ForbiddenException());
-			}
-		).mapTry(
-			this::execute
-		);
+			return _provideParamClasses(
+				provideFunction, request, getParamClasses()
+			).mapTry(
+				this::execute
+			);
+		};
 	}
 
 	/**
@@ -617,6 +580,59 @@ public final class ActionSemantics {
 		 */
 		public PermissionStep returns(Class<?> returnClass);
 
+	}
+
+	private void _checkPermissions(
+		ProvideFunction provideFunction, HttpServletRequest request) {
+
+		List<Object> params = _getPermissionParams(
+			provideFunction, request, getPermissionProvidedClasses());
+
+		Try.of(
+			() -> getPermissionMethod().apply(params)
+		).onSuccess(
+			success -> {
+				if (!success) {
+					throw new ForbiddenException();
+				}
+			}
+		);
+	}
+
+	private List<Object> _getPermissionParams(
+		ProvideFunction provideFunction, HttpServletRequest request,
+		List<Class<?>> paramClasses) {
+
+		Try<List<Object>> lists = _provideParamClasses(
+			provideFunction, request, paramClasses);
+
+		return lists.toStream(
+		).map(
+			param -> {
+				if (param instanceof Resource.Id) {
+					return ((Resource.Id)param).asObject();
+				}
+
+				return param;
+			}
+		).collect(
+			Collectors.toList()
+		);
+	}
+
+	private Try<List<Object>> _provideParamClasses(
+		ProvideFunction provideFunction, HttpServletRequest request,
+		List<Class<?>> paramClasses) {
+
+		return Try.of(
+			paramClasses::stream
+		).map(
+			stream -> stream.map(
+				provideFunction.apply(this, request)
+			).collect(
+				toList()
+			)
+		);
 	}
 
 	private List<Annotation> _annotations = new ArrayList<>();
