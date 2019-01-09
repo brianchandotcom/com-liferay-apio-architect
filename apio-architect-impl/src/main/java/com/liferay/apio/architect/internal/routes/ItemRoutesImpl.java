@@ -153,7 +153,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).permissionMethod(
 				params -> permissionBiFunction.apply(
 					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
-			).permissionClasses(
+			).permissionProvidedClasses(
 				Credentials.class, Id.class
 			).executeFunction(
 				params -> throwableHexaFunction.andThen(
@@ -229,7 +229,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).permissionMethod(
 				params -> hasRemovePermissionFunction.apply(
 					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
-			).permissionClasses(
+			).permissionProvidedClasses(
 				Credentials.class, Id.class
 			).executeFunction(
 				params -> _run(
@@ -268,7 +268,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			).permissionMethod(
 				params -> hasUpdatePermissionFunction.apply(
 					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
-			).permissionClasses(
+			).permissionProvidedClasses(
 				Credentials.class, Id.class
 			).executeFunction(
 				params -> updaterThrowableHexaFunction.andThen(

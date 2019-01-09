@@ -162,7 +162,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				).permissionMethod(
 					params -> hasAddingPermissionFunction.apply(
 						unsafeCast(params.get(0)))
-				).permissionClasses(
+				).permissionProvidedClasses(
 					Credentials.class
 				).executeFunction(
 					params -> batchCreatorThrowablePentaFunction.andThen(
@@ -191,7 +191,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			).permissionMethod(
 				params -> hasAddingPermissionFunction.apply(
 					unsafeCast(params.get(0)))
-			).permissionClasses(
+			).permissionProvidedClasses(
 				Credentials.class
 			).executeFunction(
 				params -> creatorThrowablePentaFunction.andThen(
@@ -246,7 +246,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				SingleModel.class
 			).permissionMethod(
 				params -> permissionFunction.apply(unsafeCast(params.get(0)))
-			).permissionClasses(
+			).permissionProvidedClasses(
 				Credentials.class
 			).executeFunction(
 				params -> throwableHexaFunction.andThen(

@@ -168,7 +168,7 @@ public class ActionSemanticsTest {
 			Long.class
 		).permissionMethod(
 			params -> Unsafe.unsafeCast(params.get(0)).equals(0L)
-		).permissionClasses(
+		).permissionProvidedClasses(
 			Id.class
 		).executeFunction(
 			_join
