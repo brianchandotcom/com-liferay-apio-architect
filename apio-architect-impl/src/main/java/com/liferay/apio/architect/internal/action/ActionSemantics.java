@@ -115,24 +115,6 @@ public final class ActionSemantics {
 	}
 
 	/**
-	 * The list of permission classes.
-	 *
-	 * @review
-	 */
-	public List<Class<?>> getPermissionClasses() {
-		return _permissionClasses;
-	}
-
-	/**
-	 * The permission method that checks if we can execute an action.
-	 *
-	 * @review
-	 */
-	public CheckedFunction1<List<?>, Boolean> getPermissionMethod() {
-		return _permissionMethod;
-	}
-
-	/**
 	 * The action's resource.
 	 *
 	 * @review
@@ -194,8 +176,6 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionClasses = _permissionClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = _returnClass;
 
@@ -225,8 +205,6 @@ public final class ActionSemantics {
 		actionSemantics._method = method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionClasses = _permissionClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = _returnClass;
 
@@ -256,8 +234,6 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionClasses = _permissionClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = _returnClass;
 
@@ -283,8 +259,6 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionClasses = _permissionClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = resource;
 		actionSemantics._returnClass = _returnClass;
 
@@ -314,8 +288,6 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionClasses = _permissionClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = returnClass;
 
@@ -323,8 +295,7 @@ public final class ActionSemantics {
 	}
 
 	public static class Builder
-		implements NameStep, MethodStep, ReturnStep, ExecuteStep, FinalStep,
-				   PermissionStep {
+		implements NameStep, MethodStep, ReturnStep, ExecuteStep, FinalStep {
 
 		public Builder(ActionSemantics actionSemantics) {
 			_actionSemantics = actionSemantics;
@@ -380,29 +351,6 @@ public final class ActionSemantics {
 		}
 
 		@Override
-		public ExecuteStep permissionClasses(Class<?>... classes) {
-			_actionSemantics._permissionClasses = Arrays.asList(classes);
-
-			return this;
-		}
-
-		@Override
-		public ExecuteStep permissionMethod() {
-			_actionSemantics._permissionMethod = params -> true;
-
-			return this;
-		}
-
-		@Override
-		public ExecuteStep permissionMethod(
-			CheckedFunction1<List<?>, Boolean> permissionMethod) {
-
-			_actionSemantics._permissionMethod = permissionMethod;
-
-			return this;
-		}
-
-		@Override
 		public FinalStep receivesParams(Class<?>... classes) {
 			_actionSemantics._paramClasses = Arrays.asList(classes);
 
@@ -410,7 +358,7 @@ public final class ActionSemantics {
 		}
 
 		@Override
-		public PermissionStep returns(Class<?> returnClass) {
+		public ExecuteStep returns(Class<?> returnClass) {
 			_actionSemantics._returnClass = returnClass;
 
 			return this;
@@ -431,15 +379,6 @@ public final class ActionSemantics {
 		 */
 		public FinalStep executeFunction(
 			CheckedFunction1<List<?>, ?> executeFunction);
-
-		/**
-		 * Provides information about the permission method arguments.
-		 * This function receives the list of param classes to provide to the
-		 * permissionMethod
-		 *
-		 * @review
-		 */
-		public ExecuteStep permissionClasses(Class<?>... classes);
 
 	}
 
@@ -549,26 +488,6 @@ public final class ActionSemantics {
 
 	}
 
-	public interface PermissionStep {
-
-		/**
-		 * Default empty implementation of the permission method.
-		 *
-		 * @review
-		 */
-		public ExecuteStep permissionMethod();
-
-		/**
-		 * Provides information about the permission method to check if the
-		 * execute function has permissions to be executed.
-		 *
-		 * @review
-		 */
-		public ExecuteStep permissionMethod(
-			CheckedFunction1<List<?>, Boolean> permissionMethod);
-
-	}
-
 	public interface ReturnStep {
 
 		/**
@@ -576,7 +495,7 @@ public final class ActionSemantics {
 		 *
 		 * @review
 		 */
-		public PermissionStep returns(Class<?> returnClass);
+		public ExecuteStep returns(Class<?> returnClass);
 
 	}
 
@@ -586,8 +505,6 @@ public final class ActionSemantics {
 	private String _method;
 	private String _name;
 	private List<Class<?>> _paramClasses = new ArrayList<>();
-	private List<Class<?>> _permissionClasses = new ArrayList<>();
-	private CheckedFunction1<List<?>, Boolean> _permissionMethod;
 	private Resource _resource;
 	private Class<?> _returnClass;
 
