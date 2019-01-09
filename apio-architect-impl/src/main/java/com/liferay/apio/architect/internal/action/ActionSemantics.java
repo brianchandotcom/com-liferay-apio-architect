@@ -437,8 +437,8 @@ public final class ActionSemantics {
 			CheckedFunction1<List<?>, ?> executeFunction);
 
 		/**
-		 * Provides information about the permission method arguments. This
-		 * function receives the list of param classes to provide to the
+		 * Provides information about the permission method arguments.
+		 * This function receives the list of param classes to provide to the
 		 * permissionMethod
 		 *
 		 * @review
