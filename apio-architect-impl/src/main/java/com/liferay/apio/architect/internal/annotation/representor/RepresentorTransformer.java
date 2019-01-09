@@ -49,7 +49,7 @@ import java.util.function.Supplier;
 /**
  * Provides a utility function that transforms a parsed type into a representor
  *
- * @author Alejandro Hernandez
+ * @author Alejandro Hernández
  * @author Víctor Galán
  * @review
  */

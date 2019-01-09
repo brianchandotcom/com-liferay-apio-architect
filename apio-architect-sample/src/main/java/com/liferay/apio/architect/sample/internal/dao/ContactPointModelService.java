@@ -41,7 +41,7 @@ import org.osgi.service.component.annotations.Reference;
  * Contains methods for retrieving contact points from an in-memory database
  * with fake data.
  *
- * @author Victor Galán
+ * @author Víctor Galán
  */
 @Component(immediate = true, service = ContactPointModelService.class)
 public class ContactPointModelService {
