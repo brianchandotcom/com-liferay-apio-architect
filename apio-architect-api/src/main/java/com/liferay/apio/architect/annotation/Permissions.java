@@ -83,6 +83,19 @@ public @interface Permissions {
 	}
 
 	/**
+	 * Defines a permission to check a method that updates elements. That method
+	 * must live inside a class that implements {@link
+	 * com.liferay.apio.architect.router.ActionRouter}.
+	 *
+	 * @review
+	 */
+	@HasPermission(httpMethod = "PATCH", name = "update")
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface CanUpdate {
+	}
+
+	/**
 	 * Defines an annotation that indicates a method performs a permission check
 	 * before an action.
 	 *
