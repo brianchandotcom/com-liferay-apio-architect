@@ -410,7 +410,7 @@ public class ActionManagerImpl implements ActionManager {
 		Stream<Class<?>> paramsStream = permissionClasses.stream();
 
 		return paramsStream.map(
-			aClass -> _provide(actionSemantics, httpServletRequest, aClass)
+			clazz -> _provide(actionSemantics, httpServletRequest, clazz)
 		).map(
 			param -> {
 				if (param instanceof Resource.Id) {

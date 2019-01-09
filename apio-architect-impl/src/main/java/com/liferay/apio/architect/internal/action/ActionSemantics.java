@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import javax.ws.rs.NotFoundException;
+import javax.ws.rs.ForbiddenException;
 
 /**
  * Instances of this class contains semantic information about an action like
@@ -121,21 +121,21 @@ public final class ActionSemantics {
 	}
 
 	/**
-	 * The list of permission classes.
-	 *
-	 * @review
-	 */
-	public List<Class<?>> getPermissionProvidedClasses() {
-		return _permissionProvidedClasses;
-	}
-
-	/**
 	 * The permission method that checks if we can execute an action.
 	 *
 	 * @review
 	 */
 	public CheckedFunction1<List<?>, Boolean> getPermissionMethod() {
 		return _permissionMethod;
+	}
+
+	/**
+	 * The list of permission classes.
+	 *
+	 * @review
+	 */
+	public List<Class<?>> getPermissionProvidedClasses() {
+		return _permissionProvidedClasses;
 	}
 
 	/**
@@ -384,13 +384,6 @@ public final class ActionSemantics {
 		}
 
 		@Override
-		public ExecuteStep permissionProvidedClasses(Class<?>... classes) {
-			_actionSemantics._permissionProvidedClasses = Arrays.asList(classes);
-
-			return this;
-		}
-
-		@Override
 		public ExecuteStep permissionMethod() {
 			_actionSemantics._permissionMethod = params -> true;
 
@@ -402,6 +395,14 @@ public final class ActionSemantics {
 			CheckedFunction1<List<?>, Boolean> permissionMethod) {
 
 			_actionSemantics._permissionMethod = permissionMethod;
+
+			return this;
+		}
+
+		@Override
+		public ExecuteStep permissionProvidedClasses(Class<?>... classes) {
+			_actionSemantics._permissionProvidedClasses = Arrays.asList(
+				classes);
 
 			return this;
 		}
@@ -592,7 +593,7 @@ public final class ActionSemantics {
 		).onSuccess(
 			success -> {
 				if (!success) {
-					throw new NotFoundException();
+					throw new ForbiddenException();
 				}
 			}
 		);
@@ -605,11 +606,7 @@ public final class ActionSemantics {
 		Try<List<Object>> lists = _provideParamClasses(
 			provideFunction, request, paramClasses);
 
-		return lists.getOrElseThrow(
-			() -> {
-				throw new NotFoundException();
-			}
-		).stream(
+		return lists.toStream(
 		).map(
 			param -> {
 				if (param instanceof Resource.Id) {
@@ -644,8 +641,8 @@ public final class ActionSemantics {
 	private String _method;
 	private String _name;
 	private List<Class<?>> _paramClasses = new ArrayList<>();
-	private List<Class<?>> _permissionProvidedClasses = new ArrayList<>();
 	private CheckedFunction1<List<?>, Boolean> _permissionMethod;
+	private List<Class<?>> _permissionProvidedClasses = new ArrayList<>();
 	private Resource _resource;
 	private Class<?> _returnClass;
 
