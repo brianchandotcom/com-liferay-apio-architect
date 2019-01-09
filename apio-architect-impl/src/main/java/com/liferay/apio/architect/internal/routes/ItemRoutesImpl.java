@@ -150,11 +150,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				customRoute.getMethod()
 			).returns(
 				SingleModel.class
-			).permissionMethod(
-				params -> permissionBiFunction.apply(
-					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
-			).permissionClasses(
-				Credentials.class, Id.class
 			).executeFunction(
 				params -> throwableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(
@@ -194,7 +189,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"GET"
 			).returns(
 				SingleModel.class
-			).permissionMethod(
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.getName())
@@ -226,11 +220,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"DELETE"
 			).returns(
 				Void.class
-			).permissionMethod(
-				params -> hasRemovePermissionFunction.apply(
-					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
-			).permissionClasses(
-				Credentials.class, Id.class
 			).executeFunction(
 				params -> _run(
 					() -> removerThrowablePentaConsumer.accept(
@@ -265,11 +254,6 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"PUT"
 			).returns(
 				SingleModel.class
-			).permissionMethod(
-				params -> hasUpdatePermissionFunction.apply(
-					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
-			).permissionClasses(
-				Credentials.class, Id.class
 			).executeFunction(
 				params -> updaterThrowableHexaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.getName())
