@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.operation.HTTPMethod;
@@ -33,10 +34,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
 /**
@@ -592,7 +595,7 @@ public final class ActionSemantics {
 		).onSuccess(
 			success -> {
 				if (!success) {
-					throw new NotFoundException();
+					throw new ForbiddenException();
 				}
 			}
 		);
@@ -605,11 +608,7 @@ public final class ActionSemantics {
 		Try<List<Object>> lists = _provideParamClasses(
 			provideFunction, request, paramClasses);
 
-		return lists.getOrElseThrow(
-			() -> {
-				throw new NotFoundException();
-			}
-		).stream(
+		return lists.toStream(
 		).map(
 			param -> {
 				if (param instanceof Resource.Id) {
