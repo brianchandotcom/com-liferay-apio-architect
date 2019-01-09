@@ -17,7 +17,6 @@ package com.liferay.apio.architect.internal.action;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 
-import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.internal.annotation.Action;
@@ -33,11 +32,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-
-import javax.ws.rs.NotFoundException;
 
 /**
  * Instances of this class contains semantic information about an action like
@@ -164,15 +158,17 @@ public final class ActionSemantics {
 	 * @review
 	 */
 	public Action toAction(ProvideFunction provideFunction) {
-		return request -> {
-			_checkPermissions(provideFunction, request);
-
-			return _provideParamClasses(
-				provideFunction, request, getParamClasses()
-			).mapTry(
-				this::execute
-			);
-		};
+		return request -> Try.of(
+			getParamClasses()::stream
+		).map(
+			stream -> stream.map(
+				provideFunction.apply(this, request)
+			).collect(
+				toList()
+			)
+		).mapTry(
+			this::execute
+		);
 	}
 
 	/**
@@ -582,63 +578,6 @@ public final class ActionSemantics {
 		 */
 		public PermissionStep returns(Class<?> returnClass);
 
-	}
-
-	private void _checkPermissions(
-		ProvideFunction provideFunction, HttpServletRequest request) {
-
-		List<Object> params = _getPermissionParams(
-			provideFunction, request, getPermissionClasses());
-
-		Try.of(
-			() -> getPermissionMethod().apply(params)
-		).onSuccess(
-			success -> {
-				if (!success) {
-					throw new NotFoundException();
-				}
-			}
-		);
-	}
-
-	private List<Object> _getPermissionParams(
-		ProvideFunction provideFunction, HttpServletRequest request,
-		List<Class<?>> paramClasses) {
-
-		Try<List<Object>> lists = _provideParamClasses(
-			provideFunction, request, paramClasses);
-
-		return lists.getOrElseThrow(
-			() -> {
-				throw new NotFoundException();
-			}
-		).stream(
-		).map(
-			param -> {
-				if (param instanceof Resource.Id) {
-					return ((Resource.Id)param).asObject();
-				}
-
-				return param;
-			}
-		).collect(
-			Collectors.toList()
-		);
-	}
-
-	private Try<List<Object>> _provideParamClasses(
-		ProvideFunction provideFunction, HttpServletRequest request,
-		List<Class<?>> paramClasses) {
-
-		return Try.of(
-			paramClasses::stream
-		).map(
-			stream -> stream.map(
-				provideFunction.apply(this, request)
-			).collect(
-				toList()
-			)
-		);
 	}
 
 	private List<Annotation> _annotations = new ArrayList<>();
