@@ -125,8 +125,8 @@ public final class ActionSemantics {
 	 *
 	 * @review
 	 */
-	public List<Class<?>> getPermissionProvidedClasses() {
-		return _permissionProvidedClasses;
+	public List<Class<?>> getPermissionClasses() {
+		return _permissionClasses;
 	}
 
 	/**
@@ -198,7 +198,7 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
+		actionSemantics._permissionClasses = _permissionClasses;
 		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = _returnClass;
@@ -229,7 +229,7 @@ public final class ActionSemantics {
 		actionSemantics._method = method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
+		actionSemantics._permissionClasses = _permissionClasses;
 		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = _returnClass;
@@ -260,7 +260,7 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
+		actionSemantics._permissionClasses = _permissionClasses;
 		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = _returnClass;
@@ -287,7 +287,7 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
+		actionSemantics._permissionClasses = _permissionClasses;
 		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = resource;
 		actionSemantics._returnClass = _returnClass;
@@ -318,7 +318,7 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
-		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
+		actionSemantics._permissionClasses = _permissionClasses;
 		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = returnClass;
@@ -384,8 +384,8 @@ public final class ActionSemantics {
 		}
 
 		@Override
-		public ExecuteStep permissionProvidedClasses(Class<?>... classes) {
-			_actionSemantics._permissionProvidedClasses = Arrays.asList(classes);
+		public ExecuteStep permissionClasses(Class<?>... classes) {
+			_actionSemantics._permissionClasses = Arrays.asList(classes);
 
 			return this;
 		}
@@ -443,7 +443,7 @@ public final class ActionSemantics {
 		 *
 		 * @review
 		 */
-		public ExecuteStep permissionProvidedClasses(Class<?>... classes);
+		public ExecuteStep permissionClasses(Class<?>... classes);
 
 	}
 
@@ -585,7 +585,7 @@ public final class ActionSemantics {
 		ProvideFunction provideFunction, HttpServletRequest request) {
 
 		List<Object> params = _getPermissionParams(
-			provideFunction, request, getPermissionProvidedClasses());
+			provideFunction, request, getPermissionClasses());
 
 		Try.of(
 			() -> getPermissionMethod().apply(params)
@@ -644,7 +644,7 @@ public final class ActionSemantics {
 	private String _method;
 	private String _name;
 	private List<Class<?>> _paramClasses = new ArrayList<>();
-	private List<Class<?>> _permissionProvidedClasses = new ArrayList<>();
+	private List<Class<?>> _permissionClasses = new ArrayList<>();
 	private CheckedFunction1<List<?>, Boolean> _permissionMethod;
 	private Resource _resource;
 	private Class<?> _returnClass;

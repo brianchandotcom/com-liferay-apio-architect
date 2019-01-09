@@ -161,7 +161,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 						hasNestedAddingPermissionFunction.apply(
 							unsafeCast(params.get(0)),
 							unsafeCast(params.get(1)))
-				).permissionProvidedClasses(
+				).permissionClasses(
 					Credentials.class, _getIdClass()
 				).executeFunction(
 					params -> batchCreatorThrowableHexaFunction.andThen(
@@ -190,7 +190,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			).permissionMethod(
 				params -> hasNestedAddingPermissionFunction.apply(
 					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
-			).permissionProvidedClasses(
+			).permissionClasses(
 				Credentials.class, _getIdClass()
 			).executeFunction(
 				params -> creatorThrowableHexaFunction.andThen(

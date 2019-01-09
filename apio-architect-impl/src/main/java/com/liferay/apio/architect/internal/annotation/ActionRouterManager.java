@@ -184,7 +184,7 @@ public class ActionRouterManager {
 			).orElse(
 				params -> true
 			)
-		).permissionProvidedClasses(
+		).permissionClasses(
 			permissionMethodOptional.map(
 				ActionRouterUtil::getParamClasses
 			).orElse(
