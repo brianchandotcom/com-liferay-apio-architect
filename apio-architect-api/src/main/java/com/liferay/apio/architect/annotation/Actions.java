@@ -148,4 +148,15 @@ public @interface Actions {
 	public @interface Retrieve {
 	}
 
+	/**
+	 * Defines an annotation that indicates a method updates an element. That
+	 * method must live inside a class that implements {@link
+	 * com.liferay.apio.architect.router.ActionRouter}.
+	 */
+	@Action(httpMethod = "PATCH", name = "update")
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface Update {
+	}
+
 }

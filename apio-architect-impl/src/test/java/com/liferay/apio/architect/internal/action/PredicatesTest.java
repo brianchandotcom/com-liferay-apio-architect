@@ -20,6 +20,7 @@ import static com.liferay.apio.architect.internal.action.Predicates.isAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionBy;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByDELETE;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByGET;
+import static com.liferay.apio.architect.internal.action.Predicates.isActionByPATCH;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByPOST;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionByPUT;
 import static com.liferay.apio.architect.internal.action.Predicates.isActionFor;
@@ -29,6 +30,7 @@ import static com.liferay.apio.architect.internal.action.Predicates.isRemoveActi
 import static com.liferay.apio.architect.internal.action.Predicates.isReplaceAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRetrieveAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
+import static com.liferay.apio.architect.internal.action.Predicates.isUpdateAction;
 import static com.liferay.apio.architect.internal.action.Predicates.returnsAnyOf;
 
 import static java.util.Collections.singletonList;
@@ -103,6 +105,12 @@ public class PredicatesTest {
 	public void testIsActionByGET() {
 		assertTrue(isActionByGET.test(_actionSemantics));
 		assertFalse(isActionByGET.test(_actionSemantics.withMethod("DELETE")));
+	}
+
+	@Test
+	public void testIsActionByPATCH() {
+		assertTrue(isActionByPATCH.test(_actionSemantics.withMethod("PATCH")));
+		assertFalse(isActionByPATCH.test(_actionSemantics));
 	}
 
 	@Test
@@ -191,6 +199,15 @@ public class PredicatesTest {
 			isRootCollectionAction.test(actionSemantics.withName("retrieve")));
 
 		assertFalse(isRootCollectionAction.test(_actionSemantics));
+	}
+
+	@Test
+	public void testIsUpdateAction() {
+		ActionSemantics actionSemantics = _actionSemantics.withMethod("PATCH");
+
+		assertTrue(isUpdateAction.test(actionSemantics.withName("update")));
+
+		assertFalse(isUpdateAction.test(_actionSemantics));
 	}
 
 	@Test

@@ -21,6 +21,7 @@ import static com.liferay.apio.architect.internal.action.Predicates.isRemoveActi
 import static com.liferay.apio.architect.internal.action.Predicates.isReplaceAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRetrieveAction;
 import static com.liferay.apio.architect.internal.action.Predicates.isRootCollectionAction;
+import static com.liferay.apio.architect.internal.action.Predicates.isUpdateAction;
 import static com.liferay.apio.architect.internal.action.converter.EntryPointConverter.getEntryPointFrom;
 import static com.liferay.apio.architect.internal.body.JSONToBodyConverter.jsonToBody;
 import static com.liferay.apio.architect.internal.body.MultipartToBodyConverter.multipartToBody;
@@ -142,6 +143,9 @@ public class ActionManagerImpl implements ActionManager {
 			if (item != null) {
 				if ("DELETE".equals(method)) {
 					return _getAction(item, isRemoveAction);
+				}
+				else if ("PATCH".equals(method)) {
+					return _getAction(item, isUpdateAction);
 				}
 				else if ("PUT".equals(method)) {
 					return _getAction(item, isReplaceAction);
