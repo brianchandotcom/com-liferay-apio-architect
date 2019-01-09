@@ -405,7 +405,7 @@ public class ActionManagerImpl implements ActionManager {
 		ActionSemantics actionSemantics) {
 
 		List<Class<?>> permissionClasses =
-			actionSemantics.getPermissionClasses();
+			actionSemantics.getPermissionProvidedClasses();
 
 		Stream<Class<?>> paramsStream = permissionClasses.stream();
 
