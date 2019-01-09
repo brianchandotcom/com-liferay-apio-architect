@@ -166,7 +166,8 @@ public class ActionRouterManager {
 		Resource resource = getResource(method, name);
 
 		Optional<Method> permissionMethodOptional = findPermissionMethod(
-			action, actionRouter, resource);
+			actionRouter.getClass(), resource.getClass(), action.name(),
+			action.httpMethod());
 
 		ActionSemantics actionSemantics = ActionSemantics.ofResource(
 			resource
