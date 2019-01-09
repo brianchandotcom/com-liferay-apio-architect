@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * @author Víctor Galán Grande
+ * @author Víctor Galán
  */
 public class TypeProcessorTestUtil {
 
