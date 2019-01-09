@@ -16,17 +16,14 @@ package com.liferay.apio.architect.internal.annotation.util;
 
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findAnnotationInAnyParameter;
-import static com.liferay.apio.architect.internal.annotation.util.AnnotationUtil.findAnnotationInMethodOrInItsAnnotations;
 
 import static io.leangen.geantyref.GenericTypeReflector.getTypeParameter;
 
 import static java.util.Objects.nonNull;
 
-import com.liferay.apio.architect.annotation.Actions;
 import com.liferay.apio.architect.annotation.GenericParentId;
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.annotation.ParentId;
-import com.liferay.apio.architect.annotation.Permissions.HasPermission;
 import com.liferay.apio.architect.annotation.Vocabulary.Type;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.identifier.Identifier;
@@ -41,12 +38,10 @@ import com.liferay.apio.architect.resource.Resource.GenericParent;
 import com.liferay.apio.architect.resource.Resource.Item;
 import com.liferay.apio.architect.resource.Resource.Nested;
 import com.liferay.apio.architect.resource.Resource.Paged;
-import com.liferay.apio.architect.router.ActionRouter;
 import com.liferay.apio.architect.single.model.SingleModel;
 
 import io.vavr.CheckedFunction1;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -165,33 +160,6 @@ public final class ActionRouterUtil {
 
 			throw throwable;
 		}
-	}
-
-	/**
-	 * Finds the permission method associated with a an action
-	 *
-	 * @param  action the action to check
-	 * @param  actionRouter the class to find the permission method
-	 * @param  resource the type of resource
-	 * @return an optional containing the method or empty otherwise
-	 * @review
-	 */
-	public static Optional<Method> findPermissionMethod(
-		Actions.Action action, ActionRouter actionRouter, Resource resource) {
-
-		Class<?> clazz = actionRouter.getClass();
-
-		return Stream.of(
-			clazz.getMethods()
-		).filter(
-			method -> {
-				HasPermission annotation =
-					findAnnotationInMethodOrInItsAnnotations(
-						method, HasPermission.class);
-
-				return _matchesPermission(action, annotation, resource, method);
-			}
-		).findFirst();
 	}
 
 	/**
@@ -410,52 +378,6 @@ public final class ActionRouterUtil {
 	 */
 	public static boolean needsParameterFromBody(Method method) {
 		return nonNull(findAnnotationInAnyParameter(method, _BODY_ANNOTATION));
-	}
-
-	private static <A extends Annotation> boolean _isResourceWithAnnotation(
-		Resource resource, Class<? extends Resource> clazz, Method method,
-		Class<A> annotation) {
-
-		A annotationInAnyParameter = findAnnotationInAnyParameter(
-			method, annotation);
-
-		if ((annotationInAnyParameter == null) ||
-			clazz.isAssignableFrom(resource.getClass())) {
-
-			return true;
-		}
-
-		return false;
-	}
-
-	private static boolean _matchesPermission(
-		Actions.Action action, HasPermission annotation, Resource resource,
-		Method method) {
-
-		if (annotation != null) {
-			boolean validIdAnnotation = _isResourceWithAnnotation(
-				resource, Item.class, method, Id.class);
-
-			boolean validParentIdAnnotation = _isResourceWithAnnotation(
-				resource, Nested.class, method, ParentId.class);
-
-			boolean validGenericParentIdAnnotation = _isResourceWithAnnotation(
-				resource, GenericParent.class, method, GenericParentId.class);
-
-			String actionName = action.name();
-
-			String httpMethod = action.httpMethod();
-
-			if (actionName.equals(annotation.name()) &&
-				httpMethod.equals(annotation.httpMethod()) &&
-				validIdAnnotation && validParentIdAnnotation &&
-				validGenericParentIdAnnotation) {
-
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	private ActionRouterUtil() {
