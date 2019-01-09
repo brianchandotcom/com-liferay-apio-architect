@@ -63,7 +63,7 @@ public class BlogPostingCommentActionRouter implements ActionRouter<Comment> {
 
 	@CanRetrieve
 	public boolean canRetrieve(Credentials credentials, @Id long id) {
-		if (credentials.get() != null) {
+		if (hasPermission(credentials)) {
 			return true;
 		}
 
