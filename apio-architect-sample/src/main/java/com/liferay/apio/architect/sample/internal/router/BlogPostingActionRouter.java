@@ -69,7 +69,7 @@ public class BlogPostingActionRouter implements ActionRouter<BlogPosting> {
 
 	@Permissions.CanCreate
 	public boolean canCreate(Credentials credentials) {
-		if (hasPermission(credentials)) {
+		if (credentials.get() != null) {
 			return true;
 		}
 
