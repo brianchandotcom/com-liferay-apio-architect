@@ -14,9 +14,6 @@
 
 package com.liferay.apio.architect.internal.annotation.util;
 
-import static com.liferay.apio.architect.annotation.Permissions.CanCreate;
-import static com.liferay.apio.architect.annotation.Permissions.CanRetrieve;
-
 import com.liferay.apio.architect.annotation.Actions.Action;
 import com.liferay.apio.architect.annotation.Actions.Create;
 import com.liferay.apio.architect.annotation.Actions.Remove;
@@ -38,12 +35,6 @@ public interface MyAnnotatedInterface {
 
 	@Action(httpMethod = "GET", name = "name")
 	public void annotatedWithAction();
-
-	@CanCreate
-	public boolean annotatedWithCanCreate();
-
-	@CanRetrieve
-	public boolean annotatedWithCanRetrieve(@Id long id);
 
 	@Create
 	public void annotatedWithCreate();

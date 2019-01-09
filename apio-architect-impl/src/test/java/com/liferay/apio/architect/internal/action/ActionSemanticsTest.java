@@ -29,12 +29,8 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
-import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.internal.annotation.Action;
-import com.liferay.apio.architect.internal.unsafe.Unsafe;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.resource.Resource;
 import com.liferay.apio.architect.resource.Resource.Item;
@@ -88,10 +84,6 @@ public class ActionSemanticsTest {
 		String result = (String)actionSemantics.execute(asList("1", "2"));
 
 		assertThat(result, is("1-2"));
-
-		boolean permission = actionSemantics.getPermissionMethod().apply(null);
-
-		assertTrue(permission);
 	}
 
 	@Test
@@ -152,42 +144,6 @@ public class ActionSemanticsTest {
 		String result = (String)actionSemantics.execute(asList("1", "2"));
 
 		assertThat(result, is("1-2"));
-	}
-
-	@Test
-	public void testBuilderWithPermissionFunctionCreatesActionSemantics()
-		throws Throwable {
-
-		ActionSemantics actionSemantics = ActionSemantics.ofResource(
-			Paged.of("name")
-		).name(
-			"action"
-		).method(
-			GET
-		).returns(
-			Long.class
-		).permissionMethod(
-			params -> Unsafe.unsafeCast(params.get(0)).equals(0L)
-		).permissionClasses(
-			Id.class
-		).executeFunction(
-			_join
-		).annotatedWith(
-			_myAnnotation
-		).build();
-
-		CheckedFunction1<List<?>, Boolean> permissionMethod =
-			actionSemantics.getPermissionMethod();
-
-		boolean validParam = permissionMethod.apply(
-			Collections.singletonList(0L));
-
-		assertTrue(validParam);
-
-		boolean invalidParam = permissionMethod.apply(
-			Collections.singletonList(1L));
-
-		assertFalse(invalidParam);
 	}
 
 	@Test
