@@ -156,7 +156,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					"POST"
 				).returns(
 					BatchResult.class
-				).permissionMethod(
+				).permissionFunction(
 					params ->
 						hasNestedAddingPermissionFunction.apply(
 							unsafeCast(params.get(0)),
@@ -187,7 +187,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"POST"
 			).returns(
 				SingleModel.class
-			).permissionMethod(
+			).permissionFunction(
 				params -> hasNestedAddingPermissionFunction.apply(
 					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
 			).permissionProvidedClasses(
@@ -226,7 +226,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				"GET"
 			).returns(
 				Page.class
-			).permissionMethod(
+			).permissionFunction(
 			).executeFunction(
 				params -> getterThrowableHexaFunction.andThen(
 					pageItems -> new PageImpl<>(

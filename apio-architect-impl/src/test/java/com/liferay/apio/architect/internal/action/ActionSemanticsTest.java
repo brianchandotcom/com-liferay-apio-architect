@@ -65,7 +65,7 @@ public class ActionSemanticsTest {
 			GET
 		).returns(
 			Long.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			_join
 		).receivesParams(
@@ -89,7 +89,7 @@ public class ActionSemanticsTest {
 
 		assertThat(result, is("1-2"));
 
-		boolean permission = actionSemantics.getPermissionMethod().apply(null);
+		boolean permission = actionSemantics.checkPermissions(null);
 
 		assertTrue(permission);
 	}
@@ -106,7 +106,7 @@ public class ActionSemanticsTest {
 			GET
 		).returns(
 			Void.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			_join
 		).build();
@@ -135,7 +135,7 @@ public class ActionSemanticsTest {
 			GET
 		).returns(
 			Long.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			_join
 		).annotatedWith(
@@ -166,7 +166,7 @@ public class ActionSemanticsTest {
 			GET
 		).returns(
 			Long.class
-		).permissionMethod(
+		).permissionFunction(
 			params -> Unsafe.unsafeCast(params.get(0)).equals(0L)
 		).permissionProvidedClasses(
 			Id.class
@@ -176,15 +176,12 @@ public class ActionSemanticsTest {
 			_myAnnotation
 		).build();
 
-		CheckedFunction1<List<?>, Boolean> permissionMethod =
-			actionSemantics.getPermissionMethod();
-
-		boolean validParam = permissionMethod.apply(
+		boolean validParam = actionSemantics.checkPermissions(
 			Collections.singletonList(0L));
 
 		assertTrue(validParam);
 
-		boolean invalidParam = permissionMethod.apply(
+		boolean invalidParam = actionSemantics.checkPermissions(
 			Collections.singletonList(1L));
 
 		assertFalse(invalidParam);
@@ -202,7 +199,7 @@ public class ActionSemanticsTest {
 			"POST"
 		).returns(
 			Void.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			_join
 		).annotatedWith(
@@ -231,7 +228,7 @@ public class ActionSemanticsTest {
 			GET
 		).returns(
 			String.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			_join
 		).receivesParams(
@@ -263,7 +260,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			__ -> null
 		).annotatedWith(
@@ -291,7 +288,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			__ -> null
 		).build();
@@ -315,7 +312,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			__ -> null
 		).build();
@@ -338,7 +335,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			__ -> null
 		).build();
@@ -361,7 +358,7 @@ public class ActionSemanticsTest {
 			"GET"
 		).returns(
 			Page.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			__ -> null
 		).build();

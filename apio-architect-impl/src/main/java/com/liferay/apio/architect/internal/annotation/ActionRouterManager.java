@@ -16,7 +16,7 @@ package com.liferay.apio.architect.internal.annotation;
 
 import static com.liferay.apio.architect.internal.annotation.representor.StringUtil.toLowercaseSlug;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.execute;
-import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.findPermissionMethod;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.findPermissionMethodOptional;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getBodyResourceClassName;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParamClasses;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getResource;
@@ -165,9 +165,10 @@ public class ActionRouterManager {
 
 		Resource resource = getResource(method, name);
 
-		Optional<Method> permissionMethodOptional = findPermissionMethod(
-			actionRouter.getClass(), resource.getClass(), action.name(),
-			action.httpMethod());
+		Optional<Method> permissionMethodOptional =
+			findPermissionMethodOptional(
+				actionRouter.getClass(), resource.getClass(), action.name(),
+				action.httpMethod());
 
 		ActionSemantics actionSemantics = ActionSemantics.ofResource(
 			resource
@@ -177,9 +178,9 @@ public class ActionRouterManager {
 			action.httpMethod()
 		).returns(
 			getReturnClass(method)
-		).permissionMethod(
+		).permissionFunction(
 			permissionMethodOptional.map(
-				permissionMethod -> _getPermissionMethodForActionRouter(
+				permissionMethod -> _getPermissionCheckedFunction1(
 					permissionMethod, actionRouter)
 			).orElse(
 				params -> true
@@ -204,9 +205,8 @@ public class ActionRouterManager {
 		return some(actionSemantics);
 	}
 
-	private CheckedFunction1<List<?>, Boolean>
-		_getPermissionMethodForActionRouter(
-			Method permissionMethod, ActionRouter actionRouter) {
+	private CheckedFunction1<List<?>, Boolean> _getPermissionCheckedFunction1(
+		Method permissionMethod, ActionRouter actionRouter) {
 
 		return arguments -> (Boolean)permissionMethod.invoke(
 			actionRouter, arguments.toArray(new Object[0]));

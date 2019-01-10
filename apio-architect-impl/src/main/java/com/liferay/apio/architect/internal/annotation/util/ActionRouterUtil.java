@@ -175,7 +175,7 @@ public final class ActionRouterUtil {
 	 * @return an optional containing the method or empty otherwise
 	 * @review
 	 */
-	public static Optional<Method> findPermissionMethod(
+	public static Optional<Method> findPermissionMethodOptional(
 		Class actionRouterClass, Class<? extends Resource> resourceClass,
 		String actionName, String httpMethod) {
 
@@ -183,12 +183,13 @@ public final class ActionRouterUtil {
 			actionRouterClass.getMethods()
 		).filter(
 			method -> {
-				HasPermission annotation =
+				HasPermission hasPermission =
 					findAnnotationInMethodOrInItsAnnotations(
 						method, HasPermission.class);
 
 				return _matchesPermission(
-					actionName, httpMethod, annotation, resourceClass, method);
+					actionName, httpMethod, hasPermission, resourceClass,
+					method);
 			}
 		).findFirst();
 	}
@@ -413,13 +414,14 @@ public final class ActionRouterUtil {
 
 	private static <A extends Annotation> boolean _isResourceWithAnnotation(
 		Class<? extends Resource> resourceClass,
-		Class<? extends Resource> clazz, Method method, Class<A> annotation) {
+		Class<? extends Resource> routerClass, Method method,
+		Class<A> annotationClass) {
 
 		A annotationInAnyParameter = findAnnotationInAnyParameter(
-			method, annotation);
+			method, annotationClass);
 
 		if ((annotationInAnyParameter == null) ||
-			clazz.isAssignableFrom(resourceClass)) {
+			routerClass.isAssignableFrom(resourceClass)) {
 
 			return true;
 		}
@@ -428,24 +430,24 @@ public final class ActionRouterUtil {
 	}
 
 	private static boolean _matchesPermission(
-		String actionName, String httpMethod, HasPermission annotation,
+		String actionName, String httpMethod, HasPermission hasPermission,
 		Class<? extends Resource> resourceClass, Method method) {
 
-		if (annotation != null) {
+		if (hasPermission != null) {
 			boolean validIdAnnotation = _isResourceWithAnnotation(
 				resourceClass, Item.class, method, Id.class);
-
-			boolean validParentIdAnnotation = _isResourceWithAnnotation(
-				resourceClass, Nested.class, method, ParentId.class);
 
 			boolean validGenericParentIdAnnotation = _isResourceWithAnnotation(
 				resourceClass, GenericParent.class, method,
 				GenericParentId.class);
 
-			if (actionName.equals(annotation.name()) &&
-				httpMethod.equals(annotation.httpMethod()) &&
-				validIdAnnotation && validParentIdAnnotation &&
-				validGenericParentIdAnnotation) {
+			boolean validParentIdAnnotation = _isResourceWithAnnotation(
+				resourceClass, Nested.class, method, ParentId.class);
+
+			if (actionName.equals(hasPermission.name()) &&
+				httpMethod.equals(hasPermission.httpMethod()) &&
+				validIdAnnotation && validGenericParentIdAnnotation &&
+				validParentIdAnnotation) {
 
 				return true;
 			}

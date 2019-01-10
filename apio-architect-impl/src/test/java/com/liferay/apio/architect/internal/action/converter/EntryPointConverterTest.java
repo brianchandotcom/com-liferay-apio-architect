@@ -75,7 +75,7 @@ public class EntryPointConverterTest {
 			"GET"
 		).returns(
 			Page.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			__ -> null
 		).annotatedWith(

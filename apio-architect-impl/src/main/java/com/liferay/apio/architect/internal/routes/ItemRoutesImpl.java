@@ -150,7 +150,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				customRoute.getMethod()
 			).returns(
 				SingleModel.class
-			).permissionMethod(
+			).permissionFunction(
 				params -> permissionBiFunction.apply(
 					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
 			).permissionProvidedClasses(
@@ -194,7 +194,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"GET"
 			).returns(
 				SingleModel.class
-			).permissionMethod(
+			).permissionFunction(
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(t, _item.getName())
@@ -226,7 +226,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"DELETE"
 			).returns(
 				Void.class
-			).permissionMethod(
+			).permissionFunction(
 				params -> hasRemovePermissionFunction.apply(
 					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
 			).permissionProvidedClasses(
@@ -265,7 +265,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				"PUT"
 			).returns(
 				SingleModel.class
-			).permissionMethod(
+			).permissionFunction(
 				params -> hasUpdatePermissionFunction.apply(
 					unsafeCast(params.get(0)), unsafeCast(params.get(1)))
 			).permissionProvidedClasses(

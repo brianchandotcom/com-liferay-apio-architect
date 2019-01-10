@@ -238,7 +238,7 @@ public class MockWriterUtil {
 			httpMethod
 		).returns(
 			Void.class
-		).permissionMethod(
+		).permissionFunction(
 		).executeFunction(
 			__ -> null
 		).build();

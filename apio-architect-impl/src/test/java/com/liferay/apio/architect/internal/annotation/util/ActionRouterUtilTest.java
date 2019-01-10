@@ -15,7 +15,7 @@
 package com.liferay.apio.architect.internal.annotation.util;
 
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.execute;
-import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.findPermissionMethod;
+import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.findPermissionMethodOptional;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getBodyResourceClassName;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getParamClasses;
 import static com.liferay.apio.architect.internal.annotation.util.ActionRouterUtil.getResource;
@@ -69,16 +69,18 @@ public class ActionRouterUtilTest {
 
 	@Test
 	public void testCanCreateAnnotationReturnsMethod() {
-		Optional<Method> createMethod = findPermissionMethod(
+		Optional<Method> createMethodOptional = findPermissionMethodOptional(
 			MyAnnotatedInterface.class, Paged.class, "create", "POST");
-		Optional<Method> createNotExistingMethod = findPermissionMethod(
-			MyAnnotatedInterface.class, Paged.class, "update", "POST");
-		Optional<Method> retrieveItemMethod = findPermissionMethod(
-			MyAnnotatedInterface.class, Item.class, "retrieve", "GET");
+		Optional<Method> notExistingMethodOptional =
+			findPermissionMethodOptional(
+				MyAnnotatedInterface.class, Paged.class, "update", "POST");
+		Optional<Method> retrieveItemMethodOptional =
+			findPermissionMethodOptional(
+				MyAnnotatedInterface.class, Item.class, "retrieve", "GET");
 
-		assertTrue(createMethod.isPresent());
-		assertFalse(createNotExistingMethod.isPresent());
-		assertTrue(retrieveItemMethod.isPresent());
+		assertTrue(createMethodOptional.isPresent());
+		assertFalse(notExistingMethodOptional.isPresent());
+		assertTrue(retrieveItemMethodOptional.isPresent());
 	}
 
 	@Test

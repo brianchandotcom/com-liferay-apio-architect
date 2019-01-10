@@ -60,6 +60,16 @@ public final class ActionSemantics {
 	}
 
 	/**
+	 * Executes the permission function with the provided params to check if we
+	 * have permissions to execute an action
+	 *
+	 * @review
+	 */
+	public Boolean checkPermissions(List<?> params) throws Throwable {
+		return _permissionFunction.apply(params);
+	}
+
+	/**
 	 * Executes the action with the provided params.
 	 *
 	 * @review
@@ -128,15 +138,6 @@ public final class ActionSemantics {
 		);
 	}
 
-	/**
-	 * The permission method that checks if we can execute an action.
-	 *
-	 * @review
-	 */
-	public CheckedFunction1<List<?>, Boolean> getPermissionMethod() {
-		return _permissionMethod;
-	}
-
 	public List<Object> getPermissionParams(
 		Function<Class<?>, Object> provideFunction) {
 
@@ -163,7 +164,7 @@ public final class ActionSemantics {
 	 * @review
 	 */
 	public List<Class<?>> getPermissionProvidedClasses() {
-		return _permissionProvidedClasses;
+		return unmodifiableList(_permissionProvidedClasses);
 	}
 
 	/**
@@ -195,7 +196,7 @@ public final class ActionSemantics {
 		return request -> Try.of(
 			() -> getPermissionParams(provideFunction.apply(this, request))
 		).mapTry(
-			getPermissionMethod()::apply
+			this::checkPermissions
 		).filter(
 			aBoolean -> aBoolean
 		).<Try<List<?>>>transform(
@@ -235,8 +236,8 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._permissionFunction = _permissionFunction;
 		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = _returnClass;
 
@@ -266,8 +267,8 @@ public final class ActionSemantics {
 		actionSemantics._method = method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._permissionFunction = _permissionFunction;
 		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = _returnClass;
 
@@ -297,8 +298,8 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = name;
 		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._permissionFunction = _permissionFunction;
 		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = _returnClass;
 
@@ -324,8 +325,8 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._permissionFunction = _permissionFunction;
 		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = resource;
 		actionSemantics._returnClass = _returnClass;
 
@@ -355,8 +356,8 @@ public final class ActionSemantics {
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
+		actionSemantics._permissionFunction = _permissionFunction;
 		actionSemantics._permissionProvidedClasses = _permissionProvidedClasses;
-		actionSemantics._permissionMethod = _permissionMethod;
 		actionSemantics._resource = _resource;
 		actionSemantics._returnClass = returnClass;
 
@@ -364,8 +365,8 @@ public final class ActionSemantics {
 	}
 
 	public static class Builder
-		implements NameStep, MethodStep, ReturnStep, ExecuteStep, FinalStep,
-				   PermissionStep {
+		implements NameStep, MethodStep, ReturnStep, PermissionStep,
+				   ExecuteStep, FinalStep {
 
 		public Builder(ActionSemantics actionSemantics) {
 			_actionSemantics = actionSemantics;
@@ -421,17 +422,17 @@ public final class ActionSemantics {
 		}
 
 		@Override
-		public ExecuteStep permissionMethod() {
-			_actionSemantics._permissionMethod = params -> true;
+		public ExecuteStep permissionFunction() {
+			_actionSemantics._permissionFunction = params -> true;
 
 			return this;
 		}
 
 		@Override
-		public ExecuteStep permissionMethod(
-			CheckedFunction1<List<?>, Boolean> permissionMethod) {
+		public ExecuteStep permissionFunction(
+			CheckedFunction1<List<?>, Boolean> permissionFunction) {
 
-			_actionSemantics._permissionMethod = permissionMethod;
+			_actionSemantics._permissionFunction = permissionFunction;
 
 			return this;
 		}
@@ -477,7 +478,7 @@ public final class ActionSemantics {
 		/**
 		 * Provides information about the permission method arguments. This
 		 * function receives the list of param classes to provide to the
-		 * permissionMethod
+		 * permissionFunction
 		 *
 		 * @review
 		 */
@@ -591,20 +592,20 @@ public final class ActionSemantics {
 	public interface PermissionStep {
 
 		/**
-		 * Default empty implementation of the permission method.
+		 * Default empty implementation of the permission function.
 		 *
 		 * @review
 		 */
-		public ExecuteStep permissionMethod();
+		public ExecuteStep permissionFunction();
 
 		/**
-		 * Provides information about the permission method to check if the
+		 * Provides information about the permission function to check if the
 		 * execute function has permissions to be executed.
 		 *
 		 * @review
 		 */
-		public ExecuteStep permissionMethod(
-			CheckedFunction1<List<?>, Boolean> permissionMethod);
+		public ExecuteStep permissionFunction(
+			CheckedFunction1<List<?>, Boolean> permissionFunction);
 
 	}
 
@@ -625,7 +626,7 @@ public final class ActionSemantics {
 	private String _method;
 	private String _name;
 	private List<Class<?>> _paramClasses = new ArrayList<>();
-	private CheckedFunction1<List<?>, Boolean> _permissionMethod;
+	private CheckedFunction1<List<?>, Boolean> _permissionFunction;
 	private List<Class<?>> _permissionProvidedClasses = new ArrayList<>();
 	private Resource _resource;
 	private Class<?> _returnClass;

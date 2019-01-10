@@ -64,7 +64,6 @@ import com.liferay.apio.architect.resource.Resource.Paged;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
-import io.vavr.CheckedFunction1;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -233,13 +232,10 @@ public class ActionManagerImpl implements ActionManager {
 			actionSemantics -> Try.of(
 				() -> {
 					List<Object> params = actionSemantics.getPermissionParams(
-						aClass -> _provide(
-							actionSemantics, httpServletRequest, aClass));
+						clazz -> _provide(
+							actionSemantics, httpServletRequest, clazz));
 
-					CheckedFunction1<List<?>, Boolean> checkedFunction1 =
-						actionSemantics.getPermissionMethod();
-
-					return checkedFunction1.apply(params);
+					return actionSemantics.checkPermissions(params);
 				}
 			).getOrElse(
 				false

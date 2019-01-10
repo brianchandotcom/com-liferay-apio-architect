@@ -159,7 +159,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					"POST"
 				).returns(
 					BatchResult.class
-				).permissionMethod(
+				).permissionFunction(
 					params -> hasAddingPermissionFunction.apply(
 						unsafeCast(params.get(0)))
 				).permissionProvidedClasses(
@@ -188,7 +188,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"POST"
 			).returns(
 				SingleModel.class
-			).permissionMethod(
+			).permissionFunction(
 				params -> hasAddingPermissionFunction.apply(
 					unsafeCast(params.get(0)))
 			).permissionProvidedClasses(
@@ -244,7 +244,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				customRoute.getMethod()
 			).returns(
 				SingleModel.class
-			).permissionMethod(
+			).permissionFunction(
 				params -> permissionFunction.apply(unsafeCast(params.get(0)))
 			).permissionProvidedClasses(
 				Credentials.class
@@ -287,7 +287,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				"GET"
 			).returns(
 				Page.class
-			).permissionMethod(
+			).permissionFunction(
 			).executeFunction(
 				params -> getterThrowablePentaFunction.andThen(
 					pageItems -> new PageImpl<>(
