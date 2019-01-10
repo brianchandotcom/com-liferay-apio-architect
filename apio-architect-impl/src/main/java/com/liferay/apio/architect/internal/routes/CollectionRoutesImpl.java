@@ -35,6 +35,8 @@ import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.internal.action.ActionSemantics;
+import com.liferay.apio.architect.internal.form.FormImpl;
+import com.liferay.apio.architect.internal.jaxrs.resource.FormResource;
 import com.liferay.apio.architect.internal.pagination.PageImpl;
 import com.liferay.apio.architect.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.pagination.Page;
@@ -50,6 +52,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import javax.ws.rs.core.UriBuilder;
 
 /**
  * @author Alejandro Hernández
@@ -150,6 +154,18 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			Form<?> form = formBuilderFunction.apply(
 				unsafeCast(_formBuilderSupplier.get()));
 
+			String uri = UriBuilder.fromResource(
+				FormResource.class
+			).path(
+				FormResource.class, "creatorForm"
+			).build(
+				_paged.getName()
+			).toString();
+
+			FormImpl formImpl = (FormImpl)form;
+
+			formImpl.setURI(uri);
+
 			ActionSemantics batchCreateActionSemantics =
 				ActionSemantics.ofResource(
 					_paged
@@ -229,6 +245,19 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			if (formBuilderFunction != null) {
 				form = formBuilderFunction.apply(
 					unsafeCast(_formBuilderSupplier.get()));
+
+				String uri = UriBuilder.fromResource(
+					FormResource.class
+				).path(
+					FormResource.class, "customRouteForm"
+				).build(
+					_paged.getName(), customRoute.getName()
+				).toString();
+
+				FormImpl formImpl = (FormImpl)form;
+
+				formImpl.setURI(uri);
+
 				bodyClass = Body.class;
 			}
 
