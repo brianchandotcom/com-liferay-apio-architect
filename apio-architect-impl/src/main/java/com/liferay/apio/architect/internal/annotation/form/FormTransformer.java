@@ -190,16 +190,20 @@ public class FormTransformer {
 		for (FieldData<LinkTo> fieldData : linkToFieldDataList) {
 			LinkTo linkTo = fieldData.getData();
 
-			if (!SINGLE.equals(linkTo.resourceType())) {
-				continue;
-			}
-
 			String key = fieldData.getFieldName();
 			String methodName = fieldData.getMethodName();
+			Method method = fieldData.getMethod();
 
-			fieldStep.addOptionalLinkedModel(
-				key, unsafeCast(linkTo.resource()),
-				unsafeCast(formFunction.apply(methodName)));
+			if (SINGLE.equals(linkTo.resourceType())) {
+				fieldStep.addOptionalLinkedModel(
+					key, unsafeCast(linkTo.resource()),
+					unsafeCast(formFunction.apply(methodName)));
+			}
+			else if (method.getReturnType() == List.class) {
+				fieldStep.addOptionalLinkedModelList(
+					key, unsafeCast(linkTo.resource()),
+					unsafeCast(formFunction.apply(methodName)));
+			}
 		}
 
 		List<FieldData<ParsedType>> nestedParsedTypes = _filterReadableFields(
