@@ -69,6 +69,9 @@ public class FormTransformerTest {
 					put("numberListField2", asList("3", "4"));
 					put("stringListField1", asList("one", "two"));
 					put("stringListField2", asList("three", "four"));
+					put(
+						"linkToChildCollectionList",
+						asList("something/3", "something/2", "something/1"));
 				}
 			};
 
@@ -79,7 +82,8 @@ public class FormTransformerTest {
 		ParsedType parsedType = TypeProcessor.processType(Dummy.class);
 
 		Form<Dummy> objectForm = FormTransformer.toForm(
-			parsedType, __ -> "", __ -> Optional.of("something"));
+			parsedType, path -> Integer.valueOf(path.getId()),
+			__ -> Optional.of("something"));
 
 		_dummy = objectForm.get(body);
 	}
@@ -102,6 +106,7 @@ public class FormTransformerTest {
 		assertThat(_dummy.getNumberListField2(), is(asList(3L, 4L)));
 		assertThat(_dummy.getStringListField1(), is(asList("one", "two")));
 		assertThat(_dummy.getStringListField2(), is(asList("three", "four")));
+		assertThat(_dummy.getLinkToChildCollectionList(), is(asList(3, 2, 1)));
 	}
 
 	@Test

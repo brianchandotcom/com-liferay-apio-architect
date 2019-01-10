@@ -105,6 +105,12 @@ public interface Dummy extends Identifier<Long> {
 		return "2d1d";
 	}
 
+	@Field(mode = READ_ONLY, value = "linkToChildCollectionList")
+	@LinkTo(resource = IntegerIdentifier.class, resourceType = CHILD_COLLECTION)
+	public default List<Integer> getLinkToChildCollectionList() {
+		return asList(1, 2, 3);
+	}
+
 	@Field("linkToSingle1")
 	@LinkTo(resource = IntegerIdentifier.class)
 	public default Integer getLinkToSingle1() {
