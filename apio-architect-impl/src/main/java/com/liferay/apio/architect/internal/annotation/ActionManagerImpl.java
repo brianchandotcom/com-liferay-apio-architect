@@ -94,11 +94,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(service = ActionManager.class)
 public class ActionManagerImpl implements ActionManager {
 
-	/**
-	 * Returns all of the action semantics collected by the different routers.
-	 *
-	 * @review
-	 */
+	@Override
 	public Stream<ActionSemantics> actionSemantics() {
 		return Stream.of(
 			_actionRouterManager.getActionSemantics(),

@@ -49,6 +49,13 @@ import javax.servlet.http.HttpServletRequest;
 public interface ActionManager {
 
 	/**
+	 * Returns all of the action semantics collected by the different routers.
+	 *
+	 * @review
+	 */
+	public Stream<ActionSemantics> actionSemantics();
+
+	/**
 	 * Returns the action for the provided combination of parameters and method,
 	 * if found. Returns an {@link Action.Error} if an action couldn't be
 	 * provided.
