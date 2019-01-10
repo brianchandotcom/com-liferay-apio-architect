@@ -65,13 +65,13 @@ public class FormTransformerTest {
 				{
 					put("booleanListField1", asList("true", "false"));
 					put("booleanListField2", asList("false", "true"));
+					put(
+						"linkToChildCollectionList",
+						asList("something/3", "something/2", "something/1"));
 					put("numberListField1", asList("1", "2"));
 					put("numberListField2", asList("3", "4"));
 					put("stringListField1", asList("one", "two"));
 					put("stringListField2", asList("three", "four"));
-					put(
-						"linkToChildCollectionList",
-						asList("something/3", "something/2", "something/1"));
 				}
 			};
 
