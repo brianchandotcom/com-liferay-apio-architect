@@ -207,11 +207,6 @@ public class RootResourceTest extends BaseTest {
 	private static class ActionManagerImpl implements ActionManager {
 
 		@Override
-		public Stream<ActionSemantics> actionSemantics() {
-			return Stream.empty();
-		}
-
-		@Override
 		public Either<Action.Error, Action> getAction(
 			String method, List<String> params) {
 
