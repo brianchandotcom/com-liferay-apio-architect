@@ -112,7 +112,7 @@ public class FormImpl<T> implements Form<T> {
 
 	@Override
 	public String getId() {
-		return _uri;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -134,15 +134,6 @@ public class FormImpl<T> implements Form<T> {
 	@Override
 	public String getTitle(AcceptLanguage acceptLanguage) {
 		return _titleFunction.apply(acceptLanguage);
-	}
-
-	/**
-	 * Sets the form's URI. Accessible through {@link #getId()} method.
-	 *
-	 * @review
-	 */
-	public void setURI(String uri) {
-		_uri = uri;
 	}
 
 	public static class BuilderImpl<T>
@@ -830,6 +821,5 @@ public class FormImpl<T> implements Form<T> {
 		new HashMap<>();
 	private Supplier<T> _supplier;
 	private Function<AcceptLanguage, String> _titleFunction;
-	private String _uri;
 
 }
