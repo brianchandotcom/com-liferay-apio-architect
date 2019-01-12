@@ -171,8 +171,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 						unsafeCast(params.get(4)), unsafeCast(params.get(5))
 					)
-				).form(
-					form, Form::getList
+				).bodyFunction(
+					form::getList
 				).receivesParams(
 					_getIdClass(), Body.class, aClass, bClass, cClass, dClass
 				).build();
@@ -200,8 +200,8 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
-			).form(
-				form, Form::get
+			).bodyFunction(
+				form::get
 			).receivesParams(
 				_getIdClass(), Body.class, aClass, bClass, cClass, dClass
 			).build();

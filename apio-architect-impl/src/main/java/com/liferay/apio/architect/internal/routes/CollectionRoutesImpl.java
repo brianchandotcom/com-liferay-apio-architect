@@ -172,8 +172,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 						unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 						unsafeCast(params.get(4))
 					)
-				).form(
-					form, Form::getList
+				).bodyFunction(
+					form::getList
 				).receivesParams(
 					Body.class, aClass, bClass, cClass, dClass
 				).build();
@@ -201,8 +201,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4))
 				)
-			).form(
-				form, Form::get
+			).bodyFunction(
+				form::get
 			).receivesParams(
 				Body.class, aClass, bClass, cClass, dClass
 			).build();
@@ -223,14 +223,18 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				Function<Credentials, Boolean> permissionFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
-			Form form = null;
-			Class<?> bodyClass = Void.class;
+			Optional<Form> optionalForm = Optional.ofNullable(
+				formBuilderFunction
+			).map(
+				function -> function.apply(
+					unsafeCast(_formBuilderSupplier.get()))
+			);
 
-			if (formBuilderFunction != null) {
-				form = formBuilderFunction.apply(
-					unsafeCast(_formBuilderSupplier.get()));
-				bodyClass = Body.class;
-			}
+			Class<?> bodyClass = optionalForm.<Class<?>>map(
+				__ -> Body.class
+			).orElse(
+				Void.class
+			);
 
 			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
 				_paged
@@ -253,8 +257,12 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
-			).form(
-				form, Form::get
+			).bodyFunction(
+				body -> optionalForm.map(
+					form -> form.get(body)
+				).orElse(
+					null
+				)
 			).receivesParams(
 				Pagination.class, bodyClass, aClass, bClass, cClass, dClass
 			).build();

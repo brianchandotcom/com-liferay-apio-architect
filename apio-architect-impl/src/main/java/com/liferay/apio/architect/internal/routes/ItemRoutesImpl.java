@@ -129,14 +129,18 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				BiFunction<Credentials, S, Boolean> permissionBiFunction,
 				FormBuilderFunction<R> formBuilderFunction) {
 
-			Form form = null;
-			Class<?> bodyClass = Void.class;
+			Optional<Form> optionalForm = Optional.ofNullable(
+				formBuilderFunction
+			).map(
+				function -> function.apply(
+					unsafeCast(_formBuilderSupplier.get()))
+			);
 
-			if (formBuilderFunction != null) {
-				form = formBuilderFunction.apply(
-					unsafeCast(_formBuilderSupplier.get()));
-				bodyClass = Body.class;
-			}
+			Class<?> bodyClass = optionalForm.<Class<?>>map(
+				__ -> Body.class
+			).orElse(
+				Void.class
+			);
 
 			ActionSemantics createActionSemantics = ActionSemantics.ofResource(
 				_item
@@ -160,8 +164,12 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
-			).form(
-				form, Form::get
+			).bodyFunction(
+				body -> optionalForm.map(
+					form -> form.get(body)
+				).orElse(
+					null
+				)
 			).receivesParams(
 				Id.class, bodyClass, aClass, bClass, cClass, dClass
 			).build();
@@ -270,8 +278,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					unsafeCast(params.get(2)), unsafeCast(params.get(3)),
 					unsafeCast(params.get(4)), unsafeCast(params.get(5))
 				)
-			).form(
-				form, Form::get
+			).bodyFunction(
+				form::get
 			).receivesParams(
 				Id.class, Body.class, aClass, bClass, cClass, dClass
 			).build();

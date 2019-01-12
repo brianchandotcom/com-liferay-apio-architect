@@ -18,14 +18,12 @@ import static java.util.Collections.unmodifiableList;
 
 import com.liferay.apio.architect.annotation.Id;
 import com.liferay.apio.architect.form.Body;
-import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.internal.annotation.Action;
 import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.resource.Resource;
 
 import io.vavr.CheckedFunction1;
-import io.vavr.Function2;
 import io.vavr.control.Try;
 
 import java.lang.annotation.Annotation;
@@ -33,7 +31,6 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -111,16 +108,6 @@ public final class ActionSemantics {
 		}
 
 		return _bodyFunction.apply(body);
-	}
-
-	/**
-	 * Returns the form for the action, if present. Returns {@code
-	 * Optional#empty()} otherwise.
-	 *
-	 * @review
-	 */
-	public Optional<Form> getFormOptional() {
-		return Optional.ofNullable(_form);
 	}
 
 	/**
@@ -246,7 +233,6 @@ public final class ActionSemantics {
 		actionSemantics._annotations = annotations;
 		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeCheckedFunction1 = _executeCheckedFunction1;
-		actionSemantics._form = _form;
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
@@ -279,7 +265,6 @@ public final class ActionSemantics {
 		actionSemantics._annotations = _annotations;
 		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeCheckedFunction1 = _executeCheckedFunction1;
-		actionSemantics._form = _form;
 		actionSemantics._method = method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
@@ -312,7 +297,6 @@ public final class ActionSemantics {
 		actionSemantics._annotations = _annotations;
 		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeCheckedFunction1 = _executeCheckedFunction1;
-		actionSemantics._form = _form;
 		actionSemantics._method = _method;
 		actionSemantics._name = name;
 		actionSemantics._paramClasses = _paramClasses;
@@ -341,7 +325,6 @@ public final class ActionSemantics {
 		actionSemantics._annotations = _annotations;
 		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeCheckedFunction1 = _executeCheckedFunction1;
-		actionSemantics._form = _form;
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
@@ -374,7 +357,6 @@ public final class ActionSemantics {
 		actionSemantics._annotations = _annotations;
 		actionSemantics._bodyFunction = _bodyFunction;
 		actionSemantics._executeCheckedFunction1 = _executeCheckedFunction1;
-		actionSemantics._form = _form;
 		actionSemantics._method = _method;
 		actionSemantics._name = _name;
 		actionSemantics._paramClasses = _paramClasses;
@@ -410,6 +392,13 @@ public final class ActionSemantics {
 		}
 
 		@Override
+		public FinalStep bodyFunction(Function<Body, Object> bodyFunction) {
+			_actionSemantics._bodyFunction = bodyFunction;
+
+			return this;
+		}
+
+		@Override
 		public ActionSemantics build() {
 			return _actionSemantics;
 		}
@@ -419,19 +408,6 @@ public final class ActionSemantics {
 			CheckedFunction1<List<?>, ?> executeCheckedFunction1) {
 
 			_actionSemantics._executeCheckedFunction1 = executeCheckedFunction1;
-
-			return this;
-		}
-
-		@Override
-		public FinalStep form(
-			Form form, Function2<Form, Body, Object> function2) {
-
-			_actionSemantics._form = form;
-
-			if (form != null) {
-				_actionSemantics._bodyFunction = function2.apply(form);
-			}
 
 			return this;
 		}
@@ -549,16 +525,8 @@ public final class ActionSemantics {
 		public FinalStep annotatedWith(Annotation... annotations);
 
 		/**
-		 * Creates the {@link ActionSemantics} object with the information
-		 * provided to the builder.
-		 *
-		 * @review
-		 */
-		public ActionSemantics build();
-
-		/**
-		 * Provides information about the form and function used to transform
-		 * the body value into the object needed by the action.
+		 * Provides information about the function used to transform the body
+		 * value into the object needed by the action.
 		 *
 		 * <p>
 		 * If the action does not need information from the body, this method
@@ -567,8 +535,15 @@ public final class ActionSemantics {
 		 *
 		 * @review
 		 */
-		public FinalStep form(
-			Form form, Function2<Form, Body, Object> biFunction);
+		public FinalStep bodyFunction(Function<Body, Object> bodyFunction);
+
+		/**
+		 * Creates the {@link ActionSemantics} object with the information
+		 * provided to the builder.
+		 *
+		 * @review
+		 */
+		public ActionSemantics build();
 
 		/**
 		 * Provides information about the params needed by the action.
@@ -652,9 +627,8 @@ public final class ActionSemantics {
 	}
 
 	private List<Annotation> _annotations = new ArrayList<>();
-	private Function<Body, Object> _bodyFunction = __ -> null;
+	private Function<Body, Object> _bodyFunction;
 	private CheckedFunction1<List<?>, ?> _executeCheckedFunction1;
-	private Form _form;
 	private String _method;
 	private String _name;
 	private List<Class<?>> _paramClasses = new ArrayList<>();

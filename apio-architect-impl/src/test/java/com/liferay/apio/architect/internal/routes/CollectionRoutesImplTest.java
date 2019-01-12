@@ -127,7 +127,7 @@ public class CollectionRoutesImplTest {
 		).addCustomRoute(
 			GET_CUSTOM_ROUTE, this::_testAndReturnFourParameterCustomRoute,
 			String.class, Long.class, Boolean.class, Integer.class,
-			CustomIdentifier.class, __ -> true, null
+			CustomIdentifier.class, __ -> true, __ -> null
 		).addCustomRoute(
 			POST_CUSTOM_ROUTE, this::_testAndReturnFourParameterCustomRoute,
 			String.class, Long.class, Boolean.class, Integer.class,
@@ -152,7 +152,7 @@ public class CollectionRoutesImplTest {
 		).addCustomRoute(
 			GET_CUSTOM_ROUTE, this::_testAndReturnThreeParameterCustomRoute,
 			String.class, Long.class, Boolean.class, CustomIdentifier.class,
-			__ -> true, null
+			__ -> true, __ -> null
 		).addCustomRoute(
 			POST_CUSTOM_ROUTE, this::_testAndReturnThreeParameterCustomRoute,
 			String.class, Long.class, Boolean.class, CustomIdentifier.class,
@@ -176,7 +176,7 @@ public class CollectionRoutesImplTest {
 			__ -> true, FORM_BUILDER_FUNCTION
 		).addCustomRoute(
 			GET_CUSTOM_ROUTE, this::_testAndReturnNoParameterCustomRoute,
-			CustomIdentifier.class, __ -> true, null
+			CustomIdentifier.class, __ -> true, __ -> null
 		).addCustomRoute(
 			POST_CUSTOM_ROUTE, this::_testAndReturnNoParameterCustomRoute,
 			CustomIdentifier.class, __ -> true, FORM_BUILDER_FUNCTION
@@ -198,7 +198,8 @@ public class CollectionRoutesImplTest {
 			Long.class, __ -> true, FORM_BUILDER_FUNCTION
 		).addCustomRoute(
 			GET_CUSTOM_ROUTE, this::_testAndReturnTwoParameterCustomRoute,
-			String.class, Long.class, CustomIdentifier.class, __ -> true, null
+			String.class, Long.class, CustomIdentifier.class,
+			__ -> true, __ -> null
 		).addCustomRoute(
 			POST_CUSTOM_ROUTE, this::_testAndReturnTwoParameterCustomRoute,
 			String.class, Long.class, CustomIdentifier.class,
@@ -222,7 +223,7 @@ public class CollectionRoutesImplTest {
 			__ -> true, FORM_BUILDER_FUNCTION
 		).addCustomRoute(
 			GET_CUSTOM_ROUTE, this::_testAndReturnOneParameterCustomRoute,
-			String.class, CustomIdentifier.class, __ -> true, null
+			String.class, CustomIdentifier.class, __ -> true, __ -> null
 		).addCustomRoute(
 			POST_CUSTOM_ROUTE, this::_testAndReturnOneParameterCustomRoute,
 			String.class, CustomIdentifier.class,
