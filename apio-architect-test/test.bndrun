@@ -56,4 +56,4 @@
 
 -runsystemcapabilities: ${native_capability}
 
--runvm: -javaagent:${.}/build/jacoco/jacocoagent.jar=destfile=${.}/build/jacoco/test.exec
+-runvm: -javaagent:${.}/build/jacoco/jacocoagent.jar=destfile=${.}/build/jacoco/testIntegration.exec

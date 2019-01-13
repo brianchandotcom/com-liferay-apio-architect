@@ -58,10 +58,43 @@ configure(subprojects.findAll {!it.childProjects}) {
 	}
 }
 
-task codeCoverageReport(type: JacocoReport)
+task codeCoverageIntegrationTestReport(type: JacocoReport)
+task codeCoverageUnitTestReport(type: JacocoReport)
 
-codeCoverageReport {
-	executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+codeCoverageIntegrationTestReport {
+	executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/testIntegration.exec")
+
+	subprojects.findAll { !it.childProjects }.each { sourceSets it.sourceSets.main }
+
+	afterEvaluate {
+		classDirectories = files(
+			classDirectories.files.collect {
+				fileTree(
+					dir: it,
+					exclude: [
+						"**/com/liferay/apio/architect/internal/test/**"
+					])
+			})
+	}
+
+	reports {
+		csv {
+			enabled = false
+		}
+
+		html {
+			enabled = false
+		}
+
+		xml {
+			enabled = true
+			destination "${buildDir}/reports/jacoco/report.xml"
+		}
+	}
+}
+
+codeCoverageUnitTestReport {
+	executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/test.exec")
 
 	subprojects.findAll { !it.childProjects }.each { sourceSets it.sourceSets.main }
 
