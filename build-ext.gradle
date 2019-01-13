@@ -11,6 +11,12 @@ allprojects {
 		delete 'out'
 	}
 
+	formatSource {
+		autoFix = true
+		showDocumentation = true
+		showStatusUpdates = false
+	}
+
 	check {
 		dependsOn checkSourceFormatting
 	}
