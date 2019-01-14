@@ -4,6 +4,7 @@
 
 -runblacklist:\
 	osgi.identity;filter:='(osgi.identity=org.osgi.compendium)',\
+	osgi.identity;filter:='(osgi.identity=org.osgi.service.cm)',\
     osgi.identity;filter:='(osgi.identity=org.osgi.service.http.whiteboard)',\
     osgi.identity;filter:='(osgi.identity=org.apache.felix.http.api)',\
     osgi.identity;filter:='(osgi.identity=osgi.cmpn)'
