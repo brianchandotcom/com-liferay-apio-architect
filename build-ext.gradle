@@ -94,7 +94,7 @@ codeCoverageIntegrationTestReport {
 
 		xml {
 			enabled = true
-			destination "${buildDir}/reports/jacoco/report.xml"
+			destination file("${buildDir}/reports/jacoco/report.xml")
 		}
 	}
 }
@@ -126,7 +126,7 @@ codeCoverageUnitTestReport {
 
 		xml {
 			enabled = true
-			destination "${buildDir}/reports/jacoco/report.xml"
+			destination file("${buildDir}/reports/jacoco/report.xml")
 		}
 	}
 }
