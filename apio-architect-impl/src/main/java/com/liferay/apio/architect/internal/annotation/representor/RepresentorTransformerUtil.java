@@ -177,23 +177,23 @@ public class RepresentorTransformerUtil {
 
 		Method method = fieldData.getMethod();
 		Field field = fieldData.getField();
-		Class<?> returnType = fieldData.getData();
+		Class<?> returnTypeClass = fieldData.getData();
 
 		String key = field.value();
 
-		if (returnType == String.class) {
+		if (returnTypeClass == String.class) {
 			_addStringFields(firstStep, method, key);
 		}
-		else if (returnType == Date.class) {
+		else if (returnTypeClass == Date.class) {
 			firstStep.addDate(key, getMethodFunction(method));
 		}
-		else if (returnType == Boolean.class) {
+		else if (returnTypeClass == Boolean.class) {
 			firstStep.addBoolean(key, getMethodFunction(method));
 		}
-		else if (returnType == BinaryFile.class) {
+		else if (returnTypeClass == BinaryFile.class) {
 			firstStep.addBinary(key, (BinaryFunction)getMethodFunction(method));
 		}
-		else if (Number.class.isAssignableFrom(returnType)) {
+		else if (Number.class.isAssignableFrom(returnTypeClass)) {
 			firstStep.addNumber(key, getMethodFunction(method));
 		}
 	}

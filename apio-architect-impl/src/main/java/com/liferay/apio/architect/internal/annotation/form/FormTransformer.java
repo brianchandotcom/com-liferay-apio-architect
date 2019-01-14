@@ -121,29 +121,29 @@ public class FormTransformer {
 
 				Method method = fieldData.getMethod();
 
-				Class<?> returnType = fieldData.getData();
+				Class<?> returnTypeClass = fieldData.getData();
 
-				if (returnType == String.class) {
+				if (returnTypeClass == String.class) {
 					fieldStep.addOptionalString(
 						key, unsafeCast(formFunction.apply(method.getName())));
 				}
-				else if (returnType == Date.class) {
+				else if (returnTypeClass == Date.class) {
 					fieldStep.addOptionalDate(
 						key, unsafeCast(formFunction.apply(method.getName())));
 				}
-				else if (returnType == Boolean.class) {
+				else if (returnTypeClass == Boolean.class) {
 					fieldStep.addOptionalBoolean(
 						key, unsafeCast(formFunction.apply(method.getName())));
 				}
-				else if (returnType == BinaryFile.class) {
+				else if (returnTypeClass == BinaryFile.class) {
 					fieldStep.addOptionalFile(
 						key, unsafeCast(formFunction.apply(method.getName())));
 				}
-				else if (returnType == Double.class) {
+				else if (returnTypeClass == Double.class) {
 					fieldStep.addOptionalDouble(
 						key, unsafeCast(formFunction.apply(method.getName())));
 				}
-				else if (Number.class.isAssignableFrom(returnType)) {
+				else if (Number.class.isAssignableFrom(returnTypeClass)) {
 					fieldStep.addOptionalLong(
 						key, unsafeCast(formFunction.apply(method.getName())));
 				}

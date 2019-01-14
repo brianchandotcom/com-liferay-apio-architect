@@ -99,9 +99,9 @@ public class TypeProcessor {
 			}
 		}
 		else {
-			Class<?> returnType = (Class<?>)type;
+			Class<?> returnTypeClass = (Class<?>)type;
 
-			_addFields(builder, method, returnType);
+			_addFields(builder, method, returnTypeClass);
 		}
 	}
 
@@ -144,16 +144,16 @@ public class TypeProcessor {
 			return;
 		}
 
-		Class<?> returnType = method.getReturnType();
+		Class<?> returnTypeClass = method.getReturnType();
 
-		if (returnType == Optional.class) {
+		if (returnTypeClass == Optional.class) {
 			_addOptionalType(builder, method);
 		}
-		else if (returnType == List.class) {
+		else if (returnTypeClass == List.class) {
 			_addListType(builder, method, (Class<?>)_getGenericType(method));
 		}
 		else {
-			_addFields(builder, method, returnType);
+			_addFields(builder, method, returnTypeClass);
 		}
 	}
 
