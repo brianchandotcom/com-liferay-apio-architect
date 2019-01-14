@@ -115,7 +115,7 @@ public class RootResource {
 
 	private Response _toResponse(Action action) {
 		return Response.ok(
-			action.apply(_request)
+			action.execute(_request)
 		).build();
 	}
 

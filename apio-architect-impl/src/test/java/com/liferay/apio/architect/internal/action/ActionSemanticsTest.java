@@ -299,7 +299,7 @@ public class ActionSemanticsTest {
 		Action action = actionSemantics.toAction(
 			(semantics, request, clazz) -> clazz.getSimpleName());
 
-		Object object = action.apply(null);
+		Object object = action.execute(null);
 
 		assertThat(object, is(instanceOf(Try.class)));
 

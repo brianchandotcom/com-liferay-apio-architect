@@ -15,7 +15,6 @@
 package com.liferay.apio.architect.internal.annotation;
 
 import java.util.Set;
-import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +25,15 @@ import javax.servlet.http.HttpServletRequest;
  * @author Alejandro Hernández
  * @review
  */
-public interface Action extends Function<HttpServletRequest, Object> {
+public interface Action {
+
+	/**
+	 * Executes the action and returns its output, using the current HTTP
+	 * request.
+	 *
+	 * @review
+	 */
+	public Object execute(HttpServletRequest request);
 
 	/**
 	 * Types implementing this interface represent errors relative to an action.
