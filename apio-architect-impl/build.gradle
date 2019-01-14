@@ -1,3 +1,7 @@
+repositories {
+	maven { url 'https://jitpack.io' }
+}
+
 task deployConfigs(type: Copy)
 
 dependencies {
@@ -29,6 +33,7 @@ dependencies {
 	testCompile group: "co.unruly", name: "java-8-matchers", version: "1.5"
 	testCompile group: "com.openpojo", name: "openpojo", version: "0.8.10"
 	testCompile group: "com.spotify", name: "hamcrest-optional", version: "1.1.0"
+	testCompile group: "in.tazj", name: "vavr-matchers", version: "1.2"
 	testCompile group: "nl.jqno.equalsverifier", name: "equalsverifier", version: "2.4"
 	testCompile group: "org.exparity", name: "hamcrest-date", version: "2.0.4"
 	testCompile group: "org.glassfish.jersey.core", name: "jersey-common", version: "2.26"
