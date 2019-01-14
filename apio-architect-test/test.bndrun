@@ -4,9 +4,9 @@
 
 -runblacklist:\
 	osgi.identity;filter:='(osgi.identity=org.osgi.compendium)',\
-    osgi.identity;filter:='(osgi.identity=osgi.cmpn)',\
-    osgi.identity;filter:='(osgi.identity=org.osgi.service.http.whiteboard)',\
-    osgi.identity;filter:='(osgi.identity=org.apache.felix.http.api)'
+        osgi.identity;filter:='(osgi.identity=org.osgi.service.http.whiteboard)',\
+        osgi.identity;filter:='(osgi.identity=org.apache.felix.http.api)',\
+        osgi.identity;filter:='(osgi.identity=osgi.cmpn)'
 
 -runbundles: \
 	ch.qos.logback.classic;version='[1.2.3,1.2.4)',\
