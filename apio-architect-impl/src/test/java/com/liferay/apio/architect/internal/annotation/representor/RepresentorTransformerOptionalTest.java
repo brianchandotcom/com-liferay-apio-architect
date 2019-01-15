@@ -57,64 +57,66 @@ public class RepresentorTransformerOptionalTest {
 
 	@Test
 	public void testBinaryFile() {
-		List<FieldFunction<OptionalDummy, BinaryFile>> binaryFunctions =
+		List<FieldFunction<OptionalDummy, BinaryFile>> binaryFieldFunctions =
 			_representor.getBinaryFunctions();
 
-		FieldFunction<OptionalDummy, BinaryFile> binaryFunction =
-			binaryFunctions.get(0);
+		FieldFunction<OptionalDummy, BinaryFile> binaryFieldFunction =
+			binaryFieldFunctions.get(0);
 
-		assertThat(binaryFunction.getKey(), is("binaryFile"));
-		assertThat(binaryFunction.apply(_optionalDummy), notNullValue());
+		assertThat(binaryFieldFunction.getKey(), is("binaryFile"));
+		assertThat(binaryFieldFunction.apply(_optionalDummy), notNullValue());
 	}
 
 	@Test
 	public void testBoolean() {
-		List<FieldFunction<OptionalDummy, Boolean>> booleanFunctions =
+		List<FieldFunction<OptionalDummy, Boolean>> booleanFieldFunctions =
 			_representor.getBooleanFunctions();
 
-		FieldFunction<OptionalDummy, Boolean> booleanListFunction =
-			booleanFunctions.get(0);
+		FieldFunction<OptionalDummy, Boolean> booleanFieldFunction =
+			booleanFieldFunctions.get(0);
 
-		assertThat(booleanListFunction.getKey(), is("boolean"));
-		assertThat(booleanListFunction.apply(_optionalDummy), is(true));
+		assertThat(booleanFieldFunction.getKey(), is("boolean"));
+		assertThat(booleanFieldFunction.apply(_optionalDummy), is(true));
 	}
 
 	@Test
 	public void testBooleanList() {
-		List<FieldFunction<OptionalDummy, List<Boolean>>> booleanListFunctions =
-			_representor.getBooleanListFunctions();
+		List<FieldFunction<OptionalDummy, List<Boolean>>>
+			booleanListFieldFunctions = _representor.getBooleanListFunctions();
 
-		FieldFunction<OptionalDummy, List<Boolean>> booleanListFunction =
-			booleanListFunctions.get(0);
+		FieldFunction<OptionalDummy, List<Boolean>> booleanListFieldFunction =
+			booleanListFieldFunctions.get(0);
 
-		assertThat(booleanListFunction.getKey(), is("booleanList"));
+		assertThat(booleanListFieldFunction.getKey(), is("booleanList"));
 		assertThat(
-			booleanListFunction.apply(_optionalDummy), is(singletonList(true)));
+			booleanListFieldFunction.apply(_optionalDummy),
+			is(singletonList(true)));
 	}
 
 	@Test
 	public void testLong() {
-		List<FieldFunction<OptionalDummy, Number>> numberFunctions =
+		List<FieldFunction<OptionalDummy, Number>> numberFieldFunctions =
 			_representor.getNumberFunctions();
 
-		FieldFunction<OptionalDummy, Number> numberFunction =
-			numberFunctions.get(0);
+		FieldFunction<OptionalDummy, Number> numberFieldFunction =
+			numberFieldFunctions.get(0);
 
-		assertThat(numberFunction.getKey(), is("long"));
-		assertThat(numberFunction.apply(_optionalDummy), is(3L));
+		assertThat(numberFieldFunction.getKey(), is("long"));
+		assertThat(numberFieldFunction.apply(_optionalDummy), is(3L));
 	}
 
 	@Test
 	public void testLongList() {
-		List<FieldFunction<OptionalDummy, List<Number>>> numberListFunctions =
-			_representor.getNumberListFunctions();
+		List<FieldFunction<OptionalDummy, List<Number>>>
+			numberListFieldFunctions = _representor.getNumberListFunctions();
 
-		FieldFunction<OptionalDummy, List<Number>> numberListFunction =
-			numberListFunctions.get(0);
+		FieldFunction<OptionalDummy, List<Number>> numberListFieldFunction =
+			numberListFieldFunctions.get(0);
 
-		assertThat(numberListFunction.getKey(), is("longList"));
+		assertThat(numberListFieldFunction.getKey(), is("longList"));
 		assertThat(
-			numberListFunction.apply(_optionalDummy), is(singletonList(1L)));
+			numberListFieldFunction.apply(_optionalDummy),
+			is(singletonList(1L)));
 	}
 
 	@Test
@@ -175,48 +177,49 @@ public class RepresentorTransformerOptionalTest {
 
 	@Test
 	public void testRelativeURLFunction() {
-		List<FieldFunction<OptionalDummy, String>> relativeURLFunctions =
+		List<FieldFunction<OptionalDummy, String>> relativeURLFieldFunctions =
 			_representor.getRelativeURLFunctions();
 
-		FieldFunction<OptionalDummy, String> relativeURLFunction =
-			relativeURLFunctions.get(0);
+		FieldFunction<OptionalDummy, String> relativeURLFieldFunction =
+			relativeURLFieldFunctions.get(0);
 
-		assertThat(relativeURLFunction.getKey(), is("relativeURL"));
+		assertThat(relativeURLFieldFunction.getKey(), is("relativeURL"));
 		assertThat(
-			relativeURLFunction.apply(_optionalDummy), is("/relativeURL"));
+			relativeURLFieldFunction.apply(_optionalDummy), is("/relativeURL"));
 	}
 
 	@Test
 	public void testStringFunction() {
-		List<FieldFunction<OptionalDummy, String>> stringFunctions =
+		List<FieldFunction<OptionalDummy, String>> stringFieldFunctions =
 			_representor.getStringFunctions();
 
-		stringFunctions.sort(Comparator.comparing(FieldFunction::getKey));
+		stringFieldFunctions.sort(Comparator.comparing(FieldFunction::getKey));
 
-		FieldFunction<OptionalDummy, String> dateFunction = stringFunctions.get(
-			0);
+		FieldFunction<OptionalDummy, String> dateFieldFunction =
+			stringFieldFunctions.get(0);
 
-		assertThat(dateFunction.getKey(), is("date"));
-		assertThat(dateFunction.apply(_optionalDummy), is("1970-01-01T00:00Z"));
+		assertThat(dateFieldFunction.getKey(), is("date"));
+		assertThat(
+			dateFieldFunction.apply(_optionalDummy), is("1970-01-01T00:00Z"));
 
-		FieldFunction<OptionalDummy, String> stringFunction =
-			stringFunctions.get(1);
+		FieldFunction<OptionalDummy, String> stringFieldFunction =
+			stringFieldFunctions.get(1);
 
-		assertThat(stringFunction.getKey(), is("string"));
-		assertThat(stringFunction.apply(_optionalDummy), is("value"));
+		assertThat(stringFieldFunction.getKey(), is("string"));
+		assertThat(stringFieldFunction.apply(_optionalDummy), is("value"));
 	}
 
 	@Test
 	public void testStringList() {
-		List<FieldFunction<OptionalDummy, List<String>>> stringListFunctions =
-			_representor.getStringListFunctions();
+		List<FieldFunction<OptionalDummy, List<String>>>
+			stringListFieldFunctions = _representor.getStringListFunctions();
 
-		FieldFunction<OptionalDummy, List<String>> stringListFunction =
-			stringListFunctions.get(0);
+		FieldFunction<OptionalDummy, List<String>> stringListFieldFunction =
+			stringListFieldFunctions.get(0);
 
-		assertThat(stringListFunction.getKey(), is("stringList"));
+		assertThat(stringListFieldFunction.getKey(), is("stringList"));
 		assertThat(
-			stringListFunction.apply(_optionalDummy),
+			stringListFieldFunction.apply(_optionalDummy),
 			is(singletonList("element")));
 	}
 
