@@ -153,6 +153,14 @@ public class RepresentorTransformerUtil {
 		);
 	}
 
+	public static <T> BinaryFunction<T> getBinaryFunction(Method method) {
+		return t -> Try.fromFallible(
+			() -> (BinaryFile)_unwrapOptionalIfNeeded(method.invoke(t))
+		).orElse(
+			null
+		);
+	}
+
 	public static <A, T, S> BiFunction<T, A, S> getMethodBiFunction(
 		Method method) {
 
@@ -191,7 +199,7 @@ public class RepresentorTransformerUtil {
 			firstStep.addBoolean(key, getMethodFunction(method));
 		}
 		else if (returnTypeClass == BinaryFile.class) {
-			firstStep.addBinary(key, (BinaryFunction)getMethodFunction(method));
+			firstStep.addBinary(key, getBinaryFunction(method));
 		}
 		else if (Number.class.isAssignableFrom(returnTypeClass)) {
 			firstStep.addNumber(key, getMethodFunction(method));
